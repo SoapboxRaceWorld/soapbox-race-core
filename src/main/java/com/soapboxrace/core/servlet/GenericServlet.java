@@ -1,5 +1,6 @@
 package com.soapboxrace.core.servlet;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +23,7 @@ public class GenericServlet extends HttpServlet {
 	@Override
 	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		System.out.println(httpRequest);
 		String filePath = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length() + 1);
 		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filePath);
 		if (inputStream != null) {
@@ -35,4 +37,28 @@ public class GenericServlet extends HttpServlet {
 			response.getOutputStream().write(buffer.toByteArray());
 		}
 	}
+
+	protected String getHeader(ServletRequest request, String param) {
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		return httpRequest.getHeader(param);
+	}
+
+	protected Long getUserId(ServletRequest request) {
+		return Long.valueOf(getHeader(request, "userId"));
+	}
+
+	protected String readInputStream(ServletRequest request) {
+		StringBuilder buffer = new StringBuilder();
+		try {
+			BufferedReader reader = request.getReader();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				buffer.append(line);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return buffer.toString();
+	}
+
 }
