@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="AchievementAwarded" nillable="true" type="AchievementAwarded" />
+  <xs:complexType name="AchievementAwarded">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievedOn" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievementDefinitionId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievementRankId" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Clip" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ClipLengthInSeconds" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Icon" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsRare" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Points" type="xs:short" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rarity" type="xs:float" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

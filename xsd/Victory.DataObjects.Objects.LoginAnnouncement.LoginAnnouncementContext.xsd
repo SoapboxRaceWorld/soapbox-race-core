@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LoginAnnouncementContext" type="LoginAnnouncementContext" />
+  <xs:simpleType name="LoginAnnouncementContext">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NotApplicable" />
+      <xs:enumeration value="CarPurchase" />
+      <xs:enumeration value="CardsPack" />
+      <xs:enumeration value="PaintShop" />
+      <xs:enumeration value="PerformanceShop" />
+      <xs:enumeration value="AftermarketShop" />
+      <xs:enumeration value="VinylShop" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

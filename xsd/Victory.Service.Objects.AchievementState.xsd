@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="AchievementState" type="AchievementState" />
+  <xs:simpleType name="AchievementState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Locked" />
+      <xs:enumeration value="InProgress" />
+      <xs:enumeration value="RewardWaiting" />
+      <xs:enumeration value="Completed" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

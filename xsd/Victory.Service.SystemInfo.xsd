@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="SystemInfo" nillable="true" type="SystemInfo" />
+  <xs:complexType name="SystemInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Branch" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ChangeList" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ClientVersion" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ClientVersionCheck" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Deployed" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EntitlementsToDownload" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ForcePermanentSession" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="JidPrepender" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LauncherServiceUrl" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="NucleusNamespace" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="NucleusNamespaceWeb" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaCacheTimeout" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PortalDomain" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PortalSecureDomain" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PortalStoreFailurePage" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PortalTimeOut" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ShardName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Time" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Version" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

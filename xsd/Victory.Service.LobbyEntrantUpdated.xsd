@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LobbyEntrantUpdated" nillable="true" type="LobbyEntrantUpdated" />
+  <xs:complexType name="LobbyEntrantUpdated">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="State" type="LobbyEntrantState" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="LobbyEntrantState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="InFreeRoam" />
+      <xs:enumeration value="InLobby" />
+      <xs:enumeration value="InEvent" />
+      <xs:enumeration value="InPostEvent" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

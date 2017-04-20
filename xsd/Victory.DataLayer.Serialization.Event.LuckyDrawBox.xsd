@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LuckyDrawBox" nillable="true" type="LuckyDrawBox" />
+  <xs:complexType name="LuckyDrawBox">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="IsValid" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LocalizationString" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LuckyDrawSetCategoryId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

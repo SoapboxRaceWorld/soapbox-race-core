@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="EventTimedOut" nillable="true" type="EventTimedOut" />
+  <xs:complexType name="EventTimedOut">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="EventSessionId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

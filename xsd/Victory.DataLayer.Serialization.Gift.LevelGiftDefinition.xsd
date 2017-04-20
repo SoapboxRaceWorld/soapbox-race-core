@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LevelGiftDefinition" nillable="true" type="LevelGiftDefinition" />
+  <xs:complexType name="LevelGiftDefinition">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Boost" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Level" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LevelGiftId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

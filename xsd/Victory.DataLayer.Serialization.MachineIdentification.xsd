@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="MachineIdentification" nillable="true" type="MachineIdentification" />
+  <xs:complexType name="MachineIdentification">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="cpuID" type="xs:unsignedInt" />
+      <xs:element minOccurs="0" maxOccurs="1" name="diskSerialNumber" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="gpuID" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="mac" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="machineName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="userID" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="volumeName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="volumeSerialNumber" type="xs:unsignedInt" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

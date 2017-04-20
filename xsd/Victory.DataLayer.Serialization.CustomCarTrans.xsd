@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="CustomCarTrans" nillable="true" type="CustomCarTrans" />
+  <xs:complexType name="CustomCarTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="BaseCar" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CarClassHash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Id" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsPreset" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Level" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Paints" type="ArrayOfCustomPaintTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PerformanceParts" type="ArrayOfPerformancePartTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PhysicsProfileHash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rating" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ResalePrice" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RideHeightDrop" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SkillModParts" type="ArrayOfSkillModPartTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SkillModSlotCount" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Version" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Vinyls" type="ArrayOfCustomVinylTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VisualParts" type="ArrayOfVisualPartTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfCustomPaintTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomPaintTrans" nillable="true" type="CustomPaintTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CustomPaintTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Group" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hue" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Sat" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Slot" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Var" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfPerformancePartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PerformancePartTrans" nillable="true" type="PerformancePartTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PerformancePartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="PerformancePartAttribHash" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfSkillModPartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SkillModPartTrans" nillable="true" type="SkillModPartTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SkillModPartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="IsFixed" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SkillModPartAttribHash" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfCustomVinylTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomVinylTrans" nillable="true" type="CustomVinylTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CustomVinylTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Hash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hue1" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hue2" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hue3" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hue4" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Layer" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Mir" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rot" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Sat1" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Sat2" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Sat3" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Sat4" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ScaleX" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ScaleY" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Shear" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TranX" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TranY" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Var1" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Var2" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Var3" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Var4" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfVisualPartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="VisualPartTrans" nillable="true" type="VisualPartTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="VisualPartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="PartHash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SlotHash" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

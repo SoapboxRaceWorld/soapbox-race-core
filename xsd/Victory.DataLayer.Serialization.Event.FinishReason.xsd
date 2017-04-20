@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="FinishReason" type="FinishReason" />
+  <xs:simpleType name="FinishReason">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="Completed" />
+      <xs:enumeration value="Succeeded" />
+      <xs:enumeration value="DidNotFinish" />
+      <xs:enumeration value="CrossedFinish" />
+      <xs:enumeration value="KnockedOut" />
+      <xs:enumeration value="Totalled" />
+      <xs:enumeration value="EngineBlown" />
+      <xs:enumeration value="Busted" />
+      <xs:enumeration value="Evaded" />
+      <xs:enumeration value="ChallengeCompleted" />
+      <xs:enumeration value="Disconnected" />
+      <xs:enumeration value="FalseStart" />
+      <xs:enumeration value="Aborted" />
+      <xs:enumeration value="TimedOut" />
+      <xs:enumeration value="TimeLimitExpired" />
+      <xs:enumeration value="PauseDetected" />
+      <xs:enumeration value="SpeedHacking" />
+      <xs:enumeration value="CodePatchDetected" />
+      <xs:enumeration value="BadVerifierResponse" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

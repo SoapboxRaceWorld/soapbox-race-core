@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="UserSettings" nillable="true" type="UserSettings" />
+  <xs:complexType name="UserSettings">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="desktopResHeight" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="desktopResWidth" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="fullscreen" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="gameResHeight" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="gameResWidth" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="globalDetailLevel" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="userID" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

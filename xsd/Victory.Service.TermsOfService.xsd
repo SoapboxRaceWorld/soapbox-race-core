@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="TermsOfService" nillable="true" type="TermsOfService" />
+  <xs:complexType name="TermsOfService">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="en" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="de" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="es" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="fr" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="pl" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="pt" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ru" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="th" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="tr" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="zh" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="zh_chs" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="StatConversion" type="StatConversion" />
+  <xs:simpleType name="StatConversion">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="FromMillisecondsToMinutes" />
+      <xs:enumeration value="FromSecondsToMinutes" />
+      <xs:enumeration value="FromCentimetersPerSecondToSpeed" />
+      <xs:enumeration value="FromMetersToDistance" />
+      <xs:enumeration value="FromNumberToCurrency" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LoginAnnouncementDefinition" nillable="true" type="LoginAnnouncementDefinition" />
+  <xs:complexType name="LoginAnnouncementDefinition">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Context" type="LoginAnnouncementContext" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Id" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ImageChecksum" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ImageUrl" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Target" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Type" type="LoginAnnouncementType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="LoginAnnouncementContext">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NotApplicable" />
+      <xs:enumeration value="CarPurchase" />
+      <xs:enumeration value="CardsPack" />
+      <xs:enumeration value="PaintShop" />
+      <xs:enumeration value="PerformanceShop" />
+      <xs:enumeration value="AftermarketShop" />
+      <xs:enumeration value="VinylShop" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="LoginAnnouncementType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ExternalLink" />
+      <xs:enumeration value="SafehouseProduct" />
+      <xs:enumeration value="ImageOnly" />
+      <xs:enumeration value="SafehouseProductNoButton" />
+      <xs:enumeration value="ExternalLinkNoButton" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

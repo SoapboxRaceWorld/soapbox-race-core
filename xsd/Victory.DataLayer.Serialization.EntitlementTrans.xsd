@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="EntitlementTrans" nillable="true" type="EntitlementTrans" />
+  <xs:complexType name="EntitlementTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Items" type="ArrayOfEntitlementItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfEntitlementItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="EntitlementItemTrans" nillable="true" type="EntitlementItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="EntitlementItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="EntitlementId" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Quantity" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

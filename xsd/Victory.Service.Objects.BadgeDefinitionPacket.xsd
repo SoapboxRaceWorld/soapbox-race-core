@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="BadgeDefinitionPacket" nillable="true" type="BadgeDefinitionPacket" />
+  <xs:complexType name="BadgeDefinitionPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Background" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BadgeDefinitionId" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Border" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Icon" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

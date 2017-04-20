@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="NewsArticleFilters" type="NewsArticleFilters" />
+  <xs:simpleType name="NewsArticleFilters">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NEWSFILTERMASK_None" />
+      <xs:enumeration value="NEWSFILTERMASK_Me" />
+      <xs:enumeration value="NEWSFILTERMASK_Friends" />
+      <xs:enumeration value="NEWSFILTERMASK_System" />
+      <xs:enumeration value="NEWSFILTERMASK_Crew" />
+      <xs:enumeration value="NEWSFILTERMASK_All" />
+      <xs:enumeration value="NEWSFILTERMASK_ITEM_COUNT" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

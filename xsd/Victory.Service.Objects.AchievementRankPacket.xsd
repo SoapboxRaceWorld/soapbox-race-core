@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="AchievementRankPacket" nillable="true" type="AchievementRankPacket" />
+  <xs:complexType name="AchievementRankPacket">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievedOn" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievementRankId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsRare" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Points" type="xs:short" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rank" type="xs:short" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rarity" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RewardDescription" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RewardType" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RewardVisualStyle" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="State" type="AchievementState" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ThresholdValue" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="AchievementState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Locked" />
+      <xs:enumeration value="InProgress" />
+      <xs:enumeration value="RewardWaiting" />
+      <xs:enumeration value="Completed" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

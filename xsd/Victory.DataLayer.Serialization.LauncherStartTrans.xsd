@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LauncherStartTrans" nillable="true" type="LauncherStartTrans" />
+  <xs:complexType name="LauncherStartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="autoLogin" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="autoStart" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="language" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="languageCode" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="region" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sku" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="userID" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

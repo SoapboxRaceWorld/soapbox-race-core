@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="DragEntrantResult" nillable="true" type="DragEntrantResult" />
+  <xs:complexType name="DragEntrantResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="EntrantResult">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="TopSpeed" type="xs:float" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="EntrantResult">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="EventDurationInMilliseconds" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventSessionId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FinishReason" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Ranking" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

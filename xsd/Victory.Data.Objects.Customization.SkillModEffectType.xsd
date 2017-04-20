@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="SkillModEffectType" type="SkillModEffectType" />
+  <xs:simpleType name="SkillModEffectType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="CashRewardExplore" />
+      <xs:enumeration value="PowerupCooldown" />
+      <xs:enumeration value="PowerupDuration" />
+      <xs:enumeration value="PowerupPower" />
+      <xs:enumeration value="CatchUp" />
+      <xs:enumeration value="CollisionMass" />
+      <xs:enumeration value="HeavyMass" />
+      <xs:enumeration value="JumpStart" />
+      <xs:enumeration value="EvadeMeter" />
+      <xs:enumeration value="PerfectStartRange" />
+      <xs:enumeration value="Radar" />
+      <xs:enumeration value="TreasureHunter" />
+      <xs:enumeration value="OneMoreLapPerformance" />
+      <xs:enumeration value="EmergencyEvadeRange" />
+      <xs:enumeration value="CooldownMeter" />
+      <xs:enumeration value="PerfectStartDuration" />
+      <xs:enumeration value="CashRewardPursuit" />
+      <xs:enumeration value="CashRewardRace" />
+      <xs:enumeration value="GearRatioEnhancement" />
+      <xs:enumeration value="LaunchGrip" />
+      <xs:enumeration value="AeroDragReduction" />
+      <xs:enumeration value="QuickShift" />
+      <xs:enumeration value="QuickLaneChange" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

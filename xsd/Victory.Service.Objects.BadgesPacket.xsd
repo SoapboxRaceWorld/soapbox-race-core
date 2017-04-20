@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="BadgesPacket" nillable="true" type="BadgesPacket" />
+  <xs:complexType name="BadgesPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Badges" type="ArrayOfBadgePacket" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfBadgePacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BadgePacket" nillable="true" type="BadgePacket" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BadgePacket">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievementRankId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BadgeDefinitionId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsRare" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rarity" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SlotId" type="xs:short" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

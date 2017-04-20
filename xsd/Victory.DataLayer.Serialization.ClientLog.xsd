@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ClientLog" nillable="true" type="ClientLog" />
+  <xs:complexType name="ClientLog">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="date" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="message" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

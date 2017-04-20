@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="AchievementRewards" nillable="true" type="AchievementRewards" />
+  <xs:complexType name="AchievementRewards">
+    <xs:complexContent mixed="false">
+      <xs:extension base="CommerceResultTrans">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="AchievementRankId" type="xs:int" />
+          <xs:element minOccurs="0" maxOccurs="1" name="VisualStyle" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CommerceResultTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="CommerceItems" type="ArrayOfCommerceItemTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="InvalidBasket" type="InvalidBasketTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="InventoryItems" type="ArrayOfInventoryItemTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PurchasedCars" type="ArrayOfOwnedCarTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Status" type="CommerceResultStatus" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Wallets" type="ArrayOfWalletTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfCommerceItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CommerceItemTrans" nillable="true" type="CommerceItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CommerceItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Hash" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Title" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="InvalidBasketTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Basket" type="BasketTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="InvalidItems" type="ArrayOfInvalidBasketItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BasketTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Items" type="ArrayOfBasketItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfBasketItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BasketItemTrans" nillable="true" type="BasketItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BasketItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="ProductId" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Quantity" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfInvalidBasketItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InvalidBasketItemTrans" nillable="true" type="InvalidBasketItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="InvalidBasketItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Index" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Reason" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfInventoryItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InventoryItemTrans" nillable="true" type="InventoryItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="InventoryItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="EntitlementTag" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ExpirationDate" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="InventoryId" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ProductId" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RemainingUseCount" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ResellPrice" type="xs:double" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Status" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StringHash" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VirtualItemType" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfOwnedCarTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="OwnedCarTrans" nillable="true" type="OwnedCarTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OwnedCarTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="CustomCar" type="CustomCarTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Durability" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ExpirationDate" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Heat" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Id" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OwnershipType" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CustomCarTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="BaseCar" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CarClassHash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Id" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsPreset" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Level" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Paints" type="ArrayOfCustomPaintTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PerformanceParts" type="ArrayOfPerformancePartTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PhysicsProfileHash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rating" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ResalePrice" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RideHeightDrop" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SkillModParts" type="ArrayOfSkillModPartTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SkillModSlotCount" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Version" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Vinyls" type="ArrayOfCustomVinylTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VisualParts" type="ArrayOfVisualPartTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfCustomPaintTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomPaintTrans" nillable="true" type="CustomPaintTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CustomPaintTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Group" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hue" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Sat" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Slot" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Var" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfPerformancePartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PerformancePartTrans" nillable="true" type="PerformancePartTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PerformancePartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="PerformancePartAttribHash" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfSkillModPartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SkillModPartTrans" nillable="true" type="SkillModPartTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SkillModPartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="IsFixed" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SkillModPartAttribHash" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfCustomVinylTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomVinylTrans" nillable="true" type="CustomVinylTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CustomVinylTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Hash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hue1" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hue2" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hue3" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hue4" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Layer" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Mir" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rot" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Sat1" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Sat2" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Sat3" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Sat4" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ScaleX" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ScaleY" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Shear" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TranX" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TranY" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Var1" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Var2" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Var3" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Var4" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfVisualPartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="VisualPartTrans" nillable="true" type="VisualPartTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="VisualPartTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="PartHash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SlotHash" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="CommerceResultStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="Fail_InvalidBasket" />
+      <xs:enumeration value="Fail_InsufficientFunds" />
+      <xs:enumeration value="Fail_InsufficientCarSlots" />
+      <xs:enumeration value="Fail_MaxStackOrRentalLimit" />
+      <xs:enumeration value="Fail_InvalidPerformanceUpgrade" />
+      <xs:enumeration value="Fail_ItemNotAvailableStandalone" />
+      <xs:enumeration value="Fail_PersonaNotRightLevel" />
+      <xs:enumeration value="Fail_LockedProductNotAccessibleToThisUser" />
+      <xs:enumeration value="Fail_BoostTransactionsAreDisabled" />
+      <xs:enumeration value="Fail_InsufficientPerformancePartInventory" />
+      <xs:enumeration value="Fail_MaxAllowedPurchasesForThisProduct" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ArrayOfWalletTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="WalletTrans" nillable="true" type="WalletTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="WalletTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Balance" type="xs:double" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Currency" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="enumPowerUpType" type="enumPowerUpType" />
+  <xs:simpleType name="enumPowerUpType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="EmergencyEvade" />
+      <xs:enumeration value="InstantCooldown" />
+      <xs:enumeration value="Juggernaut" />
+      <xs:enumeration value="NosShot" />
+      <xs:enumeration value="OneMoreLap" />
+      <xs:enumeration value="Ready" />
+      <xs:enumeration value="RunFlatTires" />
+      <xs:enumeration value="Shield" />
+      <xs:enumeration value="Slingshot" />
+      <xs:enumeration value="TeamEmergencyEvade" />
+      <xs:enumeration value="TeamSlingshot" />
+      <xs:enumeration value="TrafficMagnet" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

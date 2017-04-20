@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Report" nillable="true" type="Report" />
+  <xs:complexType name="Report">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="chatTranscripts" type="ArrayOfChatTranscript" />
+      <xs:element minOccurs="0" maxOccurs="1" name="errorReport" type="ArrayOfErrorReport" />
+      <xs:element minOccurs="0" maxOccurs="1" name="fraudDetectionReport" type="ArrayOfFraudDetection" />
+      <xs:element minOccurs="0" maxOccurs="1" name="shortcutUsage" type="ArrayOfShortcutUsage" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfChatTranscript">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ChatTranscript" nillable="true" type="ChatTranscript" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ChatTranscript">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Message" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TargetPersonaId" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="UserId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfErrorReport">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ErrorReport" nillable="true" type="ErrorReport" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ErrorReport">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="errorCode" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="errorDescription" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfFraudDetection">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FraudDetection" nillable="true" type="FraudDetection" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FraudDetection">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Checksum" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IntValue1" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IntValue2" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IntValue3" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IntValue4" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsEncrypted" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ModuleName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ModulePath" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ModuleValue" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StringValue1" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StringValue2" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfShortcutUsage">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ShortcutUsage" nillable="true" type="ShortcutUsage" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ShortcutUsage">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="shortCut" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="timesUsed" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

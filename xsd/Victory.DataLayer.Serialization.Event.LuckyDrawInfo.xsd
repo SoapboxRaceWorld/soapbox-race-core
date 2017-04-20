@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LuckyDrawInfo" nillable="true" type="LuckyDrawInfo" />
+  <xs:complexType name="LuckyDrawInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Boxes" type="ArrayOfLuckyDrawBox" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CardDeck" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CurrentStreak" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsStreakBroken" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Items" type="ArrayOfLuckyDrawItem" />
+      <xs:element minOccurs="1" maxOccurs="1" name="NumBoxAnimations" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="NumCards" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfLuckyDrawBox">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LuckyDrawBox" nillable="true" type="LuckyDrawBox" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LuckyDrawBox">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="IsValid" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LocalizationString" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LuckyDrawSetCategoryId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfLuckyDrawItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LuckyDrawItem" nillable="true" type="LuckyDrawItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LuckyDrawItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hash" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Icon" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RemainingUseCount" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ResellPrice" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VirtualItem" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VirtualItemType" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="WasSold" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LobbyCountdown" nillable="true" type="LobbyCountdown" />
+  <xs:complexType name="LobbyCountdown">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="EventId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsWaiting" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyCountdownInMilliseconds" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyStuckDurationInMilliseconds" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="EventDefinition" nillable="true" type="EventDefinition" />
+  <xs:complexType name="EventDefinition">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CarClassHash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Coins" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="EngagePoint" type="Vector3" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventLocalization" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventModeDescriptionLocalization" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="EventModeIcon" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventModeId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventModeLocalization" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsEnabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsLocked" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Laps" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Length" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MaxClassRating" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MaxEntrants" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MaxLevel" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MinClassRating" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MinEntrants" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MinLevel" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RegionLocalization" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RewardModes" type="ArrayOfInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeLimit" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="TrackLayoutMap" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TrackLocalization" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Vector3">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="X" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Y" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Z" type="xs:float" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfInt">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

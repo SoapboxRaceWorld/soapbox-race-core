@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="PersonaPresence" nillable="true" type="PersonaPresence" />
+  <xs:complexType name="PersonaPresence">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="personaId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="presence" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="userId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

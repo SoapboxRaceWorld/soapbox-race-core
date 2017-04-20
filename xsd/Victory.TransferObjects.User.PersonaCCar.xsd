@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="PersonaCCar" nillable="true" type="PersonaCCar" />
+  <xs:complexType name="PersonaCCar">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CCID" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Durability" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Heat" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsDefault" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

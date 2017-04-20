@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="InvalidBasketTrans" nillable="true" type="InvalidBasketTrans" />
+  <xs:complexType name="InvalidBasketTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Basket" type="BasketTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="InvalidItems" type="ArrayOfInvalidBasketItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BasketTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Items" type="ArrayOfBasketItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfBasketItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BasketItemTrans" nillable="true" type="BasketItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BasketItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="ProductId" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Quantity" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfInvalidBasketItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InvalidBasketItemTrans" nillable="true" type="InvalidBasketItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="InvalidBasketItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Index" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Reason" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

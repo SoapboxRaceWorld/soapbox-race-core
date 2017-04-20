@@ -1,0 +1,18 @@
+#!/bin/bash
+xjc -p com.soapboxrace.jaxb.http \
+   Victory.TransferObjects.User.UserInfo.xsd \
+   Victory.TransferObjects.DriverPersona.PersonaFriendsList.xsd \
+   Victory.DataLayer.Serialization.UserSettings.xsd \
+   Victory.DataLayer.Serialization.ClientConfigTrans.xsd \
+   Victory.Service.SystemInfo.xsd \
+   Victory.TransferObjects.Session.chatServer.xsd \
+   Victory.Service.Objects.Event.CarClass.xsd \
+   Victory.DataLayer.Serialization.CarSlotInfoTrans.xsd \
+   Victory.DataLayer.Serialization.FraudConfig.xsd \
+   Victory.DataLayer.Serialization.UdpRelayInfo.xsd \
+   Victory.DataLayer.Serialization.RegionInfo.xsd \
+   Victory.DataLayer.Serialization.LoginAnnouncement.LoginAnnouncementsDefinition.xsd \
+   Victory.DataLayer.Serialization.HeartBeat.xsd
+   
+cp -r com ../src/main/java
+rm -rf com

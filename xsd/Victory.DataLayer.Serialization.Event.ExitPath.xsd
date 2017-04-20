@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ExitPath" type="ExitPath" />
+  <xs:simpleType name="ExitPath">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ExitToFreeroam" />
+      <xs:enumeration value="ExitToLobby" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

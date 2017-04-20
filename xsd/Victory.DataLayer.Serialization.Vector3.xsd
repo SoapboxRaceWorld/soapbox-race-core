@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Vector3" nillable="true" type="Vector3" />
+  <xs:complexType name="Vector3">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="X" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Y" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Z" type="xs:float" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

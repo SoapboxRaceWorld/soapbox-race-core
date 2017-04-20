@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="PowerupActivated" nillable="true" type="PowerupActivated" />
+  <xs:complexType name="PowerupActivated">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Count" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Id" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TargetPersonaId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

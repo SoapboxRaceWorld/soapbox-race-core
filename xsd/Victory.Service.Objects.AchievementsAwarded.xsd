@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="AchievementsAwarded" nillable="true" type="AchievementsAwarded" />
+  <xs:complexType name="AchievementsAwarded">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Achievements" type="ArrayOfAchievementAwarded" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Badges" type="ArrayOfBadgePacket" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Progressed" type="ArrayOfAchievementProgress" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Score" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfAchievementAwarded">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AchievementAwarded" nillable="true" type="AchievementAwarded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AchievementAwarded">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievedOn" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievementDefinitionId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievementRankId" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Clip" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ClipLengthInSeconds" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Icon" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsRare" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Points" type="xs:short" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rarity" type="xs:float" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfBadgePacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BadgePacket" nillable="true" type="BadgePacket" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BadgePacket">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievementRankId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BadgeDefinitionId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsRare" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rarity" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SlotId" type="xs:short" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfAchievementProgress">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AchievementProgress" nillable="true" type="AchievementProgress" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AchievementProgress">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievementDefinitionId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CurrentValue" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="MetagameFlags" type="MetagameFlags" />
+  <xs:simpleType name="MetagameFlags">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="RaceNowEnabled" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

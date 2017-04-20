@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="enumRewardCategory" type="enumRewardCategory" />
+  <xs:simpleType name="enumRewardCategory">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Base" />
+      <xs:enumeration value="Rank" />
+      <xs:enumeration value="Bonus" />
+      <xs:enumeration value="TeamBonus" />
+      <xs:enumeration value="Amplifier" />
+      <xs:enumeration value="Skill" />
+      <xs:enumeration value="Pursuit" />
+      <xs:enumeration value="Objective" />
+      <xs:enumeration value="SkillMod" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

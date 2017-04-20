@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="TeamEscapeArbitrationPacket" nillable="true" type="TeamEscapeArbitrationPacket" />
+  <xs:complexType name="TeamEscapeArbitrationPacket">
+    <xs:complexContent mixed="false">
+      <xs:extension base="ArbitrationPacket">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="BustedCount" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CopsDeployed" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CopsDisabled" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CopsRammed" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CostToState" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DistanceToFinish" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="FractionCompleted" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Infractions" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LongestJumpDurationInMilliseconds" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NumberOfCollisions" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="PerfectStart" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="RoadBlocksDodged" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SpikeStripsDodged" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SumOfJumpsDurationInMilliseconds" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TopSpeed" type="xs:float" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ArbitrationPacket">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AlternateEventDurationInMilliseconds" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CarId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventDurationInMilliseconds" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FinishReason" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="FraudDetectionInfo" type="FraudDetection" />
+      <xs:element minOccurs="1" maxOccurs="1" name="HacksDetected" type="xs:unsignedInt" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PhysicsMetrics" type="ClientPhysicsMetrics" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rank" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Response" type="SecurityResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FraudDetection">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Checksum" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IntValue1" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IntValue2" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IntValue3" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IntValue4" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsEncrypted" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ModuleName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ModulePath" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ModuleValue" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StringValue1" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StringValue2" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ClientPhysicsMetrics">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AccelerationAverage" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AccelerationMaximum" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AccelerationMedian" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SpeedAverage" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SpeedMaximum" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SpeedMedian" type="xs:float" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SecurityResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="ChallengeId" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Result" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

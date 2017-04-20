@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="SocialSettings" nillable="true" type="SocialSettings" />
+  <xs:complexType name="SocialSettings">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AppearOffline" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DeclineGroupInvite" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DeclineIncommingFriendRequests" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DeclinePrivateInvite" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="HideOfflineFriends" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ShowNewsOnSignIn" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ShowOnlyPlayersInSameChatChannel" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

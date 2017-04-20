@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="NewsArticleType" type="NewsArticleType" />
+  <xs:simpleType name="NewsArticleType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NullNews" />
+      <xs:enumeration value="FriendRequestReceived" />
+      <xs:enumeration value="FriendLeveledUp" />
+      <xs:enumeration value="TopSpeedEclipsed" />
+      <xs:enumeration value="LongestPursuitEclipsed" />
+      <xs:enumeration value="TotalCostToStateEclipsed" />
+      <xs:enumeration value="WelcomeMessage" />
+      <xs:enumeration value="AutoRejectedFriendRequest" />
+      <xs:enumeration value="DynamicNews" />
+      <xs:enumeration value="RareItemWonLuckyDraw" />
+      <xs:enumeration value="RareItemWonCardPack" />
+      <xs:enumeration value="RepAmplifierExpiring" />
+      <xs:enumeration value="RepAmplifierExpired" />
+      <xs:enumeration value="CashAmplifierExpiring" />
+      <xs:enumeration value="CashAmplifierExpired" />
+      <xs:enumeration value="CarRentalExpired" />
+      <xs:enumeration value="CarInsuranceExpiring" />
+      <xs:enumeration value="CarInsuranceExpired" />
+      <xs:enumeration value="UnopenedGift" />
+      <xs:enumeration value="RareItemWonStreak" />
+      <xs:enumeration value="StreakMilestone" />
+      <xs:enumeration value="CarClassChanged" />
+      <xs:enumeration value="ReferralBoostGiftAwarded" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

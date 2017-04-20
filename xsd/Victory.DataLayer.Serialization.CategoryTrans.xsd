@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="CategoryTrans" nillable="true" type="CategoryTrans" />
+  <xs:complexType name="CategoryTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CatalogVersion" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Categories" type="ArrayOfCategoryTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="DisplayName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FilterType" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Icon" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Id" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LongDescription" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Priority" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Products" type="ArrayOfProductTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ShortDescription" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ShowInNavigationPane" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ShowPromoPage" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="WebIcon" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfCategoryTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CategoryTrans" nillable="true" type="CategoryTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfProductTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProductTrans" nillable="true" type="ProductTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProductTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="BundleItems" type="ArrayOfProductTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CategoryId" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Currency" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DurationMinute" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hash" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Icon" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Level" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LongDescription" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Price" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Priority" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ProductId" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ProductTitle" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ProductType" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SecondaryIcon" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="UseCount" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VisualStyle" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="WebIcon" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="WebLocation" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

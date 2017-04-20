@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="AchievementsPacket" nillable="true" type="AchievementsPacket" />
+  <xs:complexType name="AchievementsPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Badges" type="ArrayOfBadgeDefinitionPacket" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Definitions" type="ArrayOfAchievementDefinitionPacket" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfBadgeDefinitionPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BadgeDefinitionPacket" nillable="true" type="BadgeDefinitionPacket" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BadgeDefinitionPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Background" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BadgeDefinitionId" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Border" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Icon" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfAchievementDefinitionPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AchievementDefinitionPacket" nillable="true" type="AchievementDefinitionPacket" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AchievementDefinitionPacket">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievementDefinitionId" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="AchievementRanks" type="ArrayOfAchievementRankPacket" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BadgeDefinitionId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CanProgress" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CurrentValue" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsVisible" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ProgressText" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="StatConversion" type="StatConversion" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfAchievementRankPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AchievementRankPacket" nillable="true" type="AchievementRankPacket" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AchievementRankPacket">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievedOn" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AchievementRankId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsRare" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Points" type="xs:short" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rank" type="xs:short" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rarity" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RewardDescription" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RewardType" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RewardVisualStyle" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="State" type="AchievementState" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ThresholdValue" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="AchievementState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Locked" />
+      <xs:enumeration value="InProgress" />
+      <xs:enumeration value="RewardWaiting" />
+      <xs:enumeration value="Completed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="StatConversion">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="FromMillisecondsToMinutes" />
+      <xs:enumeration value="FromSecondsToMinutes" />
+      <xs:enumeration value="FromCentimetersPerSecondToSpeed" />
+      <xs:enumeration value="FromMetersToDistance" />
+      <xs:enumeration value="FromNumberToCurrency" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

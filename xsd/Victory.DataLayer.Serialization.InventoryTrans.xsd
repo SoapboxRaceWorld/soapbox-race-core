@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="InventoryTrans" nillable="true" type="InventoryTrans" />
+  <xs:complexType name="InventoryTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="InventoryItems" type="ArrayOfInventoryItemTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PerformancePartsCapacity" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PerformancePartsUsedSlotCount" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SkillModPartsCapacity" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SkillModPartsUsedSlotCount" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="VisualPartsCapacity" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="VisualPartsUsedSlotCount" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfInventoryItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InventoryItemTrans" nillable="true" type="InventoryItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="InventoryItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="EntitlementTag" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ExpirationDate" type="xs:dateTime" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="InventoryId" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ProductId" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RemainingUseCount" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ResellPrice" type="xs:double" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Status" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="StringHash" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VirtualItemType" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

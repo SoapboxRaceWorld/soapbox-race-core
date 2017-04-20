@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="CarClass" nillable="true" type="CarClass" />
+  <xs:complexType name="ArrayOfCarClass">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ArrayOfCarClass" nillable="true" type="CarClass" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CarClass">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CarClassHash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MaxRating" type="xs:short" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MinRating" type="xs:short" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

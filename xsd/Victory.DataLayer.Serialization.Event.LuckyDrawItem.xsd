@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LuckyDrawItem" nillable="true" type="LuckyDrawItem" />
+  <xs:complexType name="LuckyDrawItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hash" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Icon" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RemainingUseCount" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ResellPrice" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VirtualItem" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VirtualItemType" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="WasSold" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

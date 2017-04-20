@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="UserInfo" nillable="true" type="UserInfo" />
+  <xs:complexType name="UserInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="defaultPersonaIdx" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="personas" type="ArrayOfProfileData" />
+      <xs:element minOccurs="0" maxOccurs="1" name="user" type="User" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfProfileData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ProfileData" nillable="true" type="ProfileData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ProfileData">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Boost" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Cash" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IconIndex" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Level" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Motto" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PercentToLevel" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rating" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rep" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RepAtCurrentLevel" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ccar" type="ArrayOfPersonaCCar" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfPersonaCCar">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PersonaCCar" nillable="true" type="PersonaCCar" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PersonaCCar">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CCID" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Durability" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Heat" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsDefault" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="User">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="address1" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="address2" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="country" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dateCreated" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dob" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="email" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="emailStatus" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="firstName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="fullGameAccess" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="gender" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="idDigits" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="isComplete" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="landlinePhone" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="language" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="lastAuthDate" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="lastName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mobile" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="nickname" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="postalCode" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="realName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="reasonCode" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="remoteUserId" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="securityToken" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="starterPackEntitlementTag" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="status" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="subscribeMsg" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="tosVersion" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="userId" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="username" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

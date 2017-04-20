@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ClientPhysicsMetrics" nillable="true" type="ClientPhysicsMetrics" />
+  <xs:complexType name="ClientPhysicsMetrics">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="AccelerationAverage" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AccelerationMaximum" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AccelerationMedian" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SpeedAverage" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SpeedMaximum" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SpeedMedian" type="xs:float" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

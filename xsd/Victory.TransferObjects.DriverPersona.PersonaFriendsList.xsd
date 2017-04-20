@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="PersonaFriendsList" nillable="true" type="PersonaFriendsList" />
+  <xs:complexType name="PersonaFriendsList">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="friendPersona" type="ArrayOfFriendPersona" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfFriendPersona">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FriendPersona" nillable="true" type="FriendPersona" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FriendPersona">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="iconIndex" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="level" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="name" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="originalName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="personaId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="presence" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="socialNetwork" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="userId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

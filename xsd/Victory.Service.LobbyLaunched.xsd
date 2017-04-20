@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LobbyLaunched" nillable="true" type="LobbyLaunched" />
+  <xs:complexType name="LobbyLaunched">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="CryptoTickets" type="ArrayOfP2PCryptoTicket" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Entrants" type="ArrayOfLobbyEntrantInfo" />
+      <xs:element minOccurs="0" maxOccurs="1" name="EventSession" type="SessionInfo" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsNewRelayServer" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyId" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="UdpRelayHost" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="UdpRelayPort" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfP2PCryptoTicket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="P2PCryptoTicket" nillable="true" type="P2PCryptoTicket" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="P2PCryptoTicket">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SessionKey" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfLobbyEntrantInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LobbyEntrantInfo" nillable="true" type="LobbyEntrantInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LobbyEntrantInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="GridIndex" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Heat" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Level" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="State" type="LobbyEntrantState" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="LobbyEntrantState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="InFreeRoam" />
+      <xs:enumeration value="InLobby" />
+      <xs:enumeration value="InEvent" />
+      <xs:enumeration value="InPostEvent" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SessionInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Challenge" type="SecurityChallenge" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SessionId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SecurityChallenge">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="ChallengeId" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LeftSize" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Pattern" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RightSize" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

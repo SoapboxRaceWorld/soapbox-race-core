@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="User_Settings" nillable="true" type="User_Settings" />
+  <xs:complexType name="User_Settings">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CarCacheAgeLimit" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsRaceNowEnabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MaxCarCacheSize" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MinRaceNowLevel" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="VoipAvailable" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="activatedHolidaySceneryGroups" type="ArrayOfString" />
+      <xs:element minOccurs="0" maxOccurs="1" name="activeHolidayIds" type="ArrayOfLong" />
+      <xs:element minOccurs="0" maxOccurs="1" name="disactivatedHolidaySceneryGroups" type="ArrayOfString" />
+      <xs:element minOccurs="1" maxOccurs="1" name="firstTimeLogin" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="maxLevel" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="starterPackApplied" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="userId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfString">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfLong">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="long" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
