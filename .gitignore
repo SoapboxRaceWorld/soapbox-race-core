@@ -6,3 +6,4 @@
 /.classpath
 /.settings
 /gradle/
+/src/main/resources/Engine.svc
