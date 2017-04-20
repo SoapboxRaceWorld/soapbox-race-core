@@ -6,8 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 
+import com.soapboxrace.core.servlet.GenericServlet;
 import com.soapboxrace.jaxb.http.ArrayOfProfileData;
 import com.soapboxrace.jaxb.http.ObjectFactory;
 import com.soapboxrace.jaxb.http.User;
@@ -15,7 +15,7 @@ import com.soapboxrace.jaxb.http.UserInfo;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
 @WebServlet(urlPatterns = { "/Engine.svc/User/GetPermanentSession" })
-public class GetPermanentSession extends HttpServlet {
+public class GetPermanentSession extends GenericServlet {
 
 	/**
 	 * 
@@ -28,7 +28,7 @@ public class GetPermanentSession extends HttpServlet {
 		userInfo.setPersonas(new ArrayOfProfileData());
 		User user = new User();
 		user.setSecurityToken("1234567890");
-		user.setUserId(69L);
+		user.setUserId(getUserId(request));
 		userInfo.setUser(user);
 		String marshal = MarshalXML.marshal(new ObjectFactory().createUserInfo(userInfo));
 		response.getOutputStream().write(marshal.getBytes());
