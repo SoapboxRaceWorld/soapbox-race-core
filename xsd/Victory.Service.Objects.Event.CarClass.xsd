@@ -3,7 +3,7 @@
   <xs:element name="CarClass" nillable="true" type="CarClass" />
   <xs:complexType name="ArrayOfCarClass">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="ArrayOfCarClass" nillable="true" type="CarClass" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CarClass" nillable="true" type="CarClass" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="CarClass">
