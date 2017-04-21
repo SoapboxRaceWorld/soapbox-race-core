@@ -10,24 +10,29 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 
 import com.soapboxrace.core.servlet.GenericServlet;
-import com.soapboxrace.jaxb.http.ArrayOfString;
+import com.soapboxrace.jaxb.http.ProfileData;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
-@WebServlet(urlPatterns = { "/Engine.svc/DriverPersona/ReserveName" })
-public class ReserveName extends GenericServlet {
+@WebServlet(urlPatterns = { "/Engine.svc/DriverPersona/CreatePersona" })
+public class CreatePersona extends GenericServlet {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8374645591799823706L;
+	private static final long serialVersionUID = 4201305649735179306L;
 
 	@Override
 	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		ArrayOfString arrayOfString = new ArrayOfString();
-		// arrayOfString.getString().add("NONE");
-		QName qName = new QName("", "ArrayOfstring");
-		JAXBElement<ArrayOfString> jaxbElement = new JAXBElement<ArrayOfString>(qName, ArrayOfString.class, null, arrayOfString);
+		ProfileData profileData = new ProfileData();
+		profileData.setName("NOBODY");
+		profileData.setCash(5000000);
+		profileData.setIconIndex(0);
+		profileData.setPersonaId(100);
+		profileData.setLevel(60);
+
+		QName qName = new QName("", "ProfileData");
+		JAXBElement<ProfileData> jaxbElement = new JAXBElement<ProfileData>(qName, ProfileData.class, null, profileData);
 		String marshal = MarshalXML.marshal(jaxbElement);
 		response.getOutputStream().write(marshal.getBytes());
 	}
-
 }
