@@ -12,7 +12,8 @@ xjc -p com.soapboxrace.jaxb.http \
    Victory.DataLayer.Serialization.UdpRelayInfo.xsd \
    Victory.DataLayer.Serialization.RegionInfo.xsd \
    Victory.DataLayer.Serialization.LoginAnnouncement.LoginAnnouncementsDefinition.xsd \
-   Victory.DataLayer.Serialization.HeartBeat.xsd 
+   Victory.DataLayer.Serialization.HeartBeat.xsd \
+   Victory.DataLayer.Serialization.Event.EventDefinition.xsd
    
 cp -r com ../src/main/java
 rm -rf com
