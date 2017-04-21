@@ -2,7 +2,7 @@
 // Este arquivo foi gerado pela Arquitetura JavaTM para Implementação de Referência (JAXB) de Bind XML, v2.2.8-b130911.1802 
 // Consulte <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Todas as modificações neste arquivo serão perdidas após a recompilação do esquema de origem. 
-// Gerado em: 2017.04.19 às 11:07:08 PM AMT 
+// Gerado em: 2017.04.20 às 09:47:17 PM AMT 
 //
 
 
@@ -10,27 +10,32 @@ package com.soapboxrace.jaxb.http;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de UserSettings complex type.
+ * <p>Classe Java de User_Settings complex type.
  * 
  * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
  * 
  * <pre>
- * &lt;complexType name="UserSettings">
+ * &lt;complexType name="User_Settings">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="desktopResHeight" type="{http://www.w3.org/2001/XMLSchema}unsignedInt"/>
- *         &lt;element name="desktopResWidth" type="{http://www.w3.org/2001/XMLSchema}unsignedInt"/>
- *         &lt;element name="fullscreen" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="gameResHeight" type="{http://www.w3.org/2001/XMLSchema}unsignedInt"/>
- *         &lt;element name="gameResWidth" type="{http://www.w3.org/2001/XMLSchema}unsignedInt"/>
- *         &lt;element name="globalDetailLevel" type="{http://www.w3.org/2001/XMLSchema}unsignedInt"/>
- *         &lt;element name="userID" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="CarCacheAgeLimit" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="IsRaceNowEnabled" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="MaxCarCacheSize" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="MinRaceNowLevel" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="VoipAvailable" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="activatedHolidaySceneryGroups" type="{}ArrayOfString" minOccurs="0"/>
+ *         &lt;element name="activeHolidayIds" type="{}ArrayOfLong" minOccurs="0"/>
+ *         &lt;element name="disactivatedHolidaySceneryGroups" type="{}ArrayOfString" minOccurs="0"/>
+ *         &lt;element name="firstTimeLogin" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="maxLevel" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="starterPackApplied" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -40,140 +45,254 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "UserSettings", propOrder = {
-    "desktopResHeight",
-    "desktopResWidth",
-    "fullscreen",
-    "gameResHeight",
-    "gameResWidth",
-    "globalDetailLevel",
-    "userID"
+@XmlType(name = "User_Settings", propOrder = {
+    "carCacheAgeLimit",
+    "isRaceNowEnabled",
+    "maxCarCacheSize",
+    "minRaceNowLevel",
+    "voipAvailable",
+    "activatedHolidaySceneryGroups",
+    "activeHolidayIds",
+    "disactivatedHolidaySceneryGroups",
+    "firstTimeLogin",
+    "maxLevel",
+    "starterPackApplied",
+    "userId"
 })
 public class UserSettings {
 
-    @XmlSchemaType(name = "unsignedInt")
-    protected long desktopResHeight;
-    @XmlSchemaType(name = "unsignedInt")
-    protected long desktopResWidth;
-    protected boolean fullscreen;
-    @XmlSchemaType(name = "unsignedInt")
-    protected long gameResHeight;
-    @XmlSchemaType(name = "unsignedInt")
-    protected long gameResWidth;
-    @XmlSchemaType(name = "unsignedInt")
-    protected long globalDetailLevel;
-    protected long userID;
+    @XmlElement(name = "CarCacheAgeLimit")
+    protected int carCacheAgeLimit;
+    @XmlElement(name = "IsRaceNowEnabled")
+    protected boolean isRaceNowEnabled;
+    @XmlElement(name = "MaxCarCacheSize")
+    protected int maxCarCacheSize;
+    @XmlElement(name = "MinRaceNowLevel")
+    protected int minRaceNowLevel;
+    @XmlElement(name = "VoipAvailable")
+    protected boolean voipAvailable;
+    protected ArrayOfString activatedHolidaySceneryGroups;
+    protected ArrayOfLong activeHolidayIds;
+    protected ArrayOfString disactivatedHolidaySceneryGroups;
+    protected boolean firstTimeLogin;
+    protected int maxLevel;
+    protected boolean starterPackApplied;
+    protected long userId;
 
     /**
-     * Obtém o valor da propriedade desktopResHeight.
+     * Obtém o valor da propriedade carCacheAgeLimit.
      * 
      */
-    public long getDesktopResHeight() {
-        return desktopResHeight;
+    public int getCarCacheAgeLimit() {
+        return carCacheAgeLimit;
     }
 
     /**
-     * Define o valor da propriedade desktopResHeight.
+     * Define o valor da propriedade carCacheAgeLimit.
      * 
      */
-    public void setDesktopResHeight(long value) {
-        this.desktopResHeight = value;
+    public void setCarCacheAgeLimit(int value) {
+        this.carCacheAgeLimit = value;
     }
 
     /**
-     * Obtém o valor da propriedade desktopResWidth.
+     * Obtém o valor da propriedade isRaceNowEnabled.
      * 
      */
-    public long getDesktopResWidth() {
-        return desktopResWidth;
+    public boolean isIsRaceNowEnabled() {
+        return isRaceNowEnabled;
     }
 
     /**
-     * Define o valor da propriedade desktopResWidth.
+     * Define o valor da propriedade isRaceNowEnabled.
      * 
      */
-    public void setDesktopResWidth(long value) {
-        this.desktopResWidth = value;
+    public void setIsRaceNowEnabled(boolean value) {
+        this.isRaceNowEnabled = value;
     }
 
     /**
-     * Obtém o valor da propriedade fullscreen.
+     * Obtém o valor da propriedade maxCarCacheSize.
      * 
      */
-    public boolean isFullscreen() {
-        return fullscreen;
+    public int getMaxCarCacheSize() {
+        return maxCarCacheSize;
     }
 
     /**
-     * Define o valor da propriedade fullscreen.
+     * Define o valor da propriedade maxCarCacheSize.
      * 
      */
-    public void setFullscreen(boolean value) {
-        this.fullscreen = value;
+    public void setMaxCarCacheSize(int value) {
+        this.maxCarCacheSize = value;
     }
 
     /**
-     * Obtém o valor da propriedade gameResHeight.
+     * Obtém o valor da propriedade minRaceNowLevel.
      * 
      */
-    public long getGameResHeight() {
-        return gameResHeight;
+    public int getMinRaceNowLevel() {
+        return minRaceNowLevel;
     }
 
     /**
-     * Define o valor da propriedade gameResHeight.
+     * Define o valor da propriedade minRaceNowLevel.
      * 
      */
-    public void setGameResHeight(long value) {
-        this.gameResHeight = value;
+    public void setMinRaceNowLevel(int value) {
+        this.minRaceNowLevel = value;
     }
 
     /**
-     * Obtém o valor da propriedade gameResWidth.
+     * Obtém o valor da propriedade voipAvailable.
      * 
      */
-    public long getGameResWidth() {
-        return gameResWidth;
+    public boolean isVoipAvailable() {
+        return voipAvailable;
     }
 
     /**
-     * Define o valor da propriedade gameResWidth.
+     * Define o valor da propriedade voipAvailable.
      * 
      */
-    public void setGameResWidth(long value) {
-        this.gameResWidth = value;
+    public void setVoipAvailable(boolean value) {
+        this.voipAvailable = value;
     }
 
     /**
-     * Obtém o valor da propriedade globalDetailLevel.
+     * Obtém o valor da propriedade activatedHolidaySceneryGroups.
      * 
+     * @return
+     *     possible object is
+     *     {@link ArrayOfString }
+     *     
      */
-    public long getGlobalDetailLevel() {
-        return globalDetailLevel;
+    public ArrayOfString getActivatedHolidaySceneryGroups() {
+        return activatedHolidaySceneryGroups;
     }
 
     /**
-     * Define o valor da propriedade globalDetailLevel.
+     * Define o valor da propriedade activatedHolidaySceneryGroups.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link ArrayOfString }
+     *     
      */
-    public void setGlobalDetailLevel(long value) {
-        this.globalDetailLevel = value;
+    public void setActivatedHolidaySceneryGroups(ArrayOfString value) {
+        this.activatedHolidaySceneryGroups = value;
     }
 
     /**
-     * Obtém o valor da propriedade userID.
+     * Obtém o valor da propriedade activeHolidayIds.
      * 
+     * @return
+     *     possible object is
+     *     {@link ArrayOfLong }
+     *     
      */
-    public long getUserID() {
-        return userID;
+    public ArrayOfLong getActiveHolidayIds() {
+        return activeHolidayIds;
     }
 
     /**
-     * Define o valor da propriedade userID.
+     * Define o valor da propriedade activeHolidayIds.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ArrayOfLong }
+     *     
+     */
+    public void setActiveHolidayIds(ArrayOfLong value) {
+        this.activeHolidayIds = value;
+    }
+
+    /**
+     * Obtém o valor da propriedade disactivatedHolidaySceneryGroups.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ArrayOfString }
+     *     
+     */
+    public ArrayOfString getDisactivatedHolidaySceneryGroups() {
+        return disactivatedHolidaySceneryGroups;
+    }
+
+    /**
+     * Define o valor da propriedade disactivatedHolidaySceneryGroups.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ArrayOfString }
+     *     
+     */
+    public void setDisactivatedHolidaySceneryGroups(ArrayOfString value) {
+        this.disactivatedHolidaySceneryGroups = value;
+    }
+
+    /**
+     * Obtém o valor da propriedade firstTimeLogin.
      * 
      */
-    public void setUserID(long value) {
-        this.userID = value;
+    public boolean isFirstTimeLogin() {
+        return firstTimeLogin;
+    }
+
+    /**
+     * Define o valor da propriedade firstTimeLogin.
+     * 
+     */
+    public void setFirstTimeLogin(boolean value) {
+        this.firstTimeLogin = value;
+    }
+
+    /**
+     * Obtém o valor da propriedade maxLevel.
+     * 
+     */
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    /**
+     * Define o valor da propriedade maxLevel.
+     * 
+     */
+    public void setMaxLevel(int value) {
+        this.maxLevel = value;
+    }
+
+    /**
+     * Obtém o valor da propriedade starterPackApplied.
+     * 
+     */
+    public boolean isStarterPackApplied() {
+        return starterPackApplied;
+    }
+
+    /**
+     * Define o valor da propriedade starterPackApplied.
+     * 
+     */
+    public void setStarterPackApplied(boolean value) {
+        this.starterPackApplied = value;
+    }
+
+    /**
+     * Obtém o valor da propriedade userId.
+     * 
+     */
+    public long getUserId() {
+        return userId;
+    }
+
+    /**
+     * Define o valor da propriedade userId.
+     * 
+     */
+    public void setUserId(long value) {
+        this.userId = value;
     }
 
 }

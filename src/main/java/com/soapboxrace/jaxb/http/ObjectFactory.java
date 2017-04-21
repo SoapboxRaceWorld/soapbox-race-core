@@ -2,7 +2,7 @@
 // Este arquivo foi gerado pela Arquitetura JavaTM para Implementação de Referência (JAXB) de Bind XML, v2.2.8-b130911.1802 
 // Consulte <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Todas as modificações neste arquivo serão perdidas após a recompilação do esquema de origem. 
-// Gerado em: 2017.04.19 às 11:07:08 PM AMT 
+// Gerado em: 2017.04.20 às 09:47:17 PM AMT 
 //
 
 
@@ -34,7 +34,7 @@ public class ObjectFactory {
     private final static QName _HeartBeat_QNAME = new QName("", "HeartBeat");
     private final static QName _SystemInfo_QNAME = new QName("", "SystemInfo");
     private final static QName _ChatServer_QNAME = new QName("", "chatServer");
-    private final static QName _UserSettings_QNAME = new QName("", "UserSettings");
+    private final static QName _UserSettings_QNAME = new QName("", "User_Settings");
     private final static QName _UserInfo_QNAME = new QName("", "UserInfo");
     private final static QName _RegionInfo_QNAME = new QName("", "RegionInfo");
     private final static QName _FraudConfig_QNAME = new QName("", "FraudConfig");
@@ -357,6 +357,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ArrayOfString }
+     * 
+     */
+    public ArrayOfString createArrayOfString() {
+        return new ArrayOfString();
+    }
+
+    /**
      * Create an instance of {@link LoginAnnouncementDefinition }
      * 
      */
@@ -370,6 +378,14 @@ public class ObjectFactory {
      */
     public PerformancePartTrans createPerformancePartTrans() {
         return new PerformancePartTrans();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfLong }
+     * 
+     */
+    public ArrayOfLong createArrayOfLong() {
+        return new ArrayOfLong();
     }
 
     /**
@@ -419,7 +435,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link UserSettings }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "UserSettings")
+    @XmlElementDecl(namespace = "", name = "User_Settings")
     public JAXBElement<UserSettings> createUserSettings(UserSettings value) {
         return new JAXBElement<UserSettings>(_UserSettings_QNAME, UserSettings.class, null, value);
     }
