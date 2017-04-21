@@ -24,7 +24,7 @@ public class GetFriendListFromUserId extends GenericServlet {
 	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
 		PersonaFriendsList personaFriendsList = new PersonaFriendsList();
 		JAXBElement<PersonaFriendsList> createPersonaFriendsList = new ObjectFactory().createPersonaFriendsList(personaFriendsList);
-		String xmlns = "http://schemas.datacontract.org/2004/07/Victory.TransferObjects.DriverPerson";
+		String xmlns = "http://schemas.datacontract.org/2004/07/Victory.TransferObjects.DriverPersona";
 		String marshal = MarshalXML.marshal(createPersonaFriendsList, xmlns);
 		response.getOutputStream().write(marshal.getBytes());
 	}
