@@ -1,6 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:element name="OwnedCarTrans" nillable="true" type="OwnedCarTrans" />
+  <xs:complexType name="PurchasedCarsType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="OwnedCarTrans" nillable="true" type="OwnedCarTrans" />
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="OwnedCarTrans">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="CustomCar" type="CustomCarTrans" />
