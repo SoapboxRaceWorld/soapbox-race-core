@@ -23,7 +23,8 @@ public class GenericServlet extends HttpServlet {
 	@Override
 	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		System.out.println(httpRequest);
+		System.out.println(httpRequest.getRequestURI());
+		System.out.println(readInputStream(request));
 		String filePath = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length() + 1);
 		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filePath);
 		if (inputStream != null) {
@@ -59,6 +60,11 @@ public class GenericServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		return buffer.toString();
+	}
+
+	protected String[] splitUri(ServletRequest request) {
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		return httpRequest.getRequestURI().split("/");
 	}
 
 }

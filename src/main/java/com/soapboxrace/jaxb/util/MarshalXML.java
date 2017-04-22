@@ -13,7 +13,7 @@ public class MarshalXML {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(jaxbElement.getValue().getClass());
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
 			if (schemaLocation != null) {
 				jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
