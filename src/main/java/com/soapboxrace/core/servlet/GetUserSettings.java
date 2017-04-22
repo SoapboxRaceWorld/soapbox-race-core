@@ -31,13 +31,15 @@ public class GetUserSettings extends GenericServlet {
 		userSettings.setMinRaceNowLevel(2);
 		userSettings.setVoipAvailable(false);
 		ArrayOfString arrayOfString = new ArrayOfString();
-		arrayOfString.getString().add("SCENERY_GROUP_CHRISTMAS");
+		arrayOfString.getString().add("SCENERY_GROUP_NORMAL");
+		arrayOfString.getString().add("PLACEHOLDER");
 		userSettings.setActivatedHolidaySceneryGroups(arrayOfString);
 		ArrayOfLong arrayOfLong = new ArrayOfLong();
 		arrayOfLong.getLong().add(0L);
 		userSettings.setActiveHolidayIds(arrayOfLong);
 		ArrayOfString arrayOfString2 = new ArrayOfString();
-		arrayOfString2.getString().add("SCENERY_GROUP_CHRISTMAS_DISABLE");
+		arrayOfString2.getString().add("SCENERY_GROUP_NORMAL_DISABLE");
+		arrayOfString2.getString().add("PLACEHOLDER");
 		userSettings.setDisactivatedHolidaySceneryGroups(arrayOfString2);
 		userSettings.setFirstTimeLogin(false);
 		userSettings.setMaxLevel(60);
