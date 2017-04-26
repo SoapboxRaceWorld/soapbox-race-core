@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="ArrayOfProfileData.xsd" />
+  <xs:include schemaLocation="User.xsd" />
+  <xs:element name="UserInfo" nillable="true" type="UserInfo" />
+  <xs:complexType name="UserInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="defaultPersonaIdx" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="personas" type="ArrayOfProfileData" />
+      <xs:element minOccurs="0" maxOccurs="1" name="user" type="User" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

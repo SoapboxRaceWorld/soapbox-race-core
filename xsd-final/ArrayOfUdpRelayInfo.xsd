@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="UdpRelayInfo.xsd" />
+  <xs:element name="ArrayOfUdpRelayInfo" nillable="true" type="ArrayOfUdpRelayInfo" />
+  <xs:complexType name="ArrayOfUdpRelayInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="UdpRelayInfo" nillable="true" type="UdpRelayInfo" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

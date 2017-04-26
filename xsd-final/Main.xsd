@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="ArrayOfProductTrans.xsd" />
+  <xs:include schemaLocation="ProfileData.xsd" />
+  <xs:include schemaLocation="ArrayOfInt.xsd" />
+  <xs:include schemaLocation="ArrayOfString.xsd" />
+  <xs:include schemaLocation="ClientConfigTrans.xsd" />
+  <xs:include schemaLocation="FraudConfig.xsd" />
+  <xs:include schemaLocation="ChatServer.xsd" />
+  <xs:include schemaLocation="UserInfo.xsd" />
+  <xs:include schemaLocation="ArrayOfCarClass.xsd" />
+  <xs:include schemaLocation="PersonaFriendsList.xsd" />
+  <xs:include schemaLocation="ArrayOfUdpRelayInfo.xsd" />
+  <xs:include schemaLocation="RegionInfo.xsd" />
+  <xs:include schemaLocation="User_Settings.xsd" />
+  <xs:include schemaLocation="LoginAnnouncementsDefinition.xsd" />
+  <xs:include schemaLocation="SystemInfo.xsd" />
+  <xs:include schemaLocation="CommerceResultTrans.xsd" />
+  <xs:include schemaLocation="HeartBeat.xsd" />
+  <xs:include schemaLocation="EventDefinition.xsd" />
+</xs:schema>

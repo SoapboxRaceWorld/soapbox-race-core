@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="FraudConfig" nillable="true" type="FraudConfig" />
+  <xs:complexType name="FraudConfig">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="enabledBitField" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="gameFileFreq" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="moduleFreq" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="startUpFreq" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="userID" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

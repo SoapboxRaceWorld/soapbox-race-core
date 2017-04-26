@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="ArrayOfCustomPaintTrans.xsd" />
+  <xs:include schemaLocation="ArrayOfPerformancePartTrans.xsd" />
+  <xs:include schemaLocation="ArrayOfSkillModPartTrans.xsd" />
+  <xs:include schemaLocation="ArrayOfCustomVinylTrans.xsd" />
+  <xs:include schemaLocation="ArrayOfVisualPartTrans.xsd" />
+  <xs:complexType name="CustomCarTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="BaseCar" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CarClassHash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Id" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsPreset" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Level" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Paints" type="ArrayOfCustomPaintTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="PerformanceParts" type="ArrayOfPerformancePartTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PhysicsProfileHash" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Rating" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ResalePrice" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RideHeightDrop" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SkillModParts" type="ArrayOfSkillModPartTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SkillModSlotCount" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Version" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Vinyls" type="ArrayOfCustomVinylTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VisualParts" type="ArrayOfVisualPartTrans" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

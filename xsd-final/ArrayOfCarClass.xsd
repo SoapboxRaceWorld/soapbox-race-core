@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="CarClass.xsd" />
+  <xs:element name="ArrayOfCarClass" nillable="true" type="ArrayOfCarClass" />
+  <xs:complexType name="ArrayOfCarClass">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CarClass" nillable="true" type="CarClass" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

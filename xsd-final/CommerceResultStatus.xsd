@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="CommerceResultStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="Fail_InvalidBasket" />
+      <xs:enumeration value="Fail_InsufficientFunds" />
+      <xs:enumeration value="Fail_InsufficientCarSlots" />
+      <xs:enumeration value="Fail_MaxStackOrRentalLimit" />
+      <xs:enumeration value="Fail_InvalidPerformanceUpgrade" />
+      <xs:enumeration value="Fail_ItemNotAvailableStandalone" />
+      <xs:enumeration value="Fail_PersonaNotRightLevel" />
+      <xs:enumeration value="Fail_LockedProductNotAccessibleToThisUser" />
+      <xs:enumeration value="Fail_BoostTransactionsAreDisabled" />
+      <xs:enumeration value="Fail_InsufficientPerformancePartInventory" />
+      <xs:enumeration value="Fail_MaxAllowedPurchasesForThisProduct" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

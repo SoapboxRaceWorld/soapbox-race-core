@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="RegionInfo" nillable="true" type="RegionInfo" />
+  <xs:complexType name="RegionInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CountdownProposalInMilliseconds" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DirectConnectTimeoutInMilliseconds" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DropOutTimeInMilliseconds" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventLoadTimeoutInMilliseconds" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="HeartbeatIntervalInMilliseconds" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="UdpRelayBandwidthInBps" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="UdpRelayTimeoutInMilliseconds" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

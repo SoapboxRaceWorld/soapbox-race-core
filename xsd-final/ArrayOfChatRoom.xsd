@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="ChatRoom.xsd" />
+  <xs:complexType name="ArrayOfChatRoom">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="chatRoom" nillable="true" type="chatRoom" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

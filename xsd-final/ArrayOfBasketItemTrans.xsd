@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="BasketItemTrans.xsd" />
+  <xs:complexType name="ArrayOfBasketItemTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BasketItemTrans" nillable="true" type="BasketItemTrans" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

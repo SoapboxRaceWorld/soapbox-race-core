@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="User">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="address1" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="address2" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="country" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dateCreated" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="dob" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="email" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="emailStatus" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="firstName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="fullGameAccess" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="gender" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="idDigits" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="isComplete" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="landlinePhone" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="language" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="lastAuthDate" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="lastName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mobile" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="nickname" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="postalCode" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="realName" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="reasonCode" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="remoteUserId" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="securityToken" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="starterPackEntitlementTag" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="status" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="subscribeMsg" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="tosVersion" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="userId" type="xs:long" />
+      <xs:element minOccurs="0" maxOccurs="1" name="username" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
