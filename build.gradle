@@ -29,5 +29,6 @@ repositories {
 
 dependencies {
     compileOnly group: 'org.jboss.spec.javax.servlet', name: 'jboss-servlet-api_3.1_spec', version: '1.0.0.Final'
+    compileOnly group: 'javax', name: 'javaee-api', version: '7.0'
 }
 
