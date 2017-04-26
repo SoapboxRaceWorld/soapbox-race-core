@@ -1,6 +1,9 @@
 package com.soapboxrace.core.bo;
 
+import javax.inject.Inject;
+
 import com.soapboxrace.core.bo.interfaces.IGetUserSettingsBO;
+import com.soapboxrace.core.db.interfaces.IDbConn;
 import com.soapboxrace.jaxb.http.ArrayOfLong;
 import com.soapboxrace.jaxb.http.ArrayOfString;
 import com.soapboxrace.jaxb.http.ObjectFactory;
@@ -9,8 +12,13 @@ import com.soapboxrace.jaxb.util.MarshalXML;
 
 public class GetUserSettingsBO implements IGetUserSettingsBO {
 
+	@Inject
+	private IDbConn dbConn;
+	
 	@Override
 	public String getUserSettings(Long userId, String token) {
+		System.out.println(dbConn.getDataSource());
+		
 		UserSettings userSettings = new UserSettings();
 		userSettings.setCarCacheAgeLimit(600);
 		userSettings.setIsRaceNowEnabled(true);

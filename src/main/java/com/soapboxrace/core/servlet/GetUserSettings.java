@@ -26,7 +26,6 @@ public class GetUserSettings extends GenericServlet {
 		// Long userId = getUserId(request);
 		Long userId = 1L;
 		String token = "";
-		System.out.println(getUserSettingsBO);
 		String userSettings = getUserSettingsBO.getUserSettings(userId, token);
 		response.getOutputStream().write(userSettings.getBytes());
 	}
