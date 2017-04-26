@@ -7,9 +7,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
 
 import com.soapboxrace.core.servlet.GenericServlet;
+import com.soapboxrace.jaxb.http.ObjectFactory;
 import com.soapboxrace.jaxb.http.ProfileData;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
@@ -30,9 +30,8 @@ public class CreatePersona extends GenericServlet {
 		profileData.setPersonaId(100);
 		profileData.setLevel(60);
 
-		QName qName = new QName("", "ProfileData");
-		JAXBElement<ProfileData> jaxbElement = new JAXBElement<ProfileData>(qName, ProfileData.class, null, profileData);
-		String marshal = MarshalXML.marshal(jaxbElement);
+		JAXBElement<ProfileData> createProfileData = new ObjectFactory().createProfileData(profileData);
+		String marshal = MarshalXML.marshal(createProfileData);
 		response.getOutputStream().write(marshal.getBytes());
 	}
 }

@@ -7,10 +7,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
 
 import com.soapboxrace.core.servlet.GenericServlet;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
+import com.soapboxrace.jaxb.http.ObjectFactory;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
 @WebServlet(urlPatterns = { "/Engine.svc/DriverPersona/GetExpLevelPointsMap" })
@@ -84,10 +84,9 @@ public class GetExpLevelPointsMap extends GenericServlet {
 		arrayOfInt.getInt().add(8837015);
 		arrayOfInt.getInt().add(9403075);
 		arrayOfInt.getInt().add(9992125);
-		QName qName = new QName("", "ArrayOfInt");
-		JAXBElement<ArrayOfInt> jaxbElement = new JAXBElement<ArrayOfInt>(qName, ArrayOfInt.class, null, arrayOfInt);
 
-		String marshal = MarshalXML.marshal(jaxbElement);
+		JAXBElement<ArrayOfInt> createArrayOfInt = new ObjectFactory().createArrayOfInt(arrayOfInt);
+		String marshal = MarshalXML.marshal(createArrayOfInt);
 		response.getOutputStream().write(marshal.getBytes());
 	}
 }

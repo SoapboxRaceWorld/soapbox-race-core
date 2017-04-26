@@ -7,10 +7,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
 
 import com.soapboxrace.core.servlet.GenericServlet;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
+import com.soapboxrace.jaxb.http.ObjectFactory;
 import com.soapboxrace.jaxb.http.ProductTrans;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
@@ -44,9 +44,9 @@ public class ProductsInCategory extends GenericServlet {
 			arrayOfProductTrans.getProductTrans().add(productTrans);
 		}
 
-		QName qName = new QName("", "ArrayOfProductTrans");
-		JAXBElement<ArrayOfProductTrans> jaxbElement = new JAXBElement<ArrayOfProductTrans>(qName, ArrayOfProductTrans.class, null, arrayOfProductTrans);
-		String marshal = MarshalXML.marshal(jaxbElement, "http://schemas.datacontract.org/2004/07/Victory.DataLayer.Serialization");
+		JAXBElement<ArrayOfProductTrans> createArrayOfProductTrans = new ObjectFactory().createArrayOfProductTrans(arrayOfProductTrans);
+		String marshal = MarshalXML.marshal(createArrayOfProductTrans, "http://schemas.datacontract.org/2004/07/Victory.DataLayer.Serialization");
 		response.getOutputStream().write(marshal.getBytes());
 	}
+
 }

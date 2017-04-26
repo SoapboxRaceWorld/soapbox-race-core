@@ -7,9 +7,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
 
 import com.soapboxrace.jaxb.http.ArrayOfUdpRelayInfo;
+import com.soapboxrace.jaxb.http.ObjectFactory;
 import com.soapboxrace.jaxb.http.UdpRelayInfo;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
@@ -27,9 +27,9 @@ public class GetRebroadcasters extends GenericServlet {
 		udpRelayInfo.setHost("127.0.0.1");
 		udpRelayInfo.setPort(9999);
 		arrayOfUdpRelayInfo.getUdpRelayInfo().add(udpRelayInfo);
-		QName qName = new QName("", "ArrayOfUdpRelayInfo");
-		JAXBElement<ArrayOfUdpRelayInfo> jaxbElement = new JAXBElement<ArrayOfUdpRelayInfo>(qName, ArrayOfUdpRelayInfo.class, null, arrayOfUdpRelayInfo);
-		String marshal = MarshalXML.marshal(jaxbElement);
+
+		JAXBElement<ArrayOfUdpRelayInfo> createArrayOfUdpRelayInfo = new ObjectFactory().createArrayOfUdpRelayInfo(arrayOfUdpRelayInfo);
+		String marshal = MarshalXML.marshal(createArrayOfUdpRelayInfo);
 		response.getOutputStream().write(marshal.getBytes());
 	}
 

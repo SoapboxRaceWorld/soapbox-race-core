@@ -7,10 +7,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
 
 import com.soapboxrace.jaxb.http.ArrayOfCarClass;
 import com.soapboxrace.jaxb.http.CarClass;
+import com.soapboxrace.jaxb.http.ObjectFactory;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
 @WebServlet(urlPatterns = { "/Engine.svc/carclasses" })
@@ -54,10 +54,8 @@ public class CarClasses extends GenericServlet {
 		carClass6.setMinRating((short) 400);
 		arrayOfCarClass.getCarClass().add(carClass6);
 
-		QName qName = new QName("", "ArrayOfCarClass");
-		JAXBElement<ArrayOfCarClass> jaxbElement = new JAXBElement<ArrayOfCarClass>(qName, ArrayOfCarClass.class, null, arrayOfCarClass);
-
-		String marshal = MarshalXML.marshal(jaxbElement);
+		JAXBElement<ArrayOfCarClass> createArrayOfCarClass = new ObjectFactory().createArrayOfCarClass(arrayOfCarClass);
+		String marshal = MarshalXML.marshal(createArrayOfCarClass);
 		response.getOutputStream().write(marshal.getBytes());
 	}
 
