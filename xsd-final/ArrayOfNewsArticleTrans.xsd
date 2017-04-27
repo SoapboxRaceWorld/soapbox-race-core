@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="NewsArticleTrans.xsd" />
+  <xs:element name="ArrayOfNewsArticleTrans" nillable="true" type="ArrayOfNewsArticleTrans" />
+  <xs:complexType name="ArrayOfNewsArticleTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NewsArticleTrans" nillable="true" type="NewsArticleTrans" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

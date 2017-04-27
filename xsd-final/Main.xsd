@@ -21,5 +21,9 @@
   <xs:include schemaLocation="CarSlotInfoTrans.xsd" />
   <xs:include schemaLocation="SocialSettings.xsd" />
   <xs:include schemaLocation="EventsPacket.xsd" />
+  <xs:include schemaLocation="AchievementsPacket.xsd" />
+  <xs:include schemaLocation="ArrayOfLevelGiftDefinition.xsd" />
+  <xs:include schemaLocation="ArrayOfPersonaBase.xsd" />
+  <xs:include schemaLocation="ArrayOfNewsArticleTrans.xsd" />
+  <xs:include schemaLocation="TreasureHuntEventSession.xsd" />
 </xs:schema>
-
