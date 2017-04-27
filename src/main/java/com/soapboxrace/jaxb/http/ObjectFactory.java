@@ -42,6 +42,7 @@ public class ObjectFactory {
     private final static QName _LoginAnnouncementsDefinition_QNAME = new QName("", "LoginAnnouncementsDefinition");
     private final static QName _CommerceResultTrans_QNAME = new QName("", "CommerceResultTrans");
     private final static QName _ClientConfigTrans_QNAME = new QName("", "ClientConfigTrans");
+    private final static QName _CarSlotInfoTrans_QNAME = new QName("", "CarSlotInfoTrans");
     private final static QName _ArrayOfInt_QNAME = new QName("", "ArrayOfInt");
     private final static QName _OwnedCarTrans_QNAME = new QName("", "OwnedCarTrans");
 
@@ -194,6 +195,14 @@ public class ObjectFactory {
      */
     public ClientConfigTrans createClientConfigTrans() {
         return new ClientConfigTrans();
+    }
+
+    /**
+     * Create an instance of {@link CarSlotInfoTrans }
+     * 
+     */
+    public CarSlotInfoTrans createCarSlotInfoTrans() {
+        return new CarSlotInfoTrans();
     }
 
     /**
@@ -692,6 +701,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "ClientConfigTrans")
     public JAXBElement<ClientConfigTrans> createClientConfigTrans(ClientConfigTrans value) {
         return new JAXBElement<ClientConfigTrans>(_ClientConfigTrans_QNAME, ClientConfigTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CarSlotInfoTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "CarSlotInfoTrans")
+    public JAXBElement<CarSlotInfoTrans> createCarSlotInfoTrans(CarSlotInfoTrans value) {
+        return new JAXBElement<CarSlotInfoTrans>(_CarSlotInfoTrans_QNAME, CarSlotInfoTrans.class, null, value);
     }
 
     /**
