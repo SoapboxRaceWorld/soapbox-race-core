@@ -19,5 +19,7 @@
   <xs:include schemaLocation="HeartBeat.xsd" />
   <xs:include schemaLocation="EventDefinition.xsd" />
   <xs:include schemaLocation="CarSlotInfoTrans.xsd" />
+  <xs:include schemaLocation="SocialSettings.xsd" />
+  <xs:include schemaLocation="EventsPacket.xsd" />
 </xs:schema>
 

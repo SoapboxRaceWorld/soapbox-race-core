@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="EventDefinition.xsd" />
+  <xs:element name="EventsPacket" nillable="true" type="EventsPacket" />
+  <xs:complexType name="EventsPacket">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Events" type="ArrayOfEventDefinition" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfEventDefinition">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="EventDefinition" nillable="true" type="EventDefinition" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
