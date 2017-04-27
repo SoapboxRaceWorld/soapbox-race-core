@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="ArrayOfOwnedCarTrans.xsd" />
+  <xs:include schemaLocation="ArrayOfProductTrans.xsd" />
+  <xs:element name="CarSlotInfoTrans" nillable="true" type="CarSlotInfoTrans" />
+  <xs:complexType name="CarSlotInfoTrans">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="CarsOwnedByPersona" type="ArrayOfOwnedCarTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DefaultOwnedCarIndex" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ObtainableSlots" type="ArrayOfProductTrans" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OwnedCarSlotsCount" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
