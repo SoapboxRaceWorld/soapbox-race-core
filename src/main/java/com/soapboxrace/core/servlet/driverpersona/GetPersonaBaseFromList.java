@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.xml.bind.JAXBElement;
 
 import com.soapboxrace.core.servlet.GenericServlet;
+import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
 import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
 import com.soapboxrace.jaxb.http.ObjectFactory;
 import com.soapboxrace.jaxb.http.PersonaBase;
@@ -25,18 +26,18 @@ public class GetPersonaBaseFromList extends GenericServlet {
 	@Override
 	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
 		ArrayOfPersonaBase arrayOfPersonaBase = new ArrayOfPersonaBase();
-		// <PersonaBase>
-		// <Badges />
-		// <IconIndex>10</IconIndex>
-		// <Level>60</Level>
-		// <Motto></Motto>
-		// <Name>Player1</Name>
-		// <PersonaId>22418201</PersonaId>
-		// <Presence>1</Presence>
-		// <Score>5175</Score>
-		// <UserId>11111111</UserId>
-		// </PersonaBase>
-		
+		PersonaBase personaBase = new PersonaBase();
+		personaBase.setBadges(new ArrayOfBadgePacket());
+		personaBase.setIconIndex(0);
+		personaBase.setLevel(60);
+		personaBase.setMotto("");
+		personaBase.setName("NOBODY");
+		personaBase.setPresence(1);
+		personaBase.setPersonaId(100);
+		personaBase.setScore(0);
+		personaBase.setUserId(getUserId(request));
+
+		arrayOfPersonaBase.getPersonaBase().add(personaBase);
 		JAXBElement<ArrayOfPersonaBase> createArrayOfPersonaBase = new ObjectFactory().createArrayOfPersonaBase(arrayOfPersonaBase);
 		String marshal = MarshalXML.marshal(createArrayOfPersonaBase);
 		response.getOutputStream().write(marshal.getBytes());
