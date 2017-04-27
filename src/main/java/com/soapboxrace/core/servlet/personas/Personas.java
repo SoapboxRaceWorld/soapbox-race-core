@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBElement;
 
 import com.soapboxrace.core.servlet.GenericServlet;
@@ -16,6 +15,7 @@ import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
 import com.soapboxrace.jaxb.http.ArrayOfPerformancePartTrans;
+import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
 import com.soapboxrace.jaxb.http.ArrayOfSkillModPartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfVisualPartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfWalletTrans;
@@ -41,10 +41,8 @@ public class Personas extends GenericServlet {
 	@Override
 	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
 		String[] splitUri = splitUri(request);
-		Long personaId = Long.valueOf(splitUri[4]);
+		// Long personaId = Long.valueOf(splitUri[4]);
 		String method = splitUri[5];
-		System.out.println("personaId: " + personaId);
-		System.out.println("method: [" + method + "]");
 		if ("baskets".equals(method)) {
 			baskets(request, response);
 		}
@@ -99,7 +97,7 @@ public class Personas extends GenericServlet {
 		customCarTrans.setVisualParts(new ArrayOfVisualPartTrans());
 		OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
 		ownedCarTrans.setCustomCar(customCarTrans);
-		ownedCarTrans.setId(0L);
+		ownedCarTrans.setId(123456L);
 		ownedCarTrans.setDurability((short) 100);
 		ownedCarTrans.setExpirationDate(null);
 		ownedCarTrans.setHeat(0F);
@@ -113,6 +111,9 @@ public class Personas extends GenericServlet {
 	private void carslots(ServletRequest request, ServletResponse response) throws ServletException, IOException {
 		CarSlotInfoTrans carSlotInfoTrans = new CarSlotInfoTrans();
 		carSlotInfoTrans.setCarsOwnedByPersona(getArrayOfOwnedCarTransExample());
+		carSlotInfoTrans.setDefaultOwnedCarIndex(0);
+		carSlotInfoTrans.setObtainableSlots(new ArrayOfProductTrans());
+		carSlotInfoTrans.setOwnedCarSlotsCount(1);
 		JAXBElement<CarSlotInfoTrans> createCarSlotInfoTrans = new ObjectFactory().createCarSlotInfoTrans(carSlotInfoTrans);
 		String marshal = MarshalXML.marshal(createCarSlotInfoTrans);
 		response.getOutputStream().write(marshal.getBytes());
