@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="Badges" type="{}ArrayOfBadgePacket" minOccurs="0"/>
  *         &lt;element name="Boost" type="{http://www.w3.org/2001/XMLSchema}double"/>
  *         &lt;element name="Cash" type="{http://www.w3.org/2001/XMLSchema}double"/>
  *         &lt;element name="IconIndex" type="{http://www.w3.org/2001/XMLSchema}int"/>
@@ -28,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="Rating" type="{http://www.w3.org/2001/XMLSchema}double"/>
  *         &lt;element name="Rep" type="{http://www.w3.org/2001/XMLSchema}double"/>
  *         &lt;element name="RepAtCurrentLevel" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="Score" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="ccar" type="{}ArrayOfPersonaCCar" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -39,6 +41,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ProfileData", propOrder = {
+    "badges",
     "boost",
     "cash",
     "iconIndex",
@@ -50,10 +53,13 @@ import javax.xml.bind.annotation.XmlType;
     "rating",
     "rep",
     "repAtCurrentLevel",
+    "score",
     "ccar"
 })
 public class ProfileData {
 
+    @XmlElement(name = "Badges")
+    protected ArrayOfBadgePacket badges;
     @XmlElement(name = "Boost")
     protected double boost;
     @XmlElement(name = "Cash")
@@ -76,7 +82,33 @@ public class ProfileData {
     protected double rep;
     @XmlElement(name = "RepAtCurrentLevel")
     protected int repAtCurrentLevel;
+    @XmlElement(name = "Score")
+    protected int score;
     protected ArrayOfPersonaCCar ccar;
+
+    /**
+     * Obtém o valor da propriedade badges.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ArrayOfBadgePacket }
+     *     
+     */
+    public ArrayOfBadgePacket getBadges() {
+        return badges;
+    }
+
+    /**
+     * Define o valor da propriedade badges.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ArrayOfBadgePacket }
+     *     
+     */
+    public void setBadges(ArrayOfBadgePacket value) {
+        this.badges = value;
+    }
 
     /**
      * Obtém o valor da propriedade boost.
@@ -268,6 +300,22 @@ public class ProfileData {
      */
     public void setRepAtCurrentLevel(int value) {
         this.repAtCurrentLevel = value;
+    }
+
+    /**
+     * Obtém o valor da propriedade score.
+     * 
+     */
+    public int getScore() {
+        return score;
+    }
+
+    /**
+     * Define o valor da propriedade score.
+     * 
+     */
+    public void setScore(int value) {
+        this.score = value;
     }
 
     /**

@@ -44,6 +44,7 @@ public class ObjectFactory {
     private final static QName _ClientConfigTrans_QNAME = new QName("", "ClientConfigTrans");
     private final static QName _CarSlotInfoTrans_QNAME = new QName("", "CarSlotInfoTrans");
     private final static QName _ArrayOfInt_QNAME = new QName("", "ArrayOfInt");
+    private final static QName _ArrayOfInventoryItemTrans_QNAME = new QName("", "ArrayOfInventoryItemTrans");
     private final static QName _OwnedCarTrans_QNAME = new QName("", "OwnedCarTrans");
 
     /**
@@ -214,6 +215,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ArrayOfInventoryItemTrans }
+     * 
+     */
+    public ArrayOfInventoryItemTrans createArrayOfInventoryItemTrans() {
+        return new ArrayOfInventoryItemTrans();
+    }
+
+    /**
      * Create an instance of {@link OwnedCarTrans }
      * 
      */
@@ -302,6 +311,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link BadgePacket }
+     * 
+     */
+    public BadgePacket createBadgePacket() {
+        return new BadgePacket();
+    }
+
+    /**
      * Create an instance of {@link BasketTrans }
      * 
      */
@@ -371,6 +388,14 @@ public class ObjectFactory {
      */
     public ArrayOfFriendPersona createArrayOfFriendPersona() {
         return new ArrayOfFriendPersona();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfBadgePacket }
+     * 
+     */
+    public ArrayOfBadgePacket createArrayOfBadgePacket() {
+        return new ArrayOfBadgePacket();
     }
 
     /**
@@ -451,14 +476,6 @@ public class ObjectFactory {
      */
     public ArrayOfCustomPaintTrans createArrayOfCustomPaintTrans() {
         return new ArrayOfCustomPaintTrans();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfInventoryItemTrans }
-     * 
-     */
-    public ArrayOfInventoryItemTrans createArrayOfInventoryItemTrans() {
-        return new ArrayOfInventoryItemTrans();
     }
 
     /**
@@ -719,6 +736,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "ArrayOfInt")
     public JAXBElement<ArrayOfInt> createArrayOfInt(ArrayOfInt value) {
         return new JAXBElement<ArrayOfInt>(_ArrayOfInt_QNAME, ArrayOfInt.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfInventoryItemTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "ArrayOfInventoryItemTrans")
+    public JAXBElement<ArrayOfInventoryItemTrans> createArrayOfInventoryItemTrans(ArrayOfInventoryItemTrans value) {
+        return new JAXBElement<ArrayOfInventoryItemTrans>(_ArrayOfInventoryItemTrans_QNAME, ArrayOfInventoryItemTrans.class, null, value);
     }
 
     /**
