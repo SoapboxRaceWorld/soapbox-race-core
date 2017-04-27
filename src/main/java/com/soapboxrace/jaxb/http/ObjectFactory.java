@@ -32,6 +32,7 @@ public class ObjectFactory {
     private final static QName _ProfileData_QNAME = new QName("", "ProfileData");
     private final static QName _UserInfo_QNAME = new QName("", "UserInfo");
     private final static QName _RegionInfo_QNAME = new QName("", "RegionInfo");
+    private final static QName _EventsPacket_QNAME = new QName("", "EventsPacket");
     private final static QName _ArrayOfCarClass_QNAME = new QName("", "ArrayOfCarClass");
     private final static QName _EventDefinition_QNAME = new QName("", "EventDefinition");
     private final static QName _FraudConfig_QNAME = new QName("", "FraudConfig");
@@ -41,6 +42,7 @@ public class ObjectFactory {
     private final static QName _ArrayOfstring_QNAME = new QName("", "ArrayOfstring");
     private final static QName _LoginAnnouncementsDefinition_QNAME = new QName("", "LoginAnnouncementsDefinition");
     private final static QName _CommerceResultTrans_QNAME = new QName("", "CommerceResultTrans");
+    private final static QName _SocialSettings_QNAME = new QName("", "SocialSettings");
     private final static QName _ClientConfigTrans_QNAME = new QName("", "ClientConfigTrans");
     private final static QName _CarSlotInfoTrans_QNAME = new QName("", "CarSlotInfoTrans");
     private final static QName _ArrayOfInt_QNAME = new QName("", "ArrayOfInt");
@@ -119,6 +121,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link EventsPacket }
+     * 
+     */
+    public EventsPacket createEventsPacket() {
+        return new EventsPacket();
+    }
+
+    /**
      * Create an instance of {@link ArrayOfCarClass }
      * 
      */
@@ -188,6 +198,14 @@ public class ObjectFactory {
      */
     public CommerceResultTrans createCommerceResultTrans() {
         return new CommerceResultTrans();
+    }
+
+    /**
+     * Create an instance of {@link SocialSettings }
+     * 
+     */
+    public SocialSettings createSocialSettings() {
+        return new SocialSettings();
     }
 
     /**
@@ -519,6 +537,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ArrayOfEventDefinition }
+     * 
+     */
+    public ArrayOfEventDefinition createArrayOfEventDefinition() {
+        return new ArrayOfEventDefinition();
+    }
+
+    /**
      * Create an instance of {@link LoginAnnouncementDefinition }
      * 
      */
@@ -631,6 +657,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link EventsPacket }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "EventsPacket")
+    public JAXBElement<EventsPacket> createEventsPacket(EventsPacket value) {
+        return new JAXBElement<EventsPacket>(_EventsPacket_QNAME, EventsPacket.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfCarClass }{@code >}}
      * 
      */
@@ -709,6 +744,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "CommerceResultTrans")
     public JAXBElement<CommerceResultTrans> createCommerceResultTrans(CommerceResultTrans value) {
         return new JAXBElement<CommerceResultTrans>(_CommerceResultTrans_QNAME, CommerceResultTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SocialSettings }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "SocialSettings")
+    public JAXBElement<SocialSettings> createSocialSettings(SocialSettings value) {
+        return new JAXBElement<SocialSettings>(_SocialSettings_QNAME, SocialSettings.class, null, value);
     }
 
     /**
