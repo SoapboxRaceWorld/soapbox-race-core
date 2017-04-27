@@ -23,8 +23,8 @@ public class GetUserSettings extends GenericServlet {
 
 	@Override
 	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		// Long userId = getUserId(request);
-		Long userId = 1L;
+		Long userId = getUserId(request);
+		// Long userId = 1L;
 		String token = "";
 		String userSettings = getUserSettingsBO.getUserSettings(userId, token);
 		response.getOutputStream().write(userSettings.getBytes());
