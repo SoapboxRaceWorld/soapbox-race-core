@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="BadgePacket" type="{}PersonaBase" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="PersonaBase" type="{}PersonaBase" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,26 +30,26 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArrayOfPersonaBase", propOrder = {
-    "badgePacket"
+    "personaBase"
 })
 public class ArrayOfPersonaBase {
 
-    @XmlElement(name = "BadgePacket", nillable = true)
-    protected List<PersonaBase> badgePacket;
+    @XmlElement(name = "PersonaBase", nillable = true)
+    protected List<PersonaBase> personaBase;
 
     /**
-     * Gets the value of the badgePacket property.
+     * Gets the value of the personaBase property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the badgePacket property.
+     * This is why there is not a <CODE>set</CODE> method for the personaBase property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getBadgePacket().add(newItem);
+     *    getPersonaBase().add(newItem);
      * </pre>
      * 
      * 
@@ -59,11 +59,11 @@ public class ArrayOfPersonaBase {
      * 
      * 
      */
-    public List<PersonaBase> getBadgePacket() {
-        if (badgePacket == null) {
-            badgePacket = new ArrayList<PersonaBase>();
+    public List<PersonaBase> getPersonaBase() {
+        if (personaBase == null) {
+            personaBase = new ArrayList<PersonaBase>();
         }
-        return this.badgePacket;
+        return this.personaBase;
     }
 
 }

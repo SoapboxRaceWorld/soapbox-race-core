@@ -48,6 +48,7 @@ public class ObjectFactory {
     private final static QName _ArrayOfCarClass_QNAME = new QName("", "ArrayOfCarClass");
     private final static QName _PersonaBase_QNAME = new QName("", "PersonaBase");
     private final static QName _ArrayOflong_QNAME = new QName("", "ArrayOflong");
+    private final static QName _ArrayOfPersonaBase_QNAME = new QName("", "ArrayOfPersonaBase");
     private final static QName _ArrayOfProductTrans_QNAME = new QName("", "ArrayOfProductTrans");
     private final static QName _PersonaFriendsList_QNAME = new QName("", "PersonaFriendsList");
     private final static QName _ProductTrans_QNAME = new QName("", "ProductTrans");
@@ -253,6 +254,14 @@ public class ObjectFactory {
      */
     public ArrayOfLong createArrayOfLong() {
         return new ArrayOfLong();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfPersonaBase }
+     * 
+     */
+    public ArrayOfPersonaBase createArrayOfPersonaBase() {
+        return new ArrayOfPersonaBase();
     }
 
     /**
@@ -656,14 +665,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfPersonaBase }
-     * 
-     */
-    public ArrayOfPersonaBase createArrayOfPersonaBase() {
-        return new ArrayOfPersonaBase();
-    }
-
-    /**
      * Create an instance of {@link ArrayOfBadgeDefinitionPacket }
      * 
      */
@@ -917,6 +918,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "ArrayOflong")
     public JAXBElement<ArrayOfLong> createArrayOflong(ArrayOfLong value) {
         return new JAXBElement<ArrayOfLong>(_ArrayOflong_QNAME, ArrayOfLong.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfPersonaBase }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "ArrayOfPersonaBase")
+    public JAXBElement<ArrayOfPersonaBase> createArrayOfPersonaBase(ArrayOfPersonaBase value) {
+        return new JAXBElement<ArrayOfPersonaBase>(_ArrayOfPersonaBase_QNAME, ArrayOfPersonaBase.class, null, value);
     }
 
     /**
