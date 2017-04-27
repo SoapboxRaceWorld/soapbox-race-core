@@ -24,30 +24,37 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _HeartBeat_QNAME = new QName("", "HeartBeat");
     private final static QName _SystemInfo_QNAME = new QName("", "SystemInfo");
+    private final static QName _NewsArticleTrans_QNAME = new QName("", "NewsArticleTrans");
     private final static QName _ChatServer_QNAME = new QName("", "chatServer");
     private final static QName _ArrayOfUdpRelayInfo_QNAME = new QName("", "ArrayOfUdpRelayInfo");
-    private final static QName _UserSettings_QNAME = new QName("", "User_Settings");
-    private final static QName _ProfileData_QNAME = new QName("", "ProfileData");
     private final static QName _UserInfo_QNAME = new QName("", "UserInfo");
     private final static QName _RegionInfo_QNAME = new QName("", "RegionInfo");
     private final static QName _EventsPacket_QNAME = new QName("", "EventsPacket");
-    private final static QName _ArrayOfCarClass_QNAME = new QName("", "ArrayOfCarClass");
     private final static QName _EventDefinition_QNAME = new QName("", "EventDefinition");
     private final static QName _FraudConfig_QNAME = new QName("", "FraudConfig");
+    private final static QName _ArrayOfLevelGiftDefinition_QNAME = new QName("", "ArrayOfLevelGiftDefinition");
+    private final static QName _LoginAnnouncementsDefinition_QNAME = new QName("", "LoginAnnouncementsDefinition");
+    private final static QName _SocialSettings_QNAME = new QName("", "SocialSettings");
+    private final static QName _CarSlotInfoTrans_QNAME = new QName("", "CarSlotInfoTrans");
+    private final static QName _ArrayOfInventoryItemTrans_QNAME = new QName("", "ArrayOfInventoryItemTrans");
+    private final static QName _AchievementsPacket_QNAME = new QName("", "AchievementsPacket");
+    private final static QName _OwnedCarTrans_QNAME = new QName("", "OwnedCarTrans");
+    private final static QName _HeartBeat_QNAME = new QName("", "HeartBeat");
+    private final static QName _ArrayOfNewsArticleTrans_QNAME = new QName("", "ArrayOfNewsArticleTrans");
+    private final static QName _UserSettings_QNAME = new QName("", "User_Settings");
+    private final static QName _TreasureHuntEventSession_QNAME = new QName("", "TreasureHuntEventSession");
+    private final static QName _ProfileData_QNAME = new QName("", "ProfileData");
+    private final static QName _ArrayOfCarClass_QNAME = new QName("", "ArrayOfCarClass");
+    private final static QName _PersonaBase_QNAME = new QName("", "PersonaBase");
+    private final static QName _ArrayOflong_QNAME = new QName("", "ArrayOflong");
     private final static QName _ArrayOfProductTrans_QNAME = new QName("", "ArrayOfProductTrans");
     private final static QName _PersonaFriendsList_QNAME = new QName("", "PersonaFriendsList");
     private final static QName _ProductTrans_QNAME = new QName("", "ProductTrans");
     private final static QName _ArrayOfstring_QNAME = new QName("", "ArrayOfstring");
-    private final static QName _LoginAnnouncementsDefinition_QNAME = new QName("", "LoginAnnouncementsDefinition");
     private final static QName _CommerceResultTrans_QNAME = new QName("", "CommerceResultTrans");
-    private final static QName _SocialSettings_QNAME = new QName("", "SocialSettings");
     private final static QName _ClientConfigTrans_QNAME = new QName("", "ClientConfigTrans");
-    private final static QName _CarSlotInfoTrans_QNAME = new QName("", "CarSlotInfoTrans");
     private final static QName _ArrayOfInt_QNAME = new QName("", "ArrayOfInt");
-    private final static QName _ArrayOfInventoryItemTrans_QNAME = new QName("", "ArrayOfInventoryItemTrans");
-    private final static QName _OwnedCarTrans_QNAME = new QName("", "OwnedCarTrans");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.soapboxrace.jaxb.http
@@ -57,19 +64,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link HeartBeat }
-     * 
-     */
-    public HeartBeat createHeartBeat() {
-        return new HeartBeat();
-    }
-
-    /**
      * Create an instance of {@link SystemInfo }
      * 
      */
     public SystemInfo createSystemInfo() {
         return new SystemInfo();
+    }
+
+    /**
+     * Create an instance of {@link NewsArticleTrans }
+     * 
+     */
+    public NewsArticleTrans createNewsArticleTrans() {
+        return new NewsArticleTrans();
     }
 
     /**
@@ -86,22 +93,6 @@ public class ObjectFactory {
      */
     public ArrayOfUdpRelayInfo createArrayOfUdpRelayInfo() {
         return new ArrayOfUdpRelayInfo();
-    }
-
-    /**
-     * Create an instance of {@link UserSettings }
-     * 
-     */
-    public UserSettings createUserSettings() {
-        return new UserSettings();
-    }
-
-    /**
-     * Create an instance of {@link ProfileData }
-     * 
-     */
-    public ProfileData createProfileData() {
-        return new ProfileData();
     }
 
     /**
@@ -129,14 +120,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfCarClass }
-     * 
-     */
-    public ArrayOfCarClass createArrayOfCarClass() {
-        return new ArrayOfCarClass();
-    }
-
-    /**
      * Create an instance of {@link EventDefinition }
      * 
      */
@@ -150,6 +133,126 @@ public class ObjectFactory {
      */
     public FraudConfig createFraudConfig() {
         return new FraudConfig();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfLevelGiftDefinition }
+     * 
+     */
+    public ArrayOfLevelGiftDefinition createArrayOfLevelGiftDefinition() {
+        return new ArrayOfLevelGiftDefinition();
+    }
+
+    /**
+     * Create an instance of {@link LoginAnnouncementsDefinition }
+     * 
+     */
+    public LoginAnnouncementsDefinition createLoginAnnouncementsDefinition() {
+        return new LoginAnnouncementsDefinition();
+    }
+
+    /**
+     * Create an instance of {@link SocialSettings }
+     * 
+     */
+    public SocialSettings createSocialSettings() {
+        return new SocialSettings();
+    }
+
+    /**
+     * Create an instance of {@link CarSlotInfoTrans }
+     * 
+     */
+    public CarSlotInfoTrans createCarSlotInfoTrans() {
+        return new CarSlotInfoTrans();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfInventoryItemTrans }
+     * 
+     */
+    public ArrayOfInventoryItemTrans createArrayOfInventoryItemTrans() {
+        return new ArrayOfInventoryItemTrans();
+    }
+
+    /**
+     * Create an instance of {@link AchievementsPacket }
+     * 
+     */
+    public AchievementsPacket createAchievementsPacket() {
+        return new AchievementsPacket();
+    }
+
+    /**
+     * Create an instance of {@link OwnedCarTrans }
+     * 
+     */
+    public OwnedCarTrans createOwnedCarTrans() {
+        return new OwnedCarTrans();
+    }
+
+    /**
+     * Create an instance of {@link HeartBeat }
+     * 
+     */
+    public HeartBeat createHeartBeat() {
+        return new HeartBeat();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfNewsArticleTrans }
+     * 
+     */
+    public ArrayOfNewsArticleTrans createArrayOfNewsArticleTrans() {
+        return new ArrayOfNewsArticleTrans();
+    }
+
+    /**
+     * Create an instance of {@link UserSettings }
+     * 
+     */
+    public UserSettings createUserSettings() {
+        return new UserSettings();
+    }
+
+    /**
+     * Create an instance of {@link TreasureHuntEventSession }
+     * 
+     */
+    public TreasureHuntEventSession createTreasureHuntEventSession() {
+        return new TreasureHuntEventSession();
+    }
+
+    /**
+     * Create an instance of {@link ProfileData }
+     * 
+     */
+    public ProfileData createProfileData() {
+        return new ProfileData();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfCarClass }
+     * 
+     */
+    public ArrayOfCarClass createArrayOfCarClass() {
+        return new ArrayOfCarClass();
+    }
+
+    /**
+     * Create an instance of {@link PersonaBase }
+     * 
+     */
+    public PersonaBase createPersonaBase() {
+        return new PersonaBase();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfLong }
+     * 
+     */
+    public ArrayOfLong createArrayOfLong() {
+        return new ArrayOfLong();
     }
 
     /**
@@ -185,27 +288,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoginAnnouncementsDefinition }
-     * 
-     */
-    public LoginAnnouncementsDefinition createLoginAnnouncementsDefinition() {
-        return new LoginAnnouncementsDefinition();
-    }
-
-    /**
      * Create an instance of {@link CommerceResultTrans }
      * 
      */
     public CommerceResultTrans createCommerceResultTrans() {
         return new CommerceResultTrans();
-    }
-
-    /**
-     * Create an instance of {@link SocialSettings }
-     * 
-     */
-    public SocialSettings createSocialSettings() {
-        return new SocialSettings();
     }
 
     /**
@@ -217,35 +304,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CarSlotInfoTrans }
-     * 
-     */
-    public CarSlotInfoTrans createCarSlotInfoTrans() {
-        return new CarSlotInfoTrans();
-    }
-
-    /**
      * Create an instance of {@link ArrayOfInt }
      * 
      */
     public ArrayOfInt createArrayOfInt() {
         return new ArrayOfInt();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfInventoryItemTrans }
-     * 
-     */
-    public ArrayOfInventoryItemTrans createArrayOfInventoryItemTrans() {
-        return new ArrayOfInventoryItemTrans();
-    }
-
-    /**
-     * Create an instance of {@link OwnedCarTrans }
-     * 
-     */
-    public OwnedCarTrans createOwnedCarTrans() {
-        return new OwnedCarTrans();
     }
 
     /**
@@ -337,6 +400,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AchievementRankPacket }
+     * 
+     */
+    public AchievementRankPacket createAchievementRankPacket() {
+        return new AchievementRankPacket();
+    }
+
+    /**
      * Create an instance of {@link BasketTrans }
      * 
      */
@@ -417,6 +488,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link LevelGiftDefinition }
+     * 
+     */
+    public LevelGiftDefinition createLevelGiftDefinition() {
+        return new LevelGiftDefinition();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfAchievementRankPacket }
+     * 
+     */
+    public ArrayOfAchievementRankPacket createArrayOfAchievementRankPacket() {
+        return new ArrayOfAchievementRankPacket();
+    }
+
+    /**
      * Create an instance of {@link ArrayOfOwnedCarTrans }
      * 
      */
@@ -481,6 +568,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AchievementDefinitionPacket }
+     * 
+     */
+    public AchievementDefinitionPacket createAchievementDefinitionPacket() {
+        return new AchievementDefinitionPacket();
+    }
+
+    /**
      * Create an instance of {@link FriendPersona }
      * 
      */
@@ -497,6 +592,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link BadgeDefinitionPacket }
+     * 
+     */
+    public BadgeDefinitionPacket createBadgeDefinitionPacket() {
+        return new BadgeDefinitionPacket();
+    }
+
+    /**
      * Create an instance of {@link ClientConfig }
      * 
      */
@@ -510,6 +613,14 @@ public class ObjectFactory {
      */
     public BasketItemTrans createBasketItemTrans() {
         return new BasketItemTrans();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfAchievementDefinitionPacket }
+     * 
+     */
+    public ArrayOfAchievementDefinitionPacket createArrayOfAchievementDefinitionPacket() {
+        return new ArrayOfAchievementDefinitionPacket();
     }
 
     /**
@@ -545,6 +656,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ArrayOfPersonaBase }
+     * 
+     */
+    public ArrayOfPersonaBase createArrayOfPersonaBase() {
+        return new ArrayOfPersonaBase();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfBadgeDefinitionPacket }
+     * 
+     */
+    public ArrayOfBadgeDefinitionPacket createArrayOfBadgeDefinitionPacket() {
+        return new ArrayOfBadgeDefinitionPacket();
+    }
+
+    /**
      * Create an instance of {@link LoginAnnouncementDefinition }
      * 
      */
@@ -577,29 +704,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfLong }
-     * 
-     */
-    public ArrayOfLong createArrayOfLong() {
-        return new ArrayOfLong();
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link HeartBeat }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "HeartBeat")
-    public JAXBElement<HeartBeat> createHeartBeat(HeartBeat value) {
-        return new JAXBElement<HeartBeat>(_HeartBeat_QNAME, HeartBeat.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SystemInfo }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "SystemInfo")
     public JAXBElement<SystemInfo> createSystemInfo(SystemInfo value) {
         return new JAXBElement<SystemInfo>(_SystemInfo_QNAME, SystemInfo.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NewsArticleTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "NewsArticleTrans")
+    public JAXBElement<NewsArticleTrans> createNewsArticleTrans(NewsArticleTrans value) {
+        return new JAXBElement<NewsArticleTrans>(_NewsArticleTrans_QNAME, NewsArticleTrans.class, null, value);
     }
 
     /**
@@ -618,24 +737,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "ArrayOfUdpRelayInfo")
     public JAXBElement<ArrayOfUdpRelayInfo> createArrayOfUdpRelayInfo(ArrayOfUdpRelayInfo value) {
         return new JAXBElement<ArrayOfUdpRelayInfo>(_ArrayOfUdpRelayInfo_QNAME, ArrayOfUdpRelayInfo.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link UserSettings }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "User_Settings")
-    public JAXBElement<UserSettings> createUserSettings(UserSettings value) {
-        return new JAXBElement<UserSettings>(_UserSettings_QNAME, UserSettings.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ProfileData }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "ProfileData")
-    public JAXBElement<ProfileData> createProfileData(ProfileData value) {
-        return new JAXBElement<ProfileData>(_ProfileData_QNAME, ProfileData.class, null, value);
     }
 
     /**
@@ -666,15 +767,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfCarClass }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "ArrayOfCarClass")
-    public JAXBElement<ArrayOfCarClass> createArrayOfCarClass(ArrayOfCarClass value) {
-        return new JAXBElement<ArrayOfCarClass>(_ArrayOfCarClass_QNAME, ArrayOfCarClass.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link EventDefinition }{@code >}}
      * 
      */
@@ -690,6 +782,141 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "FraudConfig")
     public JAXBElement<FraudConfig> createFraudConfig(FraudConfig value) {
         return new JAXBElement<FraudConfig>(_FraudConfig_QNAME, FraudConfig.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfLevelGiftDefinition }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "ArrayOfLevelGiftDefinition")
+    public JAXBElement<ArrayOfLevelGiftDefinition> createArrayOfLevelGiftDefinition(ArrayOfLevelGiftDefinition value) {
+        return new JAXBElement<ArrayOfLevelGiftDefinition>(_ArrayOfLevelGiftDefinition_QNAME, ArrayOfLevelGiftDefinition.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link LoginAnnouncementsDefinition }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "LoginAnnouncementsDefinition")
+    public JAXBElement<LoginAnnouncementsDefinition> createLoginAnnouncementsDefinition(LoginAnnouncementsDefinition value) {
+        return new JAXBElement<LoginAnnouncementsDefinition>(_LoginAnnouncementsDefinition_QNAME, LoginAnnouncementsDefinition.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SocialSettings }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "SocialSettings")
+    public JAXBElement<SocialSettings> createSocialSettings(SocialSettings value) {
+        return new JAXBElement<SocialSettings>(_SocialSettings_QNAME, SocialSettings.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CarSlotInfoTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "CarSlotInfoTrans")
+    public JAXBElement<CarSlotInfoTrans> createCarSlotInfoTrans(CarSlotInfoTrans value) {
+        return new JAXBElement<CarSlotInfoTrans>(_CarSlotInfoTrans_QNAME, CarSlotInfoTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfInventoryItemTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "ArrayOfInventoryItemTrans")
+    public JAXBElement<ArrayOfInventoryItemTrans> createArrayOfInventoryItemTrans(ArrayOfInventoryItemTrans value) {
+        return new JAXBElement<ArrayOfInventoryItemTrans>(_ArrayOfInventoryItemTrans_QNAME, ArrayOfInventoryItemTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AchievementsPacket }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "AchievementsPacket")
+    public JAXBElement<AchievementsPacket> createAchievementsPacket(AchievementsPacket value) {
+        return new JAXBElement<AchievementsPacket>(_AchievementsPacket_QNAME, AchievementsPacket.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link OwnedCarTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "OwnedCarTrans")
+    public JAXBElement<OwnedCarTrans> createOwnedCarTrans(OwnedCarTrans value) {
+        return new JAXBElement<OwnedCarTrans>(_OwnedCarTrans_QNAME, OwnedCarTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link HeartBeat }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "HeartBeat")
+    public JAXBElement<HeartBeat> createHeartBeat(HeartBeat value) {
+        return new JAXBElement<HeartBeat>(_HeartBeat_QNAME, HeartBeat.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfNewsArticleTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "ArrayOfNewsArticleTrans")
+    public JAXBElement<ArrayOfNewsArticleTrans> createArrayOfNewsArticleTrans(ArrayOfNewsArticleTrans value) {
+        return new JAXBElement<ArrayOfNewsArticleTrans>(_ArrayOfNewsArticleTrans_QNAME, ArrayOfNewsArticleTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UserSettings }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "User_Settings")
+    public JAXBElement<UserSettings> createUserSettings(UserSettings value) {
+        return new JAXBElement<UserSettings>(_UserSettings_QNAME, UserSettings.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link TreasureHuntEventSession }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "TreasureHuntEventSession")
+    public JAXBElement<TreasureHuntEventSession> createTreasureHuntEventSession(TreasureHuntEventSession value) {
+        return new JAXBElement<TreasureHuntEventSession>(_TreasureHuntEventSession_QNAME, TreasureHuntEventSession.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ProfileData }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "ProfileData")
+    public JAXBElement<ProfileData> createProfileData(ProfileData value) {
+        return new JAXBElement<ProfileData>(_ProfileData_QNAME, ProfileData.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfCarClass }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "ArrayOfCarClass")
+    public JAXBElement<ArrayOfCarClass> createArrayOfCarClass(ArrayOfCarClass value) {
+        return new JAXBElement<ArrayOfCarClass>(_ArrayOfCarClass_QNAME, ArrayOfCarClass.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PersonaBase }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "PersonaBase")
+    public JAXBElement<PersonaBase> createPersonaBase(PersonaBase value) {
+        return new JAXBElement<PersonaBase>(_PersonaBase_QNAME, PersonaBase.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfLong }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "ArrayOflong")
+    public JAXBElement<ArrayOfLong> createArrayOflong(ArrayOfLong value) {
+        return new JAXBElement<ArrayOfLong>(_ArrayOflong_QNAME, ArrayOfLong.class, null, value);
     }
 
     /**
@@ -729,30 +956,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link LoginAnnouncementsDefinition }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "LoginAnnouncementsDefinition")
-    public JAXBElement<LoginAnnouncementsDefinition> createLoginAnnouncementsDefinition(LoginAnnouncementsDefinition value) {
-        return new JAXBElement<LoginAnnouncementsDefinition>(_LoginAnnouncementsDefinition_QNAME, LoginAnnouncementsDefinition.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CommerceResultTrans }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "CommerceResultTrans")
     public JAXBElement<CommerceResultTrans> createCommerceResultTrans(CommerceResultTrans value) {
         return new JAXBElement<CommerceResultTrans>(_CommerceResultTrans_QNAME, CommerceResultTrans.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SocialSettings }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "SocialSettings")
-    public JAXBElement<SocialSettings> createSocialSettings(SocialSettings value) {
-        return new JAXBElement<SocialSettings>(_SocialSettings_QNAME, SocialSettings.class, null, value);
     }
 
     /**
@@ -765,39 +974,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CarSlotInfoTrans }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "CarSlotInfoTrans")
-    public JAXBElement<CarSlotInfoTrans> createCarSlotInfoTrans(CarSlotInfoTrans value) {
-        return new JAXBElement<CarSlotInfoTrans>(_CarSlotInfoTrans_QNAME, CarSlotInfoTrans.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfInt }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfInt")
     public JAXBElement<ArrayOfInt> createArrayOfInt(ArrayOfInt value) {
         return new JAXBElement<ArrayOfInt>(_ArrayOfInt_QNAME, ArrayOfInt.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfInventoryItemTrans }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "ArrayOfInventoryItemTrans")
-    public JAXBElement<ArrayOfInventoryItemTrans> createArrayOfInventoryItemTrans(ArrayOfInventoryItemTrans value) {
-        return new JAXBElement<ArrayOfInventoryItemTrans>(_ArrayOfInventoryItemTrans_QNAME, ArrayOfInventoryItemTrans.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link OwnedCarTrans }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "OwnedCarTrans")
-    public JAXBElement<OwnedCarTrans> createOwnedCarTrans(OwnedCarTrans value) {
-        return new JAXBElement<OwnedCarTrans>(_OwnedCarTrans_QNAME, OwnedCarTrans.class, null, value);
     }
 
 }
