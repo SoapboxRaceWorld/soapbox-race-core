@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de chatServer complex type.
+ * <p>Java class for chatServer complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="chatServer">
@@ -45,7 +45,7 @@ public class ChatServer {
     protected String prefix;
 
     /**
-     * Obtém o valor da propriedade rooms.
+     * Gets the value of the rooms property.
      * 
      * @return
      *     possible object is
@@ -57,7 +57,7 @@ public class ChatServer {
     }
 
     /**
-     * Define o valor da propriedade rooms.
+     * Sets the value of the rooms property.
      * 
      * @param value
      *     allowed object is
@@ -69,7 +69,7 @@ public class ChatServer {
     }
 
     /**
-     * Obtém o valor da propriedade ip.
+     * Gets the value of the ip property.
      * 
      * @return
      *     possible object is
@@ -81,7 +81,7 @@ public class ChatServer {
     }
 
     /**
-     * Define o valor da propriedade ip.
+     * Sets the value of the ip property.
      * 
      * @param value
      *     allowed object is
@@ -93,7 +93,7 @@ public class ChatServer {
     }
 
     /**
-     * Obtém o valor da propriedade port.
+     * Gets the value of the port property.
      * 
      */
     public int getPort() {
@@ -101,7 +101,7 @@ public class ChatServer {
     }
 
     /**
-     * Define o valor da propriedade port.
+     * Sets the value of the port property.
      * 
      */
     public void setPort(int value) {
@@ -109,7 +109,7 @@ public class ChatServer {
     }
 
     /**
-     * Obtém o valor da propriedade prefix.
+     * Gets the value of the prefix property.
      * 
      * @return
      *     possible object is
@@ -121,7 +121,7 @@ public class ChatServer {
     }
 
     /**
-     * Define o valor da propriedade prefix.
+     * Sets the value of the prefix property.
      * 
      * @param value
      *     allowed object is

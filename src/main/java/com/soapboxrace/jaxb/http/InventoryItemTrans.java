@@ -10,9 +10,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Classe Java de InventoryItemTrans complex type.
+ * <p>Java class for InventoryItemTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="InventoryItemTrans">
@@ -75,7 +75,7 @@ public class InventoryItemTrans {
     protected String virtualItemType;
 
     /**
-     * Obtém o valor da propriedade entitlementTag.
+     * Gets the value of the entitlementTag property.
      * 
      * @return
      *     possible object is
@@ -87,7 +87,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Define o valor da propriedade entitlementTag.
+     * Sets the value of the entitlementTag property.
      * 
      * @param value
      *     allowed object is
@@ -99,7 +99,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade expirationDate.
+     * Gets the value of the expirationDate property.
      * 
      * @return
      *     possible object is
@@ -111,7 +111,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Define o valor da propriedade expirationDate.
+     * Sets the value of the expirationDate property.
      * 
      * @param value
      *     allowed object is
@@ -123,7 +123,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade hash.
+     * Gets the value of the hash property.
      * 
      */
     public int getHash() {
@@ -131,7 +131,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Define o valor da propriedade hash.
+     * Sets the value of the hash property.
      * 
      */
     public void setHash(int value) {
@@ -139,7 +139,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade inventoryId.
+     * Gets the value of the inventoryId property.
      * 
      */
     public long getInventoryId() {
@@ -147,7 +147,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Define o valor da propriedade inventoryId.
+     * Sets the value of the inventoryId property.
      * 
      */
     public void setInventoryId(long value) {
@@ -155,7 +155,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade productId.
+     * Gets the value of the productId property.
      * 
      * @return
      *     possible object is
@@ -167,7 +167,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Define o valor da propriedade productId.
+     * Sets the value of the productId property.
      * 
      * @param value
      *     allowed object is
@@ -179,7 +179,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade remainingUseCount.
+     * Gets the value of the remainingUseCount property.
      * 
      */
     public long getRemainingUseCount() {
@@ -187,7 +187,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Define o valor da propriedade remainingUseCount.
+     * Sets the value of the remainingUseCount property.
      * 
      */
     public void setRemainingUseCount(long value) {
@@ -195,7 +195,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade resellPrice.
+     * Gets the value of the resellPrice property.
      * 
      */
     public double getResellPrice() {
@@ -203,7 +203,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Define o valor da propriedade resellPrice.
+     * Sets the value of the resellPrice property.
      * 
      */
     public void setResellPrice(double value) {
@@ -211,7 +211,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade status.
+     * Gets the value of the status property.
      * 
      * @return
      *     possible object is
@@ -223,7 +223,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Define o valor da propriedade status.
+     * Sets the value of the status property.
      * 
      * @param value
      *     allowed object is
@@ -235,7 +235,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade stringHash.
+     * Gets the value of the stringHash property.
      * 
      * @return
      *     possible object is
@@ -247,7 +247,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Define o valor da propriedade stringHash.
+     * Sets the value of the stringHash property.
      * 
      * @param value
      *     allowed object is
@@ -259,7 +259,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade virtualItemType.
+     * Gets the value of the virtualItemType property.
      * 
      * @return
      *     possible object is
@@ -271,7 +271,7 @@ public class InventoryItemTrans {
     }
 
     /**
-     * Define o valor da propriedade virtualItemType.
+     * Sets the value of the virtualItemType property.
      * 
      * @param value
      *     allowed object is

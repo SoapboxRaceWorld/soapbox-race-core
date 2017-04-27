@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de PerformancePartTrans complex type.
+ * <p>Java class for PerformancePartTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PerformancePartTrans">
@@ -36,7 +36,7 @@ public class PerformancePartTrans {
     protected int performancePartAttribHash;
 
     /**
-     * Obtém o valor da propriedade performancePartAttribHash.
+     * Gets the value of the performancePartAttribHash property.
      * 
      */
     public int getPerformancePartAttribHash() {
@@ -44,7 +44,7 @@ public class PerformancePartTrans {
     }
 
     /**
-     * Define o valor da propriedade performancePartAttribHash.
+     * Sets the value of the performancePartAttribHash property.
      * 
      */
     public void setPerformancePartAttribHash(int value) {

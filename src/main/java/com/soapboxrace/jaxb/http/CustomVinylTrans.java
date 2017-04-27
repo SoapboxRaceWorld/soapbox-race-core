@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de CustomVinylTrans complex type.
+ * <p>Java class for CustomVinylTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CustomVinylTrans">
@@ -116,7 +116,7 @@ public class CustomVinylTrans {
     protected int var4;
 
     /**
-     * Obtém o valor da propriedade hash.
+     * Gets the value of the hash property.
      * 
      */
     public int getHash() {
@@ -124,7 +124,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade hash.
+     * Sets the value of the hash property.
      * 
      */
     public void setHash(int value) {
@@ -132,7 +132,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade hue1.
+     * Gets the value of the hue1 property.
      * 
      */
     public int getHue1() {
@@ -140,7 +140,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade hue1.
+     * Sets the value of the hue1 property.
      * 
      */
     public void setHue1(int value) {
@@ -148,7 +148,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade hue2.
+     * Gets the value of the hue2 property.
      * 
      */
     public int getHue2() {
@@ -156,7 +156,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade hue2.
+     * Sets the value of the hue2 property.
      * 
      */
     public void setHue2(int value) {
@@ -164,7 +164,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade hue3.
+     * Gets the value of the hue3 property.
      * 
      */
     public int getHue3() {
@@ -172,7 +172,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade hue3.
+     * Sets the value of the hue3 property.
      * 
      */
     public void setHue3(int value) {
@@ -180,7 +180,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade hue4.
+     * Gets the value of the hue4 property.
      * 
      */
     public int getHue4() {
@@ -188,7 +188,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade hue4.
+     * Sets the value of the hue4 property.
      * 
      */
     public void setHue4(int value) {
@@ -196,7 +196,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade layer.
+     * Gets the value of the layer property.
      * 
      */
     public int getLayer() {
@@ -204,7 +204,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade layer.
+     * Sets the value of the layer property.
      * 
      */
     public void setLayer(int value) {
@@ -212,7 +212,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade mir.
+     * Gets the value of the mir property.
      * 
      */
     public boolean isMir() {
@@ -220,7 +220,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade mir.
+     * Sets the value of the mir property.
      * 
      */
     public void setMir(boolean value) {
@@ -228,7 +228,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade rot.
+     * Gets the value of the rot property.
      * 
      */
     public int getRot() {
@@ -236,7 +236,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade rot.
+     * Sets the value of the rot property.
      * 
      */
     public void setRot(int value) {
@@ -244,7 +244,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade sat1.
+     * Gets the value of the sat1 property.
      * 
      */
     public int getSat1() {
@@ -252,7 +252,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade sat1.
+     * Sets the value of the sat1 property.
      * 
      */
     public void setSat1(int value) {
@@ -260,7 +260,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade sat2.
+     * Gets the value of the sat2 property.
      * 
      */
     public int getSat2() {
@@ -268,7 +268,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade sat2.
+     * Sets the value of the sat2 property.
      * 
      */
     public void setSat2(int value) {
@@ -276,7 +276,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade sat3.
+     * Gets the value of the sat3 property.
      * 
      */
     public int getSat3() {
@@ -284,7 +284,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade sat3.
+     * Sets the value of the sat3 property.
      * 
      */
     public void setSat3(int value) {
@@ -292,7 +292,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade sat4.
+     * Gets the value of the sat4 property.
      * 
      */
     public int getSat4() {
@@ -300,7 +300,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade sat4.
+     * Sets the value of the sat4 property.
      * 
      */
     public void setSat4(int value) {
@@ -308,7 +308,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade scaleX.
+     * Gets the value of the scaleX property.
      * 
      */
     public int getScaleX() {
@@ -316,7 +316,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade scaleX.
+     * Sets the value of the scaleX property.
      * 
      */
     public void setScaleX(int value) {
@@ -324,7 +324,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade scaleY.
+     * Gets the value of the scaleY property.
      * 
      */
     public int getScaleY() {
@@ -332,7 +332,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade scaleY.
+     * Sets the value of the scaleY property.
      * 
      */
     public void setScaleY(int value) {
@@ -340,7 +340,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade shear.
+     * Gets the value of the shear property.
      * 
      */
     public int getShear() {
@@ -348,7 +348,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade shear.
+     * Sets the value of the shear property.
      * 
      */
     public void setShear(int value) {
@@ -356,7 +356,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade tranX.
+     * Gets the value of the tranX property.
      * 
      */
     public int getTranX() {
@@ -364,7 +364,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade tranX.
+     * Sets the value of the tranX property.
      * 
      */
     public void setTranX(int value) {
@@ -372,7 +372,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade tranY.
+     * Gets the value of the tranY property.
      * 
      */
     public int getTranY() {
@@ -380,7 +380,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade tranY.
+     * Sets the value of the tranY property.
      * 
      */
     public void setTranY(int value) {
@@ -388,7 +388,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade var1.
+     * Gets the value of the var1 property.
      * 
      */
     public int getVar1() {
@@ -396,7 +396,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade var1.
+     * Sets the value of the var1 property.
      * 
      */
     public void setVar1(int value) {
@@ -404,7 +404,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade var2.
+     * Gets the value of the var2 property.
      * 
      */
     public int getVar2() {
@@ -412,7 +412,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade var2.
+     * Sets the value of the var2 property.
      * 
      */
     public void setVar2(int value) {
@@ -420,7 +420,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade var3.
+     * Gets the value of the var3 property.
      * 
      */
     public int getVar3() {
@@ -428,7 +428,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade var3.
+     * Sets the value of the var3 property.
      * 
      */
     public void setVar3(int value) {
@@ -436,7 +436,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Obtém o valor da propriedade var4.
+     * Gets the value of the var4 property.
      * 
      */
     public int getVar4() {
@@ -444,7 +444,7 @@ public class CustomVinylTrans {
     }
 
     /**
-     * Define o valor da propriedade var4.
+     * Sets the value of the var4 property.
      * 
      */
     public void setVar4(int value) {

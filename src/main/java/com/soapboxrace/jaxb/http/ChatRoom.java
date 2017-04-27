@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de chatRoom complex type.
+ * <p>Java class for chatRoom complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="chatRoom">
@@ -40,7 +40,7 @@ public class ChatRoom {
     protected String shortName;
 
     /**
-     * Obtém o valor da propriedade channelCount.
+     * Gets the value of the channelCount property.
      * 
      */
     public int getChannelCount() {
@@ -48,7 +48,7 @@ public class ChatRoom {
     }
 
     /**
-     * Define o valor da propriedade channelCount.
+     * Sets the value of the channelCount property.
      * 
      */
     public void setChannelCount(int value) {
@@ -56,7 +56,7 @@ public class ChatRoom {
     }
 
     /**
-     * Obtém o valor da propriedade longName.
+     * Gets the value of the longName property.
      * 
      * @return
      *     possible object is
@@ -68,7 +68,7 @@ public class ChatRoom {
     }
 
     /**
-     * Define o valor da propriedade longName.
+     * Sets the value of the longName property.
      * 
      * @param value
      *     allowed object is
@@ -80,7 +80,7 @@ public class ChatRoom {
     }
 
     /**
-     * Obtém o valor da propriedade shortName.
+     * Gets the value of the shortName property.
      * 
      * @return
      *     possible object is
@@ -92,7 +92,7 @@ public class ChatRoom {
     }
 
     /**
-     * Define o valor da propriedade shortName.
+     * Sets the value of the shortName property.
      * 
      * @param value
      *     allowed object is

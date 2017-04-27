@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de InvalidBasketTrans complex type.
+ * <p>Java class for InvalidBasketTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="InvalidBasketTrans">
@@ -40,7 +40,7 @@ public class InvalidBasketTrans {
     protected ArrayOfInvalidBasketItemTrans invalidItems;
 
     /**
-     * Obtém o valor da propriedade basket.
+     * Gets the value of the basket property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class InvalidBasketTrans {
     }
 
     /**
-     * Define o valor da propriedade basket.
+     * Sets the value of the basket property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class InvalidBasketTrans {
     }
 
     /**
-     * Obtém o valor da propriedade invalidItems.
+     * Gets the value of the invalidItems property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class InvalidBasketTrans {
     }
 
     /**
-     * Define o valor da propriedade invalidItems.
+     * Sets the value of the invalidItems property.
      * 
      * @param value
      *     allowed object is

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de CarClass complex type.
+ * <p>Java class for CarClass complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CarClass">
@@ -44,7 +44,7 @@ public class CarClass {
     protected short minRating;
 
     /**
-     * Obtém o valor da propriedade carClassHash.
+     * Gets the value of the carClassHash property.
      * 
      */
     public int getCarClassHash() {
@@ -52,7 +52,7 @@ public class CarClass {
     }
 
     /**
-     * Define o valor da propriedade carClassHash.
+     * Sets the value of the carClassHash property.
      * 
      */
     public void setCarClassHash(int value) {
@@ -60,7 +60,7 @@ public class CarClass {
     }
 
     /**
-     * Obtém o valor da propriedade maxRating.
+     * Gets the value of the maxRating property.
      * 
      */
     public short getMaxRating() {
@@ -68,7 +68,7 @@ public class CarClass {
     }
 
     /**
-     * Define o valor da propriedade maxRating.
+     * Sets the value of the maxRating property.
      * 
      */
     public void setMaxRating(short value) {
@@ -76,7 +76,7 @@ public class CarClass {
     }
 
     /**
-     * Obtém o valor da propriedade minRating.
+     * Gets the value of the minRating property.
      * 
      */
     public short getMinRating() {
@@ -84,7 +84,7 @@ public class CarClass {
     }
 
     /**
-     * Define o valor da propriedade minRating.
+     * Sets the value of the minRating property.
      * 
      */
     public void setMinRating(short value) {

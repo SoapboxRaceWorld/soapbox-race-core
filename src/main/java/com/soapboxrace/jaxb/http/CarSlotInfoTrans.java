@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de CarSlotInfoTrans complex type.
+ * <p>Java class for CarSlotInfoTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CarSlotInfoTrans">
@@ -48,7 +48,7 @@ public class CarSlotInfoTrans {
     protected int ownedCarSlotsCount;
 
     /**
-     * Obtém o valor da propriedade carsOwnedByPersona.
+     * Gets the value of the carsOwnedByPersona property.
      * 
      * @return
      *     possible object is
@@ -60,7 +60,7 @@ public class CarSlotInfoTrans {
     }
 
     /**
-     * Define o valor da propriedade carsOwnedByPersona.
+     * Sets the value of the carsOwnedByPersona property.
      * 
      * @param value
      *     allowed object is
@@ -72,7 +72,7 @@ public class CarSlotInfoTrans {
     }
 
     /**
-     * Obtém o valor da propriedade defaultOwnedCarIndex.
+     * Gets the value of the defaultOwnedCarIndex property.
      * 
      */
     public int getDefaultOwnedCarIndex() {
@@ -80,7 +80,7 @@ public class CarSlotInfoTrans {
     }
 
     /**
-     * Define o valor da propriedade defaultOwnedCarIndex.
+     * Sets the value of the defaultOwnedCarIndex property.
      * 
      */
     public void setDefaultOwnedCarIndex(int value) {
@@ -88,7 +88,7 @@ public class CarSlotInfoTrans {
     }
 
     /**
-     * Obtém o valor da propriedade obtainableSlots.
+     * Gets the value of the obtainableSlots property.
      * 
      * @return
      *     possible object is
@@ -100,7 +100,7 @@ public class CarSlotInfoTrans {
     }
 
     /**
-     * Define o valor da propriedade obtainableSlots.
+     * Sets the value of the obtainableSlots property.
      * 
      * @param value
      *     allowed object is
@@ -112,7 +112,7 @@ public class CarSlotInfoTrans {
     }
 
     /**
-     * Obtém o valor da propriedade ownedCarSlotsCount.
+     * Gets the value of the ownedCarSlotsCount property.
      * 
      */
     public int getOwnedCarSlotsCount() {
@@ -120,7 +120,7 @@ public class CarSlotInfoTrans {
     }
 
     /**
-     * Define o valor da propriedade ownedCarSlotsCount.
+     * Sets the value of the ownedCarSlotsCount property.
      * 
      */
     public void setOwnedCarSlotsCount(int value) {

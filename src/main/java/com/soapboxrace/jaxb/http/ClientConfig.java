@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de ClientConfig complex type.
+ * <p>Java class for ClientConfig complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="ClientConfig">
@@ -37,7 +37,7 @@ public class ClientConfig {
     protected long level;
 
     /**
-     * Obtém o valor da propriedade group.
+     * Gets the value of the group property.
      * 
      * @return
      *     possible object is
@@ -49,7 +49,7 @@ public class ClientConfig {
     }
 
     /**
-     * Define o valor da propriedade group.
+     * Sets the value of the group property.
      * 
      * @param value
      *     allowed object is
@@ -61,7 +61,7 @@ public class ClientConfig {
     }
 
     /**
-     * Obtém o valor da propriedade level.
+     * Gets the value of the level property.
      * 
      */
     public long getLevel() {
@@ -69,7 +69,7 @@ public class ClientConfig {
     }
 
     /**
-     * Define o valor da propriedade level.
+     * Sets the value of the level property.
      * 
      */
     public void setLevel(long value) {

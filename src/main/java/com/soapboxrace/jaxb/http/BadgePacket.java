@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de BadgePacket complex type.
+ * <p>Java class for BadgePacket complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="BadgePacket">
@@ -52,7 +52,7 @@ public class BadgePacket {
     protected short slotId;
 
     /**
-     * Obtém o valor da propriedade achievementRankId.
+     * Gets the value of the achievementRankId property.
      * 
      */
     public int getAchievementRankId() {
@@ -60,7 +60,7 @@ public class BadgePacket {
     }
 
     /**
-     * Define o valor da propriedade achievementRankId.
+     * Sets the value of the achievementRankId property.
      * 
      */
     public void setAchievementRankId(int value) {
@@ -68,7 +68,7 @@ public class BadgePacket {
     }
 
     /**
-     * Obtém o valor da propriedade badgeDefinitionId.
+     * Gets the value of the badgeDefinitionId property.
      * 
      */
     public int getBadgeDefinitionId() {
@@ -76,7 +76,7 @@ public class BadgePacket {
     }
 
     /**
-     * Define o valor da propriedade badgeDefinitionId.
+     * Sets the value of the badgeDefinitionId property.
      * 
      */
     public void setBadgeDefinitionId(int value) {
@@ -84,7 +84,7 @@ public class BadgePacket {
     }
 
     /**
-     * Obtém o valor da propriedade isRare.
+     * Gets the value of the isRare property.
      * 
      */
     public boolean isIsRare() {
@@ -92,7 +92,7 @@ public class BadgePacket {
     }
 
     /**
-     * Define o valor da propriedade isRare.
+     * Sets the value of the isRare property.
      * 
      */
     public void setIsRare(boolean value) {
@@ -100,7 +100,7 @@ public class BadgePacket {
     }
 
     /**
-     * Obtém o valor da propriedade rarity.
+     * Gets the value of the rarity property.
      * 
      */
     public float getRarity() {
@@ -108,7 +108,7 @@ public class BadgePacket {
     }
 
     /**
-     * Define o valor da propriedade rarity.
+     * Sets the value of the rarity property.
      * 
      */
     public void setRarity(float value) {
@@ -116,7 +116,7 @@ public class BadgePacket {
     }
 
     /**
-     * Obtém o valor da propriedade slotId.
+     * Gets the value of the slotId property.
      * 
      */
     public short getSlotId() {
@@ -124,7 +124,7 @@ public class BadgePacket {
     }
 
     /**
-     * Define o valor da propriedade slotId.
+     * Sets the value of the slotId property.
      * 
      */
     public void setSlotId(short value) {

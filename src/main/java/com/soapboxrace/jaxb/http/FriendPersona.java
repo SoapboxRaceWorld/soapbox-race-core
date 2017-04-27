@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de FriendPersona complex type.
+ * <p>Java class for FriendPersona complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="FriendPersona">
@@ -55,7 +55,7 @@ public class FriendPersona {
     protected long userId;
 
     /**
-     * Obtém o valor da propriedade iconIndex.
+     * Gets the value of the iconIndex property.
      * 
      */
     public int getIconIndex() {
@@ -63,7 +63,7 @@ public class FriendPersona {
     }
 
     /**
-     * Define o valor da propriedade iconIndex.
+     * Sets the value of the iconIndex property.
      * 
      */
     public void setIconIndex(int value) {
@@ -71,7 +71,7 @@ public class FriendPersona {
     }
 
     /**
-     * Obtém o valor da propriedade level.
+     * Gets the value of the level property.
      * 
      */
     public int getLevel() {
@@ -79,7 +79,7 @@ public class FriendPersona {
     }
 
     /**
-     * Define o valor da propriedade level.
+     * Sets the value of the level property.
      * 
      */
     public void setLevel(int value) {
@@ -87,7 +87,7 @@ public class FriendPersona {
     }
 
     /**
-     * Obtém o valor da propriedade name.
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
@@ -99,7 +99,7 @@ public class FriendPersona {
     }
 
     /**
-     * Define o valor da propriedade name.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
@@ -111,7 +111,7 @@ public class FriendPersona {
     }
 
     /**
-     * Obtém o valor da propriedade originalName.
+     * Gets the value of the originalName property.
      * 
      * @return
      *     possible object is
@@ -123,7 +123,7 @@ public class FriendPersona {
     }
 
     /**
-     * Define o valor da propriedade originalName.
+     * Sets the value of the originalName property.
      * 
      * @param value
      *     allowed object is
@@ -135,7 +135,7 @@ public class FriendPersona {
     }
 
     /**
-     * Obtém o valor da propriedade personaId.
+     * Gets the value of the personaId property.
      * 
      */
     public long getPersonaId() {
@@ -143,7 +143,7 @@ public class FriendPersona {
     }
 
     /**
-     * Define o valor da propriedade personaId.
+     * Sets the value of the personaId property.
      * 
      */
     public void setPersonaId(long value) {
@@ -151,7 +151,7 @@ public class FriendPersona {
     }
 
     /**
-     * Obtém o valor da propriedade presence.
+     * Gets the value of the presence property.
      * 
      */
     public int getPresence() {
@@ -159,7 +159,7 @@ public class FriendPersona {
     }
 
     /**
-     * Define o valor da propriedade presence.
+     * Sets the value of the presence property.
      * 
      */
     public void setPresence(int value) {
@@ -167,7 +167,7 @@ public class FriendPersona {
     }
 
     /**
-     * Obtém o valor da propriedade socialNetwork.
+     * Gets the value of the socialNetwork property.
      * 
      */
     public int getSocialNetwork() {
@@ -175,7 +175,7 @@ public class FriendPersona {
     }
 
     /**
-     * Define o valor da propriedade socialNetwork.
+     * Sets the value of the socialNetwork property.
      * 
      */
     public void setSocialNetwork(int value) {
@@ -183,7 +183,7 @@ public class FriendPersona {
     }
 
     /**
-     * Obtém o valor da propriedade userId.
+     * Gets the value of the userId property.
      * 
      */
     public long getUserId() {
@@ -191,7 +191,7 @@ public class FriendPersona {
     }
 
     /**
-     * Define o valor da propriedade userId.
+     * Sets the value of the userId property.
      * 
      */
     public void setUserId(long value) {

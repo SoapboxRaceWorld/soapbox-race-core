@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de LoginAnnouncementDefinition complex type.
+ * <p>Java class for LoginAnnouncementDefinition complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="LoginAnnouncementDefinition">
@@ -59,7 +59,7 @@ public class LoginAnnouncementDefinition {
     protected LoginAnnouncementType type;
 
     /**
-     * Obtém o valor da propriedade context.
+     * Gets the value of the context property.
      * 
      * @return
      *     possible object is
@@ -71,7 +71,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Define o valor da propriedade context.
+     * Sets the value of the context property.
      * 
      * @param value
      *     allowed object is
@@ -83,7 +83,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade id.
+     * Gets the value of the id property.
      * 
      */
     public int getId() {
@@ -91,7 +91,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Define o valor da propriedade id.
+     * Sets the value of the id property.
      * 
      */
     public void setId(int value) {
@@ -99,7 +99,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade imageChecksum.
+     * Gets the value of the imageChecksum property.
      * 
      */
     public int getImageChecksum() {
@@ -107,7 +107,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Define o valor da propriedade imageChecksum.
+     * Sets the value of the imageChecksum property.
      * 
      */
     public void setImageChecksum(int value) {
@@ -115,7 +115,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade imageUrl.
+     * Gets the value of the imageUrl property.
      * 
      * @return
      *     possible object is
@@ -127,7 +127,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Define o valor da propriedade imageUrl.
+     * Sets the value of the imageUrl property.
      * 
      * @param value
      *     allowed object is
@@ -139,7 +139,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade target.
+     * Gets the value of the target property.
      * 
      * @return
      *     possible object is
@@ -151,7 +151,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Define o valor da propriedade target.
+     * Sets the value of the target property.
      * 
      * @param value
      *     allowed object is
@@ -163,7 +163,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade type.
+     * Gets the value of the type property.
      * 
      * @return
      *     possible object is
@@ -175,7 +175,7 @@ public class LoginAnnouncementDefinition {
     }
 
     /**
-     * Define o valor da propriedade type.
+     * Sets the value of the type property.
      * 
      * @param value
      *     allowed object is

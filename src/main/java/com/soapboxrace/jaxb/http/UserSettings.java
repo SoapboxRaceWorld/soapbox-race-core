@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de User_Settings complex type.
+ * <p>Java class for User_Settings complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="User_Settings">
@@ -73,7 +73,7 @@ public class UserSettings {
     protected long userId;
 
     /**
-     * Obtém o valor da propriedade carCacheAgeLimit.
+     * Gets the value of the carCacheAgeLimit property.
      * 
      */
     public int getCarCacheAgeLimit() {
@@ -81,7 +81,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade carCacheAgeLimit.
+     * Sets the value of the carCacheAgeLimit property.
      * 
      */
     public void setCarCacheAgeLimit(int value) {
@@ -89,7 +89,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade isRaceNowEnabled.
+     * Gets the value of the isRaceNowEnabled property.
      * 
      */
     public boolean isIsRaceNowEnabled() {
@@ -97,7 +97,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade isRaceNowEnabled.
+     * Sets the value of the isRaceNowEnabled property.
      * 
      */
     public void setIsRaceNowEnabled(boolean value) {
@@ -105,7 +105,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade maxCarCacheSize.
+     * Gets the value of the maxCarCacheSize property.
      * 
      */
     public int getMaxCarCacheSize() {
@@ -113,7 +113,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade maxCarCacheSize.
+     * Sets the value of the maxCarCacheSize property.
      * 
      */
     public void setMaxCarCacheSize(int value) {
@@ -121,7 +121,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade minRaceNowLevel.
+     * Gets the value of the minRaceNowLevel property.
      * 
      */
     public int getMinRaceNowLevel() {
@@ -129,7 +129,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade minRaceNowLevel.
+     * Sets the value of the minRaceNowLevel property.
      * 
      */
     public void setMinRaceNowLevel(int value) {
@@ -137,7 +137,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade voipAvailable.
+     * Gets the value of the voipAvailable property.
      * 
      */
     public boolean isVoipAvailable() {
@@ -145,7 +145,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade voipAvailable.
+     * Sets the value of the voipAvailable property.
      * 
      */
     public void setVoipAvailable(boolean value) {
@@ -153,7 +153,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade activatedHolidaySceneryGroups.
+     * Gets the value of the activatedHolidaySceneryGroups property.
      * 
      * @return
      *     possible object is
@@ -165,7 +165,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade activatedHolidaySceneryGroups.
+     * Sets the value of the activatedHolidaySceneryGroups property.
      * 
      * @param value
      *     allowed object is
@@ -177,7 +177,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade activeHolidayIds.
+     * Gets the value of the activeHolidayIds property.
      * 
      * @return
      *     possible object is
@@ -189,7 +189,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade activeHolidayIds.
+     * Sets the value of the activeHolidayIds property.
      * 
      * @param value
      *     allowed object is
@@ -201,7 +201,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade disactivatedHolidaySceneryGroups.
+     * Gets the value of the disactivatedHolidaySceneryGroups property.
      * 
      * @return
      *     possible object is
@@ -213,7 +213,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade disactivatedHolidaySceneryGroups.
+     * Sets the value of the disactivatedHolidaySceneryGroups property.
      * 
      * @param value
      *     allowed object is
@@ -225,7 +225,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade firstTimeLogin.
+     * Gets the value of the firstTimeLogin property.
      * 
      */
     public boolean isFirstTimeLogin() {
@@ -233,7 +233,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade firstTimeLogin.
+     * Sets the value of the firstTimeLogin property.
      * 
      */
     public void setFirstTimeLogin(boolean value) {
@@ -241,7 +241,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade maxLevel.
+     * Gets the value of the maxLevel property.
      * 
      */
     public int getMaxLevel() {
@@ -249,7 +249,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade maxLevel.
+     * Sets the value of the maxLevel property.
      * 
      */
     public void setMaxLevel(int value) {
@@ -257,7 +257,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade starterPackApplied.
+     * Gets the value of the starterPackApplied property.
      * 
      */
     public boolean isStarterPackApplied() {
@@ -265,7 +265,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade starterPackApplied.
+     * Sets the value of the starterPackApplied property.
      * 
      */
     public void setStarterPackApplied(boolean value) {
@@ -273,7 +273,7 @@ public class UserSettings {
     }
 
     /**
-     * Obtém o valor da propriedade userId.
+     * Gets the value of the userId property.
      * 
      */
     public long getUserId() {
@@ -281,7 +281,7 @@ public class UserSettings {
     }
 
     /**
-     * Define o valor da propriedade userId.
+     * Sets the value of the userId property.
      * 
      */
     public void setUserId(long value) {

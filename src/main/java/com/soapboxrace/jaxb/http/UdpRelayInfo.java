@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de UdpRelayInfo complex type.
+ * <p>Java class for UdpRelayInfo complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="UdpRelayInfo">
@@ -40,7 +40,7 @@ public class UdpRelayInfo {
     protected int port;
 
     /**
-     * Obtém o valor da propriedade host.
+     * Gets the value of the host property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class UdpRelayInfo {
     }
 
     /**
-     * Define o valor da propriedade host.
+     * Sets the value of the host property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class UdpRelayInfo {
     }
 
     /**
-     * Obtém o valor da propriedade port.
+     * Gets the value of the port property.
      * 
      */
     public int getPort() {
@@ -72,7 +72,7 @@ public class UdpRelayInfo {
     }
 
     /**
-     * Define o valor da propriedade port.
+     * Sets the value of the port property.
      * 
      */
     public void setPort(int value) {

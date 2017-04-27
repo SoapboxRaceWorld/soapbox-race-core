@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de LoginAnnouncementsDefinition complex type.
+ * <p>Java class for LoginAnnouncementsDefinition complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="LoginAnnouncementsDefinition">
@@ -40,7 +40,7 @@ public class LoginAnnouncementsDefinition {
     protected String imagesPath;
 
     /**
-     * Obtém o valor da propriedade announcements.
+     * Gets the value of the announcements property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class LoginAnnouncementsDefinition {
     }
 
     /**
-     * Define o valor da propriedade announcements.
+     * Sets the value of the announcements property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class LoginAnnouncementsDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade imagesPath.
+     * Gets the value of the imagesPath property.
      * 
      * @return
      *     possible object is
@@ -76,7 +76,7 @@ public class LoginAnnouncementsDefinition {
     }
 
     /**
-     * Define o valor da propriedade imagesPath.
+     * Sets the value of the imagesPath property.
      * 
      * @param value
      *     allowed object is

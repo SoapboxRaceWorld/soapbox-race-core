@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de CustomCarTrans complex type.
+ * <p>Java class for CustomCarTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CustomCarTrans">
@@ -100,7 +100,7 @@ public class CustomCarTrans {
     protected ArrayOfVisualPartTrans visualParts;
 
     /**
-     * Obtém o valor da propriedade baseCar.
+     * Gets the value of the baseCar property.
      * 
      */
     public int getBaseCar() {
@@ -108,7 +108,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade baseCar.
+     * Sets the value of the baseCar property.
      * 
      */
     public void setBaseCar(int value) {
@@ -116,7 +116,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade carClassHash.
+     * Gets the value of the carClassHash property.
      * 
      */
     public int getCarClassHash() {
@@ -124,7 +124,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade carClassHash.
+     * Sets the value of the carClassHash property.
      * 
      */
     public void setCarClassHash(int value) {
@@ -132,7 +132,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade id.
+     * Gets the value of the id property.
      * 
      */
     public int getId() {
@@ -140,7 +140,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade id.
+     * Sets the value of the id property.
      * 
      */
     public void setId(int value) {
@@ -148,7 +148,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade isPreset.
+     * Gets the value of the isPreset property.
      * 
      */
     public boolean isIsPreset() {
@@ -156,7 +156,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade isPreset.
+     * Sets the value of the isPreset property.
      * 
      */
     public void setIsPreset(boolean value) {
@@ -164,7 +164,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade level.
+     * Gets the value of the level property.
      * 
      */
     public int getLevel() {
@@ -172,7 +172,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade level.
+     * Sets the value of the level property.
      * 
      */
     public void setLevel(int value) {
@@ -180,7 +180,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade name.
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
@@ -192,7 +192,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade name.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
@@ -204,7 +204,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade paints.
+     * Gets the value of the paints property.
      * 
      * @return
      *     possible object is
@@ -216,7 +216,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade paints.
+     * Sets the value of the paints property.
      * 
      * @param value
      *     allowed object is
@@ -228,7 +228,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade performanceParts.
+     * Gets the value of the performanceParts property.
      * 
      * @return
      *     possible object is
@@ -240,7 +240,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade performanceParts.
+     * Sets the value of the performanceParts property.
      * 
      * @param value
      *     allowed object is
@@ -252,7 +252,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade physicsProfileHash.
+     * Gets the value of the physicsProfileHash property.
      * 
      */
     public int getPhysicsProfileHash() {
@@ -260,7 +260,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade physicsProfileHash.
+     * Sets the value of the physicsProfileHash property.
      * 
      */
     public void setPhysicsProfileHash(int value) {
@@ -268,7 +268,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade rating.
+     * Gets the value of the rating property.
      * 
      */
     public int getRating() {
@@ -276,7 +276,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade rating.
+     * Sets the value of the rating property.
      * 
      */
     public void setRating(int value) {
@@ -284,7 +284,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade resalePrice.
+     * Gets the value of the resalePrice property.
      * 
      */
     public float getResalePrice() {
@@ -292,7 +292,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade resalePrice.
+     * Sets the value of the resalePrice property.
      * 
      */
     public void setResalePrice(float value) {
@@ -300,7 +300,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade rideHeightDrop.
+     * Gets the value of the rideHeightDrop property.
      * 
      */
     public float getRideHeightDrop() {
@@ -308,7 +308,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade rideHeightDrop.
+     * Sets the value of the rideHeightDrop property.
      * 
      */
     public void setRideHeightDrop(float value) {
@@ -316,7 +316,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade skillModParts.
+     * Gets the value of the skillModParts property.
      * 
      * @return
      *     possible object is
@@ -328,7 +328,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade skillModParts.
+     * Sets the value of the skillModParts property.
      * 
      * @param value
      *     allowed object is
@@ -340,7 +340,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade skillModSlotCount.
+     * Gets the value of the skillModSlotCount property.
      * 
      */
     public int getSkillModSlotCount() {
@@ -348,7 +348,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade skillModSlotCount.
+     * Sets the value of the skillModSlotCount property.
      * 
      */
     public void setSkillModSlotCount(int value) {
@@ -356,7 +356,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade version.
+     * Gets the value of the version property.
      * 
      */
     public int getVersion() {
@@ -364,7 +364,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade version.
+     * Sets the value of the version property.
      * 
      */
     public void setVersion(int value) {
@@ -372,7 +372,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade vinyls.
+     * Gets the value of the vinyls property.
      * 
      * @return
      *     possible object is
@@ -384,7 +384,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade vinyls.
+     * Sets the value of the vinyls property.
      * 
      * @param value
      *     allowed object is
@@ -396,7 +396,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade visualParts.
+     * Gets the value of the visualParts property.
      * 
      * @return
      *     possible object is
@@ -408,7 +408,7 @@ public class CustomCarTrans {
     }
 
     /**
-     * Define o valor da propriedade visualParts.
+     * Sets the value of the visualParts property.
      * 
      * @param value
      *     allowed object is

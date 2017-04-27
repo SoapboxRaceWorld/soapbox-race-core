@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de ProfileData complex type.
+ * <p>Java class for ProfileData complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="ProfileData">
@@ -87,7 +87,7 @@ public class ProfileData {
     protected ArrayOfPersonaCCar ccar;
 
     /**
-     * Obtém o valor da propriedade badges.
+     * Gets the value of the badges property.
      * 
      * @return
      *     possible object is
@@ -99,7 +99,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade badges.
+     * Sets the value of the badges property.
      * 
      * @param value
      *     allowed object is
@@ -111,7 +111,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade boost.
+     * Gets the value of the boost property.
      * 
      */
     public double getBoost() {
@@ -119,7 +119,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade boost.
+     * Sets the value of the boost property.
      * 
      */
     public void setBoost(double value) {
@@ -127,7 +127,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade cash.
+     * Gets the value of the cash property.
      * 
      */
     public double getCash() {
@@ -135,7 +135,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade cash.
+     * Sets the value of the cash property.
      * 
      */
     public void setCash(double value) {
@@ -143,7 +143,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade iconIndex.
+     * Gets the value of the iconIndex property.
      * 
      */
     public int getIconIndex() {
@@ -151,7 +151,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade iconIndex.
+     * Sets the value of the iconIndex property.
      * 
      */
     public void setIconIndex(int value) {
@@ -159,7 +159,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade level.
+     * Gets the value of the level property.
      * 
      */
     public int getLevel() {
@@ -167,7 +167,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade level.
+     * Sets the value of the level property.
      * 
      */
     public void setLevel(int value) {
@@ -175,7 +175,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade motto.
+     * Gets the value of the motto property.
      * 
      * @return
      *     possible object is
@@ -187,7 +187,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade motto.
+     * Sets the value of the motto property.
      * 
      * @param value
      *     allowed object is
@@ -199,7 +199,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade name.
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
@@ -211,7 +211,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade name.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
@@ -223,7 +223,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade percentToLevel.
+     * Gets the value of the percentToLevel property.
      * 
      */
     public float getPercentToLevel() {
@@ -231,7 +231,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade percentToLevel.
+     * Sets the value of the percentToLevel property.
      * 
      */
     public void setPercentToLevel(float value) {
@@ -239,7 +239,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade personaId.
+     * Gets the value of the personaId property.
      * 
      */
     public long getPersonaId() {
@@ -247,7 +247,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade personaId.
+     * Sets the value of the personaId property.
      * 
      */
     public void setPersonaId(long value) {
@@ -255,7 +255,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade rating.
+     * Gets the value of the rating property.
      * 
      */
     public double getRating() {
@@ -263,7 +263,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade rating.
+     * Sets the value of the rating property.
      * 
      */
     public void setRating(double value) {
@@ -271,7 +271,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade rep.
+     * Gets the value of the rep property.
      * 
      */
     public double getRep() {
@@ -279,7 +279,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade rep.
+     * Sets the value of the rep property.
      * 
      */
     public void setRep(double value) {
@@ -287,7 +287,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade repAtCurrentLevel.
+     * Gets the value of the repAtCurrentLevel property.
      * 
      */
     public int getRepAtCurrentLevel() {
@@ -295,7 +295,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade repAtCurrentLevel.
+     * Sets the value of the repAtCurrentLevel property.
      * 
      */
     public void setRepAtCurrentLevel(int value) {
@@ -303,7 +303,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade score.
+     * Gets the value of the score property.
      * 
      */
     public int getScore() {
@@ -311,7 +311,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade score.
+     * Sets the value of the score property.
      * 
      */
     public void setScore(int value) {
@@ -319,7 +319,7 @@ public class ProfileData {
     }
 
     /**
-     * Obtém o valor da propriedade ccar.
+     * Gets the value of the ccar property.
      * 
      * @return
      *     possible object is
@@ -331,7 +331,7 @@ public class ProfileData {
     }
 
     /**
-     * Define o valor da propriedade ccar.
+     * Sets the value of the ccar property.
      * 
      * @param value
      *     allowed object is

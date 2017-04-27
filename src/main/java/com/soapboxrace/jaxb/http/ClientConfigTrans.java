@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de ClientConfigTrans complex type.
+ * <p>Java class for ClientConfigTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="ClientConfigTrans">
@@ -34,7 +34,7 @@ public class ClientConfigTrans {
     protected ArrayOfClientConfig clientConfigs;
 
     /**
-     * Obtém o valor da propriedade clientConfigs.
+     * Gets the value of the clientConfigs property.
      * 
      * @return
      *     possible object is
@@ -46,7 +46,7 @@ public class ClientConfigTrans {
     }
 
     /**
-     * Define o valor da propriedade clientConfigs.
+     * Sets the value of the clientConfigs property.
      * 
      * @param value
      *     allowed object is

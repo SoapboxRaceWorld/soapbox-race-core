@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de CommerceResultTrans complex type.
+ * <p>Java class for CommerceResultTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CommerceResultTrans">
@@ -58,7 +58,7 @@ public class CommerceResultTrans {
     protected ArrayOfWalletTrans wallets;
 
     /**
-     * Obtém o valor da propriedade commerceItems.
+     * Gets the value of the commerceItems property.
      * 
      * @return
      *     possible object is
@@ -70,7 +70,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Define o valor da propriedade commerceItems.
+     * Sets the value of the commerceItems property.
      * 
      * @param value
      *     allowed object is
@@ -82,7 +82,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Obtém o valor da propriedade invalidBasket.
+     * Gets the value of the invalidBasket property.
      * 
      * @return
      *     possible object is
@@ -94,7 +94,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Define o valor da propriedade invalidBasket.
+     * Sets the value of the invalidBasket property.
      * 
      * @param value
      *     allowed object is
@@ -106,7 +106,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Obtém o valor da propriedade inventoryItems.
+     * Gets the value of the inventoryItems property.
      * 
      * @return
      *     possible object is
@@ -118,7 +118,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Define o valor da propriedade inventoryItems.
+     * Sets the value of the inventoryItems property.
      * 
      * @param value
      *     allowed object is
@@ -130,7 +130,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Obtém o valor da propriedade purchasedCars.
+     * Gets the value of the purchasedCars property.
      * 
      * @return
      *     possible object is
@@ -142,7 +142,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Define o valor da propriedade purchasedCars.
+     * Sets the value of the purchasedCars property.
      * 
      * @param value
      *     allowed object is
@@ -154,7 +154,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Obtém o valor da propriedade status.
+     * Gets the value of the status property.
      * 
      * @return
      *     possible object is
@@ -166,7 +166,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Define o valor da propriedade status.
+     * Sets the value of the status property.
      * 
      * @param value
      *     allowed object is
@@ -178,7 +178,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Obtém o valor da propriedade wallets.
+     * Gets the value of the wallets property.
      * 
      * @return
      *     possible object is
@@ -190,7 +190,7 @@ public class CommerceResultTrans {
     }
 
     /**
-     * Define o valor da propriedade wallets.
+     * Sets the value of the wallets property.
      * 
      * @param value
      *     allowed object is

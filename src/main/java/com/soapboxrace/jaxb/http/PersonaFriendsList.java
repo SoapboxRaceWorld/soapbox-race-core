@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de PersonaFriendsList complex type.
+ * <p>Java class for PersonaFriendsList complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="PersonaFriendsList">
@@ -34,7 +34,7 @@ public class PersonaFriendsList {
     protected ArrayOfFriendPersona friendPersona;
 
     /**
-     * Obtém o valor da propriedade friendPersona.
+     * Gets the value of the friendPersona property.
      * 
      * @return
      *     possible object is
@@ -46,7 +46,7 @@ public class PersonaFriendsList {
     }
 
     /**
-     * Define o valor da propriedade friendPersona.
+     * Sets the value of the friendPersona property.
      * 
      * @param value
      *     allowed object is

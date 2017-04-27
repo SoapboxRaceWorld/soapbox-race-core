@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de Vector3 complex type.
+ * <p>Java class for Vector3 complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="Vector3">
@@ -44,7 +44,7 @@ public class Vector3 {
     protected float z;
 
     /**
-     * Obtém o valor da propriedade x.
+     * Gets the value of the x property.
      * 
      */
     public float getX() {
@@ -52,7 +52,7 @@ public class Vector3 {
     }
 
     /**
-     * Define o valor da propriedade x.
+     * Sets the value of the x property.
      * 
      */
     public void setX(float value) {
@@ -60,7 +60,7 @@ public class Vector3 {
     }
 
     /**
-     * Obtém o valor da propriedade y.
+     * Gets the value of the y property.
      * 
      */
     public float getY() {
@@ -68,7 +68,7 @@ public class Vector3 {
     }
 
     /**
-     * Define o valor da propriedade y.
+     * Sets the value of the y property.
      * 
      */
     public void setY(float value) {
@@ -76,7 +76,7 @@ public class Vector3 {
     }
 
     /**
-     * Obtém o valor da propriedade z.
+     * Gets the value of the z property.
      * 
      */
     public float getZ() {
@@ -84,7 +84,7 @@ public class Vector3 {
     }
 
     /**
-     * Define o valor da propriedade z.
+     * Sets the value of the z property.
      * 
      */
     public void setZ(float value) {

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de EventDefinition complex type.
+ * <p>Java class for EventDefinition complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="EventDefinition">
@@ -128,7 +128,7 @@ public class EventDefinition {
     protected int trackLocalization;
 
     /**
-     * Obtém o valor da propriedade carClassHash.
+     * Gets the value of the carClassHash property.
      * 
      */
     public int getCarClassHash() {
@@ -136,7 +136,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade carClassHash.
+     * Sets the value of the carClassHash property.
      * 
      */
     public void setCarClassHash(int value) {
@@ -144,7 +144,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade coins.
+     * Gets the value of the coins property.
      * 
      */
     public int getCoins() {
@@ -152,7 +152,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade coins.
+     * Sets the value of the coins property.
      * 
      */
     public void setCoins(int value) {
@@ -160,7 +160,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade engagePoint.
+     * Gets the value of the engagePoint property.
      * 
      * @return
      *     possible object is
@@ -172,7 +172,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade engagePoint.
+     * Sets the value of the engagePoint property.
      * 
      * @param value
      *     allowed object is
@@ -184,7 +184,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade eventId.
+     * Gets the value of the eventId property.
      * 
      */
     public int getEventId() {
@@ -192,7 +192,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade eventId.
+     * Sets the value of the eventId property.
      * 
      */
     public void setEventId(int value) {
@@ -200,7 +200,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade eventLocalization.
+     * Gets the value of the eventLocalization property.
      * 
      */
     public int getEventLocalization() {
@@ -208,7 +208,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade eventLocalization.
+     * Sets the value of the eventLocalization property.
      * 
      */
     public void setEventLocalization(int value) {
@@ -216,7 +216,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade eventModeDescriptionLocalization.
+     * Gets the value of the eventModeDescriptionLocalization property.
      * 
      */
     public int getEventModeDescriptionLocalization() {
@@ -224,7 +224,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade eventModeDescriptionLocalization.
+     * Sets the value of the eventModeDescriptionLocalization property.
      * 
      */
     public void setEventModeDescriptionLocalization(int value) {
@@ -232,7 +232,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade eventModeIcon.
+     * Gets the value of the eventModeIcon property.
      * 
      * @return
      *     possible object is
@@ -244,7 +244,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade eventModeIcon.
+     * Sets the value of the eventModeIcon property.
      * 
      * @param value
      *     allowed object is
@@ -256,7 +256,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade eventModeId.
+     * Gets the value of the eventModeId property.
      * 
      */
     public int getEventModeId() {
@@ -264,7 +264,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade eventModeId.
+     * Sets the value of the eventModeId property.
      * 
      */
     public void setEventModeId(int value) {
@@ -272,7 +272,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade eventModeLocalization.
+     * Gets the value of the eventModeLocalization property.
      * 
      */
     public int getEventModeLocalization() {
@@ -280,7 +280,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade eventModeLocalization.
+     * Sets the value of the eventModeLocalization property.
      * 
      */
     public void setEventModeLocalization(int value) {
@@ -288,7 +288,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade isEnabled.
+     * Gets the value of the isEnabled property.
      * 
      */
     public boolean isIsEnabled() {
@@ -296,7 +296,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade isEnabled.
+     * Sets the value of the isEnabled property.
      * 
      */
     public void setIsEnabled(boolean value) {
@@ -304,7 +304,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade isLocked.
+     * Gets the value of the isLocked property.
      * 
      */
     public boolean isIsLocked() {
@@ -312,7 +312,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade isLocked.
+     * Sets the value of the isLocked property.
      * 
      */
     public void setIsLocked(boolean value) {
@@ -320,7 +320,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade laps.
+     * Gets the value of the laps property.
      * 
      */
     public int getLaps() {
@@ -328,7 +328,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade laps.
+     * Sets the value of the laps property.
      * 
      */
     public void setLaps(int value) {
@@ -336,7 +336,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade length.
+     * Gets the value of the length property.
      * 
      */
     public float getLength() {
@@ -344,7 +344,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade length.
+     * Sets the value of the length property.
      * 
      */
     public void setLength(float value) {
@@ -352,7 +352,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade maxClassRating.
+     * Gets the value of the maxClassRating property.
      * 
      */
     public int getMaxClassRating() {
@@ -360,7 +360,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade maxClassRating.
+     * Sets the value of the maxClassRating property.
      * 
      */
     public void setMaxClassRating(int value) {
@@ -368,7 +368,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade maxEntrants.
+     * Gets the value of the maxEntrants property.
      * 
      */
     public int getMaxEntrants() {
@@ -376,7 +376,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade maxEntrants.
+     * Sets the value of the maxEntrants property.
      * 
      */
     public void setMaxEntrants(int value) {
@@ -384,7 +384,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade maxLevel.
+     * Gets the value of the maxLevel property.
      * 
      */
     public int getMaxLevel() {
@@ -392,7 +392,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade maxLevel.
+     * Sets the value of the maxLevel property.
      * 
      */
     public void setMaxLevel(int value) {
@@ -400,7 +400,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade minClassRating.
+     * Gets the value of the minClassRating property.
      * 
      */
     public int getMinClassRating() {
@@ -408,7 +408,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade minClassRating.
+     * Sets the value of the minClassRating property.
      * 
      */
     public void setMinClassRating(int value) {
@@ -416,7 +416,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade minEntrants.
+     * Gets the value of the minEntrants property.
      * 
      */
     public int getMinEntrants() {
@@ -424,7 +424,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade minEntrants.
+     * Sets the value of the minEntrants property.
      * 
      */
     public void setMinEntrants(int value) {
@@ -432,7 +432,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade minLevel.
+     * Gets the value of the minLevel property.
      * 
      */
     public int getMinLevel() {
@@ -440,7 +440,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade minLevel.
+     * Sets the value of the minLevel property.
      * 
      */
     public void setMinLevel(int value) {
@@ -448,7 +448,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade regionLocalization.
+     * Gets the value of the regionLocalization property.
      * 
      */
     public int getRegionLocalization() {
@@ -456,7 +456,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade regionLocalization.
+     * Sets the value of the regionLocalization property.
      * 
      */
     public void setRegionLocalization(int value) {
@@ -464,7 +464,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade rewardModes.
+     * Gets the value of the rewardModes property.
      * 
      * @return
      *     possible object is
@@ -476,7 +476,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade rewardModes.
+     * Sets the value of the rewardModes property.
      * 
      * @param value
      *     allowed object is
@@ -488,7 +488,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade timeLimit.
+     * Gets the value of the timeLimit property.
      * 
      */
     public float getTimeLimit() {
@@ -496,7 +496,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade timeLimit.
+     * Sets the value of the timeLimit property.
      * 
      */
     public void setTimeLimit(float value) {
@@ -504,7 +504,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade trackLayoutMap.
+     * Gets the value of the trackLayoutMap property.
      * 
      * @return
      *     possible object is
@@ -516,7 +516,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade trackLayoutMap.
+     * Sets the value of the trackLayoutMap property.
      * 
      * @param value
      *     allowed object is
@@ -528,7 +528,7 @@ public class EventDefinition {
     }
 
     /**
-     * Obtém o valor da propriedade trackLocalization.
+     * Gets the value of the trackLocalization property.
      * 
      */
     public int getTrackLocalization() {
@@ -536,7 +536,7 @@ public class EventDefinition {
     }
 
     /**
-     * Define o valor da propriedade trackLocalization.
+     * Sets the value of the trackLocalization property.
      * 
      */
     public void setTrackLocalization(int value) {

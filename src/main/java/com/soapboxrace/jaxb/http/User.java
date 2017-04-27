@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de User complex type.
+ * <p>Java class for User complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="User">
@@ -118,7 +118,7 @@ public class User {
     protected String username;
 
     /**
-     * Obtém o valor da propriedade address1.
+     * Gets the value of the address1 property.
      * 
      * @return
      *     possible object is
@@ -130,7 +130,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade address1.
+     * Sets the value of the address1 property.
      * 
      * @param value
      *     allowed object is
@@ -142,7 +142,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade address2.
+     * Gets the value of the address2 property.
      * 
      * @return
      *     possible object is
@@ -154,7 +154,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade address2.
+     * Sets the value of the address2 property.
      * 
      * @param value
      *     allowed object is
@@ -166,7 +166,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade country.
+     * Gets the value of the country property.
      * 
      * @return
      *     possible object is
@@ -178,7 +178,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade country.
+     * Sets the value of the country property.
      * 
      * @param value
      *     allowed object is
@@ -190,7 +190,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade dateCreated.
+     * Gets the value of the dateCreated property.
      * 
      * @return
      *     possible object is
@@ -202,7 +202,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade dateCreated.
+     * Sets the value of the dateCreated property.
      * 
      * @param value
      *     allowed object is
@@ -214,7 +214,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade dob.
+     * Gets the value of the dob property.
      * 
      * @return
      *     possible object is
@@ -226,7 +226,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade dob.
+     * Sets the value of the dob property.
      * 
      * @param value
      *     allowed object is
@@ -238,7 +238,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade email.
+     * Gets the value of the email property.
      * 
      * @return
      *     possible object is
@@ -250,7 +250,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade email.
+     * Sets the value of the email property.
      * 
      * @param value
      *     allowed object is
@@ -262,7 +262,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade emailStatus.
+     * Gets the value of the emailStatus property.
      * 
      * @return
      *     possible object is
@@ -274,7 +274,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade emailStatus.
+     * Sets the value of the emailStatus property.
      * 
      * @param value
      *     allowed object is
@@ -286,7 +286,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade firstName.
+     * Gets the value of the firstName property.
      * 
      * @return
      *     possible object is
@@ -298,7 +298,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade firstName.
+     * Sets the value of the firstName property.
      * 
      * @param value
      *     allowed object is
@@ -310,7 +310,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade fullGameAccess.
+     * Gets the value of the fullGameAccess property.
      * 
      */
     public boolean isFullGameAccess() {
@@ -318,7 +318,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade fullGameAccess.
+     * Sets the value of the fullGameAccess property.
      * 
      */
     public void setFullGameAccess(boolean value) {
@@ -326,7 +326,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade gender.
+     * Gets the value of the gender property.
      * 
      * @return
      *     possible object is
@@ -338,7 +338,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade gender.
+     * Sets the value of the gender property.
      * 
      * @param value
      *     allowed object is
@@ -350,7 +350,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade idDigits.
+     * Gets the value of the idDigits property.
      * 
      * @return
      *     possible object is
@@ -362,7 +362,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade idDigits.
+     * Sets the value of the idDigits property.
      * 
      * @param value
      *     allowed object is
@@ -374,7 +374,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade isComplete.
+     * Gets the value of the isComplete property.
      * 
      */
     public boolean isIsComplete() {
@@ -382,7 +382,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade isComplete.
+     * Sets the value of the isComplete property.
      * 
      */
     public void setIsComplete(boolean value) {
@@ -390,7 +390,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade landlinePhone.
+     * Gets the value of the landlinePhone property.
      * 
      * @return
      *     possible object is
@@ -402,7 +402,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade landlinePhone.
+     * Sets the value of the landlinePhone property.
      * 
      * @param value
      *     allowed object is
@@ -414,7 +414,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade language.
+     * Gets the value of the language property.
      * 
      * @return
      *     possible object is
@@ -426,7 +426,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade language.
+     * Sets the value of the language property.
      * 
      * @param value
      *     allowed object is
@@ -438,7 +438,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade lastAuthDate.
+     * Gets the value of the lastAuthDate property.
      * 
      * @return
      *     possible object is
@@ -450,7 +450,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade lastAuthDate.
+     * Sets the value of the lastAuthDate property.
      * 
      * @param value
      *     allowed object is
@@ -462,7 +462,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade lastName.
+     * Gets the value of the lastName property.
      * 
      * @return
      *     possible object is
@@ -474,7 +474,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade lastName.
+     * Sets the value of the lastName property.
      * 
      * @param value
      *     allowed object is
@@ -486,7 +486,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade mobile.
+     * Gets the value of the mobile property.
      * 
      * @return
      *     possible object is
@@ -498,7 +498,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade mobile.
+     * Sets the value of the mobile property.
      * 
      * @param value
      *     allowed object is
@@ -510,7 +510,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade nickname.
+     * Gets the value of the nickname property.
      * 
      * @return
      *     possible object is
@@ -522,7 +522,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade nickname.
+     * Sets the value of the nickname property.
      * 
      * @param value
      *     allowed object is
@@ -534,7 +534,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade postalCode.
+     * Gets the value of the postalCode property.
      * 
      * @return
      *     possible object is
@@ -546,7 +546,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade postalCode.
+     * Sets the value of the postalCode property.
      * 
      * @param value
      *     allowed object is
@@ -558,7 +558,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade realName.
+     * Gets the value of the realName property.
      * 
      * @return
      *     possible object is
@@ -570,7 +570,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade realName.
+     * Sets the value of the realName property.
      * 
      * @param value
      *     allowed object is
@@ -582,7 +582,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade reasonCode.
+     * Gets the value of the reasonCode property.
      * 
      * @return
      *     possible object is
@@ -594,7 +594,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade reasonCode.
+     * Sets the value of the reasonCode property.
      * 
      * @param value
      *     allowed object is
@@ -606,7 +606,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade remoteUserId.
+     * Gets the value of the remoteUserId property.
      * 
      */
     public long getRemoteUserId() {
@@ -614,7 +614,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade remoteUserId.
+     * Sets the value of the remoteUserId property.
      * 
      */
     public void setRemoteUserId(long value) {
@@ -622,7 +622,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade securityToken.
+     * Gets the value of the securityToken property.
      * 
      * @return
      *     possible object is
@@ -634,7 +634,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade securityToken.
+     * Sets the value of the securityToken property.
      * 
      * @param value
      *     allowed object is
@@ -646,7 +646,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade starterPackEntitlementTag.
+     * Gets the value of the starterPackEntitlementTag property.
      * 
      * @return
      *     possible object is
@@ -658,7 +658,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade starterPackEntitlementTag.
+     * Sets the value of the starterPackEntitlementTag property.
      * 
      * @param value
      *     allowed object is
@@ -670,7 +670,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade status.
+     * Gets the value of the status property.
      * 
      * @return
      *     possible object is
@@ -682,7 +682,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade status.
+     * Sets the value of the status property.
      * 
      * @param value
      *     allowed object is
@@ -694,7 +694,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade subscribeMsg.
+     * Gets the value of the subscribeMsg property.
      * 
      */
     public boolean isSubscribeMsg() {
@@ -702,7 +702,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade subscribeMsg.
+     * Sets the value of the subscribeMsg property.
      * 
      */
     public void setSubscribeMsg(boolean value) {
@@ -710,7 +710,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade tosVersion.
+     * Gets the value of the tosVersion property.
      * 
      * @return
      *     possible object is
@@ -722,7 +722,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade tosVersion.
+     * Sets the value of the tosVersion property.
      * 
      * @param value
      *     allowed object is
@@ -734,7 +734,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade userId.
+     * Gets the value of the userId property.
      * 
      */
     public long getUserId() {
@@ -742,7 +742,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade userId.
+     * Sets the value of the userId property.
      * 
      */
     public void setUserId(long value) {
@@ -750,7 +750,7 @@ public class User {
     }
 
     /**
-     * Obtém o valor da propriedade username.
+     * Gets the value of the username property.
      * 
      * @return
      *     possible object is
@@ -762,7 +762,7 @@ public class User {
     }
 
     /**
-     * Define o valor da propriedade username.
+     * Sets the value of the username property.
      * 
      * @param value
      *     allowed object is

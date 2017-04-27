@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de FraudConfig complex type.
+ * <p>Java class for FraudConfig complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="FraudConfig">
@@ -46,7 +46,7 @@ public class FraudConfig {
     protected long userID;
 
     /**
-     * Obtém o valor da propriedade enabledBitField.
+     * Gets the value of the enabledBitField property.
      * 
      */
     public int getEnabledBitField() {
@@ -54,7 +54,7 @@ public class FraudConfig {
     }
 
     /**
-     * Define o valor da propriedade enabledBitField.
+     * Sets the value of the enabledBitField property.
      * 
      */
     public void setEnabledBitField(int value) {
@@ -62,7 +62,7 @@ public class FraudConfig {
     }
 
     /**
-     * Obtém o valor da propriedade gameFileFreq.
+     * Gets the value of the gameFileFreq property.
      * 
      */
     public int getGameFileFreq() {
@@ -70,7 +70,7 @@ public class FraudConfig {
     }
 
     /**
-     * Define o valor da propriedade gameFileFreq.
+     * Sets the value of the gameFileFreq property.
      * 
      */
     public void setGameFileFreq(int value) {
@@ -78,7 +78,7 @@ public class FraudConfig {
     }
 
     /**
-     * Obtém o valor da propriedade moduleFreq.
+     * Gets the value of the moduleFreq property.
      * 
      */
     public int getModuleFreq() {
@@ -86,7 +86,7 @@ public class FraudConfig {
     }
 
     /**
-     * Define o valor da propriedade moduleFreq.
+     * Sets the value of the moduleFreq property.
      * 
      */
     public void setModuleFreq(int value) {
@@ -94,7 +94,7 @@ public class FraudConfig {
     }
 
     /**
-     * Obtém o valor da propriedade startUpFreq.
+     * Gets the value of the startUpFreq property.
      * 
      */
     public int getStartUpFreq() {
@@ -102,7 +102,7 @@ public class FraudConfig {
     }
 
     /**
-     * Define o valor da propriedade startUpFreq.
+     * Sets the value of the startUpFreq property.
      * 
      */
     public void setStartUpFreq(int value) {
@@ -110,7 +110,7 @@ public class FraudConfig {
     }
 
     /**
-     * Obtém o valor da propriedade userID.
+     * Gets the value of the userID property.
      * 
      */
     public long getUserID() {
@@ -118,7 +118,7 @@ public class FraudConfig {
     }
 
     /**
-     * Define o valor da propriedade userID.
+     * Sets the value of the userID property.
      * 
      */
     public void setUserID(long value) {

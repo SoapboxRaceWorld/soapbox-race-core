@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de HeartBeat complex type.
+ * <p>Java class for HeartBeat complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="HeartBeat">
@@ -39,7 +39,7 @@ public class HeartBeat {
     protected int enabledBitField;
 
     /**
-     * Obtém o valor da propriedade metagameFlags.
+     * Gets the value of the metagameFlags property.
      * 
      */
     public int getMetagameFlags() {
@@ -47,7 +47,7 @@ public class HeartBeat {
     }
 
     /**
-     * Define o valor da propriedade metagameFlags.
+     * Sets the value of the metagameFlags property.
      * 
      */
     public void setMetagameFlags(int value) {
@@ -55,7 +55,7 @@ public class HeartBeat {
     }
 
     /**
-     * Obtém o valor da propriedade enabledBitField.
+     * Gets the value of the enabledBitField property.
      * 
      */
     public int getEnabledBitField() {
@@ -63,7 +63,7 @@ public class HeartBeat {
     }
 
     /**
-     * Define o valor da propriedade enabledBitField.
+     * Sets the value of the enabledBitField property.
      * 
      */
     public void setEnabledBitField(int value) {

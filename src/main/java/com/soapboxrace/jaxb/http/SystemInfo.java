@@ -10,9 +10,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Classe Java de SystemInfo complex type.
+ * <p>Java class for SystemInfo complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="SystemInfo">
@@ -111,7 +111,7 @@ public class SystemInfo {
     protected String version;
 
     /**
-     * Obtém o valor da propriedade branch.
+     * Gets the value of the branch property.
      * 
      * @return
      *     possible object is
@@ -123,7 +123,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade branch.
+     * Sets the value of the branch property.
      * 
      * @param value
      *     allowed object is
@@ -135,7 +135,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade changeList.
+     * Gets the value of the changeList property.
      * 
      * @return
      *     possible object is
@@ -147,7 +147,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade changeList.
+     * Sets the value of the changeList property.
      * 
      * @param value
      *     allowed object is
@@ -159,7 +159,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade clientVersion.
+     * Gets the value of the clientVersion property.
      * 
      * @return
      *     possible object is
@@ -171,7 +171,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade clientVersion.
+     * Sets the value of the clientVersion property.
      * 
      * @param value
      *     allowed object is
@@ -183,7 +183,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade clientVersionCheck.
+     * Gets the value of the clientVersionCheck property.
      * 
      */
     public boolean isClientVersionCheck() {
@@ -191,7 +191,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade clientVersionCheck.
+     * Sets the value of the clientVersionCheck property.
      * 
      */
     public void setClientVersionCheck(boolean value) {
@@ -199,7 +199,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade deployed.
+     * Gets the value of the deployed property.
      * 
      * @return
      *     possible object is
@@ -211,7 +211,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade deployed.
+     * Sets the value of the deployed property.
      * 
      * @param value
      *     allowed object is
@@ -223,7 +223,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade entitlementsToDownload.
+     * Gets the value of the entitlementsToDownload property.
      * 
      */
     public boolean isEntitlementsToDownload() {
@@ -231,7 +231,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade entitlementsToDownload.
+     * Sets the value of the entitlementsToDownload property.
      * 
      */
     public void setEntitlementsToDownload(boolean value) {
@@ -239,7 +239,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade forcePermanentSession.
+     * Gets the value of the forcePermanentSession property.
      * 
      */
     public boolean isForcePermanentSession() {
@@ -247,7 +247,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade forcePermanentSession.
+     * Sets the value of the forcePermanentSession property.
      * 
      */
     public void setForcePermanentSession(boolean value) {
@@ -255,7 +255,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade jidPrepender.
+     * Gets the value of the jidPrepender property.
      * 
      * @return
      *     possible object is
@@ -267,7 +267,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade jidPrepender.
+     * Sets the value of the jidPrepender property.
      * 
      * @param value
      *     allowed object is
@@ -279,7 +279,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade launcherServiceUrl.
+     * Gets the value of the launcherServiceUrl property.
      * 
      * @return
      *     possible object is
@@ -291,7 +291,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade launcherServiceUrl.
+     * Sets the value of the launcherServiceUrl property.
      * 
      * @param value
      *     allowed object is
@@ -303,7 +303,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade nucleusNamespace.
+     * Gets the value of the nucleusNamespace property.
      * 
      * @return
      *     possible object is
@@ -315,7 +315,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade nucleusNamespace.
+     * Sets the value of the nucleusNamespace property.
      * 
      * @param value
      *     allowed object is
@@ -327,7 +327,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade nucleusNamespaceWeb.
+     * Gets the value of the nucleusNamespaceWeb property.
      * 
      * @return
      *     possible object is
@@ -339,7 +339,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade nucleusNamespaceWeb.
+     * Sets the value of the nucleusNamespaceWeb property.
      * 
      * @param value
      *     allowed object is
@@ -351,7 +351,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade personaCacheTimeout.
+     * Gets the value of the personaCacheTimeout property.
      * 
      */
     public int getPersonaCacheTimeout() {
@@ -359,7 +359,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade personaCacheTimeout.
+     * Sets the value of the personaCacheTimeout property.
      * 
      */
     public void setPersonaCacheTimeout(int value) {
@@ -367,7 +367,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade portalDomain.
+     * Gets the value of the portalDomain property.
      * 
      * @return
      *     possible object is
@@ -379,7 +379,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade portalDomain.
+     * Sets the value of the portalDomain property.
      * 
      * @param value
      *     allowed object is
@@ -391,7 +391,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade portalSecureDomain.
+     * Gets the value of the portalSecureDomain property.
      * 
      * @return
      *     possible object is
@@ -403,7 +403,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade portalSecureDomain.
+     * Sets the value of the portalSecureDomain property.
      * 
      * @param value
      *     allowed object is
@@ -415,7 +415,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade portalStoreFailurePage.
+     * Gets the value of the portalStoreFailurePage property.
      * 
      * @return
      *     possible object is
@@ -427,7 +427,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade portalStoreFailurePage.
+     * Sets the value of the portalStoreFailurePage property.
      * 
      * @param value
      *     allowed object is
@@ -439,7 +439,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade portalTimeOut.
+     * Gets the value of the portalTimeOut property.
      * 
      * @return
      *     possible object is
@@ -451,7 +451,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade portalTimeOut.
+     * Sets the value of the portalTimeOut property.
      * 
      * @param value
      *     allowed object is
@@ -463,7 +463,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade shardName.
+     * Gets the value of the shardName property.
      * 
      * @return
      *     possible object is
@@ -475,7 +475,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade shardName.
+     * Sets the value of the shardName property.
      * 
      * @param value
      *     allowed object is
@@ -487,7 +487,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade time.
+     * Gets the value of the time property.
      * 
      * @return
      *     possible object is
@@ -499,7 +499,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade time.
+     * Sets the value of the time property.
      * 
      * @param value
      *     allowed object is
@@ -511,7 +511,7 @@ public class SystemInfo {
     }
 
     /**
-     * Obtém o valor da propriedade version.
+     * Gets the value of the version property.
      * 
      * @return
      *     possible object is
@@ -523,7 +523,7 @@ public class SystemInfo {
     }
 
     /**
-     * Define o valor da propriedade version.
+     * Sets the value of the version property.
      * 
      * @param value
      *     allowed object is

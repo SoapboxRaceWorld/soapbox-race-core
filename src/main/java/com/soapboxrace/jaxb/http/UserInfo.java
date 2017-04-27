@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de UserInfo complex type.
+ * <p>Java class for UserInfo complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="UserInfo">
@@ -40,7 +40,7 @@ public class UserInfo {
     protected User user;
 
     /**
-     * Obtém o valor da propriedade defaultPersonaIdx.
+     * Gets the value of the defaultPersonaIdx property.
      * 
      */
     public int getDefaultPersonaIdx() {
@@ -48,7 +48,7 @@ public class UserInfo {
     }
 
     /**
-     * Define o valor da propriedade defaultPersonaIdx.
+     * Sets the value of the defaultPersonaIdx property.
      * 
      */
     public void setDefaultPersonaIdx(int value) {
@@ -56,7 +56,7 @@ public class UserInfo {
     }
 
     /**
-     * Obtém o valor da propriedade personas.
+     * Gets the value of the personas property.
      * 
      * @return
      *     possible object is
@@ -68,7 +68,7 @@ public class UserInfo {
     }
 
     /**
-     * Define o valor da propriedade personas.
+     * Sets the value of the personas property.
      * 
      * @param value
      *     allowed object is
@@ -80,7 +80,7 @@ public class UserInfo {
     }
 
     /**
-     * Obtém o valor da propriedade user.
+     * Gets the value of the user property.
      * 
      * @return
      *     possible object is
@@ -92,7 +92,7 @@ public class UserInfo {
     }
 
     /**
-     * Define o valor da propriedade user.
+     * Sets the value of the user property.
      * 
      * @param value
      *     allowed object is

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de BasketItemTrans complex type.
+ * <p>Java class for BasketItemTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="BasketItemTrans">
@@ -40,7 +40,7 @@ public class BasketItemTrans {
     protected int quantity;
 
     /**
-     * Obtém o valor da propriedade productId.
+     * Gets the value of the productId property.
      * 
      * @return
      *     possible object is
@@ -52,7 +52,7 @@ public class BasketItemTrans {
     }
 
     /**
-     * Define o valor da propriedade productId.
+     * Sets the value of the productId property.
      * 
      * @param value
      *     allowed object is
@@ -64,7 +64,7 @@ public class BasketItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade quantity.
+     * Gets the value of the quantity property.
      * 
      */
     public int getQuantity() {
@@ -72,7 +72,7 @@ public class BasketItemTrans {
     }
 
     /**
-     * Define o valor da propriedade quantity.
+     * Sets the value of the quantity property.
      * 
      */
     public void setQuantity(int value) {

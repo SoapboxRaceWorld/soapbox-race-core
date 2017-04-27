@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de BasketTrans complex type.
+ * <p>Java class for BasketTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="BasketTrans">
@@ -36,7 +36,7 @@ public class BasketTrans {
     protected ArrayOfBasketItemTrans items;
 
     /**
-     * Obtém o valor da propriedade items.
+     * Gets the value of the items property.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class BasketTrans {
     }
 
     /**
-     * Define o valor da propriedade items.
+     * Sets the value of the items property.
      * 
      * @param value
      *     allowed object is

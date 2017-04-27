@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de ProductTrans complex type.
+ * <p>Java class for ProductTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="ProductTrans">
@@ -108,7 +108,7 @@ public class ProductTrans {
     protected String webLocation;
 
     /**
-     * Obtém o valor da propriedade bundleItems.
+     * Gets the value of the bundleItems property.
      * 
      * @return
      *     possible object is
@@ -120,7 +120,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade bundleItems.
+     * Sets the value of the bundleItems property.
      * 
      * @param value
      *     allowed object is
@@ -132,7 +132,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade categoryId.
+     * Gets the value of the categoryId property.
      * 
      * @return
      *     possible object is
@@ -144,7 +144,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade categoryId.
+     * Sets the value of the categoryId property.
      * 
      * @param value
      *     allowed object is
@@ -156,7 +156,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade currency.
+     * Gets the value of the currency property.
      * 
      * @return
      *     possible object is
@@ -168,7 +168,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade currency.
+     * Sets the value of the currency property.
      * 
      * @param value
      *     allowed object is
@@ -180,7 +180,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade description.
+     * Gets the value of the description property.
      * 
      * @return
      *     possible object is
@@ -192,7 +192,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade description.
+     * Sets the value of the description property.
      * 
      * @param value
      *     allowed object is
@@ -204,7 +204,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade durationMinute.
+     * Gets the value of the durationMinute property.
      * 
      */
     public int getDurationMinute() {
@@ -212,7 +212,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade durationMinute.
+     * Sets the value of the durationMinute property.
      * 
      */
     public void setDurationMinute(int value) {
@@ -220,7 +220,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade hash.
+     * Gets the value of the hash property.
      * 
      */
     public int getHash() {
@@ -228,7 +228,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade hash.
+     * Sets the value of the hash property.
      * 
      */
     public void setHash(int value) {
@@ -236,7 +236,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade icon.
+     * Gets the value of the icon property.
      * 
      * @return
      *     possible object is
@@ -248,7 +248,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade icon.
+     * Sets the value of the icon property.
      * 
      * @param value
      *     allowed object is
@@ -260,7 +260,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade level.
+     * Gets the value of the level property.
      * 
      */
     public int getLevel() {
@@ -268,7 +268,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade level.
+     * Sets the value of the level property.
      * 
      */
     public void setLevel(int value) {
@@ -276,7 +276,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade longDescription.
+     * Gets the value of the longDescription property.
      * 
      * @return
      *     possible object is
@@ -288,7 +288,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade longDescription.
+     * Sets the value of the longDescription property.
      * 
      * @param value
      *     allowed object is
@@ -300,7 +300,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade price.
+     * Gets the value of the price property.
      * 
      */
     public double getPrice() {
@@ -308,7 +308,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade price.
+     * Sets the value of the price property.
      * 
      */
     public void setPrice(double value) {
@@ -316,7 +316,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade priority.
+     * Gets the value of the priority property.
      * 
      */
     public int getPriority() {
@@ -324,7 +324,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade priority.
+     * Sets the value of the priority property.
      * 
      */
     public void setPriority(int value) {
@@ -332,7 +332,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade productId.
+     * Gets the value of the productId property.
      * 
      * @return
      *     possible object is
@@ -344,7 +344,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade productId.
+     * Sets the value of the productId property.
      * 
      * @param value
      *     allowed object is
@@ -356,7 +356,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade productTitle.
+     * Gets the value of the productTitle property.
      * 
      * @return
      *     possible object is
@@ -368,7 +368,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade productTitle.
+     * Sets the value of the productTitle property.
      * 
      * @param value
      *     allowed object is
@@ -380,7 +380,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade productType.
+     * Gets the value of the productType property.
      * 
      * @return
      *     possible object is
@@ -392,7 +392,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade productType.
+     * Sets the value of the productType property.
      * 
      * @param value
      *     allowed object is
@@ -404,7 +404,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade secondaryIcon.
+     * Gets the value of the secondaryIcon property.
      * 
      * @return
      *     possible object is
@@ -416,7 +416,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade secondaryIcon.
+     * Sets the value of the secondaryIcon property.
      * 
      * @param value
      *     allowed object is
@@ -428,7 +428,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade useCount.
+     * Gets the value of the useCount property.
      * 
      */
     public int getUseCount() {
@@ -436,7 +436,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade useCount.
+     * Sets the value of the useCount property.
      * 
      */
     public void setUseCount(int value) {
@@ -444,7 +444,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade visualStyle.
+     * Gets the value of the visualStyle property.
      * 
      * @return
      *     possible object is
@@ -456,7 +456,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade visualStyle.
+     * Sets the value of the visualStyle property.
      * 
      * @param value
      *     allowed object is
@@ -468,7 +468,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade webIcon.
+     * Gets the value of the webIcon property.
      * 
      * @return
      *     possible object is
@@ -480,7 +480,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade webIcon.
+     * Sets the value of the webIcon property.
      * 
      * @param value
      *     allowed object is
@@ -492,7 +492,7 @@ public class ProductTrans {
     }
 
     /**
-     * Obtém o valor da propriedade webLocation.
+     * Gets the value of the webLocation property.
      * 
      * @return
      *     possible object is
@@ -504,7 +504,7 @@ public class ProductTrans {
     }
 
     /**
-     * Define o valor da propriedade webLocation.
+     * Sets the value of the webLocation property.
      * 
      * @param value
      *     allowed object is

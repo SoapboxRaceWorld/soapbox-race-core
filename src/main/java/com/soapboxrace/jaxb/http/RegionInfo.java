@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de RegionInfo complex type.
+ * <p>Java class for RegionInfo complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="RegionInfo">
@@ -60,7 +60,7 @@ public class RegionInfo {
     protected int udpRelayTimeoutInMilliseconds;
 
     /**
-     * Obtém o valor da propriedade countdownProposalInMilliseconds.
+     * Gets the value of the countdownProposalInMilliseconds property.
      * 
      */
     public int getCountdownProposalInMilliseconds() {
@@ -68,7 +68,7 @@ public class RegionInfo {
     }
 
     /**
-     * Define o valor da propriedade countdownProposalInMilliseconds.
+     * Sets the value of the countdownProposalInMilliseconds property.
      * 
      */
     public void setCountdownProposalInMilliseconds(int value) {
@@ -76,7 +76,7 @@ public class RegionInfo {
     }
 
     /**
-     * Obtém o valor da propriedade directConnectTimeoutInMilliseconds.
+     * Gets the value of the directConnectTimeoutInMilliseconds property.
      * 
      */
     public int getDirectConnectTimeoutInMilliseconds() {
@@ -84,7 +84,7 @@ public class RegionInfo {
     }
 
     /**
-     * Define o valor da propriedade directConnectTimeoutInMilliseconds.
+     * Sets the value of the directConnectTimeoutInMilliseconds property.
      * 
      */
     public void setDirectConnectTimeoutInMilliseconds(int value) {
@@ -92,7 +92,7 @@ public class RegionInfo {
     }
 
     /**
-     * Obtém o valor da propriedade dropOutTimeInMilliseconds.
+     * Gets the value of the dropOutTimeInMilliseconds property.
      * 
      */
     public int getDropOutTimeInMilliseconds() {
@@ -100,7 +100,7 @@ public class RegionInfo {
     }
 
     /**
-     * Define o valor da propriedade dropOutTimeInMilliseconds.
+     * Sets the value of the dropOutTimeInMilliseconds property.
      * 
      */
     public void setDropOutTimeInMilliseconds(int value) {
@@ -108,7 +108,7 @@ public class RegionInfo {
     }
 
     /**
-     * Obtém o valor da propriedade eventLoadTimeoutInMilliseconds.
+     * Gets the value of the eventLoadTimeoutInMilliseconds property.
      * 
      */
     public int getEventLoadTimeoutInMilliseconds() {
@@ -116,7 +116,7 @@ public class RegionInfo {
     }
 
     /**
-     * Define o valor da propriedade eventLoadTimeoutInMilliseconds.
+     * Sets the value of the eventLoadTimeoutInMilliseconds property.
      * 
      */
     public void setEventLoadTimeoutInMilliseconds(int value) {
@@ -124,7 +124,7 @@ public class RegionInfo {
     }
 
     /**
-     * Obtém o valor da propriedade heartbeatIntervalInMilliseconds.
+     * Gets the value of the heartbeatIntervalInMilliseconds property.
      * 
      */
     public int getHeartbeatIntervalInMilliseconds() {
@@ -132,7 +132,7 @@ public class RegionInfo {
     }
 
     /**
-     * Define o valor da propriedade heartbeatIntervalInMilliseconds.
+     * Sets the value of the heartbeatIntervalInMilliseconds property.
      * 
      */
     public void setHeartbeatIntervalInMilliseconds(int value) {
@@ -140,7 +140,7 @@ public class RegionInfo {
     }
 
     /**
-     * Obtém o valor da propriedade udpRelayBandwidthInBps.
+     * Gets the value of the udpRelayBandwidthInBps property.
      * 
      */
     public int getUdpRelayBandwidthInBps() {
@@ -148,7 +148,7 @@ public class RegionInfo {
     }
 
     /**
-     * Define o valor da propriedade udpRelayBandwidthInBps.
+     * Sets the value of the udpRelayBandwidthInBps property.
      * 
      */
     public void setUdpRelayBandwidthInBps(int value) {
@@ -156,7 +156,7 @@ public class RegionInfo {
     }
 
     /**
-     * Obtém o valor da propriedade udpRelayTimeoutInMilliseconds.
+     * Gets the value of the udpRelayTimeoutInMilliseconds property.
      * 
      */
     public int getUdpRelayTimeoutInMilliseconds() {
@@ -164,7 +164,7 @@ public class RegionInfo {
     }
 
     /**
-     * Define o valor da propriedade udpRelayTimeoutInMilliseconds.
+     * Sets the value of the udpRelayTimeoutInMilliseconds property.
      * 
      */
     public void setUdpRelayTimeoutInMilliseconds(int value) {

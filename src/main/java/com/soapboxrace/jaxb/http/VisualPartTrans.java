@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de VisualPartTrans complex type.
+ * <p>Java class for VisualPartTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="VisualPartTrans">
@@ -40,7 +40,7 @@ public class VisualPartTrans {
     protected int slotHash;
 
     /**
-     * Obtém o valor da propriedade partHash.
+     * Gets the value of the partHash property.
      * 
      */
     public int getPartHash() {
@@ -48,7 +48,7 @@ public class VisualPartTrans {
     }
 
     /**
-     * Define o valor da propriedade partHash.
+     * Sets the value of the partHash property.
      * 
      */
     public void setPartHash(int value) {
@@ -56,7 +56,7 @@ public class VisualPartTrans {
     }
 
     /**
-     * Obtém o valor da propriedade slotHash.
+     * Gets the value of the slotHash property.
      * 
      */
     public int getSlotHash() {
@@ -64,7 +64,7 @@ public class VisualPartTrans {
     }
 
     /**
-     * Define o valor da propriedade slotHash.
+     * Sets the value of the slotHash property.
      * 
      */
     public void setSlotHash(int value) {

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de CommerceItemTrans complex type.
+ * <p>Java class for CommerceItemTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CommerceItemTrans">
@@ -40,7 +40,7 @@ public class CommerceItemTrans {
     protected String title;
 
     /**
-     * Obtém o valor da propriedade hash.
+     * Gets the value of the hash property.
      * 
      */
     public int getHash() {
@@ -48,7 +48,7 @@ public class CommerceItemTrans {
     }
 
     /**
-     * Define o valor da propriedade hash.
+     * Sets the value of the hash property.
      * 
      */
     public void setHash(int value) {
@@ -56,7 +56,7 @@ public class CommerceItemTrans {
     }
 
     /**
-     * Obtém o valor da propriedade title.
+     * Gets the value of the title property.
      * 
      * @return
      *     possible object is
@@ -68,7 +68,7 @@ public class CommerceItemTrans {
     }
 
     /**
-     * Define o valor da propriedade title.
+     * Sets the value of the title property.
      * 
      * @param value
      *     allowed object is

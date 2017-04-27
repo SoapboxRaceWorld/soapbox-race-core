@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de SocialSettings complex type.
+ * <p>Java class for SocialSettings complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="SocialSettings">
@@ -60,7 +60,7 @@ public class SocialSettings {
     protected boolean showOnlyPlayersInSameChatChannel;
 
     /**
-     * Obtém o valor da propriedade appearOffline.
+     * Gets the value of the appearOffline property.
      * 
      */
     public boolean isAppearOffline() {
@@ -68,7 +68,7 @@ public class SocialSettings {
     }
 
     /**
-     * Define o valor da propriedade appearOffline.
+     * Sets the value of the appearOffline property.
      * 
      */
     public void setAppearOffline(boolean value) {
@@ -76,7 +76,7 @@ public class SocialSettings {
     }
 
     /**
-     * Obtém o valor da propriedade declineGroupInvite.
+     * Gets the value of the declineGroupInvite property.
      * 
      */
     public int getDeclineGroupInvite() {
@@ -84,7 +84,7 @@ public class SocialSettings {
     }
 
     /**
-     * Define o valor da propriedade declineGroupInvite.
+     * Sets the value of the declineGroupInvite property.
      * 
      */
     public void setDeclineGroupInvite(int value) {
@@ -92,7 +92,7 @@ public class SocialSettings {
     }
 
     /**
-     * Obtém o valor da propriedade declineIncommingFriendRequests.
+     * Gets the value of the declineIncommingFriendRequests property.
      * 
      */
     public boolean isDeclineIncommingFriendRequests() {
@@ -100,7 +100,7 @@ public class SocialSettings {
     }
 
     /**
-     * Define o valor da propriedade declineIncommingFriendRequests.
+     * Sets the value of the declineIncommingFriendRequests property.
      * 
      */
     public void setDeclineIncommingFriendRequests(boolean value) {
@@ -108,7 +108,7 @@ public class SocialSettings {
     }
 
     /**
-     * Obtém o valor da propriedade declinePrivateInvite.
+     * Gets the value of the declinePrivateInvite property.
      * 
      */
     public int getDeclinePrivateInvite() {
@@ -116,7 +116,7 @@ public class SocialSettings {
     }
 
     /**
-     * Define o valor da propriedade declinePrivateInvite.
+     * Sets the value of the declinePrivateInvite property.
      * 
      */
     public void setDeclinePrivateInvite(int value) {
@@ -124,7 +124,7 @@ public class SocialSettings {
     }
 
     /**
-     * Obtém o valor da propriedade hideOfflineFriends.
+     * Gets the value of the hideOfflineFriends property.
      * 
      */
     public boolean isHideOfflineFriends() {
@@ -132,7 +132,7 @@ public class SocialSettings {
     }
 
     /**
-     * Define o valor da propriedade hideOfflineFriends.
+     * Sets the value of the hideOfflineFriends property.
      * 
      */
     public void setHideOfflineFriends(boolean value) {
@@ -140,7 +140,7 @@ public class SocialSettings {
     }
 
     /**
-     * Obtém o valor da propriedade showNewsOnSignIn.
+     * Gets the value of the showNewsOnSignIn property.
      * 
      */
     public boolean isShowNewsOnSignIn() {
@@ -148,7 +148,7 @@ public class SocialSettings {
     }
 
     /**
-     * Define o valor da propriedade showNewsOnSignIn.
+     * Sets the value of the showNewsOnSignIn property.
      * 
      */
     public void setShowNewsOnSignIn(boolean value) {
@@ -156,7 +156,7 @@ public class SocialSettings {
     }
 
     /**
-     * Obtém o valor da propriedade showOnlyPlayersInSameChatChannel.
+     * Gets the value of the showOnlyPlayersInSameChatChannel property.
      * 
      */
     public boolean isShowOnlyPlayersInSameChatChannel() {
@@ -164,7 +164,7 @@ public class SocialSettings {
     }
 
     /**
-     * Define o valor da propriedade showOnlyPlayersInSameChatChannel.
+     * Sets the value of the showOnlyPlayersInSameChatChannel property.
      * 
      */
     public void setShowOnlyPlayersInSameChatChannel(boolean value) {

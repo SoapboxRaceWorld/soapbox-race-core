@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de CustomPaintTrans complex type.
+ * <p>Java class for CustomPaintTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="CustomPaintTrans">
@@ -52,7 +52,7 @@ public class CustomPaintTrans {
     protected int var;
 
     /**
-     * Obtém o valor da propriedade group.
+     * Gets the value of the group property.
      * 
      */
     public int getGroup() {
@@ -60,7 +60,7 @@ public class CustomPaintTrans {
     }
 
     /**
-     * Define o valor da propriedade group.
+     * Sets the value of the group property.
      * 
      */
     public void setGroup(int value) {
@@ -68,7 +68,7 @@ public class CustomPaintTrans {
     }
 
     /**
-     * Obtém o valor da propriedade hue.
+     * Gets the value of the hue property.
      * 
      */
     public int getHue() {
@@ -76,7 +76,7 @@ public class CustomPaintTrans {
     }
 
     /**
-     * Define o valor da propriedade hue.
+     * Sets the value of the hue property.
      * 
      */
     public void setHue(int value) {
@@ -84,7 +84,7 @@ public class CustomPaintTrans {
     }
 
     /**
-     * Obtém o valor da propriedade sat.
+     * Gets the value of the sat property.
      * 
      */
     public int getSat() {
@@ -92,7 +92,7 @@ public class CustomPaintTrans {
     }
 
     /**
-     * Define o valor da propriedade sat.
+     * Sets the value of the sat property.
      * 
      */
     public void setSat(int value) {
@@ -100,7 +100,7 @@ public class CustomPaintTrans {
     }
 
     /**
-     * Obtém o valor da propriedade slot.
+     * Gets the value of the slot property.
      * 
      */
     public int getSlot() {
@@ -108,7 +108,7 @@ public class CustomPaintTrans {
     }
 
     /**
-     * Define o valor da propriedade slot.
+     * Sets the value of the slot property.
      * 
      */
     public void setSlot(int value) {
@@ -116,7 +116,7 @@ public class CustomPaintTrans {
     }
 
     /**
-     * Obtém o valor da propriedade var.
+     * Gets the value of the var property.
      * 
      */
     public int getVar() {
@@ -124,7 +124,7 @@ public class CustomPaintTrans {
     }
 
     /**
-     * Define o valor da propriedade var.
+     * Sets the value of the var property.
      * 
      */
     public void setVar(int value) {

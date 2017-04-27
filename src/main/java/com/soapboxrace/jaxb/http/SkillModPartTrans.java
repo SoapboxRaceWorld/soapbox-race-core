@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de SkillModPartTrans complex type.
+ * <p>Java class for SkillModPartTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="SkillModPartTrans">
@@ -40,7 +40,7 @@ public class SkillModPartTrans {
     protected int skillModPartAttribHash;
 
     /**
-     * Obtém o valor da propriedade isFixed.
+     * Gets the value of the isFixed property.
      * 
      */
     public boolean isIsFixed() {
@@ -48,7 +48,7 @@ public class SkillModPartTrans {
     }
 
     /**
-     * Define o valor da propriedade isFixed.
+     * Sets the value of the isFixed property.
      * 
      */
     public void setIsFixed(boolean value) {
@@ -56,7 +56,7 @@ public class SkillModPartTrans {
     }
 
     /**
-     * Obtém o valor da propriedade skillModPartAttribHash.
+     * Gets the value of the skillModPartAttribHash property.
      * 
      */
     public int getSkillModPartAttribHash() {
@@ -64,7 +64,7 @@ public class SkillModPartTrans {
     }
 
     /**
-     * Define o valor da propriedade skillModPartAttribHash.
+     * Sets the value of the skillModPartAttribHash property.
      * 
      */
     public void setSkillModPartAttribHash(int value) {

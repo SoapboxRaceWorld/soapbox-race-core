@@ -10,9 +10,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Classe Java de OwnedCarTrans complex type.
+ * <p>Java class for OwnedCarTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="OwnedCarTrans">
@@ -59,7 +59,7 @@ public class OwnedCarTrans {
     protected String ownershipType;
 
     /**
-     * Obtém o valor da propriedade customCar.
+     * Gets the value of the customCar property.
      * 
      * @return
      *     possible object is
@@ -71,7 +71,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Define o valor da propriedade customCar.
+     * Sets the value of the customCar property.
      * 
      * @param value
      *     allowed object is
@@ -83,7 +83,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade durability.
+     * Gets the value of the durability property.
      * 
      */
     public int getDurability() {
@@ -91,7 +91,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Define o valor da propriedade durability.
+     * Sets the value of the durability property.
      * 
      */
     public void setDurability(int value) {
@@ -99,7 +99,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade expirationDate.
+     * Gets the value of the expirationDate property.
      * 
      * @return
      *     possible object is
@@ -111,7 +111,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Define o valor da propriedade expirationDate.
+     * Sets the value of the expirationDate property.
      * 
      * @param value
      *     allowed object is
@@ -123,7 +123,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade heat.
+     * Gets the value of the heat property.
      * 
      */
     public float getHeat() {
@@ -131,7 +131,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Define o valor da propriedade heat.
+     * Sets the value of the heat property.
      * 
      */
     public void setHeat(float value) {
@@ -139,7 +139,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade id.
+     * Gets the value of the id property.
      * 
      */
     public long getId() {
@@ -147,7 +147,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Define o valor da propriedade id.
+     * Sets the value of the id property.
      * 
      */
     public void setId(long value) {
@@ -155,7 +155,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Obtém o valor da propriedade ownershipType.
+     * Gets the value of the ownershipType property.
      * 
      * @return
      *     possible object is
@@ -167,7 +167,7 @@ public class OwnedCarTrans {
     }
 
     /**
-     * Define o valor da propriedade ownershipType.
+     * Sets the value of the ownershipType property.
      * 
      * @param value
      *     allowed object is

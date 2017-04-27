@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java de WalletTrans complex type.
+ * <p>Java class for WalletTrans complex type.
  * 
- * <p>O seguinte fragmento do esquema especifica o conteúdo esperado contido dentro desta classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="WalletTrans">
@@ -40,7 +40,7 @@ public class WalletTrans {
     protected String currency;
 
     /**
-     * Obtém o valor da propriedade balance.
+     * Gets the value of the balance property.
      * 
      */
     public double getBalance() {
@@ -48,7 +48,7 @@ public class WalletTrans {
     }
 
     /**
-     * Define o valor da propriedade balance.
+     * Sets the value of the balance property.
      * 
      */
     public void setBalance(double value) {
@@ -56,7 +56,7 @@ public class WalletTrans {
     }
 
     /**
-     * Obtém o valor da propriedade currency.
+     * Gets the value of the currency property.
      * 
      * @return
      *     possible object is
@@ -68,7 +68,7 @@ public class WalletTrans {
     }
 
     /**
-     * Define o valor da propriedade currency.
+     * Sets the value of the currency property.
      * 
      * @param value
      *     allowed object is
