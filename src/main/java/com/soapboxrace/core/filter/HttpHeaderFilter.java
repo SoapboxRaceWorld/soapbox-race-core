@@ -18,7 +18,6 @@ public class HttpHeaderFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -26,13 +25,11 @@ public class HttpHeaderFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(httpResponse);
 		responseWrapper.addHeader("Connection", "close");
-		responseWrapper.addHeader("Content-Type", "application/xml");
 		chain.doFilter(request, httpResponse);
 	}
 
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
-
 	}
 }
