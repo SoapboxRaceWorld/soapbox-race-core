@@ -1,27 +1,19 @@
-package com.soapboxrace.core.servlet;
+package com.soapboxrace.core.api;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebServlet;
-import javax.xml.bind.JAXBElement;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.jaxb.http.ArrayOfCarClass;
 import com.soapboxrace.jaxb.http.CarClass;
-import com.soapboxrace.jaxb.http.ObjectFactory;
-import com.soapboxrace.jaxb.util.MarshalXML;
 
-@WebServlet(urlPatterns = { "/Engine.svc/carclasses" })
-public class CarClasses extends GenericServlet {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1328854360778795692L;
+@Path("/carclasses")
+public class CarClasses {
 
-	@Override
-	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+	@GET
+	@Produces(MediaType.APPLICATION_XML)
+	public ArrayOfCarClass carClasses() {
 		ArrayOfCarClass arrayOfCarClass = new ArrayOfCarClass();
 		CarClass carClass = new CarClass();
 		carClass.setCarClassHash(-2142411446);
@@ -53,10 +45,6 @@ public class CarClasses extends GenericServlet {
 		carClass6.setMaxRating((short) 499);
 		carClass6.setMinRating((short) 400);
 		arrayOfCarClass.getCarClass().add(carClass6);
-
-		JAXBElement<ArrayOfCarClass> createArrayOfCarClass = new ObjectFactory().createArrayOfCarClass(arrayOfCarClass);
-		String marshal = MarshalXML.marshal(createArrayOfCarClass);
-		answer(request, response, marshal);
+		return arrayOfCarClass;
 	}
-
 }
