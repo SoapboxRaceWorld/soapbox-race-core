@@ -15,7 +15,7 @@ public class Catalog {
 	@GET
 	@Path("/productsInCategory")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfProductTrans productsInCategory(@QueryParam("categoryName") String categoryName, @QueryParam("categoryName") String clientProductType) {
+	public ArrayOfProductTrans productsInCategory(@QueryParam("categoryName") String categoryName, @QueryParam("clientProductType") String clientProductType) {
 		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
 		// categoryName=Starting_Cars&clientProductType=PRESETCAR
 		if ("Starting_Cars".equals(categoryName) && "PRESETCAR".equals(clientProductType)) {

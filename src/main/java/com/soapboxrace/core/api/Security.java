@@ -1,14 +1,19 @@
 package com.soapboxrace.core.api;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.jaxb.http.FraudConfig;
 
-@Path("/Security")
+@Path("/security")
 public class Security {
 
+	@GET
 	@Path("/fraudConfig")
+	@Produces(MediaType.APPLICATION_XML)
 	public FraudConfig fraudConfig(@HeaderParam("userId") Long userId) {
 		FraudConfig fraudConfig = new FraudConfig();
 		fraudConfig.setEnabledBitField(12);
