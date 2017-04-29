@@ -19,7 +19,4 @@ public class UserBO {
 		dao.insert(userEntity);
 	}
 
-	public void selectAll() {
-		dao.selectAll();
-	}
 }
