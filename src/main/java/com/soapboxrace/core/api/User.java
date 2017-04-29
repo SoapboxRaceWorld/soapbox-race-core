@@ -24,7 +24,7 @@ public class User {
 		userInfo.setUser(user);
 		return userInfo;
 	}
-	
+
 	@POST
 	@Path("SecureLoginPersona")
 	@Produces(MediaType.APPLICATION_XML)
@@ -36,6 +36,13 @@ public class User {
 		user.setUserId(userId);
 		userInfo.setUser(user);
 		return userInfo;
+	}
+
+	@POST
+	@Path("SecureLogout")
+	@Produces(MediaType.APPLICATION_XML)
+	public String secureLogout() {
+		return "";
 	}
 
 }
