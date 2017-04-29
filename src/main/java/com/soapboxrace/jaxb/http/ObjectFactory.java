@@ -42,6 +42,7 @@ public class ObjectFactory {
     private final static QName _OwnedCarTrans_QNAME = new QName("", "OwnedCarTrans");
     private final static QName _HeartBeat_QNAME = new QName("", "HeartBeat");
     private final static QName _ArrayOfNewsArticleTrans_QNAME = new QName("", "ArrayOfNewsArticleTrans");
+    private final static QName _HardwareInfo_QNAME = new QName("", "HardwareInfo");
     private final static QName _UserSettings_QNAME = new QName("", "User_Settings");
     private final static QName _TreasureHuntEventSession_QNAME = new QName("", "TreasureHuntEventSession");
     private final static QName _ProfileData_QNAME = new QName("", "ProfileData");
@@ -206,6 +207,14 @@ public class ObjectFactory {
      */
     public ArrayOfNewsArticleTrans createArrayOfNewsArticleTrans() {
         return new ArrayOfNewsArticleTrans();
+    }
+
+    /**
+     * Create an instance of {@link HardwareInfo }
+     * 
+     */
+    public HardwareInfo createHardwareInfo() {
+        return new HardwareInfo();
     }
 
     /**
@@ -864,6 +873,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "ArrayOfNewsArticleTrans")
     public JAXBElement<ArrayOfNewsArticleTrans> createArrayOfNewsArticleTrans(ArrayOfNewsArticleTrans value) {
         return new JAXBElement<ArrayOfNewsArticleTrans>(_ArrayOfNewsArticleTrans_QNAME, ArrayOfNewsArticleTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link HardwareInfo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "HardwareInfo")
+    public JAXBElement<HardwareInfo> createHardwareInfo(HardwareInfo value) {
+        return new JAXBElement<HardwareInfo>(_HardwareInfo_QNAME, HardwareInfo.class, null, value);
     }
 
     /**
