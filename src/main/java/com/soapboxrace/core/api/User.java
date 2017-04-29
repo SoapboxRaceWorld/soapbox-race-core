@@ -9,13 +9,26 @@ import javax.ws.rs.core.MediaType;
 import com.soapboxrace.jaxb.http.ArrayOfProfileData;
 import com.soapboxrace.jaxb.http.UserInfo;
 
-@Path("/User")
+@Path("User")
 public class User {
 
 	@POST
 	@Path("GetPermanentSession")
 	@Produces(MediaType.APPLICATION_XML)
 	public UserInfo getPermanentSession(@HeaderParam("userId") Long userId) {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setPersonas(new ArrayOfProfileData());
+		com.soapboxrace.jaxb.http.User user = new com.soapboxrace.jaxb.http.User();
+		user.setSecurityToken("1234567890");
+		user.setUserId(userId);
+		userInfo.setUser(user);
+		return userInfo;
+	}
+	
+	@POST
+	@Path("SecureLoginPersona")
+	@Produces(MediaType.APPLICATION_XML)
+	public UserInfo secureLoginPersona(@HeaderParam("userId") Long userId) {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setPersonas(new ArrayOfProfileData());
 		com.soapboxrace.jaxb.http.User user = new com.soapboxrace.jaxb.http.User();

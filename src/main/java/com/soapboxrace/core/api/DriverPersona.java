@@ -1,11 +1,18 @@
 package com.soapboxrace.core.api;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
+import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
+import com.soapboxrace.jaxb.http.ArrayOfString;
+import com.soapboxrace.jaxb.http.PersonaBase;
+import com.soapboxrace.jaxb.http.ProfileData;
 
 @Path("/DriverPersona")
 public class DriverPersona {
@@ -76,5 +83,71 @@ public class DriverPersona {
 		arrayOfInt.getInt().add(9403075);
 		arrayOfInt.getInt().add(9992125);
 		return arrayOfInt;
+	}
+
+	@GET
+	@Path("/GetPersonaInfo")
+	@Produces(MediaType.APPLICATION_XML)
+	public ProfileData getPersonaInfo() {
+		ProfileData profileData = new ProfileData();
+		profileData.setBadges(new ArrayOfBadgePacket());
+		profileData.setCash(5000000);
+		profileData.setIconIndex(0);
+		profileData.setLevel(60);
+		profileData.setMotto("");
+		profileData.setName("NOBODY");
+		profileData.setPercentToLevel(0);
+		profileData.setPersonaId(100);
+		profileData.setRating(0);
+		profileData.setRep(0);
+		profileData.setRepAtCurrentLevel(0);
+		profileData.setScore(0);
+		return profileData;
+	}
+
+	@POST
+	@Path("/ReserveName")
+	@Produces(MediaType.APPLICATION_XML)
+	public ArrayOfString reserveName() {
+		return new ArrayOfString();
+	}
+
+	@POST
+	@Path("/CreatePersona")
+	@Produces(MediaType.APPLICATION_XML)
+	public ProfileData createPersona() {
+		ProfileData profileData = new ProfileData();
+		profileData.setName("NOBODY");
+		profileData.setCash(5000000);
+		profileData.setIconIndex(0);
+		profileData.setPersonaId(100);
+		profileData.setLevel(60);
+		return profileData;
+	}
+
+	@GET
+	@Path("/GetPersonaBaseFromList")
+	@Produces(MediaType.APPLICATION_XML)
+	public ArrayOfPersonaBase getPersonaBaseFromList(@HeaderParam("userId") Long userId) {
+		ArrayOfPersonaBase arrayOfPersonaBase = new ArrayOfPersonaBase();
+		PersonaBase personaBase = new PersonaBase();
+		personaBase.setBadges(new ArrayOfBadgePacket());
+		personaBase.setIconIndex(0);
+		personaBase.setLevel(60);
+		personaBase.setMotto("");
+		personaBase.setName("NOBODY");
+		personaBase.setPresence(1);
+		personaBase.setPersonaId(100);
+		personaBase.setScore(0);
+		personaBase.setUserId(userId);
+		arrayOfPersonaBase.getPersonaBase().add(personaBase);
+		return arrayOfPersonaBase;
+	}
+
+	@POST
+	@Path("/UpdatePersonaPresence")
+	@Produces(MediaType.APPLICATION_XML)
+	public String UpdatePersonaPresence() {
+		return "";
 	}
 }
