@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="HardwareInfo" nillable="true" type="HardwareInfo" />
+  <xs:complexType name="HardwareInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="availableMem" type="xs:unsignedInt" />
+      <xs:element minOccurs="0" maxOccurs="1" name="cpuBrand" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="cpuid0" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="cpuid1_0" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="cpuid1_1" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="cpuid1_2" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="cpuid1_3" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="deviceID" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="excpuid1_0" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="excpuid1_1" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="excpuid1_2" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="excpuid1_3" type="xs:unsignedInt" />
+      <xs:element minOccurs="0" maxOccurs="1" name="gpuDescription" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="gpuDriverBuild" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="gpuDriverSubversion" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="gpuDriverVersion" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="gpuMemory" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="gpuProduct" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="osBuildNumber" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="osMajorVersion" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="osMinorVersion" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="physicalCores" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="platformID" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="processAffinityMask" type="xs:unsignedInt" />
+      <xs:element minOccurs="0" maxOccurs="1" name="servicePack" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="systemAffinityMask" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="totalMemory" type="xs:unsignedInt" />
+      <xs:element minOccurs="1" maxOccurs="1" name="userID" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="vendorID" type="xs:unsignedInt" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

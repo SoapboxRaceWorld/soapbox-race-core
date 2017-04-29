@@ -26,4 +26,5 @@
   <xs:include schemaLocation="ArrayOfPersonaBase.xsd" />
   <xs:include schemaLocation="ArrayOfNewsArticleTrans.xsd" />
   <xs:include schemaLocation="TreasureHuntEventSession.xsd" />
+  <xs:include schemaLocation="HardwareInfo.xsd" />
 </xs:schema>
