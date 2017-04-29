@@ -26,7 +26,7 @@ public class ReserveName extends GenericServlet {
 		// arrayOfString.getString().add("NONE");
 		JAXBElement<ArrayOfString> createArrayOfstring = new ObjectFactory().createArrayOfstring(arrayOfString);
 		String marshal = MarshalXML.marshal(createArrayOfstring);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }

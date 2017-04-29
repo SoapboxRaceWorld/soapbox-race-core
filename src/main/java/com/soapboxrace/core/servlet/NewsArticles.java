@@ -25,7 +25,7 @@ public class NewsArticles extends GenericServlet {
 		ArrayOfNewsArticleTrans arrayOfNewsArticleTrans = new ArrayOfNewsArticleTrans();
 		JAXBElement<ArrayOfNewsArticleTrans> createArrayOfNewsArticleTrans = new ObjectFactory().createArrayOfNewsArticleTrans(arrayOfNewsArticleTrans);
 		String marshal = MarshalXML.marshal(createArrayOfNewsArticleTrans);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }

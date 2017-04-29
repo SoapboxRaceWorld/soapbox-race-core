@@ -32,6 +32,6 @@ public class GetRegionInfo extends GenericServlet {
 
 		JAXBElement<RegionInfo> createRegionInfo = new ObjectFactory().createRegionInfo(regionInfo);
 		String marshal = MarshalXML.marshal(createRegionInfo);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

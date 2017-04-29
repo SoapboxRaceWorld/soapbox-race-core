@@ -39,6 +39,6 @@ public class GetChatInfo extends GenericServlet {
 
 		JAXBElement<ChatServer> createChatServer = new ObjectFactory().createChatServer(chatServer);
 		String marshal = MarshalXML.marshal(createChatServer);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

@@ -25,6 +25,6 @@ public class GetBlockersByUsers extends GenericServlet {
 		ArrayOfLong arrayOfLong = new ArrayOfLong();
 		JAXBElement<ArrayOfLong> createArrayOflong = new ObjectFactory().createArrayOflong(arrayOfLong);
 		String marshal = MarshalXML.marshal(createArrayOflong);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

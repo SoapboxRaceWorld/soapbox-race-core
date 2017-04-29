@@ -30,6 +30,6 @@ public class FraudConfig extends GenericServlet {
 		fraudConfig.setUserID(getUserId(request));
 		JAXBElement<com.soapboxrace.jaxb.http.FraudConfig> createFraudConfig = new ObjectFactory().createFraudConfig(fraudConfig);
 		String marshal = MarshalXML.marshal(createFraudConfig);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

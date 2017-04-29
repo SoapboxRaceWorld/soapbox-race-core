@@ -51,6 +51,6 @@ public class SystemInfo extends GenericServlet {
 
 		JAXBElement<com.soapboxrace.jaxb.http.SystemInfo> createSystemInfo = new ObjectFactory().createSystemInfo(systemInfo);
 		String marshal = MarshalXML.marshal(createSystemInfo);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

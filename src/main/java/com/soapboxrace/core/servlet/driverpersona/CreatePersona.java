@@ -32,6 +32,6 @@ public class CreatePersona extends GenericServlet {
 
 		JAXBElement<ProfileData> createProfileData = new ObjectFactory().createProfileData(profileData);
 		String marshal = MarshalXML.marshal(createProfileData);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

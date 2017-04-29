@@ -26,7 +26,7 @@ public class GetTreasureHuntEventSession extends GenericServlet {
 		TreasureHuntEventSession treasureHuntEventSession = new TreasureHuntEventSession();
 		JAXBElement<TreasureHuntEventSession> createTreasureHuntEventSession = new ObjectFactory().createTreasureHuntEventSession(treasureHuntEventSession);
 		String marshal = MarshalXML.marshal(createTreasureHuntEventSession);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }

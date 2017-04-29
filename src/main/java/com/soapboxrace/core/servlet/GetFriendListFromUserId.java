@@ -26,7 +26,7 @@ public class GetFriendListFromUserId extends GenericServlet {
 		JAXBElement<PersonaFriendsList> createPersonaFriendsList = new ObjectFactory().createPersonaFriendsList(personaFriendsList);
 		String xmlns = "http://schemas.datacontract.org/2004/07/Victory.TransferObjects.DriverPersona";
 		String marshal = MarshalXML.marshal(createPersonaFriendsList, xmlns);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }

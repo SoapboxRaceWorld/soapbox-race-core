@@ -11,6 +11,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 @WebServlet(urlPatterns = { "/Engine.svc/*" })
 public class GenericServlet extends HttpServlet {
@@ -65,6 +67,13 @@ public class GenericServlet extends HttpServlet {
 	protected String[] splitUri(ServletRequest request) {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		return httpRequest.getRequestURI().split("/");
+	}
+
+	protected void answer(ServletRequest request, ServletResponse response, String answer) throws IOException {
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
+		HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(httpResponse);
+		responseWrapper.addHeader("Content-Type", "application/xml");
+		response.getOutputStream().write(answer.getBytes());
 	}
 
 }

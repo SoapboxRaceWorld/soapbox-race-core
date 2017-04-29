@@ -26,6 +26,6 @@ public class AvailableAtLevel extends GenericServlet {
 		EventsPacket eventsPacket = new EventsPacket();
 		JAXBElement<EventsPacket> createEventsPacket = new ObjectFactory().createEventsPacket(eventsPacket);
 		String marshal = MarshalXML.marshal(createEventsPacket);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

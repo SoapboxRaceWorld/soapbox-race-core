@@ -26,7 +26,7 @@ public class LoadAll extends GenericServlet {
 		AchievementsPacket achievementsPacket = new AchievementsPacket();
 		JAXBElement<AchievementsPacket> createAchievementsPacket = new ObjectFactory().createAchievementsPacket(achievementsPacket);
 		String marshal = MarshalXML.marshal(createAchievementsPacket);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }

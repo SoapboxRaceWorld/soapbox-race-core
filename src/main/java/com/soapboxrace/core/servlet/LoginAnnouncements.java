@@ -26,6 +26,6 @@ public class LoginAnnouncements extends GenericServlet {
 		JAXBElement<LoginAnnouncementsDefinition> createLoginAnnouncementsDefinition = new ObjectFactory().createLoginAnnouncementsDefinition(loginAnnouncementsDefinition);
 		String xmlns = "http://schemas.datacontract.org/2004/07/Victory.DataLayer.Serialization.LoginAnnouncement";
 		String marshal = MarshalXML.marshal(createLoginAnnouncementsDefinition, xmlns);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

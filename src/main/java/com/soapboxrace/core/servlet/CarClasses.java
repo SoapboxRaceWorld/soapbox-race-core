@@ -56,7 +56,7 @@ public class CarClasses extends GenericServlet {
 
 		JAXBElement<ArrayOfCarClass> createArrayOfCarClass = new ObjectFactory().createArrayOfCarClass(arrayOfCarClass);
 		String marshal = MarshalXML.marshal(createArrayOfCarClass);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }

@@ -32,6 +32,6 @@ public class GetSocialSettings extends GenericServlet {
 		socialSettings.setShowOnlyPlayersInSameChatChannel(false);
 		JAXBElement<SocialSettings> createSocialSettings = new ObjectFactory().createSocialSettings(socialSettings);
 		String marshal = MarshalXML.marshal(createSocialSettings);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

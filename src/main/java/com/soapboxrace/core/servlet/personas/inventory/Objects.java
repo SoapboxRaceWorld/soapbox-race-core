@@ -27,6 +27,6 @@ public class Objects extends GenericServlet {
 		JAXBElement<ArrayOfInventoryItemTrans> createArrayOfInventoryItemTrans = new ObjectFactory().createArrayOfInventoryItemTrans(arrayOfInventoryItemTrans);
 		String marshal = MarshalXML.marshal(createArrayOfInventoryItemTrans);
 		// http://schemas.datacontract.org/2004/07/Victory.DataLayer.Serialization
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

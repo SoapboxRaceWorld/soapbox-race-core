@@ -30,7 +30,7 @@ public class GetRebroadcasters extends GenericServlet {
 
 		JAXBElement<ArrayOfUdpRelayInfo> createArrayOfUdpRelayInfo = new ObjectFactory().createArrayOfUdpRelayInfo(arrayOfUdpRelayInfo);
 		String marshal = MarshalXML.marshal(createArrayOfUdpRelayInfo);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }

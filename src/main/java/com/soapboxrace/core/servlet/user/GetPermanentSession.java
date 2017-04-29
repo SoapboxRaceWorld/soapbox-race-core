@@ -31,7 +31,7 @@ public class GetPermanentSession extends GenericServlet {
 		user.setUserId(getUserId(request));
 		userInfo.setUser(user);
 		String marshal = MarshalXML.marshal(new ObjectFactory().createUserInfo(userInfo));
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }

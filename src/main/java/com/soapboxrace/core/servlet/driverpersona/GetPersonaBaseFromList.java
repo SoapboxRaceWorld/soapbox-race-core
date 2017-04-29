@@ -40,6 +40,6 @@ public class GetPersonaBaseFromList extends GenericServlet {
 		arrayOfPersonaBase.getPersonaBase().add(personaBase);
 		JAXBElement<ArrayOfPersonaBase> createArrayOfPersonaBase = new ObjectFactory().createArrayOfPersonaBase(arrayOfPersonaBase);
 		String marshal = MarshalXML.marshal(createArrayOfPersonaBase);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

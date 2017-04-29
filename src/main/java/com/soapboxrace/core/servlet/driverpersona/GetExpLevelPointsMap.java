@@ -87,6 +87,6 @@ public class GetExpLevelPointsMap extends GenericServlet {
 
 		JAXBElement<ArrayOfInt> createArrayOfInt = new ObjectFactory().createArrayOfInt(arrayOfInt);
 		String marshal = MarshalXML.marshal(createArrayOfInt);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

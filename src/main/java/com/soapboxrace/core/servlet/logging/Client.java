@@ -27,6 +27,6 @@ public class Client extends GenericServlet {
 		JAXBElement<ClientConfigTrans> createClientConfigTrans = new ObjectFactory().createClientConfigTrans(clientConfigTrans);
 		String xmlns = "http://schemas.datacontract.org/2004/07/Victory.DataLayer.Serialization";
 		String marshal = MarshalXML.marshal(createClientConfigTrans, xmlns);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 }

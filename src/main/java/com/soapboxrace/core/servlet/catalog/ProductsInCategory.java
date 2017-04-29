@@ -46,7 +46,7 @@ public class ProductsInCategory extends GenericServlet {
 
 		JAXBElement<ArrayOfProductTrans> createArrayOfProductTrans = new ObjectFactory().createArrayOfProductTrans(arrayOfProductTrans);
 		String marshal = MarshalXML.marshal(createArrayOfProductTrans, "http://schemas.datacontract.org/2004/07/Victory.DataLayer.Serialization");
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }

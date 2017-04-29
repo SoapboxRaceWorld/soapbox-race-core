@@ -75,7 +75,7 @@ public class Personas extends GenericServlet {
 
 		JAXBElement<CommerceResultTrans> createCommerceResultTrans = new ObjectFactory().createCommerceResultTrans(commerceResultTrans);
 		String marshal = MarshalXML.marshal(createCommerceResultTrans);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 	private ArrayOfOwnedCarTrans getArrayOfOwnedCarTransExample() {
@@ -116,7 +116,7 @@ public class Personas extends GenericServlet {
 		carSlotInfoTrans.setOwnedCarSlotsCount(1);
 		JAXBElement<CarSlotInfoTrans> createCarSlotInfoTrans = new ObjectFactory().createCarSlotInfoTrans(carSlotInfoTrans);
 		String marshal = MarshalXML.marshal(createCarSlotInfoTrans);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }

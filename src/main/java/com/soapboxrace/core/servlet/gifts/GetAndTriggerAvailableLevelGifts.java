@@ -26,7 +26,7 @@ public class GetAndTriggerAvailableLevelGifts extends GenericServlet {
 		ArrayOfLevelGiftDefinition arrayOfLevelGiftDefinition = new ArrayOfLevelGiftDefinition();
 		JAXBElement<ArrayOfLevelGiftDefinition> createArrayOfLevelGiftDefinition = new ObjectFactory().createArrayOfLevelGiftDefinition(arrayOfLevelGiftDefinition);
 		String marshal = MarshalXML.marshal(createArrayOfLevelGiftDefinition);
-		response.getOutputStream().write(marshal.getBytes());
+		answer(request, response, marshal);
 	}
 
 }
