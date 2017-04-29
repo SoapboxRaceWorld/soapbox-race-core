@@ -125,7 +125,7 @@ public class DriverPersona {
 		return profileData;
 	}
 
-	@GET
+	@POST
 	@Path("/GetPersonaBaseFromList")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfPersonaBase getPersonaBaseFromList(@HeaderParam("userId") Long userId) {
