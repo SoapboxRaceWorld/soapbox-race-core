@@ -25,7 +25,7 @@ public class GenericServlet extends HttpServlet {
 	@Override
 	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		System.out.println(httpRequest.getRequestURI());
+		System.out.println("[" + httpRequest.getMethod() + "]" + httpRequest.getRequestURI());
 		System.out.println(readInputStream(request));
 		String filePath = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length() + 1);
 		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filePath);

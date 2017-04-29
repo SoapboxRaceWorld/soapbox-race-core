@@ -17,14 +17,14 @@ public class Example {
 
 	@GET
 	@Path("/some/{user}/path")
-	@Produces(MediaType.APPLICATION_XML + ";charset=UTF-8")
+	@Produces(MediaType.APPLICATION_XML)
 	@XsiSchemaLocation(schemaLocation = "http://schemas.datacontract.org/2004/07/Victory.TransferObjects.DriverPersona")
 	public PersonaFriendsList uga(@PathParam("user") Long userId) {
 		return new PersonaFriendsList();
 	}
 
 	@GET
-	@Produces(MediaType.APPLICATION_XML + ";charset=UTF-8")
+	@Produces(MediaType.APPLICATION_XML)
 	public UserSettings getUserSettingsGet() {
 		UserSettings userSettings = new UserSettings();
 		userSettings.setCarCacheAgeLimit(600);
