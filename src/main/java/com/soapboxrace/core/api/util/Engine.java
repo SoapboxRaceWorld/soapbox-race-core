@@ -1,4 +1,4 @@
-package com.soapboxrace.core.api;
+package com.soapboxrace.core.api.util;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

@@ -1,4 +1,4 @@
-package com.soapboxrace.core.api;
+package com.soapboxrace.core.api.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
