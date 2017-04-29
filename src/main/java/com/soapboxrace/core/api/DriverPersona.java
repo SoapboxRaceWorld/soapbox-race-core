@@ -1,28 +1,19 @@
-package com.soapboxrace.core.servlet.driverpersona;
+package com.soapboxrace.core.api;
 
-import java.io.IOException;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebServlet;
-import javax.xml.bind.JAXBElement;
-
-import com.soapboxrace.core.servlet.GenericServlet;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
-import com.soapboxrace.jaxb.http.ObjectFactory;
-import com.soapboxrace.jaxb.util.MarshalXML;
 
-@WebServlet(urlPatterns = { "/Engine.svc/DriverPersona/GetExpLevelPointsMap" })
-public class GetExpLevelPointsMap extends GenericServlet {
+@Path("/DriverPersona")
+public class DriverPersona {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7900043925324697940L;
-
-	@Override
-	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+	@GET
+	@Path("/GetExpLevelPointsMap")
+	@Produces(MediaType.APPLICATION_XML)
+	public ArrayOfInt getExpLevelPointsMap() {
 		ArrayOfInt arrayOfInt = new ArrayOfInt();
 		arrayOfInt.getInt().add(100);
 		arrayOfInt.getInt().add(975);
@@ -84,9 +75,6 @@ public class GetExpLevelPointsMap extends GenericServlet {
 		arrayOfInt.getInt().add(8837015);
 		arrayOfInt.getInt().add(9403075);
 		arrayOfInt.getInt().add(9992125);
-
-		JAXBElement<ArrayOfInt> createArrayOfInt = new ObjectFactory().createArrayOfInt(arrayOfInt);
-		String marshal = MarshalXML.marshal(createArrayOfInt);
-		answer(request, response, marshal);
+		return arrayOfInt;
 	}
 }
