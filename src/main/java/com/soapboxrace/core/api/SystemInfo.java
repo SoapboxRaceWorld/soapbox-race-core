@@ -1,28 +1,20 @@
-package com.soapboxrace.core.servlet;
+package com.soapboxrace.core.api;
 
-import java.io.IOException;
 import java.util.GregorianCalendar;
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebServlet;
-import javax.xml.bind.JAXBElement;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import com.soapboxrace.jaxb.http.ObjectFactory;
-import com.soapboxrace.jaxb.util.MarshalXML;
+@Path("/systeminfo")
+public class SystemInfo {
 
-@WebServlet(urlPatterns = { "/Engine.svc/systeminfo" })
-public class SystemInfo extends GenericServlet {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -207709800210654924L;
-
-	@Override
-	public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+	@GET
+	@Produces(MediaType.APPLICATION_XML)
+	public com.soapboxrace.jaxb.http.SystemInfo systemInfo() {
 		com.soapboxrace.jaxb.http.SystemInfo systemInfo = new com.soapboxrace.jaxb.http.SystemInfo();
 		systemInfo.setBranch("production");
 		systemInfo.setChangeList("620384");
@@ -48,9 +40,6 @@ public class SystemInfo extends GenericServlet {
 			e.printStackTrace();
 		}
 		systemInfo.setVersion("1599");
-
-		JAXBElement<com.soapboxrace.jaxb.http.SystemInfo> createSystemInfo = new ObjectFactory().createSystemInfo(systemInfo);
-		String marshal = MarshalXML.marshal(createSystemInfo);
-		answer(request, response, marshal);
+		return systemInfo;
 	}
 }
