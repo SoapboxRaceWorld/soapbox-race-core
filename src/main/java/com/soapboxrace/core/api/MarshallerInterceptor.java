@@ -2,6 +2,7 @@ package com.soapboxrace.core.api;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -51,7 +52,10 @@ public class MarshallerInterceptor implements MessageBodyWriter<Object> {
 			}
 			XmlType xmlTypeAnnotation = object.getClass().getAnnotation(XmlType.class);
 			QName qname = new QName("", xmlTypeAnnotation.name());
-			jaxbMarshaller.marshal(new JAXBElement<Object>(qname, (Class<Object>) object.getClass(), null, object), entityStream);
+			StringWriter stringWriter = new StringWriter();
+			JAXBElement<Object> jaxbElement = new JAXBElement<Object>(qname, (Class<Object>) object.getClass(), null, object);
+			jaxbMarshaller.marshal(jaxbElement, stringWriter);
+			entityStream.write(stringWriter.toString().getBytes());
 		} catch (Exception e) {
 			throw new WebApplicationException(e);
 		}
