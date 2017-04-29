@@ -37,6 +37,7 @@ public class GenericServlet extends HttpServlet {
 				buffer.write(data, 0, nRead);
 			}
 			buffer.flush();
+			setClosedHeader(response);
 			response.getOutputStream().write(buffer.toByteArray());
 		}
 	}
@@ -69,10 +70,14 @@ public class GenericServlet extends HttpServlet {
 		return httpRequest.getRequestURI().split("/");
 	}
 
-	protected void answer(ServletRequest request, ServletResponse response, String answer) throws IOException {
+	private void setClosedHeader(ServletResponse response) {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(httpResponse);
 		responseWrapper.addHeader("Content-Type", "application/xml");
+	}
+
+	protected void answer(ServletRequest request, ServletResponse response, String answer) throws IOException {
+		setClosedHeader(response);
 		response.getOutputStream().write(answer.getBytes());
 	}
 
