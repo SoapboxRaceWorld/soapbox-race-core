@@ -42,6 +42,7 @@ public class ObjectFactory {
     private final static QName _AchievementsPacket_QNAME = new QName("", "AchievementsPacket");
     private final static QName _SocialNetworkInfo_QNAME = new QName("", "SocialNetworkInfo");
     private final static QName _OwnedCarTrans_QNAME = new QName("", "OwnedCarTrans");
+    private final static QName _CategoryTrans_QNAME = new QName("", "CategoryTrans");
     private final static QName _HeartBeat_QNAME = new QName("", "HeartBeat");
     private final static QName _ArrayOfNewsArticleTrans_QNAME = new QName("", "ArrayOfNewsArticleTrans");
     private final static QName _HardwareInfo_QNAME = new QName("", "HardwareInfo");
@@ -59,6 +60,7 @@ public class ObjectFactory {
     private final static QName _CommerceResultTrans_QNAME = new QName("", "CommerceResultTrans");
     private final static QName _ClientConfigTrans_QNAME = new QName("", "ClientConfigTrans");
     private final static QName _ArrayOfInt_QNAME = new QName("", "ArrayOfInt");
+    private final static QName _ArrayOfCategoryTrans_QNAME = new QName("", "ArrayOfCategoryTrans");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.soapboxrace.jaxb.http
@@ -212,6 +214,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CategoryTrans }
+     * 
+     */
+    public CategoryTrans createCategoryTrans() {
+        return new CategoryTrans();
+    }
+
+    /**
      * Create an instance of {@link HeartBeat }
      * 
      */
@@ -345,6 +355,14 @@ public class ObjectFactory {
      */
     public ArrayOfInt createArrayOfInt() {
         return new ArrayOfInt();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfCategoryTrans }
+     * 
+     */
+    public ArrayOfCategoryTrans createArrayOfCategoryTrans() {
+        return new ArrayOfCategoryTrans();
     }
 
     /**
@@ -894,6 +912,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CategoryTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "CategoryTrans")
+    public JAXBElement<CategoryTrans> createCategoryTrans(CategoryTrans value) {
+        return new JAXBElement<CategoryTrans>(_CategoryTrans_QNAME, CategoryTrans.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link HeartBeat }{@code >}}
      * 
      */
@@ -1044,6 +1071,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "ArrayOfInt")
     public JAXBElement<ArrayOfInt> createArrayOfInt(ArrayOfInt value) {
         return new JAXBElement<ArrayOfInt>(_ArrayOfInt_QNAME, ArrayOfInt.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfCategoryTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "ArrayOfCategoryTrans")
+    public JAXBElement<ArrayOfCategoryTrans> createArrayOfCategoryTrans(ArrayOfCategoryTrans value) {
+        return new JAXBElement<ArrayOfCategoryTrans>(_ArrayOfCategoryTrans_QNAME, ArrayOfCategoryTrans.class, null, value);
     }
 
 }
