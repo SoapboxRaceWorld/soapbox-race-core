@@ -34,11 +34,13 @@ public class ObjectFactory {
     private final static QName _EventDefinition_QNAME = new QName("", "EventDefinition");
     private final static QName _FraudConfig_QNAME = new QName("", "FraudConfig");
     private final static QName _ArrayOfLevelGiftDefinition_QNAME = new QName("", "ArrayOfLevelGiftDefinition");
+    private final static QName _PersonaMotto_QNAME = new QName("", "PersonaMotto");
     private final static QName _LoginAnnouncementsDefinition_QNAME = new QName("", "LoginAnnouncementsDefinition");
     private final static QName _SocialSettings_QNAME = new QName("", "SocialSettings");
     private final static QName _CarSlotInfoTrans_QNAME = new QName("", "CarSlotInfoTrans");
     private final static QName _ArrayOfInventoryItemTrans_QNAME = new QName("", "ArrayOfInventoryItemTrans");
     private final static QName _AchievementsPacket_QNAME = new QName("", "AchievementsPacket");
+    private final static QName _SocialNetworkInfo_QNAME = new QName("", "SocialNetworkInfo");
     private final static QName _OwnedCarTrans_QNAME = new QName("", "OwnedCarTrans");
     private final static QName _HeartBeat_QNAME = new QName("", "HeartBeat");
     private final static QName _ArrayOfNewsArticleTrans_QNAME = new QName("", "ArrayOfNewsArticleTrans");
@@ -146,6 +148,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link PersonaMotto }
+     * 
+     */
+    public PersonaMotto createPersonaMotto() {
+        return new PersonaMotto();
+    }
+
+    /**
      * Create an instance of {@link LoginAnnouncementsDefinition }
      * 
      */
@@ -183,6 +193,14 @@ public class ObjectFactory {
      */
     public AchievementsPacket createAchievementsPacket() {
         return new AchievementsPacket();
+    }
+
+    /**
+     * Create an instance of {@link SocialNetworkInfo }
+     * 
+     */
+    public SocialNetworkInfo createSocialNetworkInfo() {
+        return new SocialNetworkInfo();
     }
 
     /**
@@ -804,6 +822,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PersonaMotto }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "PersonaMotto")
+    public JAXBElement<PersonaMotto> createPersonaMotto(PersonaMotto value) {
+        return new JAXBElement<PersonaMotto>(_PersonaMotto_QNAME, PersonaMotto.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link LoginAnnouncementsDefinition }{@code >}}
      * 
      */
@@ -846,6 +873,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "AchievementsPacket")
     public JAXBElement<AchievementsPacket> createAchievementsPacket(AchievementsPacket value) {
         return new JAXBElement<AchievementsPacket>(_AchievementsPacket_QNAME, AchievementsPacket.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SocialNetworkInfo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "SocialNetworkInfo")
+    public JAXBElement<SocialNetworkInfo> createSocialNetworkInfo(SocialNetworkInfo value) {
+        return new JAXBElement<SocialNetworkInfo>(_SocialNetworkInfo_QNAME, SocialNetworkInfo.class, null, value);
     }
 
     /**
