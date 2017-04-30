@@ -27,4 +27,6 @@
   <xs:include schemaLocation="ArrayOfNewsArticleTrans.xsd" />
   <xs:include schemaLocation="TreasureHuntEventSession.xsd" />
   <xs:include schemaLocation="HardwareInfo.xsd" />
+  <xs:include schemaLocation="SocialNetworkInfo.xsd" />
+  <xs:include schemaLocation="PersonaMotto.xsd" />
 </xs:schema>
