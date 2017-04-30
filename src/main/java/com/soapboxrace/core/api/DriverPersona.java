@@ -5,6 +5,7 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
@@ -12,6 +13,7 @@ import com.soapboxrace.jaxb.http.ArrayOfInt;
 import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
 import com.soapboxrace.jaxb.http.ArrayOfString;
 import com.soapboxrace.jaxb.http.PersonaBase;
+import com.soapboxrace.jaxb.http.PersonaMotto;
 import com.soapboxrace.jaxb.http.ProfileData;
 
 @Path("/DriverPersona")
@@ -147,7 +149,24 @@ public class DriverPersona {
 	@POST
 	@Path("/UpdatePersonaPresence")
 	@Produces(MediaType.APPLICATION_XML)
-	public String UpdatePersonaPresence() {
+	public String updatePersonaPresence() {
 		return "";
+	}
+
+	@GET
+	@Path("/GetPersonaPresenceByName")
+	@Produces(MediaType.APPLICATION_XML)
+	public String getPersonaPresenceByName() {
+		return "";
+	}
+
+	@POST
+	@Path("/UpdateStatusMessage")
+	@Produces(MediaType.APPLICATION_XML)
+	public PersonaMotto updateStatusMessage(@QueryParam("message") String message, @QueryParam("personaId") Long personaId) {
+		PersonaMotto personaMotto = new PersonaMotto();
+		personaMotto.setMessage("");
+		personaMotto.setPersonaId(100L);
+		return personaMotto;
 	}
 }
