@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="ArrayOfProductTrans.xsd" />
+  <xs:include schemaLocation="ArrayOfCategoryTrans.xsd" />
+  <xs:element name="CategoryTrans" nillable="true" type="CategoryTrans" />
+  <xs:complexType name="CategoryTrans">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CatalogVersion" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Categories" type="ArrayOfCategoryTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="DisplayName" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="FilterType" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Icon" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Id" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LongDescription" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Priority" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Products" type="ArrayOfProductTrans" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ShortDescription" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ShowInNavigationPane" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ShowPromoPage" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="WebIcon" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
