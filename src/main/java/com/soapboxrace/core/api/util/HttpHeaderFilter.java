@@ -12,7 +12,7 @@ public class HttpHeaderFilter implements ContainerResponseFilter {
 
 	@Override
 	public void filter(ContainerRequestContext request, ContainerResponseContext response) throws IOException {
-		System.out.println("[" + request.getMethod() + "] " + request.getUriInfo().getPath());
+		System.out.println("[" + request.getMethod() + "] " + request.getUriInfo().getPath() + " " + request.getUriInfo().getRequestUri().getQuery());
 		response.getHeaders().add("Connection", "close");
 	}
 }

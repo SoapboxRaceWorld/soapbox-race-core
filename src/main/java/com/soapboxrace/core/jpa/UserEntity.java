@@ -1,10 +1,13 @@
 package com.soapboxrace.core.jpa;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -22,8 +25,8 @@ public class UserEntity {
 	@Column(name = "PASSWORD", length = 50)
 	private String password;
 
-	// @OneToMany(mappedBy = "user", targetEntity = PersonaEntity.class)
-	// private List<PersonaEntity> listOfPersona;
+	@OneToMany(mappedBy = "user", targetEntity = PersonaEntity.class)
+	private List<PersonaEntity> listOfProfile;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -49,11 +52,8 @@ public class UserEntity {
 		return this.password;
 	}
 
-	// public void setListOfPersona(List<PersonaEntity> listOfPersona) {
-	// this.listOfPersona = listOfPersona;
-	// }
-	//
-	// public List<PersonaEntity> getListOfPersona() {
-	// return this.listOfPersona;
-	// }
+	public List<PersonaEntity> getListOfProfile() {
+		return listOfProfile;
+	}
+
 }

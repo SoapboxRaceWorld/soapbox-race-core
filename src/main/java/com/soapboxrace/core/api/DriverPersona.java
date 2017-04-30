@@ -1,5 +1,6 @@
 package com.soapboxrace.core.api;
 
+import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -8,6 +9,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.bo.DriverPersonaBO;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
 import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
@@ -18,6 +21,9 @@ import com.soapboxrace.jaxb.http.ProfileData;
 
 @Path("/DriverPersona")
 public class DriverPersona {
+
+	@EJB
+	private DriverPersonaBO bo;
 
 	@GET
 	@Path("/GetExpLevelPointsMap")
@@ -117,14 +123,12 @@ public class DriverPersona {
 	@POST
 	@Path("/CreatePersona")
 	@Produces(MediaType.APPLICATION_XML)
-	public ProfileData createPersona() {
-		ProfileData profileData = new ProfileData();
-		profileData.setName("NOBODY");
-		profileData.setCash(5000000);
-		profileData.setIconIndex(0);
-		profileData.setPersonaId(100);
-		profileData.setLevel(60);
-		return profileData;
+	public ProfileData createPersona(@HeaderParam("userId") Long userId, @QueryParam("name") String name, @QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan,
+			@QueryParam("clanIcon") String clanIcon) {
+		PersonaEntity personaEntity = new PersonaEntity();
+		personaEntity.setName(name);
+		personaEntity.setIconIndex(iconIndex);
+		return bo.createPersona(userId, personaEntity);
 	}
 
 	@POST

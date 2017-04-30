@@ -98,7 +98,7 @@ public class Personas {
 		return new ArrayOfInventoryItemTrans();
 	}
 
-	private ArrayOfOwnedCarTrans getArrayOfOwnedCarTransExample() {
+	private OwnedCarTrans getOwnedCarTransExample() {
 		CustomCarTrans customCarTrans = new CustomCarTrans();
 		customCarTrans.setId(12345678);
 		customCarTrans.setBaseCar(12345678);
@@ -122,9 +122,13 @@ public class Personas {
 		ownedCarTrans.setExpirationDate(null);
 		ownedCarTrans.setHeat(0F);
 		ownedCarTrans.setOwnershipType("PresetCar");
+		return ownedCarTrans;
+	}
+
+	private ArrayOfOwnedCarTrans getArrayOfOwnedCarTransExample() {
 
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
-		arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
+		arrayOfOwnedCarTrans.getOwnedCarTrans().add(getOwnedCarTransExample());
 		return arrayOfOwnedCarTrans;
 	}
 
@@ -138,7 +142,15 @@ public class Personas {
 	@POST
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfOwnedCarTrans defaultcar(@PathParam(value = "personaId") Long personaId) {
+	public ArrayOfOwnedCarTrans defaultcarPost(@PathParam(value = "personaId") Long personaId) {
 		return getArrayOfOwnedCarTransExample();
 	}
+
+	@GET
+	@Path("/{personaId}/defaultcar")
+	@Produces(MediaType.APPLICATION_XML)
+	public OwnedCarTrans defaultcarGet(@PathParam(value = "personaId") Long personaId) {
+		return getOwnedCarTransExample();
+	}
+
 }
