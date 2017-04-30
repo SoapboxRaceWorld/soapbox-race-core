@@ -51,6 +51,7 @@ public class ObjectFactory {
     private final static QName _ProfileData_QNAME = new QName("", "ProfileData");
     private final static QName _ArrayOfCarClass_QNAME = new QName("", "ArrayOfCarClass");
     private final static QName _PersonaBase_QNAME = new QName("", "PersonaBase");
+    private final static QName _PersonaIdArray_QNAME = new QName("", "PersonaIdArray");
     private final static QName _ArrayOflong_QNAME = new QName("", "ArrayOflong");
     private final static QName _ArrayOfPersonaBase_QNAME = new QName("", "ArrayOfPersonaBase");
     private final static QName _ArrayOfProductTrans_QNAME = new QName("", "ArrayOfProductTrans");
@@ -283,6 +284,14 @@ public class ObjectFactory {
      */
     public PersonaBase createPersonaBase() {
         return new PersonaBase();
+    }
+
+    /**
+     * Create an instance of {@link PersonaIdArray }
+     * 
+     */
+    public PersonaIdArray createPersonaIdArray() {
+        return new PersonaIdArray();
     }
 
     /**
@@ -990,6 +999,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "PersonaBase")
     public JAXBElement<PersonaBase> createPersonaBase(PersonaBase value) {
         return new JAXBElement<PersonaBase>(_PersonaBase_QNAME, PersonaBase.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PersonaIdArray }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "PersonaIdArray")
+    public JAXBElement<PersonaIdArray> createPersonaIdArray(PersonaIdArray value) {
+        return new JAXBElement<PersonaIdArray>(_PersonaIdArray_QNAME, PersonaIdArray.class, null, value);
     }
 
     /**
