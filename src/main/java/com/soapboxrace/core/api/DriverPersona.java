@@ -1,5 +1,7 @@
 package com.soapboxrace.core.api;
 
+import java.io.InputStream;
+
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -11,13 +13,14 @@ import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.bo.DriverPersonaBO;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
+import com.soapboxrace.jaxb.http.ArrayOfLong;
 import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
 import com.soapboxrace.jaxb.http.ArrayOfString;
-import com.soapboxrace.jaxb.http.PersonaBase;
+import com.soapboxrace.jaxb.http.PersonaIdArray;
 import com.soapboxrace.jaxb.http.PersonaMotto;
 import com.soapboxrace.jaxb.http.ProfileData;
+import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Path("/DriverPersona")
 public class DriverPersona {
@@ -96,21 +99,8 @@ public class DriverPersona {
 	@GET
 	@Path("/GetPersonaInfo")
 	@Produces(MediaType.APPLICATION_XML)
-	public ProfileData getPersonaInfo() {
-		ProfileData profileData = new ProfileData();
-		profileData.setBadges(new ArrayOfBadgePacket());
-		profileData.setCash(5000000);
-		profileData.setIconIndex(0);
-		profileData.setLevel(60);
-		profileData.setMotto("");
-		profileData.setName("NOBODY");
-		profileData.setPercentToLevel(0);
-		profileData.setPersonaId(100);
-		profileData.setRating(0);
-		profileData.setRep(0);
-		profileData.setRepAtCurrentLevel(0);
-		profileData.setScore(0);
-		return profileData;
+	public ProfileData getPersonaInfo(@QueryParam("personaId") Long personaId) {
+		return bo.getPersonaInfo(personaId);
 	}
 
 	@POST
@@ -134,20 +124,10 @@ public class DriverPersona {
 	@POST
 	@Path("/GetPersonaBaseFromList")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfPersonaBase getPersonaBaseFromList(@HeaderParam("userId") Long userId) {
-		ArrayOfPersonaBase arrayOfPersonaBase = new ArrayOfPersonaBase();
-		PersonaBase personaBase = new PersonaBase();
-		personaBase.setBadges(new ArrayOfBadgePacket());
-		personaBase.setIconIndex(0);
-		personaBase.setLevel(60);
-		personaBase.setMotto("");
-		personaBase.setName("NOBODY");
-		personaBase.setPresence(1);
-		personaBase.setPersonaId(100);
-		personaBase.setScore(0);
-		personaBase.setUserId(userId);
-		arrayOfPersonaBase.getPersonaBase().add(personaBase);
-		return arrayOfPersonaBase;
+	public ArrayOfPersonaBase getPersonaBaseFromList(InputStream is) {
+		PersonaIdArray personaIdArray = (PersonaIdArray) UnmarshalXML.unMarshal(is, PersonaIdArray.class);
+		ArrayOfLong personaIds = personaIdArray.getPersonaIds();
+		return bo.getPersonaBaseFromList(personaIds.getLong());
 	}
 
 	@POST
