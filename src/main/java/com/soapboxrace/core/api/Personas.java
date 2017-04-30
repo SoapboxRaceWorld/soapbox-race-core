@@ -2,6 +2,7 @@ package com.soapboxrace.core.api;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -24,6 +25,7 @@ import com.soapboxrace.jaxb.http.CustomCarTrans;
 import com.soapboxrace.jaxb.http.InvalidBasketTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
+import com.soapboxrace.jaxb.http.ProductTrans;
 import com.soapboxrace.jaxb.http.WalletTrans;
 
 @Path("/personas")
@@ -65,6 +67,27 @@ public class Personas {
 		carSlotInfoTrans.setDefaultOwnedCarIndex(0);
 		carSlotInfoTrans.setObtainableSlots(new ArrayOfProductTrans());
 		carSlotInfoTrans.setOwnedCarSlotsCount(1);
+		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
+		ProductTrans productTrans = new ProductTrans();
+		productTrans.setBundleItems(new ArrayOfProductTrans());
+		productTrans.setCategoryId("");
+		productTrans.setCurrency("_NS");
+		productTrans.setDescription("New car slot !!");
+		productTrans.setDurationMinute(0);
+		productTrans.setHash(-1143680669);
+		productTrans.setIcon("128_cash");
+		productTrans.setLevel(70);
+		productTrans.setLongDescription("New car slot !");
+		productTrans.setPrice(100.0000);
+		productTrans.setPriority(0);
+		productTrans.setProductId("SRV-GARAGESLOT");
+		productTrans.setSecondaryIcon("");
+		productTrans.setUseCount(1);
+		productTrans.setVisualStyle("");
+		productTrans.setWebIcon("");
+		productTrans.setWebLocation("");
+		arrayOfProductTrans.getProductTrans().add(productTrans);
+		carSlotInfoTrans.setObtainableSlots(arrayOfProductTrans);
 		return carSlotInfoTrans;
 	}
 
@@ -103,5 +126,19 @@ public class Personas {
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 		arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 		return arrayOfOwnedCarTrans;
+	}
+
+	@PUT
+	@Path("/{personaId}/defaultcar/{carId}")
+	@Produces(MediaType.APPLICATION_XML)
+	public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId) {
+		return "";
+	}
+
+	@POST
+	@Path("/{personaId}/cars")
+	@Produces(MediaType.APPLICATION_XML)
+	public ArrayOfOwnedCarTrans defaultcar(@PathParam(value = "personaId") Long personaId) {
+		return getArrayOfOwnedCarTransExample();
 	}
 }

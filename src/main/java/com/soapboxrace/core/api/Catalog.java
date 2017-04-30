@@ -6,6 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.jaxb.http.ArrayOfCategoryTrans;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
 import com.soapboxrace.jaxb.http.ProductTrans;
 
@@ -34,5 +35,12 @@ public class Catalog {
 			arrayOfProductTrans.getProductTrans().add(productTrans);
 		}
 		return arrayOfProductTrans;
+	}
+
+	@GET
+	@Path("/categories")
+	@Produces(MediaType.APPLICATION_XML)
+	public ArrayOfCategoryTrans categories() {
+		return new ArrayOfCategoryTrans();
 	}
 }
