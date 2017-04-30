@@ -30,4 +30,5 @@
   <xs:include schemaLocation="SocialNetworkInfo.xsd" />
   <xs:include schemaLocation="PersonaMotto.xsd" />
   <xs:include schemaLocation="ArrayOfCategoryTrans.xsd" />
+  <xs:include schemaLocation="PersonaIdArray.xsd" />
 </xs:schema>
