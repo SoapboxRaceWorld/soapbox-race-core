@@ -5,18 +5,58 @@
  * For more details take a look at the Java Libraries chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.4/userguide/java_library_plugin.html
  */
+// https://github.com/WASdev/sample.abdera.jaxrs/blob/master/abdera-jaxrs-application/build.gradle
+// https://github.com/ibm-security-intelligence/visualizations/blob/master/incident_overview/build.gradle
+// https://discuss.gradle.org/t/problems-with-eclipse-executing-junit-tests-compiled-by-gradle/2338/8
+
+import org.gradle.plugins.ide.eclipse.model.Facet
+import groovy.xml.MarkupBuilder
 
 // Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
 apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'eclipse'
 apply plugin: 'eclipse-wtp'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-eclipse.wtp.facet.file.withXml { provider ->
-    provider.asNode().installed.find { it.@facet == 'jst.web' }.@version = '3.1'
+eclipse.wtp.facet {
+    // Clear default facets to work around bug where you get duplicates including wst 2.4
+    facets = []
+    facet name: 'jst.java', type: 'fixed'
+    facet name: 'jst.web', type: 'fixed'
+    facet name: 'jst.web', version: '3.1'
+    facet name: 'jst.java', version: '1.8'
+    facet name: 'jst.jaxrs', version: '2.0'
+}
+
+//eclipse.wtp.facet.file.withXml { provider ->
+//provider.asNode().installed.find { it.@facet == 'jst.web' }.@version = '3.1'
+//}
+
+eclipse {
+	File facetPrefsFile = file('.settings/org.eclipse.wst.common.project.facet.core.prefs.xml')
+    facetPrefsFile.parentFile.mkdirs()
+    def writer = new StringWriter()
+    def xml = new MarkupBuilder(writer)
+    xml.root() {
+//        facet(id:'jpt.jpa') {
+//            node(name:'libprov') {
+//                attribute(name:'provider-id', value:'jpa-no-op-library-provider')
+//            }
+//        }
+        facet(id:'jst.jaxrs') {
+            node(name:'libprov') {
+                attribute(name:'provider-id', value:'jaxrs-no-op-library-provider')
+            }
+        }
+    }
+	facetPrefsFile.write(writer.toString());
+	
+	project {
+	  	buildCommand 'org.jboss.tools.ws.jaxrs.metamodelBuilder'
+	    natures 'org.jboss.tools.ws.jaxrs.nature'
+    }
 }
 
 // In this section you declare where to find the dependencies of your project
