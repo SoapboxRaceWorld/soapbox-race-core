@@ -32,3 +32,25 @@ standalone.xml need to have gzip, here an example
       </filters>
     </subsystem>
     
+    
+system property example:
+
+	 <system-properties>
+	    <property name="openFireToken" value="xzxzx99df4d51z2d" />
+	    <property name="openFireAddress" value="http://localhost:9090/plugins/restapi/v1" />
+	    <property name="xmppIp" value="127.0.0.1" />
+	    <property name="xmppPort" value="5222" />
+	  </system-properties>
+	  
+	  
+datasource example:
+
+	<datasource jndi-name="java:jboss/datasources/SoapBoxDS" pool-name="SoapBoxDS" enabled="true" use-java-context="true">
+	  <connection-url>jdbc:h2:tcp://localhost/~/git/soapbox-race-core/db/soapbox</connection-url>
+	  <driver>h2</driver>
+	  <security>
+	    <user-name>sa</user-name>
+	    <password>sa</password>
+	  </security>
+	</datasource>
+
