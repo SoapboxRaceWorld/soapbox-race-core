@@ -1,16 +1,22 @@
 package com.soapboxrace.xmpp.openfire;
 
-import javax.ejb.Singleton;
-
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.xmpp.XMPP_MessageType;
 
-@Singleton
 public class OpenFireSoapBoxCli {
 
 	private OpenFireTalk xmppTalk;
 
-	public OpenFireSoapBoxCli() {
+	private static OpenFireSoapBoxCli instance;
+
+	public static OpenFireSoapBoxCli getInstance() {
+		if (instance == null) {
+			instance = new OpenFireSoapBoxCli();
+		}
+		return instance;
+	}
+
+	private OpenFireSoapBoxCli() {
 		HandShake xmppHandShake = new HandShake();
 		xmppTalk = xmppHandShake.getXmppTalk();
 	}

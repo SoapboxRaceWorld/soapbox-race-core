@@ -32,6 +32,13 @@ public class User {
 	}
 
 	@POST
+	@Path("SecureLogoutPersona")
+	@Produces(MediaType.APPLICATION_XML)
+	public void secureLogoutPersona(@HeaderParam("userId") Long userId, @QueryParam("personaId") Long personaId) {
+		//
+	}
+
+	@POST
 	@Path("SecureLogout")
 	@Produces(MediaType.APPLICATION_XML)
 	public String secureLogout() {

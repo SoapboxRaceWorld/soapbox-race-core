@@ -1,12 +1,14 @@
 package com.soapboxrace.xmpp.openfire;
 
+import com.soapboxrace.core.api.util.Config;
+
 public class HandShake {
 
 	private OpenFireTalk openFireTalk;
 
 	public HandShake() {
-		String xmppIp = "127.0.0.1";
-		int xmppPort = 5222;
+		String xmppIp = Config.getXmppIp();
+		int xmppPort = Config.getXmppPort();
 
 		SocketClient socketClient = new SocketClient(xmppIp, xmppPort);
 		socketClient.send(

@@ -24,6 +24,7 @@ import com.soapboxrace.jaxb.http.CommerceResultTrans;
 import com.soapboxrace.jaxb.http.CustomCarTrans;
 import com.soapboxrace.jaxb.http.InvalidBasketTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
+import com.soapboxrace.jaxb.http.InventoryTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.ProductTrans;
 import com.soapboxrace.jaxb.http.WalletTrans;
@@ -94,8 +95,22 @@ public class Personas {
 	@GET
 	@Path("/inventory/objects")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfInventoryItemTrans inventoryObjects() {
-		return new ArrayOfInventoryItemTrans();
+	public InventoryTrans inventoryObjects() {
+		InventoryTrans inventoryTrans = new InventoryTrans();
+		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
+		InventoryItemTrans inventoryItemTrans = new InventoryItemTrans();
+		inventoryItemTrans.setEntitlementTag("nosshot");
+		inventoryItemTrans.setHash(-1681514783);
+		inventoryItemTrans.setInventoryId(1842996427);
+		inventoryItemTrans.setProductId("DO NOT USE ME");
+		inventoryItemTrans.setRemainingUseCount(100L);
+		inventoryItemTrans.setResellPrice(0.00);
+		inventoryItemTrans.setStatus("ACTIVE");
+		inventoryItemTrans.setStringHash("0x9bc61ee1");
+		inventoryItemTrans.setVirtualItemType("powerup");
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(inventoryItemTrans);
+		inventoryTrans.setInventoryItems(arrayOfInventoryItemTrans);
+		return inventoryTrans;
 	}
 
 	private OwnedCarTrans getOwnedCarTransExample() {
@@ -126,7 +141,6 @@ public class Personas {
 	}
 
 	private ArrayOfOwnedCarTrans getArrayOfOwnedCarTransExample() {
-
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 		arrayOfOwnedCarTrans.getOwnedCarTrans().add(getOwnedCarTransExample());
 		return arrayOfOwnedCarTrans;

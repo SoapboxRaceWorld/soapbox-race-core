@@ -52,7 +52,7 @@ public class OpenFireTalk {
 			e.printStackTrace();
 		}
 		System.out.println("S->C [" + msg + "]");
-		if (msg.contains("<ping xmlns=\"urn:xmpp:ping\"/>")) {
+		if (msg != null && !msg.isEmpty() && msg.contains("<ping xmlns=\"urn:xmpp:ping\"/>")) {
 			XMPP_IQPingType openfirePing = (XMPP_IQPingType) UnmarshalXML.unMarshal(msg, new XMPP_IQPingType());
 			write(MarshalXML.marshal(new XMPP_IQPongType(openfirePing.getId())));
 		}

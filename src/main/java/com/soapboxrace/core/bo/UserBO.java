@@ -24,8 +24,7 @@ public class UserBO {
 	@EJB
 	private OpenFireRestApiCli xmppRestApiCli;
 
-	@EJB
-	private OpenFireSoapBoxCli openFireSoapBoxCli;
+	private OpenFireSoapBoxCli openFireSoapBoxCli = OpenFireSoapBoxCli.getInstance();
 
 	public void createUser(String email, String passwd) {
 		UserEntity userEntity = new UserEntity();
