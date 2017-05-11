@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="Entrants">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LobbyEntrantInfo" nillable="true" type="LobbyEntrantInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LobbyEntrantInfo" nillable="true" type="LobbyEntrantInfo" />
+  <xs:complexType name="LobbyEntrantInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="GridIndex" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Heat" type="xs:float" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Level" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="State" type="LobbyEntrantState" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="LobbyEntrantState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="InFreeRoam" />
+      <xs:enumeration value="InLobby" />
+      <xs:enumeration value="InEvent" />
+      <xs:enumeration value="InPostEvent" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
