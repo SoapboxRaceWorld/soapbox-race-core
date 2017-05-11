@@ -57,6 +57,7 @@ public class ObjectFactory {
     private final static QName _ArrayOfProductTrans_QNAME = new QName("", "ArrayOfProductTrans");
     private final static QName _PersonaFriendsList_QNAME = new QName("", "PersonaFriendsList");
     private final static QName _ProductTrans_QNAME = new QName("", "ProductTrans");
+    private final static QName _LobbyEntrantInfo_QNAME = new QName("", "LobbyEntrantInfo");
     private final static QName _ArrayOfstring_QNAME = new QName("", "ArrayOfstring");
     private final static QName _CommerceResultTrans_QNAME = new QName("", "CommerceResultTrans");
     private final static QName _ClientConfigTrans_QNAME = new QName("", "ClientConfigTrans");
@@ -332,6 +333,14 @@ public class ObjectFactory {
      */
     public ProductTrans createProductTrans() {
         return new ProductTrans();
+    }
+
+    /**
+     * Create an instance of {@link LobbyEntrantInfo }
+     * 
+     */
+    public LobbyEntrantInfo createLobbyEntrantInfo() {
+        return new LobbyEntrantInfo();
     }
 
     /**
@@ -727,6 +736,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Entrants }
+     * 
+     */
+    public Entrants createEntrants() {
+        return new Entrants();
+    }
+
+    /**
      * Create an instance of {@link LoginAnnouncementDefinition }
      * 
      */
@@ -1053,6 +1070,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "ProductTrans")
     public JAXBElement<ProductTrans> createProductTrans(ProductTrans value) {
         return new JAXBElement<ProductTrans>(_ProductTrans_QNAME, ProductTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link LobbyEntrantInfo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "LobbyEntrantInfo")
+    public JAXBElement<LobbyEntrantInfo> createLobbyEntrantInfo(LobbyEntrantInfo value) {
+        return new JAXBElement<LobbyEntrantInfo>(_LobbyEntrantInfo_QNAME, LobbyEntrantInfo.class, null, value);
     }
 
     /**
