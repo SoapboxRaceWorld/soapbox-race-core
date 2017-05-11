@@ -12,7 +12,7 @@ import com.soapboxrace.jaxb.http.ArrayOfProfileData;
 import com.soapboxrace.jaxb.http.ProfileData;
 import com.soapboxrace.jaxb.http.User;
 import com.soapboxrace.jaxb.http.UserInfo;
-import com.soapboxrace.xmpp.util.XmppRestApiCli;
+import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
 
 @Stateless
 public class UserBO {
@@ -21,7 +21,7 @@ public class UserBO {
 	private UserDAO userDao;
 
 	@EJB
-	private XmppRestApiCli xmppRestApiCli;
+	private OpenFireRestApiCli xmppRestApiCli;
 
 	public void createUser(String email, String passwd) {
 		UserEntity userEntity = new UserEntity();

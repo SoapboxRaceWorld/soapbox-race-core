@@ -1,4 +1,4 @@
-package com.soapboxrace.xmpp.util;
+package com.soapboxrace.xmpp.openfire;
 
 import javax.ejb.Singleton;
 import javax.ws.rs.client.Client;
@@ -11,15 +11,18 @@ import javax.ws.rs.core.Response;
 
 import org.igniterealtime.restclient.entity.UserEntity;
 
+import com.soapboxrace.core.api.util.Config;
+
 @Singleton
-public class XmppRestApiCli {
+public class OpenFireRestApiCli {
 
 	private String openFireToken;
 	private String openFireAddress;
 
-	public XmppRestApiCli() {
-		openFireToken = System.getProperty("openFireToken");
-		openFireAddress = System.getProperty("openFireAddress");
+	public OpenFireRestApiCli() {
+		openFireToken = Config.getOpenFireToken();
+		openFireAddress = Config.getOpenFireAddress();
+		createUpdatePersona("sbrw.engine.engine", "1234567890123456");
 	}
 
 	private Builder getBuilder(String path) {
@@ -30,8 +33,7 @@ public class XmppRestApiCli {
 		return request;
 	}
 
-	public void createUpdatePersona(Long personaId, String password) {
-		String user = "sbrw." + personaId.toString();
+	public void createUpdatePersona(String user, String password) {
 		Builder builder = getBuilder("users/" + user);
 		Response response = builder.get();
 		if (response.getStatus() == 200) {
@@ -47,6 +49,11 @@ public class XmppRestApiCli {
 			builder.post(Entity.entity(userEntity, MediaType.APPLICATION_XML));
 		}
 		response.close();
+	}
+
+	public void createUpdatePersona(Long personaId, String password) {
+		String user = "sbrw." + personaId.toString();
+		createUpdatePersona(user, password);
 	}
 
 }
