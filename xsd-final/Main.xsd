@@ -32,4 +32,5 @@
   <xs:include schemaLocation="ArrayOfCategoryTrans.xsd" />
   <xs:include schemaLocation="PersonaIdArray.xsd" />
   <xs:include schemaLocation="LobbyEntrantInfo.xsd" />
+  <xs:include schemaLocation="InventoryTrans.xsd" />
 </xs:schema>
