@@ -21,7 +21,7 @@ public class Session {
 		chatServer.setPort(5222);
 		chatServer.setPrefix("sbrw");
 		ChatRoom chatRoom = new ChatRoom();
-		chatRoom.setChannelCount(2);
+		chatRoom.setChannelCount(1);
 		chatRoom.setLongName("TXT_CHAT_LANG_ENGLISH");
 		chatRoom.setShortName("EN");
 		ArrayOfChatRoom arrayOfChatRoom = new ArrayOfChatRoom();

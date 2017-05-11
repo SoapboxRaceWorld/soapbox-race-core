@@ -12,6 +12,7 @@ import com.soapboxrace.jaxb.http.ArrayOfProfileData;
 import com.soapboxrace.jaxb.http.ProfileData;
 import com.soapboxrace.jaxb.http.User;
 import com.soapboxrace.jaxb.http.UserInfo;
+import com.soapboxrace.xmpp.util.XmppRestApiCli;
 
 @Stateless
 public class UserBO {
@@ -19,11 +20,25 @@ public class UserBO {
 	@EJB
 	private UserDAO userDao;
 
+	@EJB
+	private XmppRestApiCli xmppRestApiCli;
+
 	public void createUser(String email, String passwd) {
 		UserEntity userEntity = new UserEntity();
 		userEntity.setEmail(email);
 		userEntity.setPassword(passwd);
 		userDao.insert(userEntity);
+	}
+
+	public UserInfo secureLoginPersona(Long userId, Long personaId) {
+		xmppRestApiCli.createUpdatePersona(personaId, "1234567890123456");
+		UserInfo userInfo = new UserInfo();
+		userInfo.setPersonas(new ArrayOfProfileData());
+		com.soapboxrace.jaxb.http.User user = new com.soapboxrace.jaxb.http.User();
+		user.setSecurityToken("1234567890123456-abcd");
+		user.setUserId(userId);
+		userInfo.setUser(user);
+		return userInfo;
 	}
 
 	public UserInfo getUserById(Long userId) {
@@ -43,7 +58,7 @@ public class UserBO {
 		}
 		userInfo.setPersonas(arrayOfProfileData);
 		User user = new User();
-		user.setSecurityToken("1234567890");
+		user.setSecurityToken("1234567890123456-abcd");
 		user.setUserId(userId);
 		userInfo.setUser(user);
 		return userInfo;
