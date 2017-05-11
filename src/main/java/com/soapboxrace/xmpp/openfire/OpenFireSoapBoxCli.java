@@ -1,8 +1,11 @@
 package com.soapboxrace.xmpp.openfire;
 
+import javax.ejb.Singleton;
+
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.xmpp.XMPP_MessageType;
 
+@Singleton
 public class OpenFireSoapBoxCli {
 
 	private OpenFireTalk xmppTalk;
