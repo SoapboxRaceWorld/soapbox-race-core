@@ -19,7 +19,7 @@ public class Powerups {
 	@POST
 	@Path("/activated/{powerupHash}")
 	@Produces(MediaType.APPLICATION_XML)
-	public void activated(@PathParam(value = "powerupHash") Integer powerupHash, @QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers,
+	public String activated(@PathParam(value = "powerupHash") Integer powerupHash, @QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers,
 			@QueryParam("eventSessionId") Long eventSessionId) {
 		System.out.println("powerup -> " + powerupHash);
 		XMPP_ResponseTypePowerupActivated powerupActivatedResponse = new XMPP_ResponseTypePowerupActivated();
@@ -34,6 +34,6 @@ public class Powerups {
 				openFireSoapBoxCli.send(powerupActivatedResponse, receiverPersonaId);
 			}
 		}
+		return "";
 	}
-
 }
