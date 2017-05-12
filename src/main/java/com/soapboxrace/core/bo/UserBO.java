@@ -28,8 +28,12 @@ public class UserBO {
 		String xmppPasswd = securityToken.substring(0, 16);
 		List<ProfileData> profileData = userInfo.getPersonas().getProfileData();
 		for (ProfileData persona : profileData) {
-			xmppRestApiCli.createUpdatePersona(persona.getPersonaId(), xmppPasswd);
+			createXmppUser(persona.getPersonaId(), xmppPasswd);
 		}
+	}
+
+	public void createXmppUser(Long personaId, String xmppPasswd) {
+		xmppRestApiCli.createUpdatePersona(personaId, xmppPasswd);
 	}
 
 	public void createUser(String email, String passwd) {

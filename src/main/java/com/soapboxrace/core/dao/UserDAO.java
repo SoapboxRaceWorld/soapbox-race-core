@@ -1,8 +1,11 @@
 package com.soapboxrace.core.dao;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.UserEntity;
@@ -17,6 +20,17 @@ public class UserDAO extends BaseDAO<UserEntity> {
 
 	public UserEntity findById(Long id) {
 		return entityManager.find(UserEntity.class, id);
+	}
+
+	public UserEntity findByEmail(String email) {
+		TypedQuery<UserEntity> query = entityManager.createNamedQuery("UserEntity.findByEmail", UserEntity.class);
+		query.setParameter("email", email);
+		List<UserEntity> resultList = query.getResultList();
+		UserEntity userEntity = new UserEntity();
+		if(resultList != null && !resultList.isEmpty()){
+			userEntity = resultList.get(0);
+		}
+		return userEntity;
 	}
 
 }

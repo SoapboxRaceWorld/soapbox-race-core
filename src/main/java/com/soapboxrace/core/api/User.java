@@ -1,31 +1,39 @@
 package com.soapboxrace.core.api;
 
 import javax.ejb.EJB;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.api.util.UUIDGen;
+import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.bo.UserBO;
 import com.soapboxrace.jaxb.http.UserInfo;
+import com.soapboxrace.jaxb.login.LoginStatusVO;
 
 @Path("User")
 public class User {
 
 	@EJB
-	private UserBO bo;
+	private UserBO userBO;
+
+	@EJB
+	private TokenSessionBO tokenBO;
 
 	@POST
+	@Secured
 	@Path("GetPermanentSession")
 	@Produces(MediaType.APPLICATION_XML)
 	public UserInfo getPermanentSession(@HeaderParam("userId") Long userId, @HeaderParam("securityToken") String securityToken) {
-		UserInfo userInfo = bo.getUserById(userId);
+		UserInfo userInfo = userBO.getUserById(userId);
 		userInfo.getUser().setSecurityToken(UUIDGen.getRandomUUID());
-		bo.createXmppUser(userInfo);
+		userBO.createXmppUser(userInfo);
 		return userInfo;
 	}
 
@@ -34,7 +42,7 @@ public class User {
 	@Path("SecureLoginPersona")
 	@Produces(MediaType.APPLICATION_XML)
 	public String secureLoginPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId, @QueryParam("personaId") Long personaId) {
-		bo.secureLoginPersona(userId, personaId);
+		userBO.secureLoginPersona(userId, personaId);
 		return "";
 	}
 
@@ -52,6 +60,17 @@ public class User {
 	@Produces(MediaType.APPLICATION_XML)
 	public String secureLogout() {
 		return "";
+	}
+
+	@GET
+	@Path("authenticateUser")
+	@Produces(MediaType.APPLICATION_XML)
+	public Response authenticateUser(@QueryParam("email") String email, @QueryParam("password") String password) {
+		LoginStatusVO loginStatusVO = tokenBO.login(email, password);
+		if (loginStatusVO.isLoginOk()) {
+			return Response.ok(loginStatusVO).build();
+		}
+		return Response.serverError().entity(loginStatusVO).build();
 	}
 
 }

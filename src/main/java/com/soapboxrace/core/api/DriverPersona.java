@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.DriverPersonaBO;
+import com.soapboxrace.core.bo.UserBO;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
 import com.soapboxrace.jaxb.http.ArrayOfLong;
@@ -28,6 +29,9 @@ public class DriverPersona {
 
 	@EJB
 	private DriverPersonaBO bo;
+
+	@EJB
+	private UserBO userBo;
 
 	@GET
 	@Secured
@@ -118,12 +122,15 @@ public class DriverPersona {
 	@Secured
 	@Path("/CreatePersona")
 	@Produces(MediaType.APPLICATION_XML)
-	public ProfileData createPersona(@HeaderParam("userId") Long userId, @QueryParam("name") String name, @QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan,
-			@QueryParam("clanIcon") String clanIcon) {
+	public ProfileData createPersona(@HeaderParam("userId") Long userId, @HeaderParam("securityToken") String securityToken, @QueryParam("name") String name,
+			@QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan, @QueryParam("clanIcon") String clanIcon) {
 		PersonaEntity personaEntity = new PersonaEntity();
 		personaEntity.setName(name);
 		personaEntity.setIconIndex(iconIndex);
-		return bo.createPersona(userId, personaEntity);
+		ProfileData persona = bo.createPersona(userId, personaEntity);
+		long personaId = persona.getPersonaId();
+		userBo.createXmppUser(personaId, securityToken.substring(0, 16));
+		return persona;
 	}
 
 	@POST
