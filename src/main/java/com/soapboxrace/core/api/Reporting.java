@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.jaxb.http.HardwareInfo;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
@@ -14,6 +15,7 @@ import com.soapboxrace.jaxb.util.UnmarshalXML;
 public class Reporting {
 
 	@POST
+	@Secured
 	@Path("/SendHardwareInfo")
 	@Produces(MediaType.APPLICATION_XML)
 	public String sendHardwareInfo(InputStream is) {
@@ -23,6 +25,7 @@ public class Reporting {
 	}
 
 	@POST
+	@Secured
 	@Path("/SendUserSettings")
 	@Produces(MediaType.APPLICATION_XML)
 	public String sendUserSettings() {

@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.DriverPersonaBO;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
@@ -29,6 +30,7 @@ public class DriverPersona {
 	private DriverPersonaBO bo;
 
 	@GET
+	@Secured
 	@Path("/GetExpLevelPointsMap")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfInt getExpLevelPointsMap() {
@@ -97,6 +99,7 @@ public class DriverPersona {
 	}
 
 	@GET
+	@Secured
 	@Path("/GetPersonaInfo")
 	@Produces(MediaType.APPLICATION_XML)
 	public ProfileData getPersonaInfo(@QueryParam("personaId") Long personaId) {
@@ -104,6 +107,7 @@ public class DriverPersona {
 	}
 
 	@POST
+	@Secured
 	@Path("/ReserveName")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfString reserveName() {
@@ -111,6 +115,7 @@ public class DriverPersona {
 	}
 
 	@POST
+	@Secured
 	@Path("/CreatePersona")
 	@Produces(MediaType.APPLICATION_XML)
 	public ProfileData createPersona(@HeaderParam("userId") Long userId, @QueryParam("name") String name, @QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan,
@@ -131,6 +136,7 @@ public class DriverPersona {
 	}
 
 	@POST
+	@Secured
 	@Path("/UpdatePersonaPresence")
 	@Produces(MediaType.APPLICATION_XML)
 	public String updatePersonaPresence() {
@@ -138,6 +144,7 @@ public class DriverPersona {
 	}
 
 	@GET
+	@Secured
 	@Path("/GetPersonaPresenceByName")
 	@Produces(MediaType.APPLICATION_XML)
 	public String getPersonaPresenceByName() {
@@ -145,6 +152,7 @@ public class DriverPersona {
 	}
 
 	@POST
+	@Secured
 	@Path("/UpdateStatusMessage")
 	@Produces(MediaType.APPLICATION_XML)
 	public PersonaMotto updateStatusMessage(@QueryParam("message") String message, @QueryParam("personaId") Long personaId) {

@@ -6,6 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.jaxb.http.ArrayOfLong;
 import com.soapboxrace.jaxb.http.ArrayOfString;
 import com.soapboxrace.jaxb.http.UserSettings;
@@ -14,6 +15,7 @@ import com.soapboxrace.jaxb.http.UserSettings;
 public class GetUserSettings {
 
 	@GET
+	@Secured
 	@Produces(MediaType.APPLICATION_XML)
 	public UserSettings getUserSettingsGet(@HeaderParam("userId") Long userId) {
 		UserSettings userSettings = new UserSettings();

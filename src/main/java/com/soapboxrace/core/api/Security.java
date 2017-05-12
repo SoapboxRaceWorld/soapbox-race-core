@@ -7,12 +7,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.jaxb.http.FraudConfig;
 
 @Path("/security")
 public class Security {
 
 	@GET
+	@Secured
 	@Path("/fraudConfig")
 	@Produces(MediaType.APPLICATION_XML)
 	public FraudConfig fraudConfig(@HeaderParam("userId") Long userId) {
@@ -26,6 +28,7 @@ public class Security {
 	}
 
 	@POST
+	@Secured
 	@Path("/generateWebToken")
 	@Produces(MediaType.APPLICATION_XML)
 	public String generateWebToken() {

@@ -8,6 +8,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfCustomPaintTrans;
 import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
@@ -33,6 +34,7 @@ import com.soapboxrace.jaxb.http.WalletTrans;
 public class Personas {
 
 	@POST
+	@Secured
 	@Path("/{personaId}/baskets")
 	@Produces(MediaType.APPLICATION_XML)
 	public CommerceResultTrans baskets(@PathParam(value = "personaId") Long personaId) {
@@ -60,6 +62,7 @@ public class Personas {
 	}
 
 	@GET
+	@Secured
 	@Path("/{personaId}/carslots")
 	@Produces(MediaType.APPLICATION_XML)
 	public CarSlotInfoTrans carslots(@PathParam(value = "personaId") Long personaId) {
@@ -93,6 +96,7 @@ public class Personas {
 	}
 
 	@GET
+	@Secured
 	@Path("/inventory/objects")
 	@Produces(MediaType.APPLICATION_XML)
 	public InventoryTrans inventoryObjects() {
@@ -147,6 +151,7 @@ public class Personas {
 	}
 
 	@PUT
+	@Secured
 	@Path("/{personaId}/defaultcar/{carId}")
 	@Produces(MediaType.APPLICATION_XML)
 	public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId) {
@@ -154,6 +159,7 @@ public class Personas {
 	}
 
 	@POST
+	@Secured
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfOwnedCarTrans defaultcarPost(@PathParam(value = "personaId") Long personaId) {
@@ -161,6 +167,7 @@ public class Personas {
 	}
 
 	@GET
+	@Secured
 	@Path("/{personaId}/defaultcar")
 	@Produces(MediaType.APPLICATION_XML)
 	public OwnedCarTrans defaultcarGet(@PathParam(value = "personaId") Long personaId) {

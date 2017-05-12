@@ -6,6 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.jaxb.http.ArrayOfCategoryTrans;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
 import com.soapboxrace.jaxb.http.ProductTrans;
@@ -14,6 +15,7 @@ import com.soapboxrace.jaxb.http.ProductTrans;
 public class Catalog {
 
 	@GET
+	@Secured
 	@Path("/productsInCategory")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfProductTrans productsInCategory(@QueryParam("categoryName") String categoryName, @QueryParam("clientProductType") String clientProductType) {
@@ -38,6 +40,7 @@ public class Catalog {
 	}
 
 	@GET
+	@Secured
 	@Path("/categories")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfCategoryTrans categories() {

@@ -8,10 +8,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.api.util.Secured;
+
 @Path("/")
 public class Generic {
 
 	@GET
+	@Secured
 	@Path("{path:.*}")
 	@Produces(MediaType.APPLICATION_XML)
 	public String genericEmptyGet(@PathParam("path") String path) {
@@ -20,6 +23,7 @@ public class Generic {
 	}
 
 	@POST
+	@Secured
 	@Path("{path:.*}")
 	@Produces(MediaType.APPLICATION_XML)
 	public String genericEmptyPost(@PathParam("path") String path) {
@@ -28,6 +32,7 @@ public class Generic {
 	}
 
 	@PUT
+	@Secured
 	@Path("{path:.*}")
 	@Produces(MediaType.APPLICATION_XML)
 	public String genericEmptyPut(@PathParam("path") String path) {

@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.jaxb.xmpp.XMPP_PowerupActivatedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePowerupActivated;
 import com.soapboxrace.xmpp.openfire.OpenFireSoapBoxCli;
@@ -17,6 +18,7 @@ public class Powerups {
 	private OpenFireSoapBoxCli openFireSoapBoxCli = OpenFireSoapBoxCli.getInstance();
 
 	@POST
+	@Secured
 	@Path("/activated/{powerupHash}")
 	@Produces(MediaType.APPLICATION_XML)
 	public String activated(@PathParam(value = "powerupHash") Integer powerupHash, @QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers,

@@ -9,10 +9,13 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import com.soapboxrace.core.api.util.Secured;
+
 @Path("/systeminfo")
 public class SystemInfo {
 
 	@GET
+	@Secured
 	@Produces(MediaType.APPLICATION_XML)
 	public com.soapboxrace.jaxb.http.SystemInfo systemInfo() {
 		com.soapboxrace.jaxb.http.SystemInfo systemInfo = new com.soapboxrace.jaxb.http.SystemInfo();

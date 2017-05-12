@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.UserBO;
 
 @Path("/CreateUser")
@@ -16,6 +17,7 @@ public class CreateUser {
 	private UserBO bo;
 
 	@POST
+	@Secured
 	@Produces(MediaType.TEXT_HTML)
 	public String createUser(@FormParam("email") String email, @FormParam("passwd") String passwd) {
 		bo.createUser(email, passwd);
