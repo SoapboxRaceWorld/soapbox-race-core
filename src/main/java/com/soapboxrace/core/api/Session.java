@@ -16,7 +16,7 @@ public class Session {
 	@GET
 	@Path("/GetChatInfo")
 	@Produces(MediaType.APPLICATION_XML)
-	public ChatServer ae() {
+	public ChatServer getChatInfo() {
 		ChatServer chatServer = new ChatServer();
 		chatServer.setIp(Config.getXmppIp());
 		chatServer.setPort(Config.getXmppPort());

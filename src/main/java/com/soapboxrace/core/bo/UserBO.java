@@ -13,7 +13,6 @@ import com.soapboxrace.jaxb.http.ProfileData;
 import com.soapboxrace.jaxb.http.User;
 import com.soapboxrace.jaxb.http.UserInfo;
 import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
-import com.soapboxrace.xmpp.openfire.OpenFireSoapBoxCli;
 
 @Stateless
 public class UserBO {
@@ -24,7 +23,14 @@ public class UserBO {
 	@EJB
 	private OpenFireRestApiCli xmppRestApiCli;
 
-	private OpenFireSoapBoxCli openFireSoapBoxCli = OpenFireSoapBoxCli.getInstance();
+	public void createXmppUser(UserInfo userInfo) {
+		String securityToken = userInfo.getUser().getSecurityToken();
+		String xmppPasswd = securityToken.substring(0, 16);
+		List<ProfileData> profileData = userInfo.getPersonas().getProfileData();
+		for (ProfileData persona : profileData) {
+			xmppRestApiCli.createUpdatePersona(persona.getPersonaId(), xmppPasswd);
+		}
+	}
 
 	public void createUser(String email, String passwd) {
 		UserEntity userEntity = new UserEntity();
@@ -34,11 +40,9 @@ public class UserBO {
 	}
 
 	public UserInfo secureLoginPersona(Long userId, Long personaId) {
-		xmppRestApiCli.createUpdatePersona(personaId, "1234567890123456");
 		UserInfo userInfo = new UserInfo();
 		userInfo.setPersonas(new ArrayOfProfileData());
 		com.soapboxrace.jaxb.http.User user = new com.soapboxrace.jaxb.http.User();
-		user.setSecurityToken("1234567890123456-abcd");
 		user.setUserId(userId);
 		userInfo.setUser(user);
 		return userInfo;
@@ -61,7 +65,6 @@ public class UserBO {
 		}
 		userInfo.setPersonas(arrayOfProfileData);
 		User user = new User();
-		user.setSecurityToken("1234567890123456-abcd");
 		user.setUserId(userId);
 		userInfo.setUser(user);
 		return userInfo;
