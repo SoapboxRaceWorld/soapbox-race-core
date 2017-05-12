@@ -22,7 +22,9 @@ public class OpenFireRestApiCli {
 	public OpenFireRestApiCli() {
 		openFireToken = Config.getOpenFireToken();
 		openFireAddress = Config.getOpenFireAddress();
-		createUpdatePersona("sbrw.engine.engine", "1234567890123456");
+		if (openFireToken != null && openFireAddress != null) {
+			createUpdatePersona("sbrw.engine.engine", "1234567890123456");
+		}
 	}
 
 	private Builder getBuilder(String path) {
