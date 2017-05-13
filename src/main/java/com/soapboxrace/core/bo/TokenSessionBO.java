@@ -21,6 +21,21 @@ public class TokenSessionBO {
 	@EJB
 	private UserDAO userDAO;
 
+	public boolean verifyToken(Long userId, String securityToken) {
+		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+		if (tokenSessionEntity == null || !tokenSessionEntity.getUserId().equals(userId)) {
+			return false;
+		}
+		long time = new Date().getTime();
+		long tokenTime = tokenSessionEntity.getExpirationDate().getTime();
+		if (time > tokenTime) {
+			return false;
+		}
+		tokenSessionEntity.setExpirationDate(getMinutes(3));
+		tokenDAO.update(tokenSessionEntity);
+		return true;
+	}
+
 	public void updateToken(String securityToken) {
 		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
 		Date expirationDate = getMinutes(3);
@@ -56,6 +71,7 @@ public class TokenSessionBO {
 			UserEntity userEntity = userDAO.findByEmail(email);
 			if (password.equals(userEntity.getPassword())) {
 				Long userId = userEntity.getId();
+				deleteByUserId(userId);
 				String randomUUID = createToken(userId);
 				loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
 				return loginStatusVO;
