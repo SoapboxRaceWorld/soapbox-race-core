@@ -28,6 +28,7 @@ public class ObjectFactory {
     private final static QName _NewsArticleTrans_QNAME = new QName("", "NewsArticleTrans");
     private final static QName _ChatServer_QNAME = new QName("", "chatServer");
     private final static QName _ArrayOfUdpRelayInfo_QNAME = new QName("", "ArrayOfUdpRelayInfo");
+    private final static QName _SessionInfo_QNAME = new QName("", "SessionInfo");
     private final static QName _UserInfo_QNAME = new QName("", "UserInfo");
     private final static QName _RegionInfo_QNAME = new QName("", "RegionInfo");
     private final static QName _EventsPacket_QNAME = new QName("", "EventsPacket");
@@ -43,6 +44,7 @@ public class ObjectFactory {
     private final static QName _SocialNetworkInfo_QNAME = new QName("", "SocialNetworkInfo");
     private final static QName _OwnedCarTrans_QNAME = new QName("", "OwnedCarTrans");
     private final static QName _CategoryTrans_QNAME = new QName("", "CategoryTrans");
+    private final static QName _PursuitEventResult_QNAME = new QName("", "PursuitEventResult");
     private final static QName _HeartBeat_QNAME = new QName("", "HeartBeat");
     private final static QName _ArrayOfNewsArticleTrans_QNAME = new QName("", "ArrayOfNewsArticleTrans");
     private final static QName _HardwareInfo_QNAME = new QName("", "HardwareInfo");
@@ -102,6 +104,14 @@ public class ObjectFactory {
      */
     public ArrayOfUdpRelayInfo createArrayOfUdpRelayInfo() {
         return new ArrayOfUdpRelayInfo();
+    }
+
+    /**
+     * Create an instance of {@link SessionInfo }
+     * 
+     */
+    public SessionInfo createSessionInfo() {
+        return new SessionInfo();
     }
 
     /**
@@ -222,6 +232,14 @@ public class ObjectFactory {
      */
     public CategoryTrans createCategoryTrans() {
         return new CategoryTrans();
+    }
+
+    /**
+     * Create an instance of {@link PursuitEventResult }
+     * 
+     */
+    public PursuitEventResult createPursuitEventResult() {
+        return new PursuitEventResult();
     }
 
     /**
@@ -393,19 +411,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfBasketItemTrans }
+     * Create an instance of {@link ArrayOfLuckyDrawItem }
      * 
      */
-    public ArrayOfBasketItemTrans createArrayOfBasketItemTrans() {
-        return new ArrayOfBasketItemTrans();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfCommerceItemTrans }
-     * 
-     */
-    public ArrayOfCommerceItemTrans createArrayOfCommerceItemTrans() {
-        return new ArrayOfCommerceItemTrans();
+    public ArrayOfLuckyDrawItem createArrayOfLuckyDrawItem() {
+        return new ArrayOfLuckyDrawItem();
     }
 
     /**
@@ -433,11 +443,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfVisualPartTrans }
+     * Create an instance of {@link Accolades }
      * 
      */
-    public ArrayOfVisualPartTrans createArrayOfVisualPartTrans() {
-        return new ArrayOfVisualPartTrans();
+    public Accolades createAccolades() {
+        return new Accolades();
     }
 
     /**
@@ -449,27 +459,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfLoginAnnouncementDefinition }
+     * Create an instance of {@link LuckyDrawBox }
      * 
      */
-    public ArrayOfLoginAnnouncementDefinition createArrayOfLoginAnnouncementDefinition() {
-        return new ArrayOfLoginAnnouncementDefinition();
-    }
-
-    /**
-     * Create an instance of {@link UdpRelayInfo }
-     * 
-     */
-    public UdpRelayInfo createUdpRelayInfo() {
-        return new UdpRelayInfo();
-    }
-
-    /**
-     * Create an instance of {@link CustomPaintTrans }
-     * 
-     */
-    public CustomPaintTrans createCustomPaintTrans() {
-        return new CustomPaintTrans();
+    public LuckyDrawBox createLuckyDrawBox() {
+        return new LuckyDrawBox();
     }
 
     /**
@@ -481,27 +475,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AchievementRankPacket }
-     * 
-     */
-    public AchievementRankPacket createAchievementRankPacket() {
-        return new AchievementRankPacket();
-    }
-
-    /**
      * Create an instance of {@link BasketTrans }
      * 
      */
     public BasketTrans createBasketTrans() {
         return new BasketTrans();
-    }
-
-    /**
-     * Create an instance of {@link InventoryItemTrans }
-     * 
-     */
-    public InventoryItemTrans createInventoryItemTrans() {
-        return new InventoryItemTrans();
     }
 
     /**
@@ -521,35 +499,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link VisualPartTrans }
-     * 
-     */
-    public VisualPartTrans createVisualPartTrans() {
-        return new VisualPartTrans();
-    }
-
-    /**
      * Create an instance of {@link ArrayOfProfileData }
      * 
      */
     public ArrayOfProfileData createArrayOfProfileData() {
         return new ArrayOfProfileData();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfClientConfig }
-     * 
-     */
-    public ArrayOfClientConfig createArrayOfClientConfig() {
-        return new ArrayOfClientConfig();
-    }
-
-    /**
-     * Create an instance of {@link CarClass }
-     * 
-     */
-    public CarClass createCarClass() {
-        return new CarClass();
     }
 
     /**
@@ -569,14 +523,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LevelGiftDefinition }
-     * 
-     */
-    public LevelGiftDefinition createLevelGiftDefinition() {
-        return new LevelGiftDefinition();
-    }
-
-    /**
      * Create an instance of {@link ArrayOfAchievementRankPacket }
      * 
      */
@@ -590,6 +536,222 @@ public class ObjectFactory {
      */
     public ArrayOfOwnedCarTrans createArrayOfOwnedCarTrans() {
         return new ArrayOfOwnedCarTrans();
+    }
+
+    /**
+     * Create an instance of {@link LuckyDrawItem }
+     * 
+     */
+    public LuckyDrawItem createLuckyDrawItem() {
+        return new LuckyDrawItem();
+    }
+
+    /**
+     * Create an instance of {@link SkillModPartTrans }
+     * 
+     */
+    public SkillModPartTrans createSkillModPartTrans() {
+        return new SkillModPartTrans();
+    }
+
+    /**
+     * Create an instance of {@link AchievementDefinitionPacket }
+     * 
+     */
+    public AchievementDefinitionPacket createAchievementDefinitionPacket() {
+        return new AchievementDefinitionPacket();
+    }
+
+    /**
+     * Create an instance of {@link BasketItemTrans }
+     * 
+     */
+    public BasketItemTrans createBasketItemTrans() {
+        return new BasketItemTrans();
+    }
+
+    /**
+     * Create an instance of {@link CommerceItemTrans }
+     * 
+     */
+    public CommerceItemTrans createCommerceItemTrans() {
+        return new CommerceItemTrans();
+    }
+
+    /**
+     * Create an instance of {@link Vector3 }
+     * 
+     */
+    public Vector3 createVector3() {
+        return new Vector3();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfPerformancePartTrans }
+     * 
+     */
+    public ArrayOfPerformancePartTrans createArrayOfPerformancePartTrans() {
+        return new ArrayOfPerformancePartTrans();
+    }
+
+    /**
+     * Create an instance of {@link EventResult }
+     * 
+     */
+    public EventResult createEventResult() {
+        return new EventResult();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfBadgeDefinitionPacket }
+     * 
+     */
+    public ArrayOfBadgeDefinitionPacket createArrayOfBadgeDefinitionPacket() {
+        return new ArrayOfBadgeDefinitionPacket();
+    }
+
+    /**
+     * Create an instance of {@link LoginAnnouncementDefinition }
+     * 
+     */
+    public LoginAnnouncementDefinition createLoginAnnouncementDefinition() {
+        return new LoginAnnouncementDefinition();
+    }
+
+    /**
+     * Create an instance of {@link PerformancePartTrans }
+     * 
+     */
+    public PerformancePartTrans createPerformancePartTrans() {
+        return new PerformancePartTrans();
+    }
+
+    /**
+     * Create an instance of {@link RewardPart }
+     * 
+     */
+    public RewardPart createRewardPart() {
+        return new RewardPart();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfBasketItemTrans }
+     * 
+     */
+    public ArrayOfBasketItemTrans createArrayOfBasketItemTrans() {
+        return new ArrayOfBasketItemTrans();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfRewardPart }
+     * 
+     */
+    public ArrayOfRewardPart createArrayOfRewardPart() {
+        return new ArrayOfRewardPart();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfLuckyDrawBox }
+     * 
+     */
+    public ArrayOfLuckyDrawBox createArrayOfLuckyDrawBox() {
+        return new ArrayOfLuckyDrawBox();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfCommerceItemTrans }
+     * 
+     */
+    public ArrayOfCommerceItemTrans createArrayOfCommerceItemTrans() {
+        return new ArrayOfCommerceItemTrans();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfVisualPartTrans }
+     * 
+     */
+    public ArrayOfVisualPartTrans createArrayOfVisualPartTrans() {
+        return new ArrayOfVisualPartTrans();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfLoginAnnouncementDefinition }
+     * 
+     */
+    public ArrayOfLoginAnnouncementDefinition createArrayOfLoginAnnouncementDefinition() {
+        return new ArrayOfLoginAnnouncementDefinition();
+    }
+
+    /**
+     * Create an instance of {@link SecurityChallenge }
+     * 
+     */
+    public SecurityChallenge createSecurityChallenge() {
+        return new SecurityChallenge();
+    }
+
+    /**
+     * Create an instance of {@link UdpRelayInfo }
+     * 
+     */
+    public UdpRelayInfo createUdpRelayInfo() {
+        return new UdpRelayInfo();
+    }
+
+    /**
+     * Create an instance of {@link CustomPaintTrans }
+     * 
+     */
+    public CustomPaintTrans createCustomPaintTrans() {
+        return new CustomPaintTrans();
+    }
+
+    /**
+     * Create an instance of {@link AchievementRankPacket }
+     * 
+     */
+    public AchievementRankPacket createAchievementRankPacket() {
+        return new AchievementRankPacket();
+    }
+
+    /**
+     * Create an instance of {@link InventoryItemTrans }
+     * 
+     */
+    public InventoryItemTrans createInventoryItemTrans() {
+        return new InventoryItemTrans();
+    }
+
+    /**
+     * Create an instance of {@link VisualPartTrans }
+     * 
+     */
+    public VisualPartTrans createVisualPartTrans() {
+        return new VisualPartTrans();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfClientConfig }
+     * 
+     */
+    public ArrayOfClientConfig createArrayOfClientConfig() {
+        return new ArrayOfClientConfig();
+    }
+
+    /**
+     * Create an instance of {@link CarClass }
+     * 
+     */
+    public CarClass createCarClass() {
+        return new CarClass();
+    }
+
+    /**
+     * Create an instance of {@link LevelGiftDefinition }
+     * 
+     */
+    public LevelGiftDefinition createLevelGiftDefinition() {
+        return new LevelGiftDefinition();
     }
 
     /**
@@ -641,22 +803,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SkillModPartTrans }
-     * 
-     */
-    public SkillModPartTrans createSkillModPartTrans() {
-        return new SkillModPartTrans();
-    }
-
-    /**
-     * Create an instance of {@link AchievementDefinitionPacket }
-     * 
-     */
-    public AchievementDefinitionPacket createAchievementDefinitionPacket() {
-        return new AchievementDefinitionPacket();
-    }
-
-    /**
      * Create an instance of {@link FriendPersona }
      * 
      */
@@ -689,14 +835,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BasketItemTrans }
-     * 
-     */
-    public BasketItemTrans createBasketItemTrans() {
-        return new BasketItemTrans();
-    }
-
-    /**
      * Create an instance of {@link ArrayOfAchievementDefinitionPacket }
      * 
      */
@@ -705,27 +843,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CommerceItemTrans }
+     * Create an instance of {@link LuckyDrawInfo }
      * 
      */
-    public CommerceItemTrans createCommerceItemTrans() {
-        return new CommerceItemTrans();
-    }
-
-    /**
-     * Create an instance of {@link Vector3 }
-     * 
-     */
-    public Vector3 createVector3() {
-        return new Vector3();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfPerformancePartTrans }
-     * 
-     */
-    public ArrayOfPerformancePartTrans createArrayOfPerformancePartTrans() {
-        return new ArrayOfPerformancePartTrans();
+    public LuckyDrawInfo createLuckyDrawInfo() {
+        return new LuckyDrawInfo();
     }
 
     /**
@@ -737,14 +859,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ArrayOfBadgeDefinitionPacket }
-     * 
-     */
-    public ArrayOfBadgeDefinitionPacket createArrayOfBadgeDefinitionPacket() {
-        return new ArrayOfBadgeDefinitionPacket();
-    }
-
-    /**
      * Create an instance of {@link Entrants }
      * 
      */
@@ -753,11 +867,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link LoginAnnouncementDefinition }
+     * Create an instance of {@link Reward }
      * 
      */
-    public LoginAnnouncementDefinition createLoginAnnouncementDefinition() {
-        return new LoginAnnouncementDefinition();
+    public Reward createReward() {
+        return new Reward();
     }
 
     /**
@@ -766,14 +880,6 @@ public class ObjectFactory {
      */
     public InvalidBasketItemTrans createInvalidBasketItemTrans() {
         return new InvalidBasketItemTrans();
-    }
-
-    /**
-     * Create an instance of {@link PerformancePartTrans }
-     * 
-     */
-    public PerformancePartTrans createPerformancePartTrans() {
-        return new PerformancePartTrans();
     }
 
     /**
@@ -818,6 +924,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "ArrayOfUdpRelayInfo")
     public JAXBElement<ArrayOfUdpRelayInfo> createArrayOfUdpRelayInfo(ArrayOfUdpRelayInfo value) {
         return new JAXBElement<ArrayOfUdpRelayInfo>(_ArrayOfUdpRelayInfo_QNAME, ArrayOfUdpRelayInfo.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SessionInfo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "SessionInfo")
+    public JAXBElement<SessionInfo> createSessionInfo(SessionInfo value) {
+        return new JAXBElement<SessionInfo>(_SessionInfo_QNAME, SessionInfo.class, null, value);
     }
 
     /**
@@ -953,6 +1068,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "CategoryTrans")
     public JAXBElement<CategoryTrans> createCategoryTrans(CategoryTrans value) {
         return new JAXBElement<CategoryTrans>(_CategoryTrans_QNAME, CategoryTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PursuitEventResult }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "PursuitEventResult")
+    public JAXBElement<PursuitEventResult> createPursuitEventResult(PursuitEventResult value) {
+        return new JAXBElement<PursuitEventResult>(_PursuitEventResult_QNAME, PursuitEventResult.class, null, value);
     }
 
     /**
