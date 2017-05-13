@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.InviteTicketBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.bo.UserBO;
 import com.soapboxrace.jaxb.http.UserInfo;
@@ -24,6 +25,9 @@ public class User {
 
 	@EJB
 	private TokenSessionBO tokenBO;
+
+	@EJB
+	private InviteTicketBO inviteTicketBO;
 
 	@POST
 	@Secured
@@ -69,6 +73,17 @@ public class User {
 	public Response authenticateUser(@QueryParam("email") String email, @QueryParam("password") String password) {
 		LoginStatusVO loginStatusVO = tokenBO.login(email, password);
 		if (loginStatusVO.isLoginOk()) {
+			return Response.ok(loginStatusVO).build();
+		}
+		return Response.serverError().entity(loginStatusVO).build();
+	}
+
+	@GET
+	@Path("createUser")
+	@Produces(MediaType.APPLICATION_XML)
+	public Response createUser(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("inviteTicket") String inviteTicket) {
+		LoginStatusVO loginStatusVO = userBO.createUserWithTicket(email, password, inviteTicket);
+		if (loginStatusVO != null && loginStatusVO.isLoginOk()) {
 			return Response.ok(loginStatusVO).build();
 		}
 		return Response.serverError().entity(loginStatusVO).build();

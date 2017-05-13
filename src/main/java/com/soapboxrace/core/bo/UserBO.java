@@ -5,13 +5,16 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.dao.InviteTicketDAO;
 import com.soapboxrace.core.dao.UserDAO;
+import com.soapboxrace.core.jpa.InviteTicketEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.ArrayOfProfileData;
 import com.soapboxrace.jaxb.http.ProfileData;
 import com.soapboxrace.jaxb.http.User;
 import com.soapboxrace.jaxb.http.UserInfo;
+import com.soapboxrace.jaxb.login.LoginStatusVO;
 import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
 
 @Stateless
@@ -19,6 +22,9 @@ public class UserBO {
 
 	@EJB
 	private UserDAO userDao;
+
+	@EJB
+	private InviteTicketDAO inviteTicketDAO;
 
 	@EJB
 	private OpenFireRestApiCli xmppRestApiCli;
@@ -36,11 +42,35 @@ public class UserBO {
 		xmppRestApiCli.createUpdatePersona(personaId, xmppPasswd);
 	}
 
-	public void createUser(String email, String passwd) {
+	public UserEntity createUser(String email, String passwd) {
 		UserEntity userEntity = new UserEntity();
 		userEntity.setEmail(email);
 		userEntity.setPassword(passwd);
 		userDao.insert(userEntity);
+		return userEntity;
+	}
+
+	public LoginStatusVO createUserWithTicket(String email, String passwd, String ticket) {
+		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
+		InviteTicketEntity inviteTicketEntity = inviteTicketDAO.findByTicket(ticket);
+		if (inviteTicketEntity == null || inviteTicketEntity.getTicket() == null || inviteTicketEntity.getTicket().isEmpty()) {
+			loginStatusVO.setDescription("Registration Error: Invalid Ticket!");
+			return loginStatusVO;
+		}
+		if (inviteTicketEntity.getUser() != null) {
+			loginStatusVO.setDescription("Registration Error: Ticket already in use!");
+			return loginStatusVO;
+		}
+		UserEntity userEntityTmp = userDao.findByEmail(email);
+		if (userEntityTmp.getEmail() != null) {
+			loginStatusVO.setDescription("Registration Error: Email already exists!");
+			return loginStatusVO;
+		}
+		UserEntity userEntity = createUser(email, passwd);
+		inviteTicketEntity.setUser(userEntity);
+		inviteTicketDAO.insert(inviteTicketEntity);
+		loginStatusVO = new LoginStatusVO(userEntity.getId(), "", true);
+		return loginStatusVO;
 	}
 
 	public UserInfo secureLoginPersona(Long userId, Long personaId) {
