@@ -5,10 +5,15 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "TOKEN_SESSION")
+@NamedQueries({ //
+		@NamedQuery(name = "TokenSessionEntity.deleteByUserId", query = "DELETE FROM TokenSessionEntity obj WHERE obj.userId = :userId") //
+})
 public class TokenSessionEntity {
 
 	@Id

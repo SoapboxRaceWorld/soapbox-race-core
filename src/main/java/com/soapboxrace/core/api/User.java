@@ -11,7 +11,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.bo.UserBO;
 import com.soapboxrace.jaxb.http.UserInfo;
@@ -31,8 +30,10 @@ public class User {
 	@Path("GetPermanentSession")
 	@Produces(MediaType.APPLICATION_XML)
 	public UserInfo getPermanentSession(@HeaderParam("userId") Long userId, @HeaderParam("securityToken") String securityToken) {
+		tokenBO.deleteByUserId(userId);
+		String randomUUID = tokenBO.createToken(userId);
 		UserInfo userInfo = userBO.getUserById(userId);
-		userInfo.getUser().setSecurityToken(UUIDGen.getRandomUUID());
+		userInfo.getUser().setSecurityToken(randomUUID);
 		userBO.createXmppUser(userInfo);
 		return userInfo;
 	}

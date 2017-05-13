@@ -21,20 +21,45 @@ public class TokenSessionBO {
 	@EJB
 	private UserDAO userDAO;
 
+	public void updateToken(String securityToken) {
+		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+		Date expirationDate = getMinutes(3);
+		tokenSessionEntity.setExpirationDate(expirationDate);
+		tokenDAO.update(tokenSessionEntity);
+	}
+
+	public String createToken(Long userId) {
+		TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
+		Date expirationDate = getMinutes(15);
+		tokenSessionEntity.setExpirationDate(expirationDate);
+		String randomUUID = UUIDGen.getRandomUUID();
+		tokenSessionEntity.setSecurityToken(randomUUID);
+		tokenSessionEntity.setUserId(userId);
+		tokenDAO.insert(tokenSessionEntity);
+		return randomUUID;
+	}
+
+	public void deleteByUserId(Long userId) {
+		tokenDAO.deleteByUserId(userId);
+	}
+
+	private Date getMinutes(int minutes) {
+		long time = new Date().getTime();
+		time = time + (minutes * 60000);
+		Date date = new Date(time);
+		return date;
+	}
+
 	public LoginStatusVO login(String email, String password) {
-		UserEntity userEntity = userDAO.findByEmail(email);
 		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-		if (password.equals(userEntity.getPassword())) {
-			TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
-			long time = new Date().getTime();
-			time = time + (15 * 60000);
-			Date date = new Date(time);
-			tokenSessionEntity.setExpirationDate(date);
-			String randomUUID = UUIDGen.getRandomUUID();
-			tokenSessionEntity.setSecurityToken(randomUUID);
-			tokenDAO.insert(tokenSessionEntity);
-			loginStatusVO = new LoginStatusVO(1L, randomUUID, true);
-			return loginStatusVO;
+		if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
+			UserEntity userEntity = userDAO.findByEmail(email);
+			if (password.equals(userEntity.getPassword())) {
+				Long userId = userEntity.getId();
+				String randomUUID = createToken(userId);
+				loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
+				return loginStatusVO;
+			}
 		}
 		loginStatusVO.setDescription("LOGIN ERROR");
 		return loginStatusVO;
