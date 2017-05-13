@@ -13,7 +13,6 @@ import com.soapboxrace.jaxb.http.UdpRelayInfo;
 public class GetRebroadcasters {
 
 	@GET
-	@Secured
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfUdpRelayInfo getRebroadcasters() {
 		ArrayOfUdpRelayInfo arrayOfUdpRelayInfo = new ArrayOfUdpRelayInfo();
