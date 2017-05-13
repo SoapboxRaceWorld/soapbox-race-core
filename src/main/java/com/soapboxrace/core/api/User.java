@@ -33,7 +33,7 @@ public class User {
 	@Secured
 	@Path("GetPermanentSession")
 	@Produces(MediaType.APPLICATION_XML)
-	public UserInfo getPermanentSession(@HeaderParam("userId") Long userId, @HeaderParam("securityToken") String securityToken) {
+	public UserInfo getPermanentSession(@HeaderParam("userId") Long userId) {
 		tokenBO.deleteByUserId(userId);
 		String randomUUID = tokenBO.createToken(userId);
 		UserInfo userInfo = userBO.getUserById(userId);
@@ -47,6 +47,7 @@ public class User {
 	@Path("SecureLoginPersona")
 	@Produces(MediaType.APPLICATION_XML)
 	public String secureLoginPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId, @QueryParam("personaId") Long personaId) {
+		tokenBO.setActivePersonaId(securityToken, personaId);
 		userBO.secureLoginPersona(userId, personaId);
 		return "";
 	}
@@ -55,7 +56,8 @@ public class User {
 	@Secured
 	@Path("SecureLogoutPersona")
 	@Produces(MediaType.APPLICATION_XML)
-	public String secureLogoutPersona(@HeaderParam("userId") Long userId, @QueryParam("personaId") Long personaId) {
+	public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId, @QueryParam("personaId") Long personaId) {
+		tokenBO.setActivePersonaId(securityToken, 0L);
 		return "";
 	}
 

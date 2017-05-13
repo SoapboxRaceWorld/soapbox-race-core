@@ -81,4 +81,15 @@ public class TokenSessionBO {
 		return loginStatusVO;
 	}
 
+	public Long getActivePersonaId(String securityToken) {
+		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+		return tokenSessionEntity.getActivePersonaId();
+	}
+
+	public void setActivePersonaId(String securityToken, Long personaId) {
+		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+		tokenSessionEntity.setActivePersonaId(personaId);
+		tokenDAO.update(tokenSessionEntity);
+	}
+
 }

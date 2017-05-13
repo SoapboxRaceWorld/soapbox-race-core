@@ -24,6 +24,8 @@ public class TokenSessionEntity {
 
 	private Date expirationDate;
 
+	private Long activePersonaId;
+
 	public String getSecurityToken() {
 		return securityToken;
 	}
@@ -46,6 +48,14 @@ public class TokenSessionEntity {
 
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+
+	public Long getActivePersonaId() {
+		return activePersonaId;
+	}
+
+	public void setActivePersonaId(Long activePersonaId) {
+		this.activePersonaId = activePersonaId;
 	}
 
 }
