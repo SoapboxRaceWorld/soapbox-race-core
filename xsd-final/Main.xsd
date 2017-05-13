@@ -33,4 +33,6 @@
   <xs:include schemaLocation="PersonaIdArray.xsd" />
   <xs:include schemaLocation="LobbyEntrantInfo.xsd" />
   <xs:include schemaLocation="InventoryTrans.xsd" />
+  <xs:include schemaLocation="SessionInfo.xsd" />
+  <xs:include schemaLocation="PursuitEventResult.xsd" />
 </xs:schema>

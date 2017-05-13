@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="PursuitEventResult" nillable="true" type="PursuitEventResult" />
+  <xs:complexType name="PursuitEventResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="EventResult">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="Heat" type="xs:float" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="EventResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Accolades" type="Accolades" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Durability" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventSessionId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ExitPath" type="ExitPath" />
+      <xs:element minOccurs="1" maxOccurs="1" name="InviteLifetimeInMilliseconds" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyInviteId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Accolades">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="FinalRewards" type="Reward" />
+      <xs:element minOccurs="1" maxOccurs="1" name="HasLeveledUp" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LuckyDrawInfo" type="LuckyDrawInfo" />
+      <xs:element minOccurs="0" maxOccurs="1" name="OriginalRewards" type="Reward" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RewardInfo" type="ArrayOfRewardPart" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Reward">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Rep" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Tokens" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LuckyDrawInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Boxes" type="ArrayOfLuckyDrawBox" />
+      <xs:element minOccurs="0" maxOccurs="1" name="CardDeck" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CurrentStreak" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsStreakBroken" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Items" type="ArrayOfLuckyDrawItem" />
+      <xs:element minOccurs="1" maxOccurs="1" name="NumBoxAnimations" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="NumCards" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfLuckyDrawBox">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LuckyDrawBox" nillable="true" type="LuckyDrawBox" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LuckyDrawBox">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="IsValid" type="xs:boolean" />
+      <xs:element minOccurs="0" maxOccurs="1" name="LocalizationString" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LuckyDrawSetCategoryId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfLuckyDrawItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LuckyDrawItem" nillable="true" type="LuckyDrawItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LuckyDrawItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Description" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Hash" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Icon" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RemainingUseCount" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ResellPrice" type="xs:float" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VirtualItem" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="VirtualItemType" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="WasSold" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfRewardPart">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RewardPart" nillable="true" type="RewardPart" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RewardPart">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="RepPart" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RewardCategory" type="enumRewardCategory" />
+      <xs:element minOccurs="1" maxOccurs="1" name="RewardType" type="enumRewardType" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TokenPart" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="enumRewardCategory">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Base" />
+      <xs:enumeration value="Rank" />
+      <xs:enumeration value="Bonus" />
+      <xs:enumeration value="TeamBonus" />
+      <xs:enumeration value="Amplifier" />
+      <xs:enumeration value="Skill" />
+      <xs:enumeration value="Pursuit" />
+      <xs:enumeration value="Objective" />
+      <xs:enumeration value="SkillMod" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="enumRewardType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Busted" />
+      <xs:enumeration value="Evaded" />
+      <xs:enumeration value="RepAmplifier" />
+      <xs:enumeration value="TokenAmplifier" />
+      <xs:enumeration value="SkillMostWanted" />
+      <xs:enumeration value="SkillSocialite" />
+      <xs:enumeration value="SkillTycoon" />
+      <xs:enumeration value="SkillTerminator" />
+      <xs:enumeration value="HeatLevel" />
+      <xs:enumeration value="PursuitLength" />
+      <xs:enumeration value="Bounty" />
+      <xs:enumeration value="CopCarsDeployed" />
+      <xs:enumeration value="CopCarsRammed" />
+      <xs:enumeration value="CopCarsDisabled" />
+      <xs:enumeration value="RhinosDisabled" />
+      <xs:enumeration value="CostToState" />
+      <xs:enumeration value="RoadblocksDodged" />
+      <xs:enumeration value="SpikeStripsDodged" />
+      <xs:enumeration value="Infractions" />
+      <xs:enumeration value="LevelCap" />
+      <xs:enumeration value="EntitlementLevelCap" />
+      <xs:enumeration value="TopenCap" />
+      <xs:enumeration value="SafehouseReached" />
+      <xs:enumeration value="Finished" />
+      <xs:enumeration value="TimeBonus" />
+      <xs:enumeration value="Player1" />
+      <xs:enumeration value="Player2" />
+      <xs:enumeration value="Player3" />
+      <xs:enumeration value="Player4" />
+      <xs:enumeration value="StrikeFree" />
+      <xs:enumeration value="TeamStrikeBonus" />
+      <xs:enumeration value="PowerupBonus" />
+      <xs:enumeration value="SkillMod" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ExitPath">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ExitToFreeroam" />
+      <xs:enumeration value="ExitToLobby" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
