@@ -29,6 +29,10 @@ public class Events {
 		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(375));
 		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(387));
 		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(500));
+		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(374));
+		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(60));
+		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(378));
+		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(502));
 		eventsPacket.setEvents(arrayOfEventDefinition);
 		return eventsPacket;
 	}
