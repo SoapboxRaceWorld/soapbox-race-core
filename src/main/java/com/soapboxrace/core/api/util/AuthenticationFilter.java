@@ -40,6 +40,5 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 		if (!tokenSessionBO.verifyToken(userId, securityToken)) {
 			throw new Exception("Invalid Token");
 		}
-		tokenSessionBO.updateToken(securityToken);
 	}
 }
