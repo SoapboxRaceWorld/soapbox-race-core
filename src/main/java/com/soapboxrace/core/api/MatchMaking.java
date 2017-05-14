@@ -51,7 +51,11 @@ public class MatchMaking {
 		securityChallenge.setRightSize(50);
 		sessionInfo.setChallenge(securityChallenge);
 		sessionInfo.setEventId(eventId);
-		sessionInfo.setSessionId(1000000000L);
+		if (eventId == 387) {
+			sessionInfo.setSessionId(1000000001L);
+		} else {
+			sessionInfo.setSessionId(1000000000L);
+		}
 		return sessionInfo;
 	}
 }

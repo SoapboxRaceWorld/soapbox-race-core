@@ -43,7 +43,11 @@ public class Event {
 	@Secured
 	@Path("/arbitration")
 	@Produces(MediaType.APPLICATION_XML)
-	public String arbitration(@QueryParam("eventSessionId") Long eventSessionId) {
+	public Object arbitration(@HeaderParam("securityToken") String securityToken, @QueryParam("eventSessionId") Long eventSessionId) {
+		if (eventSessionId.equals(1000000001L)) {
+			Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+			return getPursitEnd(eventSessionId, activePersonaId);
+		}
 		return "";
 	}
 
@@ -52,6 +56,13 @@ public class Event {
 	@Path("/bust")
 	@Produces(MediaType.APPLICATION_XML)
 	public PursuitEventResult bust(@HeaderParam("securityToken") String securityToken, @QueryParam("eventSessionId") Long eventSessionId) {
+		PursuitEventResult pursuitEventResult = new PursuitEventResult();
+		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+		pursuitEventResult = getPursitEnd(eventSessionId, activePersonaId);
+		return pursuitEventResult;
+	}
+
+	private PursuitEventResult getPursitEnd(Long eventSessionId, Long activePersonaId) {
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
 		Accolades accolades = new Accolades();
 		Reward finalReward = new Reward();
@@ -66,7 +77,6 @@ public class Event {
 		pursuitEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
 		pursuitEventResult.setInviteLifetimeInMilliseconds(0);
 		pursuitEventResult.setLobbyInviteId(0);
-		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 		pursuitEventResult.setPersonaId(activePersonaId);
 		pursuitEventResult.setHeat(1);
 		Reward originalRewards = new Reward();
