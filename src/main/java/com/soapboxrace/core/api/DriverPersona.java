@@ -134,6 +134,15 @@ public class DriverPersona {
 	}
 
 	@POST
+	@Secured
+	@Path("/DeletePersona")
+	@Produces(MediaType.APPLICATION_XML)
+	public String deletePersona( @QueryParam("personaId") Long personaId) {
+		bo.deletePersona(personaId);
+		return "<long>0</long>";
+	}
+
+	@POST
 	@Path("/GetPersonaBaseFromList")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfPersonaBase getPersonaBaseFromList(InputStream is) {

@@ -75,4 +75,9 @@ public class DriverPersonaBO {
 		return arrayOfPersonaBase;
 	}
 
+	public void deletePersona(Long personaId) {
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		personaDao.delete(personaEntity);
+	}
+
 }
