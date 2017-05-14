@@ -58,4 +58,13 @@ public class MatchMaking {
 		}
 		return sessionInfo;
 	}
+
+	@PUT
+	@Secured
+	@Path("/makeprivatelobby/{eventId}")
+	@Produces(MediaType.APPLICATION_XML)
+	public String makePrivateLobby(@PathParam("eventId") int eventId) {
+		return "";
+	}
+
 }
