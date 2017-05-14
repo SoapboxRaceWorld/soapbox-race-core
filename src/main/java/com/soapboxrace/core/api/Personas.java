@@ -102,19 +102,34 @@ public class Personas {
 	public InventoryTrans inventoryObjects() {
 		InventoryTrans inventoryTrans = new InventoryTrans();
 		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("nosshot", -1681514783, 1842996427L, "0x9bc61ee1"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("runflattires",-537557654, 2876729160L, "0xdff5856a"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("instantcooldown", -1692359144,2876729162L, "0x9b20a618"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("shield", -364944936, 2876729163L, "0xea3f61d8"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("slingshot", 2236629, 2876729164L, "0x2220d5"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("ready", 957701799, 2876729165L, "0x39155ea7"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("juggernaut", 1805681994, 2876729166L, "0x6ba0854a"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("emergencyevade", -611661916, 2876729167L, "0xdb8ac7a4"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("team_emergencyevade", -1564932069, 2876729168L, "0xa2b9081b"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("onemorelap", 1627606782, 2876729170L, "0x61034efe"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("team_slingshot", 1113720384, 2876729171L, "0x42620640"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("trafficmagnet", 125509666, 2880783203L, "0x77b2022"));
+		inventoryTrans.setInventoryItems(arrayOfInventoryItemTrans);
+		return inventoryTrans;
+	}
+
+	private InventoryItemTrans getPowerUpInventory(String tag, int hash, long invId, String strHash) {
 		InventoryItemTrans inventoryItemTrans = new InventoryItemTrans();
 		inventoryItemTrans.setEntitlementTag("nosshot");
-		inventoryItemTrans.setHash(-1681514783);
-		inventoryItemTrans.setInventoryId(1842996427);
+		inventoryItemTrans.setHash(hash);
+		inventoryItemTrans.setInventoryId(invId);
 		inventoryItemTrans.setProductId("DO NOT USE ME");
 		inventoryItemTrans.setRemainingUseCount(100L);
 		inventoryItemTrans.setResellPrice(0.00);
 		inventoryItemTrans.setStatus("ACTIVE");
-		inventoryItemTrans.setStringHash("0x9bc61ee1");
+		inventoryItemTrans.setStringHash(strHash);
 		inventoryItemTrans.setVirtualItemType("powerup");
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(inventoryItemTrans);
-		inventoryTrans.setInventoryItems(arrayOfInventoryItemTrans);
-		return inventoryTrans;
+		return inventoryItemTrans;
 	}
 
 	private OwnedCarTrans getOwnedCarTransExample() {
