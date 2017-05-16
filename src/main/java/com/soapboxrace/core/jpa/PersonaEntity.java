@@ -91,11 +91,11 @@ public class PersonaEntity {
 		this.percentToLevel = percentToLevel;
 	}
 
-	public long getPersonaId() {
+	public Long getPersonaId() {
 		return personaId;
 	}
 
-	public void setPersonaId(long personaId) {
+	public void setPersonaId(Long personaId) {
 		this.personaId = personaId;
 	}
 
