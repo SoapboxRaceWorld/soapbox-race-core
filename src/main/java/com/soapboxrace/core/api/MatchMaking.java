@@ -24,6 +24,14 @@ public class MatchMaking {
 
 	@PUT
 	@Secured
+	@Path("/joinqueueevent/{eventId}")
+	@Produces(MediaType.APPLICATION_XML)
+	public String joinQueueEvent(@PathParam("eventId") Long eventId) {
+		return "";
+	}
+
+	@PUT
+	@Secured
 	@Path("/leavequeue")
 	@Produces(MediaType.APPLICATION_XML)
 	public String leaveQueue() {
