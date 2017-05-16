@@ -1,5 +1,8 @@
 package com.soapboxrace.core.api;
 
+import java.util.List;
+
+import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -7,6 +10,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.EventBO;
+import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.jaxb.http.ArrayOfEventDefinition;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
 import com.soapboxrace.jaxb.http.EventDefinition;
@@ -17,22 +22,20 @@ import com.soapboxrace.jaxb.http.Vector3;
 @Path("/events")
 public class Events {
 
+	@EJB
+	private EventBO eventBO;
+
 	@GET
 	@Secured
 	@Path("/availableatlevel")
 	@Produces(MediaType.APPLICATION_XML)
-	public EventsPacket availableatlevel() {
+	public EventsPacket availableAtLevel() {
 		EventsPacket eventsPacket = new EventsPacket();
 		ArrayOfEventDefinition arrayOfEventDefinition = new ArrayOfEventDefinition();
-		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(43));
-		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(289));
-		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(375));
-		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(387));
-		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(500));
-		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(374));
-		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(60));
-		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(378));
-		arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(502));
+		List<EventEntity> availableAtLevel = eventBO.availableAtLevel();
+		for (EventEntity eventEntity : availableAtLevel) {
+			arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(eventEntity.getId()));
+		}
 		eventsPacket.setEvents(arrayOfEventDefinition);
 		return eventsPacket;
 	}
