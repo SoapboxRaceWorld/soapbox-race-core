@@ -10,7 +10,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.EventBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.jpa.EventEntity;
+import com.soapboxrace.core.jpa.EventMode;
+import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.LuckyDrawInfo;
@@ -22,6 +26,9 @@ public class Event {
 
 	@EJB
 	private TokenSessionBO tokenBO;
+
+	@EJB
+	private EventBO eventBO;
 
 	@POST
 	@Secured
@@ -44,7 +51,10 @@ public class Event {
 	@Path("/arbitration")
 	@Produces(MediaType.APPLICATION_XML)
 	public Object arbitration(@HeaderParam("securityToken") String securityToken, @QueryParam("eventSessionId") Long eventSessionId) {
-		if (eventSessionId.equals(1000000001L)) {
+		EventSessionEntity eventSessionEntity = eventBO.findEventSessionById(eventSessionId);
+		EventEntity event = eventSessionEntity.getEvent();
+		EventMode eventMode = EventMode.fromId(event.getEventModeId());
+		if (EventMode.PURSUIT_SP.equals(eventMode)) {
 			Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 			return getPursitEnd(eventSessionId, activePersonaId);
 		}

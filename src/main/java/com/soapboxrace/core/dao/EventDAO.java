@@ -18,8 +18,8 @@ public class EventDAO extends BaseDAO<EventEntity> {
 		this.entityManager = entityManager;
 	}
 
-	public EventEntity findById(String securityToken) {
-		return entityManager.find(EventEntity.class, securityToken);
+	public EventEntity findById(int id) {
+		return entityManager.find(EventEntity.class, id);
 	}
 
 	public List<EventEntity> findAll() {
