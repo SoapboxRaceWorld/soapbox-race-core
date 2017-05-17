@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="LobbyEntrantInfo.xsd" />
+  <xs:element name="LobbyInfo" nillable="true" type="LobbyInfo" />
+  <xs:complexType name="LobbyInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Countdown" type="LobbyCountdown" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Entrants" type="ArrayOfLobbyEntrantInfo" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EventId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsInviteEnabled" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyInviteId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LobbyCountdown">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="EventId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsWaiting" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyCountdownInMilliseconds" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyStuckDurationInMilliseconds" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfLobbyEntrantInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LobbyEntrantInfo" nillable="true" type="LobbyEntrantInfo" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

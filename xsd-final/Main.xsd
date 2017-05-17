@@ -35,4 +35,5 @@
   <xs:include schemaLocation="InventoryTrans.xsd" />
   <xs:include schemaLocation="SessionInfo.xsd" />
   <xs:include schemaLocation="PursuitEventResult.xsd" />
+  <xs:include schemaLocation="LobbyInfo.xsd" />
 </xs:schema>
