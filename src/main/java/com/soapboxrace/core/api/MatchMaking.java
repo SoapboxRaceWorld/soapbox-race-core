@@ -13,7 +13,9 @@ import javax.ws.rs.core.MediaType;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.EventBO;
 import com.soapboxrace.core.bo.LobbyBO;
+import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.jaxb.http.LobbyInfo;
 import com.soapboxrace.jaxb.http.SecurityChallenge;
 import com.soapboxrace.jaxb.http.SessionInfo;
 
@@ -25,6 +27,9 @@ public class MatchMaking {
 
 	@EJB
 	private LobbyBO lobbyBO;
+
+	@EJB
+	private TokenSessionBO tokenSessionBO;
 
 	@PUT
 	@Secured
@@ -85,12 +90,12 @@ public class MatchMaking {
 		return "";
 	}
 
-	// [PUT] /matchmaking/acceptinvite lobbyInviteId=2
 	@PUT
 	@Secured
 	@Path("/acceptinvite")
 	@Produces(MediaType.APPLICATION_XML)
-	public String acceptInvite(@QueryParam("lobbyInviteId") Long lobbyInviteId) {
-		return "";
+	public LobbyInfo acceptInvite(@HeaderParam("securityToken") String securityToken, @QueryParam("lobbyInviteId") Long lobbyInviteId) {
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		return lobbyBO.acceptinvite(activePersonaId, lobbyInviteId);
 	}
 }

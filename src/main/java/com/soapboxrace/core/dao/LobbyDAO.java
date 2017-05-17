@@ -20,7 +20,7 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
 		this.entityManager = entityManager;
 	}
 
-	public LobbyEntity findById(int id) {
+	public LobbyEntity findById(Long id) {
 		return entityManager.find(LobbyEntity.class, id);
 	}
 

@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "LOBBY")
@@ -38,6 +39,9 @@ public class LobbyEntity {
 	private List<LobbyEntrantEntity> entrants;
 
 	private Date lobbyDateTimeStart = new Date();
+
+	@Transient
+	private Long lobbyCountdownInMilliseconds = 60000L;
 
 	public Long getId() {
 		return id;
@@ -76,6 +80,16 @@ public class LobbyEntity {
 			entrants = new ArrayList<>();
 		}
 		return entrants.add(e);
+	}
+
+	public int getLobbyCountdownInMilliseconds() {
+		if (lobbyDateTimeStart != null) {
+			Date now = new Date();
+			Long time = now.getTime() - lobbyDateTimeStart.getTime();
+			time = 60000L - time;
+			return time.intValue();
+		}
+		return lobbyCountdownInMilliseconds.intValue();
 	}
 
 }

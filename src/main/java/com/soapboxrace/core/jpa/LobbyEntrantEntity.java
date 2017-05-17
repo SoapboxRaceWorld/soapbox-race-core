@@ -27,6 +27,8 @@ public class LobbyEntrantEntity implements Comparable<LobbyEntrantEntity> {
 	@JoinColumn(name = "LOBBYID", referencedColumnName = "ID")
 	private LobbyEntity lobby;
 
+	private int gridIndex;
+
 	public Long getId() {
 		return id;
 	}
@@ -54,6 +56,14 @@ public class LobbyEntrantEntity implements Comparable<LobbyEntrantEntity> {
 	@Override
 	public int compareTo(LobbyEntrantEntity lobbyEntrantEntity) {
 		return this.getPersona().getPersonaId().compareTo(lobbyEntrantEntity.getPersona().getPersonaId());
+	}
+
+	public int getGridIndex() {
+		return gridIndex;
+	}
+
+	public void setGridIndex(int gridIndex) {
+		this.gridIndex = gridIndex;
 	}
 
 }
