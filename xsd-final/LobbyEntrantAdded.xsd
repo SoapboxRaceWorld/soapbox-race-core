@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="LobbyEntrantInfo.xsd" />
+  <xs:element name="LobbyEntrantAdded" nillable="true" type="LobbyEntrantAdded" />
+  <xs:complexType name="LobbyEntrantAdded">
+    <xs:complexContent mixed="false">
+      <xs:extension base="LobbyEntrantInfo">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="LobbyId" type="xs:long" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

@@ -36,4 +36,5 @@
   <xs:include schemaLocation="SessionInfo.xsd" />
   <xs:include schemaLocation="PursuitEventResult.xsd" />
   <xs:include schemaLocation="LobbyInfo.xsd" />
+  <xs:include schemaLocation="LobbyEntrantAdded.xsd" />
 </xs:schema>
