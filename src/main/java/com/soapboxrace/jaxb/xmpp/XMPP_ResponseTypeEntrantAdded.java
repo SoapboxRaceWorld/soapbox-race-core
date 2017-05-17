@@ -7,24 +7,24 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.soapboxrace.jaxb.http.LobbyEntrantInfo;
+import com.soapboxrace.jaxb.http.LobbyInfo;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XMPP_ResponseTypeEntrantAdded", propOrder = { "lobbyInvite" })
 @XmlRootElement(name = "response")
 public class XMPP_ResponseTypeEntrantAdded {
 	@XmlElement(name = "LobbyEntrantAdded", required = true)
-	protected LobbyEntrantInfo lobbyInvite;
+	protected LobbyInfo lobbyInvite;
 	@XmlAttribute(name = "status")
 	protected int status = 1;
 	@XmlAttribute(name = "ticket")
 	protected int ticket = 0;
 
-	public LobbyEntrantInfo getLobbyInvite() {
+	public LobbyInfo getLobbyInvite() {
 		return lobbyInvite;
 	}
 
-	public void setLobbyInvite(LobbyEntrantInfo lobbyInvite) {
+	public void setLobbyInvite(LobbyInfo lobbyInvite) {
 		this.lobbyInvite = lobbyInvite;
 	}
 

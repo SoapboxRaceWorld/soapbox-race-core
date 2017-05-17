@@ -38,6 +38,7 @@ public class ObjectFactory {
     private final static QName _PersonaMotto_QNAME = new QName("", "PersonaMotto");
     private final static QName _LoginAnnouncementsDefinition_QNAME = new QName("", "LoginAnnouncementsDefinition");
     private final static QName _SocialSettings_QNAME = new QName("", "SocialSettings");
+    private final static QName _LobbyInfo_QNAME = new QName("", "LobbyInfo");
     private final static QName _CarSlotInfoTrans_QNAME = new QName("", "CarSlotInfoTrans");
     private final static QName _ArrayOfInventoryItemTrans_QNAME = new QName("", "ArrayOfInventoryItemTrans");
     private final static QName _AchievementsPacket_QNAME = new QName("", "AchievementsPacket");
@@ -184,6 +185,14 @@ public class ObjectFactory {
      */
     public SocialSettings createSocialSettings() {
         return new SocialSettings();
+    }
+
+    /**
+     * Create an instance of {@link LobbyInfo }
+     * 
+     */
+    public LobbyInfo createLobbyInfo() {
+        return new LobbyInfo();
     }
 
     /**
@@ -859,6 +868,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link LobbyCountdown }
+     * 
+     */
+    public LobbyCountdown createLobbyCountdown() {
+        return new LobbyCountdown();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfLobbyEntrantInfo }
+     * 
+     */
+    public ArrayOfLobbyEntrantInfo createArrayOfLobbyEntrantInfo() {
+        return new ArrayOfLobbyEntrantInfo();
+    }
+
+    /**
      * Create an instance of {@link Entrants }
      * 
      */
@@ -1014,6 +1039,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "SocialSettings")
     public JAXBElement<SocialSettings> createSocialSettings(SocialSettings value) {
         return new JAXBElement<SocialSettings>(_SocialSettings_QNAME, SocialSettings.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link LobbyInfo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "LobbyInfo")
+    public JAXBElement<LobbyInfo> createLobbyInfo(LobbyInfo value) {
+        return new JAXBElement<LobbyInfo>(_LobbyInfo_QNAME, LobbyInfo.class, null, value);
     }
 
     /**
