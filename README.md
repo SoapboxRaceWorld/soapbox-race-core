@@ -40,6 +40,8 @@ system property example:
 	    <property name="openFireAddress" value="http://localhost:9090/plugins/restapi/v1" />
 	    <property name="xmppIp" value="127.0.0.1" />
 	    <property name="xmppPort" value="5222" />
+	    <property name="udpRaceIp" value="127.0.0.1"/>
+        <property name="udpRacePort" value="9998"/>
 	  </system-properties>
 	  
 	  
