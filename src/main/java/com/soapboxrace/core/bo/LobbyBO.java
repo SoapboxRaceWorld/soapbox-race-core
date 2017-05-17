@@ -72,7 +72,7 @@ public class LobbyBO {
 		lobbyEntity.setEvent(eventEntity);
 		lobbyDao.insert(lobbyEntity);
 		sendJoinEvent(personaEntity.getPersonaId(), lobbyEntity);
-		new LobbyCountDown(lobbyEntity.getId(), lobbyDao, eventSessionDao).start();
+		new LobbyCountDown(lobbyEntity.getId(), lobbyDao, eventSessionDao, tokenDAO).start();
 	}
 
 	private void joinLobby(PersonaEntity personaEntity, List<LobbyEntity> lobbys) {
@@ -188,10 +188,13 @@ public class LobbyBO {
 
 		private Long lobbyId;
 
-		public LobbyCountDown(Long lobbyId, LobbyDAO lobbyDao, EventSessionDAO eventSessionDao) {
+		private TokenSessionDAO tokenDAO;
+
+		public LobbyCountDown(Long lobbyId, LobbyDAO lobbyDao, EventSessionDAO eventSessionDao, TokenSessionDAO tokenDAO) {
 			this.lobbyId = lobbyId;
 			this.lobbyDao = lobbyDao;
 			this.eventSessionDao = eventSessionDao;
+			this.tokenDAO = tokenDAO;
 		}
 
 		public void run() {
@@ -229,12 +232,8 @@ public class LobbyBO {
 				byteBuffer.put(numOfRacers);
 				byteBuffer.putInt(personaId.intValue());
 				byte[] cryptoTicketBytes = byteBuffer.array();
-				String cryptoTicketBase64 = Base64.getEncoder().encodeToString(cryptoTicketBytes);
-				Long userId = lobbyEntrantEntity.getPersona().getUser().getId();
-				// HttpSessionVO httpSessionVo = Router.getHttpSessionVo(userId);
-				// if (httpSessionVo != null) {
-				// httpSessionVo.setRelayCryptoTicket(cryptoTicketBase64);
-				// }
+				String relayCrypotTicket = Base64.getEncoder().encodeToString(cryptoTicketBytes);
+				tokenDAO.updateRelayCrytoTicketByPersonaId(personaId, relayCrypotTicket);
 
 				XMPP_P2PCryptoTicketType p2pCryptoTicketType = new XMPP_P2PCryptoTicketType();
 				p2pCryptoTicketType.setPersonaId(personaId);

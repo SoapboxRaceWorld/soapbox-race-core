@@ -92,4 +92,9 @@ public class TokenSessionBO {
 		tokenDAO.update(tokenSessionEntity);
 	}
 
+	public String getActiveRelayCryptoTicket(String securityToken) {
+		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+		return tokenSessionEntity.getRelayCryptoTicket();
+	}
+
 }

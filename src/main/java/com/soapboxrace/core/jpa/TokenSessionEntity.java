@@ -12,7 +12,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "TOKEN_SESSION")
 @NamedQueries({ //
-		@NamedQuery(name = "TokenSessionEntity.deleteByUserId", query = "DELETE FROM TokenSessionEntity obj WHERE obj.userId = :userId") //
+		@NamedQuery(name = "TokenSessionEntity.deleteByUserId", query = "DELETE FROM TokenSessionEntity obj WHERE obj.userId = :userId"), //
+		@NamedQuery(name = "TokenSessionEntity.updateRelayCrytoTicket", //
+				query = "UPDATE TokenSessionEntity obj " //
+						+ "SET obj.relayCryptoTicket = :relayCryptoTicket WHERE obj.activePersonaId = :personaId") //
 })
 public class TokenSessionEntity {
 
@@ -25,6 +28,8 @@ public class TokenSessionEntity {
 	private Date expirationDate;
 
 	private Long activePersonaId;
+
+	private String relayCryptoTicket;
 
 	public String getSecurityToken() {
 		return securityToken;
@@ -56,6 +61,14 @@ public class TokenSessionEntity {
 
 	public void setActivePersonaId(Long activePersonaId) {
 		this.activePersonaId = activePersonaId;
+	}
+
+	public String getRelayCryptoTicket() {
+		return relayCryptoTicket;
+	}
+
+	public void setRelayCryptoTicket(String relayCryptoTicket) {
+		this.relayCryptoTicket = relayCryptoTicket;
 	}
 
 }

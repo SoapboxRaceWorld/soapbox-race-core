@@ -26,4 +26,11 @@ public class TokenSessionDAO extends BaseDAO<TokenSessionEntity> {
 		query.executeUpdate();
 	}
 
+	public void updateRelayCrytoTicketByPersonaId(Long personaId, String relayCryptoTicket) {
+		Query query = entityManager.createNamedQuery("TokenSessionEntity.updateRelayCrytoTicket");
+		query.setParameter("personaId", personaId);
+		query.setParameter("relayCryptoTicket", relayCryptoTicket);
+		query.executeUpdate();
+	}
+
 }
