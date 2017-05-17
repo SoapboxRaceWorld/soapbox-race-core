@@ -17,6 +17,7 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.jaxb.http.ArrayOfLobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.LobbyCountdown;
+import com.soapboxrace.jaxb.http.LobbyEntrantAdded;
 import com.soapboxrace.jaxb.http.LobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.LobbyInfo;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInviteType;
@@ -55,21 +56,42 @@ public class LobbyBO {
 	private void createLobby(PersonaEntity personaEntity, int eventId) {
 		EventEntity eventEntity = new EventEntity();
 		eventEntity.setId(eventId);
-
 		LobbyEntity lobbyEntity = new LobbyEntity();
 		lobbyEntity.setEvent(eventEntity);
-
-		// LobbyEntrantEntity lobbyEntrantEntity = new LobbyEntrantEntity();
-		// lobbyEntrantEntity.setPersona(personaEntity);
-		// lobbyEntrantEntity.setLobby(lobbyEntity);
-		// lobbyEntity.add(lobbyEntrantEntity);
-
 		lobbyDao.insert(lobbyEntity);
 		sendJoinEvent(personaEntity.getPersonaId(), lobbyEntity);
 	}
 
 	private void joinLobby(PersonaEntity personaEntity, List<LobbyEntity> lobbys) {
+		LobbyEntity lobbyEntity = null;
+		for (LobbyEntity lobbyEntityTmp : lobbys) {
+			int maxEntrants = 2;
+			List<LobbyEntrantEntity> lobbyEntrants = lobbyEntityTmp.getEntrants();
+			int entrantsSize = lobbyEntrants.size();
+			if (entrantsSize < maxEntrants) {
+				lobbyEntity = lobbyEntityTmp;
+				if (!isPersonaInside(personaEntity.getPersonaId(), lobbyEntrants)) {
+					LobbyEntrantEntity lobbyEntrantEntity = new LobbyEntrantEntity();
+					lobbyEntrantEntity.setPersona(personaEntity);
+					lobbyEntrantEntity.setLobby(lobbyEntity);
+					lobbyEntrants.add(lobbyEntrantEntity);
+				}
+				break;
+			}
+		}
+		if (lobbyEntity != null) {
+			sendJoinEvent(personaEntity.getPersonaId(), lobbyEntity);
+		}
+	}
 
+	private boolean isPersonaInside(Long personaId, List<LobbyEntrantEntity> lobbyEntrants) {
+		for (LobbyEntrantEntity lobbyEntrantEntity : lobbyEntrants) {
+			Long entrantPersonaId = lobbyEntrantEntity.getPersona().getPersonaId();
+			if (entrantPersonaId == personaId) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void sendJoinEvent(Long personaId, LobbyEntity lobbyEntity) {
@@ -134,18 +156,14 @@ public class LobbyBO {
 
 	private void sendJoinMsg(Long personaId, List<LobbyEntrantEntity> lobbyEntrants) {
 		for (LobbyEntrantEntity lobbyEntrantEntity : lobbyEntrants) {
-			LobbyInfo lobbyInfo = new LobbyInfo();
-			LobbyEntrantInfo lobbyEntrantInfo = new LobbyEntrantInfo();
+			LobbyEntrantAdded lobbyEntrantAdded = new LobbyEntrantAdded();
 			if (personaId != lobbyEntrantEntity.getPersona().getPersonaId()) {
-				lobbyEntrantInfo.setHeat(1);
-				lobbyEntrantInfo.setLevel(lobbyEntrantEntity.getPersona().getLevel());
-				lobbyEntrantInfo.setPersonaId(personaId);
-				lobbyInfo.setLobbyId(lobbyEntrantEntity.getLobby().getId());
-				ArrayOfLobbyEntrantInfo arrayOfLobbyEntrantInfo = new ArrayOfLobbyEntrantInfo();
-				arrayOfLobbyEntrantInfo.getLobbyEntrantInfo().add(lobbyEntrantInfo);
-				lobbyInfo.setEntrants(arrayOfLobbyEntrantInfo);
+				lobbyEntrantAdded.setHeat(1);
+				lobbyEntrantAdded.setLevel(lobbyEntrantEntity.getPersona().getLevel());
+				lobbyEntrantAdded.setPersonaId(personaId);
+				lobbyEntrantAdded.setLobbyId(lobbyEntrantEntity.getLobby().getId());
 				XmppLobby xmppLobby = new XmppLobby(lobbyEntrantEntity.getPersona().getPersonaId());
-				xmppLobby.sendJoinMsg(lobbyInfo);
+				xmppLobby.sendJoinMsg(lobbyEntrantAdded);
 			}
 		}
 	}

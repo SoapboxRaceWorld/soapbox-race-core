@@ -2,8 +2,8 @@ package com.soapboxrace.xmpp.openfire;
 
 import java.util.List;
 
+import com.soapboxrace.jaxb.http.LobbyEntrantAdded;
 import com.soapboxrace.jaxb.http.LobbyEntrantInfo;
-import com.soapboxrace.jaxb.http.LobbyInfo;
 import com.soapboxrace.jaxb.xmpp.XMPP_CryptoTicketsType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInviteType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyLaunchedType;
@@ -32,7 +32,7 @@ public class XmppLobby {
 		}
 	}
 
-	public void sendJoinMsg(LobbyInfo lobbyInfo) {
+	public void sendJoinMsg(LobbyEntrantAdded lobbyInfo) {
 		XMPP_ResponseTypeEntrantAdded responseType = new XMPP_ResponseTypeEntrantAdded();
 		responseType.setLobbyInvite(lobbyInfo);
 		try {
