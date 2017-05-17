@@ -17,4 +17,12 @@ public class Config {
 	public static int getXmppPort() {
 		return Integer.valueOf(System.getProperty("xmppPort"));
 	}
+
+	public static String getUdpRaceIp() {
+		return System.getProperty("udpRaceIp");
+	}
+
+	public static int getUdpRacePort() {
+		return Integer.valueOf(System.getProperty("udpRacePort"));
+	}
 }
