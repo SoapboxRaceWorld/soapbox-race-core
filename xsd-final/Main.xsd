@@ -37,4 +37,5 @@
   <xs:include schemaLocation="PursuitEventResult.xsd" />
   <xs:include schemaLocation="LobbyInfo.xsd" />
   <xs:include schemaLocation="LobbyEntrantAdded.xsd" />
+  <xs:include schemaLocation="UdpRelayCryptoTicket.xsd" />
 </xs:schema>
