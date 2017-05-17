@@ -67,6 +67,7 @@ public class ObjectFactory {
     private final static QName _ClientConfigTrans_QNAME = new QName("", "ClientConfigTrans");
     private final static QName _ArrayOfInt_QNAME = new QName("", "ArrayOfInt");
     private final static QName _ArrayOfCategoryTrans_QNAME = new QName("", "ArrayOfCategoryTrans");
+    private final static QName _UdpRelayCryptoTicket_QNAME = new QName("", "UdpRelayCryptoTicket");
     private final static QName _InventoryTrans_QNAME = new QName("", "InventoryTrans");
 
     /**
@@ -418,6 +419,14 @@ public class ObjectFactory {
      */
     public ArrayOfCategoryTrans createArrayOfCategoryTrans() {
         return new ArrayOfCategoryTrans();
+    }
+
+    /**
+     * Create an instance of {@link UdpRelayCryptoTicket }
+     * 
+     */
+    public UdpRelayCryptoTicket createUdpRelayCryptoTicket() {
+        return new UdpRelayCryptoTicket();
     }
 
     /**
@@ -1309,6 +1318,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "ArrayOfCategoryTrans")
     public JAXBElement<ArrayOfCategoryTrans> createArrayOfCategoryTrans(ArrayOfCategoryTrans value) {
         return new JAXBElement<ArrayOfCategoryTrans>(_ArrayOfCategoryTrans_QNAME, ArrayOfCategoryTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UdpRelayCryptoTicket }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "UdpRelayCryptoTicket")
+    public JAXBElement<UdpRelayCryptoTicket> createUdpRelayCryptoTicket(UdpRelayCryptoTicket value) {
+        return new JAXBElement<UdpRelayCryptoTicket>(_UdpRelayCryptoTicket_QNAME, UdpRelayCryptoTicket.class, null, value);
     }
 
     /**
