@@ -2,6 +2,7 @@ package com.soapboxrace.core.api;
 
 import java.io.InputStream;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -32,4 +33,11 @@ public class Reporting {
 		return "";
 	}
 
+	@GET
+	@Secured
+	@Path("/SendMultiplayerConnect")
+	@Produces(MediaType.APPLICATION_XML)
+	public String sendMultiplayerConnect() {
+		return "";
+	}
 }
