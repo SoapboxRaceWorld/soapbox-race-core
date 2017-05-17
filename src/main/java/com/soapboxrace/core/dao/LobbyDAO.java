@@ -21,7 +21,9 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
 	}
 
 	public LobbyEntity findById(Long id) {
-		return entityManager.find(LobbyEntity.class, id);
+		LobbyEntity lobbyEntity = entityManager.find(LobbyEntity.class, id);
+		lobbyEntity.getEntrants().size();
+		return lobbyEntity;
 	}
 
 	public List<LobbyEntity> findByEventStarted(int eventId) {
