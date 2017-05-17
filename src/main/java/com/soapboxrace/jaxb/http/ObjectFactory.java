@@ -32,6 +32,7 @@ public class ObjectFactory {
     private final static QName _UserInfo_QNAME = new QName("", "UserInfo");
     private final static QName _RegionInfo_QNAME = new QName("", "RegionInfo");
     private final static QName _EventsPacket_QNAME = new QName("", "EventsPacket");
+    private final static QName _LobbyEntrantAdded_QNAME = new QName("", "LobbyEntrantAdded");
     private final static QName _EventDefinition_QNAME = new QName("", "EventDefinition");
     private final static QName _FraudConfig_QNAME = new QName("", "FraudConfig");
     private final static QName _ArrayOfLevelGiftDefinition_QNAME = new QName("", "ArrayOfLevelGiftDefinition");
@@ -137,6 +138,14 @@ public class ObjectFactory {
      */
     public EventsPacket createEventsPacket() {
         return new EventsPacket();
+    }
+
+    /**
+     * Create an instance of {@link LobbyEntrantAdded }
+     * 
+     */
+    public LobbyEntrantAdded createLobbyEntrantAdded() {
+        return new LobbyEntrantAdded();
     }
 
     /**
@@ -985,6 +994,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "EventsPacket")
     public JAXBElement<EventsPacket> createEventsPacket(EventsPacket value) {
         return new JAXBElement<EventsPacket>(_EventsPacket_QNAME, EventsPacket.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link LobbyEntrantAdded }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "LobbyEntrantAdded")
+    public JAXBElement<LobbyEntrantAdded> createLobbyEntrantAdded(LobbyEntrantAdded value) {
+        return new JAXBElement<LobbyEntrantAdded>(_LobbyEntrantAdded_QNAME, LobbyEntrantAdded.class, null, value);
     }
 
     /**
