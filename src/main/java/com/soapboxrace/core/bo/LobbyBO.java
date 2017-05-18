@@ -125,6 +125,7 @@ public class LobbyBO {
 		lobbyCountdown.setLobbyId(lobbyInviteId);
 		lobbyCountdown.setEventId(eventId);
 		lobbyCountdown.setLobbyCountdownInMilliseconds(lobbyEntity.getLobbyCountdownInMilliseconds());
+		lobbyCountdown.setLobbyStuckDurationInMilliseconds(10000);
 
 		ArrayOfLobbyEntrantInfo arrayOfLobbyEntrantInfo = new ArrayOfLobbyEntrantInfo();
 		List<LobbyEntrantInfo> lobbyEntrantInfo = arrayOfLobbyEntrantInfo.getLobbyEntrantInfo();
