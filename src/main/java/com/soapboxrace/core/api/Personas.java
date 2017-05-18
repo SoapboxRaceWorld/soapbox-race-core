@@ -23,6 +23,7 @@ import com.soapboxrace.jaxb.http.CarSlotInfoTrans;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceResultTrans;
 import com.soapboxrace.jaxb.http.CustomCarTrans;
+import com.soapboxrace.jaxb.http.CustomPaintTrans;
 import com.soapboxrace.jaxb.http.InvalidBasketTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
@@ -103,8 +104,8 @@ public class Personas {
 		InventoryTrans inventoryTrans = new InventoryTrans();
 		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
 		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("nosshot", -1681514783, 1842996427L, "0x9bc61ee1"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("runflattires",-537557654, 2876729160L, "0xdff5856a"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("instantcooldown", -1692359144,2876729162L, "0x9b20a618"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("runflattires", -537557654, 2876729160L, "0xdff5856a"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("instantcooldown", -1692359144, 2876729162L, "0x9b20a618"));
 		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("shield", -364944936, 2876729163L, "0xea3f61d8"));
 		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("slingshot", 2236629, 2876729164L, "0x2220d5"));
 		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("ready", 957701799, 2876729165L, "0x39155ea7"));
@@ -132,6 +133,27 @@ public class Personas {
 		return inventoryItemTrans;
 	}
 
+	private CustomPaintTrans getCustomPaintTrans(int slot) {
+		CustomPaintTrans customPaintTrans = new CustomPaintTrans();
+		customPaintTrans.setGroup(47885063);
+		customPaintTrans.setHue(496032328);
+		customPaintTrans.setSat(0);
+		customPaintTrans.setVar(0);
+		customPaintTrans.setSlot(slot);
+		return customPaintTrans;
+	}
+
+	private ArrayOfCustomPaintTrans getArrayOfCustomPaintTrans() {
+		ArrayOfCustomPaintTrans arrayOfCustomPaintTrans = new ArrayOfCustomPaintTrans();
+		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(0));
+		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(3));
+		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(4));
+		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(5));
+		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(6));
+		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(7));
+		return arrayOfCustomPaintTrans;
+	}
+
 	private OwnedCarTrans getOwnedCarTransExample() {
 		CustomCarTrans customCarTrans = new CustomCarTrans();
 		customCarTrans.setId(12345678);
@@ -141,7 +163,8 @@ public class Personas {
 		customCarTrans.setName("240sx");
 		customCarTrans.setPhysicsProfileHash(-1469109252);
 		customCarTrans.setSkillModSlotCount(5);
-		customCarTrans.setPaints(new ArrayOfCustomPaintTrans());
+
+		customCarTrans.setPaints(getArrayOfCustomPaintTrans());
 		customCarTrans.setPerformanceParts(new ArrayOfPerformancePartTrans());
 		customCarTrans.setRating(224);
 		customCarTrans.setResalePrice(65000);
@@ -156,6 +179,7 @@ public class Personas {
 		ownedCarTrans.setExpirationDate(null);
 		ownedCarTrans.setHeat(0F);
 		ownedCarTrans.setOwnershipType("PresetCar");
+
 		return ownedCarTrans;
 	}
 
