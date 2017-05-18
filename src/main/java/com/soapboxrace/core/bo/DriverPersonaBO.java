@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.dao.LobbyEntrantDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.PersonaEntity;
@@ -22,6 +23,9 @@ public class DriverPersonaBO {
 
 	@EJB
 	private PersonaDAO personaDao;
+
+	@EJB
+	private LobbyEntrantDAO lobbyEntrantDAO;
 
 	public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
 		UserEntity userEntity = userDao.findById(userId);
@@ -77,6 +81,7 @@ public class DriverPersonaBO {
 
 	public void deletePersona(Long personaId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
+		lobbyEntrantDAO.deleteByPersona(personaEntity);
 		personaDao.delete(personaEntity);
 	}
 

@@ -6,11 +6,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "LOBBY_ENTRANT")
+@NamedQueries({ //
+		@NamedQuery(name = "LobbyEntrantEntity.deleteByPersona", query = "DELETE FROM LobbyEntrantEntity obj WHERE obj.persona = :persona") //
+})
 public class LobbyEntrantEntity implements Comparable<LobbyEntrantEntity> {
 
 	@Id
