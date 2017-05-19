@@ -56,3 +56,4 @@ datasource example:
 	  </security>
 	</datasource>
 
+donations: https://www.patreon.com/nilzao
