@@ -98,4 +98,13 @@ public class MatchMaking {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
 		return lobbyBO.acceptinvite(activePersonaId, lobbyInviteId);
 	}
+
+	@PUT
+	@Secured
+	@Path("/declineinvite")
+	@Produces(MediaType.APPLICATION_XML)
+	public String declineInvite(@HeaderParam("securityToken") String securityToken, @QueryParam("lobbyInviteId") Long lobbyInviteId) {
+		return "";
+	}
+
 }
