@@ -12,6 +12,7 @@ import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.LobbyDAO;
+import com.soapboxrace.core.dao.LobbyEntrantDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.EventEntity;
@@ -25,6 +26,7 @@ import com.soapboxrace.jaxb.http.Entrants;
 import com.soapboxrace.jaxb.http.LobbyCountdown;
 import com.soapboxrace.jaxb.http.LobbyEntrantAdded;
 import com.soapboxrace.jaxb.http.LobbyEntrantInfo;
+import com.soapboxrace.jaxb.http.LobbyEntrantRemoved;
 import com.soapboxrace.jaxb.http.LobbyEntrantState;
 import com.soapboxrace.jaxb.http.LobbyInfo;
 import com.soapboxrace.jaxb.xmpp.ChallengeType;
@@ -52,6 +54,9 @@ public class LobbyBO {
 
 	@EJB
 	private LobbyDAO lobbyDao;
+	
+	@EJB
+	private LobbyEntrantDAO lobbyEntrantDao;
 
 	public void joinQueueEvent(String securityToken, int eventId) {
 		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
@@ -178,6 +183,26 @@ public class LobbyBO {
 				lobbyEntrantAdded.setLobbyId(lobbyEntrantEntity.getLobby().getId());
 				XmppLobby xmppLobby = new XmppLobby(lobbyEntrantEntity.getPersona().getPersonaId());
 				xmppLobby.sendJoinMsg(lobbyEntrantAdded);
+			}
+		}
+	}
+	
+	public void deleteLobbyEntrant(Long personaId, Long lobbyId) {
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		lobbyEntrantDao.deleteByPersona(personaEntity);
+		updateLobby(personaId, lobbyId);
+	}
+	
+	private void updateLobby(Long personaId, Long lobbyId) {
+		LobbyEntity lobbyEntity = lobbyDao.findById(lobbyId);
+		List<LobbyEntrantEntity> listLobbyEntrantEntity = lobbyEntity.getEntrants();
+		for(LobbyEntrantEntity entity : listLobbyEntrantEntity) {
+			LobbyEntrantRemoved lobbyEntrantRemoved = new LobbyEntrantRemoved();
+			if(entity.getPersona().getPersonaId() != personaId) {
+				lobbyEntrantRemoved.setPersonaId(personaId);
+				lobbyEntrantRemoved.setLobbyId(lobbyId);
+				XmppLobby xmppLobby = new XmppLobby(entity.getPersona().getPersonaId());
+				xmppLobby.sendExitMsg(lobbyEntrantRemoved);
 			}
 		}
 	}

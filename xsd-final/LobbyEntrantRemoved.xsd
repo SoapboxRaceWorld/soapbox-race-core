@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="LobbyEntrantRemoved" nillable="true" type="LobbyEntrantRemoved" />
+  <xs:complexType name="LobbyEntrantRemoved">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="LobbyId" type="xs:long" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PersonaId" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -60,7 +60,10 @@ public class MatchMaking {
 	@Secured
 	@Path("/leavelobby")
 	@Produces(MediaType.APPLICATION_XML)
-	public String leavelobby() {
+	public String leavelobby(@HeaderParam("securityToken") String securityToken) {
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		Long activeLobbyId = tokenSessionBO.getActiveLobbyId(securityToken);
+		lobbyBO.deleteLobbyEntrant(activePersonaId, activeLobbyId);
 		return "";
 	}
 
@@ -96,6 +99,7 @@ public class MatchMaking {
 	@Produces(MediaType.APPLICATION_XML)
 	public LobbyInfo acceptInvite(@HeaderParam("securityToken") String securityToken, @QueryParam("lobbyInviteId") Long lobbyInviteId) {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		tokenSessionBO.setActiveLobbyId(securityToken, lobbyInviteId);
 		return lobbyBO.acceptinvite(activePersonaId, lobbyInviteId);
 	}
 
