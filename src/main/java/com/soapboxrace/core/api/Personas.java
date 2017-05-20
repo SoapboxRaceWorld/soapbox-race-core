@@ -201,7 +201,15 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfOwnedCarTrans defaultcarPost(@PathParam(value = "personaId") Long personaId) {
+	public ArrayOfOwnedCarTrans carsPost(@PathParam(value = "personaId") Long personaId) {
+		return getArrayOfOwnedCarTransExample();
+	}
+
+	@GET
+	@Secured
+	@Path("/{personaId}/cars")
+	@Produces(MediaType.APPLICATION_XML)
+	public ArrayOfOwnedCarTrans carsGet(@PathParam(value = "personaId") Long personaId) {
 		return getArrayOfOwnedCarTransExample();
 	}
 
