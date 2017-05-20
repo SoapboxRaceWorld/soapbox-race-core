@@ -12,6 +12,7 @@ import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.LobbyDAO;
+import com.soapboxrace.core.dao.LobbyEntrantDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.EventEntity;
@@ -52,6 +53,9 @@ public class LobbyBO {
 
 	@EJB
 	private LobbyDAO lobbyDao;
+	
+	@EJB
+	private LobbyEntrantDAO lobbyEntrantDao;
 
 	public void joinQueueEvent(String securityToken, int eventId) {
 		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
@@ -180,6 +184,11 @@ public class LobbyBO {
 				xmppLobby.sendJoinMsg(lobbyEntrantAdded);
 			}
 		}
+	}
+	
+	public void deleteLobbyEntrant(Long personaId) {
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		lobbyEntrantDao.deleteByPersona(personaEntity);
 	}
 
 	private static class LobbyCountDown extends Thread {

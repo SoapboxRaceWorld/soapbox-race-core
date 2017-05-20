@@ -60,7 +60,9 @@ public class MatchMaking {
 	@Secured
 	@Path("/leavelobby")
 	@Produces(MediaType.APPLICATION_XML)
-	public String leavelobby() {
+	public String leavelobby(@HeaderParam("securityToken") String securityToken) {
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		lobbyBO.deleteLobbyEntrant(activePersonaId);
 		return "";
 	}
 
