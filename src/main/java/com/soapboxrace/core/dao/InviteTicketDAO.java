@@ -33,4 +33,15 @@ public class InviteTicketDAO extends BaseDAO<InviteTicketEntity> {
 		return inviteTicketEntity;
 	}
 
+	public InviteTicketEntity findByDiscordName(String discordName) {
+		TypedQuery<InviteTicketEntity> query = entityManager.createNamedQuery("InviteTicketEntity.findByDiscordName", InviteTicketEntity.class);
+		query.setParameter("discordName", discordName);
+		List<InviteTicketEntity> resultList = query.getResultList();
+		InviteTicketEntity inviteTicketEntity = null;
+		if (resultList != null && !resultList.isEmpty()) {
+			inviteTicketEntity = resultList.get(0);
+		}
+		return inviteTicketEntity;
+	}
+
 }

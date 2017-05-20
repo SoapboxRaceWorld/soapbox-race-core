@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.bo.InviteTicketBO;
+import com.soapboxrace.core.jpa.InviteTicketEntity;
 
 @Path("/CreateTicket")
 public class CreateTicket {
@@ -17,11 +18,9 @@ public class CreateTicket {
 
 	@POST
 	@Produces(MediaType.TEXT_HTML)
-	public String createUser(@FormParam("ticket") String ticket) {
-		if (bo.createTicket(ticket)) {
-			return "Ticket [" + ticket + "] created";
-		}
-		return "Ticket [" + ticket + "] creation failed! already exist or server error";
+	public String createUser(@FormParam("discordName") String discordName) {
+		InviteTicketEntity createTicket = bo.createTicket(discordName);
+		return "Discord Name: [" + createTicket.getDiscordName() + "] with ticket: <strong>" + createTicket.getTicket() + "</strong>";
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.soapboxrace.core.bo;
 
+import java.util.Date;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -12,15 +14,18 @@ public class InviteTicketBO {
 	@EJB
 	private InviteTicketDAO inviteTicketDAO;
 
-	public boolean createTicket(String ticket) {
-		InviteTicketEntity findByTicket = inviteTicketDAO.findByTicket(ticket);
-		if (findByTicket.getTicket() != null) {
-			return false;
+	public InviteTicketEntity createTicket(String discordName) {
+		InviteTicketEntity findByTicket = inviteTicketDAO.findByDiscordName(discordName);
+		if (findByTicket != null) {
+			return findByTicket;
 		}
+		Long time = new Date().getTime();
+		String ticket = "SBRW-" + time.intValue();
 		InviteTicketEntity inviteTicketEntity = new InviteTicketEntity();
 		inviteTicketEntity.setTicket(ticket);
+		inviteTicketEntity.setDiscordName(discordName);
 		inviteTicketDAO.insert(inviteTicketEntity);
-		return true;
+		return inviteTicketEntity;
 	}
 
 }

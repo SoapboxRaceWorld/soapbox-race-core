@@ -16,8 +16,8 @@ import javax.persistence.Table;
 // InviteTicketEntity.findByTicket
 @NamedQueries({ //
 		@NamedQuery(name = "InviteTicketEntity.findAll", query = "SELECT obj FROM InviteTicketEntity obj"),
-		@NamedQuery(name = "InviteTicketEntity.findByTicket", query = "SELECT obj FROM InviteTicketEntity obj WHERE obj.ticket = :ticket") //
-})
+		@NamedQuery(name = "InviteTicketEntity.findByTicket", query = "SELECT obj FROM InviteTicketEntity obj WHERE obj.ticket = :ticket"), //
+		@NamedQuery(name = "InviteTicketEntity.findByDiscordName", query = "SELECT obj FROM InviteTicketEntity obj WHERE obj.discordName = :discordName") })
 public class InviteTicketEntity {
 
 	@Id
@@ -27,6 +27,9 @@ public class InviteTicketEntity {
 
 	@Column(name = "TICKET", length = 255)
 	private String ticket;
+
+	@Column(name = "DISCORD_NAME", length = 255)
+	private String discordName;
 
 	@ManyToOne
 	@JoinColumn(name = "USERID", referencedColumnName = "ID")
@@ -54,6 +57,14 @@ public class InviteTicketEntity {
 
 	public void setUser(UserEntity user) {
 		this.user = user;
+	}
+
+	public String getDiscordName() {
+		return discordName;
+	}
+
+	public void setDiscordName(String discordName) {
+		this.discordName = discordName;
 	}
 
 }

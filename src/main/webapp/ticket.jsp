@@ -4,7 +4,7 @@
 	<br />
 	<br />
 	<form action="Engine.svc/CreateTicket" method="post">
-		ticket: <input type="text" name="ticket" /><br /> <input
+		Discord Name: <input type="text" name="discordName" /><br /> <input
 			type="submit" value="create ticket" />
 	</form>
 	<br />
