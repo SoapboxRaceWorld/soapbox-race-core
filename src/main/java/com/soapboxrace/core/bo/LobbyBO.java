@@ -199,7 +199,7 @@ public class LobbyBO {
 		for(LobbyEntrantEntity entity : listLobbyEntrantEntity) {
 			LobbyEntrantRemoved lobbyEntrantRemoved = new LobbyEntrantRemoved();
 			if(entity.getPersona().getPersonaId() != personaId) {
-				lobbyEntrantRemoved.setPersonaId(entity.getPersona().getPersonaId());
+				lobbyEntrantRemoved.setPersonaId(personaId);
 				lobbyEntrantRemoved.setLobbyId(lobbyId);
 				XmppLobby xmppLobby = new XmppLobby(entity.getPersona().getPersonaId());
 				xmppLobby.sendExitMsg(lobbyEntrantRemoved);

@@ -44,16 +44,11 @@ public class XmppLobby {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	public void sendExitMsg(LobbyEntrantRemoved lobbyInfo) {
 		XMPP_ResponseTypeEntrantRemoved responseType = new XMPP_ResponseTypeEntrantRemoved();
 		responseType.setLobbyExit(lobbyInfo);
-		try {
-			Thread.sleep(1000);
-			openFireSoapBoxCli.send(responseType, personaId);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+		openFireSoapBoxCli.send(responseType, personaId);
 	}
 
 	public static void sendRelay(XMPP_LobbyLaunchedType lobbyLaunched, XMPP_CryptoTicketsType xMPP_CryptoTicketsType) {
