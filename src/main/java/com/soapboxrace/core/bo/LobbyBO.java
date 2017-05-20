@@ -26,6 +26,7 @@ import com.soapboxrace.jaxb.http.Entrants;
 import com.soapboxrace.jaxb.http.LobbyCountdown;
 import com.soapboxrace.jaxb.http.LobbyEntrantAdded;
 import com.soapboxrace.jaxb.http.LobbyEntrantInfo;
+import com.soapboxrace.jaxb.http.LobbyEntrantRemoved;
 import com.soapboxrace.jaxb.http.LobbyEntrantState;
 import com.soapboxrace.jaxb.http.LobbyInfo;
 import com.soapboxrace.jaxb.xmpp.ChallengeType;
@@ -186,9 +187,24 @@ public class LobbyBO {
 		}
 	}
 	
-	public void deleteLobbyEntrant(Long personaId) {
+	public void deleteLobbyEntrant(Long personaId, Long lobbyId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		lobbyEntrantDao.deleteByPersona(personaEntity);
+		updateLobby(personaId, lobbyId);
+	}
+	
+	private void updateLobby(Long personaId, Long lobbyId) {
+		LobbyEntity lobbyEntity = lobbyDao.findById(lobbyId);
+		List<LobbyEntrantEntity> listLobbyEntrantEntity = lobbyEntity.getEntrants();
+		for(LobbyEntrantEntity entity : listLobbyEntrantEntity) {
+			LobbyEntrantRemoved lobbyEntrantRemoved = new LobbyEntrantRemoved();
+			if(entity.getPersona().getPersonaId() != personaId) {
+				lobbyEntrantRemoved.setPersonaId(entity.getPersona().getPersonaId());
+				lobbyEntrantRemoved.setLobbyId(lobbyId);
+				XmppLobby xmppLobby = new XmppLobby(entity.getPersona().getPersonaId());
+				xmppLobby.sendExitMsg(lobbyEntrantRemoved);
+			}
+		}
 	}
 
 	private static class LobbyCountDown extends Thread {

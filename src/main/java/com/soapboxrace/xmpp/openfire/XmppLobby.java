@@ -4,11 +4,13 @@ import java.util.List;
 
 import com.soapboxrace.jaxb.http.LobbyEntrantAdded;
 import com.soapboxrace.jaxb.http.LobbyEntrantInfo;
+import com.soapboxrace.jaxb.http.LobbyEntrantRemoved;
 import com.soapboxrace.jaxb.xmpp.XMPP_CryptoTicketsType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInviteType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyLaunchedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_P2PCryptoTicketType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeEntrantAdded;
+import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeEntrantRemoved;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeLobbyInvite;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeLobbyLaunched;
 
@@ -35,6 +37,17 @@ public class XmppLobby {
 	public void sendJoinMsg(LobbyEntrantAdded lobbyInfo) {
 		XMPP_ResponseTypeEntrantAdded responseType = new XMPP_ResponseTypeEntrantAdded();
 		responseType.setLobbyInvite(lobbyInfo);
+		try {
+			Thread.sleep(1000);
+			openFireSoapBoxCli.send(responseType, personaId);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void sendExitMsg(LobbyEntrantRemoved lobbyInfo) {
+		XMPP_ResponseTypeEntrantRemoved responseType = new XMPP_ResponseTypeEntrantRemoved();
+		responseType.setLobbyExit(lobbyInfo);
 		try {
 			Thread.sleep(1000);
 			openFireSoapBoxCli.send(responseType, personaId);

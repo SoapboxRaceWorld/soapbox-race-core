@@ -96,5 +96,16 @@ public class TokenSessionBO {
 		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
 		return tokenSessionEntity.getRelayCryptoTicket();
 	}
+	
+	public Long getActiveLobbyId(String securityToken) {
+		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+		return tokenSessionEntity.getActiveLobbyId();
+	}
+	
+	public void setActiveLobbyId(String securityToken, Long lobbyId) {
+		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+		tokenSessionEntity.setActiveLobbyId(lobbyId);
+		tokenDAO.update(tokenSessionEntity);
+	}
 
 }
