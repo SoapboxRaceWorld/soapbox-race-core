@@ -23,13 +23,24 @@ public class Session {
 		chatServer.setIp(Config.getXmppIp());
 		chatServer.setPort(Config.getXmppPort());
 		chatServer.setPrefix("sbrw");
-		ChatRoom chatRoom = new ChatRoom();
-		chatRoom.setChannelCount(1);
-		chatRoom.setLongName("TXT_CHAT_LANG_ENGLISH");
-		chatRoom.setShortName("EN");
 		ArrayOfChatRoom arrayOfChatRoom = new ArrayOfChatRoom();
-		arrayOfChatRoom.getChatRoom().add(chatRoom);
+		arrayOfChatRoom.getChatRoom().add(getRoom("TXT_CHAT_LANG_ENGLISH", "EN"));
+		arrayOfChatRoom.getChatRoom().add(getRoom("TXT_CHAT_LANG_GERMAN", "DE"));
+		arrayOfChatRoom.getChatRoom().add(getRoom("TXT_CHAT_LANG_FRENCH", "FR"));
+		arrayOfChatRoom.getChatRoom().add(getRoom("TXT_CHAT_LANG_SPANISH", "ES"));
+		arrayOfChatRoom.getChatRoom().add(getRoom("TXT_CHAT_LANG_POLISH", "PL"));
+		arrayOfChatRoom.getChatRoom().add(getRoom("TXT_CHAT_LANG_BRAZILIANPORTUGUESE", "BR"));
+		arrayOfChatRoom.getChatRoom().add(getRoom("TXT_CHAT_LANG_RUSSIAN", "RU"));
+		arrayOfChatRoom.getChatRoom().add(getRoom("TXT_CHAT_LANG_GENERAL", "GN"));
 		chatServer.setRooms(arrayOfChatRoom);
 		return chatServer;
+	}
+
+	private ChatRoom getRoom(String longName, String shortName) {
+		ChatRoom chatRoom = new ChatRoom();
+		chatRoom.setChannelCount(10);
+		chatRoom.setLongName(longName);
+		chatRoom.setShortName(shortName);
+		return chatRoom;
 	}
 }
