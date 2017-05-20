@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Classe Java pour LobbyEntrantRemoved complex type.
+ * <p>Java class for LobbyEntrantRemoved complex type.
  * 
- * <p>Le fragment de schéma suivant indique le contenu attendu figurant dans cette classe.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType name="LobbyEntrantRemoved">
@@ -40,7 +40,7 @@ public class LobbyEntrantRemoved {
     protected long personaId;
 
     /**
-     * Obtient la valeur de la propriété lobbyId.
+     * Gets the value of the lobbyId property.
      * 
      */
     public long getLobbyId() {
@@ -48,7 +48,7 @@ public class LobbyEntrantRemoved {
     }
 
     /**
-     * Définit la valeur de la propriété lobbyId.
+     * Sets the value of the lobbyId property.
      * 
      */
     public void setLobbyId(long value) {
@@ -56,7 +56,7 @@ public class LobbyEntrantRemoved {
     }
 
     /**
-     * Obtient la valeur de la propriété personaId.
+     * Gets the value of the personaId property.
      * 
      */
     public long getPersonaId() {
@@ -64,7 +64,7 @@ public class LobbyEntrantRemoved {
     }
 
     /**
-     * Définit la valeur de la propriété personaId.
+     * Sets the value of the personaId property.
      * 
      */
     public void setPersonaId(long value) {

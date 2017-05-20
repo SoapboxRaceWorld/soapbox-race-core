@@ -35,6 +35,7 @@ public class ObjectFactory {
     private final static QName _LobbyEntrantAdded_QNAME = new QName("", "LobbyEntrantAdded");
     private final static QName _EventDefinition_QNAME = new QName("", "EventDefinition");
     private final static QName _FraudConfig_QNAME = new QName("", "FraudConfig");
+    private final static QName _LobbyEntrantRemoved_QNAME = new QName("", "LobbyEntrantRemoved");
     private final static QName _ArrayOfLevelGiftDefinition_QNAME = new QName("", "ArrayOfLevelGiftDefinition");
     private final static QName _PersonaMotto_QNAME = new QName("", "PersonaMotto");
     private final static QName _LoginAnnouncementsDefinition_QNAME = new QName("", "LoginAnnouncementsDefinition");
@@ -163,6 +164,14 @@ public class ObjectFactory {
      */
     public FraudConfig createFraudConfig() {
         return new FraudConfig();
+    }
+
+    /**
+     * Create an instance of {@link LobbyEntrantRemoved }
+     * 
+     */
+    public LobbyEntrantRemoved createLobbyEntrantRemoved() {
+        return new LobbyEntrantRemoved();
     }
 
     /**
@@ -1030,6 +1039,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "FraudConfig")
     public JAXBElement<FraudConfig> createFraudConfig(FraudConfig value) {
         return new JAXBElement<FraudConfig>(_FraudConfig_QNAME, FraudConfig.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link LobbyEntrantRemoved }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "LobbyEntrantRemoved")
+    public JAXBElement<LobbyEntrantRemoved> createLobbyEntrantRemoved(LobbyEntrantRemoved value) {
+        return new JAXBElement<LobbyEntrantRemoved>(_LobbyEntrantRemoved_QNAME, LobbyEntrantRemoved.class, null, value);
     }
 
     /**
