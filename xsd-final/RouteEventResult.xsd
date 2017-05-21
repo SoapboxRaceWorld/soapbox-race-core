@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="RouteEntrantResult.xsd" />
+  <xs:include schemaLocation="EventResult.xsd" />
+  <xs:element name="RouteEventResult" nillable="true" type="RouteEventResult" />
+  <xs:complexType name="RouteEventResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="EventResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Entrants" type="ArrayOfRouteEntrantResult" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfRouteEntrantResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RouteEntrantResult" nillable="true" type="RouteEntrantResult" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

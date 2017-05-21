@@ -47,6 +47,9 @@ import javax.xml.bind.annotation.XmlType;
     "personaId"
 })
 @XmlSeeAlso({
+    DragEventResult.class,
+    TeamEscapeEventResult.class,
+    RouteEventResult.class,
     PursuitEventResult.class
 })
 public class EventResult {
