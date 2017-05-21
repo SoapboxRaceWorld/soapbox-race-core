@@ -39,7 +39,7 @@ public class EventDataDAO extends BaseDAO<EventDataEntity> {
 	
 	public List<EventDataEntity> getRacers(Long eventSessionId) {
 		TypedQuery<EventDataEntity> query = entityManager.createNamedQuery("EventDataEntity.getRacers", EventDataEntity.class);
-		query.setParameter("id", eventSessionId);
+		query.setParameter("eventSessionId", eventSessionId);
 		List<EventDataEntity> resultList = query.getResultList();
 		return resultList;
 	}

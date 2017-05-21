@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Table(name = "EVENT_DATA")
 @NamedQueries({ //
 	@NamedQuery(name = "EventDataEntity.findByPersona", query = "SELECT obj FROM EventDataEntity obj WHERE obj.personaId = :personaId"), //
-	@NamedQuery(name = "EventDataEntity.getRacers", query = "SELECT obj FROM EventDataEntity obj WHERE obj.id = :id"), //
+	@NamedQuery(name = "EventDataEntity.getRacers", query = "SELECT obj FROM EventDataEntity obj WHERE obj.eventSessionId = :eventSessionId"), //
 	@NamedQuery(name = "EventDataEntity.findByPersonaAndType", query = "SELECT obj FROM EventDataEntity obj WHERE obj.personaId = :personaId AND obj.eventModeId = :eventModeId"), //
 	@NamedQuery(name = "EventDataEntity.findByPersonaAndEventSessionId", query = "SELECT obj FROM EventDataEntity obj WHERE obj.personaId = :personaId AND obj.eventSessionId = :eventSessionId") //
 })
@@ -30,70 +30,44 @@ public class EventDataEntity {
 	@JoinColumn(name = "EVENTID", referencedColumnName = "ID")
 	private EventEntity event;
 	
-	@Column(name = "PERSONAID")
 	private Long personaId;
-	@Column(name = "EVENTMODEID")
 	private int eventModeId;
-	@Column(name = "EVENTSESSIONID")
 	private Long eventSessionId;
 	
 	// ArbitrationPacket variables
-	@Column(name = "ALTERNATEEVENTDURATIONBINMS")
 	private long alternateEventDurationInMilliseconds;
-	@Column(name = "CarId")
 	private long carId;
-	@Column(name = "EVENTDURATIONINMS")
 	private long eventDurationInMilliseconds;
-	@Column(name = "FINISHREASON")
 	private int finishReason;
-	@Column(name = "HACKSDETECTED")
 	private long hacksDetected;
-	@Column(name = "RANK")
 	private int rank;
 	
 	// OtherArbitrationPacket Global variables
-	@Column(name = "LONGESTJUMPDURATIONINMS")
     protected long longestJumpDurationInMilliseconds;
-	@Column(name = "SUMOFJUMPSDURATIONINMS")
     protected long sumOfJumpsDurationInMilliseconds;
-	@Column(name = "TOPSPEED")
     protected float topSpeed;
 	
 	// RouteArbitrationPacket variables
-	@Column(name = "BESTLAPDURATIONINMS")
     protected long bestLapDurationInMilliseconds;
-	@Column(name = "FRACTIONCOMPLETED")
     protected float fractionCompleted;
-	@Column(name = "NUMBEROFCOLLISIONS")
     protected int numberOfCollisions;
-	@Column(name = "PERFECTSTART")
     protected int perfectStart;
 	
 	
 	// PursuitArbitrationPacket and TeamEscapeArbitrationPacket Global variable
-	@Column(name = "CopsDeployed")
 	protected int copsDeployed;
-	@Column(name = "CopsDisabled")
 	protected int copsDisabled;
-	@Column(name = "CopsRammed")
 	protected int copsRammed;
-	@Column(name = "CostToState")
 	protected int costToState;
-	@Column(name = "Infractions")
 	protected int infractions;
-	@Column(name = "RoadBlocksDodged")
 	protected int roadBlocksDodged;
-	@Column(name = "SpikeStripsDodged")
 	protected int spikeStripsDodged;
 	
 	// PursuitArbitrationPacket variable
-	@Column(name = "Heat")
 	protected float heat;
 	
 	// TeamEscapeArbitrationPacket variables
-	@Column(name = "BustedCount")
     protected int bustedCount;
-	@Column(name = "DistanceToFinish")
     protected float distanceToFinish;
 
 	public Long getId() {
