@@ -3,6 +3,7 @@ package com.soapboxrace.xmpp.openfire;
 import com.soapboxrace.jaxb.xmpp.XMPP_EventTimingOutType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeEventTimingOut;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
+import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeTeamEscapeEntrantResult;
 
 public class XmppEvent {
 
@@ -15,6 +16,10 @@ public class XmppEvent {
 
 	public void sendRaceEnd(XMPP_ResponseTypeRouteEntrantResult routeEntrantResultResponse) {
 		openFireSoapBoxCli.send(routeEntrantResultResponse, personaId);
+	}
+	
+	public void sendTeamEscapeEnd(XMPP_ResponseTypeTeamEscapeEntrantResult teamEscapeEntrantResultResponse) {
+		openFireSoapBoxCli.send(teamEscapeEntrantResultResponse, personaId);
 	}
 	
 	public void sendEventTimingOut(Long eventSessionId) {

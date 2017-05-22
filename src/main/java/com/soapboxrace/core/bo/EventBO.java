@@ -13,6 +13,7 @@ import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
+import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.DragArbitrationPacket;
 import com.soapboxrace.jaxb.http.DragEventResult;
 import com.soapboxrace.jaxb.http.ExitPath;
@@ -24,6 +25,7 @@ import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
 import com.soapboxrace.jaxb.http.RouteEntrantResult;
 import com.soapboxrace.jaxb.http.RouteEventResult;
 import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
+import com.soapboxrace.jaxb.http.TeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.TeamEscapeEventResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeTeamEscapeEntrantResult;
@@ -256,6 +258,27 @@ public class EventBO {
 		eventDataEntity.setTopSpeed(teamEscapeArbitrationPacket.getTopSpeed());
 		eventDataDao.update(eventDataEntity);
 		
+		ArrayOfTeamEscapeEntrantResult arrayOfTeamEscapeEntrantResult = new ArrayOfTeamEscapeEntrantResult();
+		for(EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
+			TeamEscapeEntrantResult teamEscapeEntrantResult = new TeamEscapeEntrantResult();
+			teamEscapeEntrantResult.setDistanceToFinish(racer.getDistanceToFinish());
+			teamEscapeEntrantResult.setEventDurationInMilliseconds(racer.getEventDurationInMilliseconds());
+			teamEscapeEntrantResult.setEventSessionId(eventSessionId);
+			teamEscapeEntrantResult.setFinishReason(racer.getFinishReason());
+			teamEscapeEntrantResult.setFractionCompleted(racer.getFractionCompleted());
+			teamEscapeEntrantResult.setPersonaId(racer.getPersonaId());
+			teamEscapeEntrantResult.setRanking(racer.getRank());
+			arrayOfTeamEscapeEntrantResult.getTeamEscapeEntrantResult().add(teamEscapeEntrantResult);
+
+			if(racer.getPersonaId() != activePersonaId) {
+				XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId());
+				xmppEvent.sendTeamEscapeEnd(teamEscapeEntrantResultResponse);
+				if( teamEscapeArbitrationPacket.getRank() == 1 ) {
+					xmppEvent.sendEventTimingOut(eventSessionId);
+				}
+			}
+		}
+		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward());
 		accolades.setHasLeveledUp(false);
@@ -270,6 +293,7 @@ public class EventBO {
 		teamEscapeEventResult.setLobbyInviteId(0);
 		teamEscapeEventResult.setPersonaId(activePersonaId);
 		teamEscapeEventResult.setAccolades(accolades);
+		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
 		
 		return teamEscapeEventResult;
 	}
