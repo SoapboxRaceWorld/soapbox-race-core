@@ -1,0 +1,6 @@
+- Race end Xmpp packets.
+- Requests related to persona name for working groupChat and whisper.
+- Private lobby racing.
+- Search all available lobbies.
+- Powerups at store, to avoid powerup console reset.
+- Number of online users REST service.
