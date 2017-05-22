@@ -12,9 +12,11 @@ import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.jaxb.http.Accolades;
+import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
 import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
 import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.DragArbitrationPacket;
+import com.soapboxrace.jaxb.http.DragEntrantResult;
 import com.soapboxrace.jaxb.http.DragEventResult;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.LuckyDrawInfo;
@@ -27,6 +29,8 @@ import com.soapboxrace.jaxb.http.RouteEventResult;
 import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
 import com.soapboxrace.jaxb.http.TeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.TeamEscapeEventResult;
+import com.soapboxrace.jaxb.xmpp.XMPP_DragEntrantResultType;
+import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeDragEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_RouteEntrantResultType;
@@ -189,6 +193,17 @@ public class EventBO {
 	public DragEventResult getDragEnd(Long eventSessionId, Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
 		DragEventResult dragEventResult = new DragEventResult();
 		
+		XMPP_DragEntrantResultType xmppDragResult = new XMPP_DragEntrantResultType();
+		xmppDragResult.setEventDurationInMilliseconds(dragArbitrationPacket.getEventDurationInMilliseconds());
+		xmppDragResult.setEventSessionId(eventSessionId);
+		xmppDragResult.setFinishReason(dragArbitrationPacket.getFinishReason());
+		xmppDragResult.setPersonaId(activePersonaId);
+		xmppDragResult.setRanking(dragArbitrationPacket.getRank());
+		xmppDragResult.setTopSpeed(dragArbitrationPacket.getTopSpeed());
+
+		XMPP_ResponseTypeDragEntrantResult dragEntrantResultResponse = new XMPP_ResponseTypeDragEntrantResult();
+		dragEntrantResultResponse.setDragEntrantResult(xmppDragResult);
+		
 		EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
 		eventDataEntity.setPersonaId(activePersonaId);
 		eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
@@ -206,6 +221,26 @@ public class EventBO {
 		eventDataEntity.setTopSpeed(dragArbitrationPacket.getTopSpeed());
 		eventDataDao.update(eventDataEntity);
 		
+		ArrayOfDragEntrantResult arrayOfDragEntrantResult = new ArrayOfDragEntrantResult();
+		for(EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
+			DragEntrantResult dragEntrantResult = new DragEntrantResult();
+			dragEntrantResult.setEventDurationInMilliseconds(racer.getEventDurationInMilliseconds());
+			dragEntrantResult.setEventSessionId(eventSessionId);
+			dragEntrantResult.setFinishReason(racer.getFinishReason());
+			dragEntrantResult.setPersonaId(racer.getPersonaId());
+			dragEntrantResult.setRanking(racer.getRank());
+			dragEntrantResult.setTopSpeed(racer.getTopSpeed());
+			arrayOfDragEntrantResult.getDragEntrantResult().add(dragEntrantResult);
+
+			if(racer.getPersonaId() != activePersonaId) {
+				XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId());
+				xmppEvent.sendDragEnd(dragEntrantResultResponse);
+				if( dragArbitrationPacket.getRank() == 1 ) {
+					xmppEvent.sendEventTimingOut(eventSessionId);
+				}
+			}
+		}
+		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward());
 		accolades.setHasLeveledUp(false);
@@ -220,6 +255,7 @@ public class EventBO {
 		dragEventResult.setLobbyInviteId(0);
 		dragEventResult.setPersonaId(activePersonaId);
 		dragEventResult.setAccolades(accolades);
+		dragEventResult.setEntrants(arrayOfDragEntrantResult);
 		
 		return dragEventResult;
 	}

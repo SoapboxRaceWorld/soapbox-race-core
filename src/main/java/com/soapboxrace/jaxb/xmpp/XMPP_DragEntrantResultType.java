@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XMPP_DragEntrantResultType", propOrder = { "eventDurationInMilliseconds", "eventSessionId",
 		"finishReason", "personaId", "ranking", "topSpeed" })
-@XmlRootElement(name = "RouteEntrantResult")
+@XmlRootElement(name = "DragEntrantResult")
 public class XMPP_DragEntrantResultType {
 	@XmlElement(name = "EventDurationInMilliseconds")
 	private Long eventDurationInMilliseconds;
