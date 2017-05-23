@@ -3,6 +3,7 @@ package com.soapboxrace.jaxb.http;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlType;
     "presence",
     "userId"
 })
+@XmlRootElement(name = "PersonaPresence")
 public class PersonaPresence {
 
     protected long personaId;
