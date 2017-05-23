@@ -1,21 +1,32 @@
 package com.soapboxrace.core.api;
 
+import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
+import com.soapboxrace.core.bo.OnlineUsersBO;
 
 @Path("/OnlineUsers")
 public class OnlineUsers {
 
-	private OpenFireRestApiCli openFireRestApiCli = new OpenFireRestApiCli();
+	@EJB
+	private OnlineUsersBO onlineUsersBO;
 
 	@GET
+	@Path("/getOnline")
 	@Produces(MediaType.APPLICATION_JSON)
 	public int onlineUsers() {
-		return openFireRestApiCli.getTotalOnlineUsers();
+		return onlineUsersBO.getNumberOfUsersOnlineNow();
+	}
+
+	@GET
+	@Path("/insertOnline")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String insertOnlineUsers() {
+		onlineUsersBO.insertNumberOfUsesOnlineNow();
+		return "ok";
 	}
 
 }
