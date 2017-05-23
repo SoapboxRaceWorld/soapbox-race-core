@@ -27,6 +27,7 @@ public class ObjectFactory {
     private final static QName _SystemInfo_QNAME = new QName("", "SystemInfo");
     private final static QName _NewsArticleTrans_QNAME = new QName("", "NewsArticleTrans");
     private final static QName _ChatServer_QNAME = new QName("", "chatServer");
+    private final static QName _PersonaPresence_QNAME = new QName("", "PersonaPresence");
     private final static QName _ArrayOfUdpRelayInfo_QNAME = new QName("", "ArrayOfUdpRelayInfo");
     private final static QName _SessionInfo_QNAME = new QName("", "SessionInfo");
     private final static QName _UserInfo_QNAME = new QName("", "UserInfo");
@@ -100,6 +101,14 @@ public class ObjectFactory {
      */
     public ChatServer createChatServer() {
         return new ChatServer();
+    }
+
+    /**
+     * Create an instance of {@link PersonaPresence }
+     * 
+     */
+    public PersonaPresence createPersonaPresence() {
+        return new PersonaPresence();
     }
 
     /**
@@ -967,6 +976,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "chatServer")
     public JAXBElement<ChatServer> createChatServer(ChatServer value) {
         return new JAXBElement<ChatServer>(_ChatServer_QNAME, ChatServer.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PersonaPresence }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "PersonaPresence")
+    public JAXBElement<PersonaPresence> createPersonaPresence(PersonaPresence value) {
+        return new JAXBElement<PersonaPresence>(_PersonaPresence_QNAME, PersonaPresence.class, null, value);
     }
 
     /**
