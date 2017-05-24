@@ -21,12 +21,4 @@ public class OnlineUsers {
 		return onlineUsersBO.getNumberOfUsersOnlineNow();
 	}
 
-	@GET
-	@Path("/insertOnline")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String insertOnlineUsers() {
-		onlineUsersBO.insertNumberOfUsesOnlineNow();
-		return "ok";
-	}
-
 }
