@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="DragEntrantResult.xsd" />
+  <xs:include schemaLocation="EventResult.xsd" />
+  <xs:element name="DragEventResult" nillable="true" type="DragEventResult" />
+  <xs:complexType name="DragEventResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="EventResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Entrants" type="ArrayOfDragEntrantResult" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>  <xs:complexType name="ArrayOfDragEntrantResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DragEntrantResult" nillable="true" type="DragEntrantResult" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
