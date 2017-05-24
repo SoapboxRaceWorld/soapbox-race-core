@@ -35,7 +35,6 @@ public class ObjectFactory {
     private final static QName _FraudConfig_QNAME = new QName("", "FraudConfig");
     private final static QName _TeamEscapeEventResult_QNAME = new QName("", "TeamEscapeEventResult");
     private final static QName _LobbyEntrantRemoved_QNAME = new QName("", "LobbyEntrantRemoved");
-    private final static QName _LobbyInvite_QNAME = new QName("", "LobbyInvite");
     private final static QName _ArrayOfLevelGiftDefinition_QNAME = new QName("", "ArrayOfLevelGiftDefinition");
     private final static QName _SocialSettings_QNAME = new QName("", "SocialSettings");
     private final static QName _LobbyInfo_QNAME = new QName("", "LobbyInfo");
@@ -179,14 +178,6 @@ public class ObjectFactory {
      */
     public LobbyEntrantRemoved createLobbyEntrantRemoved() {
         return new LobbyEntrantRemoved();
-    }
-
-    /**
-     * Create an instance of {@link LobbyInvite }
-     * 
-     */
-    public LobbyInvite createLobbyInvite() {
-        return new LobbyInvite();
     }
 
     /**
@@ -1214,15 +1205,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "LobbyEntrantRemoved")
     public JAXBElement<LobbyEntrantRemoved> createLobbyEntrantRemoved(LobbyEntrantRemoved value) {
         return new JAXBElement<LobbyEntrantRemoved>(_LobbyEntrantRemoved_QNAME, LobbyEntrantRemoved.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link LobbyInvite }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "LobbyInvite")
-    public JAXBElement<LobbyInvite> createLobbyInvite(LobbyInvite value) {
-        return new JAXBElement<LobbyInvite>(_LobbyInvite_QNAME, LobbyInvite.class, null, value);
     }
 
     /**
