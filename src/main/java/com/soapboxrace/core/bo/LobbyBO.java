@@ -35,6 +35,7 @@ import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInviteType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyLaunchedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_P2PCryptoTicketType;
 import com.soapboxrace.xmpp.openfire.XmppLobby;
+import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
 
 @Stateless
 public class LobbyBO {
@@ -56,6 +57,9 @@ public class LobbyBO {
 	
 	@EJB
 	private LobbyEntrantDAO lobbyEntrantDao;
+	
+	@EJB
+	private OpenFireRestApiCli xmppRestApiCli;
 
 	public void joinQueueEvent(Long personaId, int eventId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
@@ -68,8 +72,14 @@ public class LobbyBO {
 	}
 	
 	public void createPrivateLobby(Long personaId, int eventId) {
-		PersonaEntity personaEntity = personaDao.findById(personaId);
-		createLobby(personaEntity, eventId, true);
+		//PersonaEntity personaEntity = personaDao.findById(personaId);
+		//createLobby(personaEntity, eventId, true);
+		List<String> listOfPersona = xmppRestApiCli.getAllPersonaByGroup(personaId);
+		for(String nameOfPersona : listOfPersona) {
+			Long personaIdMember = Long.parseLong(nameOfPersona.replace("sbrw.", ""));
+			PersonaEntity personaEntity = personaDao.findById(personaIdMember);
+			System.out.println(personaEntity);
+		}
 	}
 
 	private void createLobby(PersonaEntity personaEntity, int eventId, Boolean isPrivate) {

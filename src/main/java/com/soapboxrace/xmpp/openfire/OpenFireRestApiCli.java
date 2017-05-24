@@ -1,5 +1,8 @@
 package com.soapboxrace.xmpp.openfire;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.Singleton;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -9,8 +12,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.igniterealtime.restclient.entity.SessionEntities;
 import org.igniterealtime.restclient.entity.UserEntity;
+import org.igniterealtime.restclient.entity.MUCRoomEntities;
+import org.igniterealtime.restclient.entity.MUCRoomEntity;
 
 import com.soapboxrace.core.api.util.Config;
 
@@ -67,6 +71,21 @@ public class OpenFireRestApiCli {
 			return clusterSessions - 1;
 		}
 		return 0;
+	}
+	
+	public List<String> getAllPersonaByGroup(Long personaId) {
+		String persona = "." + personaId.toString();
+		Builder builder = getBuilder("chatrooms");
+		MUCRoomEntities roomEntities = builder.get(MUCRoomEntities.class);
+		List<String> listOfPersona = new ArrayList<String>();
+		List<MUCRoomEntity> listRoomEntity = roomEntities.getMucRooms();
+		for(MUCRoomEntity entity : listRoomEntity) {
+			if(entity.getRoomName().contains(persona)) {
+				listOfPersona = entity.getMembers();
+				break;
+			}
+		}
+		return listOfPersona;
 	}
 
 }
