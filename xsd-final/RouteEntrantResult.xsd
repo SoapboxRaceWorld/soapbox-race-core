@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="EntrantResult.xsd" />
+  <xs:element name="RouteEntrantResult" nillable="true" type="RouteEntrantResult" />
+  <xs:complexType name="RouteEntrantResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="EntrantResult">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="BestLapDurationInMilliseconds" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TopSpeed" type="xs:float" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

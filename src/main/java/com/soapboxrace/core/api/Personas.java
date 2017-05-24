@@ -1,5 +1,7 @@
 package com.soapboxrace.core.api;
 
+import java.io.InputStream;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -19,6 +21,7 @@ import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
 import com.soapboxrace.jaxb.http.ArrayOfSkillModPartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfVisualPartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfWalletTrans;
+import com.soapboxrace.jaxb.http.BasketTrans;
 import com.soapboxrace.jaxb.http.CarSlotInfoTrans;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceResultTrans;
@@ -30,6 +33,7 @@ import com.soapboxrace.jaxb.http.InventoryTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.ProductTrans;
 import com.soapboxrace.jaxb.http.WalletTrans;
+import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Path("/personas")
 public class Personas {
@@ -38,7 +42,7 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/baskets")
 	@Produces(MediaType.APPLICATION_XML)
-	public CommerceResultTrans baskets(@PathParam(value = "personaId") Long personaId) {
+	public CommerceResultTrans baskets(InputStream basketXml, @PathParam(value = "personaId") Long personaId) {
 		CommerceResultTrans commerceResultTrans = new CommerceResultTrans();
 
 		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
@@ -59,6 +63,12 @@ public class Personas {
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = getArrayOfOwnedCarTransExample();
 		commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
 		commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
+
+		BasketTrans basketTrans = (BasketTrans) UnmarshalXML.unMarshal(basketXml, BasketTrans.class);
+		String productId = basketTrans.getItems().getBasketItemTrans().get(0).getProductId();
+		if ("SRV-GARAGESLOT".equals(productId)) {
+			commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
+		}
 		return commerceResultTrans;
 	}
 

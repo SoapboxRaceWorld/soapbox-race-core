@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="ArbitrationPacket.xsd" />
+  <xs:element name="RouteArbitrationPacket" nillable="true" type="RouteArbitrationPacket" />
+  <xs:complexType name="RouteArbitrationPacket">
+    <xs:complexContent mixed="false">
+      <xs:extension base="ArbitrationPacket">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="BestLapDurationInMilliseconds" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="FractionCompleted" type="xs:float" />
+          <xs:element minOccurs="1" maxOccurs="1" name="LongestJumpDurationInMilliseconds" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="NumberOfCollisions" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="PerfectStart" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SumOfJumpsDurationInMilliseconds" type="xs:unsignedInt" />
+          <xs:element minOccurs="1" maxOccurs="1" name="TopSpeed" type="xs:float" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>
