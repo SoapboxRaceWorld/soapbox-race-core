@@ -39,4 +39,5 @@
   <xs:include schemaLocation="LobbyEntrantAdded.xsd" />
   <xs:include schemaLocation="UdpRelayCryptoTicket.xsd" />
   <xs:include schemaLocation="LobbyEntrantRemoved.xsd" />
+  <xs:include schemaLocation="PersonaPresence.xsd" />
 </xs:schema>

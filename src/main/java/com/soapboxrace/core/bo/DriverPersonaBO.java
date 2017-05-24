@@ -13,6 +13,7 @@ import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
 import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
 import com.soapboxrace.jaxb.http.PersonaBase;
+import com.soapboxrace.jaxb.http.PersonaPresence;
 import com.soapboxrace.jaxb.http.ProfileData;
 
 @Stateless
@@ -83,6 +84,18 @@ public class DriverPersonaBO {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		lobbyEntrantDAO.deleteByPersona(personaEntity);
 		personaDao.delete(personaEntity);
+	}
+	
+	public PersonaPresence getPersonaPresenceByName(String name) {
+		PersonaEntity personaEntity = personaDao.findByName(name);
+		if(personaEntity != null) {
+			PersonaPresence personaPresence = new PersonaPresence();
+			personaPresence.setPersonaId(personaEntity.getPersonaId());
+			personaPresence.setPresence(1);
+			personaPresence.setUserId(personaEntity.getUser().getId());
+			return personaPresence;
+		}
+		return null;
 	}
 
 }

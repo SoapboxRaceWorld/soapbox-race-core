@@ -21,7 +21,9 @@ import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
 import com.soapboxrace.jaxb.http.ArrayOfString;
 import com.soapboxrace.jaxb.http.PersonaIdArray;
 import com.soapboxrace.jaxb.http.PersonaMotto;
+import com.soapboxrace.jaxb.http.PersonaPresence;
 import com.soapboxrace.jaxb.http.ProfileData;
+import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Path("/DriverPersona")
@@ -163,7 +165,11 @@ public class DriverPersona {
 	@Secured
 	@Path("/GetPersonaPresenceByName")
 	@Produces(MediaType.APPLICATION_XML)
-	public String getPersonaPresenceByName() {
+	public String getPersonaPresenceByName(@QueryParam("displayName") String displayName) {
+		PersonaPresence personaPresence = bo.getPersonaPresenceByName(displayName);
+		if(personaPresence != null) {
+			return MarshalXML.marshal(personaPresence);
+		}
 		return "";
 	}
 
