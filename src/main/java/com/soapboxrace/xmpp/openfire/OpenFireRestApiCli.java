@@ -9,6 +9,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.igniterealtime.restclient.entity.SessionEntities;
 import org.igniterealtime.restclient.entity.UserEntity;
 
 import com.soapboxrace.core.api.util.Config;
@@ -56,6 +57,16 @@ public class OpenFireRestApiCli {
 	public void createUpdatePersona(Long personaId, String password) {
 		String user = "sbrw." + personaId.toString();
 		createUpdatePersona(user, password);
+	}
+
+	public int getTotalOnlineUsers() {
+		Builder builder = getBuilder("system/statistics/sessions");
+		SessionsCount sessionsCount = builder.get(SessionsCount.class);
+		int clusterSessions = sessionsCount.getClusterSessions();
+		if (clusterSessions > 1) {
+			return clusterSessions - 1;
+		}
+		return 0;
 	}
 
 }
