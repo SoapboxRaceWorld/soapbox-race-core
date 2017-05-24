@@ -74,11 +74,13 @@ public class LobbyBO {
 	public void createPrivateLobby(Long personaId, int eventId) {
 		//PersonaEntity personaEntity = personaDao.findById(personaId);
 		//createLobby(personaEntity, eventId, true);
-		List<String> listOfPersona = xmppRestApiCli.getAllPersonaByGroup(personaId);
-		for(String nameOfPersona : listOfPersona) {
-			Long personaIdMember = Long.parseLong(nameOfPersona.replace("sbrw.", ""));
-			PersonaEntity personaEntity = personaDao.findById(personaIdMember);
-			System.out.println(personaEntity);
+		List<Long> listOfPersona = xmppRestApiCli.getAllPersonaByGroup(personaId);
+		if(listOfPersona.isEmpty()) {
+			System.out.println("EMPTY");
+		}
+		for(Long idPersona : listOfPersona) {
+			PersonaEntity personaEntity = personaDao.findById(idPersona);
+			System.out.println("LONG " + idPersona + " PERSONA NAME " + personaEntity.getName());
 		}
 	}
 
