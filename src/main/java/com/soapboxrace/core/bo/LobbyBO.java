@@ -20,7 +20,6 @@ import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.LobbyEntrantEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.jaxb.http.ArrayOfLobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.Entrants;
 import com.soapboxrace.jaxb.http.LobbyCountdown;
@@ -58,23 +57,27 @@ public class LobbyBO {
 	@EJB
 	private LobbyEntrantDAO lobbyEntrantDao;
 
-	public void joinQueueEvent(String securityToken, int eventId) {
-		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
-		Long activePersonaId = tokenSessionEntity.getActivePersonaId();
-		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
+	public void joinQueueEvent(Long personaId, int eventId) {
+		PersonaEntity personaEntity = personaDao.findById(personaId);
 		List<LobbyEntity> lobbys = lobbyDao.findByEventStarted(eventId);
 		if (lobbys.size() == 0) {
-			createLobby(personaEntity, eventId);
+			createLobby(personaEntity, eventId, false);
 		} else {
 			joinLobby(personaEntity, lobbys);
 		}
 	}
+	
+	public void createPrivateLobby(Long personaId, int eventId) {
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		createLobby(personaEntity, eventId, true);
+	}
 
-	private void createLobby(PersonaEntity personaEntity, int eventId) {
+	private void createLobby(PersonaEntity personaEntity, int eventId, Boolean isPrivate) {
 		EventEntity eventEntity = new EventEntity();
 		eventEntity.setId(eventId);
 		LobbyEntity lobbyEntity = new LobbyEntity();
 		lobbyEntity.setEvent(eventEntity);
+		lobbyEntity.setIsPrivate(isPrivate);
 		lobbyDao.insert(lobbyEntity);
 		sendJoinEvent(personaEntity.getPersonaId(), lobbyEntity);
 		new LobbyCountDown(lobbyEntity.getId(), lobbyDao, eventSessionDao, tokenDAO).start();
