@@ -1,4 +1,4 @@
 - Private lobby racing.
 - Search all available lobbies.
 - Powerups at store, to avoid powerup console reset.
-- Block buy new car slots button in safehouse
+- Cars inside store, with disable and level flag
