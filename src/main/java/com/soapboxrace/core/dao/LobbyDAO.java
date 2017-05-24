@@ -37,4 +37,24 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
 		query.setParameter("dateTime2", dateNow);
 		return query.getResultList();
 	}
+	
+	public LobbyEntity findByEventAndPersona(int eventId, Boolean isPrivate, Long personaId) {
+		Date dateNow = new Date();
+		Date datePast = new Date(dateNow.getTime() - 35000);
+		EventEntity eventEntity = new EventEntity();
+		eventEntity.setId(eventId);
+		
+		TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findByEventAndPersona", LobbyEntity.class);
+		query.setParameter("event", eventEntity);
+		query.setParameter("dateTime1", datePast);
+		query.setParameter("dateTime2", dateNow);
+		query.setParameter("personaId", personaId);
+		
+		List<LobbyEntity> resultList = query.getResultList();
+		LobbyEntity lobbyEntity = new LobbyEntity();
+		if(resultList != null && !resultList.isEmpty()){
+			lobbyEntity = resultList.get(0);
+		}
+		return lobbyEntity;
+	}
 }
