@@ -15,8 +15,6 @@ import javax.ws.rs.core.Response;
 import org.igniterealtime.restclient.entity.UserEntity;
 import org.igniterealtime.restclient.entity.MUCRoomEntities;
 import org.igniterealtime.restclient.entity.MUCRoomEntity;
-import org.igniterealtime.restclient.entity.ParticipantEntities;
-import org.igniterealtime.restclient.entity.ParticipantEntity;
 
 import com.soapboxrace.core.api.util.Config;
 
@@ -83,21 +81,18 @@ public class OpenFireRestApiCli {
 			if(entity.getRoomName().contains("group.channel.")) {
 				Long idOwner = Long.parseLong(entity.getRoomName().substring(entity.getRoomName().lastIndexOf(".") + 1));
 				if(idOwner == personaId) {
-					return getAllOccupantInGroup(entity.getRoomName(), entity.getOwners());
+					return getAllOccupantInGroup(entity.getRoomName());
 				}
 			}
 		}
 		return new ArrayList<Long>();
 	}
 	
-	private List<Long> getAllOccupantInGroup(String roomName, List<String> owner) {
-		Builder builder = getBuilder("chatrooms/" + roomName + "/participants");
-		ParticipantEntities participantEntities = builder.get(ParticipantEntities.class);
+	private List<Long> getAllOccupantInGroup(String roomName) {
+		Builder builder = getBuilder("chatrooms/" + roomName + "/occupants");
+		OccupantEntities occupantEntities = builder.get(OccupantEntities.class);
 		List<Long> listOfPersona = new ArrayList<Long>();
-		for(String string : owner) {
-			listOfPersona.add(Long.parseLong(string.substring(string.indexOf(".") + 1, string.lastIndexOf("@"))));
-		}
-		for(ParticipantEntity entity : participantEntities.getParticipants()) {
+		for(OccupantEntity entity : occupantEntities.getOccupants()) {
 			listOfPersona.add(Long.parseLong(entity.getJid().substring(entity.getJid().lastIndexOf(".") + 1)));
 		}
 		return listOfPersona;
