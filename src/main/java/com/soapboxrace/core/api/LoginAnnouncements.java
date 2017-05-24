@@ -28,8 +28,8 @@ public class LoginAnnouncements {
 		loginAnnouncementDefinition.setId(1);
 		loginAnnouncementDefinition.setImageChecksum(-1);
 		loginAnnouncementDefinition.setImageUrl("GgMribk.png");
-		loginAnnouncementDefinition.setType(LoginAnnouncementType.EXTERNAL_LINK);
-		loginAnnouncementDefinition.setTarget("https://www.facebook.com/SoapBoxRaceWorld");
+		loginAnnouncementDefinition.setType(LoginAnnouncementType.IMAGE_ONLY);
+		// loginAnnouncementDefinition.setTarget("https://www.facebook.com/SoapBoxRaceWorld");
 		arrayOfLoginAnnouncementDefinition.getLoginAnnouncementDefinition().add(loginAnnouncementDefinition);
 		loginAnnouncementsDefinition.setAnnouncements(arrayOfLoginAnnouncementDefinition);
 		loginAnnouncementsDefinition.setImagesPath("http://i.imgur.com/");
