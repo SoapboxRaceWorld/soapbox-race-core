@@ -44,8 +44,8 @@ public class MatchMaking {
 	@Path("/joinqueueevent/{eventId}")
 	@Produces(MediaType.APPLICATION_XML)
 	public String joinQueueEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
-		Long activeLobbyId = tokenSessionBO.getActiveLobbyId(securityToken);
-		lobbyBO.joinQueueEvent(activeLobbyId, eventId);
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		lobbyBO.joinQueueEvent(activePersonaId, eventId);
 		return "";
 	}
 
