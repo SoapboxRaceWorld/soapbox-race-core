@@ -31,6 +31,7 @@ import com.soapboxrace.jaxb.http.LobbyInfo;
 import com.soapboxrace.jaxb.xmpp.ChallengeType;
 import com.soapboxrace.jaxb.xmpp.XMPP_CryptoTicketsType;
 import com.soapboxrace.jaxb.xmpp.XMPP_EventSessionType;
+import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInvite;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInviteType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyLaunchedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_P2PCryptoTicketType;
@@ -72,15 +73,26 @@ public class LobbyBO {
 	}
 	
 	public void createPrivateLobby(Long personaId, int eventId) {
-		//PersonaEntity personaEntity = personaDao.findById(personaId);
-		//createLobby(personaEntity, eventId, true);
 		List<Long> listOfPersona = xmppRestApiCli.getAllPersonaByGroup(personaId);
-		if(listOfPersona.isEmpty()) {
-			System.out.println("EMPTY");
-		}
-		for(Long idPersona : listOfPersona) {
-			PersonaEntity personaEntity = personaDao.findById(idPersona);
-			System.out.println("LONG " + idPersona + " PERSONA NAME " + personaEntity.getName());
+		if(!listOfPersona.isEmpty()) {
+			PersonaEntity personaEntity = personaDao.findById(personaId);
+			createLobby(personaEntity, eventId, true);
+
+			LobbyEntity lobbys = lobbyDao.findByEventAndPersona(eventId, true, personaId);
+			
+			XMPP_LobbyInvite lobbyInvite = new XMPP_LobbyInvite();
+			lobbyInvite.setEventId(eventId);
+			lobbyInvite.setInvitedByPersonaId(personaId);
+			lobbyInvite.setInviteLifetimeInMilliseconds(60);
+			lobbyInvite.setIsPrivate(true);
+			lobbyInvite.setLobbyInviteId(lobbys.getId());
+			
+			for(Long idPersona : listOfPersona) {
+				if(idPersona != personaId) {
+					XmppLobby xmppLobby = new XmppLobby(idPersona);
+					xmppLobby.sendLobbyInvite(lobbyInvite);
+				}
+			}
 		}
 	}
 
@@ -90,6 +102,7 @@ public class LobbyBO {
 		LobbyEntity lobbyEntity = new LobbyEntity();
 		lobbyEntity.setEvent(eventEntity);
 		lobbyEntity.setIsPrivate(isPrivate);
+		lobbyEntity.setPersonaId(personaEntity.getPersonaId());
 		lobbyDao.insert(lobbyEntity);
 		sendJoinEvent(personaEntity.getPersonaId(), lobbyEntity);
 		new LobbyCountDown(lobbyEntity.getId(), lobbyDao, eventSessionDao, tokenDAO).start();

@@ -81,7 +81,7 @@ public class OpenFireRestApiCli {
 		List<MUCRoomEntity> listRoomEntity = roomEntities.getMucRooms();
 		for(MUCRoomEntity entity : listRoomEntity) {
 			if(entity.getRoomName().contains("group.channel.")) {
-				Long idOwner = Long.parseLong(entity.getRoomName().substring(23));
+				Long idOwner = Long.parseLong(entity.getRoomName().substring(entity.getRoomName().lastIndexOf(".") + 1));
 				if(idOwner == personaId) {
 					return getAllOccupantInGroup(entity.getRoomName(), entity.getOwners());
 				}
