@@ -29,7 +29,7 @@ public class ProductEntity {
 	private String currency;
 	private String description;
 	private int durationMinute;
-	private int hash;
+	private Long hash;
 	private String icon;
 	private int level;
 	private String longDescription;
@@ -95,11 +95,11 @@ public class ProductEntity {
 		this.durationMinute = durationMinute;
 	}
 
-	public int getHash() {
+	public Long getHash() {
 		return hash;
 	}
 
-	public void setHash(int hash) {
+	public void setHash(Long hash) {
 		this.hash = hash;
 	}
 

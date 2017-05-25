@@ -33,7 +33,7 @@ public class Catalog {
 			ProductTrans productTrans = new ProductTrans();
 			productTrans.setCurrency(productEntity.getCurrency());
 			productTrans.setDurationMinute(productEntity.getDurationMinute());
-			productTrans.setHash(productEntity.getHash());
+			productTrans.setHash(productEntity.getHash().intValue());
 			productTrans.setIcon(productEntity.getIcon());
 			productTrans.setLevel(productEntity.getLevel());
 			productTrans.setPrice(productEntity.getPrice());
