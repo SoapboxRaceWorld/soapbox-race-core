@@ -1,4 +1,3 @@
 - Private lobby racing.
 - Search all available lobbies.
-- Powerups at store, to avoid powerup console reset.
-- Cars inside store, with disable and level flag
+- make cardealer work (for start class E cars)
