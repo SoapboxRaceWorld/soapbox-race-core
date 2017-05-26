@@ -1,7 +1,9 @@
 package com.soapboxrace.core.api;
 
 import java.io.InputStream;
+import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -11,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.BasketBO;
+import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfCustomPaintTrans;
 import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
@@ -33,10 +37,14 @@ import com.soapboxrace.jaxb.http.InventoryTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.ProductTrans;
 import com.soapboxrace.jaxb.http.WalletTrans;
+import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Path("/personas")
 public class Personas {
+
+	@EJB
+	private BasketBO basketBO;
 
 	@POST
 	@Secured
@@ -60,14 +68,22 @@ public class Personas {
 		commerceResultTrans.setInvalidBasket(new InvalidBasketTrans());
 		commerceResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
 
-		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = getArrayOfOwnedCarTransExample();
-		commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
-		commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
+		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 
 		BasketTrans basketTrans = (BasketTrans) UnmarshalXML.unMarshal(basketXml, BasketTrans.class);
 		String productId = basketTrans.getItems().getBasketItemTrans().get(0).getProductId();
 		if ("SRV-GARAGESLOT".equals(productId)) {
 			commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
+		} else {
+			arrayOfOwnedCarTrans.getOwnedCarTrans().add(new OwnedCarTrans());
+			commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
+
+			if (basketBO.buyCar(productId, personaId)) {
+				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
+			} else {
+				commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS);
+			}
+
 		}
 		return commerceResultTrans;
 	}
@@ -77,11 +93,19 @@ public class Personas {
 	@Path("/{personaId}/carslots")
 	@Produces(MediaType.APPLICATION_XML)
 	public CarSlotInfoTrans carslots(@PathParam(value = "personaId") Long personaId) {
+		List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
+		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
+		for (CarSlotEntity carSlotEntity : personasCar) {
+			String ownedCarTransXml = carSlotEntity.getOwnedCarTrans();
+			OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
+			ownedCarTrans.setId(carSlotEntity.getId());
+			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
+		}
 		CarSlotInfoTrans carSlotInfoTrans = new CarSlotInfoTrans();
-		carSlotInfoTrans.setCarsOwnedByPersona(getArrayOfOwnedCarTransExample());
+		carSlotInfoTrans.setCarsOwnedByPersona(arrayOfOwnedCarTrans);
 		carSlotInfoTrans.setDefaultOwnedCarIndex(0);
 		carSlotInfoTrans.setObtainableSlots(new ArrayOfProductTrans());
-		carSlotInfoTrans.setOwnedCarSlotsCount(1);
+		carSlotInfoTrans.setOwnedCarSlotsCount(6);
 		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
 		ProductTrans productTrans = new ProductTrans();
 		productTrans.setBundleItems(new ArrayOfProductTrans());
