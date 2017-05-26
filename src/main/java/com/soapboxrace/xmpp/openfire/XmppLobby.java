@@ -6,7 +6,6 @@ import com.soapboxrace.jaxb.http.LobbyEntrantAdded;
 import com.soapboxrace.jaxb.http.LobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.LobbyEntrantRemoved;
 import com.soapboxrace.jaxb.xmpp.XMPP_CryptoTicketsType;
-import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInvite;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInviteType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyLaunchedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_P2PCryptoTicketType;
@@ -70,8 +69,8 @@ public class XmppLobby {
 		}
 	}
 	
-	public void sendLobbyInvite(XMPP_LobbyInvite lobbyInvite) {
-		openFireSoapBoxCli.send(lobbyInvite, personaId);
+	public void sendLobbyInvite(XMPP_LobbyInviteType lobbyInviteType) {
+		openFireSoapBoxCli.send(lobbyInviteType, personaId);
 	}
 
 }

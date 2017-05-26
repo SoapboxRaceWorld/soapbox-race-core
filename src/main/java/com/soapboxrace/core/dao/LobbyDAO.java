@@ -38,7 +38,7 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
 		return query.getResultList();
 	}
 	
-	public LobbyEntity findByEventAndPersona(int eventId, Boolean isPrivate, Long personaId) {
+	public LobbyEntity findByEventAndPersona(int eventId, Long personaId) {
 		Date dateNow = new Date();
 		Date datePast = new Date(dateNow.getTime() - 35000);
 		EventEntity eventEntity = new EventEntity();
