@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
@@ -235,8 +236,15 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfOwnedCarTrans carsPost(@PathParam(value = "personaId") Long personaId) {
-		return getArrayOfOwnedCarTransExample();
+	public OwnedCarTrans carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber) {
+		OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
+		ownedCarTrans.setId(0);
+		CarSlotEntity sellCar = basketBO.sellCar(personaId, serialNumber);
+		if (sellCar != null) {
+			String ownedCarTransXml = sellCar.getOwnedCarTrans();
+			ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
+		}
+		return ownedCarTrans;
 	}
 
 	@GET
@@ -244,7 +252,14 @@ public class Personas {
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfOwnedCarTrans carsGet(@PathParam(value = "personaId") Long personaId) {
-		return getArrayOfOwnedCarTransExample();
+		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
+		List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
+		for (CarSlotEntity carSlotEntity : personasCar) {
+			String ownedCarTransXml = carSlotEntity.getOwnedCarTrans();
+			OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
+			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
+		}
+		return arrayOfOwnedCarTrans;
 	}
 
 	@GET

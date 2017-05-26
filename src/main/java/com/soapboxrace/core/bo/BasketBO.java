@@ -54,4 +54,14 @@ public class BasketBO {
 		return carSlotDAO.findByPersonaId(personaId);
 	}
 
+	public CarSlotEntity sellCar(Long personaId, Long serialNumber) {
+		CarSlotEntity carSlotEntity = carSlotDAO.findById(serialNumber);
+		int personaCarCount = getPersonaCarCount(personaId);
+		if (personaCarCount > 1) {
+			carSlotDAO.delete(carSlotEntity);
+			return carSlotEntity;
+		}
+		return null;
+	}
+
 }
