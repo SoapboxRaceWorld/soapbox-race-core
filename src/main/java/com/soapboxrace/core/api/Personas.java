@@ -236,15 +236,12 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
-	public OwnedCarTrans carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber) {
-		OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
-		ownedCarTrans.setId(0);
+	public String carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber) {
 		CarSlotEntity sellCar = basketBO.sellCar(personaId, serialNumber);
 		if (sellCar != null) {
-			String ownedCarTransXml = sellCar.getOwnedCarTrans();
-			ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
+			return sellCar.getOwnedCarTrans();
 		}
-		return ownedCarTrans;
+		return "";
 	}
 
 	@GET
