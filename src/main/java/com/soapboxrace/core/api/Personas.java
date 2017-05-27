@@ -173,7 +173,7 @@ public class Personas {
 	@Produces(MediaType.APPLICATION_XML)
 	public String carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber) {
 		if (basketBO.sellCar(personaId, serialNumber)) {
-			OwnedCarTrans ownedCarTrans = personaBO.getDefaultOwnedCarTransXml(personaId);
+			OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
 			return MarshalXML.marshal(ownedCarTrans);
 		}
 		return "";
@@ -199,7 +199,7 @@ public class Personas {
 	@Path("/{personaId}/defaultcar")
 	@Produces(MediaType.APPLICATION_XML)
 	public OwnedCarTrans defaultcarGet(@PathParam(value = "personaId") Long personaId) {
-		OwnedCarTrans ownedCarTrans = personaBO.getDefaultOwnedCarTransXml(personaId);
+		OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
 		return ownedCarTrans;
 	}
 

@@ -39,7 +39,7 @@ public class PersonaBO {
 		return personaDAO.findById(personaId);
 	}
 
-	public OwnedCarTrans getDefaultOwnedCarTransXml(Long personaId) {
+	public OwnedCarTrans getDefaultCar(Long personaId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
 		List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
 		Integer curCarIndex = personaEntity.getCurCarIndex();
