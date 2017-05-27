@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
@@ -30,6 +31,13 @@ public class CarSlotDAO extends BaseDAO<CarSlotEntity> {
 		query.setParameter("persona", personaEntity);
 		List<CarSlotEntity> resultList = query.getResultList();
 		return resultList;
+	}
+
+	public void deleteByPersona(PersonaEntity personaEntity) {
+		Query query = entityManager.createNamedQuery("CarSlotEntity.deleteByPersona");
+		query.setParameter("persona", personaEntity);
+		query.executeUpdate();
+
 	}
 
 }

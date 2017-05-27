@@ -13,8 +13,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "CARSLOT")
-@NamedQueries({ @NamedQuery(name = "CarSlotEntity.findByPersonaId", //
-		query = "SELECT obj FROM CarSlotEntity obj WHERE obj.persona = :persona ORDER by obj.id") })
+@NamedQueries({
+		@NamedQuery(name = "CarSlotEntity.findByPersonaId", //
+				query = "SELECT obj FROM CarSlotEntity obj WHERE obj.persona = :persona ORDER by obj.id"), //
+		@NamedQuery(name = "CarSlotEntity.deleteByPersona", //
+				query = "DELETE FROM CarSlotEntity obj WHERE obj.persona = :persona") //
+})
 public class CarSlotEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

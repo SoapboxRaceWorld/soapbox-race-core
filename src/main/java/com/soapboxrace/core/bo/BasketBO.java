@@ -10,7 +10,6 @@ import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.jpa.BasketDefinitionEntity;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.jaxb.http.ArrayOfCustomPaintTrans;
 import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
 import com.soapboxrace.jaxb.http.ArrayOfPerformancePartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfSkillModPartTrans;
@@ -64,14 +63,14 @@ public class BasketBO {
 		return carSlotDAO.findByPersonaId(personaId);
 	}
 
-	public CarSlotEntity sellCar(Long personaId, Long serialNumber) {
+	public boolean sellCar(Long personaId, Long serialNumber) {
 		CarSlotEntity carSlotEntity = carSlotDAO.findById(serialNumber);
 		int personaCarCount = getPersonaCarCount(personaId);
 		if (personaCarCount > 1) {
 			carSlotDAO.delete(carSlotEntity);
-			return carSlotEntity;
+			return true;
 		}
-		return null;
+		return false;
 	}
 
 }

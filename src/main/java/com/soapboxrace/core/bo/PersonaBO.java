@@ -9,6 +9,8 @@ import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.jaxb.http.OwnedCarTrans;
+import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Stateless
 public class PersonaBO {
@@ -36,4 +38,27 @@ public class PersonaBO {
 	public PersonaEntity getPersonaById(Long personaId) {
 		return personaDAO.findById(personaId);
 	}
+
+	public OwnedCarTrans getDefaultOwnedCarTransXml(Long personaId) {
+		PersonaEntity personaEntity = personaDAO.findById(personaId);
+		List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
+		Integer curCarIndex = personaEntity.getCurCarIndex();
+		if (carSlotList.size() > 0) {
+			if (curCarIndex >= carSlotList.size()) {
+				curCarIndex--;
+				CarSlotEntity ownedCarEntity = carSlotList.get(curCarIndex);
+				changeDefaultCar(personaId, ownedCarEntity.getId());
+			}
+			CarSlotEntity carSlotEntity = carSlotList.get(curCarIndex);
+			OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
+			ownedCarTrans.setId(carSlotEntity.getId());
+			return ownedCarTrans;
+		}
+		return new OwnedCarTrans();
+	}
+
+	public List<CarSlotEntity> getPersonasCar(Long personaId) {
+		return carSlotDAO.findByPersonaId(personaId);
+	}
+
 }
