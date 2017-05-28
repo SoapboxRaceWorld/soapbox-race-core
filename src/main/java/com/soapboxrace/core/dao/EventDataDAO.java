@@ -25,35 +25,29 @@ public class EventDataDAO extends BaseDAO<EventDataEntity> {
 	public List<EventDataEntity> findByPersona(Long personaId) {
 		TypedQuery<EventDataEntity> query = entityManager.createNamedQuery("EventDataEntity.findByPersona", EventDataEntity.class);
 		query.setParameter("personaId", personaId);
-		List<EventDataEntity> resultList = query.getResultList();
-		return resultList;
+		return query.getResultList();
 	}
 	
 	public List<EventDataEntity> findByPersonaAndRaceType(Long personaId, Integer type) {
 		TypedQuery<EventDataEntity> query = entityManager.createNamedQuery("EventDataEntity.findByPersonaAndType", EventDataEntity.class);
 		query.setParameter("personaId", personaId);
 		query.setParameter("eventModeID", type);
-		List<EventDataEntity> resultList = query.getResultList();
-		return resultList;
+		return query.getResultList();
 	}
 	
 	public List<EventDataEntity> getRacers(Long eventSessionId) {
 		TypedQuery<EventDataEntity> query = entityManager.createNamedQuery("EventDataEntity.getRacers", EventDataEntity.class);
 		query.setParameter("eventSessionId", eventSessionId);
-		List<EventDataEntity> resultList = query.getResultList();
-		return resultList;
+		return query.getResultList();
 	}
 	
 	public EventDataEntity findByPersonaAndEventSessionId(Long personaId, Long eventSessionId) {
 		TypedQuery<EventDataEntity> query = entityManager.createNamedQuery("EventDataEntity.findByPersonaAndEventSessionId", EventDataEntity.class);
 		query.setParameter("personaId", personaId);
 		query.setParameter("eventSessionId", eventSessionId);
+		
 		List<EventDataEntity> resultList = query.getResultList();
-		EventDataEntity eventDataEntity = new EventDataEntity();
-		if(resultList != null && !resultList.isEmpty()){
-			eventDataEntity = resultList.get(0);
-		}
-		return eventDataEntity;
+		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 
 }

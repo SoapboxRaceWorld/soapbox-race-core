@@ -25,12 +25,9 @@ public class InviteTicketDAO extends BaseDAO<InviteTicketEntity> {
 	public InviteTicketEntity findByTicket(String ticket) {
 		TypedQuery<InviteTicketEntity> query = entityManager.createNamedQuery("InviteTicketEntity.findByTicket", InviteTicketEntity.class);
 		query.setParameter("ticket", ticket);
+		
 		List<InviteTicketEntity> resultList = query.getResultList();
-		InviteTicketEntity inviteTicketEntity = new InviteTicketEntity();
-		if (resultList != null && !resultList.isEmpty()) {
-			inviteTicketEntity = resultList.get(0);
-		}
-		return inviteTicketEntity;
+		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 
 }

@@ -34,25 +34,26 @@ public class BasketBO {
 	}
 
 	public boolean buyCar(String productId, Long personaId) {
-		if (getPersonaCarCount(personaId) < 6) {
-			OwnedCarTrans car = getCar(productId);
-			// clear car parts to avoid other safehouse menus----
-			car.getCustomCar().setVinyls(new ArrayOfCustomVinylTrans());
-			// car.getCustomCar().setPaints(new ArrayOfCustomPaintTrans());
-			car.getCustomCar().setSkillModParts(new ArrayOfSkillModPartTrans());
-			car.getCustomCar().setPerformanceParts(new ArrayOfPerformancePartTrans());
-			car.getCustomCar().setVisualParts(new ArrayOfVisualPartTrans());
-			// ----clear car parts to avoid other safehouse menus
-			String carXml = MarshalXML.marshal(car);
-			CarSlotEntity carSlotEntity = new CarSlotEntity();
-			PersonaEntity personaEntity = new PersonaEntity();
-			personaEntity.setPersonaId(personaId);
-			carSlotEntity.setPersona(personaEntity);
-			carSlotEntity.setOwnedCarTrans(carXml);
-			carSlotDAO.insert(carSlotEntity);
-			return true;
+		if(getPersonaCarCount(personaId) >= 6) {
+			return false;
 		}
-		return false;
+		
+		OwnedCarTrans car = getCar(productId);
+		// clear car parts to avoid other safehouse menus----
+		car.getCustomCar().setVinyls(new ArrayOfCustomVinylTrans());
+		// car.getCustomCar().setPaints(new ArrayOfCustomPaintTrans());
+		car.getCustomCar().setSkillModParts(new ArrayOfSkillModPartTrans());
+		car.getCustomCar().setPerformanceParts(new ArrayOfPerformancePartTrans());
+		car.getCustomCar().setVisualParts(new ArrayOfVisualPartTrans());
+		// ----clear car parts to avoid other safehouse menus
+		String carXml = MarshalXML.marshal(car);
+		CarSlotEntity carSlotEntity = new CarSlotEntity();
+		PersonaEntity personaEntity = new PersonaEntity();
+		personaEntity.setPersonaId(personaId);
+		carSlotEntity.setPersona(personaEntity);
+		carSlotEntity.setOwnedCarTrans(carXml);
+		carSlotDAO.insert(carSlotEntity);		
+		return true;
 	}
 
 	private int getPersonaCarCount(Long personaId) {
@@ -65,12 +66,15 @@ public class BasketBO {
 
 	public boolean sellCar(Long personaId, Long serialNumber) {
 		CarSlotEntity carSlotEntity = carSlotDAO.findById(serialNumber);
+		if(carSlotEntity == null) {
+			return false;
+		}
+		
 		int personaCarCount = getPersonaCarCount(personaId);
 		if (personaCarCount > 1) {
 			carSlotDAO.delete(carSlotEntity);
-			return true;
 		}
-		return false;
+		return true;
 	}
 
 }

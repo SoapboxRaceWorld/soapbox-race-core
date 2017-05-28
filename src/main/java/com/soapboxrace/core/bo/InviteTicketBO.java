@@ -14,7 +14,7 @@ public class InviteTicketBO {
 
 	public boolean createTicket(String ticket) {
 		InviteTicketEntity findByTicket = inviteTicketDAO.findByTicket(ticket);
-		if (findByTicket.getTicket() != null) {
+		if (findByTicket != null) {
 			return false;
 		}
 		InviteTicketEntity inviteTicketEntity = new InviteTicketEntity();

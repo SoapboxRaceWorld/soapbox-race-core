@@ -23,8 +23,8 @@ public class EventDAO extends BaseDAO<EventEntity> {
 	}
 
 	public List<EventEntity> findAll() {
-		TypedQuery<EventEntity> createNamedQuery = entityManager.createNamedQuery("EventEntity.findAll", EventEntity.class);
-		return createNamedQuery.getResultList();
+		TypedQuery<EventEntity> query = entityManager.createNamedQuery("EventEntity.findAll", EventEntity.class);
+		return query.getResultList();
 	}
 
 }

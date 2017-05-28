@@ -25,14 +25,12 @@ public class OnlineUsersDAO extends BaseDAO<OnlineUsersEntity> {
 
 	public OnlineUsersEntity findByTime(Date time) {
 		Long timeLong = time.getTime();
+		
 		TypedQuery<OnlineUsersEntity> query = entityManager.createNamedQuery("OnlineUsersEntity.findByTime", OnlineUsersEntity.class);
 		query.setParameter("time", timeLong.intValue());
+		
 		List<OnlineUsersEntity> resultList = query.getResultList();
-		OnlineUsersEntity inviteTicketEntity = new OnlineUsersEntity();
-		if (resultList != null && !resultList.isEmpty()) {
-			inviteTicketEntity = resultList.get(0);
-		}
-		return inviteTicketEntity;
+		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 
 }
