@@ -60,6 +60,12 @@ public class LobbyBO {
 	
 	@EJB
 	private OpenFireRestApiCli xmppRestApiCli;
+	
+	public void joinFastLobby(Long personaId) {
+		List<LobbyEntity> lobbys = lobbyDao.findAllOpen();
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		joinLobby(personaEntity, lobbys);
+	}
 
 	public void joinQueueEvent(Long personaId, int eventId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
