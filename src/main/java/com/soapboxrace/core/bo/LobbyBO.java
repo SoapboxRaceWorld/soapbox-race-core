@@ -57,6 +57,12 @@ public class LobbyBO {
 	
 	@EJB
 	private LobbyEntrantDAO lobbyEntrantDao;
+	
+	public void joinFastLobby(Long personaId) {
+		List<LobbyEntity> lobbys = lobbyDao.findAllOpen();
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		joinLobby(personaEntity, lobbys);
+	}
 
 	public void joinQueueEvent(String securityToken, int eventId) {
 		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);

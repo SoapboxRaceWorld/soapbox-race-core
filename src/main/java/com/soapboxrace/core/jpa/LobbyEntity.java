@@ -22,7 +22,8 @@ import javax.persistence.Transient;
 @Table(name = "LOBBY")
 @NamedQueries({ //
 		@NamedQuery(name = "LobbyEntity.findAll", query = "SELECT obj FROM UserEntity obj"), //
-		@NamedQuery(name = "LobbyEntity.findByEventStarted", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event = :event and obj.lobbyDateTimeStart between :dateTime1 and :dateTime2") //
+		@NamedQuery(name = "LobbyEntity.findByEventStarted", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event = :event and obj.lobbyDateTimeStart between :dateTime1 and :dateTime2"), //
+		@NamedQuery(name = "LobbyEntity.findAllOpen", query = "SELECT obj FROM LobbyEntity obj WHERE obj.lobbyDateTimeStart between :dateTime1 and :dateTime2") //
 })
 public class LobbyEntity {
 

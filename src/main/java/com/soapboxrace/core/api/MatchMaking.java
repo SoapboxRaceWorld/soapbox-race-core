@@ -35,7 +35,9 @@ public class MatchMaking {
 	@Secured
 	@Path("/joinqueueracenow")
 	@Produces(MediaType.APPLICATION_XML)
-	public String joinQueueRaceNow() {
+	public String joinQueueRaceNow(@HeaderParam("securityToken") String securityToken) {
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		lobbyBO.joinFastLobby(activePersonaId);
 		return "";
 	}
 
