@@ -85,17 +85,21 @@ public class DriverPersonaBO {
 		lobbyEntrantDAO.deleteByPersona(personaEntity);
 		personaDao.delete(personaEntity);
 	}
-	
+
 	public PersonaPresence getPersonaPresenceByName(String name) {
 		PersonaEntity personaEntity = personaDao.findByName(name);
-		if(personaEntity != null) {
+		if (personaEntity != null) {
 			PersonaPresence personaPresence = new PersonaPresence();
 			personaPresence.setPersonaId(personaEntity.getPersonaId());
 			personaPresence.setPresence(1);
 			personaPresence.setUserId(personaEntity.getUser().getId());
 			return personaPresence;
 		}
-		return null;
+		PersonaPresence personaPresence = new PersonaPresence();
+		personaPresence.setPersonaId(0);
+		personaPresence.setPresence(0);
+		personaPresence.setUserId(0);
+		return personaPresence;
 	}
 
 }

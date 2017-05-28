@@ -21,13 +21,13 @@ public class PersonaDAO extends BaseDAO<PersonaEntity> {
 	public PersonaEntity findById(Long id) {
 		return entityManager.find(PersonaEntity.class, id);
 	}
-	
+
 	public PersonaEntity findByName(String name) {
 		TypedQuery<PersonaEntity> query = entityManager.createNamedQuery("PersonaEntity.findByName", PersonaEntity.class);
 		query.setParameter("name", name);
 		List<PersonaEntity> resultList = query.getResultList();
-		PersonaEntity personaEntity = new PersonaEntity();
-		if(resultList != null && !resultList.isEmpty()){
+		PersonaEntity personaEntity = null;
+		if (resultList != null && !resultList.isEmpty()) {
 			personaEntity = resultList.get(0);
 		}
 		return personaEntity;
