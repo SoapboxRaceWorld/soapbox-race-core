@@ -35,7 +35,9 @@ public class MatchMaking {
 	@Secured
 	@Path("/joinqueueracenow")
 	@Produces(MediaType.APPLICATION_XML)
-	public String joinQueueRaceNow() {
+	public String joinQueueRaceNow(@HeaderParam("securityToken") String securityToken) {
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		lobbyBO.joinFastLobby(activePersonaId);
 		return "";
 	}
 
@@ -44,7 +46,8 @@ public class MatchMaking {
 	@Path("/joinqueueevent/{eventId}")
 	@Produces(MediaType.APPLICATION_XML)
 	public String joinQueueEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
-		lobbyBO.joinQueueEvent(securityToken, eventId);
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		lobbyBO.joinQueueEvent(activePersonaId, eventId);
 		return "";
 	}
 
@@ -92,7 +95,9 @@ public class MatchMaking {
 	@Secured
 	@Path("/makeprivatelobby/{eventId}")
 	@Produces(MediaType.APPLICATION_XML)
-	public String makePrivateLobby(@PathParam("eventId") int eventId) {
+	public String makePrivateLobby(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		lobbyBO.createPrivateLobby(activePersonaId, eventId);
 		return "";
 	}
 

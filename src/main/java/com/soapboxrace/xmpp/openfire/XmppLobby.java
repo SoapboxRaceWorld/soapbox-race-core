@@ -68,5 +68,9 @@ public class XmppLobby {
 			openFireSoapBoxCli.send(responseType, personaId);
 		}
 	}
+	
+	public void sendLobbyInvite(XMPP_LobbyInviteType lobbyInviteType) {
+		openFireSoapBoxCli.send(lobbyInviteType, personaId);
+	}
 
 }
