@@ -3,11 +3,13 @@ package com.soapboxrace.jaxb.xmpp;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XMPP_LobbyInviteType", propOrder = { "eventId", "inviteLifetimeInMilliseconds", "invitedByPersonaId",
 		"isPrivate", "lobbyInviteId" })
+@XmlRootElement(name = "LobbyInvite")
 public class XMPP_LobbyInviteType {
 
 	@XmlElement(name = "EventId")
