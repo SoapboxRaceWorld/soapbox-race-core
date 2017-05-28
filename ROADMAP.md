@@ -1,4 +1,4 @@
 - Private lobby racing.
 - Search all available lobbies.
-- Powerups at store, to avoid powerup console reset.
-- Block buy new car slots button in safehouse
+- Friend List (add/delete)
+- make cardealer work (for start class E cars with carslot blocking)

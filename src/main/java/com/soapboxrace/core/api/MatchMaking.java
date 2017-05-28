@@ -64,7 +64,9 @@ public class MatchMaking {
 	public String leavelobby(@HeaderParam("securityToken") String securityToken) {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
 		Long activeLobbyId = tokenSessionBO.getActiveLobbyId(securityToken);
-		lobbyBO.deleteLobbyEntrant(activePersonaId, activeLobbyId);
+		if(activeLobbyId != null && !activeLobbyId.equals(0L)){
+			lobbyBO.deleteLobbyEntrant(activePersonaId, activeLobbyId);
+		}
 		return "";
 	}
 
@@ -72,7 +74,7 @@ public class MatchMaking {
 	@Secured
 	@Path("/launchevent/{eventId}")
 	@Produces(MediaType.APPLICATION_XML)
-	public SessionInfo launchEvent(@PathParam("eventId") int eventId) {
+	public SessionInfo launchEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
 		SessionInfo sessionInfo = new SessionInfo();
 		SecurityChallenge securityChallenge = new SecurityChallenge();
 		securityChallenge.setChallengeId("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -83,6 +85,7 @@ public class MatchMaking {
 		sessionInfo.setEventId(eventId);
 		EventSessionEntity createEventSession = eventBO.createEventSession(eventId);
 		sessionInfo.setSessionId(createEventSession.getId());
+		tokenSessionBO.setActiveLobbyId(securityToken, 0L);
 		return sessionInfo;
 	}
 
