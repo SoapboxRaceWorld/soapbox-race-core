@@ -66,14 +66,12 @@ public class BasketBO {
 
 	public boolean sellCar(Long personaId, Long serialNumber) {
 		CarSlotEntity carSlotEntity = carSlotDAO.findById(serialNumber);
-		if(carSlotEntity == null) {
+		int personaCarCount = getPersonaCarCount(personaId);
+		if(carSlotEntity == null || personaCarCount <= 1) {
 			return false;
 		}
-		
-		int personaCarCount = getPersonaCarCount(personaId);
-		if (personaCarCount > 1) {
-			carSlotDAO.delete(carSlotEntity);
-		}
+
+		carSlotDAO.delete(carSlotEntity);
 		return true;
 	}
 
