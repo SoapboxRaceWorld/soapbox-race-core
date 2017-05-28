@@ -1,42 +1,49 @@
 package com.soapboxrace.core.api;
 
 import java.io.InputStream;
+import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.BasketBO;
+import com.soapboxrace.core.bo.PersonaBO;
+import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
-import com.soapboxrace.jaxb.http.ArrayOfCustomPaintTrans;
-import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
-import com.soapboxrace.jaxb.http.ArrayOfPerformancePartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
-import com.soapboxrace.jaxb.http.ArrayOfSkillModPartTrans;
-import com.soapboxrace.jaxb.http.ArrayOfVisualPartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfWalletTrans;
 import com.soapboxrace.jaxb.http.BasketTrans;
 import com.soapboxrace.jaxb.http.CarSlotInfoTrans;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceResultTrans;
-import com.soapboxrace.jaxb.http.CustomCarTrans;
-import com.soapboxrace.jaxb.http.CustomPaintTrans;
 import com.soapboxrace.jaxb.http.InvalidBasketTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.ProductTrans;
 import com.soapboxrace.jaxb.http.WalletTrans;
+import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Path("/personas")
 public class Personas {
+
+	@EJB
+	private BasketBO basketBO;
+
+	@EJB
+	private PersonaBO personaBO;
 
 	@POST
 	@Secured
@@ -60,14 +67,22 @@ public class Personas {
 		commerceResultTrans.setInvalidBasket(new InvalidBasketTrans());
 		commerceResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
 
-		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = getArrayOfOwnedCarTransExample();
-		commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
-		commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
+		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 
 		BasketTrans basketTrans = (BasketTrans) UnmarshalXML.unMarshal(basketXml, BasketTrans.class);
 		String productId = basketTrans.getItems().getBasketItemTrans().get(0).getProductId();
 		if ("SRV-GARAGESLOT".equals(productId)) {
 			commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
+		} else {
+			arrayOfOwnedCarTrans.getOwnedCarTrans().add(new OwnedCarTrans());
+			commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
+
+			if (basketBO.buyCar(productId, personaId)) {
+				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
+			} else {
+				commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS);
+			}
+
 		}
 		return commerceResultTrans;
 	}
@@ -77,11 +92,20 @@ public class Personas {
 	@Path("/{personaId}/carslots")
 	@Produces(MediaType.APPLICATION_XML)
 	public CarSlotInfoTrans carslots(@PathParam(value = "personaId") Long personaId) {
+		PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
+		List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
+		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
+		for (CarSlotEntity carSlotEntity : personasCar) {
+			String ownedCarTransXml = carSlotEntity.getOwnedCarTrans();
+			OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
+			ownedCarTrans.setId(carSlotEntity.getId());
+			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
+		}
 		CarSlotInfoTrans carSlotInfoTrans = new CarSlotInfoTrans();
-		carSlotInfoTrans.setCarsOwnedByPersona(getArrayOfOwnedCarTransExample());
-		carSlotInfoTrans.setDefaultOwnedCarIndex(0);
+		carSlotInfoTrans.setCarsOwnedByPersona(arrayOfOwnedCarTrans);
+		carSlotInfoTrans.setDefaultOwnedCarIndex(personaEntity.getCurCarIndex());
 		carSlotInfoTrans.setObtainableSlots(new ArrayOfProductTrans());
-		carSlotInfoTrans.setOwnedCarSlotsCount(1);
+		carSlotInfoTrans.setOwnedCarSlotsCount(6);
 		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
 		ProductTrans productTrans = new ProductTrans();
 		productTrans.setBundleItems(new ArrayOfProductTrans());
@@ -143,76 +167,16 @@ public class Personas {
 		return inventoryItemTrans;
 	}
 
-	private CustomPaintTrans getCustomPaintTrans(int slot) {
-		CustomPaintTrans customPaintTrans = new CustomPaintTrans();
-		customPaintTrans.setGroup(47885063);
-		customPaintTrans.setHue(496032328);
-		customPaintTrans.setSat(0);
-		customPaintTrans.setVar(0);
-		customPaintTrans.setSlot(slot);
-		return customPaintTrans;
-	}
-
-	private ArrayOfCustomPaintTrans getArrayOfCustomPaintTrans() {
-		ArrayOfCustomPaintTrans arrayOfCustomPaintTrans = new ArrayOfCustomPaintTrans();
-		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(0));
-		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(3));
-		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(4));
-		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(5));
-		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(6));
-		arrayOfCustomPaintTrans.getCustomPaintTrans().add(getCustomPaintTrans(7));
-		return arrayOfCustomPaintTrans;
-	}
-
-	private OwnedCarTrans getOwnedCarTransExample() {
-		CustomCarTrans customCarTrans = new CustomCarTrans();
-		customCarTrans.setId(12345678);
-		customCarTrans.setBaseCar(12345678);
-		customCarTrans.setIsPreset(true);
-		customCarTrans.setCarClassHash(872416321);
-		customCarTrans.setName("240sx");
-		customCarTrans.setPhysicsProfileHash(-1469109252);
-		customCarTrans.setSkillModSlotCount(5);
-
-		customCarTrans.setPaints(getArrayOfCustomPaintTrans());
-		customCarTrans.setPerformanceParts(new ArrayOfPerformancePartTrans());
-		customCarTrans.setRating(224);
-		customCarTrans.setResalePrice(65000);
-		customCarTrans.setRideHeightDrop(0);
-		customCarTrans.setSkillModParts(new ArrayOfSkillModPartTrans());
-		customCarTrans.setVinyls(new ArrayOfCustomVinylTrans());
-		customCarTrans.setVisualParts(new ArrayOfVisualPartTrans());
-		OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
-		ownedCarTrans.setCustomCar(customCarTrans);
-		ownedCarTrans.setId(123456L);
-		ownedCarTrans.setDurability((short) 100);
-		ownedCarTrans.setExpirationDate(null);
-		ownedCarTrans.setHeat(0F);
-		ownedCarTrans.setOwnershipType("PresetCar");
-
-		return ownedCarTrans;
-	}
-
-	private ArrayOfOwnedCarTrans getArrayOfOwnedCarTransExample() {
-		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
-		arrayOfOwnedCarTrans.getOwnedCarTrans().add(getOwnedCarTransExample());
-		return arrayOfOwnedCarTrans;
-	}
-
-	@PUT
-	@Secured
-	@Path("/{personaId}/defaultcar/{carId}")
-	@Produces(MediaType.APPLICATION_XML)
-	public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId) {
-		return "";
-	}
-
 	@POST
 	@Secured
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfOwnedCarTrans carsPost(@PathParam(value = "personaId") Long personaId) {
-		return getArrayOfOwnedCarTransExample();
+	public String carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber) {
+		if (basketBO.sellCar(personaId, serialNumber)) {
+			OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
+			return MarshalXML.marshal(ownedCarTrans);
+		}
+		return "";
 	}
 
 	@GET
@@ -220,7 +184,14 @@ public class Personas {
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfOwnedCarTrans carsGet(@PathParam(value = "personaId") Long personaId) {
-		return getArrayOfOwnedCarTransExample();
+		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
+		List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
+		for (CarSlotEntity carSlotEntity : personasCar) {
+			String ownedCarTransXml = carSlotEntity.getOwnedCarTrans();
+			OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
+			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
+		}
+		return arrayOfOwnedCarTrans;
 	}
 
 	@GET
@@ -228,7 +199,17 @@ public class Personas {
 	@Path("/{personaId}/defaultcar")
 	@Produces(MediaType.APPLICATION_XML)
 	public OwnedCarTrans defaultcarGet(@PathParam(value = "personaId") Long personaId) {
-		return getOwnedCarTransExample();
+		OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
+		return ownedCarTrans;
+	}
+
+	@PUT
+	@Secured
+	@Path("/{personaId}/defaultcar/{carId}")
+	@Produces(MediaType.APPLICATION_XML)
+	public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId) {
+		personaBO.changeDefaultCar(personaId, carId);
+		return "";
 	}
 
 }
