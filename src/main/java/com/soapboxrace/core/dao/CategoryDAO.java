@@ -23,7 +23,7 @@ public class CategoryDAO extends BaseDAO<CategoryEntity> {
 	}
 
 	public List<CategoryEntity> getAll() {
-		TypedQuery<CategoryEntity> query = entityManager.createNamedQuery("CategoryEntity.findByCategoryName", CategoryEntity.class);
+		TypedQuery<CategoryEntity> query = entityManager.createNamedQuery("CategoryEntity.getAll", CategoryEntity.class);
 		return query.getResultList();
 	}
 

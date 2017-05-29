@@ -11,9 +11,11 @@ import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.ProductBO;
+import com.soapboxrace.core.jpa.CategoryEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCategoryTrans;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
+import com.soapboxrace.jaxb.http.CategoryTrans;
 import com.soapboxrace.jaxb.http.ProductTrans;
 
 @Path("/catalog")
@@ -52,6 +54,25 @@ public class Catalog {
 	@Path("/categories")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfCategoryTrans categories() {
-		return new ArrayOfCategoryTrans();
+		ArrayOfCategoryTrans arrayOfCategoryTrans = new ArrayOfCategoryTrans();
+		List<CategoryEntity> listCategoryEntity = productBO.categories();
+		for(CategoryEntity entity : listCategoryEntity) {
+			CategoryTrans categoryTrans = new CategoryTrans();
+			categoryTrans.setCatalogVersion(Integer.parseInt(entity.getCatalogVersion()));
+			categoryTrans.setDisplayName(entity.getDisplayName());
+			categoryTrans.setFilterType(entity.getFilterType());
+			categoryTrans.setIcon(entity.getIcon());
+			categoryTrans.setId(entity.getIdentifiant().toString());
+			categoryTrans.setLongDescription(entity.getLongDescription());
+			categoryTrans.setName(entity.getName());
+			categoryTrans.setPriority(entity.getPriority());
+			categoryTrans.setProducts(productBO.getVinylByCategory(entity));
+			categoryTrans.setShortDescription(entity.getShortDescription());
+			categoryTrans.setShowInNavigationPane(entity.getShowInNavigationPane());
+			categoryTrans.setShowPromoPage(entity.getShowPromoPage());
+			categoryTrans.setWebIcon(entity.getWebIcon());
+			arrayOfCategoryTrans.getCategoryTrans().add(categoryTrans);
+		}
+		return arrayOfCategoryTrans;
 	}
 }

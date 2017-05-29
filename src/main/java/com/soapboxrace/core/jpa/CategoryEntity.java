@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CATEGORY")
 @NamedQueries({ //
-	@NamedQuery(name = "CategoryEntity.findByCategoryName", query = "SELECT obj FROM CategoryEntity obj") //
+	@NamedQuery(name = "CategoryEntity.getAll", query = "SELECT obj FROM CategoryEntity obj") //
 })
 public class CategoryEntity {
 
@@ -82,6 +82,13 @@ public class CategoryEntity {
 	}
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+	
+	public Long getIdentifiant() {
+		return id;
+	}
+	public void setIdentifiant(Long id) {
+		this.id = id;		
 	}
 
 	public String getLongDescription() {

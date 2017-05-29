@@ -13,8 +13,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "VINYLPRODUCT")
 @NamedQueries({ //
-	@NamedQuery(name = "VinylProductEntity.findByCategoryName", query = "SELECT obj FROM VinylProductEntity obj WHERE obj.categoryName = :categoryName"), //
-	@NamedQuery(name = "VinylProductEntity.findByProductId", query = "SELECT obj FROM VinylProductEntity obj WHERE obj.productId = :productId") //
+	@NamedQuery(name = "VinylProductEntity.findByProductId", query = "SELECT obj FROM VinylProductEntity obj WHERE obj.productId = :productId"), //
+	@NamedQuery(name = "VinylProductEntity.findByCategoryLevelEnabled", query = "SELECT obj FROM VinylProductEntity obj WHERE obj.category = :category AND obj.minLevel >= :minLevel AND obj.enabled = :enabled") //
 })
 public class VinylProductEntity {
 

@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.jpa.CategoryEntity;
 import com.soapboxrace.core.jpa.VinylProductEntity;
 
 @Stateless
@@ -21,12 +22,6 @@ public class VinylProductDAO extends BaseDAO<VinylProductEntity> {
 	public VinylProductEntity findById(Long id) {
 		return entityManager.find(VinylProductEntity.class, id);
 	}
-
-	public List<VinylProductEntity> findByCategoryName(String categoryName) {
-		TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByCategoryName", VinylProductEntity.class);
-		query.setParameter("categoryName", categoryName);
-		return query.getResultList();
-	}
 	
 	public VinylProductEntity findByProductId(String productId) {
 		TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByProductId", VinylProductEntity.class);
@@ -34,6 +29,14 @@ public class VinylProductDAO extends BaseDAO<VinylProductEntity> {
 		
 		List<VinylProductEntity> resultList = query.getResultList();
 		return !resultList.isEmpty() ? resultList.get(0) : null;
+	}
+	
+	public List<VinylProductEntity> findByCategoryLevelEnabled(CategoryEntity category, int minLevel, Boolean enabled) {
+		TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByCategoryLevelEnabled", VinylProductEntity.class);
+		query.setParameter("category", category);
+		query.setParameter("enabled", enabled);
+		query.setParameter("minLevel", minLevel);
+		return query.getResultList();
 	}
 
 }
