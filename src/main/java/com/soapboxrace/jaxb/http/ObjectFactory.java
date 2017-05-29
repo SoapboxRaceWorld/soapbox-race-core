@@ -49,6 +49,7 @@ public class ObjectFactory {
     private final static QName _ArrayOfCarClass_QNAME = new QName("", "ArrayOfCarClass");
     private final static QName _PersonaIdArray_QNAME = new QName("", "PersonaIdArray");
     private final static QName _ArrayOfProductTrans_QNAME = new QName("", "ArrayOfProductTrans");
+    private final static QName _EntitlementItemTrans_QNAME = new QName("", "EntitlementItemTrans");
     private final static QName _PersonaFriendsList_QNAME = new QName("", "PersonaFriendsList");
     private final static QName _ProductTrans_QNAME = new QName("", "ProductTrans");
     private final static QName _LobbyEntrantInfo_QNAME = new QName("", "LobbyEntrantInfo");
@@ -71,9 +72,12 @@ public class ObjectFactory {
     private final static QName _TeamEscapeArbitrationPacket_QNAME = new QName("", "TeamEscapeArbitrationPacket");
     private final static QName _OwnedCarTrans_QNAME = new QName("", "OwnedCarTrans");
     private final static QName _PursuitEventResult_QNAME = new QName("", "PursuitEventResult");
+    private final static QName _CommerceSessionTrans_QNAME = new QName("", "CommerceSessionTrans");
+    private final static QName _EntitlementTrans_QNAME = new QName("", "EntitlementTrans");
     private final static QName _HardwareInfo_QNAME = new QName("", "HardwareInfo");
     private final static QName _ArbitrationPacket_QNAME = new QName("", "ArbitrationPacket");
     private final static QName _DragArbitrationPacket_QNAME = new QName("", "DragArbitrationPacket");
+    private final static QName _CommerceSessionResultTrans_QNAME = new QName("", "CommerceSessionResultTrans");
     private final static QName _UserSettings_QNAME = new QName("", "User_Settings");
     private final static QName _PersonaBase_QNAME = new QName("", "PersonaBase");
     private final static QName _ArrayOflong_QNAME = new QName("", "ArrayOflong");
@@ -293,6 +297,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link EntitlementItemTrans }
+     * 
+     */
+    public EntitlementItemTrans createEntitlementItemTrans() {
+        return new EntitlementItemTrans();
+    }
+
+    /**
      * Create an instance of {@link PersonaFriendsList }
      * 
      */
@@ -469,6 +481,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CommerceSessionTrans }
+     * 
+     */
+    public CommerceSessionTrans createCommerceSessionTrans() {
+        return new CommerceSessionTrans();
+    }
+
+    /**
+     * Create an instance of {@link EntitlementTrans }
+     * 
+     */
+    public EntitlementTrans createEntitlementTrans() {
+        return new EntitlementTrans();
+    }
+
+    /**
      * Create an instance of {@link HardwareInfo }
      * 
      */
@@ -490,6 +518,14 @@ public class ObjectFactory {
      */
     public DragArbitrationPacket createDragArbitrationPacket() {
         return new DragArbitrationPacket();
+    }
+
+    /**
+     * Create an instance of {@link CommerceSessionResultTrans }
+     * 
+     */
+    public CommerceSessionResultTrans createCommerceSessionResultTrans() {
+        return new CommerceSessionResultTrans();
     }
 
     /**
@@ -698,6 +734,14 @@ public class ObjectFactory {
      */
     public ArrayOfAchievementRankPacket createArrayOfAchievementRankPacket() {
         return new ArrayOfAchievementRankPacket();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfEntitlementItemTrans }
+     * 
+     */
+    public ArrayOfEntitlementItemTrans createArrayOfEntitlementItemTrans() {
+        return new ArrayOfEntitlementItemTrans();
     }
 
     /**
@@ -1334,6 +1378,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link EntitlementItemTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "EntitlementItemTrans")
+    public JAXBElement<EntitlementItemTrans> createEntitlementItemTrans(EntitlementItemTrans value) {
+        return new JAXBElement<EntitlementItemTrans>(_EntitlementItemTrans_QNAME, EntitlementItemTrans.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PersonaFriendsList }{@code >}}
      * 
      */
@@ -1532,6 +1585,24 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CommerceSessionTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "CommerceSessionTrans")
+    public JAXBElement<CommerceSessionTrans> createCommerceSessionTrans(CommerceSessionTrans value) {
+        return new JAXBElement<CommerceSessionTrans>(_CommerceSessionTrans_QNAME, CommerceSessionTrans.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link EntitlementTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "EntitlementTrans")
+    public JAXBElement<EntitlementTrans> createEntitlementTrans(EntitlementTrans value) {
+        return new JAXBElement<EntitlementTrans>(_EntitlementTrans_QNAME, EntitlementTrans.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link HardwareInfo }{@code >}}
      * 
      */
@@ -1556,6 +1627,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "DragArbitrationPacket")
     public JAXBElement<DragArbitrationPacket> createDragArbitrationPacket(DragArbitrationPacket value) {
         return new JAXBElement<DragArbitrationPacket>(_DragArbitrationPacket_QNAME, DragArbitrationPacket.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CommerceSessionResultTrans }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "CommerceSessionResultTrans")
+    public JAXBElement<CommerceSessionResultTrans> createCommerceSessionResultTrans(CommerceSessionResultTrans value) {
+        return new JAXBElement<CommerceSessionResultTrans>(_CommerceSessionResultTrans_QNAME, CommerceSessionResultTrans.class, null, value);
     }
 
     /**

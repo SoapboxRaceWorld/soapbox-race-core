@@ -53,4 +53,9 @@
   <xs:include schemaLocation="UdpRelayCryptoTicket.xsd" />
   <xs:include schemaLocation="LobbyEntrantRemoved.xsd" />
   <xs:include schemaLocation="PersonaPresence.xsd" />
+  <xs:include schemaLocation="CommerceSessionResultTrans.xsd" />
+  <xs:include schemaLocation="CommerceSessionTrans.xsd" />
+  <xs:include schemaLocation="ArrayOfEntitlementItemTrans.xsd" />
+  <xs:include schemaLocation="EntitlementItemTrans.xsd" />
+  <xs:include schemaLocation="EntitlementTrans.xsd" />
 </xs:schema>
