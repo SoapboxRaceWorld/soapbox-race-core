@@ -6,7 +6,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.jaxb.annotation.XsiSchemaLocation;
 import com.soapboxrace.jaxb.http.ArrayOfLoginAnnouncementDefinition;
 import com.soapboxrace.jaxb.http.LoginAnnouncementContext;
 import com.soapboxrace.jaxb.http.LoginAnnouncementDefinition;
@@ -19,7 +18,6 @@ public class LoginAnnouncements {
 	@GET
 	@Secured
 	@Produces(MediaType.APPLICATION_XML)
-	@XsiSchemaLocation(schemaLocation = "http://schemas.datacontract.org/2004/07/Victory.DataLayer.Serialization.LoginAnnouncement")
 	public LoginAnnouncementsDefinition loginAnnouncements() {
 		LoginAnnouncementsDefinition loginAnnouncementsDefinition = new LoginAnnouncementsDefinition();
 		ArrayOfLoginAnnouncementDefinition arrayOfLoginAnnouncementDefinition = new ArrayOfLoginAnnouncementDefinition();
