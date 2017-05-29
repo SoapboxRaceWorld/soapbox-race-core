@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.BasketBO;
+import com.soapboxrace.core.bo.CommerceBO;
 import com.soapboxrace.core.bo.PersonaBO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
@@ -27,6 +28,8 @@ import com.soapboxrace.jaxb.http.BasketTrans;
 import com.soapboxrace.jaxb.http.CarSlotInfoTrans;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceResultTrans;
+import com.soapboxrace.jaxb.http.CommerceSessionResultTrans;
+import com.soapboxrace.jaxb.http.CommerceSessionTrans;
 import com.soapboxrace.jaxb.http.InvalidBasketTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
@@ -44,6 +47,38 @@ public class Personas {
 
 	@EJB
 	private PersonaBO personaBO;
+	
+	@EJB
+	private CommerceBO commerceBO;
+	
+	@POST
+	@Secured
+	@Path("/{personaId}/commerce")
+	@Produces(MediaType.APPLICATION_XML)
+	public CommerceSessionResultTrans commerce(InputStream commerceXml, @PathParam(value = "personaId") Long personaId) {
+		CommerceSessionResultTrans commerceSessionResultTrans = new CommerceSessionResultTrans();
+		
+		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(new InventoryItemTrans());
+
+		WalletTrans walletTrans = new WalletTrans();
+		walletTrans.setBalance(5000000);
+		walletTrans.setCurrency("CASH");
+
+		ArrayOfWalletTrans arrayOfWalletTrans = new ArrayOfWalletTrans();
+		arrayOfWalletTrans.getWalletTrans().add(walletTrans);
+
+		CommerceSessionTrans commerceSessionTrans = (CommerceSessionTrans) UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
+		commerceBO.updateCar(commerceSessionTrans, personaId);
+		
+		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
+		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
+		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
+		commerceSessionResultTrans.setUpdatedCar(commerceBO.responseCar(commerceSessionTrans));
+		commerceSessionResultTrans.setStatus(CommerceResultStatus.SUCCESS);
+
+		return commerceSessionResultTrans;
+	}
 
 	@POST
 	@Secured
