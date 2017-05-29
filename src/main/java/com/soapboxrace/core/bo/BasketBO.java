@@ -10,10 +10,6 @@ import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.jpa.BasketDefinitionEntity;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
-import com.soapboxrace.jaxb.http.ArrayOfPerformancePartTrans;
-import com.soapboxrace.jaxb.http.ArrayOfSkillModPartTrans;
-import com.soapboxrace.jaxb.http.ArrayOfVisualPartTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
@@ -39,13 +35,6 @@ public class BasketBO {
 		}
 		
 		OwnedCarTrans car = getCar(productId);
-		// clear car parts to avoid other safehouse menus----
-		car.getCustomCar().setVinyls(new ArrayOfCustomVinylTrans());
-		// car.getCustomCar().setPaints(new ArrayOfCustomPaintTrans());
-		car.getCustomCar().setSkillModParts(new ArrayOfSkillModPartTrans());
-		car.getCustomCar().setPerformanceParts(new ArrayOfPerformancePartTrans());
-		car.getCustomCar().setVisualParts(new ArrayOfVisualPartTrans());
-		// ----clear car parts to avoid other safehouse menus
 		String carXml = MarshalXML.marshal(car);
 		CarSlotEntity carSlotEntity = new CarSlotEntity();
 		PersonaEntity personaEntity = new PersonaEntity();
