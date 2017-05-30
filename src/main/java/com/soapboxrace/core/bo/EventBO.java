@@ -8,8 +8,10 @@ import javax.ejb.Stateless;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
@@ -48,9 +50,13 @@ public class EventBO {
 	
 	@EJB
 	private EventDataDAO eventDataDao;
+	
+	@EJB
+	private PersonaDAO personaDao;
 
-	public List<EventEntity> availableAtLevel() {
-		return eventDao.findByLevel(70);
+	public List<EventEntity> availableAtLevel(Long personaId) {
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		return eventDao.findByLevel(personaEntity.getLevel());
 	}
 	
 	public void createEventDataSession(Long personaId, Long eventSessionId) {

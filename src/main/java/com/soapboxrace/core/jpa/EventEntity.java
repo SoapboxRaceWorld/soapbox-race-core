@@ -24,6 +24,11 @@ public class EventEntity {
 
 	private int eventModeId;
 	private int minLevel;
+	private int maxLevel;
+	private int minCarClassRating;
+	private int maxCarClassRating;
+	private boolean isEnabled;
+	private boolean isLocked;
 
 	public int getId() {
 		return id;
@@ -47,6 +52,46 @@ public class EventEntity {
 	
 	public void setMinLevel(int minLevel) {
 		this.minLevel = minLevel;
+	}
+	
+	public int getMaxLevel() {
+		return maxLevel;
+	}
+	
+	public void setMaxLevel(int maxLevel) {
+		this.maxLevel = maxLevel;
+	}
+	
+	public int getMinCarClassRating() {
+		return minCarClassRating;
+	}
+	
+	public void setMinCarClassRating(int minCarClassRating) {
+		this.minCarClassRating = minCarClassRating;
+	}
+	
+	public int getMaxCarClassRating() {
+		return maxCarClassRating;
+	}
+	
+	public void setMaxCarClassRating(int maxCarClassRating) {
+		this.maxCarClassRating = maxCarClassRating;
+	}
+	
+	public boolean getIsEnabled() {
+		return isEnabled;
+	}
+	
+	public void setIsEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+	
+	public boolean getIsLocked() {
+		return isLocked;
+	}
+	
+	public void setIsLocked(boolean isLocked) {
+		this.isLocked = isLocked;
 	}
 
 }

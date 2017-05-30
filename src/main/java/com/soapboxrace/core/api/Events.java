@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.EventBO;
+import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.jaxb.http.ArrayOfEventDefinition;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
@@ -24,23 +26,28 @@ public class Events {
 
 	@EJB
 	private EventBO eventBO;
+	
+	@EJB
+	private TokenSessionBO tokenSessionBO;
 
 	@GET
 	@Secured
 	@Path("/availableatlevel")
 	@Produces(MediaType.APPLICATION_XML)
-	public EventsPacket availableAtLevel() {
+	public EventsPacket availableAtLevel(@HeaderParam("securityToken") String securityToken) {
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		
 		EventsPacket eventsPacket = new EventsPacket();
 		ArrayOfEventDefinition arrayOfEventDefinition = new ArrayOfEventDefinition();
-		List<EventEntity> availableAtLevel = eventBO.availableAtLevel();
+		List<EventEntity> availableAtLevel = eventBO.availableAtLevel(activePersonaId);
 		for (EventEntity eventEntity : availableAtLevel) {
-			arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(eventEntity.getId()));
+			arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(eventEntity));
 		}
 		eventsPacket.setEvents(arrayOfEventDefinition);
 		return eventsPacket;
 	}
 
-	private EventDefinition getEventDefinitionWithId(int eventId) {
+	private EventDefinition getEventDefinitionWithId(EventEntity eventEntity) {
 		EventDefinition eventDefinition = new EventDefinition();
 		eventDefinition.setCarClassHash(607077938);
 		eventDefinition.setCoins(0);
@@ -49,22 +56,22 @@ public class Events {
 		vector3.setY(0);
 		vector3.setZ(0);
 		eventDefinition.setEngagePoint(vector3);
-		eventDefinition.setEventId(eventId);
+		eventDefinition.setEventId(eventEntity.getId());
 		eventDefinition.setEventLocalization(953953223);
 		eventDefinition.setEventModeDescriptionLocalization(1204604434);
 		eventDefinition.setEventModeIcon("GameModeIcon_Sprint");
-		eventDefinition.setEventModeId(9);
+		eventDefinition.setEventModeId(eventEntity.getEventModeId());
 		eventDefinition.setEventModeLocalization(-1152300457);
-		eventDefinition.setIsEnabled(true);
-		eventDefinition.setIsLocked(false);
+		eventDefinition.setIsEnabled(eventEntity.getIsEnabled());
+		eventDefinition.setIsLocked(eventEntity.getIsLocked());
 		eventDefinition.setLaps(0);
 		eventDefinition.setLength(0);
-		eventDefinition.setMaxClassRating(999);
+		eventDefinition.setMaxClassRating(eventEntity.getMaxCarClassRating());
 		eventDefinition.setMaxEntrants(2);
-		eventDefinition.setMaxLevel(70);
-		eventDefinition.setMinClassRating(0);
+		eventDefinition.setMaxLevel(eventEntity.getMaxLevel());
+		eventDefinition.setMinClassRating(eventEntity.getMinCarClassRating());
 		eventDefinition.setMinEntrants(2);
-		eventDefinition.setMinLevel(2);
+		eventDefinition.setMinLevel(eventEntity.getMinLevel());
 		eventDefinition.setRegionLocalization(0);
 		eventDefinition.setRewardModes(new ArrayOfInt());
 		eventDefinition.setTimeLimit(0);
