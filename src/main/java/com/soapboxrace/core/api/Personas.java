@@ -228,6 +228,15 @@ public class Personas {
 		}
 		return arrayOfOwnedCarTrans;
 	}
+	
+	@PUT
+	@Secured
+	@Path("/{personaId}/cars")
+	@Produces(MediaType.APPLICATION_XML)
+	public String carsPut(@PathParam(value = "personaId") Long personaId) {
+		OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
+		return MarshalXML.marshal(ownedCarTrans);
+	}
 
 	@GET
 	@Secured
