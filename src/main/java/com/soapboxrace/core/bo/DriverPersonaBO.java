@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.LobbyEntrantDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.UserDAO;
@@ -13,6 +14,7 @@ import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
 import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
 import com.soapboxrace.jaxb.http.PersonaBase;
+import com.soapboxrace.jaxb.http.PersonaPresence;
 import com.soapboxrace.jaxb.http.ProfileData;
 
 @Stateless
@@ -26,6 +28,9 @@ public class DriverPersonaBO {
 
 	@EJB
 	private LobbyEntrantDAO lobbyEntrantDAO;
+
+	@EJB
+	private CarSlotDAO carSlotDAO;
 
 	public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
 		UserEntity userEntity = userDao.findById(userId);
@@ -81,8 +86,22 @@ public class DriverPersonaBO {
 
 	public void deletePersona(Long personaId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
+		carSlotDAO.deleteByPersona(personaEntity);
 		lobbyEntrantDAO.deleteByPersona(personaEntity);
 		personaDao.delete(personaEntity);
+	}
+
+	public PersonaPresence getPersonaPresenceByName(String name) {
+		PersonaEntity personaEntity = personaDao.findByName(name);
+		if (personaEntity == null) {
+			return null;
+		}
+		
+		PersonaPresence personaPresence = new PersonaPresence();
+		personaPresence.setPersonaId(personaEntity.getPersonaId());
+		personaPresence.setPresence(1);
+		personaPresence.setUserId(personaEntity.getUser().getId());
+		return personaPresence;
 	}
 
 }

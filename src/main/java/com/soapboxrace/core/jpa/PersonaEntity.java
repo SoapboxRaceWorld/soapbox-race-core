@@ -8,10 +8,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "PERSONA")
+@NamedQueries({ //
+		@NamedQuery(name = "PersonaEntity.findByName", query = "SELECT obj FROM PersonaEntity obj WHERE obj.name = :name") //
+})
 public class PersonaEntity {
 
 	@Id
@@ -29,8 +34,7 @@ public class PersonaEntity {
 	private double rep;
 	private int repAtCurrentLevel;
 	private int score;
-	// private ArrayOfBadgePacket badges;
-	// private ArrayOfPersonaCCar ccar;
+	private int curCarIndex = 0;
 	@ManyToOne
 	@JoinColumn(name = "USERID", referencedColumnName = "ID")
 	private UserEntity user;
@@ -137,6 +141,14 @@ public class PersonaEntity {
 
 	public void setUser(UserEntity user) {
 		this.user = user;
+	}
+
+	public int getCurCarIndex() {
+		return curCarIndex;
+	}
+
+	public void setCurCarIndex(int curCarIndex) {
+		this.curCarIndex = curCarIndex;
 	}
 
 }

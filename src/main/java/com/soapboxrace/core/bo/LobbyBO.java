@@ -12,6 +12,7 @@ import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.LobbyDAO;
+import com.soapboxrace.core.dao.LobbyEntrantDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.EventEntity;
@@ -19,12 +20,12 @@ import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.LobbyEntrantEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.jaxb.http.ArrayOfLobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.Entrants;
 import com.soapboxrace.jaxb.http.LobbyCountdown;
 import com.soapboxrace.jaxb.http.LobbyEntrantAdded;
 import com.soapboxrace.jaxb.http.LobbyEntrantInfo;
+import com.soapboxrace.jaxb.http.LobbyEntrantRemoved;
 import com.soapboxrace.jaxb.http.LobbyEntrantState;
 import com.soapboxrace.jaxb.http.LobbyInfo;
 import com.soapboxrace.jaxb.xmpp.ChallengeType;
@@ -34,6 +35,7 @@ import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInviteType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyLaunchedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_P2PCryptoTicketType;
 import com.soapboxrace.xmpp.openfire.XmppLobby;
+import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
 
 @Stateless
 public class LobbyBO {
@@ -52,25 +54,63 @@ public class LobbyBO {
 
 	@EJB
 	private LobbyDAO lobbyDao;
+	
+	@EJB
+	private LobbyEntrantDAO lobbyEntrantDao;
+	
+	@EJB
+	private OpenFireRestApiCli xmppRestApiCli;
+	
+	public void joinFastLobby(Long personaId) {
+		List<LobbyEntity> lobbys = lobbyDao.findAllOpen();
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		joinLobby(personaEntity, lobbys);
+	}
 
-	public void joinQueueEvent(String securityToken, int eventId) {
-		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
-		Long activePersonaId = tokenSessionEntity.getActivePersonaId();
-		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
+	public void joinQueueEvent(Long personaId, int eventId) {
+		PersonaEntity personaEntity = personaDao.findById(personaId);
 		List<LobbyEntity> lobbys = lobbyDao.findByEventStarted(eventId);
 		if (lobbys.size() == 0) {
-			createLobby(personaEntity, eventId);
+			createLobby(personaEntity, eventId, false);
 		} else {
 			joinLobby(personaEntity, lobbys);
 		}
 	}
+	
+	public void createPrivateLobby(Long personaId, int eventId) {
+		List<Long> listOfPersona = xmppRestApiCli.getAllPersonaByGroup(personaId);
+		if(!listOfPersona.isEmpty()) {
+			PersonaEntity personaEntity = personaDao.findById(personaId);
+			createLobby(personaEntity, eventId, true);
 
-	private void createLobby(PersonaEntity personaEntity, int eventId) {
+			LobbyEntity lobbys = lobbyDao.findByEventAndPersona(eventId, personaId);
+			
+			XMPP_LobbyInviteType lobbyInviteType = new XMPP_LobbyInviteType();
+			lobbyInviteType.setEventId(eventId);
+			lobbyInviteType.setInvitedByPersonaId(personaId);
+			lobbyInviteType.setInviteLifetimeInMilliseconds(60);
+			lobbyInviteType.setPrivate(true);
+			lobbyInviteType.setLobbyInviteId(lobbys.getId());
+			
+			for(Long idPersona : listOfPersona) {
+				if(idPersona != personaId) {
+					XmppLobby xmppLobby = new XmppLobby(idPersona);
+					xmppLobby.sendLobbyInvite(lobbyInviteType);
+				}
+			}
+		}
+	}
+
+	private void createLobby(PersonaEntity personaEntity, int eventId, Boolean isPrivate) {
 		EventEntity eventEntity = new EventEntity();
 		eventEntity.setId(eventId);
+		
 		LobbyEntity lobbyEntity = new LobbyEntity();
 		lobbyEntity.setEvent(eventEntity);
+		lobbyEntity.setIsPrivate(isPrivate);
+		lobbyEntity.setPersonaId(personaEntity.getPersonaId());
 		lobbyDao.insert(lobbyEntity);
+		
 		sendJoinEvent(personaEntity.getPersonaId(), lobbyEntity);
 		new LobbyCountDown(lobbyEntity.getId(), lobbyDao, eventSessionDao, tokenDAO).start();
 	}
@@ -108,13 +148,15 @@ public class LobbyBO {
 	}
 
 	private void sendJoinEvent(Long personaId, LobbyEntity lobbyEntity) {
-		XMPP_LobbyInviteType xMPP_LobbyInviteType = new XMPP_LobbyInviteType();
 		int eventId = lobbyEntity.getEvent().getId();
-		xMPP_LobbyInviteType.setEventId(eventId);
 		Long lobbyId = lobbyEntity.getId();
+		
+		XMPP_LobbyInviteType xMPP_LobbyInviteType = new XMPP_LobbyInviteType();
+		xMPP_LobbyInviteType.setEventId(eventId);
 		xMPP_LobbyInviteType.setLobbyInviteId(lobbyId);
+		
 		XmppLobby xmppLobby = new XmppLobby(personaId);
-		xmppLobby.joinQueueEvent(xMPP_LobbyInviteType);
+		xmppLobby.sendLobbyInvite(xMPP_LobbyInviteType);
 	}
 
 	public LobbyInfo acceptinvite(Long personaId, Long lobbyInviteId) {
@@ -178,6 +220,26 @@ public class LobbyBO {
 				lobbyEntrantAdded.setLobbyId(lobbyEntrantEntity.getLobby().getId());
 				XmppLobby xmppLobby = new XmppLobby(lobbyEntrantEntity.getPersona().getPersonaId());
 				xmppLobby.sendJoinMsg(lobbyEntrantAdded);
+			}
+		}
+	}
+	
+	public void deleteLobbyEntrant(Long personaId, Long lobbyId) {
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		lobbyEntrantDao.deleteByPersona(personaEntity);
+		updateLobby(personaId, lobbyId);
+	}
+	
+	private void updateLobby(Long personaId, Long lobbyId) {
+		LobbyEntity lobbyEntity = lobbyDao.findById(lobbyId);
+		List<LobbyEntrantEntity> listLobbyEntrantEntity = lobbyEntity.getEntrants();
+		for(LobbyEntrantEntity entity : listLobbyEntrantEntity) {
+			LobbyEntrantRemoved lobbyEntrantRemoved = new LobbyEntrantRemoved();
+			if(entity.getPersona().getPersonaId() != personaId) {
+				lobbyEntrantRemoved.setPersonaId(personaId);
+				lobbyEntrantRemoved.setLobbyId(lobbyId);
+				XmppLobby xmppLobby = new XmppLobby(entity.getPersona().getPersonaId());
+				xmppLobby.sendExitMsg(lobbyEntrantRemoved);
 			}
 		}
 	}

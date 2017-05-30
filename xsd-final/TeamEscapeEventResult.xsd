@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="TeamEscapeEntrantResult.xsd" />
+  <xs:include schemaLocation="EventResult.xsd" />
+  <xs:element name="TeamEscapeEventResult" nillable="true" type="TeamEscapeEventResult" />
+  <xs:complexType name="TeamEscapeEventResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="EventResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="Entrants" type="ArrayOfTeamEscapeEntrantResult" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfTeamEscapeEntrantResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TeamEscapeEntrantResult" nillable="true" type="TeamEscapeEntrantResult" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -25,12 +25,9 @@ public class UserDAO extends BaseDAO<UserEntity> {
 	public UserEntity findByEmail(String email) {
 		TypedQuery<UserEntity> query = entityManager.createNamedQuery("UserEntity.findByEmail", UserEntity.class);
 		query.setParameter("email", email);
+		
 		List<UserEntity> resultList = query.getResultList();
-		UserEntity userEntity = new UserEntity();
-		if(resultList != null && !resultList.isEmpty()){
-			userEntity = resultList.get(0);
-		}
-		return userEntity;
+		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 
 }

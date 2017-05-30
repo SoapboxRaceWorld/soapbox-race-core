@@ -22,7 +22,9 @@ import javax.persistence.Transient;
 @Table(name = "LOBBY")
 @NamedQueries({ //
 		@NamedQuery(name = "LobbyEntity.findAll", query = "SELECT obj FROM UserEntity obj"), //
-		@NamedQuery(name = "LobbyEntity.findByEventStarted", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event = :event and obj.lobbyDateTimeStart between :dateTime1 and :dateTime2") //
+		@NamedQuery(name = "LobbyEntity.findAllOpen", query = "SELECT obj FROM LobbyEntity obj WHERE obj.lobbyDateTimeStart between :dateTime1 and :dateTime2"), //
+		@NamedQuery(name = "LobbyEntity.findByEventStarted", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event = :event AND obj.lobbyDateTimeStart between :dateTime1 AND :dateTime2 AND obj.isPrivate = false"), //
+		@NamedQuery(name = "LobbyEntity.findByEventAndPersona", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event = :event AND obj.lobbyDateTimeStart between :dateTime1 AND :dateTime2 AND obj.isPrivate = true AND obj.personaId = :personaId") //
 })
 public class LobbyEntity {
 
@@ -39,6 +41,10 @@ public class LobbyEntity {
 	private List<LobbyEntrantEntity> entrants;
 
 	private Date lobbyDateTimeStart = new Date();
+	
+	private Boolean isPrivate;
+	
+	private Long personaId;
 
 	@Transient
 	private Long lobbyCountdownInMilliseconds = 60000L;
@@ -73,6 +79,22 @@ public class LobbyEntity {
 
 	public void setLobbyDateTimeStart(Date lobbyDateTimeStart) {
 		this.lobbyDateTimeStart = lobbyDateTimeStart;
+	}
+	
+	public Boolean getIsPrivate() {
+		return isPrivate;
+	}
+	
+	public void setIsPrivate(Boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
+	
+	public Long getPersonaId() {
+		return personaId;
+	}
+	
+	public void setPersonaId(Long personaId) {
+		this.personaId = personaId;
 	}
 
 	public boolean add(LobbyEntrantEntity e) {

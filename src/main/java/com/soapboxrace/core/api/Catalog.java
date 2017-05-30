@@ -1,5 +1,8 @@
 package com.soapboxrace.core.api;
 
+import java.util.List;
+
+import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -7,12 +10,19 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.ProductBO;
+import com.soapboxrace.core.jpa.CategoryEntity;
+import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCategoryTrans;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
+import com.soapboxrace.jaxb.http.CategoryTrans;
 import com.soapboxrace.jaxb.http.ProductTrans;
 
 @Path("/catalog")
 public class Catalog {
+
+	@EJB
+	private ProductBO productBO;
 
 	@GET
 	@Secured
@@ -20,20 +30,20 @@ public class Catalog {
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfProductTrans productsInCategory(@QueryParam("categoryName") String categoryName, @QueryParam("clientProductType") String clientProductType) {
 		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
-		// categoryName=Starting_Cars&clientProductType=PRESETCAR
-		if ("Starting_Cars".equals(categoryName) && "PRESETCAR".equals(clientProductType)) {
+		List<ProductEntity> productsInCategory = productBO.productsInCategory(categoryName, clientProductType);
+		for (ProductEntity productEntity : productsInCategory) {
 			ProductTrans productTrans = new ProductTrans();
-			productTrans.setCurrency("CASH");
-			productTrans.setDurationMinute(0);
-			productTrans.setHash(1133182666);
-			productTrans.setIcon("Black_64x64");
-			productTrans.setLevel(0);
-			productTrans.setPrice(200000.00D);
-			productTrans.setPriority(0);
-			productTrans.setProductId("SRV-SCAR7");
-			productTrans.setProductTitle("BLACK");
-			productTrans.setProductType("PRESETCAR");
-			productTrans.setUseCount(1);
+			productTrans.setCurrency(productEntity.getCurrency());
+			productTrans.setDurationMinute(productEntity.getDurationMinute());
+			productTrans.setHash(productEntity.getHash().intValue());
+			productTrans.setIcon(productEntity.getIcon());
+			productTrans.setLevel(productEntity.getLevel());
+			productTrans.setPrice(productEntity.getPrice());
+			productTrans.setPriority(productEntity.getPriority());
+			productTrans.setProductId(productEntity.getProductId());
+			productTrans.setProductTitle(productEntity.getProductTitle());
+			productTrans.setProductType(productEntity.getProductType());
+			productTrans.setUseCount(productEntity.getUseCount());
 			arrayOfProductTrans.getProductTrans().add(productTrans);
 		}
 		return arrayOfProductTrans;
@@ -44,6 +54,25 @@ public class Catalog {
 	@Path("/categories")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfCategoryTrans categories() {
-		return new ArrayOfCategoryTrans();
+		ArrayOfCategoryTrans arrayOfCategoryTrans = new ArrayOfCategoryTrans();
+		List<CategoryEntity> listCategoryEntity = productBO.categories();
+		for(CategoryEntity entity : listCategoryEntity) {
+			CategoryTrans categoryTrans = new CategoryTrans();
+			categoryTrans.setCatalogVersion(Integer.parseInt(entity.getCatalogVersion()));
+			categoryTrans.setDisplayName(entity.getDisplayName());
+			categoryTrans.setFilterType(entity.getFilterType());
+			categoryTrans.setIcon(entity.getIcon());
+			categoryTrans.setId(entity.getIdentifiant().toString());
+			categoryTrans.setLongDescription(entity.getLongDescription());
+			categoryTrans.setName(entity.getName());
+			categoryTrans.setPriority(entity.getPriority());
+			categoryTrans.setProducts(productBO.getVinylByCategory(entity));
+			categoryTrans.setShortDescription(entity.getShortDescription());
+			categoryTrans.setShowInNavigationPane(entity.getShowInNavigationPane());
+			categoryTrans.setShowPromoPage(entity.getShowPromoPage());
+			categoryTrans.setWebIcon(entity.getWebIcon());
+			arrayOfCategoryTrans.getCategoryTrans().add(categoryTrans);
+		}
+		return arrayOfCategoryTrans;
 	}
 }

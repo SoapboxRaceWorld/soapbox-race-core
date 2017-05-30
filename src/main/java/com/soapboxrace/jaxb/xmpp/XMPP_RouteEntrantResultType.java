@@ -20,7 +20,7 @@ public class XMPP_RouteEntrantResultType {
 	@XmlElement(name = "PersonaId")
 	private Long personaId;
 	@XmlElement(name = "Ranking")
-	private Short ranking;
+	private Integer ranking;
 	@XmlElement(name = "BestLapDurationInMilliseconds")
 	private Long bestLapDurationInMilliseconds;
 	@XmlElement(name = "TopSpeed")
@@ -58,11 +58,11 @@ public class XMPP_RouteEntrantResultType {
 		this.personaId = personaId;
 	}
 
-	public Short getRanking() {
+	public Integer getRanking() {
 		return ranking;
 	}
 
-	public void setRanking(Short ranking) {
+	public void setRanking(Integer ranking) {
 		this.ranking = ranking;
 	}
 

@@ -25,16 +25,43 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
 		lobbyEntity.getEntrants().size();
 		return lobbyEntity;
 	}
+	
+	public List<LobbyEntity> findAllOpen() {
+		Date dateNow = new Date();
+		Date datePast = new Date(dateNow.getTime() - 35000);
+		
+		TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findAllOpen", LobbyEntity.class);
+		query.setParameter("dateTime1", datePast);
+		query.setParameter("dateTime2", dateNow);
+		return query.getResultList();
+	}
 
 	public List<LobbyEntity> findByEventStarted(int eventId) {
 		Date dateNow = new Date();
 		Date datePast = new Date(dateNow.getTime() - 35000);
-		TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findByEventStarted", LobbyEntity.class);
 		EventEntity eventEntity = new EventEntity();
 		eventEntity.setId(eventId);
+		
+		TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findByEventStarted", LobbyEntity.class);
 		query.setParameter("event", eventEntity);
 		query.setParameter("dateTime1", datePast);
 		query.setParameter("dateTime2", dateNow);
 		return query.getResultList();
+	}
+	
+	public LobbyEntity findByEventAndPersona(int eventId, Long personaId) {
+		Date dateNow = new Date();
+		Date datePast = new Date(dateNow.getTime() - 35000);
+		EventEntity eventEntity = new EventEntity();
+		eventEntity.setId(eventId);
+		
+		TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findByEventAndPersona", LobbyEntity.class);
+		query.setParameter("event", eventEntity);
+		query.setParameter("dateTime1", datePast);
+		query.setParameter("dateTime2", dateNow);
+		query.setParameter("personaId", personaId);
+		
+		List<LobbyEntity> resultList = query.getResultList();
+		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 }

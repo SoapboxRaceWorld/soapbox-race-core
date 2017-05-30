@@ -1,5 +1,7 @@
 package com.soapboxrace.core.api;
 
+import java.io.InputStream;
+
 import javax.ejb.EJB;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -15,11 +17,12 @@ import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.jaxb.http.Accolades;
-import com.soapboxrace.jaxb.http.ExitPath;
-import com.soapboxrace.jaxb.http.LuckyDrawInfo;
+import com.soapboxrace.jaxb.http.DragArbitrationPacket;
+import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
-import com.soapboxrace.jaxb.http.Reward;
+import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
+import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
+import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Path("/event")
 public class Event {
@@ -42,7 +45,9 @@ public class Event {
 	@Secured
 	@Path("/launched")
 	@Produces(MediaType.APPLICATION_XML)
-	public String launched(@QueryParam("eventSessionId") Long eventSessionId) {
+	public String launched(@HeaderParam("securityToken") String securityToken, @QueryParam("eventSessionId") Long eventSessionId) {
+		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+		eventBO.createEventDataSession(activePersonaId, eventSessionId);
 		return "";
 	}
 
@@ -50,13 +55,26 @@ public class Event {
 	@Secured
 	@Path("/arbitration")
 	@Produces(MediaType.APPLICATION_XML)
-	public Object arbitration(@HeaderParam("securityToken") String securityToken, @QueryParam("eventSessionId") Long eventSessionId) {
+	public Object arbitration(InputStream arbitrationXml, @HeaderParam("securityToken") String securityToken, @QueryParam("eventSessionId") Long eventSessionId) {
 		EventSessionEntity eventSessionEntity = eventBO.findEventSessionById(eventSessionId);
 		EventEntity event = eventSessionEntity.getEvent();
 		EventMode eventMode = EventMode.fromId(event.getEventModeId());
+		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 		if (EventMode.PURSUIT_SP.equals(eventMode)) {
-			Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-			return getPursitEnd(eventSessionId, activePersonaId);
+			PursuitArbitrationPacket pursuitArbitrationPacket = (PursuitArbitrationPacket) UnmarshalXML.unMarshal(arbitrationXml, PursuitArbitrationPacket.class);
+			return eventBO.getPursitEnd(eventSessionId, activePersonaId, pursuitArbitrationPacket);
+		}
+		if (EventMode.SPRINT.equals(eventMode) || EventMode.CIRCUIT.equals(eventMode)) {
+			RouteArbitrationPacket routeArbitrationPacket = (RouteArbitrationPacket) UnmarshalXML.unMarshal(arbitrationXml, RouteArbitrationPacket.class);
+			return eventBO.getRaceEnd(eventSessionId, activePersonaId, routeArbitrationPacket);
+		}
+		if (EventMode.DRAG.equals(eventMode)) {
+			DragArbitrationPacket dragArbitrationPacket = (DragArbitrationPacket) UnmarshalXML.unMarshal(arbitrationXml, DragArbitrationPacket.class);
+			return eventBO.getDragEnd(eventSessionId, activePersonaId, dragArbitrationPacket);
+		}
+		if (EventMode.PURSUIT_MP.equals(eventMode)) {
+			TeamEscapeArbitrationPacket teamEscapeArbitrationPacket = (TeamEscapeArbitrationPacket) UnmarshalXML.unMarshal(arbitrationXml, TeamEscapeArbitrationPacket.class);
+			return eventBO.getTeamEscapeEnd(eventSessionId, activePersonaId, teamEscapeArbitrationPacket);
 		}
 		return "";
 	}
@@ -65,35 +83,11 @@ public class Event {
 	@Secured
 	@Path("/bust")
 	@Produces(MediaType.APPLICATION_XML)
-	public PursuitEventResult bust(@HeaderParam("securityToken") String securityToken, @QueryParam("eventSessionId") Long eventSessionId) {
+	public PursuitEventResult bust(InputStream bustXml, @HeaderParam("securityToken") String securityToken, @QueryParam("eventSessionId") Long eventSessionId) {
+		PursuitArbitrationPacket pursuitArbitrationPacket = (PursuitArbitrationPacket) UnmarshalXML.unMarshal(bustXml, PursuitArbitrationPacket.class);
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
 		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-		pursuitEventResult = getPursitEnd(eventSessionId, activePersonaId);
-		return pursuitEventResult;
-	}
-
-	private PursuitEventResult getPursitEnd(Long eventSessionId, Long activePersonaId) {
-		PursuitEventResult pursuitEventResult = new PursuitEventResult();
-		Accolades accolades = new Accolades();
-		Reward finalReward = new Reward();
-		finalReward.setRep(0);
-		finalReward.setTokens(0);
-		accolades.setFinalRewards(finalReward);
-		accolades.setHasLeveledUp(false);
-		accolades.setLuckyDrawInfo(new LuckyDrawInfo());
-		pursuitEventResult.setDurability(100);
-		pursuitEventResult.setEventId(387); // get from session
-		pursuitEventResult.setEventSessionId(eventSessionId);
-		pursuitEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
-		pursuitEventResult.setInviteLifetimeInMilliseconds(0);
-		pursuitEventResult.setLobbyInviteId(0);
-		pursuitEventResult.setPersonaId(activePersonaId);
-		pursuitEventResult.setHeat(1);
-		Reward originalRewards = new Reward();
-		originalRewards.setRep(0);
-		originalRewards.setTokens(0);
-		accolades.setOriginalRewards(originalRewards);
-		pursuitEventResult.setAccolades(accolades);
+		pursuitEventResult = eventBO.getPursitEnd(eventSessionId, activePersonaId, pursuitArbitrationPacket);
 		return pursuitEventResult;
 	}
 }

@@ -21,6 +21,7 @@ import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
 import com.soapboxrace.jaxb.http.ArrayOfString;
 import com.soapboxrace.jaxb.http.PersonaIdArray;
 import com.soapboxrace.jaxb.http.PersonaMotto;
+import com.soapboxrace.jaxb.http.PersonaPresence;
 import com.soapboxrace.jaxb.http.ProfileData;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
@@ -137,7 +138,7 @@ public class DriverPersona {
 	@Secured
 	@Path("/DeletePersona")
 	@Produces(MediaType.APPLICATION_XML)
-	public String deletePersona( @QueryParam("personaId") Long personaId) {
+	public String deletePersona(@QueryParam("personaId") Long personaId) {
 		bo.deletePersona(personaId);
 		return "<long>0</long>";
 	}
@@ -163,8 +164,8 @@ public class DriverPersona {
 	@Secured
 	@Path("/GetPersonaPresenceByName")
 	@Produces(MediaType.APPLICATION_XML)
-	public String getPersonaPresenceByName() {
-		return "";
+	public PersonaPresence getPersonaPresenceByName(@QueryParam("displayName") String displayName) {
+		return bo.getPersonaPresenceByName(displayName);
 	}
 
 	@POST

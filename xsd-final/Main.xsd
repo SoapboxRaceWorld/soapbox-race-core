@@ -37,5 +37,25 @@
   <xs:include schemaLocation="PursuitEventResult.xsd" />
   <xs:include schemaLocation="LobbyInfo.xsd" />
   <xs:include schemaLocation="LobbyEntrantAdded.xsd" />
+  <xs:include schemaLocation="ArbitrationPacket.xsd" />
+  <xs:include schemaLocation="DragArbitrationPacket.xsd" />
+  <xs:include schemaLocation="PursuitArbitrationPacket.xsd" />
+  <xs:include schemaLocation="RouteArbitrationPacket.xsd" />
+  <xs:include schemaLocation="TeamEscapeArbitrationPacket.xsd" />
+  <xs:include schemaLocation="RouteEventResult.xsd" />
+  <xs:include schemaLocation="RouteEntrantResult.xsd" />
+  <xs:include schemaLocation="TeamEscapeEventResult.xsd" />
+  <xs:include schemaLocation="TeamEscapeEntrantResult.xsd" />
+  <xs:include schemaLocation="DragEventResult.xsd" />
+  <xs:include schemaLocation="DragEntrantResult.xsd" />
+  <xs:include schemaLocation="EntrantResult.xsd" />
+  <xs:include schemaLocation="EventResult.xsd" />
   <xs:include schemaLocation="UdpRelayCryptoTicket.xsd" />
+  <xs:include schemaLocation="LobbyEntrantRemoved.xsd" />
+  <xs:include schemaLocation="PersonaPresence.xsd" />
+  <xs:include schemaLocation="CommerceSessionResultTrans.xsd" />
+  <xs:include schemaLocation="CommerceSessionTrans.xsd" />
+  <xs:include schemaLocation="ArrayOfEntitlementItemTrans.xsd" />
+  <xs:include schemaLocation="EntitlementItemTrans.xsd" />
+  <xs:include schemaLocation="EntitlementTrans.xsd" />
 </xs:schema>

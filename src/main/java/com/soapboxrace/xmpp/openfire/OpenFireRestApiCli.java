@@ -1,5 +1,8 @@
 package com.soapboxrace.xmpp.openfire;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.Singleton;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -10,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.igniterealtime.restclient.entity.UserEntity;
+import org.igniterealtime.restclient.entity.MUCRoomEntities;
+import org.igniterealtime.restclient.entity.MUCRoomEntity;
 
 import com.soapboxrace.core.api.util.Config;
 
@@ -56,6 +61,41 @@ public class OpenFireRestApiCli {
 	public void createUpdatePersona(Long personaId, String password) {
 		String user = "sbrw." + personaId.toString();
 		createUpdatePersona(user, password);
+	}
+
+	public int getTotalOnlineUsers() {
+		Builder builder = getBuilder("system/statistics/sessions");
+		SessionsCount sessionsCount = builder.get(SessionsCount.class);
+		int clusterSessions = sessionsCount.getClusterSessions();
+		if (clusterSessions > 1) {
+			return clusterSessions - 1;
+		}
+		return 0;
+	}
+	
+	public List<Long> getAllPersonaByGroup(Long personaId) {
+		Builder builder = getBuilder("chatrooms");
+		MUCRoomEntities roomEntities = builder.get(MUCRoomEntities.class);
+		List<MUCRoomEntity> listRoomEntity = roomEntities.getMucRooms();
+		for(MUCRoomEntity entity : listRoomEntity) {
+			if(entity.getRoomName().contains("group.channel.")) {
+				Long idOwner = Long.parseLong(entity.getRoomName().substring(entity.getRoomName().lastIndexOf(".") + 1));
+				if(idOwner == personaId) {
+					return getAllOccupantInGroup(entity.getRoomName());
+				}
+			}
+		}
+		return new ArrayList<Long>();
+	}
+	
+	private List<Long> getAllOccupantInGroup(String roomName) {
+		Builder builder = getBuilder("chatrooms/" + roomName + "/occupants");
+		OccupantEntities occupantEntities = builder.get(OccupantEntities.class);
+		List<Long> listOfPersona = new ArrayList<Long>();
+		for(OccupantEntity entity : occupantEntities.getOccupants()) {
+			listOfPersona.add(Long.parseLong(entity.getJid().substring(entity.getJid().lastIndexOf(".") + 1)));
+		}
+		return listOfPersona;
 	}
 
 }
