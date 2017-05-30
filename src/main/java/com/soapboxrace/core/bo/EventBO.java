@@ -50,7 +50,7 @@ public class EventBO {
 	private EventDataDAO eventDataDao;
 
 	public List<EventEntity> availableAtLevel() {
-		return eventDao.findAll();
+		return eventDao.findByLevel(70);
 	}
 	
 	public void createEventDataSession(Long personaId, Long eventSessionId) {

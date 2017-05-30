@@ -26,5 +26,11 @@ public class EventDAO extends BaseDAO<EventEntity> {
 		TypedQuery<EventEntity> query = entityManager.createNamedQuery("EventEntity.findAll", EventEntity.class);
 		return query.getResultList();
 	}
+	
+	public List<EventEntity> findByLevel(int level) {
+		TypedQuery<EventEntity> query = entityManager.createNamedQuery("EventEntity.findByLevel", EventEntity.class);
+		query.setParameter("level", level);
+		return query.getResultList();
+	}
 
 }

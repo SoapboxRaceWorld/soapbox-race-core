@@ -12,7 +12,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "EVENT")
 @NamedQueries({ //
-		@NamedQuery(name = "EventEntity.findAll", query = "SELECT obj FROM EventEntity obj")//
+		@NamedQuery(name = "EventEntity.findAll", query = "SELECT obj FROM EventEntity obj"), //
+		@NamedQuery(name = "EventEntity.findByLevel", query = "SELECT obj FROM EventEntity obj WHERE :level >= obj.minLevel") //
 })
 public class EventEntity {
 
@@ -22,6 +23,7 @@ public class EventEntity {
 	private int id;
 
 	private int eventModeId;
+	private int minLevel;
 
 	public int getId() {
 		return id;
@@ -37,6 +39,14 @@ public class EventEntity {
 
 	public void setEventModeId(int eventModeId) {
 		this.eventModeId = eventModeId;
+	}
+	
+	public int getMinLevel() {
+		return minLevel;
+	}
+	
+	public void setMinLevel(int minLevel) {
+		this.minLevel = minLevel;
 	}
 
 }
