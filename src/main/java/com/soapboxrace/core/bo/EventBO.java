@@ -87,7 +87,7 @@ public class EventBO {
 		eventDataEntity.setHacksDetected(pursuitArbitrationPacket.getHacksDetected());
 		eventDataEntity.setCopsDeployed(pursuitArbitrationPacket.getCopsDeployed());
 		eventDataEntity.setCopsDisabled(pursuitArbitrationPacket.getCopsDisabled());
-		eventDataEntity.setCopsRammed(pursuitArbitrationPacket.getCopsDeployed());
+		eventDataEntity.setCopsRammed(pursuitArbitrationPacket.getCopsRammed());
 		eventDataEntity.setCostToState(pursuitArbitrationPacket.getCostToState());
 		eventDataEntity.setHeat(pursuitArbitrationPacket.getHeat());
 		eventDataEntity.setInfractions(pursuitArbitrationPacket.getInfractions());
@@ -282,7 +282,7 @@ public class EventBO {
 		eventDataEntity.setHacksDetected(teamEscapeArbitrationPacket.getHacksDetected());
 		eventDataEntity.setCopsDeployed(teamEscapeArbitrationPacket.getCopsDeployed());
 		eventDataEntity.setCopsDisabled(teamEscapeArbitrationPacket.getCopsDisabled());
-		eventDataEntity.setCopsRammed(teamEscapeArbitrationPacket.getCopsDeployed());
+		eventDataEntity.setCopsRammed(teamEscapeArbitrationPacket.getCopsRammed());
 		eventDataEntity.setCostToState(teamEscapeArbitrationPacket.getCostToState());
 		eventDataEntity.setInfractions(teamEscapeArbitrationPacket.getInfractions());
 		eventDataEntity.setRoadBlocksDodged(teamEscapeArbitrationPacket.getRoadBlocksDodged());
