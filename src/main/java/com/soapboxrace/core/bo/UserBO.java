@@ -62,9 +62,11 @@ public class UserBO {
 			return loginStatusVO;
 		}
 		UserEntity userEntityTmp = userDao.findByEmail(email);
-		if (userEntityTmp.getEmail() != null) {
-			loginStatusVO.setDescription("Registration Error: Email already exists!");
-			return loginStatusVO;
+		if (userEntityTmp != null) {
+			if (userEntityTmp.getEmail() != null) {
+				loginStatusVO.setDescription("Registration Error: Email already exists!");
+				return loginStatusVO;
+			}
 		}
 		UserEntity userEntity = createUser(email, passwd);
 		inviteTicketEntity.setUser(userEntity);
