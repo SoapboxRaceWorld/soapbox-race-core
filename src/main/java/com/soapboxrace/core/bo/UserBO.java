@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.dao.InviteTicketDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.InviteTicketEntity;
@@ -52,14 +53,19 @@ public class UserBO {
 
 	public LoginStatusVO createUserWithTicket(String email, String passwd, String ticket) {
 		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-		InviteTicketEntity inviteTicketEntity = inviteTicketDAO.findByTicket(ticket);
-		if (inviteTicketEntity == null || inviteTicketEntity.getTicket() == null || inviteTicketEntity.getTicket().isEmpty()) {
-			loginStatusVO.setDescription("Registration Error: Invalid Ticket!");
-			return loginStatusVO;
-		}
-		if (inviteTicketEntity.getUser() != null) {
-			loginStatusVO.setDescription("Registration Error: Ticket already in use!");
-			return loginStatusVO;
+		InviteTicketEntity inviteTicketEntity = new InviteTicketEntity();
+		inviteTicketEntity.setTicket("empty-ticket");
+		String ticketToken = Config.getTicketToken();
+		if (ticketToken != null && !ticketToken.equals("null")) {
+			inviteTicketEntity = inviteTicketDAO.findByTicket(ticket);
+			if (inviteTicketEntity == null || inviteTicketEntity.getTicket() == null || inviteTicketEntity.getTicket().isEmpty()) {
+				loginStatusVO.setDescription("Registration Error: Invalid Ticket!");
+				return loginStatusVO;
+			}
+			if (inviteTicketEntity.getUser() != null) {
+				loginStatusVO.setDescription("Registration Error: Ticket already in use!");
+				return loginStatusVO;
+			}
 		}
 		UserEntity userEntityTmp = userDao.findByEmail(email);
 		if (userEntityTmp != null) {

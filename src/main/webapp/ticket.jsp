@@ -3,9 +3,11 @@
 <body>
 	<br />
 	<br />
+
 	<form action="Engine.svc/CreateTicket" method="post">
-		Discord Name: <input type="text" name="discordName" /><br /> <input
-			type="text" name="hidden" value="123456789" /> <br /> <br /> <input
+		Discord Name: <input type="text" name="discordName" /><br /> <br />
+		<input type="hidden" name="ticketAuth"
+			value="<%=request.getParameter("ticketAuth")%>" /> <br /> <input
 			type="submit" value="create ticket" />
 	</form>
 	<br />
