@@ -69,6 +69,9 @@ public class DriverPersonaBO {
 		ArrayOfPersonaBase arrayOfPersonaBase = new ArrayOfPersonaBase();
 		for (Long personaId : personaIdList) {
 			PersonaEntity personaEntity = personaDao.findById(personaId);
+			if (personaEntity == null) {
+				return arrayOfPersonaBase;
+			}
 			PersonaBase personaBase = new PersonaBase();
 			personaBase.setBadges(new ArrayOfBadgePacket());
 			personaBase.setIconIndex(personaEntity.getIconIndex());
@@ -93,14 +96,17 @@ public class DriverPersonaBO {
 
 	public PersonaPresence getPersonaPresenceByName(String name) {
 		PersonaEntity personaEntity = personaDao.findByName(name);
-		if (personaEntity == null) {
-			return null;
+		if (personaEntity != null) {
+			PersonaPresence personaPresence = new PersonaPresence();
+			personaPresence.setPersonaId(personaEntity.getPersonaId());
+			personaPresence.setPresence(1);
+			personaPresence.setUserId(personaEntity.getUser().getId());
+			return personaPresence;
 		}
-		
 		PersonaPresence personaPresence = new PersonaPresence();
-		personaPresence.setPersonaId(personaEntity.getPersonaId());
-		personaPresence.setPresence(1);
-		personaPresence.setUserId(personaEntity.getUser().getId());
+		personaPresence.setPersonaId(0);
+		personaPresence.setPresence(0);
+		personaPresence.setUserId(0);
 		return personaPresence;
 	}
 

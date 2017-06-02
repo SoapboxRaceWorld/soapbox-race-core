@@ -25,4 +25,9 @@ public class Config {
 	public static int getUdpRacePort() {
 		return Integer.valueOf(System.getProperty("udpRacePort"));
 	}
+
+	public static String getTicketToken() {
+		return System.getProperty("ticketToken");
+	}
+
 }

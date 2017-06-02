@@ -42,6 +42,7 @@ system property example:
 	    <property name="xmppPort" value="5222" />
 	    <property name="udpRaceIp" value="127.0.0.1"/>
         <property name="udpRacePort" value="9998"/>
+        <property name="ticketToken" value="123456789"/>
 	  </system-properties>
 	  
 	  
