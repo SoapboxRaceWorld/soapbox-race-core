@@ -12,21 +12,26 @@ import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.CardDecks;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
 import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
+import com.soapboxrace.jaxb.http.ArrayOfRewardPart;
 import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
 import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.DragArbitrationPacket;
 import com.soapboxrace.jaxb.http.DragEntrantResult;
 import com.soapboxrace.jaxb.http.DragEventResult;
+import com.soapboxrace.jaxb.http.EnumRewardCategory;
+import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.LuckyDrawInfo;
 import com.soapboxrace.jaxb.http.LuckyDrawItem;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
 import com.soapboxrace.jaxb.http.Reward;
+import com.soapboxrace.jaxb.http.RewardPart;
 import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
 import com.soapboxrace.jaxb.http.RouteEntrantResult;
 import com.soapboxrace.jaxb.http.RouteEventResult;
@@ -177,7 +182,7 @@ public class EventBO {
 			if(racer.getPersonaId() != activePersonaId) {
 				XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId());
 				xmppEvent.sendRaceEnd(routeEntrantResultResponse);
-				if( routeArbitrationPacket.getRank() == 1 ) {
+				if(routeArbitrationPacket.getRank() == 1) {
 					xmppEvent.sendEventTimingOut(eventSessionId);
 				}
 			}
@@ -244,7 +249,7 @@ public class EventBO {
 			if(racer.getPersonaId() != activePersonaId) {
 				XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId());
 				xmppEvent.sendDragEnd(dragEntrantResultResponse);
-				if( dragArbitrationPacket.getRank() == 1 ) {
+				if(dragArbitrationPacket.getRank() == 1) {
 					xmppEvent.sendEventTimingOut(eventSessionId);
 				}
 			}
@@ -315,7 +320,7 @@ public class EventBO {
 			if(racer.getPersonaId() != activePersonaId) {
 				XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId());
 				xmppEvent.sendTeamEscapeEnd(teamEscapeEntrantResultResponse);
-				if( teamEscapeArbitrationPacket.getRank() == 1 ) {
+				if(teamEscapeArbitrationPacket.getRank() == 1) {
 					xmppEvent.sendEventTimingOut(eventSessionId);
 				}
 			}
@@ -339,8 +344,16 @@ public class EventBO {
 		accolades.setHasLeveledUp(false);
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo());
 		accolades.setOriginalRewards(getOriginalReward());
+		accolades.setRewardInfo(getRewardPart());
 		
 		return accolades;
+	}
+	
+	public Reward getFinalReward() {
+		Reward finalReward = new Reward();
+		finalReward.setRep(7331);
+		finalReward.setTokens(1337);
+		return finalReward;
 	}
 	
 	public LuckyDrawInfo getLuckyDrawInfo() {
@@ -358,15 +371,8 @@ public class EventBO {
 		
 		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
 		luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
-		luckyDrawInfo.setCardDeck("LD_CARD_GOLD");
+		luckyDrawInfo.setCardDeck(CardDecks.forRank(1));
 		return luckyDrawInfo;
-	}
-	
-	public Reward getFinalReward() {
-		Reward finalReward = new Reward();
-		finalReward.setRep(7331);
-		finalReward.setTokens(1337);
-		return finalReward;
 	}
 	
 	public Reward getOriginalReward() {
@@ -374,6 +380,18 @@ public class EventBO {
 		originalRewards.setRep(562);
 		originalRewards.setTokens(845);
 		return originalRewards;
+	}
+	
+	public ArrayOfRewardPart getRewardPart() {
+		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
+		RewardPart rewardPart = new RewardPart();
+		rewardPart.setRepPart(256);
+		rewardPart.setRewardCategory(EnumRewardCategory.BASE);
+		rewardPart.setRewardType(EnumRewardType.NONE);
+		rewardPart.setTokenPart(852);
+		arrayOfRewardPart.getRewardPart().add(rewardPart);
+		
+		return arrayOfRewardPart;
 	}
 	
 	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
