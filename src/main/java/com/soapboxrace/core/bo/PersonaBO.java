@@ -6,8 +6,10 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.soapboxrace.core.dao.CarSlotDAO;
+import com.soapboxrace.core.dao.LevelRepDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.LevelRepEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
@@ -20,6 +22,9 @@ public class PersonaBO {
 
 	@EJB
 	private CarSlotDAO carSlotDAO;
+	
+	@EJB
+	private LevelRepDAO levelRepDAO;
 
 	public void changeDefaultCar(Long personaId, Long defaultCarId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
@@ -59,6 +64,10 @@ public class PersonaBO {
 
 	public List<CarSlotEntity> getPersonasCar(Long personaId) {
 		return carSlotDAO.findByPersonaId(personaId);
+	}
+	
+	public LevelRepEntity getLevelInfoByLevel(Long level) {
+		return levelRepDAO.findByLevel(level);
 	}
 
 }
