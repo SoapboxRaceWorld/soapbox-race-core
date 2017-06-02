@@ -86,6 +86,7 @@ public class User {
 	public Response createUser(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("inviteTicket") String inviteTicket) {
 		LoginStatusVO loginStatusVO = userBO.createUserWithTicket(email, password, inviteTicket);
 		if (loginStatusVO != null && loginStatusVO.isLoginOk()) {
+			loginStatusVO = tokenBO.login(email, password);
 			return Response.ok(loginStatusVO).build();
 		}
 		return Response.serverError().entity(loginStatusVO).build();
