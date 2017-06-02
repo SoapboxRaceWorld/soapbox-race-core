@@ -15,6 +15,7 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
+import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
 import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
 import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.DragArbitrationPacket;
@@ -22,6 +23,7 @@ import com.soapboxrace.jaxb.http.DragEntrantResult;
 import com.soapboxrace.jaxb.http.DragEventResult;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.LuckyDrawInfo;
+import com.soapboxrace.jaxb.http.LuckyDrawItem;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
 import com.soapboxrace.jaxb.http.Reward;
@@ -110,23 +112,16 @@ public class EventBO {
 		eventDataEntity.setSumOfJumpsDurationInMilliseconds(pursuitArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
 		eventDataEntity.setTopSpeed(pursuitArbitrationPacket.getTopSpeed());
 		eventDataDao.update(eventDataEntity);
-		
-		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(getFinalReward());
-		accolades.setHasLeveledUp(false);
-		accolades.setLuckyDrawInfo(new LuckyDrawInfo());
-		accolades.setOriginalRewards(getOriginalReward());
-		
+
+		pursuitEventResult.setAccolades(getAccolades());
 		pursuitEventResult.setDurability(100);
 		pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
 		pursuitEventResult.setEventSessionId(eventSessionId);
 		pursuitEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
+		pursuitEventResult.setHeat(1);
 		pursuitEventResult.setInviteLifetimeInMilliseconds(0);
 		pursuitEventResult.setLobbyInviteId(0);
 		pursuitEventResult.setPersonaId(activePersonaId);
-		pursuitEventResult.setHeat(1);
-		pursuitEventResult.setAccolades(accolades);
-		
 		return pursuitEventResult;
 	}
 	
@@ -187,13 +182,9 @@ public class EventBO {
 				}
 			}
 		}
-		
-		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(getFinalReward());
-		accolades.setHasLeveledUp(false);
-		accolades.setLuckyDrawInfo(new LuckyDrawInfo());
-		accolades.setOriginalRewards(getOriginalReward());
-		
+
+		routeEventResult.setAccolades(getAccolades());
+		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
 		routeEventResult.setDurability(100);
 		routeEventResult.setEventId(eventDataEntity.getEvent().getId());
 		routeEventResult.setEventSessionId(eventSessionId);
@@ -201,9 +192,6 @@ public class EventBO {
 		routeEventResult.setInviteLifetimeInMilliseconds(0);
 		routeEventResult.setLobbyInviteId(0);
 		routeEventResult.setPersonaId(activePersonaId);
-		routeEventResult.setAccolades(accolades);
-		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
-		
 		return routeEventResult;
 	}
 	
@@ -261,13 +249,9 @@ public class EventBO {
 				}
 			}
 		}
-		
-		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(getFinalReward());
-		accolades.setHasLeveledUp(false);
-		accolades.setLuckyDrawInfo(new LuckyDrawInfo());
-		accolades.setOriginalRewards(getOriginalReward());
-		
+
+		dragEventResult.setAccolades(getAccolades());
+		dragEventResult.setEntrants(arrayOfDragEntrantResult);
 		dragEventResult.setDurability(100);
 		dragEventResult.setEventId(eventDataEntity.getEvent().getId());
 		dragEventResult.setEventSessionId(eventSessionId);
@@ -275,9 +259,6 @@ public class EventBO {
 		dragEventResult.setInviteLifetimeInMilliseconds(0);
 		dragEventResult.setLobbyInviteId(0);
 		dragEventResult.setPersonaId(activePersonaId);
-		dragEventResult.setAccolades(accolades);
-		dragEventResult.setEntrants(arrayOfDragEntrantResult);
-		
 		return dragEventResult;
 	}
 	
@@ -339,13 +320,9 @@ public class EventBO {
 				}
 			}
 		}
-		
-		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(getFinalReward());
-		accolades.setHasLeveledUp(false);
-		accolades.setLuckyDrawInfo(new LuckyDrawInfo());
-		accolades.setOriginalRewards(getOriginalReward());
-		
+
+		teamEscapeEventResult.setAccolades(getAccolades());
+		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
 		teamEscapeEventResult.setDurability(100);
 		teamEscapeEventResult.setEventId(eventDataEntity.getEvent().getId());
 		teamEscapeEventResult.setEventSessionId(eventSessionId);
@@ -353,23 +330,49 @@ public class EventBO {
 		teamEscapeEventResult.setInviteLifetimeInMilliseconds(0);
 		teamEscapeEventResult.setLobbyInviteId(0);
 		teamEscapeEventResult.setPersonaId(activePersonaId);
-		teamEscapeEventResult.setAccolades(accolades);
-		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
-		
 		return teamEscapeEventResult;
+	}
+	
+	public Accolades getAccolades() {
+		Accolades accolades = new Accolades();
+		accolades.setFinalRewards(getFinalReward());
+		accolades.setHasLeveledUp(false);
+		accolades.setLuckyDrawInfo(getLuckyDrawInfo());
+		accolades.setOriginalRewards(getOriginalReward());
+		
+		return accolades;
+	}
+	
+	public LuckyDrawInfo getLuckyDrawInfo() {
+		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
+		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
+		luckyDrawItem.setDescription("TEST DROP");
+		luckyDrawItem.setHash(-1681514783);
+		luckyDrawItem.setIcon("product_nos_x1");
+		luckyDrawItem.setRemainingUseCount(0);
+		luckyDrawItem.setResellPrice(7331);
+		luckyDrawItem.setVirtualItem("nosshot");
+		luckyDrawItem.setVirtualItemType("POWERUP");
+		luckyDrawItem.setWasSold(true);
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(luckyDrawItem);
+		
+		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
+		luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
+		luckyDrawInfo.setCardDeck("LD_CARD_GOLD");
+		return luckyDrawInfo;
 	}
 	
 	public Reward getFinalReward() {
 		Reward finalReward = new Reward();
-		finalReward.setRep(0);
-		finalReward.setTokens(0);
+		finalReward.setRep(7331);
+		finalReward.setTokens(1337);
 		return finalReward;
 	}
 	
 	public Reward getOriginalReward() {
 		Reward originalRewards = new Reward();
-		originalRewards.setRep(0);
-		originalRewards.setTokens(0);
+		originalRewards.setRep(562);
+		originalRewards.setTokens(845);
 		return originalRewards;
 	}
 	
