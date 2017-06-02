@@ -69,6 +69,9 @@ public class DriverPersonaBO {
 		ArrayOfPersonaBase arrayOfPersonaBase = new ArrayOfPersonaBase();
 		for (Long personaId : personaIdList) {
 			PersonaEntity personaEntity = personaDao.findById(personaId);
+			if (personaEntity == null) {
+				return arrayOfPersonaBase;
+			}
 			PersonaBase personaBase = new PersonaBase();
 			personaBase.setBadges(new ArrayOfBadgePacket());
 			personaBase.setIconIndex(personaEntity.getIconIndex());
