@@ -13,7 +13,7 @@ public class SocialBO {
 	@EJB
 	private ReportDAO reportDao;
 	
-	public void sendReport(Long personaId, Long abuserPersonaId, Integer petitionType, String description, Integer customCarID, Integer chatMinutes) {
+	public void sendReport(Long personaId, Long abuserPersonaId, Integer petitionType, String description, Integer customCarID, Integer chatMinutes, Long hacksDetected) {
 		ReportEntity reportEntity = new ReportEntity();
 		reportEntity.setAbuserPersonaId(abuserPersonaId);
 		reportEntity.setChatMinutes(chatMinutes);
@@ -21,6 +21,7 @@ public class SocialBO {
 		reportEntity.setDescription(description);
 		reportEntity.setPersonaId(personaId);
 		reportEntity.setPetitionType(petitionType);
+		reportEntity.setHacksDetected(hacksDetected);
 		reportDao.insert(reportEntity);
 	}
 

@@ -19,6 +19,7 @@ public class ReportEntity {
 	private Integer petitionType;
 	private Integer customCarID;
 	private Integer chatMinutes;
+	private Long hacksdetected;
 
 	public Long getId() {
 		return id;
@@ -74,6 +75,14 @@ public class ReportEntity {
 
 	public void setChatMinutes(Integer chatMinutes) {
 		this.chatMinutes = chatMinutes;
+	}
+	
+	public Long getHacksDetected() {
+		return hacksdetected;
+	}
+	
+	public void setHacksDetected(Long hacksdetected) {
+		this.hacksdetected = hacksdetected;
 	}
 
 }

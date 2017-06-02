@@ -53,6 +53,9 @@ public class EventBO {
 	
 	@EJB
 	private PersonaDAO personaDao;
+	
+	@EJB
+	private SocialBO socialBo;
 
 	public List<EventEntity> availableAtLevel(Long personaId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
@@ -82,6 +85,10 @@ public class EventBO {
 	
 	public PursuitEventResult getPursitEnd(Long eventSessionId, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket) {
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
+		
+		if(pursuitArbitrationPacket.getHacksDetected() > 0) {
+			sendReportFromServer(activePersonaId, (int)pursuitArbitrationPacket.getCarId(), pursuitArbitrationPacket.getHacksDetected());
+		}
 		
 		EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
 		eventDataEntity.setPersonaId(activePersonaId);
@@ -125,6 +132,10 @@ public class EventBO {
 	
 	public RouteEventResult getRaceEnd(Long eventSessionId, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
 		RouteEventResult routeEventResult = new RouteEventResult();
+		
+		if(routeArbitrationPacket.getHacksDetected() > 0) {
+			sendReportFromServer(activePersonaId, (int)routeArbitrationPacket.getCarId(), routeArbitrationPacket.getHacksDetected());
+		}
 		
 		XMPP_RouteEntrantResultType xmppRouteResult = new XMPP_RouteEntrantResultType();
 		xmppRouteResult.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
@@ -199,6 +210,10 @@ public class EventBO {
 	public DragEventResult getDragEnd(Long eventSessionId, Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
 		DragEventResult dragEventResult = new DragEventResult();
 		
+		if(dragArbitrationPacket.getHacksDetected() > 0) {
+			sendReportFromServer(activePersonaId, (int)dragArbitrationPacket.getCarId(), dragArbitrationPacket.getHacksDetected());
+		}
+		
 		XMPP_DragEntrantResultType xmppDragResult = new XMPP_DragEntrantResultType();
 		xmppDragResult.setEventDurationInMilliseconds(dragArbitrationPacket.getEventDurationInMilliseconds());
 		xmppDragResult.setEventSessionId(eventSessionId);
@@ -268,6 +283,10 @@ public class EventBO {
 	
 	public TeamEscapeEventResult getTeamEscapeEnd(Long eventSessionId, Long activePersonaId, TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
 		TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
+		
+		if(teamEscapeArbitrationPacket.getHacksDetected() > 0) {
+			sendReportFromServer(activePersonaId, (int)teamEscapeArbitrationPacket.getCarId(), teamEscapeArbitrationPacket.getHacksDetected());
+		}
 		
 		XMPP_TeamEscapeEntrantResultType xmppTeamEscapeResult = new XMPP_TeamEscapeEntrantResultType();
 		xmppTeamEscapeResult.setEventDurationInMilliseconds(teamEscapeArbitrationPacket.getEventDurationInMilliseconds());
@@ -352,6 +371,10 @@ public class EventBO {
 		originalRewards.setRep(0);
 		originalRewards.setTokens(0);
 		return originalRewards;
+	}
+	
+	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
+		socialBo.sendReport(0L, activePersonaId, 3, "Server was send a report for cheat", carId, 0, hacksDetected);
 	}
 	
 }
