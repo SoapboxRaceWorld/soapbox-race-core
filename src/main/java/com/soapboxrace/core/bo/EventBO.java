@@ -91,8 +91,6 @@ public class EventBO {
 	}
 	
 	public PursuitEventResult getPursitEnd(Long eventSessionId, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket) {
-		PursuitEventResult pursuitEventResult = new PursuitEventResult();
-		
 		if(pursuitArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int)pursuitArbitrationPacket.getCarId(), pursuitArbitrationPacket.getHacksDetected());
 		}
@@ -118,7 +116,8 @@ public class EventBO {
 		eventDataEntity.setTopSpeed(pursuitArbitrationPacket.getTopSpeed());
 		eventDataDao.update(eventDataEntity);
 
-		pursuitEventResult.setAccolades(getAccolades());
+		PursuitEventResult pursuitEventResult = new PursuitEventResult();
+		pursuitEventResult.setAccolades(getAccolades(1));
 		pursuitEventResult.setDurability(100);
 		pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
 		pursuitEventResult.setEventSessionId(eventSessionId);
@@ -131,8 +130,6 @@ public class EventBO {
 	}
 	
 	public RouteEventResult getRaceEnd(Long eventSessionId, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
-		RouteEventResult routeEventResult = new RouteEventResult();
-		
 		if(routeArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int)routeArbitrationPacket.getCarId(), routeArbitrationPacket.getHacksDetected());
 		}
@@ -187,10 +184,11 @@ public class EventBO {
 				}
 			}
 		}
-
-		routeEventResult.setAccolades(getAccolades());
-		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
+		
+		RouteEventResult routeEventResult = new RouteEventResult();
+		routeEventResult.setAccolades(getAccolades(routeArbitrationPacket.getRank()));
 		routeEventResult.setDurability(100);
+		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
 		routeEventResult.setEventId(eventDataEntity.getEvent().getId());
 		routeEventResult.setEventSessionId(eventSessionId);
 		routeEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
@@ -201,8 +199,6 @@ public class EventBO {
 	}
 	
 	public DragEventResult getDragEnd(Long eventSessionId, Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
-		DragEventResult dragEventResult = new DragEventResult();
-		
 		if(dragArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int)dragArbitrationPacket.getCarId(), dragArbitrationPacket.getHacksDetected());
 		}
@@ -255,9 +251,10 @@ public class EventBO {
 			}
 		}
 
-		dragEventResult.setAccolades(getAccolades());
-		dragEventResult.setEntrants(arrayOfDragEntrantResult);
+		DragEventResult dragEventResult = new DragEventResult();
+		dragEventResult.setAccolades(getAccolades(dragArbitrationPacket.getRank()));
 		dragEventResult.setDurability(100);
+		dragEventResult.setEntrants(arrayOfDragEntrantResult);
 		dragEventResult.setEventId(eventDataEntity.getEvent().getId());
 		dragEventResult.setEventSessionId(eventSessionId);
 		dragEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
@@ -268,8 +265,6 @@ public class EventBO {
 	}
 	
 	public TeamEscapeEventResult getTeamEscapeEnd(Long eventSessionId, Long activePersonaId, TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
-		TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
-		
 		if(teamEscapeArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int)teamEscapeArbitrationPacket.getCarId(), teamEscapeArbitrationPacket.getHacksDetected());
 		}
@@ -326,9 +321,10 @@ public class EventBO {
 			}
 		}
 
-		teamEscapeEventResult.setAccolades(getAccolades());
-		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
+		TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
+		teamEscapeEventResult.setAccolades(getAccolades(teamEscapeArbitrationPacket.getRank()));
 		teamEscapeEventResult.setDurability(100);
+		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
 		teamEscapeEventResult.setEventId(eventDataEntity.getEvent().getId());
 		teamEscapeEventResult.setEventSessionId(eventSessionId);
 		teamEscapeEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
@@ -338,11 +334,11 @@ public class EventBO {
 		return teamEscapeEventResult;
 	}
 	
-	public Accolades getAccolades() {
+	public Accolades getAccolades(Integer rank) {
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward());
 		accolades.setHasLeveledUp(false);
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo());
+		accolades.setLuckyDrawInfo(getLuckyDrawInfo(rank));
 		accolades.setOriginalRewards(getOriginalReward());
 		accolades.setRewardInfo(getRewardPart());
 		
@@ -356,7 +352,7 @@ public class EventBO {
 		return finalReward;
 	}
 	
-	public LuckyDrawInfo getLuckyDrawInfo() {
+	public LuckyDrawInfo getLuckyDrawInfo(Integer rank) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
 		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
 		luckyDrawItem.setDescription("TEST DROP");
@@ -370,8 +366,8 @@ public class EventBO {
 		arrayOfLuckyDrawItem.getLuckyDrawItem().add(luckyDrawItem);
 		
 		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
+		luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
 		luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
-		luckyDrawInfo.setCardDeck(CardDecks.forRank(1));
 		return luckyDrawInfo;
 	}
 	
