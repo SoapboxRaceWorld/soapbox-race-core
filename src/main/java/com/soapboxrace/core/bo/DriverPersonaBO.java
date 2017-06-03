@@ -109,5 +109,11 @@ public class DriverPersonaBO {
 		personaPresence.setUserId(0);
 		return personaPresence;
 	}
+	
+	public void updateStatusMessage(String message, Long personaId) {
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		personaEntity.setMotto(message);
+		personaDao.update(personaEntity);
+	}
 
 }

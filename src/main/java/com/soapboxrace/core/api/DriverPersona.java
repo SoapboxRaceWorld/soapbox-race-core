@@ -177,10 +177,9 @@ public class DriverPersona {
 	@Secured
 	@Path("/UpdateStatusMessage")
 	@Produces(MediaType.APPLICATION_XML)
-	public PersonaMotto updateStatusMessage(@QueryParam("message") String message, @QueryParam("personaId") Long personaId) {
-		PersonaMotto personaMotto = new PersonaMotto();
-		personaMotto.setMessage("");
-		personaMotto.setPersonaId(100L);
+	public PersonaMotto updateStatusMessage(InputStream statusXml) {
+		PersonaMotto personaMotto = (PersonaMotto) UnmarshalXML.unMarshal(statusXml, PersonaMotto.class);
+		bo.updateStatusMessage(personaMotto.getMessage(), personaMotto.getPersonaId());
 		return personaMotto;
 	}
 }
