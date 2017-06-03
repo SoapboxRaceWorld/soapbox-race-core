@@ -116,8 +116,9 @@ public class DriverPersona {
 	@Secured
 	@Path("/ReserveName")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfString reserveName() {
-		return new ArrayOfString();
+	public ArrayOfString reserveName(@QueryParam("name") String name) {
+		ArrayOfString arrayOfString = bo.reserveName(name);
+		return arrayOfString;
 	}
 
 	@POST

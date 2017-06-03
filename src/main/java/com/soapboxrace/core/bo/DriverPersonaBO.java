@@ -13,6 +13,7 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
 import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
+import com.soapboxrace.jaxb.http.ArrayOfString;
 import com.soapboxrace.jaxb.http.PersonaBase;
 import com.soapboxrace.jaxb.http.PersonaPresence;
 import com.soapboxrace.jaxb.http.ProfileData;
@@ -114,6 +115,14 @@ public class DriverPersonaBO {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		personaEntity.setMotto(message);
 		personaDao.update(personaEntity);
+	}
+	
+	public ArrayOfString reserveName(String name) {
+		ArrayOfString arrayOfString = new ArrayOfString();
+		if(personaDao.findByName(name) != null) {
+			arrayOfString.getString().add("NONE");
+		}	
+		return arrayOfString;
 	}
 
 }
