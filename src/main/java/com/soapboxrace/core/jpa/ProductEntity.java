@@ -46,6 +46,7 @@ public class ProductEntity {
 	private String categoryName;
 	private boolean enabled;
 	private int minLevel;
+	private boolean premium;
 
 	public Long getId() {
 		return id;
@@ -233,6 +234,14 @@ public class ProductEntity {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public boolean isPremium() {
+		return premium;
+	}
+
+	public void setPremium(boolean premium) {
+		this.premium = premium;
 	}
 
 }

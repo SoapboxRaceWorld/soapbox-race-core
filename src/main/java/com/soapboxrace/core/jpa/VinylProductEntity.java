@@ -13,8 +13,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "VINYLPRODUCT")
 @NamedQueries({ //
-	@NamedQuery(name = "VinylProductEntity.findByProductId", query = "SELECT obj FROM VinylProductEntity obj WHERE obj.productId = :productId"), //
-	@NamedQuery(name = "VinylProductEntity.findByCategoryLevelEnabled", query = "SELECT obj FROM VinylProductEntity obj WHERE obj.category = :category AND obj.minLevel >= :minLevel AND obj.enabled = :enabled") //
+		@NamedQuery(name = "VinylProductEntity.findByProductId", query = "SELECT obj FROM VinylProductEntity obj WHERE obj.productId = :productId"), //
+		@NamedQuery(name = "VinylProductEntity.findByCategoryLevelEnabled", query = "SELECT obj FROM VinylProductEntity obj WHERE obj.category = :category AND obj.minLevel >= :minLevel AND obj.enabled = :enabled") //
 })
 public class VinylProductEntity {
 
@@ -41,7 +41,7 @@ public class VinylProductEntity {
 	private String visualStyle;
 	private String webIcon;
 	private String webLocation;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "parentCategoryId", referencedColumnName = "idcategory")
 	private CategoryEntity category;
@@ -49,6 +49,7 @@ public class VinylProductEntity {
 	private String categoryName;
 	private boolean enabled;
 	private int minLevel;
+	private boolean premium;
 
 	public Long getId() {
 		return id;
@@ -225,7 +226,7 @@ public class VinylProductEntity {
 	public void setCategory(CategoryEntity category) {
 		this.category = category;
 	}
-	
+
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -240,6 +241,14 @@ public class VinylProductEntity {
 
 	public void setMinLevel(int minLevel) {
 		this.minLevel = minLevel;
+	}
+
+	public boolean isPremium() {
+		return premium;
+	}
+
+	public void setPremium(boolean premium) {
+		this.premium = premium;
 	}
 
 }

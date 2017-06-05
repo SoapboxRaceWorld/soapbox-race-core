@@ -34,6 +34,8 @@ public class UserEntity {
 	@OneToMany(mappedBy = "user", targetEntity = PersonaEntity.class)
 	private List<PersonaEntity> listOfProfile;
 
+	private boolean premium;
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -60,6 +62,14 @@ public class UserEntity {
 
 	public List<PersonaEntity> getListOfProfile() {
 		return listOfProfile;
+	}
+
+	public boolean isPremium() {
+		return premium;
+	}
+
+	public void setPremium(boolean premium) {
+		this.premium = premium;
 	}
 
 }
