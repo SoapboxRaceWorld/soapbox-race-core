@@ -29,6 +29,7 @@ public class EventEntity {
 	private int maxCarClassRating;
 	private boolean isEnabled;
 	private boolean isLocked;
+	private String name;
 
 	public int getId() {
 		return id;
@@ -92,6 +93,14 @@ public class EventEntity {
 	
 	public void setIsLocked(boolean isLocked) {
 		this.isLocked = isLocked;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
