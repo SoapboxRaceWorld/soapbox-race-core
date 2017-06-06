@@ -1,5 +1,7 @@
 package com.soapboxrace.core.jpa;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,7 +24,8 @@ public class RecoveryPasswordEntity {
 
 	private Long userId;
 	private String randomKey;
-	private Integer time;
+	private Date expirationDate;
+	private Boolean isClose;
 
 	public Long getId() {
 		return id;
@@ -48,12 +51,20 @@ public class RecoveryPasswordEntity {
 		this.randomKey = randomKey;
 	}
 	
-	public Integer getTime() {
-		return time;
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 	
-	public void setTime(Integer time) {
-		this.time = time;
+	public Boolean getIsClose() {
+		return isClose;
+	}
+	
+	public void setIsClose(Boolean isClose) {
+		this.isClose = isClose;
 	}
 
 }

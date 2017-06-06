@@ -1,5 +1,6 @@
 package com.soapboxrace.core.bo;
 
+import java.util.Date;
 import java.util.Properties;
 
 import javax.ejb.EJB;
@@ -39,9 +40,17 @@ public class RecoveryPasswordBO {
 		if(!password.equals(passwordconf))
 			return "Password typed are not equals to the confirm password";
 		
+		Long currentTime = new Date().getTime();
+		Long recoveryTime = recoveryPasswordEntity.getExpirationDate().getTime();
+		if(recoveryPasswordEntity.getIsClose() || currentTime > recoveryTime)
+			return "This ticket is closed or no longer available";
+		
 		UserEntity userEntity = userDao.findById(recoveryPasswordEntity.getUserId());
 		userEntity.setPassword(DigestUtils.sha1Hex(password));
 		userDao.update(userEntity);
+		
+		recoveryPasswordEntity.setIsClose(true);
+		recoveryPasswordDao.update(recoveryPasswordEntity);
 		
 		return "Password successfully changed with key[" + randomKey + "] for eMail[" + userEntity.getEmail() + "] new password[" + DigestUtils.sha1Hex(password) + "]";
 	}
@@ -55,14 +64,18 @@ public class RecoveryPasswordBO {
 		if(recoveryPasswordEntity != null)
 			return "Already existing";
 		
-		recoveryPasswordEntity = new RecoveryPasswordEntity();
-		recoveryPasswordEntity.setRandomKey(createSecretKey(userEntity.getId()));
-		recoveryPasswordEntity.setTime(60);
-		recoveryPasswordEntity.setUserId(userEntity.getId());
-		recoveryPasswordDao.insert(recoveryPasswordEntity);
+		String randomKey = createSecretKey(userEntity.getId());
 		
 		//Send email
-		sendEmail(recoveryPasswordEntity.getRandomKey(), userEntity);
+		if(!sendEmail(randomKey, userEntity))
+			return "A problem has occured with sending email, please be sure your email are valid !";
+		
+		recoveryPasswordEntity = new RecoveryPasswordEntity();
+		recoveryPasswordEntity.setRandomKey(randomKey);
+		recoveryPasswordEntity.setExpirationDate(getMinutes(15));
+		recoveryPasswordEntity.setUserId(userEntity.getId());
+		recoveryPasswordEntity.setIsClose(false);
+		recoveryPasswordDao.insert(recoveryPasswordEntity);
 		
 		return "Recovery Password are successfully created for userId[" + userEntity.getId() + "]";
 	}
@@ -71,7 +84,7 @@ public class RecoveryPasswordBO {
 		return (Long.toHexString(Double.doubleToLongBits(Math.random())) + userId.toString());
 	}
 	
-	private void sendEmail(String randomKey, UserEntity userEntity) {
+	private Boolean sendEmail(String randomKey, UserEntity userEntity) {
 		// Assuming you are sending email from localhost
 		final String username = "user@gmail.com";// Change Username Here
 		final String password = "password"; // Change Password Here
@@ -101,9 +114,18 @@ public class RecoveryPasswordBO {
 			message.setSubject("Recovery Password Email");
 			message.setText("http://localhost:8080/soapbox-race-core/password.jsp?randomKey=" + randomKey);
 			Transport.send(message);
+			return true;
 		} catch (MessagingException mex) {
 			mex.printStackTrace();
+			return false;
 		}
+	}
+	
+	private Date getMinutes(int minutes) {
+		long time = new Date().getTime();
+		time = time + (minutes * 60000);
+		Date date = new Date(time);
+		return date;
 	}
 
 }
