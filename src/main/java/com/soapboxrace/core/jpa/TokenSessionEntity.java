@@ -33,8 +33,10 @@ public class TokenSessionEntity {
 	private Long activePersonaId;
 
 	private String relayCryptoTicket;
-	
+
 	private Long activeLobbyId;
+
+	private boolean premium;
 
 	public String getSecurityToken() {
 		return securityToken;
@@ -75,13 +77,21 @@ public class TokenSessionEntity {
 	public void setRelayCryptoTicket(String relayCryptoTicket) {
 		this.relayCryptoTicket = relayCryptoTicket;
 	}
-	
+
 	public Long getActiveLobbyId() {
 		return activeLobbyId;
 	}
-	
+
 	public void setActiveLobbyId(Long activeLobbyId) {
 		this.activeLobbyId = activeLobbyId;
+	}
+
+	public boolean isPremium() {
+		return premium;
+	}
+
+	public void setPremium(boolean premium) {
+		this.premium = premium;
 	}
 
 }
