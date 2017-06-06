@@ -60,7 +60,8 @@ public class Catalog {
 	@Secured
 	@Path("/categories")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfCategoryTrans categories() {
+	public ArrayOfCategoryTrans categories(@HeaderParam("securityToken") String securityToken) {
+		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 		ArrayOfCategoryTrans arrayOfCategoryTrans = new ArrayOfCategoryTrans();
 		List<CategoryEntity> listCategoryEntity = productBO.categories();
 		for (CategoryEntity entity : listCategoryEntity) {
@@ -73,7 +74,7 @@ public class Catalog {
 			categoryTrans.setLongDescription(entity.getLongDescription());
 			categoryTrans.setName(entity.getName());
 			categoryTrans.setPriority(entity.getPriority());
-			categoryTrans.setProducts(productBO.getVinylByCategory(entity));
+			categoryTrans.setProducts(productBO.getVinylByCategory(entity, activePersonaId));
 			categoryTrans.setShortDescription(entity.getShortDescription());
 			categoryTrans.setShowInNavigationPane(entity.getShowInNavigationPane());
 			categoryTrans.setShowPromoPage(entity.getShowPromoPage());

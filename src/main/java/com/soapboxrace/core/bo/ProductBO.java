@@ -46,9 +46,16 @@ public class ProductBO {
 		return categoryDao.getAll();
 	}
 
-	public ArrayOfProductTrans getVinylByCategory(CategoryEntity categoryEntity) {
+	public ArrayOfProductTrans getVinylByCategory(CategoryEntity categoryEntity, Long personaId) {
+		boolean premium = false;
+		int level = 1;
+		if (personaId != null && !personaId.equals(0L)) {
+			PersonaEntity personaEntity = personaDao.findById(personaId);
+			premium = personaEntity.getUser().isPremium();
+			level = personaEntity.getLevel();
+		}
 		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
-		List<VinylProductEntity> vinylProductEntity = vinylProductDao.findByCategoryLevelEnabled(categoryEntity, 1, true);
+		List<VinylProductEntity> vinylProductEntity = vinylProductDao.findByCategoryLevelEnabled(categoryEntity, level, true, premium);
 		for (VinylProductEntity entity : vinylProductEntity) {
 			ProductTrans productTrans = new ProductTrans();
 			productTrans.setCurrency(entity.getCurrency());
