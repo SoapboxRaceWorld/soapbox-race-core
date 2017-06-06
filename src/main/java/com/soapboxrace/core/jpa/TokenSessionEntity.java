@@ -36,7 +36,7 @@ public class TokenSessionEntity {
 
 	private Long activeLobbyId;
 
-	private boolean premium;
+	private boolean premium = false;
 
 	public String getSecurityToken() {
 		return securityToken;

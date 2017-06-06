@@ -6,9 +6,11 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.soapboxrace.core.dao.CategoryDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.dao.VinylProductDAO;
 import com.soapboxrace.core.jpa.CategoryEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.core.jpa.VinylProductEntity;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
@@ -19,21 +21,31 @@ public class ProductBO {
 
 	@EJB
 	private ProductDAO ProductDAO;
-	
+
 	@EJB
 	private CategoryDAO categoryDao;
 
 	@EJB
 	private VinylProductDAO vinylProductDao;
-	
-	public List<ProductEntity> productsInCategory(String categoryName, String productType) {
-		return ProductDAO.findByLevelEnabled(categoryName, productType, 1, true);
+
+	@EJB
+	private PersonaDAO personaDao;
+
+	public List<ProductEntity> productsInCategory(String categoryName, String productType, Long personaId) {
+		boolean premium = false;
+		int level = 1;
+		if (personaId != null && !personaId.equals(0L)) {
+			PersonaEntity personaEntity = personaDao.findById(personaId);
+			premium = personaEntity.getUser().isPremium();
+			level = personaEntity.getLevel();
+		}
+		return ProductDAO.findByLevelEnabled(categoryName, productType, level, true, premium);
 	}
-	
+
 	public List<CategoryEntity> categories() {
 		return categoryDao.getAll();
 	}
-	
+
 	public ArrayOfProductTrans getVinylByCategory(CategoryEntity categoryEntity) {
 		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
 		List<VinylProductEntity> vinylProductEntity = vinylProductDao.findByCategoryLevelEnabled(categoryEntity, 1, true);

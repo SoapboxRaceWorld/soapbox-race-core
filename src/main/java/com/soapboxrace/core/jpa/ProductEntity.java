@@ -14,7 +14,8 @@ import javax.persistence.Table;
 		@NamedQuery(name = "ProductEntity.findByLevelEnabled", //
 				query = "SELECT obj FROM ProductEntity obj WHERE " //
 						+ "obj.enabled = :enabled "//
-						+ "and obj.minLevel >= :minLevel " //
+						+ "and :minLevel >= obj.minLevel " //
+						+ "and (obj.premium = false or obj.premium = :premium )" //
 						+ "and obj.categoryName = :categoryName "//
 						+ "and obj.productType = :productType") //
 })
@@ -46,7 +47,7 @@ public class ProductEntity {
 	private String categoryName;
 	private boolean enabled;
 	private int minLevel;
-	private boolean premium;
+	private boolean premium = false;
 
 	public Long getId() {
 		return id;

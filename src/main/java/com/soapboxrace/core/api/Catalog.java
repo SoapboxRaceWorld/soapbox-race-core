@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.ProductBO;
+import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.CategoryEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCategoryTrans;
@@ -24,13 +26,18 @@ public class Catalog {
 	@EJB
 	private ProductBO productBO;
 
+	@EJB
+	private TokenSessionBO tokenBO;
+
 	@GET
 	@Secured
 	@Path("/productsInCategory")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfProductTrans productsInCategory(@QueryParam("categoryName") String categoryName, @QueryParam("clientProductType") String clientProductType) {
+	public ArrayOfProductTrans productsInCategory(@HeaderParam("securityToken") String securityToken, @QueryParam("categoryName") String categoryName,
+			@QueryParam("clientProductType") String clientProductType) {
 		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
-		List<ProductEntity> productsInCategory = productBO.productsInCategory(categoryName, clientProductType);
+		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+		List<ProductEntity> productsInCategory = productBO.productsInCategory(categoryName, clientProductType, activePersonaId);
 		for (ProductEntity productEntity : productsInCategory) {
 			ProductTrans productTrans = new ProductTrans();
 			productTrans.setCurrency(productEntity.getCurrency());
@@ -56,7 +63,7 @@ public class Catalog {
 	public ArrayOfCategoryTrans categories() {
 		ArrayOfCategoryTrans arrayOfCategoryTrans = new ArrayOfCategoryTrans();
 		List<CategoryEntity> listCategoryEntity = productBO.categories();
-		for(CategoryEntity entity : listCategoryEntity) {
+		for (CategoryEntity entity : listCategoryEntity) {
 			CategoryTrans categoryTrans = new CategoryTrans();
 			categoryTrans.setCatalogVersion(Integer.parseInt(entity.getCatalogVersion()));
 			categoryTrans.setDisplayName(entity.getDisplayName());
