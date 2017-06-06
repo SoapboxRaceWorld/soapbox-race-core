@@ -1,6 +1,7 @@
 package com.soapboxrace.core.bo;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import javax.ejb.EJB;
@@ -60,19 +61,19 @@ public class RecoveryPasswordBO {
 		if(userEntity == null)
 			return "";
 		
-		RecoveryPasswordEntity recoveryPasswordEntity = recoveryPasswordDao.findByUserId(userEntity.getId());
-		if(recoveryPasswordEntity != null)
-			return "Already existing";
+		List<RecoveryPasswordEntity> listRecoveryPasswordEntity = recoveryPasswordDao.findAllByUserId(userEntity.getId());
+		for(RecoveryPasswordEntity entity : listRecoveryPasswordEntity) {
+			if(!entity.getIsClose())
+				return "Already existing";
+		}
 		
 		String randomKey = createSecretKey(userEntity.getId());
-		
-		//Send email
 		if(!sendEmail(randomKey, userEntity))
 			return "A problem has occured with sending email, please be sure your email are valid !";
 		
-		recoveryPasswordEntity = new RecoveryPasswordEntity();
+		RecoveryPasswordEntity recoveryPasswordEntity = new RecoveryPasswordEntity();
 		recoveryPasswordEntity.setRandomKey(randomKey);
-		recoveryPasswordEntity.setExpirationDate(getMinutes(15));
+		recoveryPasswordEntity.setExpirationDate(getHours(24));
 		recoveryPasswordEntity.setUserId(userEntity.getId());
 		recoveryPasswordEntity.setIsClose(false);
 		recoveryPasswordDao.insert(recoveryPasswordEntity);
@@ -121,11 +122,10 @@ public class RecoveryPasswordBO {
 		}
 	}
 	
-	private Date getMinutes(int minutes) {
-		long time = new Date().getTime();
-		time = time + (minutes * 60000);
-		Date date = new Date(time);
-		return date;
+	private Date getHours(int hours) {
+		Long time = new Date().getTime();
+		time += hours * 60000 * 60;
+		return new Date(time);
 	}
 
 }
