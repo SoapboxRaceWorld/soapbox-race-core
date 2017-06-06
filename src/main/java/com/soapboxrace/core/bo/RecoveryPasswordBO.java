@@ -17,6 +17,8 @@ import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.RecoveryPasswordEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 @Stateless
 public class RecoveryPasswordBO {
 	
@@ -27,11 +29,21 @@ public class RecoveryPasswordBO {
 	private UserDAO userDao;
 	
 	public String sendRecoveryPassword(String password, String passwordconf, String randomKey) {
-		return randomKey;
-	}
-	
-	private String createSecretKey(Long userId) {
-		return (Long.toHexString(Double.doubleToLongBits(Math.random())) + userId.toString());
+		RecoveryPasswordEntity recoveryPasswordEntity = recoveryPasswordDao.findByRandomKey(randomKey);
+		if(recoveryPasswordEntity == null || randomKey == null || randomKey.isEmpty())
+			return "";
+		
+		if(password.isEmpty() || passwordconf.isEmpty())
+			return "Be sure to all field are valid";
+		
+		if(!password.equals(passwordconf))
+			return "Password typed are not equals to the confirm password";
+		
+		UserEntity userEntity = userDao.findById(recoveryPasswordEntity.getUserId());
+		userEntity.setPassword(DigestUtils.sha1Hex(password));
+		userDao.update(userEntity);
+		
+		return "Password successfully changed with key[" + randomKey + "] for eMail[" + userEntity.getEmail() + "] new password[" + DigestUtils.sha1Hex(password) + "]";
 	}
 	
 	public String createRecoveryPassword(Long userId) {
@@ -43,20 +55,23 @@ public class RecoveryPasswordBO {
 		if(recoveryPasswordEntity != null)
 			return "Already existing";
 		
-		String randomKey = createSecretKey(userEntity.getId());
 		recoveryPasswordEntity = new RecoveryPasswordEntity();
-		recoveryPasswordEntity.setRandomKey(randomKey);
+		recoveryPasswordEntity.setRandomKey(createSecretKey(userEntity.getId()));
 		recoveryPasswordEntity.setTime(60);
 		recoveryPasswordEntity.setUserId(userEntity.getId());
 		recoveryPasswordDao.insert(recoveryPasswordEntity);
 		
 		//Send email
-		sendEmail(randomKey, userEntity);
+		sendEmail(recoveryPasswordEntity.getRandomKey(), userEntity);
 		
 		return "Recovery Password are successfully created for userId[" + userEntity.getId() + "]";
 	}
 	
-	public void sendEmail(String randomKey, UserEntity userEntity) {
+	private String createSecretKey(Long userId) {
+		return (Long.toHexString(Double.doubleToLongBits(Math.random())) + userId.toString());
+	}
+	
+	private void sendEmail(String randomKey, UserEntity userEntity) {
 		// Assuming you are sending email from localhost
 		final String username = "user@gmail.com";// Change Username Here
 		final String password = "password"; // Change Password Here

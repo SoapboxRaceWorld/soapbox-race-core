@@ -21,7 +21,7 @@ public class RecoveryPassword {
 	@POST
 	@Path("/sendRecoveryPassword")
 	@Produces(MediaType.TEXT_HTML)
-	public String sendRecoveryPassword(@FormParam("password") String password, @FormParam("passwordconf") String passwordconf, @QueryParam("randomKey") String randomKey) {
+	public String sendRecoveryPassword(@FormParam("password") String password, @FormParam("passwordconf") String passwordconf, @FormParam("randomKey") String randomKey) {
 		return bo.sendRecoveryPassword(password, passwordconf, randomKey);
 	}
 	

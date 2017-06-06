@@ -29,5 +29,13 @@ public class RecoveryPasswordDAO extends BaseDAO<RecoveryPasswordEntity> {
 		List<RecoveryPasswordEntity> resultList = query.getResultList();
 		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
+	
+	public RecoveryPasswordEntity findByRandomKey(String randomKey) {
+		TypedQuery<RecoveryPasswordEntity> query = entityManager.createNamedQuery("RecoveryPasswordEntity.findByRandomKey", RecoveryPasswordEntity.class);
+		query.setParameter("randomKey", randomKey);
+		
+		List<RecoveryPasswordEntity> resultList = query.getResultList();
+		return !resultList.isEmpty() ? resultList.get(0) : null;
+	}
 
 }

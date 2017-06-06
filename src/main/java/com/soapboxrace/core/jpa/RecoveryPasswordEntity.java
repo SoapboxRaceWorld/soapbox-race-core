@@ -11,7 +11,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "RECOVERY_PASSWORD")
 @NamedQueries({ //
-	@NamedQuery(name = "RecoveryPasswordEntity.findByUserId", query = "SELECT obj FROM RecoveryPasswordEntity obj WHERE obj.userId = :userId") //
+	@NamedQuery(name = "RecoveryPasswordEntity.findByUserId", query = "SELECT obj FROM RecoveryPasswordEntity obj WHERE obj.userId = :userId"), //
+	@NamedQuery(name = "RecoveryPasswordEntity.findByRandomKey", query = "SELECT obj FROM RecoveryPasswordEntity obj WHERE obj.randomKey = :randomKey") //
 })
 public class RecoveryPasswordEntity {
 	
