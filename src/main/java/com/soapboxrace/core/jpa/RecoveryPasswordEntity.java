@@ -39,11 +39,11 @@ public class RecoveryPasswordEntity {
 		this.userId = userId;
 	}
 
-	public String getOwnedCarTrans() {
+	public String getRandomKey() {
 		return randomKey;
 	}
 
-	public void setOwnedCarTrans(String randomKey) {
+	public void setRandomKey(String randomKey) {
 		this.randomKey = randomKey;
 	}
 	
