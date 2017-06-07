@@ -2,18 +2,18 @@ package com.soapboxrace.core.bo;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.dao.RecoveryPasswordDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.RecoveryPasswordEntity;
@@ -29,6 +29,9 @@ public class RecoveryPasswordBO {
 	
 	@EJB
 	private UserDAO userDao;
+	
+	@Resource(mappedName = "java:jboss/mail/Gmail")
+	private Session mailSession;
 	
 	public String sendRecoveryPassword(String password, String passwordconf, String randomKey) {
 		RecoveryPasswordEntity recoveryPasswordEntity = recoveryPasswordDao.findByRandomKey(randomKey);
@@ -86,37 +89,15 @@ public class RecoveryPasswordBO {
 	}
 	
 	private Boolean sendEmail(String randomKey, UserEntity userEntity) {
-		// Assuming you are sending email from localhost
-		final String username = "user@gmail.com";// Change Username Here
-		final String password = "password"; // Change Password Here
-		String from = "from@gmail.com"; // Change From Mail ID
-		String to = userEntity.getEmail();// Change To Mail ID
-		
-		// Get system properties
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
-		
-		// Get the default Session object.
-		Session session = Session.getInstance(props,
-				new javax.mail.Authenticator() {
-					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication(username, password);
-					}
-    			});
-
 		try {
-			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(from));
-			message.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
+			MimeMessage message = new MimeMessage(mailSession);
+			message.setFrom(new InternetAddress(Config.getEmailFrom()));
+			message.addRecipient(Message.RecipientType.TO,new InternetAddress(userEntity.getEmail()));
 			message.setSubject("Recovery Password Email");
-			message.setText("http://localhost:8080/soapbox-race-core/password.jsp?randomKey=" + randomKey);
+			message.setText(Config.getServerAddress() + "/soapbox-race-core/password.jsp?randomKey=" + randomKey);
 			Transport.send(message);
 			return true;
-		} catch (MessagingException mex) {
+		} catch(MessagingException mex) {
 			mex.printStackTrace();
 			return false;
 		}
