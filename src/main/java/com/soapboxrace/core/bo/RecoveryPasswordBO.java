@@ -50,6 +50,9 @@ public class RecoveryPasswordBO {
 			return "This ticket is closed or no longer available";
 		
 		UserEntity userEntity = userDao.findById(recoveryPasswordEntity.getUserId());
+		if(DigestUtils.sha1Hex(password).equals(userEntity.getPassword()))
+			return "Password typed are equals to the actual password";
+		
 		userEntity.setPassword(DigestUtils.sha1Hex(password));
 		userDao.update(userEntity);
 		
@@ -64,11 +67,9 @@ public class RecoveryPasswordBO {
 		if(userEntity == null)
 			return "";
 		
-		List<RecoveryPasswordEntity> listRecoveryPasswordEntity = recoveryPasswordDao.findAllByUserId(userEntity.getId());
-		for(RecoveryPasswordEntity entity : listRecoveryPasswordEntity) {
-			if(!entity.getIsClose())
-				return "Already existing";
-		}
+		List<RecoveryPasswordEntity> listRecoveryPasswordEntity = recoveryPasswordDao.findAllOpenByUserId(userEntity.getId());
+		if(!listRecoveryPasswordEntity.isEmpty())
+			return "Already existing";
 		
 		String randomKey = createSecretKey(userEntity.getId());
 		if(!sendEmail(randomKey, userEntity))

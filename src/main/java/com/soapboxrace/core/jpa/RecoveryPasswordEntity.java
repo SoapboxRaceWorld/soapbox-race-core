@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "RECOVERY_PASSWORD")
 @NamedQueries({ //
 	@NamedQuery(name = "RecoveryPasswordEntity.findByUserId", query = "SELECT obj FROM RecoveryPasswordEntity obj WHERE obj.userId = :userId"), //
-	@NamedQuery(name = "RecoveryPasswordEntity.findAllByUserId", query = "SELECT obj FROM RecoveryPasswordEntity obj WHERE obj.userId = :userId"), //
+	@NamedQuery(name = "RecoveryPasswordEntity.findAllOpenByUserId", query = "SELECT obj FROM RecoveryPasswordEntity obj WHERE obj.userId = :userId AND obj.isClose = false"), //
 	@NamedQuery(name = "RecoveryPasswordEntity.findByRandomKey", query = "SELECT obj FROM RecoveryPasswordEntity obj WHERE obj.randomKey = :randomKey") //
 })
 public class RecoveryPasswordEntity {

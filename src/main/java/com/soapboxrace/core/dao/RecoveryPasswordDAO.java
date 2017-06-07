@@ -30,8 +30,8 @@ public class RecoveryPasswordDAO extends BaseDAO<RecoveryPasswordEntity> {
 		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 	
-	public List<RecoveryPasswordEntity> findAllByUserId(Long userId) {
-		TypedQuery<RecoveryPasswordEntity> query = entityManager.createNamedQuery("RecoveryPasswordEntity.findAllByUserId", RecoveryPasswordEntity.class);
+	public List<RecoveryPasswordEntity> findAllOpenByUserId(Long userId) {
+		TypedQuery<RecoveryPasswordEntity> query = entityManager.createNamedQuery("RecoveryPasswordEntity.findAllOpenByUserId", RecoveryPasswordEntity.class);
 		query.setParameter("userId", userId);
 		return query.getResultList();
 	}
