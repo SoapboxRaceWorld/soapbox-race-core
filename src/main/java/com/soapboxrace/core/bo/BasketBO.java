@@ -22,6 +22,9 @@ public class BasketBO {
 
 	@EJB
 	private CarSlotDAO carSlotDAO;
+	
+	@EJB
+	private PersonaBO personaBo;
 
 	public OwnedCarTrans getCar(String productId) {
 		BasketDefinitionEntity basketDefinitonEntity = basketDefinitionsDAO.findById(productId);
@@ -41,7 +44,10 @@ public class BasketBO {
 		personaEntity.setPersonaId(personaId);
 		carSlotEntity.setPersona(personaEntity);
 		carSlotEntity.setOwnedCarTrans(carXml);
-		carSlotDAO.insert(carSlotEntity);		
+		carSlotDAO.insert(carSlotEntity);
+		
+		personaBo.changeDefaultCar(personaId, carSlotEntity.getId());
+		
 		return true;
 	}
 
