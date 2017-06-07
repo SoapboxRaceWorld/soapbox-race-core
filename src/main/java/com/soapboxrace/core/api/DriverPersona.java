@@ -123,6 +123,14 @@ public class DriverPersona {
 
 	@POST
 	@Secured
+	@Path("/UnreserveName")
+	@Produces(MediaType.APPLICATION_XML)
+	public String UnreserveName(@QueryParam("name") String name) {
+		return "";
+	}
+
+	@POST
+	@Secured
 	@Path("/CreatePersona")
 	@Produces(MediaType.APPLICATION_XML)
 	public ProfileData createPersona(@HeaderParam("userId") Long userId, @HeaderParam("securityToken") String securityToken, @QueryParam("name") String name,

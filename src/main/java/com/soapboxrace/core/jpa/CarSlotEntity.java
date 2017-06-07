@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -28,7 +29,8 @@ public class CarSlotEntity {
 	@JoinColumn(name = "PersonaId", referencedColumnName = "ID")
 	private PersonaEntity persona;
 
-	@Column(length = 40000)
+	@Lob
+	@Column(length = 65535)
 	private String ownedCarTrans;
 
 	public Long getId() {
