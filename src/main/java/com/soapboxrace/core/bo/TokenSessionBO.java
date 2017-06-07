@@ -50,6 +50,8 @@ public class TokenSessionBO {
 		String randomUUID = UUIDGen.getRandomUUID();
 		tokenSessionEntity.setSecurityToken(randomUUID);
 		tokenSessionEntity.setUserId(userId);
+		UserEntity userEntity = userDAO.findById(userId);
+		tokenSessionEntity.setPremium(userEntity.isPremium());
 		tokenDAO.insert(tokenSessionEntity);
 		return randomUUID;
 	}

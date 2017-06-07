@@ -22,20 +22,21 @@ public class VinylProductDAO extends BaseDAO<VinylProductEntity> {
 	public VinylProductEntity findById(Long id) {
 		return entityManager.find(VinylProductEntity.class, id);
 	}
-	
+
 	public VinylProductEntity findByProductId(String productId) {
 		TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByProductId", VinylProductEntity.class);
 		query.setParameter("productId", productId);
-		
+
 		List<VinylProductEntity> resultList = query.getResultList();
 		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
-	
-	public List<VinylProductEntity> findByCategoryLevelEnabled(CategoryEntity category, int minLevel, Boolean enabled) {
+
+	public List<VinylProductEntity> findByCategoryLevelEnabled(CategoryEntity category, int minLevel, Boolean enabled, Boolean premium) {
 		TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByCategoryLevelEnabled", VinylProductEntity.class);
 		query.setParameter("category", category);
 		query.setParameter("enabled", enabled);
 		query.setParameter("minLevel", minLevel);
+		query.setParameter("premium", premium);
 		return query.getResultList();
 	}
 
