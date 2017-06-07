@@ -1,5 +1,6 @@
 package com.soapboxrace.core.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -33,6 +34,7 @@ public class RecoveryPasswordDAO extends BaseDAO<RecoveryPasswordEntity> {
 	public List<RecoveryPasswordEntity> findAllOpenByUserId(Long userId) {
 		TypedQuery<RecoveryPasswordEntity> query = entityManager.createNamedQuery("RecoveryPasswordEntity.findAllOpenByUserId", RecoveryPasswordEntity.class);
 		query.setParameter("userId", userId);
+		query.setParameter("expirationDate", new Date());
 		return query.getResultList();
 	}
 	
