@@ -30,4 +30,11 @@ public class Config {
 		return System.getProperty("ticketToken");
 	}
 
+	public static String getEmailFrom() {
+		return System.getProperty("emailFrom");
+	}
+
+	public static String getServerAddress() {
+		return System.getProperty("serverAddress");
+	}
 }

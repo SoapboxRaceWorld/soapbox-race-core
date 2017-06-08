@@ -43,6 +43,8 @@ system property example:
 	    <property name="udpRaceIp" value="127.0.0.1"/>
         <property name="udpRacePort" value="9998"/>
         <property name="ticketToken" value="123456789"/>
+        <property name="emailFrom" value="myemail@gmail.com" />
+        <property name="serverAddress" value="http://127.0.0.1:8680" />
 	  </system-properties>
 	  
 	  
@@ -56,5 +58,25 @@ datasource example:
 	    <password>sa</password>
 	  </security>
 	</datasource>
+
+
+email config example:
+
+
+    <subsystem xmlns="urn:jboss:domain:mail:2.0">
+      <mail-session name="default" jndi-name="java:jboss/mail/Default">
+        <smtp-server outbound-socket-binding-ref="mail-smtp" />
+      </mail-session>
+      <mail-session name="Gmail" from="oncabroadcast@gmail.com" jndi-name="java:jboss/mail/Gmail">
+        <smtp-server password="secretPassword" username="myemail@gmail.com" ssl="true" outbound-socket-binding-ref="mail-smtp-gmail" />
+      </mail-session>
+    </subsystem>
+    ......
+    <outbound-socket-binding name="mail-smtp">
+      <remote-destination host="localhost" port="25" />
+    </outbound-socket-binding>
+    <outbound-socket-binding name="mail-smtp-gmail" source-port="0" fixed-source-port="false">
+      <remote-destination host="smtp.gmail.com" port="465" />
+    </outbound-socket-binding>
 
 donations: https://www.patreon.com/nilzao
