@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "PROMO_CODE")
 @NamedQueries({
 	@NamedQuery(name = "PromoCodeEntity.findByUser", query = "SELECT obj FROM PromoCodeEntity obj WHERE obj.user = :user AND obj.isUsed = false"), //
-	@NamedQuery(name = "PromoCodeEntity.findByCode", query = "SELECT obj FROM PromoCodeEntity obj WHERE obj.promoCode = :promoCode AND obj.isUsed = false") //
+	@NamedQuery(name = "PromoCodeEntity.findByCode", query = "SELECT obj FROM PromoCodeEntity obj WHERE obj.promoCode = :promoCode") //
 })
 public class PromoCodeEntity {
 
