@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.dao.InviteTicketDAO;
+import com.soapboxrace.core.dao.ServerInfoDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.InviteTicketEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
@@ -26,6 +27,9 @@ public class UserBO {
 
 	@EJB
 	private InviteTicketDAO inviteTicketDAO;
+
+	@EJB
+	private ServerInfoDAO serverInfoDAO;
 
 	@EJB
 	private OpenFireRestApiCli xmppRestApiCli;
@@ -78,6 +82,7 @@ public class UserBO {
 		inviteTicketEntity.setUser(userEntity);
 		inviteTicketDAO.insert(inviteTicketEntity);
 		loginStatusVO = new LoginStatusVO(userEntity.getId(), "", true);
+		serverInfoDAO.updateNumberOfRegistered();
 		return loginStatusVO;
 	}
 

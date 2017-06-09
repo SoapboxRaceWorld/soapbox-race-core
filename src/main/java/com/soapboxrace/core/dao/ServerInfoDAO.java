@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
@@ -20,9 +21,14 @@ public class ServerInfoDAO extends BaseDAO<ServerInfoEntity> {
 
 	public ServerInfoEntity findInfo() {
 		TypedQuery<ServerInfoEntity> query = entityManager.createNamedQuery("ServerInfoEntity.findAll", ServerInfoEntity.class);
-		
+
 		List<ServerInfoEntity> resultList = query.getResultList();
 		return !resultList.isEmpty() ? resultList.get(0) : null;
+	}
+
+	public void updateNumberOfRegistered() {
+		Query createNamedQuery = entityManager.createNamedQuery("ServerInfoEntity.updateNumberOfRegistered");
+		createNamedQuery.executeUpdate();
 	}
 
 }

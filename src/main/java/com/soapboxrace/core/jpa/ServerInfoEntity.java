@@ -11,14 +11,15 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "SERVER_INFO")
 @NamedQueries({ //
-	@NamedQuery(name = "ServerInfoEntity.findAll", query = "SELECT obj FROM ServerInfoEntity obj") //
+		@NamedQuery(name = "ServerInfoEntity.findAll", query = "SELECT obj FROM ServerInfoEntity obj"), //
+		@NamedQuery(name = "ServerInfoEntity.updateNumberOfRegistered", query = "UPDATE ServerInfoEntity obj SET obj.numberOfRegistered=obj.numberOfRegistered+1") //
 })
 public class ServerInfoEntity {
 
 	@Id
 	@Column(length = 1000)
 	private String messageSrv;
-	
+
 	private String homePageUrl;
 	private String facebookUrl;
 	private String discordUrl;
@@ -29,10 +30,9 @@ public class ServerInfoEntity {
 	private String adminList;
 	private String ownerList;
 	private Integer numberOfRegistered;
-	
+
 	@Transient
 	private Integer onlineNumber;
-
 
 	public String getMessageSrv() {
 		return messageSrv;
