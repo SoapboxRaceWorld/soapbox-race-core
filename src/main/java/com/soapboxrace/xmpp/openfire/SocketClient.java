@@ -18,7 +18,7 @@ public class SocketClient {
 		while (!connected) {
 			try {
 				tries++;
-				System.out.println("Attempting to connect OpenFire XMPP Host. #" + String.valueOf(tries));
+				System.out.println("Attempting to connect to OpenFire XMPP Host. Attempt #" + String.valueOf(tries));
 				socket = new Socket(srvAddress, port);
 				out = new PrintWriter(this.socket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -40,7 +40,6 @@ public class SocketClient {
 		System.out.println("C->S [" + command + "]");
 		out.println(command);
 		out.flush();
-
 	}
 
 	public String receive() {

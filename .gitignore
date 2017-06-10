@@ -9,3 +9,6 @@
 /src/main/resources/Engine.svc
 /db
 /build
+.idea/
+parts.json
+sql-old/
