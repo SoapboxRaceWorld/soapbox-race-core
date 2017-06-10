@@ -5,6 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.jaxb.http.ArrayOfUdpRelayInfo;
 import com.soapboxrace.jaxb.http.UdpRelayInfo;
@@ -18,8 +19,8 @@ public class GetRebroadcasters {
 	public ArrayOfUdpRelayInfo getRebroadcasters() {
 		ArrayOfUdpRelayInfo arrayOfUdpRelayInfo = new ArrayOfUdpRelayInfo();
 		UdpRelayInfo udpRelayInfo = new UdpRelayInfo();
-		udpRelayInfo.setHost("127.0.0.1");
-		udpRelayInfo.setPort(9999);
+		udpRelayInfo.setHost(Config.getUdpFreeroamIp());
+		udpRelayInfo.setPort(Config.getUdpRacePort());
 		arrayOfUdpRelayInfo.getUdpRelayInfo().add(udpRelayInfo);
 		return arrayOfUdpRelayInfo;
 	}

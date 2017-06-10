@@ -26,6 +26,14 @@ public class Config {
 		return Integer.valueOf(System.getProperty("udpRacePort"));
 	}
 
+	public static String getUdpFreeroamIp() {
+		return System.getProperty("udpFreeroamIp");
+	}
+
+	public static int getUdpFreeroamPort() {
+		return Integer.valueOf(System.getProperty("udpFreeroamPort"));
+	}
+
 	public static String getTicketToken() {
 		return System.getProperty("ticketToken");
 	}
