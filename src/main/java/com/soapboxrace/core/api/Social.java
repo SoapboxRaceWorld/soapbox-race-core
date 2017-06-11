@@ -20,7 +20,7 @@ public class Social {
 	@Secured
 	@Path("/petition")
 	@Produces(MediaType.APPLICATION_XML)
-	public String sendHardwareInfo(@QueryParam("personaId") Long personaId, @QueryParam("abuserPersonaId") Long abuserPersonaId, @QueryParam("petitionType") Integer petitionType, @QueryParam("description") String description, @QueryParam("customCarID") Integer customCarID, @QueryParam("chatMinutes") Integer chatMinutes) {
+	public String petition(@QueryParam("personaId") Long personaId, @QueryParam("abuserPersonaId") Long abuserPersonaId, @QueryParam("petitionType") Integer petitionType, @QueryParam("description") String description, @QueryParam("customCarID") Integer customCarID, @QueryParam("chatMinutes") Integer chatMinutes) {
 		bo.sendReport(personaId, abuserPersonaId, petitionType, description, customCarID, chatMinutes, 0L);
 		return "";
 	}
