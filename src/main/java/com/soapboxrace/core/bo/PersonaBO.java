@@ -22,7 +22,7 @@ public class PersonaBO {
 
 	@EJB
 	private CarSlotDAO carSlotDAO;
-	
+
 	@EJB
 	private LevelRepDAO levelRepDAO;
 
@@ -44,7 +44,7 @@ public class PersonaBO {
 		return personaDAO.findById(personaId);
 	}
 
-	public OwnedCarTrans getDefaultCar(Long personaId) {
+	public CarSlotEntity getDefaultCarEntity(Long personaId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
 		List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
 		Integer curCarIndex = personaEntity.getCurCarIndex();
@@ -54,18 +54,23 @@ public class PersonaBO {
 				CarSlotEntity ownedCarEntity = carSlotList.get(curCarIndex);
 				changeDefaultCar(personaId, ownedCarEntity.getId());
 			}
-			CarSlotEntity carSlotEntity = carSlotList.get(curCarIndex);
-			OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
-			ownedCarTrans.setId(carSlotEntity.getId());
-			return ownedCarTrans;
+			return carSlotList.get(curCarIndex);
 		}
-		return new OwnedCarTrans();
+		return null;
+	}
+
+	public OwnedCarTrans getDefaultCar(Long personaId) {
+		CarSlotEntity carSlotEntity = getDefaultCarEntity(personaId);
+		if (carSlotEntity == null) {
+			return new OwnedCarTrans();
+		}
+		return (OwnedCarTrans) UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
 	}
 
 	public List<CarSlotEntity> getPersonasCar(Long personaId) {
 		return carSlotDAO.findByPersonaId(personaId);
 	}
-	
+
 	public LevelRepEntity getLevelInfoByLevel(Long level) {
 		return levelRepDAO.findByLevel(level);
 	}

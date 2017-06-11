@@ -47,17 +47,17 @@ public class Personas {
 
 	@EJB
 	private PersonaBO personaBO;
-	
+
 	@EJB
 	private CommerceBO commerceBO;
-	
+
 	@POST
 	@Secured
 	@Path("/{personaId}/commerce")
 	@Produces(MediaType.APPLICATION_XML)
 	public CommerceSessionResultTrans commerce(InputStream commerceXml, @PathParam(value = "personaId") Long personaId) {
 		CommerceSessionResultTrans commerceSessionResultTrans = new CommerceSessionResultTrans();
-		
+
 		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
 		arrayOfInventoryItemTrans.getInventoryItemTrans().add(new InventoryItemTrans());
 
@@ -71,7 +71,7 @@ public class Personas {
 		CommerceSessionTrans commerceSessionTrans = (CommerceSessionTrans) UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
 		commerceSessionTrans.getUpdatedCar().setDurability(100);
 		commerceBO.updateCar(commerceSessionTrans, personaId);
-		
+
 		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
 		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
 		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
@@ -110,9 +110,15 @@ public class Personas {
 		if ("SRV-GARAGESLOT".equals(productId)) {
 			commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
 		} else {
-			arrayOfOwnedCarTrans.getOwnedCarTrans().add(new OwnedCarTrans());
+			OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
 			commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
-
+			if ("SRV-REPAIR".equals(productId)) {
+				OwnedCarTrans defaultCar = basketBO.repairCar(personaId);
+				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
+				arrayOfOwnedCarTrans.getOwnedCarTrans().add(defaultCar);
+				return commerceResultTrans;
+			}
+			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 			if (basketBO.buyCar(productId, personaId)) {
 				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
 			} else {
@@ -229,7 +235,7 @@ public class Personas {
 		}
 		return arrayOfOwnedCarTrans;
 	}
-	
+
 	@PUT
 	@Secured
 	@Path("/{personaId}/cars")

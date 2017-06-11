@@ -22,21 +22,35 @@ public class BasketBO {
 
 	@EJB
 	private CarSlotDAO carSlotDAO;
-	
+
 	@EJB
 	private PersonaBO personaBo;
 
 	public OwnedCarTrans getCar(String productId) {
 		BasketDefinitionEntity basketDefinitonEntity = basketDefinitionsDAO.findById(productId);
+		if (basketDefinitonEntity == null) {
+			return new OwnedCarTrans();
+		}
 		String ownedCarTrans = basketDefinitonEntity.getOwnedCarTrans();
 		return (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTrans, OwnedCarTrans.class);
 	}
 
+	public OwnedCarTrans repairCar(Long personaId) {
+		CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaId);
+		OwnedCarTrans defaultCar = personaBo.getDefaultCar(personaId);
+		defaultCar.setDurability(100);
+		String marshal = MarshalXML.marshal(defaultCar);
+		defaultCarEntity.setOwnedCarTrans(marshal);
+		carSlotDAO.update(defaultCarEntity);
+		defaultCar.setId(defaultCarEntity.getId());
+		return defaultCar;
+	}
+
 	public boolean buyCar(String productId, Long personaId) {
-		if(getPersonaCarCount(personaId) >= 6) {
+		if (getPersonaCarCount(personaId) >= 6) {
 			return false;
 		}
-		
+
 		OwnedCarTrans car = getCar(productId);
 		String carXml = MarshalXML.marshal(car);
 		CarSlotEntity carSlotEntity = new CarSlotEntity();
@@ -45,9 +59,9 @@ public class BasketBO {
 		carSlotEntity.setPersona(personaEntity);
 		carSlotEntity.setOwnedCarTrans(carXml);
 		carSlotDAO.insert(carSlotEntity);
-		
+
 		personaBo.changeDefaultCar(personaId, carSlotEntity.getId());
-		
+
 		return true;
 	}
 
@@ -62,7 +76,7 @@ public class BasketBO {
 	public boolean sellCar(Long personaId, Long serialNumber) {
 		CarSlotEntity carSlotEntity = carSlotDAO.findById(serialNumber);
 		int personaCarCount = getPersonaCarCount(personaId);
-		if(carSlotEntity == null || personaCarCount <= 1) {
+		if (carSlotEntity == null || personaCarCount <= 1) {
 			return false;
 		}
 
