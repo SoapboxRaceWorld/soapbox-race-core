@@ -257,7 +257,7 @@ CREATE TABLE
         ownerList VARCHAR(255) COLLATE utf8_unicode_ci,
         serverName VARCHAR(255) COLLATE utf8_unicode_ci,
         timezone INT,
-        PRIMARY KEY (messageSrv)
+        PRIMARY KEY (serverName)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE

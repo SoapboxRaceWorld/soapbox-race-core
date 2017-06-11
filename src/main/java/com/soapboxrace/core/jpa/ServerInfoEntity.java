@@ -15,14 +15,13 @@ import javax.persistence.Transient;
 		@NamedQuery(name = "ServerInfoEntity.updateNumberOfRegistered", query = "UPDATE ServerInfoEntity obj SET obj.numberOfRegistered=obj.numberOfRegistered+1") //
 })
 public class ServerInfoEntity {
-
-	@Id
 	@Column(length = 1000)
 	private String messageSrv;
 
 	private String homePageUrl;
 	private String facebookUrl;
 	private String discordUrl;
+	@Id
 	private String serverName;
 	private String Country;
 	private Integer timezone;
