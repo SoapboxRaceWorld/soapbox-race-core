@@ -64,7 +64,9 @@ public class PersonaBO {
 		if (carSlotEntity == null) {
 			return new OwnedCarTrans();
 		}
-		return (OwnedCarTrans) UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
+		OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
+		ownedCarTrans.setId(carSlotEntity.getId());
+		return ownedCarTrans;
 	}
 
 	public List<CarSlotEntity> getPersonasCar(Long personaId) {
