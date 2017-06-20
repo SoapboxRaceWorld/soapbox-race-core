@@ -23,7 +23,7 @@ public class ServerInfoEntity {
 	private String discordUrl;
 	@Id
 	private String serverName;
-	private String Country;
+	private String country;
 	private Integer timezone;
 	private String bannerUrl;
 	private String adminList;
@@ -74,11 +74,11 @@ public class ServerInfoEntity {
 	}
 
 	public String getCountry() {
-		return Country;
+		return country;
 	}
 
 	public void setCountry(String country) {
-		Country = country;
+		this.country = country;
 	}
 
 	public Integer getTimezone() {
