@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -85,7 +86,8 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/baskets")
 	@Produces(MediaType.APPLICATION_XML)
-	public CommerceResultTrans baskets(InputStream basketXml, @PathParam(value = "personaId") Long personaId) {
+	public CommerceResultTrans baskets(@HeaderParam("securityToken") String securityToken, InputStream basketXml, @PathParam(value = "personaId") Long personaId) {
+
 		CommerceResultTrans commerceResultTrans = new CommerceResultTrans();
 
 		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
@@ -119,7 +121,7 @@ public class Personas {
 				return commerceResultTrans;
 			}
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
-			if (basketBO.buyCar(productId, personaId)) {
+			if (basketBO.buyCar(productId, personaId, securityToken)) {
 				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
 			} else {
 				commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS);
@@ -133,7 +135,7 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/carslots")
 	@Produces(MediaType.APPLICATION_XML)
-	public CarSlotInfoTrans carslots(@PathParam(value = "personaId") Long personaId) {
+	public CarSlotInfoTrans carslots(@PathParam(value = "personaId") Long personaId, @HeaderParam("securityToken") String securityToken) {
 		PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
 		List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
@@ -147,7 +149,8 @@ public class Personas {
 		carSlotInfoTrans.setCarsOwnedByPersona(arrayOfOwnedCarTrans);
 		carSlotInfoTrans.setDefaultOwnedCarIndex(personaEntity.getCurCarIndex());
 		carSlotInfoTrans.setObtainableSlots(new ArrayOfProductTrans());
-		carSlotInfoTrans.setOwnedCarSlotsCount(6);
+		int carlimit = basketBO.getCarLimit(securityToken);
+		carSlotInfoTrans.setOwnedCarSlotsCount(carlimit);
 		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
 		ProductTrans productTrans = new ProductTrans();
 		productTrans.setBundleItems(new ArrayOfProductTrans());

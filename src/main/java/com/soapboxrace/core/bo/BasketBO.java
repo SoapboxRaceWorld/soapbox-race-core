@@ -7,9 +7,11 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.dao.BasketDefinitionDAO;
 import com.soapboxrace.core.dao.CarSlotDAO;
+import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.BasketDefinitionEntity;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
@@ -25,6 +27,9 @@ public class BasketBO {
 
 	@EJB
 	private PersonaBO personaBo;
+
+	@EJB
+	private TokenSessionDAO tokenDAO;
 
 	public OwnedCarTrans getCar(String productId) {
 		BasketDefinitionEntity basketDefinitonEntity = basketDefinitionsDAO.findById(productId);
@@ -46,8 +51,9 @@ public class BasketBO {
 		return defaultCar;
 	}
 
-	public boolean buyCar(String productId, Long personaId) {
-		if (getPersonaCarCount(personaId) >= 6) {
+	public boolean buyCar(String productId, Long personaId, String securityToken) {
+		int carLimit = getCarLimit(securityToken);
+		if (getPersonaCarCount(personaId) >= carLimit) {
 			return false;
 		}
 
@@ -84,4 +90,11 @@ public class BasketBO {
 		return true;
 	}
 
+	public int getCarLimit(String securityToken) {
+		TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
+		if (tokenSession.isPremium()) {
+			return 30;
+		}
+		return 6;
+	}
 }
