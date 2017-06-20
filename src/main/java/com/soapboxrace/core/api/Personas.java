@@ -234,6 +234,7 @@ public class Personas {
 		for (CarSlotEntity carSlotEntity : personasCar) {
 			String ownedCarTransXml = carSlotEntity.getOwnedCarTrans();
 			OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
+			ownedCarTrans.setId(carSlotEntity.getId());
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 		}
 		return arrayOfOwnedCarTrans;
