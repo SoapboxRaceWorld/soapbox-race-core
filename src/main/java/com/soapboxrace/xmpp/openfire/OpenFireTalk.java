@@ -2,6 +2,7 @@ package com.soapboxrace.xmpp.openfire;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -87,7 +88,18 @@ public class OpenFireTalk {
 		@Override
 		public void run() {
 			while (true) {
-				xmppTalk.read();
+				String read = xmppTalk.read();
+				if (read == null) {
+					OpenFireSoapBoxCli.getInstance().disconnect();
+					try {
+						xmppTalk.socket.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					OpenFireSoapBoxCli.getInstance();
+					this.interrupt();
+					break;
+				}
 			}
 		}
 
