@@ -109,7 +109,7 @@ public class Personas {
 
 		BasketTrans basketTrans = (BasketTrans) UnmarshalXML.unMarshal(basketXml, BasketTrans.class);
 		String productId = basketTrans.getItems().getBasketItemTrans().get(0).getProductId();
-		if ("SRV-GARAGESLOT".equals(productId)) {
+		if ("SRV-GARAGESLOT".equals(productId) || "-1".equals(productId) ) {
 			commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
 		} else {
 			OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
