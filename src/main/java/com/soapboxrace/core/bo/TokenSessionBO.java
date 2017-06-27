@@ -59,10 +59,12 @@ public class TokenSessionBO {
 
 	public boolean verifyPersona(String securityToken, Long personaId) {
 		TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
+
 		if (tokenSession == null) {
 			throw new NotAuthorizedException("Invalid session...");
 		}
 		UserEntity user = userDAO.findById(tokenSession.getUserId());
+
 		if (!user.ownsPersona(personaId)) {
 			throw new NotAuthorizedException("Persona is not owned by user");
 		}
