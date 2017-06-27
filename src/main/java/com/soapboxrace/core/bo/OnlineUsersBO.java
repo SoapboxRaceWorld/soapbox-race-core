@@ -24,7 +24,7 @@ public class OnlineUsersBO {
 		return onlineUsersEntity.getNumberOfUsers();
 	}
 
-	@Schedule(second = "0", minute = "*", hour = "*", persistent = false)
+	@Schedule(minute = "*", hour = "*", persistent = false)
 	public void insertNumberOfUsesOnlineNow() {
 		Long timeLong = new Date().getTime() / 1000L;
 		OnlineUsersEntity onlineUsersEntity = new OnlineUsersEntity();
@@ -36,7 +36,7 @@ public class OnlineUsersBO {
 	private Date getLastMinutes(int minutes) {
 		long time = new Date().getTime();
 		time = time - (minutes * 90000);
-		Date date = new Date(time);
-		return date;
+
+		return new Date(time);
 	}
 }

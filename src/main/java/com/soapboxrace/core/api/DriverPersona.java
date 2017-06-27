@@ -1,30 +1,24 @@
 package com.soapboxrace.core.api;
 
-import java.io.InputStream;
-
-import javax.ejb.EJB;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.DriverPersonaBO;
+import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.bo.UserBO;
+import com.soapboxrace.core.dao.TokenSessionDAO;
+import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.jaxb.http.ArrayOfInt;
-import com.soapboxrace.jaxb.http.ArrayOfLong;
-import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
-import com.soapboxrace.jaxb.http.ArrayOfString;
-import com.soapboxrace.jaxb.http.PersonaIdArray;
-import com.soapboxrace.jaxb.http.PersonaMotto;
-import com.soapboxrace.jaxb.http.PersonaPresence;
-import com.soapboxrace.jaxb.http.ProfileData;
+import com.soapboxrace.core.jpa.TokenSessionEntity;
+import com.soapboxrace.core.jpa.UserEntity;
+import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
+
+import javax.ejb.EJB;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
+import java.io.InputStream;
 
 @Path("/DriverPersona")
 public class DriverPersona {
@@ -34,6 +28,15 @@ public class DriverPersona {
 
 	@EJB
 	private UserBO userBo;
+
+	@EJB
+	private TokenSessionBO tokenSessionBo;
+
+	@EJB
+	private TokenSessionDAO tokenSessionDao;
+
+	@EJB
+	private UserDAO userDao;
 
 	@GET
 	@Secured
@@ -117,8 +120,7 @@ public class DriverPersona {
 	@Path("/ReserveName")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfString reserveName(@QueryParam("name") String name) {
-		ArrayOfString arrayOfString = bo.reserveName(name);
-		return arrayOfString;
+		return bo.reserveName(name);
 	}
 
 	@POST
@@ -148,7 +150,9 @@ public class DriverPersona {
 	@Secured
 	@Path("/DeletePersona")
 	@Produces(MediaType.APPLICATION_XML)
-	public String deletePersona(@QueryParam("personaId") Long personaId) {
+	public String deletePersona(@QueryParam("personaId") Long personaId, @HeaderParam("securityToken") String securityToken) {
+		tokenSessionBo.verifyPersona(securityToken, personaId);
+
 		bo.deletePersona(personaId);
 		return "<long>0</long>";
 	}
@@ -186,8 +190,10 @@ public class DriverPersona {
 	@Secured
 	@Path("/UpdateStatusMessage")
 	@Produces(MediaType.APPLICATION_XML)
-	public PersonaMotto updateStatusMessage(InputStream statusXml) {
+	public PersonaMotto updateStatusMessage(InputStream statusXml, @HeaderParam("securityToken") String securityToken, @Context Request request) {
 		PersonaMotto personaMotto = (PersonaMotto) UnmarshalXML.unMarshal(statusXml, PersonaMotto.class);
+		tokenSessionBo.verifyPersona(securityToken, personaMotto.getPersonaId());
+
 		bo.updateStatusMessage(personaMotto.getMessage(), personaMotto.getPersonaId());
 		return personaMotto;
 	}

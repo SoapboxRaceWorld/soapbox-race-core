@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ws.rs.NotAuthorizedException;
 
 import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.dao.TokenSessionDAO;
@@ -56,6 +57,18 @@ public class TokenSessionBO {
 		return randomUUID;
 	}
 
+	public boolean verifyPersona(String securityToken, Long personaId) {
+		TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
+
+		if (tokenSession == null)
+			throw new NotAuthorizedException("Invalid session...");
+		UserEntity user = userDAO.findById(tokenSession.getUserId());
+
+		if (!user.ownsPersona(personaId))
+			throw new NotAuthorizedException("Persona is not owned by user");
+		return true;
+	}
+
 	public void deleteByUserId(Long userId) {
 		tokenDAO.deleteByUserId(userId);
 	}
@@ -92,6 +105,11 @@ public class TokenSessionBO {
 
 	public void setActivePersonaId(String securityToken, Long personaId) {
 		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+
+		if (!userDAO.findById(tokenSessionEntity.getUserId()).ownsPersona(personaId)) {
+			throw new NotAuthorizedException("Persona not owned by user");
+		}
+
 		tokenSessionEntity.setActivePersonaId(personaId);
 		tokenDAO.update(tokenSessionEntity);
 	}
