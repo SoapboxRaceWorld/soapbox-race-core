@@ -38,6 +38,10 @@ public class Config {
 		return System.getProperty("ticketToken");
 	}
 
+	public static String getPromoCodeToken() {
+		return System.getProperty("promoCodeToken");
+	}
+
 	public static String getEmailFrom() {
 		return System.getProperty("emailFrom");
 	}

@@ -47,6 +47,7 @@ system property example:
         <property name="ticketToken" value="123456789"/>
         <property name="emailFrom" value="myemail@gmail.com" />
         <property name="serverAddress" value="http://127.0.0.1:8680" />
+        <property name="promoCodeToken" value="987654321" />
 	  </system-properties>
 	  
 	  
