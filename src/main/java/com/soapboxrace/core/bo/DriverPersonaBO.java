@@ -1,5 +1,6 @@
 package com.soapboxrace.core.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -8,8 +9,10 @@ import javax.ejb.Stateless;
 import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.LobbyEntrantDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.TreasureHuntDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
 import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
@@ -33,12 +36,26 @@ public class DriverPersonaBO {
 	@EJB
 	private CarSlotDAO carSlotDAO;
 
+	@EJB
+	private TreasureHuntDAO treasureHuntDAO;
+
 	public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
 		UserEntity userEntity = userDao.findById(userId);
 		personaEntity.setUser(userEntity);
 		personaEntity.setCash(6000000);
 		personaEntity.setLevel(60);
 		personaDao.insert(personaEntity);
+		
+		TreasureHuntEntity treasureHuntEntity = new TreasureHuntEntity();
+		treasureHuntEntity.setCoinsCollected(0);
+		treasureHuntEntity.setIsStreakBroken(false);
+		treasureHuntEntity.setNumCoins(0);
+		treasureHuntEntity.setPersonaId(personaEntity.getPersonaId());
+		treasureHuntEntity.setSeed(-1142185119);
+		treasureHuntEntity.setStreak(1);
+		treasureHuntEntity.setThDate(new Date());
+		treasureHuntDAO.insert(treasureHuntEntity);
+		
 		return castPersonaEntity(personaEntity);
 	}
 
@@ -92,6 +109,7 @@ public class DriverPersonaBO {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		carSlotDAO.deleteByPersona(personaEntity);
 		lobbyEntrantDAO.deleteByPersona(personaEntity);
+		treasureHuntDAO.deleteByPersona(personaEntity.getPersonaId());
 		personaDao.delete(personaEntity);
 	}
 
