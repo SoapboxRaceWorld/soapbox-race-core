@@ -66,7 +66,7 @@ public class PromoCodeBO {
 		promoCodeEntity.setIsUsed(true);
 		promoCodeEntity.setUser(userEntity);
 		promoCodeDao.update(promoCodeEntity);
-		return "Enjoy with your premium account!";
+		return "Enjoy your premium account!";
 	}
 
 }
