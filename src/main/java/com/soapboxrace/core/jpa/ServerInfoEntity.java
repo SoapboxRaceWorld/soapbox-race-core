@@ -32,6 +32,10 @@ public class ServerInfoEntity {
 
 	@Transient
 	private Integer onlineNumber;
+	@Transient
+	private boolean requireTicket = false;
+	@Transient
+	private String serverVersion;
 
 	public String getMessageSrv() {
 		return messageSrv;
@@ -127,6 +131,22 @@ public class ServerInfoEntity {
 
 	public void setOnlineNumber(Integer onlineNumber) {
 		this.onlineNumber = onlineNumber;
+	}
+
+	public boolean isRequireTicket() {
+		return requireTicket;
+	}
+
+	public void setRequireTicket(boolean requireTicket) {
+		this.requireTicket = requireTicket;
+	}
+
+	public String getServerVersion() {
+		return serverVersion;
+	}
+
+	public void setServerVersion(String serverVersion) {
+		this.serverVersion = serverVersion;
 	}
 
 }
