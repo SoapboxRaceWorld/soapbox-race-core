@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.EventBO;
+import com.soapboxrace.core.bo.EventsBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.jaxb.http.ArrayOfEventDefinition;
@@ -26,6 +27,9 @@ public class Events {
 
 	@EJB
 	private EventBO eventBO;
+	
+	@EJB
+	private EventsBO eventsBO;
 	
 	@EJB
 	private TokenSessionBO tokenSessionBO;
@@ -84,8 +88,9 @@ public class Events {
 	@Secured
 	@Path("/gettreasurehunteventsession")
 	@Produces(MediaType.APPLICATION_XML)
-	public TreasureHuntEventSession getTreasureHuntEventSession() {
-		return new TreasureHuntEventSession();
+	public TreasureHuntEventSession getTreasureHuntEventSession(@HeaderParam("securityToken") String securityToken) {
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		return eventsBO.getTreasureHuntEventSession(activePersonaId);
 	}
 
 	@GET
