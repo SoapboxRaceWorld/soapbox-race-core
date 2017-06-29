@@ -12,20 +12,19 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "PROMO_CODE")
-@NamedQueries({
-	@NamedQuery(name = "PromoCodeEntity.findByUser", query = "SELECT obj FROM PromoCodeEntity obj WHERE obj.user = :user AND obj.isUsed = false"), //
-	@NamedQuery(name = "PromoCodeEntity.findByCode", query = "SELECT obj FROM PromoCodeEntity obj WHERE obj.promoCode = :promoCode") //
+@NamedQueries({ @NamedQuery(name = "PromoCodeEntity.findByUser", query = "SELECT obj FROM PromoCodeEntity obj WHERE obj.user = :user AND obj.isUsed = false"), //
+		@NamedQuery(name = "PromoCodeEntity.findByCode", query = "SELECT obj FROM PromoCodeEntity obj WHERE obj.promoCode = :promoCode") //
 })
 public class PromoCodeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "UserId", referencedColumnName = "ID")
+	@JoinColumn(name = "USERID", referencedColumnName = "ID")
 	private UserEntity user;
-	
+
 	private String promoCode;
 	private Boolean isUsed;
 
@@ -36,7 +35,7 @@ public class PromoCodeEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public UserEntity getUser() {
 		return user;
 	}
