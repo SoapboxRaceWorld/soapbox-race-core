@@ -316,7 +316,7 @@ CREATE TABLE
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE
-    PROMO_CODE
+    SOAPBOX.PROMO_CODE
     (
         id bigint NOT NULL AUTO_INCREMENT,
         isUsed bit,
