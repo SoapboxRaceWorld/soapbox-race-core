@@ -72,4 +72,7 @@ public class UserEntity {
 		this.premium = premium;
 	}
 
+	public boolean ownsPersona(Long id) {
+		return this.listOfProfile.stream().anyMatch(p -> p.getPersonaId().equals(id));
+	}
 }

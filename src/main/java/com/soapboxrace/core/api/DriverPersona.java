@@ -9,10 +9,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.DriverPersonaBO;
+import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.bo.UserBO;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
@@ -34,6 +37,9 @@ public class DriverPersona {
 
 	@EJB
 	private UserBO userBo;
+
+	@EJB
+	private TokenSessionBO tokenSessionBo;
 
 	@GET
 	@Secured
@@ -117,8 +123,7 @@ public class DriverPersona {
 	@Path("/ReserveName")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfString reserveName(@QueryParam("name") String name) {
-		ArrayOfString arrayOfString = bo.reserveName(name);
-		return arrayOfString;
+		return bo.reserveName(name);
 	}
 
 	@POST
@@ -148,7 +153,8 @@ public class DriverPersona {
 	@Secured
 	@Path("/DeletePersona")
 	@Produces(MediaType.APPLICATION_XML)
-	public String deletePersona(@QueryParam("personaId") Long personaId) {
+	public String deletePersona(@QueryParam("personaId") Long personaId, @HeaderParam("securityToken") String securityToken) {
+		tokenSessionBo.verifyPersona(securityToken, personaId);
 		bo.deletePersona(personaId);
 		return "<long>0</long>";
 	}
@@ -186,8 +192,10 @@ public class DriverPersona {
 	@Secured
 	@Path("/UpdateStatusMessage")
 	@Produces(MediaType.APPLICATION_XML)
-	public PersonaMotto updateStatusMessage(InputStream statusXml) {
+	public PersonaMotto updateStatusMessage(InputStream statusXml, @HeaderParam("securityToken") String securityToken, @Context Request request) {
 		PersonaMotto personaMotto = (PersonaMotto) UnmarshalXML.unMarshal(statusXml, PersonaMotto.class);
+		tokenSessionBo.verifyPersona(securityToken, personaMotto.getPersonaId());
+
 		bo.updateStatusMessage(personaMotto.getMessage(), personaMotto.getPersonaId());
 		return personaMotto;
 	}

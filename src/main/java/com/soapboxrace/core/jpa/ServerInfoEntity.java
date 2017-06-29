@@ -15,16 +15,15 @@ import javax.persistence.Transient;
 		@NamedQuery(name = "ServerInfoEntity.updateNumberOfRegistered", query = "UPDATE ServerInfoEntity obj SET obj.numberOfRegistered=obj.numberOfRegistered+1") //
 })
 public class ServerInfoEntity {
-
-	@Id
 	@Column(length = 1000)
 	private String messageSrv;
 
 	private String homePageUrl;
 	private String facebookUrl;
 	private String discordUrl;
+	@Id
 	private String serverName;
-	private String Country;
+	private String country;
 	private Integer timezone;
 	private String bannerUrl;
 	private String adminList;
@@ -75,11 +74,11 @@ public class ServerInfoEntity {
 	}
 
 	public String getCountry() {
-		return Country;
+		return country;
 	}
 
 	public void setCountry(String country) {
-		Country = country;
+		this.country = country;
 	}
 
 	public Integer getTimezone() {

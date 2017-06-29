@@ -7,9 +7,11 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.dao.BasketDefinitionDAO;
 import com.soapboxrace.core.dao.CarSlotDAO;
+import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.BasketDefinitionEntity;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
@@ -22,21 +24,39 @@ public class BasketBO {
 
 	@EJB
 	private CarSlotDAO carSlotDAO;
-	
+
 	@EJB
 	private PersonaBO personaBo;
 
+	@EJB
+	private TokenSessionDAO tokenDAO;
+
 	public OwnedCarTrans getCar(String productId) {
 		BasketDefinitionEntity basketDefinitonEntity = basketDefinitionsDAO.findById(productId);
+		if (basketDefinitonEntity == null) {
+			return new OwnedCarTrans();
+		}
 		String ownedCarTrans = basketDefinitonEntity.getOwnedCarTrans();
 		return (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTrans, OwnedCarTrans.class);
 	}
 
-	public boolean buyCar(String productId, Long personaId) {
-		if(getPersonaCarCount(personaId) >= 6) {
+	public OwnedCarTrans repairCar(Long personaId) {
+		CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaId);
+		OwnedCarTrans defaultCar = personaBo.getDefaultCar(personaId);
+		defaultCar.setDurability(100);
+		String marshal = MarshalXML.marshal(defaultCar);
+		defaultCarEntity.setOwnedCarTrans(marshal);
+		carSlotDAO.update(defaultCarEntity);
+		defaultCar.setId(defaultCarEntity.getId());
+		return defaultCar;
+	}
+
+	public boolean buyCar(String productId, Long personaId, String securityToken) {
+		int carLimit = getCarLimit(securityToken);
+		if (getPersonaCarCount(personaId) >= carLimit) {
 			return false;
 		}
-		
+
 		OwnedCarTrans car = getCar(productId);
 		String carXml = MarshalXML.marshal(car);
 		CarSlotEntity carSlotEntity = new CarSlotEntity();
@@ -45,9 +65,9 @@ public class BasketBO {
 		carSlotEntity.setPersona(personaEntity);
 		carSlotEntity.setOwnedCarTrans(carXml);
 		carSlotDAO.insert(carSlotEntity);
-		
+
 		personaBo.changeDefaultCar(personaId, carSlotEntity.getId());
-		
+
 		return true;
 	}
 
@@ -62,7 +82,7 @@ public class BasketBO {
 	public boolean sellCar(Long personaId, Long serialNumber) {
 		CarSlotEntity carSlotEntity = carSlotDAO.findById(serialNumber);
 		int personaCarCount = getPersonaCarCount(personaId);
-		if(carSlotEntity == null || personaCarCount <= 1) {
+		if (carSlotEntity == null || personaCarCount <= 1) {
 			return false;
 		}
 
@@ -70,4 +90,11 @@ public class BasketBO {
 		return true;
 	}
 
+	public int getCarLimit(String securityToken) {
+		TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
+		if (tokenSession.isPremium()) {
+			return 30;
+		}
+		return 6;
+	}
 }

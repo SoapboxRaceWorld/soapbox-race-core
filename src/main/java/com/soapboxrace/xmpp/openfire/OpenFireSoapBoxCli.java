@@ -35,4 +35,8 @@ public class OpenFireSoapBoxCli {
 		this.send(responseXmlStr, to);
 	}
 
+	public void disconnect() {
+		instance = null;
+	}
+
 }

@@ -247,7 +247,7 @@ CREATE TABLE
     SOAPBOX.SERVER_INFO
     (
         messageSrv VARCHAR(1000) COLLATE utf8_unicode_ci NOT NULL,
-        Country VARCHAR(255) COLLATE utf8_unicode_ci,
+        country VARCHAR(255) COLLATE utf8_unicode_ci,
         adminList VARCHAR(255) COLLATE utf8_unicode_ci,
         bannerUrl VARCHAR(255) COLLATE utf8_unicode_ci,
         discordUrl VARCHAR(255) COLLATE utf8_unicode_ci,
@@ -257,7 +257,7 @@ CREATE TABLE
         ownerList VARCHAR(255) COLLATE utf8_unicode_ci,
         serverName VARCHAR(255) COLLATE utf8_unicode_ci,
         timezone INT,
-        PRIMARY KEY (messageSrv)
+        PRIMARY KEY (serverName)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE

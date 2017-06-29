@@ -19,7 +19,11 @@ public class UserDAO extends BaseDAO<UserEntity> {
 	}
 
 	public UserEntity findById(Long id) {
-		return entityManager.find(UserEntity.class, id);
+		UserEntity user = entityManager.find(UserEntity.class, id);
+
+		user.getListOfProfile().size();
+
+		return user;
 	}
 
 	public UserEntity findByEmail(String email) {

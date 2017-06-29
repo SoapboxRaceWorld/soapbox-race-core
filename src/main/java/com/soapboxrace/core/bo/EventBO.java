@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
@@ -12,6 +13,7 @@ import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CardDecks;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.jaxb.http.Accolades;
@@ -28,6 +30,7 @@ import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.LuckyDrawInfo;
 import com.soapboxrace.jaxb.http.LuckyDrawItem;
+import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
 import com.soapboxrace.jaxb.http.Reward;
@@ -38,6 +41,7 @@ import com.soapboxrace.jaxb.http.RouteEventResult;
 import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
 import com.soapboxrace.jaxb.http.TeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.TeamEscapeEventResult;
+import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.xmpp.XMPP_DragEntrantResultType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeDragEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
@@ -60,9 +64,15 @@ public class EventBO {
 	
 	@EJB
 	private PersonaDAO personaDao;
+
+	@EJB
+	private CarSlotDAO carSlotDao;
 	
 	@EJB
 	private SocialBO socialBo;
+	
+	@EJB
+	private PersonaBO personaBo;
 
 	public List<EventEntity> availableAtLevel(Long personaId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
@@ -96,29 +106,29 @@ public class EventBO {
 		}
 		
 		EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
-		eventDataEntity.setPersonaId(activePersonaId);
-		eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
 		eventDataEntity.setAlternateEventDurationInMilliseconds(pursuitArbitrationPacket.getAlternateEventDurationInMilliseconds());
 		eventDataEntity.setCarId(pursuitArbitrationPacket.getCarId());
-		eventDataEntity.setEventDurationInMilliseconds(pursuitArbitrationPacket.getEventDurationInMilliseconds());
-		eventDataEntity.setFinishReason(pursuitArbitrationPacket.getFinishReason());
-		eventDataEntity.setHacksDetected(pursuitArbitrationPacket.getHacksDetected());
 		eventDataEntity.setCopsDeployed(pursuitArbitrationPacket.getCopsDeployed());
 		eventDataEntity.setCopsDisabled(pursuitArbitrationPacket.getCopsDisabled());
 		eventDataEntity.setCopsRammed(pursuitArbitrationPacket.getCopsRammed());
 		eventDataEntity.setCostToState(pursuitArbitrationPacket.getCostToState());
+		eventDataEntity.setEventDurationInMilliseconds(pursuitArbitrationPacket.getEventDurationInMilliseconds());
+		eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
+		eventDataEntity.setFinishReason(pursuitArbitrationPacket.getFinishReason());
+		eventDataEntity.setHacksDetected(pursuitArbitrationPacket.getHacksDetected());
 		eventDataEntity.setHeat(pursuitArbitrationPacket.getHeat());
 		eventDataEntity.setInfractions(pursuitArbitrationPacket.getInfractions());
+		eventDataEntity.setLongestJumpDurationInMilliseconds(pursuitArbitrationPacket.getLongestJumpDurationInMilliseconds());
+		eventDataEntity.setPersonaId(activePersonaId);
 		eventDataEntity.setRoadBlocksDodged(pursuitArbitrationPacket.getRoadBlocksDodged());
 		eventDataEntity.setSpikeStripsDodged(pursuitArbitrationPacket.getSpikeStripsDodged());
-		eventDataEntity.setLongestJumpDurationInMilliseconds(pursuitArbitrationPacket.getLongestJumpDurationInMilliseconds());
 		eventDataEntity.setSumOfJumpsDurationInMilliseconds(pursuitArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
 		eventDataEntity.setTopSpeed(pursuitArbitrationPacket.getTopSpeed());
 		eventDataDao.update(eventDataEntity);
 
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
 		pursuitEventResult.setAccolades(getAccolades(1));
-		pursuitEventResult.setDurability(100);
+		pursuitEventResult.setDurability(updateDamageCar(activePersonaId, pursuitArbitrationPacket.getCarId(), 0, pursuitArbitrationPacket.getEventDurationInMilliseconds()));
 		pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
 		pursuitEventResult.setEventSessionId(eventSessionId);
 		pursuitEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
@@ -147,19 +157,19 @@ public class EventBO {
 		routeEntrantResultResponse.setRouteEntrantResult(xmppRouteResult);
 		
 		EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
-		eventDataEntity.setPersonaId(activePersonaId);
-		eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
 		eventDataEntity.setAlternateEventDurationInMilliseconds(routeArbitrationPacket.getAlternateEventDurationInMilliseconds());
+		eventDataEntity.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
 		eventDataEntity.setCarId(routeArbitrationPacket.getCarId());
 		eventDataEntity.setEventDurationInMilliseconds(routeArbitrationPacket.getEventDurationInMilliseconds());
+		eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
 		eventDataEntity.setFinishReason(routeArbitrationPacket.getFinishReason());
-		eventDataEntity.setHacksDetected(routeArbitrationPacket.getHacksDetected());
-		eventDataEntity.setRank(routeArbitrationPacket.getRank());
-		eventDataEntity.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
 		eventDataEntity.setFractionCompleted(routeArbitrationPacket.getFractionCompleted());
+		eventDataEntity.setHacksDetected(routeArbitrationPacket.getHacksDetected());
 		eventDataEntity.setLongestJumpDurationInMilliseconds(routeArbitrationPacket.getLongestJumpDurationInMilliseconds());
 		eventDataEntity.setNumberOfCollisions(routeArbitrationPacket.getNumberOfCollisions());
 		eventDataEntity.setPerfectStart(routeArbitrationPacket.getPerfectStart());
+		eventDataEntity.setPersonaId(activePersonaId);
+		eventDataEntity.setRank(routeArbitrationPacket.getRank());
 		eventDataEntity.setSumOfJumpsDurationInMilliseconds(routeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
 		eventDataEntity.setTopSpeed(routeArbitrationPacket.getTopSpeed());
 		eventDataDao.update(eventDataEntity);
@@ -187,7 +197,7 @@ public class EventBO {
 		
 		RouteEventResult routeEventResult = new RouteEventResult();
 		routeEventResult.setAccolades(getAccolades(routeArbitrationPacket.getRank()));
-		routeEventResult.setDurability(100);
+		routeEventResult.setDurability(updateDamageCar(activePersonaId, routeArbitrationPacket.getCarId(), routeArbitrationPacket.getNumberOfCollisions(), routeArbitrationPacket.getEventDurationInMilliseconds()));
 		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
 		routeEventResult.setEventId(eventDataEntity.getEvent().getId());
 		routeEventResult.setEventSessionId(eventSessionId);
@@ -215,18 +225,18 @@ public class EventBO {
 		dragEntrantResultResponse.setDragEntrantResult(xmppDragResult);
 		
 		EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
-		eventDataEntity.setPersonaId(activePersonaId);
-		eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
 		eventDataEntity.setAlternateEventDurationInMilliseconds(dragArbitrationPacket.getAlternateEventDurationInMilliseconds());
 		eventDataEntity.setCarId(dragArbitrationPacket.getCarId());
 		eventDataEntity.setEventDurationInMilliseconds(dragArbitrationPacket.getEventDurationInMilliseconds());
+		eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
 		eventDataEntity.setFinishReason(dragArbitrationPacket.getFinishReason());
-		eventDataEntity.setHacksDetected(dragArbitrationPacket.getHacksDetected());
-		eventDataEntity.setRank(dragArbitrationPacket.getRank());
 		eventDataEntity.setFractionCompleted(dragArbitrationPacket.getFractionCompleted());
+		eventDataEntity.setHacksDetected(dragArbitrationPacket.getHacksDetected());
 		eventDataEntity.setLongestJumpDurationInMilliseconds(dragArbitrationPacket.getLongestJumpDurationInMilliseconds());
 		eventDataEntity.setNumberOfCollisions(dragArbitrationPacket.getNumberOfCollisions());
 		eventDataEntity.setPerfectStart(dragArbitrationPacket.getPerfectStart());
+		eventDataEntity.setPersonaId(activePersonaId);
+		eventDataEntity.setRank(dragArbitrationPacket.getRank());
 		eventDataEntity.setSumOfJumpsDurationInMilliseconds(dragArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
 		eventDataEntity.setTopSpeed(dragArbitrationPacket.getTopSpeed());
 		eventDataDao.update(eventDataEntity);
@@ -250,10 +260,10 @@ public class EventBO {
 				}
 			}
 		}
-
+		
 		DragEventResult dragEventResult = new DragEventResult();
 		dragEventResult.setAccolades(getAccolades(dragArbitrationPacket.getRank()));
-		dragEventResult.setDurability(100);
+		dragEventResult.setDurability(updateDamageCar(activePersonaId, dragArbitrationPacket.getCarId(), dragArbitrationPacket.getNumberOfCollisions(), dragArbitrationPacket.getEventDurationInMilliseconds()));
 		dragEventResult.setEntrants(arrayOfDragEntrantResult);
 		dragEventResult.setEventId(eventDataEntity.getEvent().getId());
 		dragEventResult.setEventSessionId(eventSessionId);
@@ -279,24 +289,28 @@ public class EventBO {
 		teamEscapeEntrantResultResponse.setTeamEscapeEntrantResult(xmppTeamEscapeResult);
 		
 		EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
-		eventDataEntity.setPersonaId(activePersonaId);
-		eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
 		eventDataEntity.setAlternateEventDurationInMilliseconds(teamEscapeArbitrationPacket.getAlternateEventDurationInMilliseconds());
+		eventDataEntity.setBustedCount(teamEscapeArbitrationPacket.getBustedCount());
 		eventDataEntity.setCarId(teamEscapeArbitrationPacket.getCarId());
-		eventDataEntity.setEventDurationInMilliseconds(teamEscapeArbitrationPacket.getEventDurationInMilliseconds());
-		eventDataEntity.setFinishReason(teamEscapeArbitrationPacket.getFinishReason());
-		eventDataEntity.setHacksDetected(teamEscapeArbitrationPacket.getHacksDetected());
 		eventDataEntity.setCopsDeployed(teamEscapeArbitrationPacket.getCopsDeployed());
 		eventDataEntity.setCopsDisabled(teamEscapeArbitrationPacket.getCopsDisabled());
 		eventDataEntity.setCopsRammed(teamEscapeArbitrationPacket.getCopsRammed());
 		eventDataEntity.setCostToState(teamEscapeArbitrationPacket.getCostToState());
+		eventDataEntity.setDistanceToFinish(teamEscapeArbitrationPacket.getDistanceToFinish());
+		eventDataEntity.setEventDurationInMilliseconds(teamEscapeArbitrationPacket.getEventDurationInMilliseconds());
+		eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
+		eventDataEntity.setFinishReason(teamEscapeArbitrationPacket.getFinishReason());
+		eventDataEntity.setFractionCompleted(teamEscapeArbitrationPacket.getFractionCompleted());
+		eventDataEntity.setHacksDetected(teamEscapeArbitrationPacket.getHacksDetected());
 		eventDataEntity.setInfractions(teamEscapeArbitrationPacket.getInfractions());
+		eventDataEntity.setLongestJumpDurationInMilliseconds(teamEscapeArbitrationPacket.getLongestJumpDurationInMilliseconds());
+		eventDataEntity.setNumberOfCollisions(teamEscapeArbitrationPacket.getNumberOfCollisions());
+		eventDataEntity.setPerfectStart(teamEscapeArbitrationPacket.getPerfectStart());
+		eventDataEntity.setRank(teamEscapeArbitrationPacket.getRank());
+		eventDataEntity.setPersonaId(activePersonaId);
 		eventDataEntity.setRoadBlocksDodged(teamEscapeArbitrationPacket.getRoadBlocksDodged());
 		eventDataEntity.setSpikeStripsDodged(teamEscapeArbitrationPacket.getSpikeStripsDodged());
-		eventDataEntity.setLongestJumpDurationInMilliseconds(teamEscapeArbitrationPacket.getLongestJumpDurationInMilliseconds());
 		eventDataEntity.setSumOfJumpsDurationInMilliseconds(teamEscapeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
-		eventDataEntity.setBustedCount(teamEscapeArbitrationPacket.getBustedCount());
-		eventDataEntity.setDistanceToFinish(teamEscapeArbitrationPacket.getDistanceToFinish());
 		eventDataEntity.setTopSpeed(teamEscapeArbitrationPacket.getTopSpeed());
 		eventDataDao.update(eventDataEntity);
 		
@@ -323,7 +337,7 @@ public class EventBO {
 
 		TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
 		teamEscapeEventResult.setAccolades(getAccolades(teamEscapeArbitrationPacket.getRank()));
-		teamEscapeEventResult.setDurability(100);
+		teamEscapeEventResult.setDurability(updateDamageCar(activePersonaId, teamEscapeArbitrationPacket.getCarId(), teamEscapeArbitrationPacket.getNumberOfCollisions(), teamEscapeArbitrationPacket.getEventDurationInMilliseconds()));
 		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
 		teamEscapeEventResult.setEventId(eventDataEntity.getEvent().getId());
 		teamEscapeEventResult.setEventSessionId(eventSessionId);
@@ -392,6 +406,24 @@ public class EventBO {
 	
 	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
 		socialBo.sendReport(0L, activePersonaId, 3, "Server was send a report for cheat", carId, 0, hacksDetected);
+	}
+	
+	private Integer updateDamageCar(Long personaId, Long carId, Integer numberOfCollision, Long eventDuration) {
+		OwnedCarTrans ownedCarTrans = personaBo.getDefaultCar(personaId);
+		
+		if(ownedCarTrans.getDurability() > 10) {
+			Integer calcDamage = numberOfCollision + ((int)(eventDuration / 60000)) * 2;
+			Integer newCarDamage = ownedCarTrans.getDurability() - calcDamage;
+			ownedCarTrans.setDurability(newCarDamage < 10 ? 10 : newCarDamage);
+
+			CarSlotEntity carSlotEntity = carSlotDao.findById(carId);
+			if(carSlotEntity != null) {
+				carSlotEntity.setOwnedCarTrans(MarshalXML.marshal(ownedCarTrans));
+				carSlotDao.update(carSlotEntity);
+			}
+		}
+		
+		return ownedCarTrans.getDurability();
 	}
 	
 }

@@ -20,7 +20,7 @@ public class GetRebroadcasters {
 		ArrayOfUdpRelayInfo arrayOfUdpRelayInfo = new ArrayOfUdpRelayInfo();
 		UdpRelayInfo udpRelayInfo = new UdpRelayInfo();
 		udpRelayInfo.setHost(Config.getUdpFreeroamIp());
-		udpRelayInfo.setPort(Config.getUdpRacePort());
+		udpRelayInfo.setPort(Config.getUdpFreeroamPort());
 		arrayOfUdpRelayInfo.getUdpRelayInfo().add(udpRelayInfo);
 		return arrayOfUdpRelayInfo;
 	}
