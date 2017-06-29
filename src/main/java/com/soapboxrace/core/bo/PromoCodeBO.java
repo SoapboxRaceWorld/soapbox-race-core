@@ -35,7 +35,7 @@ public class PromoCodeBO {
 
 	private UserEntity checkLogin(String email, String password) {
 		password = (DigestUtils.sha1Hex(password));
-		if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
+		if (email != null && !email.isEmpty() && !password.isEmpty()) {
 			UserEntity userEntity = userDao.findByEmail(email);
 			if (userEntity != null) {
 				if (password.equals(userEntity.getPassword())) {
