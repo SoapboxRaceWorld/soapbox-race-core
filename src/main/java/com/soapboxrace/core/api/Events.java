@@ -92,6 +92,24 @@ public class Events {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
 		return eventsBO.getTreasureHuntEventSession(activePersonaId);
 	}
+	
+	@GET
+	@Secured
+	@Path("/notifycoincollected")
+	@Produces(MediaType.APPLICATION_XML)
+	public String notifyCoinCollected(@HeaderParam("securityToken") String securityToken, @QueryParam("coins") Integer coins) {
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		return eventsBO.notifyCoinCollected(activePersonaId, coins);
+	}
+	
+	@GET
+	@Secured
+	@Path("/accolades")
+	@Produces(MediaType.APPLICATION_XML)
+	public String accolades(@HeaderParam("securityToken") String securityToken) {
+		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		return eventsBO.accolades(activePersonaId, true);
+	}
 
 	@GET
 	@Secured
