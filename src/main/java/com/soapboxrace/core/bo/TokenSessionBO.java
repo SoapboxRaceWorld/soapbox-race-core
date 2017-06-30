@@ -59,12 +59,11 @@ public class TokenSessionBO {
 
 	public boolean verifyPersona(String securityToken, Long personaId) {
 		TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
-
 		if (tokenSession == null) {
 			throw new NotAuthorizedException("Invalid session...");
 		}
+		
 		UserEntity user = userDAO.findById(tokenSession.getUserId());
-
 		if (!user.ownsPersona(personaId)) {
 			throw new NotAuthorizedException("Persona is not owned by user");
 		}
@@ -105,11 +104,13 @@ public class TokenSessionBO {
 		return tokenSessionEntity.getActivePersonaId();
 	}
 
-	public void setActivePersonaId(String securityToken, Long personaId) {
+	public void setActivePersonaId(String securityToken, Long personaId, Boolean isLogout) {
 		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
 
-		if (!userDAO.findById(tokenSessionEntity.getUserId()).ownsPersona(personaId)) {
-			throw new NotAuthorizedException("Persona not owned by user");
+		if(!isLogout) {
+			if (!userDAO.findById(tokenSessionEntity.getUserId()).ownsPersona(personaId)) {
+				throw new NotAuthorizedException("Persona not owned by user");
+			}
 		}
 
 		tokenSessionEntity.setActivePersonaId(personaId);

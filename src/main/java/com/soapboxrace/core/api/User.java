@@ -47,7 +47,7 @@ public class User {
 	@Path("SecureLoginPersona")
 	@Produces(MediaType.APPLICATION_XML)
 	public String secureLoginPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId, @QueryParam("personaId") Long personaId) {
-		tokenBO.setActivePersonaId(securityToken, personaId);
+		tokenBO.setActivePersonaId(securityToken, personaId, false);
 		userBO.secureLoginPersona(userId, personaId);
 		return "";
 	}
@@ -57,7 +57,7 @@ public class User {
 	@Path("SecureLogoutPersona")
 	@Produces(MediaType.APPLICATION_XML)
 	public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId, @QueryParam("personaId") Long personaId) {
-		tokenBO.setActivePersonaId(securityToken, 0L);
+		tokenBO.setActivePersonaId(securityToken, 0L, true);
 		return "";
 	}
 
