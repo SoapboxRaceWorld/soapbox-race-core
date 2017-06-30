@@ -49,7 +49,7 @@ public class DriverPersonaBO {
 		TreasureHuntEntity treasureHuntEntity = new TreasureHuntEntity();
 		treasureHuntEntity.setCoinsCollected(0);
 		treasureHuntEntity.setIsStreakBroken(false);
-		treasureHuntEntity.setNumCoins(0);
+		treasureHuntEntity.setNumCoins(15);
 		treasureHuntEntity.setPersonaId(personaEntity.getPersonaId());
 		treasureHuntEntity.setSeed(-1142185119);
 		treasureHuntEntity.setStreak(1);
