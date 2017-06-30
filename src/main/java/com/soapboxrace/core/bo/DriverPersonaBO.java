@@ -46,15 +46,7 @@ public class DriverPersonaBO {
 		personaEntity.setLevel(60);
 		personaDao.insert(personaEntity);
 		
-		TreasureHuntEntity treasureHuntEntity = new TreasureHuntEntity();
-		treasureHuntEntity.setCoinsCollected(0);
-		treasureHuntEntity.setIsStreakBroken(false);
-		treasureHuntEntity.setNumCoins(15);
-		treasureHuntEntity.setPersonaId(personaEntity.getPersonaId());
-		treasureHuntEntity.setSeed(-1142185119);
-		treasureHuntEntity.setStreak(1);
-		treasureHuntEntity.setThDate(LocalDate.now());
-		treasureHuntDAO.insert(treasureHuntEntity);
+		createThInformation(personaEntity);
 		
 		return castPersonaEntity(personaEntity);
 	}
@@ -141,6 +133,18 @@ public class DriverPersonaBO {
 			arrayOfString.getString().add("NONE");
 		}	
 		return arrayOfString;
+	}
+	
+	public void createThInformation(PersonaEntity personaEntity) {
+		TreasureHuntEntity treasureHuntEntity = new TreasureHuntEntity();
+		treasureHuntEntity.setCoinsCollected(0);
+		treasureHuntEntity.setIsStreakBroken(false);
+		treasureHuntEntity.setNumCoins(15);
+		treasureHuntEntity.setPersonaId(personaEntity.getPersonaId());
+		treasureHuntEntity.setSeed(-1142185119);
+		treasureHuntEntity.setStreak(1);
+		treasureHuntEntity.setThDate(LocalDate.now());
+		treasureHuntDAO.insert(treasureHuntEntity);
 	}
 
 }

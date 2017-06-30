@@ -32,11 +32,16 @@ public class EventsBO {
 	
 	@EJB
 	private TreasureHuntDAO treasureHuntDao;
+	
+	@EJB
+	private DriverPersonaBO driverPersonaBo;
 
 	public TreasureHuntEventSession getTreasureHuntEventSession(Long activePersonaId) {
 		TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
-		if(treasureHuntEntity == null)
-			return new TreasureHuntEventSession();
+		if(treasureHuntEntity == null) {
+			driverPersonaBo.createThInformation(personaDao.findById(activePersonaId));
+			return getTreasureHuntEventSession(activePersonaId);
+		}
 		
 		LocalDate thDate = treasureHuntEntity.getThDate();
 		LocalDate nowDate = LocalDate.now();
