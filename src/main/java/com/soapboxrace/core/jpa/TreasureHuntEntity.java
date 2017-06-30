@@ -1,6 +1,6 @@
 package com.soapboxrace.core.jpa;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,7 +22,7 @@ public class TreasureHuntEntity {
 	private Integer numCoins;
 	private Integer seed;
 	private Integer streak;
-	private Date thDate;
+	private LocalDate thDate;
 
 	public Long getPersonaId() {
 		return personaId;
@@ -66,10 +66,10 @@ public class TreasureHuntEntity {
 		this.streak = streak;
 	}
 	
-	public Date getThDate() {
+	public LocalDate getThDate() {
 		return thDate;
 	}
-	public void setThDate(Date thDate) {
+	public void setThDate(LocalDate thDate) {
 		this.thDate = thDate;
 	}
 

@@ -1,6 +1,6 @@
 package com.soapboxrace.core.bo;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -53,7 +53,7 @@ public class DriverPersonaBO {
 		treasureHuntEntity.setPersonaId(personaEntity.getPersonaId());
 		treasureHuntEntity.setSeed(-1142185119);
 		treasureHuntEntity.setStreak(1);
-		treasureHuntEntity.setThDate(new Date());
+		treasureHuntEntity.setThDate(LocalDate.now());
 		treasureHuntDAO.insert(treasureHuntEntity);
 		
 		return castPersonaEntity(personaEntity);
