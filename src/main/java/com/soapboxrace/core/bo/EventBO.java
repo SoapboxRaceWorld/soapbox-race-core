@@ -350,8 +350,7 @@ public class EventBO {
 	
 	private Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-		double exp = 100.0 * (((personaEntity.getLevel() * 2.0) / 100.0) + 1.0);
-		System.out.println("Calc 1: " + (int)exp);
+		float exp = 100.0f * (((personaEntity.getLevel() * 2.0f) / 100.0f) + 1.0f);
 		
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
 		RewardPart rewardPart = new RewardPart();
@@ -361,8 +360,7 @@ public class EventBO {
 		rewardPart.setTokenPart(1337);
 		arrayOfRewardPart.getRewardPart().add(rewardPart);
 		
-		double rank = dragArbitrationPacket.getRank() == 1 ? exp * 0.5 : dragArbitrationPacket.getRank() == 2 ? exp * 0.3 : dragArbitrationPacket.getRank() == 3 ? exp * 0.2 : exp * 0.1;	 
-		System.out.println("Calc 2: " + exp + " + " + rank + " = " + (rank + exp));
+		float rank = dragArbitrationPacket.getRank() == 1 ? exp * 0.5f : dragArbitrationPacket.getRank() == 2 ? exp * 0.3f : dragArbitrationPacket.getRank() == 3 ? exp * 0.2f : exp * 0.1f;	 
 		exp += (int)rank;
 		rewardPart = new RewardPart();
 		rewardPart.setRepPart((int)rank);
@@ -370,8 +368,7 @@ public class EventBO {
 		rewardPart.setRewardType(EnumRewardType.PLAYER_1);
 		arrayOfRewardPart.getRewardPart().add(rewardPart);
 		
-		double timeRace = exp * (((60000.0 / dragArbitrationPacket.getEventDurationInMilliseconds()) / 10.0) + 1);
-		System.out.println("Calc 3: " + exp + " + " + timeRace + " = " + (timeRace + exp));
+		float timeRace = exp * (((60000.0f / dragArbitrationPacket.getEventDurationInMilliseconds()) / 10.0f) + 1.0f);
 		exp += (int)timeRace;
 		rewardPart = new RewardPart();
 		rewardPart.setRepPart((int)timeRace);
@@ -380,8 +377,7 @@ public class EventBO {
 		arrayOfRewardPart.getRewardPart().add(rewardPart);
 		
 		if(dragArbitrationPacket.getPerfectStart() == 1) {
-			double perfectStart = exp * 0.2;
-			System.out.println("Calc 4: " + exp + " + " + perfectStart + " = " + (perfectStart + exp));
+			float perfectStart = exp * 0.2f;
 			exp += (int)perfectStart;
 			rewardPart = new RewardPart();
 			rewardPart.setRepPart((int)perfectStart);
@@ -391,8 +387,7 @@ public class EventBO {
 		}
 		
 		if(dragArbitrationPacket.getTopSpeed() >= 70.0f) {
-			double highSpeed = exp * 0.2;
-			System.out.println("Calc 5: " + exp + " + " + highSpeed + " = " + (highSpeed + exp));
+			float highSpeed = exp * 0.2f;
 			exp += (int)highSpeed;
 			rewardPart = new RewardPart();
 			rewardPart.setRepPart((int)highSpeed);
