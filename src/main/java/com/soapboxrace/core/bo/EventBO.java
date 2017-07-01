@@ -186,7 +186,7 @@ public class EventBO {
 			routeEntrantResult.setTopSpeed(racer.getTopSpeed());
 			arrayOfRouteEntrantResult.getRouteEntrantResult().add(routeEntrantResult);
 
-			if(racer.getPersonaId() != activePersonaId) {
+			if(!racer.getPersonaId().equals(activePersonaId)) {
 				XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId());
 				xmppEvent.sendRaceEnd(routeEntrantResultResponse);
 				if(routeArbitrationPacket.getRank() == 1) {
@@ -252,7 +252,7 @@ public class EventBO {
 			dragEntrantResult.setTopSpeed(racer.getTopSpeed());
 			arrayOfDragEntrantResult.getDragEntrantResult().add(dragEntrantResult);
 
-			if(racer.getPersonaId() != activePersonaId) {
+			if(!racer.getPersonaId().equals(activePersonaId)) {
 				XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId());
 				xmppEvent.sendDragEnd(dragEntrantResultResponse);
 				if(dragArbitrationPacket.getRank() == 1) {
@@ -262,7 +262,7 @@ public class EventBO {
 		}
 		
 		DragEventResult dragEventResult = new DragEventResult();
-		dragEventResult.setAccolades(getAccolades(dragArbitrationPacket.getRank()));
+		dragEventResult.setAccolades(getDragAccolades(activePersonaId, dragArbitrationPacket));
 		dragEventResult.setDurability(updateDamageCar(activePersonaId, dragArbitrationPacket.getCarId(), dragArbitrationPacket.getNumberOfCollisions(), dragArbitrationPacket.getEventDurationInMilliseconds()));
 		dragEventResult.setEntrants(arrayOfDragEntrantResult);
 		dragEventResult.setEventId(eventDataEntity.getEvent().getId());
@@ -326,7 +326,7 @@ public class EventBO {
 			teamEscapeEntrantResult.setRanking(racer.getRank());
 			arrayOfTeamEscapeEntrantResult.getTeamEscapeEntrantResult().add(teamEscapeEntrantResult);
 
-			if(racer.getPersonaId() != activePersonaId) {
+			if(!racer.getPersonaId().equals(activePersonaId)) {
 				XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId());
 				xmppEvent.sendTeamEscapeEnd(teamEscapeEntrantResultResponse);
 				if(teamEscapeArbitrationPacket.getRank() == 1) {
@@ -348,25 +348,105 @@ public class EventBO {
 		return teamEscapeEventResult;
 	}
 	
-	public Accolades getAccolades(Integer rank) {
-		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(getFinalReward());
-		accolades.setHasLeveledUp(false);
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(rank));
-		accolades.setOriginalRewards(getOriginalReward());
-		accolades.setRewardInfo(getRewardPart());
+	private Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
+		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
+		double exp = 100.0 * (((personaEntity.getLevel() * 2.0) / 100.0) + 1.0);
+		System.out.println("Calc 1: " + (int)exp);
 		
+		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
+		RewardPart rewardPart = new RewardPart();
+		rewardPart.setRepPart((int)exp);
+		rewardPart.setRewardCategory(EnumRewardCategory.BASE);
+		rewardPart.setRewardType(EnumRewardType.NONE);
+		rewardPart.setTokenPart(1337);
+		arrayOfRewardPart.getRewardPart().add(rewardPart);
+		
+		double rank = dragArbitrationPacket.getRank() == 1 ? exp * 0.5 : dragArbitrationPacket.getRank() == 2 ? exp * 0.3 : dragArbitrationPacket.getRank() == 3 ? exp * 0.2 : exp * 0.1;	 
+		System.out.println("Calc 2: " + exp + " + " + rank + " = " + (rank + exp));
+		exp += (int)rank;
+		rewardPart = new RewardPart();
+		rewardPart.setRepPart((int)rank);
+		rewardPart.setRewardCategory(EnumRewardCategory.RANK);
+		rewardPart.setRewardType(EnumRewardType.PLAYER_1);
+		arrayOfRewardPart.getRewardPart().add(rewardPart);
+		
+		double timeRace = exp * (((60000.0 / dragArbitrationPacket.getEventDurationInMilliseconds()) / 10.0) + 1);
+		System.out.println("Calc 3: " + exp + " + " + timeRace + " = " + (timeRace + exp));
+		exp += (int)timeRace;
+		rewardPart = new RewardPart();
+		rewardPart.setRepPart((int)timeRace);
+		rewardPart.setRewardCategory(EnumRewardCategory.BONUS);
+		rewardPart.setRewardType(EnumRewardType.TIME_BONUS);
+		arrayOfRewardPart.getRewardPart().add(rewardPart);
+		
+		if(dragArbitrationPacket.getPerfectStart() == 1) {
+			double perfectStart = exp * 0.2;
+			System.out.println("Calc 4: " + exp + " + " + perfectStart + " = " + (perfectStart + exp));
+			exp += (int)perfectStart;
+			rewardPart = new RewardPart();
+			rewardPart.setRepPart((int)perfectStart);
+			rewardPart.setRewardCategory(EnumRewardCategory.BONUS);
+			rewardPart.setRewardType(EnumRewardType.NONE);
+			arrayOfRewardPart.getRewardPart().add(rewardPart);
+		}
+		
+		if(dragArbitrationPacket.getTopSpeed() >= 70.0f) {
+			double highSpeed = exp * 0.2;
+			System.out.println("Calc 5: " + exp + " + " + highSpeed + " = " + (highSpeed + exp));
+			exp += (int)highSpeed;
+			rewardPart = new RewardPart();
+			rewardPart.setRepPart((int)highSpeed);
+			rewardPart.setRewardCategory(EnumRewardCategory.BONUS);
+			rewardPart.setRewardType(EnumRewardType.NONE);
+			arrayOfRewardPart.getRewardPart().add(rewardPart);
+		}
+		
+		Reward originalRewards = new Reward();
+		originalRewards.setRep((int)exp);
+		originalRewards.setTokens(1337);
+		
+		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
+		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
+		luckyDrawItem.setDescription("TEST DROP");
+		luckyDrawItem.setHash(-1681514783);
+		luckyDrawItem.setIcon("product_nos_x1");
+		luckyDrawItem.setRemainingUseCount(0);
+		luckyDrawItem.setResellPrice(7331);
+		luckyDrawItem.setVirtualItem("nosshot");
+		luckyDrawItem.setVirtualItemType("POWERUP");
+		luckyDrawItem.setWasSold(true);
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(luckyDrawItem);
+		
+		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
+		luckyDrawInfo.setCardDeck(CardDecks.forRank(dragArbitrationPacket.getRank()));
+		luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
+			
+		Reward finalReward = new Reward();
+		finalReward.setRep((int)exp);
+		finalReward.setTokens(1337);
+		
+		Accolades accolades = new Accolades();
+		accolades.setFinalRewards(finalReward);
+		accolades.setHasLeveledUp(false);
+		accolades.setLuckyDrawInfo(luckyDrawInfo);
+		accolades.setOriginalRewards(originalRewards);
+		accolades.setRewardInfo(arrayOfRewardPart);
 		return accolades;
 	}
 	
-	public Reward getFinalReward() {
-		Reward finalReward = new Reward();
-		finalReward.setRep(7331);
-		finalReward.setTokens(1337);
-		return finalReward;
-	}
-	
-	public LuckyDrawInfo getLuckyDrawInfo(Integer rank) {
+	private Accolades getAccolades(Integer rank) {
+		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
+		RewardPart rewardPart = new RewardPart();
+		rewardPart.setRepPart(256);
+		rewardPart.setRewardCategory(EnumRewardCategory.BASE);
+		rewardPart.setRewardType(EnumRewardType.NONE);
+		rewardPart.setTokenPart(852);
+		arrayOfRewardPart.getRewardPart().add(rewardPart);
+		
+		Reward originalRewards = new Reward();
+		originalRewards.setRep(562);
+		originalRewards.setTokens(845);
+		
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
 		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
 		luckyDrawItem.setDescription("TEST DROP");
@@ -382,26 +462,18 @@ public class EventBO {
 		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
 		luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
 		luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
-		return luckyDrawInfo;
-	}
-	
-	public Reward getOriginalReward() {
-		Reward originalRewards = new Reward();
-		originalRewards.setRep(562);
-		originalRewards.setTokens(845);
-		return originalRewards;
-	}
-	
-	public ArrayOfRewardPart getRewardPart() {
-		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		RewardPart rewardPart = new RewardPart();
-		rewardPart.setRepPart(256);
-		rewardPart.setRewardCategory(EnumRewardCategory.BASE);
-		rewardPart.setRewardType(EnumRewardType.NONE);
-		rewardPart.setTokenPart(852);
-		arrayOfRewardPart.getRewardPart().add(rewardPart);
+			
+		Reward finalReward = new Reward();
+		finalReward.setRep(7331);
+		finalReward.setTokens(1337);
 		
-		return arrayOfRewardPart;
+		Accolades accolades = new Accolades();
+		accolades.setFinalRewards(finalReward);
+		accolades.setHasLeveledUp(false);
+		accolades.setLuckyDrawInfo(luckyDrawInfo);
+		accolades.setOriginalRewards(originalRewards);
+		accolades.setRewardInfo(arrayOfRewardPart);
+		return accolades;
 	}
 	
 	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
@@ -410,7 +482,6 @@ public class EventBO {
 	
 	private Integer updateDamageCar(Long personaId, Long carId, Integer numberOfCollision, Long eventDuration) {
 		OwnedCarTrans ownedCarTrans = personaBo.getDefaultCar(personaId);
-		
 		if(ownedCarTrans.getDurability() > 10) {
 			Integer calcDamage = numberOfCollision + ((int)(eventDuration / 60000)) * 2;
 			Integer newCarDamage = ownedCarTrans.getDurability() - calcDamage;
@@ -422,7 +493,6 @@ public class EventBO {
 				carSlotDao.update(carSlotEntity);
 			}
 		}
-		
 		return ownedCarTrans.getDurability();
 	}
 	
