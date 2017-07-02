@@ -100,7 +100,7 @@ public class EventBO {
 		return eventSessionDao.findById(id);
 	}
 	
-	public PursuitEventResult getPursitEnd(Long eventSessionId, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket) {
+	public PursuitEventResult getPursitEnd(Long eventSessionId, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket, Boolean isBusted) {
 		if(pursuitArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int)pursuitArbitrationPacket.getCarId(), pursuitArbitrationPacket.getHacksDetected());
 		}
@@ -127,7 +127,7 @@ public class EventBO {
 		eventDataDao.update(eventDataEntity);
 
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
-		pursuitEventResult.setAccolades(getAccolades(1));
+		pursuitEventResult.setAccolades(getAccolades(1, isBusted));
 		pursuitEventResult.setDurability(updateDamageCar(activePersonaId, pursuitArbitrationPacket.getCarId(), 0, pursuitArbitrationPacket.getEventDurationInMilliseconds()));
 		pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
 		pursuitEventResult.setEventSessionId(eventSessionId);
@@ -196,7 +196,7 @@ public class EventBO {
 		}
 		
 		RouteEventResult routeEventResult = new RouteEventResult();
-		routeEventResult.setAccolades(getAccolades(routeArbitrationPacket.getRank()));
+		routeEventResult.setAccolades(getAccolades(routeArbitrationPacket.getRank(), false));
 		routeEventResult.setDurability(updateDamageCar(activePersonaId, routeArbitrationPacket.getCarId(), routeArbitrationPacket.getNumberOfCollisions(), routeArbitrationPacket.getEventDurationInMilliseconds()));
 		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
 		routeEventResult.setEventId(eventDataEntity.getEvent().getId());
@@ -262,7 +262,7 @@ public class EventBO {
 		}
 		
 		DragEventResult dragEventResult = new DragEventResult();
-		dragEventResult.setAccolades(getAccolades(dragArbitrationPacket.getRank()));
+		dragEventResult.setAccolades(getAccolades(dragArbitrationPacket.getRank(), false));
 		dragEventResult.setDurability(updateDamageCar(activePersonaId, dragArbitrationPacket.getCarId(), dragArbitrationPacket.getNumberOfCollisions(), dragArbitrationPacket.getEventDurationInMilliseconds()));
 		dragEventResult.setEntrants(arrayOfDragEntrantResult);
 		dragEventResult.setEventId(eventDataEntity.getEvent().getId());
@@ -336,7 +336,7 @@ public class EventBO {
 		}
 
 		TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
-		teamEscapeEventResult.setAccolades(getAccolades(teamEscapeArbitrationPacket.getRank()));
+		teamEscapeEventResult.setAccolades(getAccolades(teamEscapeArbitrationPacket.getRank(), false));
 		teamEscapeEventResult.setDurability(updateDamageCar(activePersonaId, teamEscapeArbitrationPacket.getCarId(), teamEscapeArbitrationPacket.getNumberOfCollisions(), teamEscapeArbitrationPacket.getEventDurationInMilliseconds()));
 		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
 		teamEscapeEventResult.setEventId(eventDataEntity.getEvent().getId());
@@ -348,25 +348,26 @@ public class EventBO {
 		return teamEscapeEventResult;
 	}
 	
-	public Accolades getAccolades(Integer rank) {
+	private Accolades getAccolades(Integer rank, Boolean isBusted) {
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward());
 		accolades.setHasLeveledUp(false);
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(rank));
+		if(!isBusted) {
+			accolades.setLuckyDrawInfo(getLuckyDrawInfo(rank));
+		}
 		accolades.setOriginalRewards(getOriginalReward());
 		accolades.setRewardInfo(getRewardPart());
-		
 		return accolades;
 	}
 	
-	public Reward getFinalReward() {
+	private Reward getFinalReward() {
 		Reward finalReward = new Reward();
 		finalReward.setRep(7331);
 		finalReward.setTokens(1337);
 		return finalReward;
 	}
 	
-	public LuckyDrawInfo getLuckyDrawInfo(Integer rank) {
+	private LuckyDrawInfo getLuckyDrawInfo(Integer rank) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
 		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
 		luckyDrawItem.setDescription("TEST DROP");
@@ -385,14 +386,14 @@ public class EventBO {
 		return luckyDrawInfo;
 	}
 	
-	public Reward getOriginalReward() {
+	private Reward getOriginalReward() {
 		Reward originalRewards = new Reward();
 		originalRewards.setRep(562);
 		originalRewards.setTokens(845);
 		return originalRewards;
 	}
 	
-	public ArrayOfRewardPart getRewardPart() {
+	private ArrayOfRewardPart getRewardPart() {
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
 		RewardPart rewardPart = new RewardPart();
 		rewardPart.setRepPart(256);
