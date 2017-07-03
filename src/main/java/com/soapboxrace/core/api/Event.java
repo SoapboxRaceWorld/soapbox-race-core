@@ -62,7 +62,7 @@ public class Event {
 		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 		if (EventMode.PURSUIT_SP.equals(eventMode)) {
 			PursuitArbitrationPacket pursuitArbitrationPacket = (PursuitArbitrationPacket) UnmarshalXML.unMarshal(arbitrationXml, PursuitArbitrationPacket.class);
-			return eventBO.getPursitEnd(eventSessionId, activePersonaId, pursuitArbitrationPacket);
+			return eventBO.getPursitEnd(eventSessionId, activePersonaId, pursuitArbitrationPacket, false);
 		}
 		if (EventMode.SPRINT.equals(eventMode) || EventMode.CIRCUIT.equals(eventMode)) {
 			RouteArbitrationPacket routeArbitrationPacket = (RouteArbitrationPacket) UnmarshalXML.unMarshal(arbitrationXml, RouteArbitrationPacket.class);
@@ -87,7 +87,7 @@ public class Event {
 		PursuitArbitrationPacket pursuitArbitrationPacket = (PursuitArbitrationPacket) UnmarshalXML.unMarshal(bustXml, PursuitArbitrationPacket.class);
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
 		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-		pursuitEventResult = eventBO.getPursitEnd(eventSessionId, activePersonaId, pursuitArbitrationPacket);
+		pursuitEventResult = eventBO.getPursitEnd(eventSessionId, activePersonaId, pursuitArbitrationPacket, true);
 		return pursuitEventResult;
 	}
 }
