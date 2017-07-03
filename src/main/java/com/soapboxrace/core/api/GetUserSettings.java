@@ -54,7 +54,7 @@ public class GetUserSettings {
 		arrayOfLong.getLong().addAll(sceneryIds);
 		userSettings.setActiveHolidayIds(arrayOfLong);
 		ArrayOfString arrayOfString2 = new ArrayOfString();
-		arrayOfString.getString().addAll(
+		arrayOfString2.getString().addAll(
 				disactivatedSceneryGroups.stream()
 						.filter(s -> sceneryBO.isValid(s.replace("_DISABLE", "")))
 						.collect(Collectors.toList()));
