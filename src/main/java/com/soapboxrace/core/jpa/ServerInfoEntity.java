@@ -1,5 +1,7 @@
 package com.soapboxrace.core.jpa;
 
+import com.soapboxrace.core.jpa.convert.SceneryGroupConverter;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -25,10 +27,10 @@ public class ServerInfoEntity {
 	private String ownerList;
 	private Integer numberOfRegistered;
 
-	@ElementCollection
+	@Convert(converter = SceneryGroupConverter.class)
 	private List<String> activatedHolidaySceneryGroups;
 
-	@ElementCollection
+	@Convert(converter = SceneryGroupConverter.class)
 	private List<String> disactivatedHolidaySceneryGroups;
 
 	@Transient
