@@ -1,12 +1,7 @@
 package com.soapboxrace.core.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "SERVER_INFO")
@@ -29,6 +24,12 @@ public class ServerInfoEntity {
 	private String adminList;
 	private String ownerList;
 	private Integer numberOfRegistered;
+
+	@ElementCollection
+	private List<String> activatedHolidaySceneryGroups;
+
+	@ElementCollection
+	private List<String> disactivatedHolidaySceneryGroups;
 
 	@Transient
 	private Integer onlineNumber;
@@ -149,4 +150,19 @@ public class ServerInfoEntity {
 		this.serverVersion = serverVersion;
 	}
 
+	public void setActivatedHolidaySceneryGroups(List<String> activatedHolidaySceneryGroups) {
+		this.activatedHolidaySceneryGroups = activatedHolidaySceneryGroups;
+	}
+
+	public List<String> getActivatedHolidaySceneryGroups() {
+		return this.activatedHolidaySceneryGroups;
+	}
+
+	public void setDisactivatedHolidaySceneryGroups(List<String> disactivatedHolidaySceneryGroups) {
+		this.disactivatedHolidaySceneryGroups = disactivatedHolidaySceneryGroups;
+	}
+
+	public List<String> getDisactivatedHolidaySceneryGroups() {
+		return this.disactivatedHolidaySceneryGroups;
+	}
 }
