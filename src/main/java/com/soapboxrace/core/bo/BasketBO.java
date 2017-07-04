@@ -11,7 +11,6 @@ import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.BasketDefinitionEntity;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
@@ -51,12 +50,7 @@ public class BasketBO {
 		return defaultCar;
 	}
 
-	public boolean buyCar(String productId, Long personaId, String securityToken) {
-		int carLimit = getCarLimit(securityToken);
-		if (getPersonaCarCount(personaId) >= carLimit) {
-			return false;
-		}
-
+	public void buyCar(String productId, Long personaId, String securityToken) {
 		OwnedCarTrans car = getCar(productId);
 		String carXml = MarshalXML.marshal(car);
 		CarSlotEntity carSlotEntity = new CarSlotEntity();
@@ -65,13 +59,10 @@ public class BasketBO {
 		carSlotEntity.setPersona(personaEntity);
 		carSlotEntity.setOwnedCarTrans(carXml);
 		carSlotDAO.insert(carSlotEntity);
-
 		personaBo.changeDefaultCar(personaId, carSlotEntity.getId());
-
-		return true;
 	}
 
-	private int getPersonaCarCount(Long personaId) {
+	public int getPersonaCarCount(Long personaId) {
 		return getPersonasCar(personaId).size();
 	}
 
@@ -90,11 +81,4 @@ public class BasketBO {
 		return true;
 	}
 
-	public int getCarLimit(String securityToken) {
-		TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
-		if (tokenSession.isPremium()) {
-			return 30;
-		}
-		return 6;
-	}
 }

@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.BasketBO;
 import com.soapboxrace.core.bo.CommerceBO;
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.PersonaBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
@@ -55,6 +56,9 @@ public class Personas {
 
 	@EJB
 	private TokenSessionBO sessionBO;
+
+	@EJB
+	private ParameterBO parameterBO;
 
 	@POST
 	@Secured
@@ -128,7 +132,10 @@ public class Personas {
 				return commerceResultTrans;
 			}
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
-			if (basketBO.buyCar(productId, personaId, securityToken)) {
+
+			int carLimit = parameterBO.getCarLimit(securityToken);
+			if (basketBO.getPersonaCarCount(personaId) >= carLimit) {
+				basketBO.buyCar(productId, personaId, securityToken);
 				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
 			} else {
 				commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS);
@@ -158,7 +165,7 @@ public class Personas {
 		carSlotInfoTrans.setCarsOwnedByPersona(arrayOfOwnedCarTrans);
 		carSlotInfoTrans.setDefaultOwnedCarIndex(personaEntity.getCurCarIndex());
 		carSlotInfoTrans.setObtainableSlots(new ArrayOfProductTrans());
-		int carlimit = basketBO.getCarLimit(securityToken);
+		int carlimit = parameterBO.getCarLimit(securityToken);
 		carSlotInfoTrans.setOwnedCarSlotsCount(carlimit);
 		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
 		ProductTrans productTrans = new ProductTrans();
