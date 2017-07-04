@@ -15,7 +15,6 @@ import com.soapboxrace.jaxb.http.ArrayOfLong;
 import com.soapboxrace.jaxb.http.ArrayOfString;
 import com.soapboxrace.jaxb.http.UserSettings;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
