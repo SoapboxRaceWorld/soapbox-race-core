@@ -23,9 +23,14 @@ import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
+import com.soapboxrace.jaxb.http.ArrayOfCustomPaintTrans;
+import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
+import com.soapboxrace.jaxb.http.ArrayOfPerformancePartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
+import com.soapboxrace.jaxb.http.ArrayOfSkillModPartTrans;
+import com.soapboxrace.jaxb.http.ArrayOfVisualPartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfWalletTrans;
 import com.soapboxrace.jaxb.http.BasketTrans;
 import com.soapboxrace.jaxb.http.CarSlotInfoTrans;
@@ -33,6 +38,7 @@ import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceResultTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionResultTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
+import com.soapboxrace.jaxb.http.CustomCarTrans;
 import com.soapboxrace.jaxb.http.InvalidBasketTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
@@ -81,6 +87,18 @@ public class Personas {
 
 		CommerceSessionTrans commerceSessionTrans = (CommerceSessionTrans) UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
 		commerceSessionTrans.getUpdatedCar().setDurability(100);
+
+		boolean premium = sessionBO.isPremium(securityToken);
+		if (parameterBO.getPremiumCarChangerProtection() && !premium) {
+			CustomCarTrans customCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
+			if (!customCar.getPerformanceParts().getPerformancePartTrans().isEmpty()) {
+				customCar.setPerformanceParts(new ArrayOfPerformancePartTrans());
+				customCar.setVinyls(new ArrayOfCustomVinylTrans());
+				customCar.setSkillModParts(new ArrayOfSkillModPartTrans());
+				customCar.setPaints(new ArrayOfCustomPaintTrans());
+				customCar.setVisualParts(new ArrayOfVisualPartTrans());
+			}
+		}
 		commerceBO.updateCar(commerceSessionTrans, personaId);
 
 		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
@@ -135,10 +153,10 @@ public class Personas {
 
 			int carLimit = parameterBO.getCarLimit(securityToken);
 			if (basketBO.getPersonaCarCount(personaId) >= carLimit) {
+				commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS);
+			} else {
 				basketBO.buyCar(productId, personaId, securityToken);
 				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
-			} else {
-				commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS);
 			}
 
 		}

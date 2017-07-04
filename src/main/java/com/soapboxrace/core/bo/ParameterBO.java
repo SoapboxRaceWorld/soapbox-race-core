@@ -20,7 +20,7 @@ public class ParameterBO {
 	private String getParameter(String name) {
 		try {
 			ParameterEntity findById = parameterDao.findById(name);
-			return findById.getName();
+			return findById.getValue();
 		} catch (Exception e) {
 		}
 		return null;
