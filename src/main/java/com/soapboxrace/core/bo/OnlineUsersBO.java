@@ -21,7 +21,7 @@ public class OnlineUsersBO {
 	public int getNumberOfUsersOnlineNow() {
 		Date lastMinutes = getLastMinutes(1);
 		OnlineUsersEntity onlineUsersEntity = onlineUsersDAO.findByTime(lastMinutes);
-		return onlineUsersEntity.getNumberOfUsers();
+		return onlineUsersEntity != null ? onlineUsersEntity.getNumberOfUsers() : 0;
 	}
 
 	@Schedule(minute = "*", hour = "*", persistent = false)
