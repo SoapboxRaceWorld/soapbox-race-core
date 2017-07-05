@@ -100,7 +100,7 @@ public class EventBO {
 		return eventSessionDao.findById(id);
 	}
 	
-	public PursuitEventResult getPursitEnd(Long eventSessionId, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket) {
+	public PursuitEventResult getPursitEnd(Long eventSessionId, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket, Boolean isBusted) {
 		if(pursuitArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int)pursuitArbitrationPacket.getCarId(), pursuitArbitrationPacket.getHacksDetected());
 		}
@@ -127,7 +127,7 @@ public class EventBO {
 		eventDataDao.update(eventDataEntity);
 
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
-		pursuitEventResult.setAccolades(getAccolades(1));
+		pursuitEventResult.setAccolades(getAccolades(1, isBusted));
 		pursuitEventResult.setDurability(updateDamageCar(activePersonaId, pursuitArbitrationPacket.getCarId(), 0, pursuitArbitrationPacket.getEventDurationInMilliseconds()));
 		pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
 		pursuitEventResult.setEventSessionId(eventSessionId);
@@ -196,7 +196,7 @@ public class EventBO {
 		}
 		
 		RouteEventResult routeEventResult = new RouteEventResult();
-		routeEventResult.setAccolades(getAccolades(routeArbitrationPacket.getRank()));
+		routeEventResult.setAccolades(getAccolades(routeArbitrationPacket.getRank(), false));
 		routeEventResult.setDurability(updateDamageCar(activePersonaId, routeArbitrationPacket.getCarId(), routeArbitrationPacket.getNumberOfCollisions(), routeArbitrationPacket.getEventDurationInMilliseconds()));
 		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
 		routeEventResult.setEventId(eventDataEntity.getEvent().getId());
@@ -336,7 +336,7 @@ public class EventBO {
 		}
 
 		TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
-		teamEscapeEventResult.setAccolades(getAccolades(teamEscapeArbitrationPacket.getRank()));
+		teamEscapeEventResult.setAccolades(getAccolades(teamEscapeArbitrationPacket.getRank(), false));
 		teamEscapeEventResult.setDurability(updateDamageCar(activePersonaId, teamEscapeArbitrationPacket.getCarId(), teamEscapeArbitrationPacket.getNumberOfCollisions(), teamEscapeArbitrationPacket.getEventDurationInMilliseconds()));
 		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
 		teamEscapeEventResult.setEventId(eventDataEntity.getEvent().getId());
@@ -429,7 +429,7 @@ public class EventBO {
 		return accolades;
 	}
 	
-	private Accolades getAccolades(Integer rank) {
+	private Accolades getAccolades(Integer rank, Boolean isBusted) {
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
 		RewardPart rewardPart = new RewardPart();
 		rewardPart.setRepPart(256);

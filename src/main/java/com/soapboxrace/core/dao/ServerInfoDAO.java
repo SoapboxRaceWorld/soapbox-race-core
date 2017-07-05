@@ -23,7 +23,14 @@ public class ServerInfoDAO extends BaseDAO<ServerInfoEntity> {
 		TypedQuery<ServerInfoEntity> query = entityManager.createNamedQuery("ServerInfoEntity.findAll", ServerInfoEntity.class);
 
 		List<ServerInfoEntity> resultList = query.getResultList();
-		return !resultList.isEmpty() ? resultList.get(0) : null;
+		ServerInfoEntity serverInfoEntity = !resultList.isEmpty() ? resultList.get(0) : null;
+
+		if (serverInfoEntity != null) {
+			serverInfoEntity.getActivatedHolidaySceneryGroups().size();
+			serverInfoEntity.getDisactivatedHolidaySceneryGroups().size();
+		}
+
+		return serverInfoEntity;
 	}
 
 	public void updateNumberOfRegistered() {

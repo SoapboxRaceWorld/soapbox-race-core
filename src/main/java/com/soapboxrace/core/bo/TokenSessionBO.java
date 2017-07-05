@@ -62,7 +62,7 @@ public class TokenSessionBO {
 		if (tokenSession == null) {
 			throw new NotAuthorizedException("Invalid session...");
 		}
-		
+
 		UserEntity user = userDAO.findById(tokenSession.getUserId());
 		if (!user.ownsPersona(personaId)) {
 			throw new NotAuthorizedException("Persona is not owned by user");
@@ -107,7 +107,7 @@ public class TokenSessionBO {
 	public void setActivePersonaId(String securityToken, Long personaId, Boolean isLogout) {
 		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
 
-		if(!isLogout) {
+		if (!isLogout) {
 			if (!userDAO.findById(tokenSessionEntity.getUserId()).ownsPersona(personaId)) {
 				throw new NotAuthorizedException("Persona not owned by user");
 			}
@@ -131,6 +131,11 @@ public class TokenSessionBO {
 		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
 		tokenSessionEntity.setActiveLobbyId(lobbyId);
 		tokenDAO.update(tokenSessionEntity);
+	}
+
+	public boolean isPremium(String securityToken) {
+		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+		return tokenSessionEntity.isPremium();
 	}
 
 }

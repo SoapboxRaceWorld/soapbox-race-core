@@ -17,14 +17,20 @@ import javax.ws.rs.core.MediaType;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.BasketBO;
 import com.soapboxrace.core.bo.CommerceBO;
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.PersonaBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
+import com.soapboxrace.jaxb.http.ArrayOfCustomPaintTrans;
+import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
+import com.soapboxrace.jaxb.http.ArrayOfPerformancePartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
+import com.soapboxrace.jaxb.http.ArrayOfSkillModPartTrans;
+import com.soapboxrace.jaxb.http.ArrayOfVisualPartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfWalletTrans;
 import com.soapboxrace.jaxb.http.BasketTrans;
 import com.soapboxrace.jaxb.http.CarSlotInfoTrans;
@@ -32,6 +38,7 @@ import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceResultTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionResultTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
+import com.soapboxrace.jaxb.http.CustomCarTrans;
 import com.soapboxrace.jaxb.http.InvalidBasketTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
@@ -56,6 +63,9 @@ public class Personas {
 	@EJB
 	private TokenSessionBO sessionBO;
 
+	@EJB
+	private ParameterBO parameterBO;
+
 	@POST
 	@Secured
 	@Path("/{personaId}/commerce")
@@ -77,6 +87,18 @@ public class Personas {
 
 		CommerceSessionTrans commerceSessionTrans = (CommerceSessionTrans) UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
 		commerceSessionTrans.getUpdatedCar().setDurability(100);
+
+		boolean premium = sessionBO.isPremium(securityToken);
+		if (parameterBO.getPremiumCarChangerProtection() && !premium) {
+			CustomCarTrans customCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
+			if (!customCar.getPerformanceParts().getPerformancePartTrans().isEmpty()) {
+				customCar.setPerformanceParts(new ArrayOfPerformancePartTrans());
+				customCar.setVinyls(new ArrayOfCustomVinylTrans());
+				customCar.setSkillModParts(new ArrayOfSkillModPartTrans());
+				customCar.setPaints(new ArrayOfCustomPaintTrans());
+				customCar.setVisualParts(new ArrayOfVisualPartTrans());
+			}
+		}
 		commerceBO.updateCar(commerceSessionTrans, personaId);
 
 		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
@@ -116,7 +138,7 @@ public class Personas {
 
 		BasketTrans basketTrans = (BasketTrans) UnmarshalXML.unMarshal(basketXml, BasketTrans.class);
 		String productId = basketTrans.getItems().getBasketItemTrans().get(0).getProductId();
-		if ("SRV-GARAGESLOT".equals(productId) || "-1".equals(productId) || productId.contains("SRV-POWERUP") ) {
+		if ("SRV-GARAGESLOT".equals(productId) || "-1".equals(productId) || productId.contains("SRV-POWERUP") || productId.equals("SRV-THREVIVE")) {
 			commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
 		} else {
 			OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
@@ -128,10 +150,13 @@ public class Personas {
 				return commerceResultTrans;
 			}
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
-			if (basketBO.buyCar(productId, personaId, securityToken)) {
-				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
-			} else {
+
+			int carLimit = parameterBO.getCarLimit(securityToken);
+			if (basketBO.getPersonaCarCount(personaId) >= carLimit) {
 				commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS);
+			} else {
+				basketBO.buyCar(productId, personaId, securityToken);
+				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
 			}
 
 		}
@@ -158,7 +183,7 @@ public class Personas {
 		carSlotInfoTrans.setCarsOwnedByPersona(arrayOfOwnedCarTrans);
 		carSlotInfoTrans.setDefaultOwnedCarIndex(personaEntity.getCurCarIndex());
 		carSlotInfoTrans.setObtainableSlots(new ArrayOfProductTrans());
-		int carlimit = basketBO.getCarLimit(securityToken);
+		int carlimit = parameterBO.getCarLimit(securityToken);
 		carSlotInfoTrans.setOwnedCarSlotsCount(carlimit);
 		ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
 		ProductTrans productTrans = new ProductTrans();
