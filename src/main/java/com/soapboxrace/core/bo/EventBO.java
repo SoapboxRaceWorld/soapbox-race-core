@@ -465,7 +465,9 @@ public class EventBO {
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(finalReward);
 		accolades.setHasLeveledUp(false);
-		accolades.setLuckyDrawInfo(luckyDrawInfo);
+		if(!isBusted) {
+			accolades.setLuckyDrawInfo(luckyDrawInfo);
+		}
 		accolades.setOriginalRewards(originalRewards);
 		accolades.setRewardInfo(arrayOfRewardPart);
 		return accolades;
