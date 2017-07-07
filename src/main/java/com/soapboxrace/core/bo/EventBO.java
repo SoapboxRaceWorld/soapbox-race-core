@@ -415,18 +415,19 @@ public class EventBO {
 	
 	private Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-		float exp = 100.0f * (((personaEntity.getLevel() * 2.0f) / 100.0f) + 1.0f);
 		
+		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
+		float exp = 100.0f * (personaEntity.getLevel() / 25.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, 1337, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
-		float rank = dragArbitrationPacket.getRank() == 1 ? exp * 0.5f : dragArbitrationPacket.getRank() == 2 ? exp * 0.3f : dragArbitrationPacket.getRank() == 3 ? exp * 0.2f : exp * 0.1f;	 
-		exp += (int)rank;
+		float rank = dragArbitrationPacket.getRank() == 1 ? exp * 0.5f : dragArbitrationPacket.getRank() == 2 ? exp * 0.3f : dragArbitrationPacket.getRank() == 3 ? exp * 0.2f : exp * 0.1f;
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)rank, 0, EnumRewardCategory.RANK, EnumRewardType.PLAYER_1));
 		
 		float timeRace = exp * (((60000.0f / dragArbitrationPacket.getEventDurationInMilliseconds()) / 10.0f) + 1.0f);
-		exp += (int)timeRace;
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)timeRace, 0, EnumRewardCategory.BONUS, EnumRewardType.TIME_BONUS));
+
+		exp += (int)timeRace + (int)rank;
 		
 		if(dragArbitrationPacket.getPerfectStart() == 1) {
 			float perfectStart = exp * 0.2f;
@@ -439,6 +440,7 @@ public class EventBO {
 			exp += (int)highSpeed;
 			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)highSpeed, 0, EnumRewardCategory.BONUS, EnumRewardType.NONE));
 		}
+		// Maths ending
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, 7331));
