@@ -196,7 +196,7 @@ public class EventBO {
 		}
 		
 		RouteEventResult routeEventResult = new RouteEventResult();
-		routeEventResult.setAccolades(getRouteAccolades(activePersonaId, routeArbitrationPacket));
+		routeEventResult.setAccolades(getRouteAccolades(activePersonaId, routeArbitrationPacket, eventDataEntity.getEvent().getEventModeId() == 9 ? true : false));
 		routeEventResult.setDurability(updateDamageCar(activePersonaId, routeArbitrationPacket.getCarId(), routeArbitrationPacket.getNumberOfCollisions(), routeArbitrationPacket.getEventDurationInMilliseconds()));
 		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
 		routeEventResult.setEventId(eventDataEntity.getEvent().getId());
@@ -400,12 +400,35 @@ public class EventBO {
 		return accolades;
 	}
 	
-	private Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
+	private Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket, Boolean isSprint) {
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-		float exp = 100.0f * (((personaEntity.getLevel() * 2.0f) / 100.0f) + 1.0f);
 		
+		// Maths begin
+		float timeRef = isSprint ? 120000.0f : 300000.0f;
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
+		float exp = 100.0f * (personaEntity.getLevel() / 15.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, 685, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		
+		float rank = routeArbitrationPacket.getRank() == 1 ? exp * 0.5f : routeArbitrationPacket.getRank() == 2 ? exp * 0.3f : routeArbitrationPacket.getRank() == 3 ? exp * 0.2f : exp * 0.1f;
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)rank, 0, EnumRewardCategory.RANK, EnumRewardType.PLAYER_1));
+		
+		float timeRace = exp * ((routeArbitrationPacket.getEventDurationInMilliseconds() / timeRef) + 1.0f);
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)timeRace, 0, EnumRewardCategory.BONUS, EnumRewardType.TIME_BONUS));
+		
+		exp += (int)rank + (int)timeRace;
+		
+		if(routeArbitrationPacket.getPerfectStart() == 1) {
+			float perfectStart = exp * 0.2f;
+			exp += (int)perfectStart;
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)perfectStart, 0, EnumRewardCategory.BONUS, EnumRewardType.NONE));
+		}
+		
+		if(routeArbitrationPacket.getTopSpeed() >= 70.0f) {
+			float highSpeed = exp * 0.2f;
+			exp += (int)highSpeed;
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)highSpeed, 0, EnumRewardCategory.BONUS, EnumRewardType.NONE));
+		}
+		// Maths ending
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, 685));
