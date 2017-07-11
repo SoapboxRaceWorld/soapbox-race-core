@@ -354,36 +354,39 @@ public class EventBO {
 		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
 		float exp = 100.0f * (personaEntity.getLevel() / 10.0f);
+		exp = isBusted ? 0 : exp;
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, 685, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
-		float copsDeployed = exp * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsDeployed, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DEPLOYED));
-		
-		float copsDisabled = exp * (pursuitArbitrationPacket.getCopsDisabled() / 100.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsDisabled, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DISABLED));
-		
-		float copsRammed = exp * (pursuitArbitrationPacket.getCopsRammed() / 150.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsRammed, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_RAMMED));
-		
-		float costToState = exp * ((pursuitArbitrationPacket.getCostToState() / 5000.0f) / 150.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)costToState, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COST_TO_STATE));
-		
-		float eventDuration = exp * ((pursuitArbitrationPacket.getEventDurationInMilliseconds() / 2500.0f) / 150.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)eventDuration, 0, EnumRewardCategory.PURSUIT, EnumRewardType.PURSUIT_LENGTH));
-		
-		float heat = exp * (pursuitArbitrationPacket.getHeat() / 2.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)heat, 0, EnumRewardCategory.PURSUIT, EnumRewardType.HEAT_LEVEL));
-		
-		float infractions = exp * (pursuitArbitrationPacket.getInfractions() / 100.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)infractions, 0, EnumRewardCategory.PURSUIT, EnumRewardType.INFRACTIONS));
-		
-		float roadBlocksDodged = exp * (pursuitArbitrationPacket.getRoadBlocksDodged() / 50.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)roadBlocksDodged, 0, EnumRewardCategory.PURSUIT, EnumRewardType.ROADBLOCKS_DODGED));
-		
-		float spikeStripsDodged = exp * (pursuitArbitrationPacket.getSpikeStripsDodged() / 50.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)spikeStripsDodged, 0, EnumRewardCategory.PURSUIT, EnumRewardType.SPIKE_STRIPS_DODGED));
-		
-		exp += (int)copsRammed + (int)copsDisabled + (int)copsDeployed + (int)costToState + (int)eventDuration + (int)infractions + (int)heat + (int)roadBlocksDodged + (int)spikeStripsDodged;
+		if(!isBusted) {	
+			float copsDeployed = exp * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsDeployed, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DEPLOYED));
+			
+			float copsDisabled = exp * (pursuitArbitrationPacket.getCopsDisabled() / 100.0f);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsDisabled, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DISABLED));
+			
+			float copsRammed = exp * (pursuitArbitrationPacket.getCopsRammed() / 150.0f);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsRammed, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_RAMMED));
+			
+			float costToState = exp * ((pursuitArbitrationPacket.getCostToState() / 5000.0f) / 150.0f);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)costToState, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COST_TO_STATE));
+			
+			float eventDuration = exp * ((pursuitArbitrationPacket.getEventDurationInMilliseconds() / 2500.0f) / 150.0f);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)eventDuration, 0, EnumRewardCategory.PURSUIT, EnumRewardType.PURSUIT_LENGTH));
+			
+			float heat = exp * (pursuitArbitrationPacket.getHeat() / 2.0f);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)heat, 0, EnumRewardCategory.PURSUIT, EnumRewardType.HEAT_LEVEL));
+			
+			float infractions = exp * (pursuitArbitrationPacket.getInfractions() / 100.0f);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)infractions, 0, EnumRewardCategory.PURSUIT, EnumRewardType.INFRACTIONS));
+			
+			float roadBlocksDodged = exp * (pursuitArbitrationPacket.getRoadBlocksDodged() / 50.0f);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)roadBlocksDodged, 0, EnumRewardCategory.PURSUIT, EnumRewardType.ROADBLOCKS_DODGED));
+			
+			float spikeStripsDodged = exp * (pursuitArbitrationPacket.getSpikeStripsDodged() / 50.0f);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)spikeStripsDodged, 0, EnumRewardCategory.PURSUIT, EnumRewardType.SPIKE_STRIPS_DODGED));
+			
+			exp += (int)copsRammed + (int)copsDisabled + (int)copsDeployed + (int)costToState + (int)eventDuration + (int)infractions + (int)heat + (int)roadBlocksDodged + (int)spikeStripsDodged;
+		}
 		// Maths ending
 		
 		Accolades accolades = new Accolades();
@@ -453,10 +456,57 @@ public class EventBO {
 	
 	private Accolades getTeamEscapeAccolades(Long activePersonaId, TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-		float exp = 100.0f * (((personaEntity.getLevel() * 2.0f) / 100.0f) + 1.0f);
 		
+		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
+		float exp = 100.0f * (personaEntity.getLevel() / 10.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, 685, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		
+		float copsDeployed = exp * (teamEscapeArbitrationPacket.getCopsDeployed() / 200.0f);
+		copsDeployed = teamEscapeArbitrationPacket.getBustedCount() > 0 && teamEscapeArbitrationPacket.getFinishReason() == 22 ? copsDeployed / (teamEscapeArbitrationPacket.getBustedCount() * 2.0f) : teamEscapeArbitrationPacket.getFinishReason() != 22 ? copsDeployed / 10 : copsDeployed;
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsDeployed, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DEPLOYED));
+		
+		float copsDisabled = exp * (teamEscapeArbitrationPacket.getCopsDisabled() / 100.0f);
+		copsDisabled = teamEscapeArbitrationPacket.getBustedCount() > 0 && teamEscapeArbitrationPacket.getFinishReason() == 22 ? copsDisabled / (teamEscapeArbitrationPacket.getBustedCount() * 2.0f) : teamEscapeArbitrationPacket.getFinishReason() != 22 ? copsDisabled / 10 : copsDisabled;
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsDisabled, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DISABLED));
+		
+		float copsRammed = exp * (teamEscapeArbitrationPacket.getCopsRammed() / 150.0f);
+		copsRammed = teamEscapeArbitrationPacket.getBustedCount() > 0 && teamEscapeArbitrationPacket.getFinishReason() == 22 ? copsRammed / (teamEscapeArbitrationPacket.getBustedCount() * 2.0f) : teamEscapeArbitrationPacket.getFinishReason() != 22 ? copsRammed / 10 : copsRammed;
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsRammed, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_RAMMED));
+		
+		float costToState = exp * ((teamEscapeArbitrationPacket.getCostToState() / 5000.0f) / 150.0f);
+		costToState = teamEscapeArbitrationPacket.getBustedCount() > 0 && teamEscapeArbitrationPacket.getFinishReason() == 22 ? costToState / (teamEscapeArbitrationPacket.getBustedCount() * 2.0f) : teamEscapeArbitrationPacket.getFinishReason() != 22 ? costToState / 10 : costToState;
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)costToState, 0, EnumRewardCategory.PURSUIT, EnumRewardType.COST_TO_STATE));
+		
+		float infractions = exp * (teamEscapeArbitrationPacket.getInfractions() / 100.0f);
+		infractions = teamEscapeArbitrationPacket.getBustedCount() > 0 && teamEscapeArbitrationPacket.getFinishReason() == 22 ? infractions / (teamEscapeArbitrationPacket.getBustedCount() * 2.0f) : teamEscapeArbitrationPacket.getFinishReason() != 22 ? infractions / 10 : infractions;
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)infractions, 0, EnumRewardCategory.PURSUIT, EnumRewardType.INFRACTIONS));
+		
+		float roadBlocksDodged = exp * (teamEscapeArbitrationPacket.getRoadBlocksDodged() / 50.0f);
+		roadBlocksDodged = teamEscapeArbitrationPacket.getBustedCount() > 0 && teamEscapeArbitrationPacket.getFinishReason() == 22 ? roadBlocksDodged / (teamEscapeArbitrationPacket.getBustedCount() * 2.0f) : teamEscapeArbitrationPacket.getFinishReason() != 22 ? roadBlocksDodged / 10 : roadBlocksDodged;
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)roadBlocksDodged, 0, EnumRewardCategory.PURSUIT, EnumRewardType.ROADBLOCKS_DODGED));
+		
+		float spikeStripsDodged = exp * (teamEscapeArbitrationPacket.getSpikeStripsDodged() / 50.0f);
+		spikeStripsDodged = teamEscapeArbitrationPacket.getBustedCount() > 0 && teamEscapeArbitrationPacket.getFinishReason() == 22 ? spikeStripsDodged / (teamEscapeArbitrationPacket.getBustedCount() * 2.0f) : teamEscapeArbitrationPacket.getFinishReason() != 22 ? spikeStripsDodged / 10 : spikeStripsDodged;
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)spikeStripsDodged, 0, EnumRewardCategory.PURSUIT, EnumRewardType.SPIKE_STRIPS_DODGED));
+		
+		float rank = teamEscapeArbitrationPacket.getRank() == 1 ? exp * 0.5f : teamEscapeArbitrationPacket.getRank() == 2 ? exp * 0.3f : teamEscapeArbitrationPacket.getRank() == 3 ? exp * 0.2f : exp * 0.1f;
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)rank, 0, EnumRewardCategory.RANK, EnumRewardType.PLAYER_1));
+		
+		exp += (int)copsRammed + (int)copsDisabled + (int)copsDeployed + (int)costToState + (int)infractions + (int)roadBlocksDodged + (int)spikeStripsDodged + (int)rank;
+		
+		if(teamEscapeArbitrationPacket.getPerfectStart() == 1) {
+			float perfectStart = exp * 0.2f;
+			exp += (int)perfectStart;
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)perfectStart, 0, EnumRewardCategory.BONUS, EnumRewardType.NONE));
+		}
+		
+		if(teamEscapeArbitrationPacket.getTopSpeed() >= 70.0f) {
+			float highSpeed = exp * 0.2f;
+			exp += (int)highSpeed;
+			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)highSpeed, 0, EnumRewardCategory.BONUS, EnumRewardType.NONE));
+		}
+		// Maths ending
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, 685));
