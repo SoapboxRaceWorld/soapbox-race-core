@@ -405,7 +405,7 @@ public class EventBO {
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
-		accolades.setHasLeveledUp(false);
+		accolades.setHasLeveledUp((long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false);
 		if(!isBusted) {
 			accolades.setLuckyDrawInfo(getLuckyDrawInfo(1));
 		}
@@ -463,7 +463,7 @@ public class EventBO {
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
-		accolades.setHasLeveledUp(false);
+		accolades.setHasLeveledUp((long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false);
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo(routeArbitrationPacket.getRank()));
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
@@ -519,7 +519,7 @@ public class EventBO {
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
-		accolades.setHasLeveledUp(false);
+		accolades.setHasLeveledUp((long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false);
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo(dragArbitrationPacket.getRank()));
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
@@ -616,7 +616,7 @@ public class EventBO {
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
-		accolades.setHasLeveledUp(false);
+		accolades.setHasLeveledUp((long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false);
 		if(teamEscapeArbitrationPacket.getFinishReason() == 22) {
 			accolades.setLuckyDrawInfo(getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank()));
 		}
