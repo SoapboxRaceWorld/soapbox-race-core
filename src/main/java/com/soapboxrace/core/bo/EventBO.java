@@ -357,8 +357,8 @@ public class EventBO {
 		
 		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		float exp = isBusted || personaEntity.getLevel() >= 60 ? 0 : 100.0f * (personaEntity.getLevel() / 10.0f);
-		float cash = isBusted || personaEntity.getCash() >= 9999999 ? 0 : 250.0f * (personaEntity.getLevel() / 10.0f);
+		float exp = isBusted || personaEntity.getLevel() >= 60 ? 0 : 200.0f * (personaEntity.getLevel() / 10.0f);
+		float cash = isBusted || personaEntity.getCash() >= 9999999 ? 0 : 400.0f * (personaEntity.getLevel() / 10.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		if(!isBusted) {
@@ -382,8 +382,8 @@ public class EventBO {
 			float eventDurationCash = cash * ((pursuitArbitrationPacket.getEventDurationInMilliseconds() / 2500.0f) / 150.0f);
 			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)eventDurationExp, (int)eventDurationCash, EnumRewardCategory.PURSUIT, EnumRewardType.PURSUIT_LENGTH));
 			
-			float heatExp = exp * (pursuitArbitrationPacket.getHeat() / 2.0f);
-			float heatCash = cash * (pursuitArbitrationPacket.getHeat() / 2.0f);
+			float heatExp = exp * (pursuitArbitrationPacket.getHeat() / 5.0f);
+			float heatCash = cash * (pursuitArbitrationPacket.getHeat() / 5.0f);
 			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)heatExp, (int)heatCash, EnumRewardCategory.PURSUIT, EnumRewardType.HEAT_LEVEL));
 			
 			float infractionsExp = exp * (pursuitArbitrationPacket.getInfractions() / 100.0f);
@@ -421,8 +421,8 @@ public class EventBO {
 		
 		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		float exp = personaEntity.getLevel() >= 60 ? 0 : 100 * (personaEntity.getLevel() / 5.0f);
-		float cash = personaEntity.getCash() >= 9999999 ? 0 : 200 * (personaEntity.getLevel() / 5.0f);
+		float exp = personaEntity.getLevel() >= 60 ? 0 : 200 * (personaEntity.getLevel() / 5.0f);
+		float cash = personaEntity.getCash() >= 9999999 ? 0 : 400 * (personaEntity.getLevel() / 5.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		float rankExp = routeArbitrationPacket.getRank() == 1 ? exp * 0.10f : exp * 0.05f; // + 10% if fist, + 5% else
@@ -477,8 +477,8 @@ public class EventBO {
 		
 		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		float exp = personaEntity.getLevel() >= 60 ? 0 : 50 * (personaEntity.getLevel() / 5.0f);
-		float cash = personaEntity.getCash() >= 9999999 ? 0 : 100 * (personaEntity.getLevel() / 5.0f);
+		float exp = personaEntity.getLevel() >= 60 ? 0 : 100 * (personaEntity.getLevel() / 5.0f);
+		float cash = personaEntity.getCash() >= 9999999 ? 0 : 200 * (personaEntity.getLevel() / 5.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		float rankExp = dragArbitrationPacket.getRank() == 1 ? exp * 0.10f : exp * 0.05f; // + 10% if fist, + 5% else
@@ -533,16 +533,16 @@ public class EventBO {
 		
 		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		float exp = personaEntity.getLevel() >= 60 ? 0 : 100.0f * (personaEntity.getLevel() / 10.0f);
-		float cash = personaEntity.getCash() >= 9999999 ? 0 : 250.0f * (personaEntity.getLevel() / 10.0f);
+		float exp = personaEntity.getLevel() >= 60 ? 0 : 200.0f * (personaEntity.getLevel() / 10.0f);
+		float cash = personaEntity.getCash() >= 9999999 ? 0 : 400.0f * (personaEntity.getLevel() / 10.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		if(personaEntity.getLevel() < 60 || personaEntity.getCash() < 9999999) {
 			Integer bustedCount = teamEscapeArbitrationPacket.getBustedCount();
 			Integer finishReason = teamEscapeArbitrationPacket.getFinishReason();
 			
-			float copsDeployedExp = exp * (teamEscapeArbitrationPacket.getCopsDeployed() / 150.0f);
-			float copsDeployedCash = cash * (teamEscapeArbitrationPacket.getCopsDeployed() / 150.0f);
+			float copsDeployedExp = exp * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);
+			float copsDeployedCash = cash * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);
 			copsDeployedExp = bustedCount > 0 && finishReason == 22 ? copsDeployedExp / (bustedCount * 2.0f) : finishReason != 22 ? copsDeployedExp / 10 : copsDeployedExp;
 			copsDeployedCash = bustedCount > 0 && finishReason == 22 ? copsDeployedCash / (bustedCount * 2.0f) : finishReason != 22 ? copsDeployedCash / 10 : copsDeployedCash;
 			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsDeployedExp, (int)copsDeployedCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DEPLOYED));
@@ -553,8 +553,8 @@ public class EventBO {
 			copsDisabledCash = bustedCount > 0 && finishReason == 22 ? copsDisabledCash / (bustedCount * 2.0f) : finishReason != 22 ? copsDisabledCash / 10 : copsDisabledCash;
 			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsDisabledExp, (int)copsDisabledCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DISABLED));
 			
-			float copsRammedExp = exp * (teamEscapeArbitrationPacket.getCopsRammed() / 125.0f);
-			float copsRammedCash = cash * (teamEscapeArbitrationPacket.getCopsRammed() / 125.0f);
+			float copsRammedExp = exp * (teamEscapeArbitrationPacket.getCopsRammed() / 150.0f);
+			float copsRammedCash = cash * (teamEscapeArbitrationPacket.getCopsRammed() / 150.0f);
 			copsRammedExp = bustedCount > 0 && finishReason == 22 ? copsRammedExp / (bustedCount * 2.0f) : finishReason != 22 ? copsRammedExp / 10 : copsRammedExp;
 			copsRammedCash = bustedCount > 0 && finishReason == 22 ? copsRammedCash / (bustedCount * 2.0f) : finishReason != 22 ? copsRammedCash / 10 : copsRammedCash;
 			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsRammedExp, (int)copsRammedCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_RAMMED));
