@@ -509,7 +509,7 @@ public class EventBO {
 		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
 		float exp = personaEntity.getLevel() >= 60 ? 0 : 100.0f * (personaEntity.getLevel() / 10.0f);
-		float cash = personaEntity.getCash() >= 9999999 ? 0 : 500.0f * (personaEntity.getLevel() / 5.0f);
+		float cash = personaEntity.getCash() >= 9999999 ? 0 : 250.0f * (personaEntity.getLevel() / 10.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		if(personaEntity.getLevel() < 60 || personaEntity.getCash() < 9999999) {
