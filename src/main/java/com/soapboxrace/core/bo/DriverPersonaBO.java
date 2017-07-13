@@ -67,11 +67,11 @@ public class DriverPersonaBO {
 		ProfileData profileData = castPersonaEntity(personaEntity);
 		profileData.setBadges(new ArrayOfBadgePacket());
 		profileData.setMotto(personaEntity.getMotto());
-		profileData.setPercentToLevel(0);
-		profileData.setRating(0);
-		profileData.setRep(0);
-		profileData.setRepAtCurrentLevel(0);
-		profileData.setScore(0);
+		profileData.setPercentToLevel(personaEntity.getPercentToLevel());
+		profileData.setRating(personaEntity.getRating());
+		profileData.setRep(personaEntity.getRep());
+		profileData.setRepAtCurrentLevel(personaEntity.getRepAtCurrentLevel());
+		profileData.setScore(personaEntity.getScore());
 		return profileData;
 	}
 
