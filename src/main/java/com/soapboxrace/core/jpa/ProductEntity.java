@@ -17,6 +17,13 @@ import javax.persistence.Table;
 						+ "and :minLevel >= obj.minLevel " //
 						+ "and (obj.premium = false or obj.premium = :premium )" //
 						+ "and obj.categoryName = :categoryName "//
+						+ "and obj.productType = :productType"), //
+		
+		@NamedQuery(name = "ProductEntity.findForEndRace", //
+				query = "SELECT obj FROM ProductEntity obj WHERE " //
+						+ "obj.enabled = :enabled "//
+						+ "and :minLevel >= obj.minLevel " //
+						+ "and obj.categoryName = :categoryName "//
 						+ "and obj.productType = :productType") //
 })
 public class ProductEntity {
