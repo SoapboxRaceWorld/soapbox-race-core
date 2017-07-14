@@ -86,7 +86,7 @@ public class EventBO {
 	@EJB
 	private PersonaBO personaBo;
 	
-	private int[][] rankDrop = new int[][] { new int[] {}, new int[] { 3, 1, 2, 4, 1, 0, 3, 4, 2, 1 }, new int[] { 3, 1, 1, 4, 1, 0, 3, 4, 1, 1 }, new int[] { 3, 1, 1, 3, 1, 0, 3, 3, 1, 1 } };
+	public static int[][] rankDrop = new int[][] { new int[] {}, new int[] { 3, 1, 2, 4, 1, 0, 3, 4, 2, 1 }, new int[] { 3, 1, 1, 4, 1, 0, 3, 4, 1, 1 }, new int[] { 3, 1, 1, 3, 1, 0, 3, 3, 1, 1 } };
 
 	public List<EventEntity> availableAtLevel(Long personaId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
@@ -742,7 +742,7 @@ public class EventBO {
 		socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", carId, 0, hacksDetected);
 	}
 	
-	private String getVisualCatgeory(Integer nRandom) {
+	public static String getVisualCatgeory(Integer nRandom) {
 		switch(nRandom) {
 			case 0: return "NFSW_NA_EP_VISUALPARTS_LICENSEPLATES";
 			case 1: return "NFSW_NA_EP_VISUALPARTS_NEONS";
@@ -771,5 +771,4 @@ public class EventBO {
 		}
 		return ownedCarTrans.getDurability();
 	}
-	
 }

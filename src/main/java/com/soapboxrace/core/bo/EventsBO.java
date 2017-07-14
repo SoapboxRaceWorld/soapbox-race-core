@@ -2,13 +2,18 @@ package com.soapboxrace.core.bo;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Random;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.dao.TreasureHuntDAO;
+import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawBox;
@@ -32,6 +37,9 @@ public class EventsBO {
 	
 	@EJB
 	private TreasureHuntDAO treasureHuntDao;
+	
+	@EJB
+	private ProductDAO productDao;
 	
 	@EJB
 	private DriverPersonaBO driverPersonaBo;
@@ -129,15 +137,50 @@ public class EventsBO {
 	
 	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, TreasureHuntEntity treasureHuntEntity) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
+		Integer hash = 0, count = 0, price = 0;
+		String desc = "", icon = "", vItem = "", vItemType = "";
+		Boolean isSold = false;
+		
+		List<ProductEntity> getProductItems = null;
+		
+		Integer randomCategory = rank > 3 ? 1 : EventBO.rankDrop[rank][new Random().nextInt(10)];
+		if(randomCategory == 1) { // Powerup
+			getProductItems = productDao.findForEndRace("STORE_POWERUPS", "POWERUP", rank);
+		} else if(randomCategory == 2) { // Perf
+			getProductItems = productDao.findForEndRace("NFSW_NA_EP_PERFORMANCEPARTS", "PERFORMANCEPART", rank);
+		} else if(randomCategory == 3) { // Skill
+			getProductItems = productDao.findForEndRace("NFSW_NA_EP_SKILLMODPARTS", "SKILLMODPART", rank);
+		} else if(randomCategory == 4) { // Visual
+			getProductItems = productDao.findForEndRace(EventBO.getVisualCatgeory(new Random().nextInt(8)), "VISUALPART", rank);
+		}
+		
+		if(getProductItems != null) { // Other part
+			Integer randomDrop = new Random().nextInt(getProductItems.size());
+			ProductEntity productEntity = getProductItems.get(randomDrop);
+			
+			desc = productEntity.getDescription();
+			hash = productEntity.getHash().intValue();
+			icon = productEntity.getIcon();
+			count = randomCategory == 1 ? new Random().nextInt(15) + 1 : 1;
+			price = (int)(productEntity.getPrice() / 3.5);
+			vItem = DigestUtils.md5Hex(productEntity.getHash().toString());
+			vItemType = productEntity.getProductType();
+		} else { // Cash part
+			Integer cashBonus = new Random().nextInt(25000) + 1;
+			desc = String.valueOf(cashBonus) + " CASH";
+			icon = "128_cash";
+			vItemType = "CASH";
+		}
+		
 		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
-		luckyDrawItem.setDescription("TEST DROP");
-		luckyDrawItem.setHash(-1681514783);
-		luckyDrawItem.setIcon("product_nos_x1");
-		luckyDrawItem.setRemainingUseCount(0);
-		luckyDrawItem.setResellPrice(7331);
-		luckyDrawItem.setVirtualItem("nosshot");
-		luckyDrawItem.setVirtualItemType("POWERUP");
-		luckyDrawItem.setWasSold(true);
+		luckyDrawItem.setDescription(desc);
+		luckyDrawItem.setHash(hash);
+		luckyDrawItem.setIcon(icon);
+		luckyDrawItem.setRemainingUseCount(count);
+		luckyDrawItem.setResellPrice(price);
+		luckyDrawItem.setVirtualItem(vItem);
+		luckyDrawItem.setVirtualItemType(vItemType);
+		luckyDrawItem.setWasSold(isSold);
 		arrayOfLuckyDrawItem.getLuckyDrawItem().add(luckyDrawItem);
 		
 		ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();
