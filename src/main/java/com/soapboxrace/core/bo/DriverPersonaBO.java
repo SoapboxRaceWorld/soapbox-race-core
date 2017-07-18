@@ -43,7 +43,7 @@ public class DriverPersonaBO {
 		UserEntity userEntity = userDao.findById(userId);
 		personaEntity.setUser(userEntity);
 		personaEntity.setCash(6000000);
-		personaEntity.setLevel(60);
+		personaEntity.setLevel(1);
 		personaDao.insert(personaEntity);
 		
 		createThInformation(personaEntity);
