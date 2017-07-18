@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name = "EVENT")
 @NamedQueries({ //
 		@NamedQuery(name = "EventEntity.findAll", query = "SELECT obj FROM EventEntity obj"), //
-		@NamedQuery(name = "EventEntity.findByLevel", query = "SELECT obj FROM EventEntity obj WHERE :level >= obj.minLevel") //
+		@NamedQuery(name = "EventEntity.findByLevel", query = "SELECT obj FROM EventEntity obj WHERE :level >= obj.minLevel AND isEnabled = true") //
 })
 public class EventEntity {
 
