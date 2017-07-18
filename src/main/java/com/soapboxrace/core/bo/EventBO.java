@@ -104,6 +104,9 @@ public class EventBO {
 
 	public EventSessionEntity createEventSession(int eventId) {
 		EventEntity eventEntity = eventDao.findById(eventId);
+		if(eventEntity == null) {
+			return null;
+		}
 		EventSessionEntity eventSessionEntity = new EventSessionEntity();
 		eventSessionEntity.setEvent(eventEntity);
 		eventSessionDao.insert(eventSessionEntity);
@@ -368,7 +371,7 @@ public class EventBO {
 		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
 		float exp = isBusted || personaEntity.getLevel() >= 60 ? 0 : 200.0f * (personaEntity.getLevel() / 10.0f);
-		float cash = isBusted || personaEntity.getCash() >= 9999999 ? 0 : 400.0f * (personaEntity.getLevel() / 10.0f);
+		float cash = isBusted || personaEntity.getCash() >= 9999999 ? 0 : 600.0f * (personaEntity.getLevel() / 10.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		if(!isBusted) {
@@ -431,8 +434,8 @@ public class EventBO {
 		
 		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		float exp = personaEntity.getLevel() >= 60 ? 0 : 200 * (personaEntity.getLevel() / 5.0f);
-		float cash = personaEntity.getCash() >= 9999999 ? 0 : 400 * (personaEntity.getLevel() / 5.0f);
+		float exp = personaEntity.getLevel() >= 60 ? 0 : 200 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
+		float cash = personaEntity.getCash() >= 9999999 ? 0 : 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		float rankExp = routeArbitrationPacket.getRank() == 1 ? exp * 0.10f : exp * 0.05f; // + 10% if fist, + 5% else
@@ -543,8 +546,8 @@ public class EventBO {
 		
 		// Maths begin
 		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		float exp = personaEntity.getLevel() >= 60 ? 0 : 200.0f * (personaEntity.getLevel() / 10.0f);
-		float cash = personaEntity.getCash() >= 9999999 ? 0 : 400.0f * (personaEntity.getLevel() / 10.0f);
+		float exp = personaEntity.getLevel() >= 60 ? 0 : 200.0f * ((personaEntity.getLevel() + 1.0f) / 10.0f);
+		float cash = personaEntity.getCash() >= 9999999 ? 0 : 600.0f * ((personaEntity.getLevel() + 1.0f) / 10.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		if(personaEntity.getLevel() < 60 || personaEntity.getCash() < 9999999) {
