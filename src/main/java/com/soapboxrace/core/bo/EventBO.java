@@ -1,24 +1,19 @@
 package com.soapboxrace.core.bo;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
+import com.soapboxrace.core.bo.util.AccoladesFunc;
 import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
-import com.soapboxrace.core.dao.LevelRepDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CardDecks;
 import com.soapboxrace.core.jpa.EventDataEntity;
@@ -35,12 +30,9 @@ import com.soapboxrace.jaxb.http.EnumRewardCategory;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.LuckyDrawInfo;
-import com.soapboxrace.jaxb.http.LuckyDrawItem;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
-import com.soapboxrace.jaxb.http.Reward;
-import com.soapboxrace.jaxb.http.RewardPart;
 import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
 import com.soapboxrace.jaxb.http.RouteEntrantResult;
 import com.soapboxrace.jaxb.http.RouteEventResult;
@@ -57,11 +49,11 @@ import com.soapboxrace.jaxb.xmpp.XMPP_TeamEscapeEntrantResultType;
 import com.soapboxrace.xmpp.openfire.XmppEvent;
 
 @Stateless
-public class EventBO {
-
+public class EventBO extends AccoladesFunc {
+	
 	@EJB
 	private EventDAO eventDao;
-
+	
 	@EJB
 	private EventSessionDAO eventSessionDao;
 	
@@ -70,15 +62,9 @@ public class EventBO {
 	
 	@EJB
 	private PersonaDAO personaDao;
-
+	
 	@EJB
 	private CarSlotDAO carSlotDao;
-
-	@EJB
-	private LevelRepDAO levelRepDao;
-
-	@EJB
-	private ProductDAO productDao;
 	
 	@EJB
 	private SocialBO socialBo;
@@ -86,8 +72,6 @@ public class EventBO {
 	@EJB
 	private PersonaBO personaBo;
 	
-	public static int[][] rankDrop = new int[][] { new int[] {}, new int[] { 3, 1, 2, 4, 1, 0, 3, 4, 2, 1 }, new int[] { 3, 1, 1, 4, 1, 0, 3, 4, 1, 1 }, new int[] { 3, 1, 1, 3, 1, 0, 3, 3, 1, 1 } };
-
 	public List<EventEntity> availableAtLevel(Long personaId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		return eventDao.findByLevel(personaEntity.getLevel());
@@ -418,7 +402,7 @@ public class EventBO {
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
-		accolades.setHasLeveledUp((long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false);
+		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
 		if(!isBusted) {
 			accolades.setLuckyDrawInfo(getLuckyDrawInfo(1));
 		}
@@ -476,7 +460,7 @@ public class EventBO {
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
-		accolades.setHasLeveledUp((long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false);
+		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo(routeArbitrationPacket.getRank()));
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
@@ -532,7 +516,7 @@ public class EventBO {
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
-		accolades.setHasLeveledUp((long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false);
+		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo(dragArbitrationPacket.getRank()));
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
@@ -629,7 +613,7 @@ public class EventBO {
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
-		accolades.setHasLeveledUp((long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false);
+		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
 		if(teamEscapeArbitrationPacket.getFinishReason() == 22) {
 			accolades.setLuckyDrawInfo(getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank()));
 		}
@@ -639,92 +623,10 @@ public class EventBO {
 		applyRaceReward((int)exp, (int)cash, personaEntity);
 		return accolades;
 	}
-	
-	private void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
-		// Cash parts
-		Integer cashMax = (int)personaEntity.getCash() + cash;
-		personaEntity.setCash(cashMax > 9999999 ? 9999999 : cashMax < 1 ? 1 : cashMax);
-		
-		// Exp parts
-		if(personaEntity.getLevel() < 60) {
-			Long expToNextLevel = levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint();
-			Long expMax = (long)(personaEntity.getRepAtCurrentLevel() + exp);
-			if(expMax >= expToNextLevel) {
-				Boolean isLeveledUp = true;
-				while(isLeveledUp) {
-					personaEntity.setLevel(personaEntity.getLevel() + 1);
-					personaEntity.setRepAtCurrentLevel((int)(expMax - expToNextLevel));
-					
-					expToNextLevel = levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint();
-					expMax = (long)(personaEntity.getRepAtCurrentLevel() + exp);
-					
-					isLeveledUp = (expMax >= expToNextLevel);
-				}
-			} else {
-				personaEntity.setRepAtCurrentLevel(expMax.intValue());
-			}
-			personaEntity.setRep(personaEntity.getRep() + exp);
-		}
-		
-		// Save parts
-		personaDao.update(personaEntity);
-	}
-	
-	private Reward getFinalReward(Integer rep, Integer cash) {
-		Reward finalReward = new Reward();
-		finalReward.setRep(rep);
-		finalReward.setTokens(cash);
-		return finalReward;
-	}
-	
+
 	private LuckyDrawInfo getLuckyDrawInfo(Integer rank) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-		
-		Integer hash = 0, count = 0, price = 0;
-		String desc = "", icon = "", vItem = "", vItemType = "";
-		Boolean isSold = false;
-		
-		List<ProductEntity> getProductItems = null;
-		
-		Integer randomCategory = rank > 3 ? 1 : rankDrop[rank][new Random().nextInt(10)];
-		if(randomCategory == 1) { // Powerup
-			getProductItems = productDao.findForEndRace("STORE_POWERUPS", "POWERUP", rank);
-		} else if(randomCategory == 2) { // Perf
-			getProductItems = productDao.findForEndRace("NFSW_NA_EP_PERFORMANCEPARTS", "PERFORMANCEPART", rank);
-		} else if(randomCategory == 3) { // Skill
-			getProductItems = productDao.findForEndRace("NFSW_NA_EP_SKILLMODPARTS", "SKILLMODPART", rank);
-		} else if(randomCategory == 4) { // Visual
-			getProductItems = productDao.findForEndRace(getVisualCatgeory(new Random().nextInt(8)), "VISUALPART", rank);
-		}
-		
-		if(getProductItems != null) { // Other part
-			Integer randomDrop = new Random().nextInt(getProductItems.size());
-			ProductEntity productEntity = getProductItems.get(randomDrop);
-			
-			desc = productEntity.getDescription();
-			hash = productEntity.getHash().intValue();
-			icon = productEntity.getIcon();
-			count = randomCategory == 1 ? new Random().nextInt(15) + 1 : 1;
-			price = (int)(productEntity.getPrice() / 3.5);
-			vItem = DigestUtils.md5Hex(productEntity.getHash().toString());
-			vItemType = productEntity.getProductType();
-		} else { // Cash part
-			Integer cashBonus = new Random().nextInt(25000) + 1;
-			desc = String.valueOf(cashBonus) + " CASH";
-			icon = "128_cash";
-			vItemType = "CASH";
-		}
-		
-		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
-		luckyDrawItem.setDescription(desc);
-		luckyDrawItem.setHash(hash);
-		luckyDrawItem.setIcon(icon);
-		luckyDrawItem.setRemainingUseCount(count);
-		luckyDrawItem.setResellPrice(price);
-		luckyDrawItem.setVirtualItem(vItem);
-		luckyDrawItem.setVirtualItemType(vItemType);
-		luckyDrawItem.setWasSold(isSold);
-		arrayOfLuckyDrawItem.getLuckyDrawItem().add(luckyDrawItem);
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, false));
 		
 		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
 		luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
@@ -732,31 +634,8 @@ public class EventBO {
 		return luckyDrawInfo;
 	}
 	
-	private RewardPart getRewardPart(Integer rep, Integer cash, EnumRewardCategory category, EnumRewardType type) {
-		RewardPart rewardPart = new RewardPart();
-		rewardPart.setRepPart(rep);
-		rewardPart.setRewardCategory(category);
-		rewardPart.setRewardType(type);
-		rewardPart.setTokenPart(cash);
-		return rewardPart;
-	}
-	
 	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
 		socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", carId, 0, hacksDetected);
-	}
-	
-	public static String getVisualCatgeory(Integer nRandom) {
-		switch(nRandom) {
-			case 0: return "NFSW_NA_EP_VISUALPARTS_LICENSEPLATES";
-			case 1: return "NFSW_NA_EP_VISUALPARTS_NEONS";
-			case 2: return "NFSW_NA_EP_VISUALPARTS_WHEELS";
-			case 3: return "STORE_VANITY_LICENSE_PLATE";
-			case 4: return "STORE_VANITY_LOWERING_KIT";
-			case 5: return "STORE_VANITY_NEON";
-			case 6: return "STORE_VANITY_WHEEL";
-			case 7: return "STORE_VANITY_WINDOW";
-			default: return "STORE_VANITY_LICENSE_PLATE";
-		}
 	}
 	
 	private Integer updateDamageCar(Long personaId, Long carId, Integer numberOfCollision, Long eventDuration) {

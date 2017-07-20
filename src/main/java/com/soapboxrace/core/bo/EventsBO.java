@@ -2,18 +2,15 @@ package com.soapboxrace.core.bo;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Random;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
+import com.soapboxrace.core.bo.util.AccoladesFunc;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.dao.TreasureHuntDAO;
-import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawBox;
@@ -23,23 +20,17 @@ import com.soapboxrace.jaxb.http.EnumRewardCategory;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.LuckyDrawBox;
 import com.soapboxrace.jaxb.http.LuckyDrawInfo;
-import com.soapboxrace.jaxb.http.LuckyDrawItem;
-import com.soapboxrace.jaxb.http.Reward;
-import com.soapboxrace.jaxb.http.RewardPart;
 import com.soapboxrace.jaxb.http.TreasureHuntEventSession;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
 @Stateless
-public class EventsBO {
+public class EventsBO extends AccoladesFunc {
 	
 	@EJB
 	private PersonaDAO personaDao;
 	
 	@EJB
 	private TreasureHuntDAO treasureHuntDao;
-	
-	@EJB
-	private ProductDAO productDao;
 	
 	@EJB
 	private DriverPersonaBO driverPersonaBo;
@@ -77,12 +68,7 @@ public class EventsBO {
 			treasureHuntEntity.setCoinsCollected(coins);
 			treasureHuntDao.update(treasureHuntEntity);
 		}
-		
-		if(coins == 32767) {
-			return accolades(activePersonaId, false);
-		}
-		
-		return "";
+		return coins == 32767 ? accolades(activePersonaId, false) : "";
 	}
 	
 	public String accolades(Long activePersonaId, Boolean isBroken)
@@ -99,7 +85,7 @@ public class EventsBO {
 		treasureHuntEntity.setThDate(LocalDate.now());
 		treasureHuntDao.update(treasureHuntEntity);
 		
-		return MarshalXML.marshal(getAccolades(1, treasureHuntEntity));
+		return MarshalXML.marshal(getTreasureHuntAccolades(activePersonaId, treasureHuntEntity));
 	}
 	
 	private TreasureHuntEventSession createNewTreasureHunt(TreasureHuntEntity treasureHuntEntity, Boolean isBroken) {
@@ -118,70 +104,37 @@ public class EventsBO {
 		return treasureHuntEventSession;
 	}
 	
-	private Accolades getAccolades(Integer rank, TreasureHuntEntity treasureHuntEntity) {
+	private Accolades getTreasureHuntAccolades(Long activePersonaId, TreasureHuntEntity treasureHuntEntity) {
+		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
+		
+		// Maths begin
+		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
+		float exp = personaEntity.getLevel() >= 60 ? 0 : 200 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
+		float cash = personaEntity.getCash() >= 9999999 ? 0 : 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		
+		float dayExp = exp + (100 * treasureHuntEntity.getStreak()); // + 100 per day
+		float dayCash = cash + (100 * treasureHuntEntity.getStreak()); // + 100 per day
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)dayExp, (int)dayCash, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		
+		exp += (int)dayExp;
+		cash += (int)dayCash;
+		// Maths ending
+		
 		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(getFinalReward());
-		accolades.setHasLeveledUp(false);
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(rank, treasureHuntEntity));
-		accolades.setOriginalRewards(getOriginalReward());
-		accolades.setRewardInfo(getRewardPart());
+		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
+		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
+		accolades.setLuckyDrawInfo(getLuckyDrawInfo(getRank(treasureHuntEntity.getStreak()), treasureHuntEntity));
+		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
+		accolades.setRewardInfo(arrayOfRewardPart);
+		
+		applyRaceReward((int)exp, (int)cash, personaEntity);
 		return accolades;
-	}
-	
-	private Reward getFinalReward() {
-		Reward finalReward = new Reward();
-		finalReward.setRep(7331);
-		finalReward.setTokens(1337);
-		return finalReward;
 	}
 	
 	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, TreasureHuntEntity treasureHuntEntity) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-		Integer hash = 0, count = 0, price = 0;
-		String desc = "", icon = "", vItem = "", vItemType = "";
-		Boolean isSold = false;
-		
-		List<ProductEntity> getProductItems = null;
-		
-		Integer randomCategory = rank > 3 ? 1 : EventBO.rankDrop[rank][new Random().nextInt(10)];
-		if(randomCategory == 1) { // Powerup
-			getProductItems = productDao.findForEndRace("STORE_POWERUPS", "POWERUP", rank);
-		} else if(randomCategory == 2) { // Perf
-			getProductItems = productDao.findForEndRace("NFSW_NA_EP_PERFORMANCEPARTS", "PERFORMANCEPART", rank);
-		} else if(randomCategory == 3) { // Skill
-			getProductItems = productDao.findForEndRace("NFSW_NA_EP_SKILLMODPARTS", "SKILLMODPART", rank);
-		} else if(randomCategory == 4) { // Visual
-			getProductItems = productDao.findForEndRace(EventBO.getVisualCatgeory(new Random().nextInt(8)), "VISUALPART", rank);
-		}
-		
-		if(getProductItems != null) { // Other part
-			Integer randomDrop = new Random().nextInt(getProductItems.size());
-			ProductEntity productEntity = getProductItems.get(randomDrop);
-			
-			desc = productEntity.getDescription();
-			hash = productEntity.getHash().intValue();
-			icon = productEntity.getIcon();
-			count = randomCategory == 1 ? new Random().nextInt(15) + 1 : 1;
-			price = (int)(productEntity.getPrice() / 3.5);
-			vItem = DigestUtils.md5Hex(productEntity.getHash().toString());
-			vItemType = productEntity.getProductType();
-		} else { // Cash part
-			Integer cashBonus = new Random().nextInt(25000) + 1;
-			desc = String.valueOf(cashBonus) + " CASH";
-			icon = "128_cash";
-			vItemType = "CASH";
-		}
-		
-		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
-		luckyDrawItem.setDescription(desc);
-		luckyDrawItem.setHash(hash);
-		luckyDrawItem.setIcon(icon);
-		luckyDrawItem.setRemainingUseCount(count);
-		luckyDrawItem.setResellPrice(price);
-		luckyDrawItem.setVirtualItem(vItem);
-		luckyDrawItem.setVirtualItemType(vItemType);
-		luckyDrawItem.setWasSold(isSold);
-		arrayOfLuckyDrawItem.getLuckyDrawItem().add(luckyDrawItem);
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, true));
 		
 		ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();
 		LuckyDrawBox luckyDrawBox = new LuckyDrawBox();
@@ -203,21 +156,16 @@ public class EventsBO {
 		return luckyDrawInfo;
 	}
 	
-	private Reward getOriginalReward() {
-		Reward originalRewards = new Reward();
-		originalRewards.setRep(562);
-		originalRewards.setTokens(845);
-		return originalRewards;
-	}
-	
-	private ArrayOfRewardPart getRewardPart() {
-		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		RewardPart rewardPart = new RewardPart();
-		rewardPart.setRepPart(256);
-		rewardPart.setRewardCategory(EnumRewardCategory.BASE);
-		rewardPart.setRewardType(EnumRewardType.NONE);
-		rewardPart.setTokenPart(852);
-		arrayOfRewardPart.getRewardPart().add(rewardPart);
-		return arrayOfRewardPart;
+	private Integer getRank(Integer days) {
+		if(days >= 100) {
+			return 1;
+		} else if(days >= 70) {
+			return 2;
+		} else if(days >= 50) {
+			return 3;
+		} else if(days >= 30) {
+			return 4;
+		}
+		return 5;
 	}
 }
