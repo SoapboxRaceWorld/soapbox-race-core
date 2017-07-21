@@ -48,7 +48,6 @@ public class AccoladesFunc {
 		new int[] { 3, 2, 2, 4, 2, 2, 3, 3, 4, 4 },
 		new int[] { 2, 2, 3, 2, 2, 3, 2, 4, 3, 4 }
 	};
-
 	
 	public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
 		// Cash parts
@@ -98,20 +97,6 @@ public class AccoladesFunc {
 	
 	public Boolean isLeveledUp(PersonaEntity personaEntity, Integer exp) {
 		return (long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false;
-	}
-	
-	private String getVisualCatgeory(Integer nRandom) {
-		switch(nRandom) {
-			case 0: return "NFSW_NA_EP_VISUALPARTS_LICENSEPLATES";
-			case 1: return "NFSW_NA_EP_VISUALPARTS_NEONS";
-			case 2: return "NFSW_NA_EP_VISUALPARTS_WHEELS";
-			case 3: return "STORE_VANITY_LICENSE_PLATE";
-			case 4: return "STORE_VANITY_LOWERING_KIT";
-			case 5: return "STORE_VANITY_NEON";
-			case 6: return "STORE_VANITY_WHEEL";
-			case 7: return "STORE_VANITY_WINDOW";
-			default: return "STORE_VANITY_LICENSE_PLATE";
-		}
 	}
 	
 	public LuckyDrawItem getItemFromProduct(Integer rank, Boolean isTH) {
@@ -168,7 +153,21 @@ public class AccoladesFunc {
 		return luckyDrawItem;
 	}
 	
-	public Integer getRandomCat(Integer rank, Boolean isTH, Integer random) {
+	private String getVisualCatgeory(Integer nRandom) {
+		switch(nRandom) {
+			case 0: return "NFSW_NA_EP_VISUALPARTS_LICENSEPLATES";
+			case 1: return "NFSW_NA_EP_VISUALPARTS_NEONS";
+			case 2: return "NFSW_NA_EP_VISUALPARTS_WHEELS";
+			case 3: return "STORE_VANITY_LICENSE_PLATE";
+			case 4: return "STORE_VANITY_LOWERING_KIT";
+			case 5: return "STORE_VANITY_NEON";
+			case 6: return "STORE_VANITY_WHEEL";
+			case 7: return "STORE_VANITY_WINDOW";
+			default: return "STORE_VANITY_LICENSE_PLATE";
+		}
+	}
+	
+	private Integer getRandomCat(Integer rank, Boolean isTH, Integer random) {
 		if(isTH) {
 			return rankDropTH[rank][random];
 		} else {
