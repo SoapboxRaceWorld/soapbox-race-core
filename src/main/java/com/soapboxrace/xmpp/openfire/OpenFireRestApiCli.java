@@ -77,11 +77,12 @@ public class OpenFireRestApiCli {
 		Builder builder = getBuilder("chatrooms");
 		MUCRoomEntities roomEntities = builder.get(MUCRoomEntities.class);
 		List<MUCRoomEntity> listRoomEntity = roomEntities.getMucRooms();
-		for (MUCRoomEntity entity : listRoomEntity) {
-			if (entity.getRoomName().contains("group.channel.")) {
-				Long idOwner = Long.parseLong(entity.getRoomName().substring(entity.getRoomName().lastIndexOf(".") + 1));
-				if (idOwner == personaId) {
-					return getAllOccupantInGroup(entity.getRoomName());
+		for(MUCRoomEntity entity : listRoomEntity) {
+			String roomName = entity.getRoomName();
+			if(roomName.contains("group.channel.")) {
+				Long idOwner = Long.parseLong(roomName.substring(roomName.lastIndexOf('.') + 1));
+				if(idOwner.equals(personaId)) {
+					return getAllOccupantInGroup(roomName);
 				}
 			}
 		}
@@ -92,8 +93,10 @@ public class OpenFireRestApiCli {
 		Builder builder = getBuilder("chatrooms/" + roomName + "/occupants");
 		OccupantEntities occupantEntities = builder.get(OccupantEntities.class);
 		List<Long> listOfPersona = new ArrayList<Long>();
-		for (OccupantEntity entity : occupantEntities.getOccupants()) {
-			listOfPersona.add(Long.parseLong(entity.getJid().substring(entity.getJid().lastIndexOf(".") + 1)));
+		for(OccupantEntity entity : occupantEntities.getOccupants()) {
+			String jid = entity.getJid();
+			Long personaId = Long.parseLong(jid.substring(jid.lastIndexOf('.') + 1));
+			listOfPersona.add(personaId);
 		}
 		return listOfPersona;
 	}

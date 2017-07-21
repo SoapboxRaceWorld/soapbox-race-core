@@ -84,18 +84,19 @@ public class LobbyBO {
 			createLobby(personaEntity, eventId, true);
 
 			LobbyEntity lobbys = lobbyDao.findByEventAndPersona(eventId, personaId);
-			
-			XMPP_LobbyInviteType lobbyInviteType = new XMPP_LobbyInviteType();
-			lobbyInviteType.setEventId(eventId);
-			lobbyInviteType.setInvitedByPersonaId(personaId);
-			lobbyInviteType.setInviteLifetimeInMilliseconds(60);
-			lobbyInviteType.setPrivate(true);
-			lobbyInviteType.setLobbyInviteId(lobbys.getId());
-			
-			for(Long idPersona : listOfPersona) {
-				if(idPersona != personaId) {
-					XmppLobby xmppLobby = new XmppLobby(idPersona);
-					xmppLobby.sendLobbyInvite(lobbyInviteType);
+			if(lobbys != null) {
+				XMPP_LobbyInviteType lobbyInviteType = new XMPP_LobbyInviteType();
+				lobbyInviteType.setEventId(eventId);
+				lobbyInviteType.setInvitedByPersonaId(personaId);
+				lobbyInviteType.setInviteLifetimeInMilliseconds(60);
+				lobbyInviteType.setPrivate(true);
+				lobbyInviteType.setLobbyInviteId(lobbys.getId());
+				
+				for(Long idPersona : listOfPersona) {
+					if(!idPersona.equals(personaId)) {
+						XmppLobby xmppLobby = new XmppLobby(idPersona);
+						xmppLobby.sendLobbyInvite(lobbyInviteType);
+					}
 				}
 			}
 		}
