@@ -404,7 +404,7 @@ public class EventBO extends AccoladesFunc {
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
 		if(!isBusted) {
-			accolades.setLuckyDrawInfo(getLuckyDrawInfo(1));
+			accolades.setLuckyDrawInfo(getLuckyDrawInfo(1, personaEntity.getLevel()));
 		}
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
@@ -461,7 +461,7 @@ public class EventBO extends AccoladesFunc {
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(routeArbitrationPacket.getRank()));
+		accolades.setLuckyDrawInfo(getLuckyDrawInfo(routeArbitrationPacket.getRank(), personaEntity.getLevel()));
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
 		
@@ -517,7 +517,7 @@ public class EventBO extends AccoladesFunc {
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(dragArbitrationPacket.getRank()));
+		accolades.setLuckyDrawInfo(getLuckyDrawInfo(dragArbitrationPacket.getRank(), personaEntity.getLevel()));
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
 		
@@ -615,7 +615,7 @@ public class EventBO extends AccoladesFunc {
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
 		if(teamEscapeArbitrationPacket.getFinishReason() == 22) {
-			accolades.setLuckyDrawInfo(getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank()));
+			accolades.setLuckyDrawInfo(getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank(), personaEntity.getLevel()));
 		}
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
@@ -624,9 +624,9 @@ public class EventBO extends AccoladesFunc {
 		return accolades;
 	}
 
-	private LuckyDrawInfo getLuckyDrawInfo(Integer rank) {
+	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, false));
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, level, false));
 		
 		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
 		luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));

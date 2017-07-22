@@ -99,7 +99,7 @@ public class AccoladesFunc {
 		return (long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false;
 	}
 	
-	public LuckyDrawItem getItemFromProduct(Integer rank, Boolean isTH) {
+	public LuckyDrawItem getItemFromProduct(Integer rank, Integer level, Boolean isTH) {
 		Integer hash = 0, count = 0, price = 0;
 		String desc = "", icon = "", vItem = "", vItemType = "";
 		Boolean isSold = false;
@@ -108,13 +108,13 @@ public class AccoladesFunc {
 		
 		Integer randomCategory = getRandomCat(rank, isTH, new Random().nextInt(10));
 		if(randomCategory == 1) { // Powerup
-			getProductItems = productDao.findForEndRace("STORE_POWERUPS", "POWERUP", rank);
+			getProductItems = productDao.findForEndRace("STORE_POWERUPS", "POWERUP", level);
 		} else if(randomCategory == 2) { // Perf
-			getProductItems = productDao.findForEndRace("NFSW_NA_EP_PERFORMANCEPARTS", "PERFORMANCEPART", rank);
+			getProductItems = productDao.findForEndRace("NFSW_NA_EP_PERFORMANCEPARTS", "PERFORMANCEPART", level);
 		} else if(randomCategory == 3) { // Skill
-			getProductItems = productDao.findForEndRace("NFSW_NA_EP_SKILLMODPARTS", "SKILLMODPART", rank);
+			getProductItems = productDao.findForEndRace("NFSW_NA_EP_SKILLMODPARTS", "SKILLMODPART", level);
 		} else if(randomCategory == 4) { // Visual
-			getProductItems = productDao.findForEndRace(getVisualCatgeory(new Random().nextInt(8)), "VISUALPART", rank);
+			getProductItems = productDao.findForEndRace(getVisualCatgeory(new Random().nextInt(8)), "VISUALPART", level);
 		}
 		
 		if(getProductItems != null) { // Other part

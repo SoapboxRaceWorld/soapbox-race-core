@@ -124,7 +124,7 @@ public class EventsBO extends AccoladesFunc {
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(getRank(treasureHuntEntity.getStreak()), treasureHuntEntity));
+		accolades.setLuckyDrawInfo(getLuckyDrawInfo(getRank(treasureHuntEntity.getStreak()), personaEntity.getLevel(), treasureHuntEntity));
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
 		
@@ -132,9 +132,9 @@ public class EventsBO extends AccoladesFunc {
 		return accolades;
 	}
 	
-	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, TreasureHuntEntity treasureHuntEntity) {
+	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, TreasureHuntEntity treasureHuntEntity) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, true));
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, level, true));
 		
 		ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();
 		LuckyDrawBox luckyDrawBox = new LuckyDrawBox();

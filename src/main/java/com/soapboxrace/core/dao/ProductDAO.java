@@ -32,12 +32,11 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
 		return query.getResultList();
 	}
 	
-	public List<ProductEntity> findForEndRace(String categoryName, String productType, int minLevel) {
+	public List<ProductEntity> findForEndRace(String categoryName, String productType, int level) {
 		TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findForEndRace", ProductEntity.class);
 		query.setParameter("categoryName", categoryName);
 		query.setParameter("productType", productType);
-		query.setParameter("enabled", true);
-		query.setParameter("minLevel", minLevel);
+		query.setParameter("level", level);
 		return query.getResultList();
 	}
 
