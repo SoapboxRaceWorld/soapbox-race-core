@@ -359,6 +359,9 @@ public class EventBO extends AccoladesFunc {
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		if(!isBusted) {
+			cash *= getSkillMultiplicater(personaEntity.getPersonaId(), 1);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
+			
 			float copsDeployedExp = exp * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
 			float copsDeployedCash = cash * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
 			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsDeployedExp, (int)copsDeployedCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DEPLOYED));
@@ -422,6 +425,9 @@ public class EventBO extends AccoladesFunc {
 		float cash = personaEntity.getCash() >= 9999999 ? 0 : 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
+		cash *= getSkillMultiplicater(personaEntity.getPersonaId(), 0);
+		arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
+		
 		float rankExp = routeArbitrationPacket.getRank() == 1 ? exp * 0.10f : exp * 0.05f; // + 10% if fist, + 5% else
 		float rankCash = routeArbitrationPacket.getRank() == 1 ? cash * 0.10f : cash * 0.05f; // + 10% if fist, + 5% else
 		rankExp = routeArbitrationPacket.getFinishReason() == 22 ? rankExp : rankExp / 10;
@@ -477,6 +483,9 @@ public class EventBO extends AccoladesFunc {
 		float exp = personaEntity.getLevel() >= 60 ? 0 : 100 * (personaEntity.getLevel() / 5.0f);
 		float cash = personaEntity.getCash() >= 9999999 ? 0 : 200 * (personaEntity.getLevel() / 5.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		
+		cash *= getSkillMultiplicater(personaEntity.getPersonaId(), 0);
+		arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
 		
 		float rankExp = dragArbitrationPacket.getRank() == 1 ? exp * 0.10f : exp * 0.05f; // + 10% if fist, + 5% else
 		float rankCash = dragArbitrationPacket.getRank() == 1 ? cash * 0.10f : cash * 0.05f; // + 10% if fist, + 5% else
@@ -537,6 +546,9 @@ public class EventBO extends AccoladesFunc {
 		if(personaEntity.getLevel() < 60 || personaEntity.getCash() < 9999999) {
 			Integer bustedCount = teamEscapeArbitrationPacket.getBustedCount();
 			Integer finishReason = teamEscapeArbitrationPacket.getFinishReason();
+			
+			cash *= getSkillMultiplicater(personaEntity.getPersonaId(), 1);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
 			
 			float copsDeployedExp = exp * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);
 			float copsDeployedCash = cash * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);

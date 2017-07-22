@@ -113,6 +113,9 @@ public class EventsBO extends AccoladesFunc {
 		float cash = personaEntity.getCash() >= 9999999 ? 0 : 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
+		cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 2);
+		arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
+		
 		float dayExp = exp + (100 * treasureHuntEntity.getStreak()); // + 100 per day
 		float dayCash = cash + (100 * treasureHuntEntity.getStreak()); // + 100 per day
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)dayExp, (int)dayCash, EnumRewardCategory.BASE, EnumRewardType.NONE));
