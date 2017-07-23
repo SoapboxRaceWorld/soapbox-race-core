@@ -14,3 +14,4 @@
 parts.json
 sql-old/
 wildfly/
+/sql/mysql/full-script.sql
