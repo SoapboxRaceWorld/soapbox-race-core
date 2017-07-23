@@ -11,20 +11,21 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PRODUCT")
 @NamedQueries({ //
-		@NamedQuery(name = "ProductEntity.findByLevelEnabled", //
-				query = "SELECT obj FROM ProductEntity obj WHERE " //
-						+ "obj.enabled = :enabled "//
-						+ "and :minLevel >= obj.minLevel " //
-						+ "and (obj.premium = false or obj.premium = :premium )" //
-						+ "and obj.categoryName = :categoryName "//
-						+ "and obj.productType = :productType"), //
+	@NamedQuery(name = "ProductEntity.findByLevelEnabled", //
+		query = "SELECT obj FROM ProductEntity obj WHERE " //
+			+ "obj.enabled = :enabled AND "//
+			+ "obj.minLevel <= :minLevel AND " //
+			+ "(obj.premium = false or obj.premium = :premium )AND " //
+			+ "obj.categoryName = :categoryName AND "//
+			+ "obj.productType = :productType"), //
 		
-		@NamedQuery(name = "ProductEntity.findForEndRace", //
-				query = "SELECT obj FROM ProductEntity obj WHERE " //
-						+ "obj.enabled = :enabled "//
-						+ "and :minLevel >= obj.minLevel " //
-						+ "and obj.categoryName = :categoryName "//
-						+ "and obj.productType = :productType") //
+	@NamedQuery(name = "ProductEntity.findForEndRace", //
+		query = "SELECT obj FROM ProductEntity obj WHERE " //
+			+ "obj.enabled = true AND " //
+			+ "obj.level <= :level AND " //
+			+ "obj.categoryName = :categoryName AND " //
+			+ "obj.isDropable = true AND " //
+			+ "obj.productType = :productType") //
 })
 public class ProductEntity {
 
@@ -55,6 +56,7 @@ public class ProductEntity {
 	private boolean enabled;
 	private int minLevel;
 	private boolean premium = false;
+	private boolean isDropable;
 
 	public Long getId() {
 		return id;
@@ -250,6 +252,14 @@ public class ProductEntity {
 
 	public void setPremium(boolean premium) {
 		this.premium = premium;
+	}
+
+	public boolean isDropable() {
+		return isDropable;
+	}
+
+	public void setDropable(boolean isDropable) {
+		this.isDropable = isDropable;
 	}
 
 }

@@ -217,6 +217,7 @@ CREATE TABLE IF NOT EXISTS
         visualStyle VARCHAR(255) COLLATE utf8_unicode_ci,
         webIcon VARCHAR(255) COLLATE utf8_unicode_ci,
         webLocation VARCHAR(255) COLLATE utf8_unicode_ci,
+        isDropable bit NOT NULL DEFAULT TRUE,
         PRIMARY KEY (id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -18,6 +18,7 @@ import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.LuckyDrawItem;
 import com.soapboxrace.jaxb.http.Reward;
 import com.soapboxrace.jaxb.http.RewardPart;
+import com.soapboxrace.jaxb.http.SkillModPartTrans;
 
 public class AccoladesFunc {
 	
@@ -99,7 +100,7 @@ public class AccoladesFunc {
 		return (long)(personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long)personaEntity.getLevel()).getExpPoint() ? true : false;
 	}
 	
-	public LuckyDrawItem getItemFromProduct(Integer rank, Boolean isTH) {
+	public LuckyDrawItem getItemFromProduct(Integer rank, Integer level, Boolean isTH) {
 		Integer hash = 0, count = 0, price = 0;
 		String desc = "", icon = "", vItem = "", vItemType = "";
 		Boolean isSold = false;
@@ -108,13 +109,13 @@ public class AccoladesFunc {
 		
 		Integer randomCategory = getRandomCat(rank, isTH, new Random().nextInt(10));
 		if(randomCategory == 1) { // Powerup
-			getProductItems = productDao.findForEndRace("STORE_POWERUPS", "POWERUP", rank);
+			getProductItems = productDao.findForEndRace("STORE_POWERUPS", "POWERUP", level);
 		} else if(randomCategory == 2) { // Perf
-			getProductItems = productDao.findForEndRace("NFSW_NA_EP_PERFORMANCEPARTS", "PERFORMANCEPART", rank);
+			getProductItems = productDao.findForEndRace("NFSW_NA_EP_PERFORMANCEPARTS", "PERFORMANCEPART", level);
 		} else if(randomCategory == 3) { // Skill
-			getProductItems = productDao.findForEndRace("NFSW_NA_EP_SKILLMODPARTS", "SKILLMODPART", rank);
+			getProductItems = productDao.findForEndRace("NFSW_NA_EP_SKILLMODPARTS", "SKILLMODPART", level);
 		} else if(randomCategory == 4) { // Visual
-			getProductItems = productDao.findForEndRace(getVisualCatgeory(new Random().nextInt(8)), "VISUALPART", rank);
+			getProductItems = productDao.findForEndRace(getVisualCatgeory(new Random().nextInt(8)), "VISUALPART", level);
 		}
 		
 		if(getProductItems != null) { // Other part
@@ -151,6 +152,95 @@ public class AccoladesFunc {
 		luckyDrawItem.setVirtualItemType(vItemType);
 		luckyDrawItem.setWasSold(isSold);
 		return luckyDrawItem;
+	}
+	
+	
+	/**
+	 * @param personaId
+	 * @param type [0 = race, 1 = pursuit & team escape, 2 = treasur hunter (freeroam)]
+	 * @return
+	 */
+	public float getSkillMultiplicater(Long personaId, Integer type) {
+		float multi = 0.0f;
+		
+		List<SkillModPartTrans> listSkillModPartTrans = personaBo.getDefaultCar(personaId).getCustomCar().getSkillModParts().getSkillModPartTrans();
+		for(SkillModPartTrans skillMod : listSkillModPartTrans) {
+			Integer skillModPartHash = skillMod.getSkillModPartAttribHash();
+			if(type.equals(0)) {
+				switch(skillModPartHash) {
+					case -1253544909: multi += 0.24f; break;
+					case -1810018228: multi += 0.23f; break;
+					case -178864567:  multi += 0.22f; break;
+					case -1070749597: multi += 0.21f; break;
+					case 1510853218:  multi += 0.20f; break;
+					case 761092816:   multi += 0.19f; break;
+					case -1375070995: multi += 0.18f; break;
+					case 1298655836:  multi += 0.17f; break;
+					case -1230383337: multi += 0.16f; break;
+					case 178242509:   multi += 0.15f; break;
+					case 177556171:   multi += 0.14f; break;
+					case 208768909:   multi += 0.09f; break;
+					case -1426720169: multi += 0.08f; break;
+					case -1512835408: multi += 0.06f; break;
+					case 25946355:    multi += 0.05f; break;
+					case -1867751699: multi += 0.04f; break;
+					case 1610883347:  multi += 0.03f; break;
+				}
+			} else if(type.equals(1)) {
+				switch(skillModPartHash) {
+					case -396529168:  multi += 0.24f; break;
+					case -185409775:  multi += 0.23f; break;
+					case 1804531402:  multi += 0.22f; break;
+					case 264948697:   multi += 0.21f; break;
+					case 1618683071:  multi += 0.20f; break;
+					case -1874412238: multi += 0.19f; break;
+					case 7127040:     multi += 0.18f; break;
+					case -1200030819: multi += 0.17f; break;
+					case -240684266:  multi += 0.16f; break;
+					case 647407388:   multi += 0.15f; break;
+					case -859142767:  multi += 0.14f; break;
+					case -681117003:  multi += 0.09f; break;
+					case -1875655157: multi += 0.08f; break;
+					case 2135702575:  multi += 0.06f; break;
+					case -603724933:  multi += 0.05f; break;
+					case -1005386908: multi += 0.04f; break;
+					case 639750226:   multi += 0.03f; break;
+				}
+				
+			} else if(type.equals(2)) {
+				switch(skillModPartHash) {
+					case -804203671:  multi += 0.40f; break;
+					case 393025796:   multi += 0.39f; break;
+					case 1202764048:  multi += 0.36f; break;
+					case 748593849:   multi += 0.35f; break;
+					case -261284782:  multi += 0.33f; break;
+					case -1911348285: multi += 0.31f; break;
+					case 604572815:   multi += 0.30f; break;
+					case -751941732:  multi += 0.28f; break;
+					case -546309571:  multi += 0.27f; break;
+					case 163017142:   multi += 0.26f; break;
+					case 2004729337:  multi += 0.25f; break;
+					case 564562464:   multi += 0.24f; break;
+					case -1097809463: multi += 0.23f; break;
+					case -1544986384: multi += 0.15f; break;
+					case -901736213:  multi += 0.14f; break;
+					case -720398048:  multi += 0.13f; break;
+					case 1948827710:  multi += 0.10f; break;
+					case 393625900:   multi += 0.09f; break;
+					case -276596299:  multi += 0.07f; break;
+					case 541216806:   multi += 0.06f; break;
+					case 2102023947:  multi += 0.05f; break;
+				}
+				
+			}
+		}
+		
+		if(type.equals(2)) {
+			multi = multi > 0.50f ? 0.50f : multi;
+		} else {
+			multi = multi > 0.30f ? 0.30f : multi;
+		}
+		return multi;
 	}
 	
 	private String getVisualCatgeory(Integer nRandom) {

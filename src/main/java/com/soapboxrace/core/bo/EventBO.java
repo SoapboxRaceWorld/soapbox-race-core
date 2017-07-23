@@ -359,6 +359,9 @@ public class EventBO extends AccoladesFunc {
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		if(!isBusted) {
+			cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 1);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
+			
 			float copsDeployedExp = exp * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
 			float copsDeployedCash = cash * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
 			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)copsDeployedExp, (int)copsDeployedCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DEPLOYED));
@@ -404,7 +407,7 @@ public class EventBO extends AccoladesFunc {
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
 		if(!isBusted) {
-			accolades.setLuckyDrawInfo(getLuckyDrawInfo(1));
+			accolades.setLuckyDrawInfo(getLuckyDrawInfo(1, personaEntity.getLevel()));
 		}
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
@@ -421,6 +424,9 @@ public class EventBO extends AccoladesFunc {
 		float exp = personaEntity.getLevel() >= 60 ? 0 : 200 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
 		float cash = personaEntity.getCash() >= 9999999 ? 0 : 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		
+		cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 0);
+		arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
 		
 		float rankExp = routeArbitrationPacket.getRank() == 1 ? exp * 0.10f : exp * 0.05f; // + 10% if fist, + 5% else
 		float rankCash = routeArbitrationPacket.getRank() == 1 ? cash * 0.10f : cash * 0.05f; // + 10% if fist, + 5% else
@@ -461,7 +467,7 @@ public class EventBO extends AccoladesFunc {
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(routeArbitrationPacket.getRank()));
+		accolades.setLuckyDrawInfo(getLuckyDrawInfo(routeArbitrationPacket.getRank(), personaEntity.getLevel()));
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
 		
@@ -477,6 +483,9 @@ public class EventBO extends AccoladesFunc {
 		float exp = personaEntity.getLevel() >= 60 ? 0 : 100 * (personaEntity.getLevel() / 5.0f);
 		float cash = personaEntity.getCash() >= 9999999 ? 0 : 200 * (personaEntity.getLevel() / 5.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		
+		cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 0);
+		arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
 		
 		float rankExp = dragArbitrationPacket.getRank() == 1 ? exp * 0.10f : exp * 0.05f; // + 10% if fist, + 5% else
 		float rankCash = dragArbitrationPacket.getRank() == 1 ? cash * 0.10f : cash * 0.05f; // + 10% if fist, + 5% else
@@ -517,7 +526,7 @@ public class EventBO extends AccoladesFunc {
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(dragArbitrationPacket.getRank()));
+		accolades.setLuckyDrawInfo(getLuckyDrawInfo(dragArbitrationPacket.getRank(), personaEntity.getLevel()));
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
 		
@@ -537,6 +546,9 @@ public class EventBO extends AccoladesFunc {
 		if(personaEntity.getLevel() < 60 || personaEntity.getCash() < 9999999) {
 			Integer bustedCount = teamEscapeArbitrationPacket.getBustedCount();
 			Integer finishReason = teamEscapeArbitrationPacket.getFinishReason();
+			
+			cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 1);
+			arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
 			
 			float copsDeployedExp = exp * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);
 			float copsDeployedCash = cash * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);
@@ -615,7 +627,7 @@ public class EventBO extends AccoladesFunc {
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
 		if(teamEscapeArbitrationPacket.getFinishReason() == 22) {
-			accolades.setLuckyDrawInfo(getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank()));
+			accolades.setLuckyDrawInfo(getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank(), personaEntity.getLevel()));
 		}
 		accolades.setOriginalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setRewardInfo(arrayOfRewardPart);
@@ -624,9 +636,9 @@ public class EventBO extends AccoladesFunc {
 		return accolades;
 	}
 
-	private LuckyDrawInfo getLuckyDrawInfo(Integer rank) {
+	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, false));
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, level, false));
 		
 		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
 		luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
