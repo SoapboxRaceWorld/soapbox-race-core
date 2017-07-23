@@ -359,7 +359,7 @@ public class EventBO extends AccoladesFunc {
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
 		if(!isBusted) {
-			cash *= getSkillMultiplicater(personaEntity.getPersonaId(), 1);
+			cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 1);
 			arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
 			
 			float copsDeployedExp = exp * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
@@ -425,7 +425,7 @@ public class EventBO extends AccoladesFunc {
 		float cash = personaEntity.getCash() >= 9999999 ? 0 : 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
-		cash *= getSkillMultiplicater(personaEntity.getPersonaId(), 0);
+		cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 0);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
 		
 		float rankExp = routeArbitrationPacket.getRank() == 1 ? exp * 0.10f : exp * 0.05f; // + 10% if fist, + 5% else
@@ -484,7 +484,7 @@ public class EventBO extends AccoladesFunc {
 		float cash = personaEntity.getCash() >= 9999999 ? 0 : 200 * (personaEntity.getLevel() / 5.0f);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart((int)exp, (int)cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
 		
-		cash *= getSkillMultiplicater(personaEntity.getPersonaId(), 0);
+		cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 0);
 		arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
 		
 		float rankExp = dragArbitrationPacket.getRank() == 1 ? exp * 0.10f : exp * 0.05f; // + 10% if fist, + 5% else
@@ -547,7 +547,7 @@ public class EventBO extends AccoladesFunc {
 			Integer bustedCount = teamEscapeArbitrationPacket.getBustedCount();
 			Integer finishReason = teamEscapeArbitrationPacket.getFinishReason();
 			
-			cash *= getSkillMultiplicater(personaEntity.getPersonaId(), 1);
+			cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 1);
 			arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int)cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
 			
 			float copsDeployedExp = exp * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);
