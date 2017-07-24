@@ -678,7 +678,7 @@ INTO
     VALUES
     (
         'plugin.restapi.secret',
-        'csWVkH04oh8pO4Ma'
+        '31CbMaN4mlk5C0xN'
     );
 INSERT
 INTO
