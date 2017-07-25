@@ -5,7 +5,12 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.ProductDAO;
+import com.soapboxrace.core.dao.VinylProductDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.jaxb.http.BasketItemTrans;
+import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.MarshalXML;
@@ -14,15 +19,21 @@ import com.soapboxrace.jaxb.util.MarshalXML;
 public class CommerceBO {
 
 	@EJB
+	private PersonaBO personaBO;
+
+	@EJB
 	private CarSlotDAO carSlotDAO;
 
 	@EJB
 	private PersonaDAO personaDAO;
 
 	@EJB
-	private PersonaBO personaBO;
+	private ProductDAO productDao;
 
-	public void updateCar(CommerceSessionTrans commerceSessionTrans, Long personaId) {
+	@EJB
+	private VinylProductDAO vinylProductDao;
+
+	public CommerceResultStatus updateCar(CommerceSessionTrans commerceSessionTrans, Long personaId) {
 		OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
 		ownedCarTrans.getCustomCar().setVinyls(commerceSessionTrans.getUpdatedCar().getCustomCar().getVinyls());
 		ownedCarTrans.getCustomCar().setPaints(commerceSessionTrans.getUpdatedCar().getCustomCar().getPaints());
@@ -34,9 +45,28 @@ public class CommerceBO {
 
 		CarSlotEntity carSlotEntity = carSlotDAO.findById(commerceSessionTrans.getUpdatedCar().getId());
 		if (carSlotEntity != null) {
+			int maxBuyPrice = 0;
+			for(BasketItemTrans basketItemTrans : commerceSessionTrans.getBasket().getItems().getBasketItemTrans()) {
+				if(basketItemTrans.getProductId().contains("SRV-VINYL")) {
+					maxBuyPrice += vinylProductDao.findByProductId(basketItemTrans.getProductId()).getPrice();
+				} else {
+					maxBuyPrice += productDao.findByProductId(basketItemTrans.getProductId()).getPrice();
+				}
+			}
+			if(maxBuyPrice > 0) {
+				PersonaEntity personaEntity = personaDAO.findById(personaId);
+				if(personaEntity.getCash() < maxBuyPrice) {
+					return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+				}
+				
+				personaEntity.setCash(personaEntity.getCash() - maxBuyPrice);
+				personaDAO.update(personaEntity);
+			}
+			
 			carSlotEntity.setOwnedCarTrans(MarshalXML.marshal(ownedCarTrans));
 			carSlotDAO.update(carSlotEntity);
 		}
+		return CommerceResultStatus.SUCCESS;
 	}
 
 	public OwnedCarTrans responseCar(CommerceSessionTrans commerceSessionTrans) {
