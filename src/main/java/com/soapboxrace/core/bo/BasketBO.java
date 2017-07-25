@@ -98,7 +98,15 @@ public class BasketBO {
 		if (carSlotEntity == null || personaCarCount <= 1) {
 			return false;
 		}
-
+		
+		PersonaEntity personaEntity = personaDao.findById(personaId);
+		if(personaEntity.getCash() < 9999999) {
+			OwnedCarTrans defaultCar = personaBo.getDefaultCar(personaId);
+			int cashTotal = (int)(personaEntity.getCash() + defaultCar.getCustomCar().getResalePrice());
+			personaEntity.setCash(cashTotal >= 9999999 ? 9999999 : cashTotal);
+			personaDao.update(personaEntity);
+		}
+		
 		carSlotDAO.delete(carSlotEntity);
 		return true;
 	}
