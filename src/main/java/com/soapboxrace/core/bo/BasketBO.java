@@ -52,15 +52,23 @@ public class BasketBO {
 		return (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTrans, OwnedCarTrans.class);
 	}
 
-	public OwnedCarTrans repairCar(Long personaId) {
-		CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaId);
-		OwnedCarTrans defaultCar = personaBo.getDefaultCar(personaId);
+	public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity) {
+		OwnedCarTrans defaultCar = personaBo.getDefaultCar(personaEntity.getPersonaId());
+		
+		int price = (int)(productDao.findByProductId(productId).getPrice() * (100 - defaultCar.getDurability()));
+		if(personaEntity.getCash() < price) {
+			return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+		}
+		personaEntity.setCash(personaEntity.getCash() - price);
+		personaDao.update(personaEntity);
+		
 		defaultCar.setDurability(100);
-		String marshal = MarshalXML.marshal(defaultCar);
-		defaultCarEntity.setOwnedCarTrans(marshal);
+		
+		CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
+		defaultCarEntity.setOwnedCarTrans(MarshalXML.marshal(defaultCar));
+		
 		carSlotDAO.update(defaultCarEntity);
-		defaultCar.setId(defaultCarEntity.getId());
-		return defaultCar;
+		return CommerceResultStatus.SUCCESS;
 	}
 
 	public CommerceResultStatus buyCar(String productId, PersonaEntity personaEntity, String securityToken) {

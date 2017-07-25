@@ -144,21 +144,16 @@ public class Personas {
 
 		BasketTrans basketTrans = (BasketTrans) UnmarshalXML.unMarshal(basketXml, BasketTrans.class);
 		String productId = basketTrans.getItems().getBasketItemTrans().get(0).getProductId();
-		if ("SRV-GARAGESLOT".equals(productId) || "-1".equals(productId) || productId.contains("SRV-POWERUP") || productId.equals("SRV-THREVIVE")) {
+		if("-1".equals(productId) || "SRV-GARAGESLOT".equals(productId) || "SRV-POWERUP".equals(productId) || "SRV-THREVIVE".equals(productId)) {
 			commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
-		} else {
+		} else if("SRV-REPAIR".equals(productId)) {
+			commerceResultTrans.setStatus(basketBO.repairCar(productId, personaEntity));
+		} else { // Car
 			OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
 			commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
-			if ("SRV-REPAIR".equals(productId)) {
-				OwnedCarTrans defaultCar = basketBO.repairCar(personaId);
-				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
-				arrayOfOwnedCarTrans.getOwnedCarTrans().add(defaultCar);
-				return commerceResultTrans;
-			}
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 
 			commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken));
-
 		}
 		return commerceResultTrans;
 	}
