@@ -89,7 +89,6 @@ public class Personas {
 
 		CommerceSessionTrans commerceSessionTrans = (CommerceSessionTrans) UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
 		commerceSessionTrans.getUpdatedCar().setDurability(100);
-		System.out.println(MarshalXML.marshal(commerceSessionTrans));
 		
 		if(!commerceSessionTrans.getBasket().getItems().getBasketItemTrans().isEmpty()) { // if buy or install perf part
 			boolean premium = sessionBO.isPremium(securityToken);

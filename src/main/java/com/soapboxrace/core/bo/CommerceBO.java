@@ -48,9 +48,9 @@ public class CommerceBO {
 			int maxBuyPrice = 0;
 			for(BasketItemTrans basketItemTrans : commerceSessionTrans.getBasket().getItems().getBasketItemTrans()) {
 				if(basketItemTrans.getProductId().contains("SRV-VINYL")) {
-					maxBuyPrice += vinylProductDao.findByProductId(basketItemTrans.getProductId()).getPrice();
+					maxBuyPrice += (vinylProductDao.findByProductId(basketItemTrans.getProductId()).getPrice() * basketItemTrans.getQuantity());
 				} else {
-					maxBuyPrice += productDao.findByProductId(basketItemTrans.getProductId()).getPrice();
+					maxBuyPrice += (productDao.findByProductId(basketItemTrans.getProductId()).getPrice() * basketItemTrans.getQuantity());
 				}
 			}
 			if(maxBuyPrice > 0) {
