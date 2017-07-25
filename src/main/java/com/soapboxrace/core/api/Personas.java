@@ -72,6 +72,8 @@ public class Personas {
 	@Produces(MediaType.APPLICATION_XML)
 	public CommerceSessionResultTrans commerce(InputStream commerceXml, @HeaderParam("securityToken") String securityToken, @PathParam(value = "personaId") Long personaId) {
 		sessionBO.verifyPersona(securityToken, personaId);
+		
+		PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
 
 		CommerceSessionResultTrans commerceSessionResultTrans = new CommerceSessionResultTrans();
 
@@ -79,7 +81,7 @@ public class Personas {
 		arrayOfInventoryItemTrans.getInventoryItemTrans().add(new InventoryItemTrans());
 
 		WalletTrans walletTrans = new WalletTrans();
-		walletTrans.setBalance(5000000);
+		walletTrans.setBalance(personaEntity.getCash());
 		walletTrans.setCurrency("CASH");
 
 		ArrayOfWalletTrans arrayOfWalletTrans = new ArrayOfWalletTrans();
@@ -115,15 +117,17 @@ public class Personas {
 	@Path("/{personaId}/baskets")
 	@Produces(MediaType.APPLICATION_XML)
 	public CommerceResultTrans baskets(@HeaderParam("securityToken") String securityToken, InputStream basketXml, @PathParam(value = "personaId") Long personaId) {
-
 		sessionBO.verifyPersona(securityToken, personaId);
+		
+		PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
+		
 		CommerceResultTrans commerceResultTrans = new CommerceResultTrans();
 
 		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
 		arrayOfInventoryItemTrans.getInventoryItemTrans().add(new InventoryItemTrans());
 
 		WalletTrans walletTrans = new WalletTrans();
-		walletTrans.setBalance(5000000);
+		walletTrans.setBalance(personaEntity.getCash());
 		walletTrans.setCurrency("CASH");
 
 		ArrayOfWalletTrans arrayOfWalletTrans = new ArrayOfWalletTrans();
@@ -151,13 +155,7 @@ public class Personas {
 			}
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 
-			int carLimit = parameterBO.getCarLimit(securityToken);
-			if (basketBO.getPersonaCarCount(personaId) >= carLimit) {
-				commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS);
-			} else {
-				basketBO.buyCar(productId, personaId, securityToken);
-				commerceResultTrans.setStatus(CommerceResultStatus.SUCCESS);
-			}
+			commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken));
 
 		}
 		return commerceResultTrans;

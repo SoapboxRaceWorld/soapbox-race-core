@@ -7,10 +7,14 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.dao.BasketDefinitionDAO;
 import com.soapboxrace.core.dao.CarSlotDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.BasketDefinitionEntity;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
@@ -19,16 +23,25 @@ import com.soapboxrace.jaxb.util.UnmarshalXML;
 public class BasketBO {
 
 	@EJB
+	private PersonaBO personaBo;
+
+	@EJB
+	private ParameterBO parameterBO;
+
+	@EJB
 	private BasketDefinitionDAO basketDefinitionsDAO;
 
 	@EJB
 	private CarSlotDAO carSlotDAO;
 
 	@EJB
-	private PersonaBO personaBo;
+	private TokenSessionDAO tokenDAO;
 
 	@EJB
-	private TokenSessionDAO tokenDAO;
+	private ProductDAO productDao;
+
+	@EJB
+	private PersonaDAO personaDao;
 
 	public OwnedCarTrans getCar(String productId) {
 		BasketDefinitionEntity basketDefinitonEntity = basketDefinitionsDAO.findById(productId);
@@ -50,16 +63,25 @@ public class BasketBO {
 		return defaultCar;
 	}
 
-	public void buyCar(String productId, Long personaId, String securityToken) {
-		OwnedCarTrans car = getCar(productId);
-		String carXml = MarshalXML.marshal(car);
+	public CommerceResultStatus buyCar(String productId, PersonaEntity personaEntity, String securityToken) {
+		if(getPersonaCarCount(personaEntity.getPersonaId()) >= parameterBO.getCarLimit(securityToken))
+			return CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS;
+		
+		ProductEntity productEntity = productDao.findByProductId(productId);
+		if(personaEntity.getCash() < productEntity.getPrice())
+			return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+		
+		String carXml = MarshalXML.marshal(getCar(productId));
 		CarSlotEntity carSlotEntity = new CarSlotEntity();
-		PersonaEntity personaEntity = new PersonaEntity();
-		personaEntity.setPersonaId(personaId);
 		carSlotEntity.setPersona(personaEntity);
 		carSlotEntity.setOwnedCarTrans(carXml);
 		carSlotDAO.insert(carSlotEntity);
-		personaBo.changeDefaultCar(personaId, carSlotEntity.getId());
+		
+		personaEntity.setCash(personaEntity.getCash() - productEntity.getPrice());
+		personaDao.update(personaEntity);
+		
+		personaBo.changeDefaultCar(personaEntity.getPersonaId(), carSlotEntity.getId());
+		return CommerceResultStatus.SUCCESS;
 	}
 
 	public int getPersonaCarCount(Long personaId) {
