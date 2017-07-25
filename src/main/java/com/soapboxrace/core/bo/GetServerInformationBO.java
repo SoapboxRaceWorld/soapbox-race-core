@@ -23,7 +23,7 @@ public class GetServerInformationBO {
 		if (ticketToken != null && !ticketToken.equals("null")) {
 			serverInfoEntity.setRequireTicket(true);
 		}
-		serverInfoEntity.setServerVersion("0.0.6-dev");
+		serverInfoEntity.setServerVersion("0.0.7-rc");
 		return serverInfoEntity;
 	}
 
