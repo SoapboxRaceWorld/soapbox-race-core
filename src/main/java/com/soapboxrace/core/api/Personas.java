@@ -90,28 +90,23 @@ public class Personas {
 		CommerceSessionTrans commerceSessionTrans = (CommerceSessionTrans) UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
 		commerceSessionTrans.getUpdatedCar().setDurability(100);
 		
-		if(!commerceSessionTrans.getBasket().getItems().getBasketItemTrans().isEmpty()) { // if buy or install perf part
-			boolean premium = sessionBO.isPremium(securityToken);
-			if (parameterBO.getPremiumCarChangerProtection() && !premium) {
-				CustomCarTrans customCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
-				if (!customCar.getPerformanceParts().getPerformancePartTrans().isEmpty()) {
-					customCar.setPerformanceParts(new ArrayOfPerformancePartTrans());
-					customCar.setVinyls(new ArrayOfCustomVinylTrans());
-					customCar.setSkillModParts(new ArrayOfSkillModPartTrans());
-					customCar.setPaints(new ArrayOfCustomPaintTrans());
-					customCar.setVisualParts(new ArrayOfVisualPartTrans());
-				}
+		boolean premium = sessionBO.isPremium(securityToken);
+		if (parameterBO.getPremiumCarChangerProtection() && !premium) {
+			CustomCarTrans customCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
+			if (!customCar.getPerformanceParts().getPerformancePartTrans().isEmpty()) {
+				customCar.setPerformanceParts(new ArrayOfPerformancePartTrans());
+				customCar.setVinyls(new ArrayOfCustomVinylTrans());
+				customCar.setSkillModParts(new ArrayOfSkillModPartTrans());
+				customCar.setPaints(new ArrayOfCustomPaintTrans());
+				customCar.setVisualParts(new ArrayOfVisualPartTrans());
 			}
-			commerceSessionResultTrans.setStatus(commerceBO.updateCar(commerceSessionTrans, personaId));
-		} else { // else i sell some part from my inventory
-			commerceSessionResultTrans.setStatus(CommerceResultStatus.SUCCESS);
 		}
-		
 
-		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
-		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
 		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
+		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
+		commerceSessionResultTrans.setStatus(commerceBO.updateCar(commerceSessionTrans, personaEntity));
 		commerceSessionResultTrans.setUpdatedCar(commerceBO.responseCar(commerceSessionTrans));
+		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
 		return commerceSessionResultTrans;
 	}
 
