@@ -103,14 +103,15 @@ public class Personas {
 				}
 			}
 			commerceSessionResultTrans.setStatus(commerceBO.updateCar(commerceSessionTrans, personaId));
-			commerceSessionResultTrans.setUpdatedCar(commerceBO.responseCar(commerceSessionTrans));
 		} else { // else i sell some part from my inventory
 			commerceSessionResultTrans.setStatus(CommerceResultStatus.SUCCESS);
 		}
+		
 
 		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
 		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
 		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
+		commerceSessionResultTrans.setUpdatedCar(commerceBO.responseCar(commerceSessionTrans));
 		return commerceSessionResultTrans;
 	}
 
