@@ -25,6 +25,36 @@ public class ParameterBO {
 		}
 		return null;
 	}
+	
+	public boolean isShardingEnabled() {
+		String property = System.getProperty("sharding.enabled");
+
+		return property != null && Boolean.parseBoolean(property);
+	}
+
+	public boolean isShardingMaster() {
+		String property = System.getProperty("sharding.master");
+
+		return isShardingEnabled() && property != null && Boolean.parseBoolean(property.trim());
+	}
+
+	public String getShardId() {
+		String property = System.getProperty("sharding.id");
+
+		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : "sbrw") : "sbrw";
+	}
+
+	public String getCncToken() {
+		String property = System.getProperty("sharding.cncToken");
+
+		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
+	}
+
+	public String getShardToken() {
+		String property = System.getProperty("sharding.clientToken");
+
+		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
+	}
 
 	public int getMaxCarSlotsFree() {
 		String parameter = getParameter("MAX_CAR_SLOTS_FREE");

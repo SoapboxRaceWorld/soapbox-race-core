@@ -18,10 +18,20 @@ public class OnlineUsersEntity {
 
 	@Id
 	@Column(name = "ID", nullable = false)
-	private int timeRecord;
+	private int id;
 
+	private int timeRecord;
+	
 	private int numberOfUsers = 0;
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public int getNumberOfUsers() {
 		return numberOfUsers;
 	}

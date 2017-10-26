@@ -7,16 +7,21 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 import com.soapboxrace.jaxb.xmpp.XMPP_IQPingType;
 import com.soapboxrace.jaxb.xmpp.XMPP_IQPongType;
+import com.soapboxrace.jaxb.xmpp.XMPP_MessageType;
+import com.soapboxrace.xmpp.openfire.shard.ShardCommand;
 
 public class OpenFireTalk {
 
 	private Socket socket;
 	private BufferedReader reader;
 	private BufferedWriter writer;
+	
+	private final ParameterBO parameterBO = new ParameterBO();
 
 	public OpenFireTalk(Socket socket) {
 		this.socket = socket;
@@ -53,9 +58,25 @@ public class OpenFireTalk {
 			e.printStackTrace();
 		}
 		System.out.println("S->C [" + msg + "]");
-		if (msg != null && !msg.isEmpty() && msg.contains("<ping xmlns=\"urn:xmpp:ping\"/>")) {
-			XMPP_IQPingType openfirePing = (XMPP_IQPingType) UnmarshalXML.unMarshal(msg, XMPP_IQPingType.class);
-			write(MarshalXML.marshal(new XMPP_IQPongType(openfirePing.getId())));
+		if (msg != null && !msg.isEmpty()) {
+			if (msg.contains("<ping xmlns=\"urn:xmpp:ping\"/>")) {
+				XMPP_IQPingType openfirePing = UnmarshalXML.unMarshal(msg, XMPP_IQPingType.class);
+				write(MarshalXML.marshal(new XMPP_IQPongType(openfirePing.getId())));
+			} else if (msg.contains("<message")) {
+				XMPP_MessageType messageType = UnmarshalXML.unMarshal(msg, XMPP_MessageType.class);
+				String body = messageType.getBody();
+				if (!body.contains("<ChatMsg") && body.contains("<ShardCommand")) {
+					ShardCommand command = UnmarshalXML.unMarshal(body, ShardCommand.class);
+					
+					if ((command.getToken() == null && parameterBO.getCncToken() != null)
+							|| (!command.getToken().equals(parameterBO.getCncToken()))) {
+						System.err.println("[CNC] Received command with invalid token!");
+						System.err.println(body);
+					} else {
+						OpenFireSoapBoxCli.getInstance().send(command.getPayload(), command.getTargetPersonaId());
+					}
+				}
+			}
 		}
 		return msg;
 	}

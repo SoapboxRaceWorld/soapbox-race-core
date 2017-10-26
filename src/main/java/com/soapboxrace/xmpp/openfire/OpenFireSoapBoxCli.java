@@ -21,6 +21,15 @@ public class OpenFireSoapBoxCli {
 		xmppTalk = xmppHandShake.getXmppTalk();
 	}
 
+	public void send(String msg, String to) {
+		XMPP_MessageType messageType = new XMPP_MessageType();
+		messageType.setTo(to);
+		messageType.setBody(msg);
+		messageType.setSubject(SubjectCalc.calculateHash(messageType.getTo().toCharArray(), msg.toCharArray()));
+		String packet = MarshalXML.marshal(messageType);
+		xmppTalk.write(packet);
+	}
+
 	public void send(String msg, Long to) {
 		XMPP_MessageType messageType = new XMPP_MessageType();
 		messageType.setToPersonaId(to);

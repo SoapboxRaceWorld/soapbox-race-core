@@ -1,42 +1,44 @@
 package com.soapboxrace.core.bo;
 
-import java.util.Date;
+import com.soapboxrace.core.dao.OnlineUsersDAO;
+import com.soapboxrace.xmpp.openfire.OnlineUsersMNG;
+import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
+import com.soapboxrace.xmpp.openfire.shard.ShardedOnlineUsersMNG;
+import com.soapboxrace.xmpp.openfire.standard.StandardOnlineUsersMNG;
 
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 
-import com.soapboxrace.core.dao.OnlineUsersDAO;
-import com.soapboxrace.core.jpa.OnlineUsersEntity;
-import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
-
 @Stateless
-public class OnlineUsersBO {
+public class OnlineUsersBO
+{
+    @EJB
+    private OnlineUsersDAO onlineUsersDAO;
 
-	@EJB
-	private OnlineUsersDAO onlineUsersDAO;
+    private OpenFireRestApiCli openFireRestApiCli = new OpenFireRestApiCli();
 
-	private OpenFireRestApiCli openFireRestApiCli = new OpenFireRestApiCli();
+    private OnlineUsersMNG onlineUsersMNG;
 
-	public int getNumberOfUsersOnlineNow() {
-		Date lastMinutes = getLastMinutes(1);
-		OnlineUsersEntity onlineUsersEntity = onlineUsersDAO.findByTime(lastMinutes);
-		return onlineUsersEntity != null ? onlineUsersEntity.getNumberOfUsers() : 0;
-	}
+    {
+        ParameterBO parameterBO = new ParameterBO();
 
-	@Schedule(minute = "*", hour = "*", persistent = false)
-	public void insertNumberOfUsesOnlineNow() {
-		Long timeLong = new Date().getTime() / 1000L;
-		OnlineUsersEntity onlineUsersEntity = new OnlineUsersEntity();
-		onlineUsersEntity.setNumberOfUsers(openFireRestApiCli.getTotalOnlineUsers());
-		onlineUsersEntity.setTimeRecord(timeLong.intValue());
-		onlineUsersDAO.insert(onlineUsersEntity);
-	}
+        if (parameterBO.isShardingEnabled())
+        {
+            onlineUsersMNG = new ShardedOnlineUsersMNG(openFireRestApiCli, onlineUsersDAO);
+        } else
+        {
+            onlineUsersMNG = new StandardOnlineUsersMNG(openFireRestApiCli, onlineUsersDAO);
+        }
+    }
 
-	private Date getLastMinutes(int minutes) {
-		long time = new Date().getTime();
-		time = time - (minutes * 90000);
+    @Schedule(minute = "*", hour = "*", persistent = false)
+    public void insertNumberOfUsesOnlineNow()
+    {
+        onlineUsersMNG.insert();
+    }
 
-		return new Date(time);
-	}
+    public Integer getNumberOfUsersOnlineNow() {
+        return onlineUsersMNG.getNumberOfUsersOnlineNow();
+    }
 }
