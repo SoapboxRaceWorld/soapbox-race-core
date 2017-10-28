@@ -11,5 +11,6 @@ public class XMPPModule implements Module
     {
         System.out.println("[DI] XMPP bind");
         OpenFireSoapBoxCli.bindHandshake(binder);
+        OpenFireSoapBoxCli.bindOnlineUsers(binder);
     }
 }
