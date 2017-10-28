@@ -1,4 +1,4 @@
-package com.soapboxrace.xmpp.openfire;
+package com.soapboxrace.core.xmpp;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeLobbyLaunched;
 public class XmppLobby {
 
 	private long personaId;
-	private static OpenFireSoapBoxCli openFireSoapBoxCli = OpenFireSoapBoxCli.getInstance();
+    private static OpenFireSoapBoxCli openFireSoapBoxCli = OpenFireSoapBoxCli.getInstance();
 
 	public XmppLobby(long personaId) {
 		this.personaId = personaId;

@@ -72,6 +72,14 @@ public class ParameterBO {
 		return 30;
 	}
 
+	public int getStartingCash() {
+		String parameter = getParameter("STARTING_CASH_AMOUNT");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 350_000;
+	}
+
 	public boolean getPremiumCarChangerProtection() {
 		String parameter = getParameter("PREMIUM_CARCHANGER_PROTECTION");
 		if (parameter != null) {

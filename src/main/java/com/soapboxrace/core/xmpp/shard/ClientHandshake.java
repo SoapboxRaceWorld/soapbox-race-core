@@ -1,24 +1,29 @@
-package com.soapboxrace.xmpp.openfire.shard;
+package com.soapboxrace.core.xmpp.shard;
 
+import com.google.inject.Injector;
 import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.bo.ParameterBO;
-import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
-import com.soapboxrace.xmpp.openfire.OpenFireTalk;
-import com.soapboxrace.xmpp.openfire.SocketClient;
-import com.soapboxrace.xmpp.openfire.TlsWrapper;
+import com.soapboxrace.core.inject.InjectorFactory;
+import com.soapboxrace.core.xmpp.*;
 
-public class ShardedMasterHandshake {
-    private OpenFireTalk openFireTalk;
+public class ClientHandshake implements IHandshake
+{
+    private static final ParameterBO PARAMETER_BO = new ParameterBO();
 
-    public ShardedMasterHandshake() {
-        final ParameterBO parameterBO = new ParameterBO();
-        final String user = "sbrw.engine.engine";
-        final String password = parameterBO.getCncToken();
-        final OpenFireRestApiCli openFireRestApiCli = new OpenFireRestApiCli();
+    private IOpenFireTalk openFireTalk;
 
-        openFireRestApiCli.createUpdatePersona(user, password);
+    public ClientHandshake()
+    {
+        Injector injector = InjectorFactory.getInjector();
+        OpenFireRestApiCli restApiCli = injector.getProvider(OpenFireRestApiCli.class).get();
+
         String xmppIp = Config.getXmppIp();
         int xmppPort = Config.getXmppPort();
+
+        String user = "sbrw.engine.client";
+        String password = PARAMETER_BO.getShardToken();
+
+        restApiCli.createUpdatePersona(user, password);
 
         SocketClient socketClient = new SocketClient(xmppIp, xmppPort);
         socketClient.send(
@@ -29,11 +34,11 @@ public class ShardedMasterHandshake {
         }
         socketClient.send("<starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>");
         socketClient.receive();
-        openFireTalk = new OpenFireTalk(socketClient.getSocket());
+        openFireTalk = new ClientOpenFireTalk(socketClient.getSocket());
         TlsWrapper.wrapXmppTalk(openFireTalk);
         openFireTalk.write(
                 "<?xml version='1.0' ?><stream:stream to='" + xmppIp + "' xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams' version='1.0' xml:lang='en'>");
-        openFireTalk.write("<iq id='EA-Chat-1' type='get'><query xmlns='jabber:iq:auth'><username>sbrw.engine.engine</username></query></iq>");
+        openFireTalk.write("<iq id='EA-Chat-1' type='get'><query xmlns='jabber:iq:auth'><username>" + user + "</username></query></iq>");
         openFireTalk.read();
         openFireTalk.write("<iq xml:lang='en' id='EA-Chat-2' type='set'><query xmlns='jabber:iq:auth'><username>" + user + "</username><password>" + password
                 + "</password><resource>EA_Chat</resource><clientlock xmlns='http://www.jabber.com/schemas/clientlocking.xsd' id='900'>57b8914527daff651df93557aef0387e5aa60fae</clientlock></query></iq>");
@@ -44,7 +49,9 @@ public class ShardedMasterHandshake {
         openFireTalk.startReader();
     }
 
-    public OpenFireTalk getOpenFireTalk() {
+    @Override
+    public IOpenFireTalk getXmppTalk()
+    {
         return openFireTalk;
     }
 }

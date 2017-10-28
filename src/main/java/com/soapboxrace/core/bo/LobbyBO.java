@@ -1,6 +1,7 @@
 package com.soapboxrace.core.bo;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,7 @@ import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.LobbyEntrantEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.xmpp.XmppLobby;
 import com.soapboxrace.jaxb.http.ArrayOfLobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.Entrants;
 import com.soapboxrace.jaxb.http.LobbyCountdown;
@@ -34,8 +36,6 @@ import com.soapboxrace.jaxb.xmpp.XMPP_EventSessionType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInviteType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyLaunchedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_P2PCryptoTicketType;
-import com.soapboxrace.xmpp.openfire.XmppLobby;
-import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
 
 @Stateless
 public class LobbyBO {
@@ -58,9 +58,6 @@ public class LobbyBO {
 	@EJB
 	private LobbyEntrantDAO lobbyEntrantDao;
 	
-	@EJB
-	private OpenFireRestApiCli xmppRestApiCli;
-	
 	public void joinFastLobby(Long personaId) {
 		List<LobbyEntity> lobbys = lobbyDao.findAllOpen();
 		PersonaEntity personaEntity = personaDao.findById(personaId);
@@ -78,7 +75,7 @@ public class LobbyBO {
 	}
 	
 	public void createPrivateLobby(Long personaId, int eventId) {
-		List<Long> listOfPersona = xmppRestApiCli.getAllPersonaByGroup(personaId);
+		List<Long> listOfPersona = new ArrayList<>();
 		if(!listOfPersona.isEmpty()) {
 			PersonaEntity personaEntity = personaDao.findById(personaId);
 			createLobby(personaEntity, eventId, true);

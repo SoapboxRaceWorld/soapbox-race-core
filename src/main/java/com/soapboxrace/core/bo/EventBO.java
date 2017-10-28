@@ -17,6 +17,7 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CardDecks;
 import com.soapboxrace.core.jpa.EventDataEntity;
+import com.soapboxrace.core.xmpp.XmppEvent;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
 import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
@@ -46,7 +47,7 @@ import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_RouteEntrantResultType;
 import com.soapboxrace.jaxb.xmpp.XMPP_TeamEscapeEntrantResultType;
-import com.soapboxrace.xmpp.openfire.XmppEvent;
+//import com.soapboxrace.xmpp.openfire.XmppEvent;
 
 @Stateless
 public class EventBO extends AccoladesFunc {

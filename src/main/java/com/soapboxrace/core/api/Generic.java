@@ -1,5 +1,8 @@
 package com.soapboxrace.core.api;
 
+import com.google.inject.Injector;
+
+import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -10,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/")
 public class Generic {
-
+	
 	@GET
 	@Path("{path:.*}")
 	@Produces(MediaType.APPLICATION_XML)
