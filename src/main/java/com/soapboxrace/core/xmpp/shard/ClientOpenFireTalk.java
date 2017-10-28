@@ -33,7 +33,7 @@ public class ClientOpenFireTalk extends BaseOpenFireTalk
         
         command.setPayload(payload);
         
-        super.send(MarshalXML.marshal(command), personaId);
+        super.send(MarshalXML.marshal(command), "sbrw.engine.engine");
     }
 
     @Override
