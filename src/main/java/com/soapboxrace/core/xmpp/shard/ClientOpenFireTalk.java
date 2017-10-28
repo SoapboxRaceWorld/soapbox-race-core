@@ -1,5 +1,6 @@
 package com.soapboxrace.core.xmpp.shard;
 
+import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.xmpp.BaseOpenFireTalk;
 import com.soapboxrace.jaxb.util.MarshalXML;
@@ -33,7 +34,7 @@ public class ClientOpenFireTalk extends BaseOpenFireTalk
         
         command.setPayload(payload);
         
-        super.send(MarshalXML.marshal(command), "sbrw.engine.engine");
+        super.send(MarshalXML.marshal(command), "sbrw.engine.engine@" + Config.getXmppIp());
     }
 
     @Override
