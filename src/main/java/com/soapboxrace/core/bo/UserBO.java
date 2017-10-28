@@ -30,6 +30,7 @@ public class UserBO {
 	@EJB
 	private ServerInfoDAO serverInfoDAO;
 	
+	@EJB
 	private OpenFireRestApiCli xmppRestApiCli;
 
 	public void createXmppUser(UserInfo userInfo) {
