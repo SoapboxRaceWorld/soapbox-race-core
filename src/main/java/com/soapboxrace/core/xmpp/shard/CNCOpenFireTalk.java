@@ -33,6 +33,7 @@ public class CNCOpenFireTalk extends BaseOpenFireTalk
 
                 if (PARAMETER_BO.getCncToken() == null || command.getToken().equals(PARAMETER_BO.getCncToken()))
                 {
+                    send(command.getPayload().getBody(), command.getToPersonaId());
 //                    OpenFireSoapBoxCli.getInstance().send(command.getPayload().getBody());
                 } else
                 {
