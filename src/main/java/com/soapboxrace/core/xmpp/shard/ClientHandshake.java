@@ -20,7 +20,7 @@ public class ClientHandshake implements IHandshake
         String xmppIp = Config.getXmppIp();
         int xmppPort = Config.getXmppPort();
 
-        String user = "sbrw.engine.client";
+        String user = "sbrw.engine.client-" + PARAMETER_BO.getShardId();
         String password = PARAMETER_BO.getShardToken();
 
         restApiCli.createUpdatePersona(user, password);
