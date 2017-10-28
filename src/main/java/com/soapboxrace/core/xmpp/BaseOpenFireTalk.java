@@ -48,10 +48,14 @@ public abstract class BaseOpenFireTalk implements IOpenFireTalk
             e.printStackTrace();
         }
         System.out.println("S->C [" + msg + "]");
-        if (msg != null && !msg.isEmpty() && msg.contains("<ping xmlns=\"urn:xmpp:ping\"/>"))
+        if (msg != null && !msg.isEmpty())
         {
-            XMPP_IQPingType openfirePing = UnmarshalXML.unMarshal(msg, XMPP_IQPingType.class);
-            write(MarshalXML.marshal(new XMPP_IQPongType(openfirePing.getId())));
+            if (msg.contains("<ping xmlns=\"urn:xmpp:ping\"/>"))
+            {
+                XMPP_IQPingType openfirePing = UnmarshalXML.unMarshal(msg, XMPP_IQPingType.class);
+                write(MarshalXML.marshal(new XMPP_IQPongType(openfirePing.getId())));
+            }
+            
             this.handleMessage(msg);
         }
         return msg;

@@ -40,6 +40,7 @@ public class OpenFireSoapBoxCli
                 handshakeClass = CNCHandshake.class; // Master shard handshake
             } else
             {
+                System.out.println("[XMPP-DI] Using ClientHandshake");
                 handshakeClass = ClientHandshake.class; // Client shard handshake
             }
         } else

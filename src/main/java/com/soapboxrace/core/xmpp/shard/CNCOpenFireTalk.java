@@ -2,7 +2,6 @@ package com.soapboxrace.core.xmpp.shard;
 
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.xmpp.BaseOpenFireTalk;
-import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 import com.soapboxrace.jaxb.xmpp.XMPP_MessageType;
 
