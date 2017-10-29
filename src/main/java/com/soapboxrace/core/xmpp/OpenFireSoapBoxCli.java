@@ -4,8 +4,6 @@ import com.google.inject.Binder;
 import com.google.inject.Injector;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.inject.InjectorFactory;
-import com.soapboxrace.core.xmpp.onlineusers.ShardedOnlineUsersReporter;
-import com.soapboxrace.core.xmpp.onlineusers.StandardOnlineUsersReporter;
 import com.soapboxrace.core.xmpp.shard.CNCHandshake;
 import com.soapboxrace.core.xmpp.shard.ClientHandshake;
 import com.soapboxrace.core.xmpp.standard.Handshake;
@@ -27,23 +25,6 @@ public class OpenFireSoapBoxCli
             instance = new OpenFireSoapBoxCli();
         }
         return instance;
-    }
-
-    public static void bindOnlineUsers(Binder binder)
-    {
-        Class<? extends OnlineUsersReporter> usersReporterClass;
-
-        if (parameterBO.isShardingEnabled())
-        {
-            System.out.println("[XMPP-DI] Using ShardedOnlineUsersReporter");
-            usersReporterClass = ShardedOnlineUsersReporter.class;
-        } else
-        {
-            System.out.println("[XMPP-DI] Using StandardOnlineUsersReporter");
-            usersReporterClass = StandardOnlineUsersReporter.class; 
-        }
-
-        binder.bind(OnlineUsersReporter.class).to(usersReporterClass);
     }
 
     public static void bindHandshake(Binder binder)
