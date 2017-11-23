@@ -34,7 +34,14 @@ public class UserEntity {
 	@OneToMany(mappedBy = "user", targetEntity = PersonaEntity.class)
 	private List<PersonaEntity> listOfProfile;
 
-	private boolean premium = false;
+	@Column(name = "premium")
+	private boolean premium;
+
+	@Column(name = "isAdmin")
+	private boolean isAdmin;
+
+	@Column(name = "isBanned")
+	private boolean isBanned;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -74,5 +81,25 @@ public class UserEntity {
 
 	public boolean ownsPersona(Long id) {
 		return this.listOfProfile.stream().anyMatch(p -> p.getPersonaId().equals(id));
+	}
+
+	public boolean isBanned()
+	{
+		return isBanned;
+	}
+
+	public void setBanned(boolean banned)
+	{
+		isBanned = banned;
+	}
+
+	public boolean isAdmin()
+	{
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean admin)
+	{
+		isAdmin = admin;
 	}
 }

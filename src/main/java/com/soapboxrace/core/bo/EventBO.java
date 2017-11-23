@@ -94,6 +94,7 @@ public class EventBO extends AccoladesFunc {
 		}
 		EventSessionEntity eventSessionEntity = new EventSessionEntity();
 		eventSessionEntity.setEvent(eventEntity);
+		eventSessionEntity.setStarted(System.currentTimeMillis());
 		eventSessionDao.insert(eventSessionEntity);
 		return eventSessionEntity;
 	}
@@ -103,6 +104,13 @@ public class EventBO extends AccoladesFunc {
 	}
 	
 	public PursuitEventResult getPursitEnd(Long eventSessionId, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket, Boolean isBusted) {
+		EventSessionEntity sessionEntity = eventSessionDao.findById(eventSessionId);
+		sessionEntity.setEnded(System.currentTimeMillis());
+		
+		eventSessionDao.update(sessionEntity);
+		
+		boolean legit = !(sessionEntity.getEnded() - sessionEntity.getStarted() <= 10_500);
+		
 		if(pursuitArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int)pursuitArbitrationPacket.getCarId(), pursuitArbitrationPacket.getHacksDetected());
 		}
@@ -129,7 +137,7 @@ public class EventBO extends AccoladesFunc {
 		eventDataDao.update(eventDataEntity);
 
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
-		pursuitEventResult.setAccolades(getPursuitAccolades(activePersonaId, pursuitArbitrationPacket, isBusted));
+		pursuitEventResult.setAccolades(legit ? getPursuitAccolades(activePersonaId, pursuitArbitrationPacket, isBusted) : new Accolades());
 		pursuitEventResult.setDurability(updateDamageCar(activePersonaId, pursuitArbitrationPacket.getCarId(), 0, pursuitArbitrationPacket.getEventDurationInMilliseconds()));
 		pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
 		pursuitEventResult.setEventSessionId(eventSessionId);
