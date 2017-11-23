@@ -11,7 +11,6 @@
       <property name="hibernate.format_sql" value="true" />
       <property name="hibernate.use_sql_comments" value="false" />
       <property name="hibernate.show_sql" value="true" />
-      <property name="hibernate.default_schema" value="SOAPBOX" />
     </properties>
   </persistence-unit>
 </persistence>
