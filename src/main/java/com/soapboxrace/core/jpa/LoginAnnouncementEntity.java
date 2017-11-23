@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "LOGIN_ANNOUCEMENT")
 @NamedQueries({ //
-        @NamedQuery(name = "LoginAnnoucementEntity.findAll", query = "SELECT obj FROM LoginAnnoucementEntity obj") //
+        @NamedQuery(name = "LoginAnnouncementEntity.findAll", query = "SELECT obj FROM LoginAnnouncementEntity obj") //
 })
 public class LoginAnnouncementEntity {
 

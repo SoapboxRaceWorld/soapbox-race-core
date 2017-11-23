@@ -19,7 +19,7 @@ public class LoginAnnouncementDAO extends BaseDAO<LoginAnnouncementEntity> {
     }
 
     public List<LoginAnnouncementEntity> findAll() {
-        TypedQuery<LoginAnnouncementEntity> query = entityManager.createNamedQuery("LoginAnnoucementEntity.findAll", LoginAnnouncementEntity.class);
+        TypedQuery<LoginAnnouncementEntity> query = entityManager.createNamedQuery("LoginAnnouncementEntity.findAll", LoginAnnouncementEntity.class);
         return query.getResultList();
     }
 }
