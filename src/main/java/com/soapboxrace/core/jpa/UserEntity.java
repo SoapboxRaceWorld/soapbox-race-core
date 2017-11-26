@@ -30,6 +30,12 @@ public class UserEntity {
 
 	@Column(name = "PASSWORD", length = 50)
 	private String password;
+	
+	@Column(name = "HWID")
+	private String hwid;
+	
+	@Column(name = "IP_ADDRESS")
+	private String ipAddress;
 
 	@OneToMany(mappedBy = "user", targetEntity = PersonaEntity.class)
 	private List<PersonaEntity> listOfProfile;
@@ -39,9 +45,6 @@ public class UserEntity {
 
 	@Column(name = "isAdmin")
 	private boolean isAdmin;
-
-	@Column(name = "isBanned")
-	private boolean isBanned;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -71,6 +74,26 @@ public class UserEntity {
 		return listOfProfile;
 	}
 
+	public String getHwid()
+	{
+		return hwid;
+	}
+
+	public void setHwid(String hwid)
+	{
+		this.hwid = hwid;
+	}
+
+	public String getIpAddress()
+	{
+		return ipAddress;
+	}
+
+	public void setIpAddress(String ipAddress)
+	{
+		this.ipAddress = ipAddress;
+	}
+
 	public boolean isPremium() {
 		return premium;
 	}
@@ -81,16 +104,6 @@ public class UserEntity {
 
 	public boolean ownsPersona(Long id) {
 		return this.listOfProfile.stream().anyMatch(p -> p.getPersonaId().equals(id));
-	}
-
-	public boolean isBanned()
-	{
-		return isBanned;
-	}
-
-	public void setBanned(boolean banned)
-	{
-		isBanned = banned;
 	}
 
 	public boolean isAdmin()

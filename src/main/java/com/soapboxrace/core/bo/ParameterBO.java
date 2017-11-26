@@ -80,6 +80,70 @@ public class ParameterBO {
 		return 350_000;
 	}
 
+	/**
+	 * minimum pursuit time in MS
+	 * @return
+	 */
+	public int getMinPursuitTime() {
+		String parameter = getParameter("PURSUIT_MINIMUM_TIME");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 18_500;
+	}
+
+	/**
+	 * minimum sprint/circuit time in MS
+	 * @return
+	 */
+	public int getMinRouteTime() {
+		String parameter = getParameter("ROUTE_MINIMUM_TIME");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 50_000;
+	}
+
+	/**
+	 * minimum drag time in MS
+	 * @return
+	 */
+	public int getMinDragTime() {
+		String parameter = getParameter("DRAG_MINIMUM_TIME");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 10_000;
+	}
+
+	/**
+	 * minimum TE time in MS
+	 * @return
+	 */
+	public int getMinTETime() {
+		String parameter = getParameter("TE_MINIMUM_TIME");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 60_000;
+	}
+
+	public int getMaxFreePlayerCash() {
+		String parameter = getParameter("MAX_PLAYER_CASH_FREE");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 5_000_000;
+	}
+
+	public int getMaxPremiumPlayerCash() {
+		String parameter = getParameter("MAX_PLAYER_CASH_PREMIUM");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 8_500_000;
+	}
+	
 	public boolean getPremiumCarChangerProtection() {
 		String parameter = getParameter("PREMIUM_CARCHANGER_PROTECTION");
 		if (parameter != null) {
@@ -94,5 +158,13 @@ public class ParameterBO {
 			return getMaxCarSlotsPremium();
 		}
 		return getMaxCarSlotsFree();
+	}
+
+	public int getMaxCash(String securityToken) {
+		TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
+		if (tokenSession.isPremium()) {
+			return getMaxPremiumPlayerCash();
+		}
+		return getMaxFreePlayerCash();
 	}
 }

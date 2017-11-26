@@ -44,6 +44,12 @@ public class DriverPersonaBO {
 
 	public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
 		UserEntity userEntity = userDao.findById(userId);
+		
+		if (userEntity.getListOfProfile().size() >= 3) { 
+			return null;
+//			throw new UnsupportedOperationException("Can't have more than 3 personas");
+		}
+		
 		personaEntity.setUser(userEntity);
 		personaEntity.setCash(parameterBO.getStartingCash());
 		personaEntity.setLevel(1);

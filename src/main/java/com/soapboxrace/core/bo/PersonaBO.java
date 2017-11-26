@@ -50,13 +50,13 @@ public class PersonaBO {
 		Integer curCarIndex = personaEntity.getCurCarIndex();
 		if (carSlotList.size() > 0) {
 			if (curCarIndex >= carSlotList.size()) {
-				curCarIndex--;
+				curCarIndex = carSlotList.size() - 1;
 				CarSlotEntity ownedCarEntity = carSlotList.get(curCarIndex);
 				changeDefaultCar(personaId, ownedCarEntity.getId());
 			}
 			return carSlotList.get(curCarIndex);
 		}
-		return null;
+		throw new IllegalStateException(String.format("Persona %d has no default car", personaId));
 	}
 
 	public OwnedCarTrans getDefaultCar(Long personaId) {
@@ -64,7 +64,7 @@ public class PersonaBO {
 		if (carSlotEntity == null) {
 			return new OwnedCarTrans();
 		}
-		OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
+		OwnedCarTrans ownedCarTrans = UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
 		ownedCarTrans.setId(carSlotEntity.getId());
 		return ownedCarTrans;
 	}

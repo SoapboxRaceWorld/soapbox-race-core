@@ -24,18 +24,7 @@ public class CNCOpenFireTalk extends BaseOpenFireTalk
             XMPP_MessageType messageType = UnmarshalXML.unMarshal(msg, XMPP_MessageType.class);
             String body = messageType.getBody();
 
-            if (body.contains("<ChatMsg"))
-            {
-                // <message xmlns="" to="sbrw.xxx@xx.xxx.xxx.xx/EA-Chat" type="groupchat" from="channel.en__1@conference.xxx.xxx.xxx.xxx/sbrw.xxxxx">
-                //    <channel>Chat_All</channel>
-                //    <body>
-                //      <ChatMsg Type="0" Uid="xxxxx" Time="-5006886331642481131" Cs="8217472555062347827">
-                //          <From>SOMEONE</From>
-                //          <Msg>lmao</Msg>;
-                //      </ChatMsg>;
-                //    </body>
-                // </message>
-            } else if (body.contains("<CNCCommand "))
+            if (body.contains("<CNCCommand "))
             {
                 CNCCommand command = UnmarshalXML.unMarshal(body, CNCCommand.class);
 

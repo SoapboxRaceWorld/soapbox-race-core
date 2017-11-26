@@ -42,11 +42,14 @@ public class BasketBO {
 
 	@EJB
 	private PersonaDAO personaDao;
+	
+	@EJB
+	private TokenSessionBO tokenSessionBO;
 
 	public OwnedCarTrans getCar(String productId) {
 		BasketDefinitionEntity basketDefinitonEntity = basketDefinitionsDAO.findById(productId);
 		if (basketDefinitonEntity == null) {
-			return new OwnedCarTrans();
+			throw new IllegalArgumentException(String.format("No basket definition for %s", productId));
 		}
 		String ownedCarTrans = basketDefinitonEntity.getOwnedCarTrans();
 		return (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTrans, OwnedCarTrans.class);
@@ -100,7 +103,9 @@ public class BasketBO {
 		return carSlotDAO.findByPersonaId(personaId);
 	}
 
-	public boolean sellCar(Long personaId, Long serialNumber) {
+	public boolean sellCar(String securityToken, Long personaId, Long serialNumber) {
+		this.tokenSessionBO.verifyPersona(securityToken, personaId);
+		
 		CarSlotEntity carSlotEntity = carSlotDAO.findById(serialNumber);
 		int personaCarCount = getPersonaCarCount(personaId);
 		if (carSlotEntity == null || personaCarCount <= 1) {
@@ -108,10 +113,11 @@ public class BasketBO {
 		}
 		
 		PersonaEntity personaEntity = personaDao.findById(personaId);
-		if(personaEntity.getCash() < 9999999) {
-			OwnedCarTrans defaultCar = personaBo.getDefaultCar(personaId);
-			int cashTotal = (int)(personaEntity.getCash() + defaultCar.getCustomCar().getResalePrice());
-			personaEntity.setCash(cashTotal >= 9999999 ? 9999999 : cashTotal);
+		final int maxCash = parameterBO.getMaxCash(securityToken);
+		if(personaEntity.getCash() < maxCash) {
+			OwnedCarTrans car = UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
+			int cashTotal = (int)(personaEntity.getCash() + car.getCustomCar().getResalePrice());
+			personaEntity.setCash(Math.max(0, Math.min(maxCash, cashTotal)));
 			personaDao.update(personaEntity);
 		}
 		

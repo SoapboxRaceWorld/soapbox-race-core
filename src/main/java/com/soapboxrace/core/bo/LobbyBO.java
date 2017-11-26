@@ -1,10 +1,7 @@
 package com.soapboxrace.core.bo;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -138,7 +135,7 @@ public class LobbyBO {
 	private boolean isPersonaInside(Long personaId, List<LobbyEntrantEntity> lobbyEntrants) {
 		for (LobbyEntrantEntity lobbyEntrantEntity : lobbyEntrants) {
 			Long entrantPersonaId = lobbyEntrantEntity.getPersona().getPersonaId();
-			if (entrantPersonaId == personaId) {
+			if (Objects.equals(entrantPersonaId, personaId)) {
 				return true;
 			}
 		}
@@ -211,7 +208,7 @@ public class LobbyBO {
 	private void sendJoinMsg(Long personaId, List<LobbyEntrantEntity> lobbyEntrants) {
 		for (LobbyEntrantEntity lobbyEntrantEntity : lobbyEntrants) {
 			LobbyEntrantAdded lobbyEntrantAdded = new LobbyEntrantAdded();
-			if (personaId != lobbyEntrantEntity.getPersona().getPersonaId()) {
+			if (!Objects.equals(personaId, lobbyEntrantEntity.getPersona().getPersonaId())) {
 				lobbyEntrantAdded.setHeat(1);
 				lobbyEntrantAdded.setLevel(lobbyEntrantEntity.getPersona().getLevel());
 				lobbyEntrantAdded.setPersonaId(personaId);
@@ -233,7 +230,7 @@ public class LobbyBO {
 		List<LobbyEntrantEntity> listLobbyEntrantEntity = lobbyEntity.getEntrants();
 		for(LobbyEntrantEntity entity : listLobbyEntrantEntity) {
 			LobbyEntrantRemoved lobbyEntrantRemoved = new LobbyEntrantRemoved();
-			if(entity.getPersona().getPersonaId() != personaId) {
+			if(!Objects.equals(entity.getPersona().getPersonaId(), personaId)) {
 				lobbyEntrantRemoved.setPersonaId(personaId);
 				lobbyEntrantRemoved.setLobbyId(lobbyId);
 				XmppLobby xmppLobby = new XmppLobby(entity.getPersona().getPersonaId());

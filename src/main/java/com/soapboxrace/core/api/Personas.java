@@ -166,7 +166,7 @@ public class Personas {
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 		for (CarSlotEntity carSlotEntity : personasCar) {
 			String ownedCarTransXml = carSlotEntity.getOwnedCarTrans();
-			OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
+			OwnedCarTrans ownedCarTrans = UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
 			ownedCarTrans.setId(carSlotEntity.getId());
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 		}
@@ -244,7 +244,7 @@ public class Personas {
 	public String carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber, @HeaderParam("securityToken") String securityToken) {
 		sessionBO.verifyPersona(securityToken, personaId);
 
-		if (basketBO.sellCar(personaId, serialNumber)) {
+		if (basketBO.sellCar(securityToken, personaId, serialNumber)) {
 			OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
 			return MarshalXML.marshal(ownedCarTrans);
 		}
@@ -260,7 +260,7 @@ public class Personas {
 		List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
 		for (CarSlotEntity carSlotEntity : personasCar) {
 			String ownedCarTransXml = carSlotEntity.getOwnedCarTrans();
-			OwnedCarTrans ownedCarTrans = (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
+			OwnedCarTrans ownedCarTrans = UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
 			ownedCarTrans.setId(carSlotEntity.getId());
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 		}

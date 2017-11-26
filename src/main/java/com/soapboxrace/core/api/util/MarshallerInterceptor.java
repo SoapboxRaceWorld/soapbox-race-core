@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -43,11 +44,13 @@ public class MarshallerInterceptor implements MessageBodyWriter<Object> {
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-			for (Annotation annotation : annotations) {
-				if (annotation instanceof XsiSchemaLocation) {
-					XsiSchemaLocation schemaAnnotation = (XsiSchemaLocation) annotation;
-					String schemaLocation = schemaAnnotation.schemaLocation();
-					jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
+			if (annotations != null) {
+				for (Annotation annotation : annotations) {
+					if (annotation instanceof XsiSchemaLocation) {
+						XsiSchemaLocation schemaAnnotation = (XsiSchemaLocation) annotation;
+						String schemaLocation = schemaAnnotation.schemaLocation();
+						jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
+					}
 				}
 			}
 			XmlType xmlTypeAnnotation = object.getClass().getAnnotation(XmlType.class);

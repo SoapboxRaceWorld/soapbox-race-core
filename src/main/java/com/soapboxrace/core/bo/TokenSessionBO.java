@@ -4,7 +4,9 @@ import java.util.Date;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.core.Context;
 
 import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.dao.TokenSessionDAO;
@@ -16,7 +18,6 @@ import com.soapboxrace.jaxb.login.LoginStatusVO;
 @Stateless
 public class TokenSessionBO
 {
-
     @EJB
     private TokenSessionDAO tokenDAO;
 
@@ -92,7 +93,7 @@ public class TokenSessionBO
         return date;
     }
 
-    public LoginStatusVO login(String email, String password)
+    public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest)
     {
         LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
         if (email != null && !email.isEmpty() && password != null && !password.isEmpty())
@@ -100,16 +101,18 @@ public class TokenSessionBO
             UserEntity userEntity = userDAO.findByEmail(email);
             if (userEntity != null)
             {
-                if (userEntity.isBanned())
+                if (password.equals(userEntity.getPassword()))
                 {
-                    loginStatusVO.setDescription("BANNED ACCOUNT");
-                    return loginStatusVO;
-                } else if (password.equals(userEntity.getPassword()))
-                {
+                    if (userEntity.getHwid() == null || userEntity.getHwid().trim().isEmpty()) {
+                        userEntity.setHwid(httpRequest.getHeader("X-HWID"));
+                        userDAO.update(userEntity);
+                    }
+
                     Long userId = userEntity.getId();
                     deleteByUserId(userId);
                     String randomUUID = createToken(userId);
                     loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
+
                     return loginStatusVO;
                 }
             }
@@ -161,13 +164,16 @@ public class TokenSessionBO
 
     public boolean isPremium(String securityToken)
     {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
-        return tokenSessionEntity.isPremium();
+        return tokenDAO.findById(securityToken).isPremium();
     }
 
     public boolean isAdmin(String securityToken)
     {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
-        return userDAO.findById(tokenSessionEntity.getUserId()).isAdmin();
+        return getUser(securityToken).isAdmin();
+    }
+
+    public UserEntity getUser(String securityToken)
+    {
+        return userDAO.findById(tokenDAO.findById(securityToken).getUserId());
     }
 }
