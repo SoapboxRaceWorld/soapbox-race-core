@@ -116,6 +116,16 @@ public class ParameterBO {
 		return 10_000;
 	}
 
+	public boolean useForwardedFor()
+	{
+		return Boolean.valueOf(getParameter("USE_FORWARDED_FOR"));
+	}
+	
+	public boolean googleLoadBalancing()
+	{
+		return Boolean.valueOf(getParameter("GOOGLE_LB_ENABLED"));
+	}
+
 	/**
 	 * minimum TE time in MS
 	 * @return

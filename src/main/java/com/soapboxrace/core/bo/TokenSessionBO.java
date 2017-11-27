@@ -23,6 +23,9 @@ public class TokenSessionBO
 
     @EJB
     private UserDAO userDAO;
+    
+    @EJB
+    private ParameterBO parameterBO;
 
     public boolean verifyToken(Long userId, String securityToken)
     {
@@ -109,7 +112,13 @@ public class TokenSessionBO
                     }
 
                     if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty()) {
-                        userEntity.setIpAddress(httpRequest.getRemoteAddr());
+                        String forwardedFor;
+                        if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.useForwardedFor()) {
+                            userEntity.setIpAddress(parameterBO.googleLoadBalancing() ? forwardedFor.split(",")[1] : forwardedFor);
+                        } else {
+                            userEntity.setIpAddress(httpRequest.getRemoteAddr());
+                        }
+//                        userEntity.setIpAddress(httpRequest.getHea);
                         userDAO.update(userEntity);
                     }
 
