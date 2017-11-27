@@ -114,7 +114,7 @@ public class TokenSessionBO
                     if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty()) {
                         String forwardedFor;
                         if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.useForwardedFor()) {
-                            userEntity.setIpAddress(parameterBO.googleLoadBalancing() ? forwardedFor.split(",")[1] : forwardedFor);
+                            userEntity.setIpAddress(parameterBO.googleLoadBalancing() ? forwardedFor.split(",")[0] : forwardedFor);
                         } else {
                             userEntity.setIpAddress(httpRequest.getRemoteAddr());
                         }
