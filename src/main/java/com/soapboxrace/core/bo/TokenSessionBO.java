@@ -112,7 +112,7 @@ public class TokenSessionBO
                     deleteByUserId(userId);
                     String randomUUID = createToken(userId);
                     loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
-                    loginStatusVO.setDescription("Login OK!");
+                    loginStatusVO.setDescription("");
                     
                     return loginStatusVO;
                 }
