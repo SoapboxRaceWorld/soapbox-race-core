@@ -108,6 +108,11 @@ public class TokenSessionBO
                         userDAO.update(userEntity);
                     }
 
+                    if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty()) {
+                        userEntity.setIpAddress(httpRequest.getRemoteAddr());
+                        userDAO.update(userEntity);
+                    }
+
                     Long userId = userEntity.getId();
                     deleteByUserId(userId);
                     String randomUUID = createToken(userId);
