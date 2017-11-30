@@ -44,10 +44,9 @@ public class LaunchFilter implements ContainerRequestFilter {
 			return;
 		}
 
-		System.out.println(sr.getParameterMap());
 		BanEntity banEntity = authenticationBO.checkNonUserBan(hwid, sr.getRemoteAddr(), sr.getParameter("email"));
 
-		if (banEntity != null && banEntity.stillApplies())
+		if (banEntity != null)
 		{
 			LoginStatusVO loginStatusVO = new BanUtil(banEntity).invoke();
 
@@ -72,7 +71,7 @@ public class LaunchFilter implements ContainerRequestFilter {
 			LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
 			LoginStatusVO.Ban ban = new LoginStatusVO.Ban();
 			ban.setReason(banEntity.getReason());
-			ban.setExpires(banEndFormatter.format(banEntity.getEndsAt()));
+			ban.setExpires(banEntity.getEndsAt() == null ? null : banEndFormatter.format(banEntity.getEndsAt()));
 			
 			loginStatusVO.setBan(ban);
 //				banDesc += " | Reason: " + banEntity.getReason().trim();

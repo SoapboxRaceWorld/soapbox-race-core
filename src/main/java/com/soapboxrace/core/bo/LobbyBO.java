@@ -275,6 +275,7 @@ public class LobbyBO {
 			int i = 0;
 			byte numOfRacers = (byte) entrants.size();
 			EventSessionEntity eventDataEntity = new EventSessionEntity();
+			eventDataEntity.setStarted(System.currentTimeMillis());
 			eventDataEntity.setEvent(lobbyEntity.getEvent());
 			eventSessionDao.insert(eventDataEntity);
 			for (LobbyEntrantEntity lobbyEntrantEntity : entrants) {

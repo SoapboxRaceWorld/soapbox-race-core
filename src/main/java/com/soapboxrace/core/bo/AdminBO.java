@@ -9,6 +9,7 @@ import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
+import com.soapboxrace.core.xmpp.XmppChat;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -45,7 +46,7 @@ public class AdminBO
                     return;
                 }
                 
-                sendBan(personaEntity, commandInfo.type, commandInfo.timeEnd, commandInfo.reason);
+                sendBan(personaId, personaEntity, commandInfo.type, commandInfo.timeEnd, commandInfo.reason);
                 break;
             case KICK:
                 sendKick(personaEntity.getUser().getId(), personaEntity.getPersonaId());
@@ -55,38 +56,53 @@ public class AdminBO
         }
     }
 
-    private void sendBan(PersonaEntity personaEntity, String type, LocalDateTime endsOn, String reason)
+    private void sendBan(Long actor, PersonaEntity personaEntity, String type, LocalDateTime endsOn, String reason)
     {
         UserEntity userEntity = personaEntity.getUser();
         BanEntity banEntity = new BanEntity();
         banEntity.setUserEntity(userEntity);
         banEntity.setEndsAt(endsOn);
         banEntity.setReason(reason);
+        
+        boolean doBan = true;
+        String failReason = "";
 
         switch (type.toUpperCase())
         {
             case "HWID":
                 banEntity.setType(BanEntity.BanType.HWID_BAN);
                 banEntity.setData(userEntity.getHwid());
+                failReason = "This HWID is already banned.";
+                doBan = banDAO.findByHWID(userEntity.getHwid()) == null;
                 break;
             case "IP":
                 banEntity.setType(BanEntity.BanType.IP_BAN);
                 banEntity.setData(userEntity.getIpAddress());
+                failReason = "This IP is already banned.";
+                doBan = banDAO.findByIp(userEntity.getIpAddress()) == null;
                 break;
             case "EMAIL":
                 banEntity.setType(BanEntity.BanType.EMAIL_BAN);
                 banEntity.setData(userEntity.getEmail());
+                failReason = "This email is already banned.";
+                doBan = banDAO.findByEmail(userEntity.getEmail()) == null;
                 break;
             case "ACCOUNT":
                 banEntity.setType(BanEntity.BanType.USER_BAN);
+                failReason = "This account is already banned.";
+                doBan = banDAO.findByUser(userEntity) == null;
                 break;
         }
 
-        banDAO.insert(banEntity);
+        if (doBan) {
+            banDAO.insert(banEntity);
 
-//        userEntity.setBanned(true);
-        userDao.update(userEntity);
-        sendKick(userEntity.getId(), personaEntity.getPersonaId());
+            sendKick(userEntity.getId(), personaEntity.getPersonaId());
+
+            OpenFireSoapBoxCli.getInstance().send(XmppChat.createSystemMessage("Ban successful!"), actor);
+        } else {
+            OpenFireSoapBoxCli.getInstance().send(XmppChat.createSystemMessage(failReason), actor);
+        }
     }
 
     private void sendKick(Long userId, Long personaId)
