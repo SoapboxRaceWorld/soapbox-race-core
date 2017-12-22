@@ -44,6 +44,18 @@ public class ParameterBO {
 		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : "sbrw") : "sbrw";
 	}
 
+	public String getCncToken() {
+		String property = System.getProperty("sharding.cncToken");
+
+		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
+	}
+
+	public String getShardToken() {
+		String property = System.getProperty("sharding.clientToken");
+
+		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
+	}
+
 	public int getMaxCarSlotsFree() {
 		String parameter = getParameter("MAX_CAR_SLOTS_FREE");
 		if (parameter != null) {

@@ -6,7 +6,8 @@ import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.inject.InjectorFactory;
 import com.soapboxrace.core.xmpp.onlineusers.ShardedOnlineUsersReporter;
 import com.soapboxrace.core.xmpp.onlineusers.StandardOnlineUsersReporter;
-import com.soapboxrace.core.xmpp.shard.ShardedHandshake;
+import com.soapboxrace.core.xmpp.shard.CNCHandshake;
+import com.soapboxrace.core.xmpp.shard.ClientHandshake;
 import com.soapboxrace.core.xmpp.standard.Handshake;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
@@ -52,9 +53,14 @@ public class OpenFireSoapBoxCli
         if (parameterBO.isShardingEnabled())
         {
             // We have specific code for sharding
+            if (parameterBO.isShardingMaster())
             {
-                System.out.println("[XMPP-DI] Using ShardedHandshake");
-                handshakeClass = ShardedHandshake.class;
+                System.out.println("[XMPP-DI] Using CNCHandshake");
+                handshakeClass = CNCHandshake.class; // Master shard handshake
+            } else
+            {
+                System.out.println("[XMPP-DI] Using ClientHandshake");
+                handshakeClass = ClientHandshake.class; // Client shard handshake
             }
         } else
         {
