@@ -16,6 +16,9 @@ import javax.persistence.Table;
 		@NamedQuery(name = "VinylProductEntity.findByProductId", //
 				query = "SELECT obj FROM VinylProductEntity obj " //
 						+ "WHERE obj.productId = :productId"), //
+		@NamedQuery(name = "VinylProductEntity.findByHash",
+				query =  "SELECT obj FROM VinylProductEntity obj " //
+						+ "WHERE obj.hash = :hash"),
 		@NamedQuery(name = "VinylProductEntity.findByCategoryLevelEnabled", //
 				query = "SELECT obj FROM VinylProductEntity obj " //
 						+ "WHERE obj.category = :category " //

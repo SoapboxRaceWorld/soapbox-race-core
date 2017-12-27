@@ -1,6 +1,7 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.InventoryBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.xmpp.XMPP_PowerupActivatedType;
@@ -15,6 +16,9 @@ public class Powerups {
 
 	@EJB
 	private TokenSessionBO tokenBO;
+	
+	@EJB
+	private InventoryBO inventoryBO;
 
 	private OpenFireSoapBoxCli openFireSoapBoxCli = OpenFireSoapBoxCli.getInstance();
 
@@ -24,11 +28,17 @@ public class Powerups {
 	@Produces(MediaType.APPLICATION_XML)
 	public String activated(@HeaderParam("securityToken") String securityToken, @PathParam(value = "powerupHash") Integer powerupHash, @QueryParam("targetId") Long targetId,
 			@QueryParam("receivers") String receivers, @QueryParam("eventSessionId") Long eventSessionId) {
+		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+		
+		if (!inventoryBO.hasItem(activePersonaId, powerupHash))
+		{
+			return "";
+		}
+		
 		XMPP_ResponseTypePowerupActivated powerupActivatedResponse = new XMPP_ResponseTypePowerupActivated();
 		XMPP_PowerupActivatedType powerupActivated = new XMPP_PowerupActivatedType();
 		powerupActivated.setId(Long.valueOf(powerupHash));
 		powerupActivated.setTargetPersonaId(targetId);
-		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 		powerupActivated.setPersonaId(activePersonaId);
 		powerupActivatedResponse.setPowerupActivated(powerupActivated);
 		for (String receiver : receivers.split("-")) {
@@ -37,6 +47,9 @@ public class Powerups {
 				openFireSoapBoxCli.send(powerupActivatedResponse, receiverPersonaId);
 			}
 		}
+		
+		inventoryBO.decrementUsage(activePersonaId, powerupHash);
+		
 		return "";
 	}
 }

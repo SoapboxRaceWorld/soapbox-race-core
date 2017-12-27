@@ -450,5 +450,4 @@ public class CustomVinylTrans {
     public void setVar4(int value) {
         this.var4 = value;
     }
-
 }

@@ -16,6 +16,7 @@ import com.soapboxrace.jaxb.login.LoginStatusVO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Stateless
@@ -50,6 +51,8 @@ public class UserBO {
 		UserEntity userEntity = new UserEntity();
 		userEntity.setEmail(email);
 		userEntity.setPassword(passwd);
+		userEntity.setCreated(LocalDateTime.now());
+		userEntity.setLastLogin(LocalDateTime.now());
 		userDao.insert(userEntity);
 		return userEntity;
 	}

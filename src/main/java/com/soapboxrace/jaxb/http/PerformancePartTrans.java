@@ -51,4 +51,9 @@ public class PerformancePartTrans {
         this.performancePartAttribHash = value;
     }
 
+    @Override
+    public String toString()
+    {
+        return Integer.toString(performancePartAttribHash);
+    }
 }

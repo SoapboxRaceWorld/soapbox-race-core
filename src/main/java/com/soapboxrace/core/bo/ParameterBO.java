@@ -35,25 +35,28 @@ public class ParameterBO {
 	public boolean isShardingMaster() {
 		String property = System.getProperty("sharding.master");
 
-		return isShardingEnabled() && property != null && Boolean.parseBoolean(property.trim());
+		return property != null && Boolean.parseBoolean(property);
 	}
 
-	public String getShardId() {
-		String property = System.getProperty("sharding.id");
-
-		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : "sbrw") : "sbrw";
-	}
-
-	public String getCncToken() {
-		String property = System.getProperty("sharding.cncToken");
+	public String getMultiXmppHost() {
+		String property = System.getProperty("sharding.multixmpp.host");
 
 		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
 	}
 
-	public String getShardToken() {
-		String property = System.getProperty("sharding.clientToken");
+	public String getMultiXmppToken() {
+		String property = System.getProperty("sharding.multixmpp.token");
 
 		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
+	}
+
+	public int getMultiXmppPort() {
+		String property = System.getProperty("sharding.multixmpp.port");
+
+		if (!isShardingEnabled())
+			return -1;
+		return property != null && !property.trim().isEmpty() ? Integer.parseInt(property) : -1;
+//		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
 	}
 
 	public int getMaxCarSlotsFree() {
@@ -78,6 +81,30 @@ public class ParameterBO {
 			return Integer.valueOf(parameter);
 		}
 		return 350_000;
+	}
+
+	public int getStartingInventoryPerfSlots() {
+		String parameter = getParameter("STARTING_INVENTORY_PERF_SLOTS");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 100;
+	}
+
+	public int getStartingInventorySkillSlots() {
+		String parameter = getParameter("STARTING_INVENTORY_SKILL_SLOTS");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 150;
+	}
+
+	public int getStartingInventoryVisualSlots() {
+		String parameter = getParameter("STARTING_INVENTORY_VISUAL_SLOTS");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 200;
 	}
 
 	/**

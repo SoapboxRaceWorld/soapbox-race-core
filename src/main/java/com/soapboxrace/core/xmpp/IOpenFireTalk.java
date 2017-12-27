@@ -4,6 +4,8 @@ import java.net.Socket;
 
 public interface IOpenFireTalk
 {
+    void init();
+    
     String read();
 
     void write(String msg);

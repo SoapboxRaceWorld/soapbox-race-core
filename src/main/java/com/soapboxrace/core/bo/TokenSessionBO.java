@@ -1,5 +1,6 @@
 package com.soapboxrace.core.bo;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.ejb.EJB;
@@ -23,7 +24,7 @@ public class TokenSessionBO
 
     @EJB
     private UserDAO userDAO;
-    
+
     @EJB
     private ParameterBO parameterBO;
 
@@ -106,28 +107,32 @@ public class TokenSessionBO
             {
                 if (password.equals(userEntity.getPassword()))
                 {
-                    if (userEntity.getHwid() == null || userEntity.getHwid().trim().isEmpty()) {
+                    if (userEntity.getHwid() == null || userEntity.getHwid().trim().isEmpty())
+                    {
                         userEntity.setHwid(httpRequest.getHeader("X-HWID"));
-                        userDAO.update(userEntity);
                     }
 
-                    if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty()) {
+                    if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty())
+                    {
                         String forwardedFor;
-                        if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.useForwardedFor()) {
+                        if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.useForwardedFor())
+                        {
                             userEntity.setIpAddress(parameterBO.googleLoadBalancing() ? forwardedFor.split(",")[0] : forwardedFor);
-                        } else {
+                        } else
+                        {
                             userEntity.setIpAddress(httpRequest.getRemoteAddr());
                         }
 //                        userEntity.setIpAddress(httpRequest.getHea);
-                        userDAO.update(userEntity);
                     }
 
+                    userEntity.setLastLogin(LocalDateTime.now());
+                    userDAO.update(userEntity);
                     Long userId = userEntity.getId();
                     deleteByUserId(userId);
                     String randomUUID = createToken(userId);
                     loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
                     loginStatusVO.setDescription("");
-                    
+
                     return loginStatusVO;
                 }
             }

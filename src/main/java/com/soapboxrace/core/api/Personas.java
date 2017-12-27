@@ -15,13 +15,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.BasketBO;
-import com.soapboxrace.core.bo.CommerceBO;
-import com.soapboxrace.core.bo.ParameterBO;
-import com.soapboxrace.core.bo.PersonaBO;
-import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfCustomPaintTrans;
 import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
@@ -65,6 +63,9 @@ public class Personas {
 
 	@EJB
 	private ParameterBO parameterBO;
+	
+	@EJB
+	private InventoryBO inventoryBO;
 
 	@POST
 	@Secured
@@ -87,21 +88,10 @@ public class Personas {
 		ArrayOfWalletTrans arrayOfWalletTrans = new ArrayOfWalletTrans();
 		arrayOfWalletTrans.getWalletTrans().add(walletTrans);
 
-		CommerceSessionTrans commerceSessionTrans = (CommerceSessionTrans) UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
+		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
+		System.out.println(MarshalXML.marshal(commerceSessionTrans));
 		commerceSessionTrans.getUpdatedCar().setDurability(100);
 		
-		boolean premium = sessionBO.isPremium(securityToken);
-		if (parameterBO.getPremiumCarChangerProtection() && !premium) {
-			CustomCarTrans customCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
-			if (!customCar.getPerformanceParts().getPerformancePartTrans().isEmpty()) {
-				customCar.setPerformanceParts(new ArrayOfPerformancePartTrans());
-				customCar.setVinyls(new ArrayOfCustomVinylTrans());
-				customCar.setSkillModParts(new ArrayOfSkillModPartTrans());
-				customCar.setPaints(new ArrayOfCustomPaintTrans());
-				customCar.setVisualParts(new ArrayOfVisualPartTrans());
-			}
-		}
-
 		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
 		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
 		commerceSessionResultTrans.setStatus(commerceBO.updateCar(commerceSessionTrans, personaEntity));
@@ -138,10 +128,12 @@ public class Personas {
 
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 
-		BasketTrans basketTrans = (BasketTrans) UnmarshalXML.unMarshal(basketXml, BasketTrans.class);
+		BasketTrans basketTrans = UnmarshalXML.unMarshal(basketXml, BasketTrans.class);
 		String productId = basketTrans.getItems().getBasketItemTrans().get(0).getProductId();
-		if("-1".equals(productId) || "SRV-GARAGESLOT".equals(productId) || "SRV-POWERUP".equals(productId) || "SRV-THREVIVE".equals(productId)) {
+		if("-1".equals(productId) || "SRV-GARAGESLOT".equals(productId) || "SRV-THREVIVE".equals(productId)) {
 			commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
+		} else if (productId.contains("SRV-POWERUP")) {
+			commerceResultTrans.setStatus(basketBO.buyPowerups(productId, personaEntity));
 		} else if("SRV-REPAIR".equals(productId)) {
 			commerceResultTrans.setStatus(basketBO.repairCar(productId, personaEntity));
 		} else { // Car
@@ -204,23 +196,25 @@ public class Personas {
 	@Secured
 	@Path("/inventory/objects")
 	@Produces(MediaType.APPLICATION_XML)
-	public InventoryTrans inventoryObjects() {
-		InventoryTrans inventoryTrans = new InventoryTrans();
-		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("nosshot", -1681514783, 1842996427L, "0x9bc61ee1"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("runflattires", -537557654, 2876729160L, "0xdff5856a"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("instantcooldown", -1692359144, 2876729162L, "0x9b20a618"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("shield", -364944936, 2876729163L, "0xea3f61d8"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("slingshot", 2236629, 2876729164L, "0x2220d5"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("ready", 957701799, 2876729165L, "0x39155ea7"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("juggernaut", 1805681994, 2876729166L, "0x6ba0854a"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("emergencyevade", -611661916, 2876729167L, "0xdb8ac7a4"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("team_emergencyevade", -1564932069, 2876729168L, "0xa2b9081b"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("onemorelap", 1627606782, 2876729170L, "0x61034efe"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("team_slingshot", 1113720384, 2876729171L, "0x42620640"));
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("trafficmagnet", 125509666, 2880783203L, "0x77b2022"));
-		inventoryTrans.setInventoryItems(arrayOfInventoryItemTrans);
-		return inventoryTrans;
+	public InventoryTrans inventoryObjects(@HeaderParam("securityToken") String securityToken) {
+		long personaId = sessionBO.getActivePersonaId(securityToken);
+		return inventoryBO.getInventory(personaId);
+//		InventoryTrans inventoryTrans = new InventoryTrans();
+//		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("nosshot", -1681514783, 1842996427L, "0x9bc61ee1"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("runflattires", -537557654, 2876729160L, "0xdff5856a"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("instantcooldown", -1692359144, 2876729162L, "0x9b20a618"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("shield", -364944936, 2876729163L, "0xea3f61d8"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("slingshot", 2236629, 2876729164L, "0x2220d5"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("ready", 957701799, 2876729165L, "0x39155ea7"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("juggernaut", 1805681994, 2876729166L, "0x6ba0854a"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("emergencyevade", -611661916, 2876729167L, "0xdb8ac7a4"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("team_emergencyevade", -1564932069, 2876729168L, "0xa2b9081b"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("onemorelap", 1627606782, 2876729170L, "0x61034efe"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("team_slingshot", 1113720384, 2876729171L, "0x42620640"));
+//		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("trafficmagnet", 125509666, 2880783203L, "0x77b2022"));
+//		inventoryTrans.setInventoryItems(arrayOfInventoryItemTrans);
+//		return inventoryTrans;
 	}
 
 	private InventoryItemTrans getPowerUpInventory(String tag, int hash, long invId, String strHash) {

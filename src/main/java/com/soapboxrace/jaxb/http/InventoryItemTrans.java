@@ -58,7 +58,7 @@ public class InventoryItemTrans {
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar expirationDate;
     @XmlElement(name = "Hash")
-    protected int hash;
+    protected long hash;
     @XmlElement(name = "InventoryId")
     protected long inventoryId;
     @XmlElement(name = "ProductId")
@@ -126,7 +126,7 @@ public class InventoryItemTrans {
      * Gets the value of the hash property.
      * 
      */
-    public int getHash() {
+    public long getHash() {
         return hash;
     }
 
@@ -134,7 +134,7 @@ public class InventoryItemTrans {
      * Sets the value of the hash property.
      * 
      */
-    public void setHash(int value) {
+    public void setHash(long value) {
         this.hash = value;
     }
 

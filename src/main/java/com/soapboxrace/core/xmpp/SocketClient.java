@@ -18,6 +18,13 @@ public class SocketClient
         int tries = 0;
         while (true)
         {
+            if (tries >= 20)
+            {
+                System.err.println("Failed to connect to XMPP host");
+                System.exit(1);
+                break;
+            }
+
             try
             {
                 tries++;

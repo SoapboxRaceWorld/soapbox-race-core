@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "PERSONA")
@@ -38,6 +39,9 @@ public class PersonaEntity {
 	@ManyToOne
 	@JoinColumn(name = "USERID", referencedColumnName = "ID")
 	private UserEntity user;
+	
+	@Column(name = "created")
+	private LocalDateTime created;
 
 	public double getBoost() {
 		return boost;
@@ -151,4 +155,13 @@ public class PersonaEntity {
 		this.curCarIndex = curCarIndex;
 	}
 
+	public LocalDateTime getCreated()
+	{
+		return created;
+	}
+
+	public void setCreated(LocalDateTime created)
+	{
+		this.created = created;
+	}
 }

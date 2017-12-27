@@ -48,4 +48,11 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
 		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 
+	public ProductEntity findByHash(long hash) {
+		TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByHash", ProductEntity.class);
+		query.setParameter("hash", hash);
+
+		List<ProductEntity> resultList = query.getResultList();
+		return !resultList.isEmpty() ? resultList.get(0) : null;
+	}
 }

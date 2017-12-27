@@ -137,7 +137,7 @@ public class EventsBO extends AccoladesFunc {
 	
 	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, TreasureHuntEntity treasureHuntEntity) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, level, true));
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, level, true, personaDao.findById(treasureHuntEntity.getPersonaId())));
 		
 		ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();
 		LuckyDrawBox luckyDrawBox = new LuckyDrawBox();

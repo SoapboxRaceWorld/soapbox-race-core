@@ -11,9 +11,9 @@ import java.net.Socket;
 
 public abstract class BaseOpenFireTalk implements IOpenFireTalk
 {
-    private Socket socket;
-    private BufferedReader reader;
-    private BufferedWriter writer;
+    protected Socket socket;
+    protected BufferedReader reader;
+    protected BufferedWriter writer;
 
     public BaseOpenFireTalk(Socket socket)
     {
@@ -29,6 +29,12 @@ public abstract class BaseOpenFireTalk implements IOpenFireTalk
     {
         this.socket = socket;
         setReaderWriter();
+    }
+
+    @Override
+    public void init()
+    {
+        //
     }
 
     @Override
@@ -50,12 +56,6 @@ public abstract class BaseOpenFireTalk implements IOpenFireTalk
         System.out.println("S->C [" + msg + "]");
         if (msg != null && !msg.isEmpty())
         {
-            if (msg.contains("<ping xmlns=\"urn:xmpp:ping\"/>"))
-            {
-                XMPP_IQPingType openfirePing = UnmarshalXML.unMarshal(msg, XMPP_IQPingType.class);
-                write(MarshalXML.marshal(new XMPP_IQPongType(openfirePing.getId())));
-            }
-            
             this.handleMessage(msg);
         }
         return msg;
@@ -76,7 +76,7 @@ public abstract class BaseOpenFireTalk implements IOpenFireTalk
         }
     }
 
-    private void setReaderWriter()
+    protected void setReaderWriter()
     {
         try
         {
