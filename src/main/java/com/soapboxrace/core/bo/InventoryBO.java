@@ -36,12 +36,15 @@ public class InventoryBO
 
         if (personaEntity == null)
         {
+            System.out.println("PERSONA IS NULL?!");
             return new InventoryTrans();
         }
         
         if (inventoryEntity == null)
         {
+            System.out.println("Inventory is null");
             inventoryEntity = createInventory(personaEntity);
+            System.out.println("Inventory = " + inventoryEntity);
         }
         
         inventoryTrans.setPerformancePartsCapacity(inventoryEntity.getPerformancePartsCapacity());
@@ -49,6 +52,9 @@ public class InventoryBO
         inventoryTrans.setVisualPartsCapacity(inventoryEntity.getVisualPartsCapacity());
 
         ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
+        
+        System.out.println(inventoryEntity);
+        System.out.println(inventoryEntity.getItems());
         
         for (InventoryItemEntity inventoryItemEntity : inventoryEntity.getItems())
         {
@@ -115,9 +121,9 @@ public class InventoryBO
     {
         InventoryEntity inventoryEntity = new InventoryEntity();
         inventoryEntity.setPersona(personaEntity);
+        inventoryEntity.setSkillModPartsCapacity(parameterBO.getStartingInventorySkillSlots());
         inventoryEntity.setPerformancePartsCapacity(parameterBO.getStartingInventoryPerfSlots());
         inventoryEntity.setVisualPartsCapacity(parameterBO.getStartingInventoryVisualSlots());
-        inventoryEntity.setSkillModPartsCapacity(parameterBO.getStartingInventorySkillSlots());
         inventoryDAO.insert(inventoryEntity);
 
 		inventoryItemDAO.insert(getPowerUpInventory("nosshot", -1681514783, "0x9bc61ee1", inventoryEntity, personaEntity));
@@ -137,7 +143,7 @@ public class InventoryBO
 
     private InventoryItemEntity getPowerUpInventory(String tag, int hash, String strHash, InventoryEntity inventoryEntity, PersonaEntity personaEntity) {
         InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-        inventoryItemEntity.setEntitlementTag("nosshot");
+        inventoryItemEntity.setEntitlementTag(tag);
         inventoryItemEntity.setHash(hash);
         inventoryItemEntity.setProductId("DO NOT USE ME");
         inventoryItemEntity.setRemainingUseCount(250);

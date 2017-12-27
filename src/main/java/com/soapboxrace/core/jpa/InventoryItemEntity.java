@@ -15,11 +15,11 @@ public class InventoryItemEntity {
     private int id;
     
     @ManyToOne
-    @JoinColumn(name = "inventoryId", referencedColumnName = "id")
+    @JoinColumn(name = "inventoryId", referencedColumnName = "ID")
     private InventoryEntity inventory;
 
     @ManyToOne
-    @JoinColumn(name = "personaId", referencedColumnName = "id")
+    @JoinColumn(name = "personaId")
     private PersonaEntity persona;
 
     private String entitlementTag;

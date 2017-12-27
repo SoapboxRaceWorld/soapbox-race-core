@@ -1,6 +1,7 @@
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ public class InventoryEntity {
     private int id;
     
     @OneToOne
-    @JoinColumn(name = "personaId", referencedColumnName = "ID")
+    @JoinColumn(name = "personaId")
     private PersonaEntity persona;
 
     private int performancePartsCapacity;
@@ -32,7 +33,7 @@ public class InventoryEntity {
     private int visualPartsUsedSlotCount;
 
     @OneToMany(mappedBy = "inventory", targetEntity = InventoryItemEntity.class)
-    private List<InventoryItemEntity> items;
+    private List<InventoryItemEntity> items = new ArrayList<>();
 
     public int getId() {
         return id;

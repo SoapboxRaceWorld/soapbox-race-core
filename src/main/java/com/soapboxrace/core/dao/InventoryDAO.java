@@ -25,11 +25,8 @@ public class InventoryDAO extends BaseDAO<InventoryEntity> {
     }
 
     public InventoryEntity findByPersonaId(Long personaId) {
-        InventoryEntity inventoryEntity = new InventoryEntity();
         PersonaEntity personaEntity = new PersonaEntity();
         personaEntity.setPersonaId(personaId);
-
-        inventoryEntity.setPersona(personaEntity);
 
         TypedQuery<InventoryEntity> query = entityManager.createNamedQuery("InventoryEntity.findByPersona", InventoryEntity.class);
         query.setParameter("persona", personaEntity);
