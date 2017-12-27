@@ -6,6 +6,8 @@ public class Message
     
     private String content;
 
+    private String token;
+    
     public String getAction()
     {
         return action;
@@ -24,5 +26,15 @@ public class Message
     public void setContent(String content)
     {
         this.content = content;
+    }
+
+    public String getToken()
+    {
+        return token;
+    }
+
+    public void setToken(String token)
+    {
+        this.token = token;
     }
 }

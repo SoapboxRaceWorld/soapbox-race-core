@@ -18,8 +18,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MultiServerTalk extends BaseOpenFireTalk
 {
     private final Session session;
+    
+    private final String token;
 
-    MultiServerTalk(Socket socket, Session session)
+    MultiServerTalk(Socket socket, Session session, String token)
     {
         super(new Socket());
 
@@ -28,6 +30,7 @@ public class MultiServerTalk extends BaseOpenFireTalk
         this.writer = null;
 
         this.session = session;
+        this.token = token;
     }
 
     @Override
@@ -106,6 +109,7 @@ public class MultiServerTalk extends BaseOpenFireTalk
 
         Message message = new Message();
         message.setAction("SEND_MESSAGE");
+        message.setToken(token);
         message.setContent(JSONUtils.serialize(smp));
 
         write(JSONUtils.serialize(message));
@@ -127,6 +131,7 @@ public class MultiServerTalk extends BaseOpenFireTalk
         Message message = new Message();
         message.setAction("SEND_MESSAGE");
         message.setContent(JSONUtils.serialize(smp));
+        message.setToken(token);
         
         write(JSONUtils.serialize(message));
         

@@ -55,15 +55,8 @@ public class MultiServerHandshake implements IHandshake
                     sessionSetLatch.countDown();
 
                     System.out.println("ONOPEN CALLED");
-                    try
-                    {
-                        session.addMessageHandler(mh);
-                        session.getBasicRemote().sendText(String.format("{\"action\":\"authenticate\",\"content\":\"%s\"}", parameterBO.getMultiXmppToken()));
+                    session.addMessageHandler(mh);
 //                        session.getBasicRemote().sendText("{\"action\":\"authenticate\",\"content\":\"HELLOYES\"}");
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
                 }
 
                 @Override
@@ -86,7 +79,7 @@ public class MultiServerHandshake implements IHandshake
             sessionSetLatch.await(10, TimeUnit.SECONDS);
             wsSession.get().removeMessageHandler(mh);
 
-            openFireTalk = new MultiServerTalk(null, wsSession.get());
+            openFireTalk = new MultiServerTalk(null, wsSession.get(), parameterBO.getMultiXmppToken());
             openFireTalk.startReader();
             ((MultiServerTalk) openFireTalk).startKeepalive();
             System.out.println("Ready!");
