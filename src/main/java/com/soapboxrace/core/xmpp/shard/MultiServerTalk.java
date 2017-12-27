@@ -150,6 +150,7 @@ public class MultiServerTalk extends BaseOpenFireTalk
                     Message message = new Message();
                     message.setAction("KEEP_ALIVE");
                     message.setContent("yep");
+                    message.setToken(token);
                     write(JSONUtils.serialize(message));
                     Thread.sleep(60000);
                 } catch (InterruptedException e)
