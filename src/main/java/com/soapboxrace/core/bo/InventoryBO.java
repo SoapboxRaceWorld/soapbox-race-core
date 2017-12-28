@@ -146,7 +146,7 @@ public class InventoryBO
         }
     }
     
-    InventoryEntity createInventory(PersonaEntity personaEntity)
+    public InventoryEntity createInventory(PersonaEntity personaEntity)
     {
         InventoryEntity inventoryEntity = new InventoryEntity();
         inventoryEntity.setPersona(personaEntity);
