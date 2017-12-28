@@ -95,7 +95,17 @@ public class InventoryBO
             return;
         }
         
-        InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(entitlementTag, personaEntity);
+        InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
+        InventoryItemEntity inventoryItemEntity = null;
+        
+        for (InventoryItemEntity item : inventoryEntity.getItems())
+        {
+            if (entitlementTag.equals(item.getEntitlementTag()))
+            {
+                inventoryItemEntity = item;
+                break;
+            }
+        }
         
         if (inventoryItemEntity != null)
         {
