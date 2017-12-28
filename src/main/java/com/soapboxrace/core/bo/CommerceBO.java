@@ -65,6 +65,37 @@ public class CommerceBO
                 currentCustomCar.getSkillModParts().getSkillModPartTrans(), updatedCustomCar.getSkillModParts().getSkillModPartTrans(),
                 SkillModPartTrans::getSkillModPartAttribHash);
 
+        // region Vinyls
+        {
+            for (ListDiffer.ProxyItem<CustomVinylTrans> addedVinyl : vinylsDiff.getAdded())
+            {
+                System.out.println(String.format("[Commerce] VINYL ADDED: %d", addedVinyl.getItem().getHash()));
+
+                VinylProductEntity vinylProductEntity = findVProduct(addedVinyl.getItem().getHash());
+
+                if (vinylProductEntity != null)
+                {
+                    System.out.println(String.format("[Commerce] Found %d in catalog - %s for %f IGC",
+                            addedVinyl.getItem().getHash(), vinylProductEntity.getProductId(), vinylProductEntity.getPrice()));
+                    purchaseCost += vinylProductEntity.getPrice();
+                } else
+                {
+                    System.out.println(String.format("[Commerce] Unknown vinyl: %d", addedVinyl.getItem().getHash()));
+                }
+            }
+
+            for (ListDiffer.ProxyItem<CustomVinylTrans> keptVinyl : vinylsDiff.getKept())
+            {
+                System.out.println(String.format("[Commerce] VINYL KEPT: %d", keptVinyl.getItem().getHash()));
+            }
+
+            for (ListDiffer.ProxyItem<CustomVinylTrans> removedPart : vinylsDiff.getRemoved())
+            {
+                System.out.println(String.format("[Commerce] VINYL REMOVED: %d", removedPart.getItem().getHash()));
+            }
+        }
+        // endregion
+
         // region Performance Parts
         {
             for (PerformancePartTrans performancePartTrans : currentCustomCar.getPerformanceParts().getPerformancePartTrans())
@@ -89,6 +120,19 @@ public class CommerceBO
 
                     inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
                     inventoryDAO.update(inventoryEntity);
+                } else
+                {
+                    ProductEntity productEntity = findProduct(performancePartTrans.getPerformancePartAttribHash());
+
+                    if (productEntity != null)
+                    {
+                        System.out.println(String.format("[Commerce] Found %d in catalog - %s for %f IGC",
+                                performancePartTrans.getPerformancePartAttribHash(), productEntity.getProductId(), productEntity.getPrice()));
+                        purchaseCost += productEntity.getPrice();
+                    } else
+                    {
+                        System.out.println(String.format("[Commerce] Unknown part: %d", performancePartTrans.getPerformancePartAttribHash()));
+                    }
                 }
             }
 
@@ -134,6 +178,19 @@ public class CommerceBO
 
                     inventoryEntity.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount() - 1);
                     inventoryDAO.update(inventoryEntity);
+                } else
+                {
+                    ProductEntity productEntity = findProduct(visualPartTrans.getPartHash());
+
+                    if (productEntity != null)
+                    {
+                        System.out.println(String.format("[Commerce] Found %d in catalog - %s for %f IGC",
+                                visualPartTrans.getPartHash(), productEntity.getProductId(), productEntity.getPrice()));
+                        purchaseCost += productEntity.getPrice();
+                    } else
+                    {
+                        System.out.println(String.format("[Commerce] Unknown part: %d", visualPartTrans.getPartHash()));
+                    }
                 }
             }
 
@@ -179,6 +236,19 @@ public class CommerceBO
 
                     inventoryEntity.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount() - 1);
                     inventoryDAO.update(inventoryEntity);
+                } else
+                {
+                    ProductEntity productEntity = findProduct(skillModPartTrans.getSkillModPartAttribHash());
+
+                    if (productEntity != null)
+                    {
+                        System.out.println(String.format("[Commerce] Found %d in catalog - %s for %f IGC",
+                                skillModPartTrans.getSkillModPartAttribHash(), productEntity.getProductId(), productEntity.getPrice()));
+                        purchaseCost += productEntity.getPrice();
+                    } else
+                    {
+                        System.out.println(String.format("[Commerce] Unknown part: %d", skillModPartTrans.getSkillModPartAttribHash()));
+                    }
                 }
             }
 
@@ -207,33 +277,15 @@ public class CommerceBO
 
         for (BasketItemTrans basketItemTrans : commerceSessionTrans.getBasket().getItems().getBasketItemTrans())
         {
-            if (basketItemTrans.getProductId().contains("SRV-VINYL"))
-            {
-                VinylProductEntity vinylProductEntity = vinylProductDao.findByProductId(basketItemTrans.getProductId());
-
-                if (vinylProductEntity != null)
-                {
-                    purchaseCost += vinylProductEntity.getPrice();
-                }
-            } else
+            if (basketItemTrans.getProductId().contains("SRV-PWHEEL") || basketItemTrans.getProductId().contains("SRV-PBODY"))
             {
                 ProductEntity productEntity = productDao.findByProductId(basketItemTrans.getProductId());
-                
+
                 if (productEntity != null)
                 {
                     purchaseCost += productEntity.getPrice();
                 }
             }
-
-//            if (basketItemTrans.getProductId().contains("SRV-PWHEEL") || basketItemTrans.getProductId().contains("SRV-PBODY"))
-//            {
-//                ProductEntity productEntity = productDao.findByProductId(basketItemTrans.getProductId());
-//
-//                if (productEntity != null)
-//                {
-//                    purchaseCost += productEntity.getPrice();
-//                }
-//            }
         }
 
         if (personaEntity.getCash() < purchaseCost)
