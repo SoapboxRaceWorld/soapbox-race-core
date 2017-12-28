@@ -2,6 +2,7 @@ package com.soapboxrace.core.dao;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,12 +18,12 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
         this.entityManager = entityManager;
     }
 
-    public InventoryItemEntity findByEntitlementTagAndPersonaId(String entitlementTag, long personaId)
+    public InventoryItemEntity findByEntitlementTagAndPersona(String entitlementTag, PersonaEntity personaEntity)
     {
         TypedQuery<InventoryItemEntity> query = entityManager.createQuery(
-                "SELECT obj FROM InventoryItemEntity obj WHERE obj.entitlementTag = :tag AND obj.persona.id = :personaId", InventoryItemEntity.class);
+                "SELECT obj FROM InventoryItemEntity obj WHERE obj.entitlementTag = :tag AND obj.persona = :persona", InventoryItemEntity.class);
         query.setParameter("tag", entitlementTag);
-        query.setParameter("personaId", personaId);
+        query.setParameter("persona", personaEntity);
 
         List<InventoryItemEntity> list = query.getResultList();
         

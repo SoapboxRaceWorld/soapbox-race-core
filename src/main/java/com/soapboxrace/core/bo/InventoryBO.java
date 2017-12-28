@@ -89,12 +89,13 @@ public class InventoryBO
     public void sellEntitlement(long personaId, String entitlementTag)
     {
         PersonaEntity personaEntity = personaDAO.findById(personaId);
-        InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersonaId(entitlementTag, personaId);
         
         if (personaEntity == null)
         {
             return;
         }
+        
+        InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(entitlementTag, personaEntity);
         
         if (inventoryItemEntity != null)
         {
