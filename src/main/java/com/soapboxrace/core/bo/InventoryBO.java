@@ -86,6 +86,35 @@ public class InventoryBO
         return inventoryTrans;
     }
     
+    public void sellEntitlement(long personaId, String entitlementTag)
+    {
+        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersonaId(entitlementTag, personaId);
+        
+        if (personaEntity == null)
+        {
+            return;
+        }
+        
+        if (inventoryItemEntity != null)
+        {
+            int newCash = (int) (personaEntity.getCash() + inventoryItemEntity.getResalePrice());
+            
+            if (newCash > 9999999)
+            {
+                newCash = 9999999;
+            } else if (newCash < 1)
+            {
+                newCash = 1;
+            }
+            
+            personaEntity.setCash(newCash);
+            personaDAO.update(personaEntity);
+            
+            inventoryItemDAO.delete(inventoryItemEntity);
+        }
+    }
+    
     public boolean hasItem(long personaId, long hash)
     {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
@@ -117,7 +146,7 @@ public class InventoryBO
         }
     }
     
-    public InventoryEntity createInventory(PersonaEntity personaEntity)
+    InventoryEntity createInventory(PersonaEntity personaEntity)
     {
         InventoryEntity inventoryEntity = new InventoryEntity();
         inventoryEntity.setPersona(personaEntity);
@@ -138,7 +167,7 @@ public class InventoryBO
 		inventoryItemDAO.insert(getPowerUpInventory("onemorelap", 1627606782, "0x61034efe", inventoryEntity, personaEntity));
 		inventoryItemDAO.insert(getPowerUpInventory("team_slingshot", 1113720384, "0x42620640", inventoryEntity, personaEntity));
 		inventoryItemDAO.insert(getPowerUpInventory("trafficmagnet", 125509666, "0x77b2022", inventoryEntity, personaEntity));        
-        return inventoryEntity;
+        return inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
     }
 
     private InventoryItemEntity getPowerUpInventory(String tag, int hash, String strHash, InventoryEntity inventoryEntity, PersonaEntity personaEntity) {
