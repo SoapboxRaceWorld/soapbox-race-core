@@ -106,6 +106,24 @@ public class ParameterBO {
 		}
 		return 200;
 	}
+	
+	public float getCashRewardMultiplier()
+	{
+		String parameter = getParameter("CASH_REWARD_MULTIPLIER");
+		if (parameter != null) {
+			return Float.valueOf(parameter);
+		}
+		return 1.0f;
+	}
+
+	public float getRepRewardMultiplier()
+	{
+		String parameter = getParameter("REP_REWARD_MULTIPLIER");
+		if (parameter != null) {
+			return Float.valueOf(parameter);
+		}
+		return 1.0f;
+	}
 
 	/**
 	 * minimum pursuit time in MS

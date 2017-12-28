@@ -444,6 +444,9 @@ public class EventBO extends AccoladesFunc {
 		}
 		// Maths ending
 		
+		exp *= parameterBO.getRepRewardMultiplier();
+		cash *= parameterBO.getCashRewardMultiplier();
+		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int)exp));
@@ -504,6 +507,9 @@ public class EventBO extends AccoladesFunc {
 			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)highSpeedExp, (int)highSpeedCash, EnumRewardCategory.BONUS, EnumRewardType.NONE));
 		}
 		// Maths ending
+
+		exp *= parameterBO.getRepRewardMultiplier();
+		cash *= parameterBO.getCashRewardMultiplier();
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
@@ -563,6 +569,9 @@ public class EventBO extends AccoladesFunc {
 			arrayOfRewardPart.getRewardPart().add(getRewardPart((int)highSpeedExp, (int)highSpeedCash, EnumRewardCategory.BONUS, EnumRewardType.NONE));
 		}
 		// Maths ending
+
+		exp *= parameterBO.getRepRewardMultiplier();
+		cash *= parameterBO.getCashRewardMultiplier();
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
@@ -663,6 +672,9 @@ public class EventBO extends AccoladesFunc {
 			}
 		}
 		// Maths ending
+
+		exp *= parameterBO.getRepRewardMultiplier();
+		cash *= parameterBO.getCashRewardMultiplier();
 		
 		Accolades accolades = new Accolades();
 		accolades.setFinalRewards(getFinalReward((int)exp, (int)cash));
