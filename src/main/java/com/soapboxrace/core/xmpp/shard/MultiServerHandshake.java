@@ -3,6 +3,7 @@ package com.soapboxrace.core.xmpp.shard;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.xmpp.IHandshake;
 import com.soapboxrace.core.xmpp.IOpenFireTalk;
+import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import org.glassfish.tyrus.client.ClientManager;
 
 import javax.websocket.*;
@@ -20,10 +21,10 @@ public class MultiServerHandshake implements IHandshake
 
     public MultiServerHandshake()
     {
-        doConnect();
+        doConnect(false);
     }
 
-    private void doConnect()
+    private void doConnect(boolean reconnect)
     {
         ParameterBO parameterBO = new ParameterBO();
         CountDownLatch loginResponseLatch = new CountDownLatch(1);
@@ -70,7 +71,7 @@ public class MultiServerHandshake implements IHandshake
                         System.exit(1);
                     } else
                     {
-                        doConnect();
+                        doConnect(true);
                     }
                 }
             }, cec, new URI(String.format("ws://%s:%d/ws/xmpp", parameterBO.getMultiXmppHost(), parameterBO.getMultiXmppPort())));
@@ -82,6 +83,8 @@ public class MultiServerHandshake implements IHandshake
             openFireTalk = new MultiServerTalk(null, wsSession.get(), parameterBO.getMultiXmppToken());
             openFireTalk.startReader();
             ((MultiServerTalk) openFireTalk).startKeepalive();
+            if (reconnect)
+                OpenFireSoapBoxCli.getInstance().setXmppTalk(openFireTalk);
             System.out.println("Ready!");
         } catch (DeploymentException | IOException | URISyntaxException | InterruptedException e)
         {
@@ -93,7 +96,7 @@ public class MultiServerHandshake implements IHandshake
                 System.exit(1);
             } else
             {
-                doConnect();
+                doConnect(true);
             }
         }
     }
