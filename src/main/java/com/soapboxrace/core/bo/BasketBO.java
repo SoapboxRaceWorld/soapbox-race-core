@@ -1,17 +1,15 @@
 package com.soapboxrace.core.bo;
 
-import java.util.List;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
-import com.google.common.primitives.Ints;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.List;
 
 @Stateless
 public class BasketBO {
@@ -52,7 +50,7 @@ public class BasketBO {
 			throw new IllegalArgumentException(String.format("No basket definition for %s", productId));
 		}
 		String ownedCarTrans = basketDefinitonEntity.getOwnedCarTrans();
-		return (OwnedCarTrans) UnmarshalXML.unMarshal(ownedCarTrans, OwnedCarTrans.class);
+		return UnmarshalXML.unMarshal(ownedCarTrans, OwnedCarTrans.class);
 	}
 
 	public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity) {

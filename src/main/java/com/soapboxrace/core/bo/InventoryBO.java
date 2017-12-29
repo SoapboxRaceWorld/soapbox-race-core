@@ -36,15 +36,12 @@ public class InventoryBO
 
         if (personaEntity == null)
         {
-            System.out.println("PERSONA IS NULL?!");
             return new InventoryTrans();
         }
         
         if (inventoryEntity == null)
         {
-            System.out.println("Inventory is null");
             inventoryEntity = createInventory(personaEntity);
-            System.out.println("Inventory = " + inventoryEntity);
         }
         
         inventoryTrans.setPerformancePartsCapacity(inventoryEntity.getPerformancePartsCapacity());
@@ -53,16 +50,13 @@ public class InventoryBO
 
         ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
         
-        System.out.println(inventoryEntity);
-        System.out.println(inventoryEntity.getItems());
-        
         for (InventoryItemEntity inventoryItemEntity : inventoryEntity.getItems())
         {
             InventoryItemTrans inventoryItemTrans = new InventoryItemTrans();
             inventoryItemTrans.setEntitlementTag(inventoryItemEntity.getEntitlementTag());
             inventoryItemTrans.setHash(inventoryItemEntity.getHash());
             inventoryItemTrans.setInventoryId(inventoryItemEntity.getId());
-            inventoryItemTrans.setProductId(inventoryItemEntity.getProductId());
+            inventoryItemTrans.setProductId("DO NOT USE ME");
             inventoryItemTrans.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount());
             inventoryItemTrans.setResellPrice(inventoryItemEntity.getResalePrice());
             inventoryItemTrans.setStringHash(inventoryItemEntity.getStringHash());
@@ -89,18 +83,12 @@ public class InventoryBO
     public void sellEntitlement(long personaId, String entitlementTag)
     {
         PersonaEntity personaEntity = personaDAO.findById(personaId);
-        
-        if (personaEntity == null)
-        {
-            return;
-        }
-        
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
         InventoryItemEntity inventoryItemEntity = null;
-        
+
         for (InventoryItemEntity item : inventoryEntity.getItems())
         {
-            if (entitlementTag.equals(item.getEntitlementTag()))
+            if (entitlementTag.equals(item.getEntitlementTag()) && "ACTIVE".equals(item.getStatus()))
             {
                 inventoryItemEntity = item;
                 break;
@@ -110,15 +98,13 @@ public class InventoryBO
         if (inventoryItemEntity != null)
         {
             int newCash = (int) (personaEntity.getCash() + inventoryItemEntity.getResalePrice());
-            
+
             if (newCash > 9999999)
-            {
                 newCash = 9999999;
-            } else if (newCash < 1)
-            {
+
+            if (newCash < 1)
                 newCash = 1;
-            }
-            
+
             personaEntity.setCash(newCash);
             personaDAO.update(personaEntity);
             
@@ -130,11 +116,11 @@ public class InventoryBO
     {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
         
-        for (InventoryItemEntity item : inventoryEntity.getItems())
+        for (InventoryItemEntity inventoryItemEntity : inventoryEntity.getItems())
         {
-            if (item.getHash() == hash)
+            if (inventoryItemEntity.getHash() == hash && inventoryItemEntity.getRemainingUseCount() > 0)
             {
-                return item.getRemainingUseCount() > 0;
+                return true;
             }
         }
         

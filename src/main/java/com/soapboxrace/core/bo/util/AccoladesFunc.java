@@ -118,9 +118,9 @@ public class AccoladesFunc
 
     public LuckyDrawItem getItemFromProduct(Integer rank, Integer level, Boolean isTH, PersonaEntity personaEntity)
     {
-        long hash = 0;
-        Integer count = 0, price = 0;
-        String desc, icon, vItem = "", vItemType;
+        long hash;
+        Integer count, price;
+        String desc, icon, vItem, vItemType;
         Boolean isSold = false;
 
         List<ProductEntity> getProductItems = null;
@@ -191,20 +191,14 @@ public class AccoladesFunc
                     break;
             }
             
-            System.out.printf("usage for type %d: %d/%d\n", randomCategory, currentUsage, maxUsage);
-
             if (currentUsage > maxUsage)
             {
                 isSold = true;
                 cashBonus += price;
-                System.out.println("sold");
             }
             
             if (!isSold)
             {
-                System.out.println("wasn't sold");
-                System.out.println(randomCategory);
-                
                 if (randomCategory == 2)
                 {
                     inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() + 1);
@@ -228,7 +222,7 @@ public class AccoladesFunc
                 inventoryItemEntity.setRemainingUseCount(count);
                 inventoryItemEntity.setResalePrice(price);
                 inventoryItemEntity.setStatus("ACTIVE");
-                inventoryItemEntity.setStringHash(Long.toHexString(hash));
+                inventoryItemEntity.setStringHash("0x" + Long.toHexString(hash));
                 inventoryItemEntity.setVirtualItemType(vItemType);
                 inventoryItemEntity.setProductId(productEntity.getProductId());
 
@@ -240,7 +234,7 @@ public class AccoladesFunc
             personaDao.update(personaEntity);
         } else
         { // Cash part
-            Integer cashBonus = new Random().nextInt(25000) + 1;
+            Integer cashBonus = new Random().nextInt(2500) + 1;
             desc = "GM_CATALOG_00000190," + cashBonus;
 //			desc = String.valueOf(cashBonus) + " CASH";
             icon = "128_cash";
