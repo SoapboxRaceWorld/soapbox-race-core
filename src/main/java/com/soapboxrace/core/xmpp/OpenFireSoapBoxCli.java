@@ -49,12 +49,12 @@ public class OpenFireSoapBoxCli
     {
         Class<? extends IHandshake> handshakeClass;
 
-        if (parameterBO.isShardingEnabled())
-        {
-            // MultiXMPP handshake
-            System.out.println("[XMPP-DI] Using MultiServerHandshake");
-            handshakeClass = MultiServerHandshake.class;
-        } else
+//        if (parameterBO.isShardingEnabled())
+//        {
+//            // MultiXMPP handshake
+//            System.out.println("[XMPP-DI] Using MultiServerHandshake");
+//            handshakeClass = MultiServerHandshake.class;
+//        } else
         {
             // Normal handshake
             System.out.println("[XMPP-DI] Using (normal) Handshake");

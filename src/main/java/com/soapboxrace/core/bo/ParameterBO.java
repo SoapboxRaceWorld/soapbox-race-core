@@ -37,6 +37,18 @@ public class ParameterBO {
 
 		return property != null && Boolean.parseBoolean(property);
 	}
+	
+	public String getShardId() {
+		String property = System.getProperty("sharding.master");
+		
+		if (property == null)
+			return null;
+		if (property.trim().isEmpty())
+			return null;
+		if (!isShardingEnabled() || isShardingMaster())
+			return null;
+		return property.trim();
+	}
 
 	public String getMultiXmppHost() {
 		String property = System.getProperty("sharding.multixmpp.host");

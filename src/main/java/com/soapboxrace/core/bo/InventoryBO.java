@@ -109,6 +109,21 @@ public class InventoryBO
             personaDAO.update(personaEntity);
             
             inventoryItemDAO.delete(inventoryItemEntity);
+            
+            switch (inventoryItemEntity.getVirtualItemType())
+            {
+                case "PERFORMANCEPART":
+                    inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
+                    break;
+                case "VISUALPART":
+                    inventoryEntity.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount() - 1);
+                    break;
+                case "SKILLMODPART":
+                    inventoryEntity.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount() - 1);
+                    break;
+            }
+            
+            inventoryDAO.update(inventoryEntity);
         }
     }
     

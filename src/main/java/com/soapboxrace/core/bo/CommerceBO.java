@@ -9,6 +9,7 @@ import com.soapboxrace.util.ListDiffer;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.List;
 
 @Stateless
 public class CommerceBO
@@ -64,6 +65,51 @@ public class CommerceBO
         ListDiffer.ListDifferences<ListDiffer.ProxyItem<SkillModPartTrans>> skillPartsDiff = ListDiffer.getDifferencesByKey(
                 currentCustomCar.getSkillModParts().getSkillModPartTrans(), updatedCustomCar.getSkillModParts().getSkillModPartTrans(),
                 SkillModPartTrans::getSkillModPartAttribHash);
+
+        for (EntitlementItemTrans entitlementItemTrans : commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans())
+        {
+            String tag = entitlementItemTrans.getEntitlementId();
+            int quantity = entitlementItemTrans.getQuantity();
+
+            List<InventoryItemEntity> inventoryItemEntityList = inventoryItemDAO.findListByEntitlementTagAndPersona(tag, personaEntity);
+
+            for (InventoryItemEntity item : inventoryItemEntityList)
+            {
+                if ("INSTALLED".equals(item.getStatus()))
+                {
+                    inventoryItemEntityList.remove(item);
+                }
+            }
+
+            if (inventoryItemEntityList.isEmpty())
+            {
+                continue;
+            }
+
+            if (inventoryItemEntityList.size() < quantity)
+            {
+                quantity = inventoryItemEntityList.size();
+            }
+
+            saleValue += inventoryItemEntityList.get(0).getResalePrice() * quantity;
+
+            inventoryItemEntityList.forEach(inventoryItemDAO::delete);
+
+            switch (inventoryItemEntityList.get(0).getVirtualItemType())
+            {
+                case "PERFORMANCEPART":
+                    inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
+                    break;
+                case "VISUALPART":
+                    inventoryEntity.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount() - 1);
+                    break;
+                case "SKILLMODPART":
+                    inventoryEntity.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount() - 1);
+                    break;
+            }
+        }
+        
+        inventoryDAO.update(inventoryEntity);
 
         // region Vinyls
         for (ListDiffer.ProxyItem<CustomVinylTrans> addedVinyl : vinylsDiff.getAdded())
@@ -134,7 +180,18 @@ public class CommerceBO
                 inventoryItemDAO.delete(inventoryItemEntity);
             } else
             {
-                System.out.println(String.format("[Commerce: PerfParts] Couldn't find %d to remove in inventory", performancePartTrans.getPerformancePartAttribHash()));
+                System.out.println(String.format("[Commerce: PerfParts] Couldn't find %d to remove in inventory; looking in catalog", performancePartTrans.getPerformancePartAttribHash()));
+                
+                ProductEntity productEntity = productDao.findByHash(performancePartTrans.getPerformancePartAttribHash());
+                
+                if (productEntity != null)
+                {
+                    System.out.println(String.format("[Commerce: PerfParts] Found %d to remove in catalog: %s for $%.0f IGC",
+                            performancePartTrans.getPerformancePartAttribHash(),
+                            productEntity.getProductId(),
+                            productEntity.getPrice()));
+                    saleValue += productEntity.getPrice() / 4;
+                }
             }
         }
         // endregion
@@ -190,6 +247,17 @@ public class CommerceBO
             } else
             {
                 System.out.println(String.format("[Commerce: VisParts] Couldn't find %d to remove in inventory", visualPartTrans.getPartHash()));
+
+                ProductEntity productEntity = productDao.findByHash(visualPartTrans.getPartHash());
+
+                if (productEntity != null)
+                {
+                    System.out.println(String.format("[Commerce: VisParts] Found %d to remove in catalog: %s for $%.0f IGC",
+                            visualPartTrans.getPartHash(),
+                            productEntity.getProductId(),
+                            productEntity.getPrice()));
+                    saleValue += productEntity.getPrice() / 4;
+                }
             }
         }
         // endregion
@@ -245,6 +313,17 @@ public class CommerceBO
             } else
             {
                 System.out.println(String.format("[Commerce: SkillMods] Couldn't find %d to remove in inventory", skillModPartTrans.getSkillModPartAttribHash()));
+
+                ProductEntity productEntity = productDao.findByHash(skillModPartTrans.getSkillModPartAttribHash());
+
+                if (productEntity != null)
+                {
+                    System.out.println(String.format("[Commerce: SkillMods] Found %d to remove in catalog: %s for $%.0f IGC",
+                            skillModPartTrans.getSkillModPartAttribHash(),
+                            productEntity.getProductId(),
+                            productEntity.getPrice()));
+                    saleValue += productEntity.getPrice() / 4;
+                }
             }
         }
         // endregion
@@ -253,7 +332,7 @@ public class CommerceBO
         {
             return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
         }
-        
+
         System.out.println(String.format("[Commerce] Purchase cost: $%d IGC ------- Sale value: $%d IGC", purchaseCost, saleValue));
 
         int newCash = (int) (personaEntity.getCash() - purchaseCost + saleValue);
