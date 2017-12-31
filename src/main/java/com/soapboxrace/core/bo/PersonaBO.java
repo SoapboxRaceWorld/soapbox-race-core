@@ -50,6 +50,10 @@ public class PersonaBO {
 
 	public CarSlotEntity getDefaultCarEntity(Long personaId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
+		
+		if (personaEntity == null)
+			return null;
+		
 		List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
 		Integer curCarIndex = personaEntity.getCurCarIndex();
 		if (carSlotList.size() > 0) {
