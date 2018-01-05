@@ -1,22 +1,16 @@
 package com.soapboxrace.core.bo;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.core.jpa.UserEntity;
-import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
-import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
-import com.soapboxrace.jaxb.http.ArrayOfString;
-import com.soapboxrace.jaxb.http.PersonaBase;
-import com.soapboxrace.jaxb.http.PersonaPresence;
-import com.soapboxrace.jaxb.http.ProfileData;
+import com.soapboxrace.jaxb.http.*;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Stateless
 public class DriverPersonaBO {
@@ -37,17 +31,8 @@ public class DriverPersonaBO {
 	private TreasureHuntDAO treasureHuntDAO;
 	
 	@EJB
-	private InventoryDAO inventoryDAO;
-	
-	@EJB
-	private InventoryItemDAO inventoryItemDAO;
-	
-	@EJB
 	private ParameterBO parameterBO;
 	
-	@EJB
-	private InventoryBO inventoryBO;
-
 	public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
 		UserEntity userEntity = userDao.findById(userId);
 		
@@ -62,7 +47,6 @@ public class DriverPersonaBO {
 		personaEntity.setCreated(LocalDateTime.now());
 		personaDao.insert(personaEntity);
 		
-		inventoryBO.createInventory(personaEntity);
 		createThInformation(personaEntity);
 		
 		return castPersonaEntity(personaEntity);
@@ -119,8 +103,6 @@ public class DriverPersonaBO {
 		carSlotDAO.deleteByPersona(personaEntity);
 		lobbyEntrantDAO.deleteByPersona(personaEntity);
 		treasureHuntDAO.deleteByPersona(personaEntity.getPersonaId());
-		inventoryItemDAO.deleteByPersona(personaId);
-		inventoryDAO.deleteByPersona(personaId);
 		
 		personaDao.delete(personaEntity);
 	}

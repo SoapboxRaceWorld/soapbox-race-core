@@ -172,7 +172,15 @@ public class ParameterBO {
 		}
 		return 10_000;
 	}
-
+	
+	public int getLobbyCountdownTime() {
+		String parameter = getParameter("LOBBY_COUNTDOWN_TIME");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 60_000;
+	}
+	
 	public boolean useForwardedFor()
 	{
 		return Boolean.valueOf(getParameter("USE_FORWARDED_FOR"));

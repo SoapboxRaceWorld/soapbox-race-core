@@ -18,6 +18,7 @@ import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.LobbyEntrantEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.core.xmpp.XmppLobby;
 import com.soapboxrace.jaxb.http.ArrayOfLobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.Entrants;
@@ -55,6 +56,9 @@ public class LobbyBO {
 	@EJB
 	private LobbyEntrantDAO lobbyEntrantDao;
 	
+	@EJB
+	private OpenFireRestApiCli openFireRestApiCli;
+	
 	public void joinFastLobby(Long personaId) {
 		List<LobbyEntity> lobbys = lobbyDao.findAllOpen();
 		PersonaEntity personaEntity = personaDao.findById(personaId);
@@ -72,7 +76,7 @@ public class LobbyBO {
 	}
 	
 	public void createPrivateLobby(Long personaId, int eventId) {
-		List<Long> listOfPersona = new ArrayList<>();
+		List<Long> listOfPersona = openFireRestApiCli.getAllPersonaByGroup(personaId);
 		if(!listOfPersona.isEmpty()) {
 			PersonaEntity personaEntity = personaDao.findById(personaId);
 			createLobby(personaEntity, eventId, true);

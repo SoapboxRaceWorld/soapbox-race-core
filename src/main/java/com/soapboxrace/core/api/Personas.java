@@ -1,50 +1,18 @@
 package com.soapboxrace.core.api;
 
-import java.io.InputStream;
-import java.util.List;
-
-import javax.ejb.EJB;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.ProductEntity;
-import com.soapboxrace.core.jpa.TokenSessionEntity;
-import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
-import com.soapboxrace.jaxb.http.ArrayOfCustomPaintTrans;
-import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
-import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
-import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
-import com.soapboxrace.jaxb.http.ArrayOfPerformancePartTrans;
-import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
-import com.soapboxrace.jaxb.http.ArrayOfSkillModPartTrans;
-import com.soapboxrace.jaxb.http.ArrayOfVisualPartTrans;
-import com.soapboxrace.jaxb.http.ArrayOfWalletTrans;
-import com.soapboxrace.jaxb.http.BasketTrans;
-import com.soapboxrace.jaxb.http.CarSlotInfoTrans;
-import com.soapboxrace.jaxb.http.CommerceResultStatus;
-import com.soapboxrace.jaxb.http.CommerceResultTrans;
-import com.soapboxrace.jaxb.http.CommerceSessionResultTrans;
-import com.soapboxrace.jaxb.http.CommerceSessionTrans;
-import com.soapboxrace.jaxb.http.CustomCarTrans;
-import com.soapboxrace.jaxb.http.InvalidBasketTrans;
-import com.soapboxrace.jaxb.http.InventoryItemTrans;
-import com.soapboxrace.jaxb.http.InventoryTrans;
-import com.soapboxrace.jaxb.http.OwnedCarTrans;
-import com.soapboxrace.jaxb.http.ProductTrans;
-import com.soapboxrace.jaxb.http.WalletTrans;
+import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
+
+import javax.ejb.EJB;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.io.InputStream;
+import java.util.List;
 
 @Path("/personas")
 public class Personas {
@@ -64,9 +32,6 @@ public class Personas {
 	@EJB
 	private ParameterBO parameterBO;
 	
-	@EJB
-	private InventoryBO inventoryBO;
-
 	@POST
 	@Secured
 	@Path("/{personaId}/commerce")
@@ -196,19 +161,37 @@ public class Personas {
 	@Secured
 	@Path("/inventory/objects")
 	@Produces(MediaType.APPLICATION_XML)
-	public InventoryTrans inventoryObjects(@HeaderParam("securityToken") String securityToken) {
-		long personaId = sessionBO.getActivePersonaId(securityToken);
-		return inventoryBO.getInventory(personaId);
+	public InventoryTrans inventoryObjects() {
+		InventoryTrans inventoryTrans = new InventoryTrans();
+		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("nosshot", -1681514783, 1842996427L, "0x9bc61ee1"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("runflattires", -537557654, 2876729160L, "0xdff5856a"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("instantcooldown", -1692359144, 2876729162L, "0x9b20a618"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("shield", -364944936, 2876729163L, "0xea3f61d8"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("slingshot", 2236629, 2876729164L, "0x2220d5"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("ready", 957701799, 2876729165L, "0x39155ea7"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("juggernaut", 1805681994, 2876729166L, "0x6ba0854a"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("emergencyevade", -611661916, 2876729167L, "0xdb8ac7a4"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("team_emergencyevade", -1564932069, 2876729168L, "0xa2b9081b"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("onemorelap", 1627606782, 2876729170L, "0x61034efe"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("team_slingshot", 1113720384, 2876729171L, "0x42620640"));
+		arrayOfInventoryItemTrans.getInventoryItemTrans().add(getPowerUpInventory("trafficmagnet", 125509666, 2880783203L, "0x77b2022"));
+		inventoryTrans.setInventoryItems(arrayOfInventoryItemTrans);
+		return inventoryTrans;
 	}
 
-	@GET
-	@Secured
-	@Path("/inventory/sell/{entitlementTag}")
-	@Produces(MediaType.APPLICATION_XML)
-	public String sellInventoryItem(@HeaderParam("securityToken") String securityToken, @PathParam("entitlementTag") String entitlementTag) {
-		long personaId = sessionBO.getActivePersonaId(securityToken);
-		inventoryBO.sellEntitlement(personaId, entitlementTag);
-		return "";
+	private InventoryItemTrans getPowerUpInventory(String tag, int hash, long invId, String strHash) {
+		InventoryItemTrans inventoryItemTrans = new InventoryItemTrans();
+		inventoryItemTrans.setEntitlementTag(tag);
+		inventoryItemTrans.setHash(hash);
+		inventoryItemTrans.setInventoryId(invId);
+		inventoryItemTrans.setProductId("DO NOT USE ME");
+		inventoryItemTrans.setRemainingUseCount(100L);
+		inventoryItemTrans.setResellPrice(0.00);
+		inventoryItemTrans.setStatus("ACTIVE");
+		inventoryItemTrans.setStringHash(strHash);
+		inventoryItemTrans.setVirtualItemType("powerup");
+		return inventoryItemTrans;
 	}
 
 	@POST

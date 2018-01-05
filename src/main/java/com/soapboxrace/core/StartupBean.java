@@ -20,6 +20,5 @@ public class StartupBean
     @PreDestroy
     public void onShutdown()
     {
-        OpenFireSoapBoxCli.getInstance().disconnect();
     }
 }
