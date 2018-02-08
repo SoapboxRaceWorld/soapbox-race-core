@@ -59,6 +59,9 @@ public class LobbyBO {
 	@EJB
 	private OpenFireRestApiCli openFireRestApiCli;
 	
+	@EJB
+	private ParameterBO parameterBO;
+	
 	public void joinFastLobby(Long personaId) {
 		List<LobbyEntity> lobbys = lobbyDao.findAllOpen();
 		PersonaEntity personaEntity = personaDao.findById(personaId);
@@ -117,7 +120,7 @@ public class LobbyBO {
 	private void joinLobby(PersonaEntity personaEntity, List<LobbyEntity> lobbys) {
 		LobbyEntity lobbyEntity = null;
 		for (LobbyEntity lobbyEntityTmp : lobbys) {
-			int maxEntrants = 2;
+			int maxEntrants = parameterBO.getMaxLobbyPlayers();
 			List<LobbyEntrantEntity> lobbyEntrants = lobbyEntityTmp.getEntrants();
 			int entrantsSize = lobbyEntrants.size();
 			if (entrantsSize < maxEntrants) {
@@ -261,7 +264,7 @@ public class LobbyBO {
 
 		public void run() {
 			try {
-				Thread.sleep(60000);
+				Thread.sleep(30000);
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}

@@ -1,6 +1,7 @@
 package com.soapboxrace.core.api.util;
 
 import com.soapboxrace.core.bo.AuthenticationBO;
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
 
@@ -23,6 +24,9 @@ public class LaunchFilter implements ContainerRequestFilter {
 	@EJB
 	private AuthenticationBO authenticationBO;
 	
+	@EJB
+	private ParameterBO parameterBO;
+	
 	public static final DateTimeFormatter banEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 	@Context
@@ -34,8 +38,9 @@ public class LaunchFilter implements ContainerRequestFilter {
 		String hwid = requestContext.getHeaderString("X-HWID");
 		String gameLauncherHash = requestContext.getHeaderString("X-GameLauncherHash");
 		
-		if ((userAgent == null || !userAgent.equals("GameLauncher (+https://github.com/SoapboxRaceWorld/GameLauncher_NFSW)"))
-				|| (hwid == null || hwid.trim().isEmpty()) || (gameLauncherHash == null || gameLauncherHash.trim().isEmpty())) {
+		if (((userAgent == null || !userAgent.equals("GameLauncher (+https://github.com/SoapboxRaceWorld/GameLauncher_NFSW)"))
+				|| (hwid == null || hwid.trim().isEmpty()) || (gameLauncherHash == null || gameLauncherHash.trim().isEmpty()))
+				&& parameterBO.enableLauncherFilter()) {
 			LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
 			loginStatusVO.setDescription("Please use MeTonaTOR's launcher. Or, are you tampering?");
 

@@ -186,11 +186,25 @@ public class ParameterBO {
 		return Boolean.valueOf(getParameter("USE_FORWARDED_FOR"));
 	}
 	
-	public boolean googleLoadBalancing()
+	public boolean enableLauncherFilter()
 	{
-		return Boolean.valueOf(getParameter("GOOGLE_LB_ENABLED"));
+		return getParameter("ENABLE_LAUNCHER_FILTER") == null ? false : Boolean.valueOf(getParameter("ENABLE_LAUNCHER_FILTER"));
+	}
+	
+	public boolean ipFromForwardedFor()
+	{
+		return Boolean.valueOf(getParameter("IP_FROM_FORWARDED_FOR"));
 	}
 
+	public int getMaxLobbyPlayers()
+	{
+		String parameter = getParameter("LOBBY_MAX_PLAYERS");
+		if (parameter != null) {
+			return Integer.valueOf(parameter);
+		}
+		return 2;
+	}
+	
 	/**
 	 * minimum TE time in MS
 	 * @return

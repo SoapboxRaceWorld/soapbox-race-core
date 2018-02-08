@@ -47,7 +47,7 @@ public class LobbyEntity {
 	private Long personaId;
 
 	@Transient
-	private Long lobbyCountdownInMilliseconds = 60000L;
+	private Long lobbyCountdownInMilliseconds = 30000L;
 
 	public Long getId() {
 		return id;
@@ -108,7 +108,7 @@ public class LobbyEntity {
 		if (lobbyDateTimeStart != null) {
 			Date now = new Date();
 			Long time = now.getTime() - lobbyDateTimeStart.getTime();
-			time = 60000L - time;
+			time = 30000L - time;
 			return time.intValue();
 		}
 		return lobbyCountdownInMilliseconds.intValue();
