@@ -39,7 +39,7 @@ public class ParameterBO {
 	}
 	
 	public String getShardId() {
-		String property = System.getProperty("sharding.master");
+		String property = System.getProperty("sharding.id");
 		
 		if (property == null)
 			return null;
