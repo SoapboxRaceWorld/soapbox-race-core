@@ -12,6 +12,11 @@ INTO
     )
     ,
     (
+        'EMAIL_FROM',
+        'myemail@gmail.com'
+    )
+    ,
+    (
         'GOOGLE_LB_ENABLED',
         'false'
     )
@@ -37,8 +42,23 @@ INTO
     )
     ,
     (
+        'OPENFIRE_ADDRESS',
+        'http://localhost:9090/plugins/restapi/v1'
+    )
+    ,
+    (
+        'OPENFIRE_TOKEN',
+        'xzxzx99df4d51z2d'
+    )
+    ,
+    (
         'PREMIUM_CARCHANGER_PROTECTION',
         'false'
+    )
+    ,
+    (
+        'PROMO_CODE_TOKEN',
+        '12345678'
     )
     ,
     (
@@ -49,6 +69,11 @@ INTO
     (
         'ROUTE_MINIMUM_TIME',
         '50000'
+    )
+    ,
+    (
+        'SERVER_ADDRESS',
+        'http://127.0.0.1:8680'
     )
     ,
     (
@@ -77,6 +102,51 @@ INTO
     )
     ,
     (
+        'TICKET_TOKEN',
+        '12345678'
+    )
+    ,
+    (
+        'UDP_FREEROAM_IP',
+        '127.0.0.1'
+    )
+    ,
+    (
+        'UDP_FREEROAM_PASSWORD',
+        '12345678'
+    )
+    ,
+    (
+        'UDP_FREEROAM_PORT',
+        '9999'
+    )
+    ,
+    (
+        'UDP_RACE_IP',
+        '127.0.0.1'
+    )
+    ,
+    (
+        'UDP_RACE_PASSWORD',
+        '12345678'
+    )
+    ,
+    (
+        'UDP_RACE_PORT',
+        '9998'
+    )
+    ,
+    (
         'USE_FORWARDED_FOR',
         'false'
+    )
+    ,
+    (
+        'XMPP_IP',
+        '127.0.0.1'
+    )
+    ,
+    (
+        'XMPP_PORT',
+        '5222'
     );
