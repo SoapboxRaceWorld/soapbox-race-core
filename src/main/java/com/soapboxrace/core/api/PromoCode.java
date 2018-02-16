@@ -7,7 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.soapboxrace.core.api.util.Config;
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.PromoCodeBO;
 
 @Path("/PromoCode")
@@ -16,11 +16,14 @@ public class PromoCode {
 	@EJB
 	private PromoCodeBO bo;
 
+	@EJB
+	private ParameterBO parameterBO;
+
 	@POST
 	@Path("/createPromoCode")
 	@Produces(MediaType.TEXT_HTML)
 	public String createPromoCode(@FormParam("promoCodeToken") String promoCodeToken) {
-		if (Config.getPromoCodeToken().equals(promoCodeToken)) {
+		if (parameterBO.getStrParam("PROMO_CODE_TOKEN").equals(promoCodeToken)) {
 			return bo.createPromoCode();
 		}
 		return "invalid promoCodeToken";

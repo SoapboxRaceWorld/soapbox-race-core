@@ -5,14 +5,18 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.soapboxrace.core.api.util.Config;
+import com.soapboxrace.core.bo.ParameterBO;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "messageType", propOrder = { "body", "subject" })
 @XmlRootElement(name = "message")
 public class XMPP_MessageType {
+
+	@XmlTransient
+	private ParameterBO parameterBO;
 
 	@XmlElement(required = true)
 	private String body;
@@ -26,7 +30,11 @@ public class XMPP_MessageType {
 	private Long subject;
 
 	public XMPP_MessageType() {
-		from = "sbrw.engine.engine@" + Config.getXmppIp();
+	}
+
+	public XMPP_MessageType(ParameterBO parameterBO) {
+		this.parameterBO = parameterBO;
+		from = "sbrw.engine.engine@" + parameterBO.getStrParam("XMPP_IP");
 	}
 
 	public String getBody() {
@@ -70,7 +78,7 @@ public class XMPP_MessageType {
 	}
 
 	public void setToPersonaId(Long personaId) {
-		this.to = "sbrw." + personaId.toString() + "@" + Config.getXmppIp();
+		this.to = "sbrw." + personaId.toString() + "@" + parameterBO.getStrParam("XMPP_IP");
 	}
 
 }

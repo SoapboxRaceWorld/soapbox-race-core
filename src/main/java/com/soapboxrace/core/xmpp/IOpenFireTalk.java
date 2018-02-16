@@ -2,23 +2,24 @@ package com.soapboxrace.core.xmpp;
 
 import java.net.Socket;
 
-public interface IOpenFireTalk
-{
-    void init();
-    
-    String read();
+import com.soapboxrace.core.bo.ParameterBO;
 
-    void write(String msg);
+public interface IOpenFireTalk {
+	void init();
 
-    void send(String msg, String to);
+	String read();
 
-    void send(String msg, Long personaId);
+	void write(String msg);
 
-    void handleMessage(String msg);
+	void send(String msg, String to, ParameterBO parameterBO);
 
-    Socket getSocket();
+	void send(String msg, Long personaId, ParameterBO parameterBO);
 
-    void setSocket(Socket socket);
+	void handleMessage(String msg);
 
-    void startReader();
+	Socket getSocket();
+
+	void setSocket(Socket socket);
+
+	void startReader();
 }

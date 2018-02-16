@@ -25,7 +25,7 @@ public class ParameterBO {
 		}
 		return null;
 	}
-	
+
 	public boolean isShardingEnabled() {
 		String property = System.getProperty("sharding.enabled");
 
@@ -37,10 +37,10 @@ public class ParameterBO {
 
 		return property != null && Boolean.parseBoolean(property);
 	}
-	
+
 	public String getShardId() {
 		String property = System.getProperty("sharding.master");
-		
+
 		if (property == null)
 			return null;
 		if (property.trim().isEmpty())
@@ -68,7 +68,8 @@ public class ParameterBO {
 		if (!isShardingEnabled())
 			return -1;
 		return property != null && !property.trim().isEmpty() ? Integer.parseInt(property) : -1;
-//		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
+		// return isShardingEnabled() ? (property != null && !property.trim().isEmpty()
+		// ? property.trim() : null) : null;
 	}
 
 	public int getMaxCarSlotsFree() {
@@ -118,9 +119,8 @@ public class ParameterBO {
 		}
 		return 200;
 	}
-	
-	public float getCashRewardMultiplier()
-	{
+
+	public float getCashRewardMultiplier() {
 		String parameter = getParameter("CASH_REWARD_MULTIPLIER");
 		if (parameter != null) {
 			return Float.valueOf(parameter);
@@ -128,8 +128,7 @@ public class ParameterBO {
 		return 1.0f;
 	}
 
-	public float getRepRewardMultiplier()
-	{
+	public float getRepRewardMultiplier() {
 		String parameter = getParameter("REP_REWARD_MULTIPLIER");
 		if (parameter != null) {
 			return Float.valueOf(parameter);
@@ -139,6 +138,7 @@ public class ParameterBO {
 
 	/**
 	 * minimum pursuit time in MS
+	 * 
 	 * @return
 	 */
 	public int getMinPursuitTime() {
@@ -151,6 +151,7 @@ public class ParameterBO {
 
 	/**
 	 * minimum sprint/circuit time in MS
+	 * 
 	 * @return
 	 */
 	public int getMinRouteTime() {
@@ -163,6 +164,7 @@ public class ParameterBO {
 
 	/**
 	 * minimum drag time in MS
+	 * 
 	 * @return
 	 */
 	public int getMinDragTime() {
@@ -173,18 +175,17 @@ public class ParameterBO {
 		return 10_000;
 	}
 
-	public boolean useForwardedFor()
-	{
+	public boolean useForwardedFor() {
 		return Boolean.valueOf(getParameter("USE_FORWARDED_FOR"));
 	}
-	
-	public boolean googleLoadBalancing()
-	{
+
+	public boolean googleLoadBalancing() {
 		return Boolean.valueOf(getParameter("GOOGLE_LB_ENABLED"));
 	}
 
 	/**
 	 * minimum TE time in MS
+	 * 
 	 * @return
 	 */
 	public int getMinTETime() {
@@ -210,7 +211,7 @@ public class ParameterBO {
 		}
 		return 8_500_000;
 	}
-	
+
 	public boolean getPremiumCarChangerProtection() {
 		String parameter = getParameter("PREMIUM_CARCHANGER_PROTECTION");
 		if (parameter != null) {
@@ -234,4 +235,19 @@ public class ParameterBO {
 		}
 		return getMaxFreePlayerCash();
 	}
+
+	public Integer getIntParam(String parameter) {
+		String parameterFromDB = getParameter(parameter);
+		return Integer.valueOf(parameterFromDB);
+	}
+
+	public Boolean getBoolParam(String parameter) {
+		String parameterFromDB = getParameter(parameter);
+		return Boolean.valueOf(parameterFromDB);
+	}
+
+	public String getStrParam(String parameter) {
+		return getParameter(parameter);
+	}
+
 }

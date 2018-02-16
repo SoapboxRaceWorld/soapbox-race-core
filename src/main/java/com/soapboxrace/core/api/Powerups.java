@@ -16,26 +16,26 @@ public class Powerups {
 
 	@EJB
 	private TokenSessionBO tokenBO;
-	
+
 	@EJB
 	private InventoryBO inventoryBO;
 
-	private OpenFireSoapBoxCli openFireSoapBoxCli = OpenFireSoapBoxCli.getInstance();
+	@EJB
+	private OpenFireSoapBoxCli openFireSoapBoxCli;
 
 	@POST
 	@Secured
 	@Path("/activated/{powerupHash}")
 	@Produces(MediaType.APPLICATION_XML)
-	public String activated(@HeaderParam("securityToken") String securityToken, @PathParam(value = "powerupHash") Integer powerupHash, @QueryParam("targetId") Long targetId,
-			@QueryParam("receivers") String receivers, @QueryParam("eventSessionId") Long eventSessionId) {
+	public String activated(@HeaderParam("securityToken") String securityToken, @PathParam(value = "powerupHash") Integer powerupHash,
+			@QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers, @QueryParam("eventSessionId") Long eventSessionId) {
 		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-		
-		if (!inventoryBO.hasItem(activePersonaId, powerupHash))
-		{
+
+		if (!inventoryBO.hasItem(activePersonaId, powerupHash)) {
 			System.out.println(String.format("Persona %d doesn't have powerup %d", activePersonaId, powerupHash));
 			return "";
 		}
-		
+
 		XMPP_ResponseTypePowerupActivated powerupActivatedResponse = new XMPP_ResponseTypePowerupActivated();
 		XMPP_PowerupActivatedType powerupActivated = new XMPP_PowerupActivatedType();
 		powerupActivated.setId(Long.valueOf(powerupHash));
@@ -48,9 +48,9 @@ public class Powerups {
 				openFireSoapBoxCli.send(powerupActivatedResponse, receiverPersonaId);
 			}
 		}
-		
+
 		inventoryBO.decrementUsage(activePersonaId, powerupHash);
-		
+
 		return "";
 	}
 }
