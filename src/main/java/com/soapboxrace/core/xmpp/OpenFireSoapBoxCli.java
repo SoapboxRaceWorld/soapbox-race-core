@@ -86,11 +86,6 @@ public class OpenFireSoapBoxCli
         this.send(responseXmlStr, to);
     }
 
-    public IOpenFireTalk getXmppTalk()
-    {
-        return xmppTalk;
-    }
-
     /**
      * utter hack
      * @param xmppTalk

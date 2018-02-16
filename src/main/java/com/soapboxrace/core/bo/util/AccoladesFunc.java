@@ -1,23 +1,37 @@
 package com.soapboxrace.core.bo.util;
 
-import com.soapboxrace.core.bo.PersonaBO;
-import com.soapboxrace.core.dao.LevelRepDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.ProductDAO;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.ProductEntity;
-import com.soapboxrace.jaxb.http.*;
-import org.apache.commons.codec.digest.DigestUtils;
-
-import javax.ejb.EJB;
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Random;
+
+import javax.ejb.EJB;
+
+import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.jpa.InventoryEntity;
+import com.soapboxrace.core.jpa.InventoryItemEntity;
+import org.apache.commons.codec.digest.DigestUtils;
+
+import com.soapboxrace.core.bo.PersonaBO;
+import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.jaxb.http.EnumRewardCategory;
+import com.soapboxrace.jaxb.http.EnumRewardType;
+import com.soapboxrace.jaxb.http.LuckyDrawItem;
+import com.soapboxrace.jaxb.http.Reward;
+import com.soapboxrace.jaxb.http.RewardPart;
+import com.soapboxrace.jaxb.http.SkillModPartTrans;
 
 public class AccoladesFunc
 {
 
     @EJB
     private PersonaDAO personaDao;
+
+    @EJB
+    private InventoryDAO inventoryDao;
+    
+    @EJB
+    private InventoryItemDAO inventoryItemDao;
 
     @EJB
     private LevelRepDAO levelRepDao;
@@ -146,6 +160,78 @@ public class AccoladesFunc
             price = (int) (productEntity.getPrice() / 3.5);
             vItem = DigestUtils.md5Hex(productEntity.getHash().toString());
             vItemType = productEntity.getProductType();
+
+            InventoryEntity inventoryEntity = inventoryDao.findByPersonaId(personaEntity.getPersonaId());
+
+            int cashBonus = 0;
+            int maxUsage = 0;
+            int currentUsage = 0;
+
+            switch (randomCategory)
+            {
+                case 2:
+                {
+                    currentUsage = inventoryEntity.getPerformancePartsUsedSlotCount() + 1;
+                    maxUsage = inventoryEntity.getPerformancePartsCapacity();
+                    break;
+                }
+                case 3:
+                {
+                    currentUsage = inventoryEntity.getSkillModPartsUsedSlotCount() + 1;
+                    maxUsage = inventoryEntity.getSkillModPartsCapacity();
+                    break;
+                }
+                case 4:
+                {
+                    currentUsage = inventoryEntity.getVisualPartsUsedSlotCount() + 1;
+                    maxUsage = inventoryEntity.getVisualPartsCapacity();
+                    break;
+                }
+                default:
+                    break;
+            }
+            
+            if (currentUsage > maxUsage)
+            {
+                isSold = true;
+                cashBonus += price;
+            }
+            
+            if (!isSold)
+            {
+                if (randomCategory == 2)
+                {
+                    inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() + 1);
+                } else if (randomCategory == 3)
+                {
+                    inventoryEntity.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount() + 1);
+                } else if (randomCategory == 4)
+                {
+                    inventoryEntity.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount() + 1);
+                }
+                
+                inventoryDao.update(inventoryEntity);
+                
+                String md5 = DigestUtils.md5Hex(String.valueOf(hash)).replace("MD5:", "");
+                
+                InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
+                inventoryItemEntity.setPersona(personaEntity);
+                inventoryItemEntity.setInventory(inventoryEntity);
+                inventoryItemEntity.setEntitlementTag(md5);
+                inventoryItemEntity.setHash(hash);
+                inventoryItemEntity.setRemainingUseCount(count);
+                inventoryItemEntity.setResalePrice(price);
+                inventoryItemEntity.setStatus("ACTIVE");
+                inventoryItemEntity.setStringHash("0x" + Long.toHexString(hash));
+                inventoryItemEntity.setVirtualItemType(vItemType);
+                inventoryItemEntity.setProductId(productEntity.getProductId());
+
+                inventoryItemDao.insert(inventoryItemEntity);
+            }
+
+            int newCash = (int) personaEntity.getCash() + cashBonus;
+            personaEntity.setCash(newCash > 9999999 ? 9999999 : newCash < 1 ? 1 : newCash);
+            personaDao.update(personaEntity);
         } else
         { // Cash part
             Integer cashBonus = new Random().nextInt(2500) + 1;

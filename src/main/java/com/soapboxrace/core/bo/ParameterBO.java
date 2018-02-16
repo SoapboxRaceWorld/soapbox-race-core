@@ -39,7 +39,7 @@ public class ParameterBO {
 	}
 	
 	public String getShardId() {
-		String property = System.getProperty("sharding.id");
+		String property = System.getProperty("sharding.master");
 		
 		if (property == null)
 			return null;
@@ -172,31 +172,17 @@ public class ParameterBO {
 		}
 		return 10_000;
 	}
-	
+
 	public boolean useForwardedFor()
 	{
 		return Boolean.valueOf(getParameter("USE_FORWARDED_FOR"));
 	}
 	
-	public boolean enableLauncherFilter()
+	public boolean googleLoadBalancing()
 	{
-		return getParameter("ENABLE_LAUNCHER_FILTER") == null ? false : Boolean.valueOf(getParameter("ENABLE_LAUNCHER_FILTER"));
-	}
-	
-	public boolean ipFromForwardedFor()
-	{
-		return Boolean.valueOf(getParameter("IP_FROM_FORWARDED_FOR"));
+		return Boolean.valueOf(getParameter("GOOGLE_LB_ENABLED"));
 	}
 
-	public int getMaxLobbyPlayers()
-	{
-		String parameter = getParameter("LOBBY_MAX_PLAYERS");
-		if (parameter != null) {
-			return Integer.valueOf(parameter);
-		}
-		return 2;
-	}
-	
 	/**
 	 * minimum TE time in MS
 	 * @return

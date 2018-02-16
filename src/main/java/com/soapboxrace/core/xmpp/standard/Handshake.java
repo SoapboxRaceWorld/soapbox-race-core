@@ -40,8 +40,7 @@ public class Handshake implements IHandshake
         {
             if (!parameterBO.isShardingMaster())
             {
-                resource += String.format("_%s", parameterBO.getShardId() == null ? "unkshard" : parameterBO.getShardId());
-//                resource += "_" + (parameterBO.getShardId() == null ? "unkshard" : parameterBO.getShardId());
+                resource += "_" + (parameterBO.getShardId() == null ? "unkshard" : parameterBO.getShardId());
             } else
             {
                 resource += "_master";

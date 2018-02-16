@@ -7,6 +7,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.core.Context;
 
 import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.dao.TokenSessionDAO;
@@ -116,7 +117,7 @@ public class TokenSessionBO
                         String forwardedFor;
                         if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.useForwardedFor())
                         {
-                            userEntity.setIpAddress(parameterBO.ipFromForwardedFor() ? forwardedFor.split(",")[0] : forwardedFor);
+                            userEntity.setIpAddress(parameterBO.googleLoadBalancing() ? forwardedFor.split(",")[0] : forwardedFor);
                         } else
                         {
                             userEntity.setIpAddress(httpRequest.getRemoteAddr());

@@ -1,17 +1,21 @@
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.CarSlotDAO;
-import com.soapboxrace.core.dao.LevelRepDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.CarSlotEntity;
-import com.soapboxrace.core.jpa.LevelRepEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.jaxb.http.OwnedCarTrans;
-import com.soapboxrace.jaxb.util.UnmarshalXML;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.List;
+
+import com.soapboxrace.core.dao.CarSlotDAO;
+import com.soapboxrace.core.dao.InventoryDAO;
+import com.soapboxrace.core.dao.LevelRepDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.InventoryEntity;
+import com.soapboxrace.core.jpa.LevelRepEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.jaxb.http.InventoryTrans;
+import com.soapboxrace.jaxb.http.OwnedCarTrans;
+import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Stateless
 public class PersonaBO {
@@ -46,10 +50,6 @@ public class PersonaBO {
 
 	public CarSlotEntity getDefaultCarEntity(Long personaId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
-		
-		if (personaEntity == null)
-			return null;
-		
 		List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
 		Integer curCarIndex = personaEntity.getCurCarIndex();
 		if (carSlotList.size() > 0) {

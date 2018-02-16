@@ -1,10 +1,7 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.*;
-import com.soapboxrace.core.jpa.BasketDefinitionEntity;
-import com.soapboxrace.core.jpa.CarSlotEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.MarshalXML;
@@ -41,6 +38,12 @@ public class BasketBO {
 	@EJB
 	private TokenSessionBO tokenSessionBO;
 	
+	@EJB
+	private InventoryDAO inventoryDao;
+
+	@EJB
+	private InventoryItemDAO inventoryItemDao;
+
 	public OwnedCarTrans getCar(String productId) {
 		BasketDefinitionEntity basketDefinitonEntity = basketDefinitionsDAO.findById(productId);
 		if (basketDefinitonEntity == null) {
@@ -71,7 +74,55 @@ public class BasketBO {
 	
 	public CommerceResultStatus buyPowerups(String productId, PersonaEntity personaEntity)
 	{
-		return CommerceResultStatus.FAIL_BOOST_TRANSACTIONS_ARE_DISABLED;
+		ProductEntity powerupProduct = productDao.findByProductId(productId);
+		InventoryEntity inventoryEntity = inventoryDao.findByPersonaId(personaEntity.getPersonaId());
+		
+		if (powerupProduct == null)
+		{
+			return CommerceResultStatus.FAIL_INVALID_BASKET;
+		}
+
+		if(personaEntity.getCash() < powerupProduct.getPrice()) 
+		{
+			return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+		}
+		
+		InventoryItemEntity item = null;
+		
+		for (InventoryItemEntity i : inventoryEntity.getItems())
+		{
+			if (i.getHash() == powerupProduct.getHash())
+			{
+				item = i;
+				break;
+			}
+		}
+		
+		if (item == null)
+		{
+			return CommerceResultStatus.FAIL_INVALID_BASKET;
+		}
+		
+		boolean upgradedAmount = false;
+
+		int newUsageCount = item.getRemainingUseCount() + 15;
+		
+		if (newUsageCount > 250)
+			newUsageCount = 250;
+		
+		if (item.getRemainingUseCount() != newUsageCount)
+			upgradedAmount = true;
+		
+		item.setRemainingUseCount(newUsageCount);
+		inventoryItemDao.update(item);
+		
+		if (upgradedAmount)
+		{
+			personaEntity.setCash(personaEntity.getCash() - powerupProduct.getPrice());
+			personaDao.update(personaEntity);
+		}
+		
+		return CommerceResultStatus.SUCCESS;
 	}
 
 	public CommerceResultStatus buyCar(String productId, PersonaEntity personaEntity, String securityToken) {
