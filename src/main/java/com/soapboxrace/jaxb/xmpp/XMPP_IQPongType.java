@@ -1,17 +1,24 @@
 package com.soapboxrace.jaxb.xmpp;
 
+import javax.ejb.EJB;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.soapboxrace.core.api.util.Config;
+import com.soapboxrace.core.bo.ParameterBO;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XMPP_IQPongType", propOrder = { "from", "to", "id", "type" })
 @XmlRootElement(name = "iq")
 public class XMPP_IQPongType {
+
+	@EJB
+	@XmlTransient
+	private ParameterBO parameterBO;
+
 	@XmlAttribute(name = "from")
 	private String from;
 	@XmlAttribute(name = "to")
@@ -25,8 +32,8 @@ public class XMPP_IQPongType {
 	}
 
 	public XMPP_IQPongType(String id) {
-		from = String.format("sbrw.engine.engine@%s/EA_Chat", Config.getXmppIp());
-		to = Config.getXmppIp();
+		from = String.format("sbrw.engine.engine@%s/EA_Chat", parameterBO.getStrParam("XMPP_IP"));
+		to = parameterBO.getStrParam("XMPP_IP");
 		this.id = id;
 	}
 

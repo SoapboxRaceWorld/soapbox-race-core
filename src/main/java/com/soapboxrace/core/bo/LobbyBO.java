@@ -1,12 +1,15 @@
 package com.soapboxrace.core.bo;
 
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.LobbyDAO;
@@ -18,6 +21,7 @@ import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.LobbyEntrantEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppLobby;
 import com.soapboxrace.jaxb.http.ArrayOfLobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.Entrants;
@@ -51,10 +55,16 @@ public class LobbyBO {
 
 	@EJB
 	private LobbyDAO lobbyDao;
-	
+
+	@EJB
+	private ParameterBO parameterBO;
+
 	@EJB
 	private LobbyEntrantDAO lobbyEntrantDao;
-	
+
+	@EJB
+	private OpenFireSoapBoxCli openFireSoapBoxCli;
+
 	public void joinFastLobby(Long personaId) {
 		List<LobbyEntity> lobbys = lobbyDao.findAllOpen();
 		PersonaEntity personaEntity = personaDao.findById(personaId);
@@ -70,25 +80,25 @@ public class LobbyBO {
 			joinLobby(personaEntity, lobbys);
 		}
 	}
-	
+
 	public void createPrivateLobby(Long personaId, int eventId) {
 		List<Long> listOfPersona = new ArrayList<>();
-		if(!listOfPersona.isEmpty()) {
+		if (!listOfPersona.isEmpty()) {
 			PersonaEntity personaEntity = personaDao.findById(personaId);
 			createLobby(personaEntity, eventId, true);
 
 			LobbyEntity lobbys = lobbyDao.findByEventAndPersona(eventId, personaId);
-			if(lobbys != null) {
+			if (lobbys != null) {
 				XMPP_LobbyInviteType lobbyInviteType = new XMPP_LobbyInviteType();
 				lobbyInviteType.setEventId(eventId);
 				lobbyInviteType.setInvitedByPersonaId(personaId);
 				lobbyInviteType.setInviteLifetimeInMilliseconds(60);
 				lobbyInviteType.setPrivate(true);
 				lobbyInviteType.setLobbyInviteId(lobbys.getId());
-				
-				for(Long idPersona : listOfPersona) {
-					if(!idPersona.equals(personaId)) {
-						XmppLobby xmppLobby = new XmppLobby(idPersona);
+
+				for (Long idPersona : listOfPersona) {
+					if (!idPersona.equals(personaId)) {
+						XmppLobby xmppLobby = new XmppLobby(idPersona, openFireSoapBoxCli);
 						xmppLobby.sendLobbyInvite(lobbyInviteType);
 					}
 				}
@@ -99,13 +109,13 @@ public class LobbyBO {
 	private void createLobby(PersonaEntity personaEntity, int eventId, Boolean isPrivate) {
 		EventEntity eventEntity = new EventEntity();
 		eventEntity.setId(eventId);
-		
+
 		LobbyEntity lobbyEntity = new LobbyEntity();
 		lobbyEntity.setEvent(eventEntity);
 		lobbyEntity.setIsPrivate(isPrivate);
 		lobbyEntity.setPersonaId(personaEntity.getPersonaId());
 		lobbyDao.insert(lobbyEntity);
-		
+
 		sendJoinEvent(personaEntity.getPersonaId(), lobbyEntity);
 		new LobbyCountDown(lobbyEntity.getId(), lobbyDao, eventSessionDao, tokenDAO).start();
 	}
@@ -145,12 +155,12 @@ public class LobbyBO {
 	private void sendJoinEvent(Long personaId, LobbyEntity lobbyEntity) {
 		int eventId = lobbyEntity.getEvent().getId();
 		Long lobbyId = lobbyEntity.getId();
-		
+
 		XMPP_LobbyInviteType xMPP_LobbyInviteType = new XMPP_LobbyInviteType();
 		xMPP_LobbyInviteType.setEventId(eventId);
 		xMPP_LobbyInviteType.setLobbyInviteId(lobbyId);
-		
-		XmppLobby xmppLobby = new XmppLobby(personaId);
+
+		XmppLobby xmppLobby = new XmppLobby(personaId, openFireSoapBoxCli);
 		xmppLobby.sendLobbyInvite(xMPP_LobbyInviteType);
 	}
 
@@ -213,33 +223,33 @@ public class LobbyBO {
 				lobbyEntrantAdded.setLevel(lobbyEntrantEntity.getPersona().getLevel());
 				lobbyEntrantAdded.setPersonaId(personaId);
 				lobbyEntrantAdded.setLobbyId(lobbyEntrantEntity.getLobby().getId());
-				XmppLobby xmppLobby = new XmppLobby(lobbyEntrantEntity.getPersona().getPersonaId());
+				XmppLobby xmppLobby = new XmppLobby(lobbyEntrantEntity.getPersona().getPersonaId(), openFireSoapBoxCli);
 				xmppLobby.sendJoinMsg(lobbyEntrantAdded);
 			}
 		}
 	}
-	
+
 	public void deleteLobbyEntrant(Long personaId, Long lobbyId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		lobbyEntrantDao.deleteByPersona(personaEntity);
 		updateLobby(personaId, lobbyId);
 	}
-	
+
 	private void updateLobby(Long personaId, Long lobbyId) {
 		LobbyEntity lobbyEntity = lobbyDao.findById(lobbyId);
 		List<LobbyEntrantEntity> listLobbyEntrantEntity = lobbyEntity.getEntrants();
-		for(LobbyEntrantEntity entity : listLobbyEntrantEntity) {
+		for (LobbyEntrantEntity entity : listLobbyEntrantEntity) {
 			LobbyEntrantRemoved lobbyEntrantRemoved = new LobbyEntrantRemoved();
-			if(!Objects.equals(entity.getPersona().getPersonaId(), personaId)) {
+			if (!Objects.equals(entity.getPersona().getPersonaId(), personaId)) {
 				lobbyEntrantRemoved.setPersonaId(personaId);
 				lobbyEntrantRemoved.setLobbyId(lobbyId);
-				XmppLobby xmppLobby = new XmppLobby(entity.getPersona().getPersonaId());
+				XmppLobby xmppLobby = new XmppLobby(entity.getPersona().getPersonaId(), openFireSoapBoxCli);
 				xmppLobby.sendExitMsg(lobbyEntrantRemoved);
 			}
 		}
 	}
 
-	private static class LobbyCountDown extends Thread {
+	private class LobbyCountDown extends Thread {
 		private LobbyDAO lobbyDao;
 
 		private EventSessionDAO eventSessionDao;
@@ -247,6 +257,12 @@ public class LobbyBO {
 		private Long lobbyId;
 
 		private TokenSessionDAO tokenDAO;
+
+		@EJB
+		private ParameterBO parameterBO;
+
+		@EJB
+		private OpenFireSoapBoxCli openFireSoapBoxCli;
 
 		public LobbyCountDown(Long lobbyId, LobbyDAO lobbyDao, EventSessionDAO eventSessionDao, TokenSessionDAO tokenDAO) {
 			this.lobbyId = lobbyId;
@@ -319,13 +335,15 @@ public class LobbyBO {
 			xMPP_EventSessionType.setSessionId(eventDataEntity.getId());
 			lobbyLaunched.setNewRelayServer(true);
 			lobbyLaunched.setLobbyId(lobbyEntity.getId());
-			lobbyLaunched.setUdpRelayHost(Config.getUdpRaceIp());
-			lobbyLaunched.setUdpRelayPort(Config.getUdpRacePort());
+			lobbyLaunched.setUdpRelayHost(parameterBO.getStrParam("UDP_RACE_IP"));
+			lobbyLaunched.setUdpRelayPort(parameterBO.getIntParam("UDP_RACE_PORT"));
 
 			lobbyLaunched.setEntrants(entrantsType);
 
 			lobbyLaunched.setEventSession(xMPP_EventSessionType);
-			XmppLobby.sendRelay(lobbyLaunched, xMPP_CryptoTicketsType);
+
+			XmppLobby xmppLobby = new XmppLobby(0L, openFireSoapBoxCli);
+			xmppLobby.sendRelay(lobbyLaunched, xMPP_CryptoTicketsType);
 		}
 	}
 }
