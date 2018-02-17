@@ -22,6 +22,11 @@ INTO
     )
     ,
     (
+        'ENABLE_METONATOR_LAUNCHER_PROTECTION',
+        'false'
+    )
+    ,
+    (
         'MAX_CAR_SLOTS_FREE',
         '30'
     )

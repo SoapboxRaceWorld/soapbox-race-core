@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.soapboxrace.core.bo.AuthenticationBO;
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
 
@@ -21,9 +22,13 @@ import com.soapboxrace.jaxb.login.LoginStatusVO;
 @Provider
 @Priority(Priorities.AUTHORIZATION)
 public class LaunchFilter implements ContainerRequestFilter {
+
 	@EJB
 	private AuthenticationBO authenticationBO;
-	
+
+	@EJB
+	private ParameterBO parameterBO;
+
 	public static final DateTimeFormatter banEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 	@Context
@@ -31,59 +36,55 @@ public class LaunchFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		String userAgent = requestContext.getHeaderString("User-Agent");
 		String hwid = requestContext.getHeaderString("X-HWID");
-		String gameLauncherHash = requestContext.getHeaderString("X-GameLauncherHash");
-		
-		if ((userAgent == null || !userAgent.equals("GameLauncher (+https://github.com/SoapboxRaceWorld/GameLauncher_NFSW)"))
-				|| (hwid == null || hwid.trim().isEmpty()) || (gameLauncherHash == null || gameLauncherHash.trim().isEmpty())) {
-			LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-			loginStatusVO.setDescription("Please use MeTonaTOR's launcher. Or, are you tampering?");
+		if (parameterBO.getBoolParam("ENABLE_METONATOR_LAUNCHER_PROTECTION")) {
+			String userAgent = requestContext.getHeaderString("User-Agent");
+			String gameLauncherHash = requestContext.getHeaderString("X-GameLauncherHash");
 
-			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
+			if ((userAgent == null || !userAgent.equals("GameLauncher (+https://github.com/SoapboxRaceWorld/GameLauncher_NFSW)"))
+					|| (hwid == null || hwid.trim().isEmpty()) || (gameLauncherHash == null || gameLauncherHash.trim().isEmpty())) {
+				LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
+				loginStatusVO.setDescription("Please use MeTonaTOR's launcher. Or, are you tampering?");
 
-			return;
+				requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
+
+				return;
+			}
 		}
 
 		BanEntity banEntity = authenticationBO.checkNonUserBan(hwid, sr.getRemoteAddr(), sr.getParameter("email"));
 
-		if (banEntity != null)
-		{
+		if (banEntity != null) {
 			LoginStatusVO loginStatusVO = new BanUtil(banEntity).invoke();
 
 			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
 			return;
 		}
-
-		System.out.println("user passed launcher + ban check");
 	}
 
-	public static class BanUtil
-	{
+	public static class BanUtil {
 		private BanEntity banEntity;
 
-		public BanUtil(BanEntity banEntity)
-		{
+		public BanUtil(BanEntity banEntity) {
 			this.banEntity = banEntity;
 		}
 
-		public LoginStatusVO invoke()
-		{
+		public LoginStatusVO invoke() {
 			LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
 			LoginStatusVO.Ban ban = new LoginStatusVO.Ban();
 			ban.setReason(banEntity.getReason());
 			ban.setExpires(banEntity.getEndsAt() == null ? null : banEndFormatter.format(banEntity.getEndsAt()));
-			
-			loginStatusVO.setBan(ban);
-//				banDesc += " | Reason: " + banEntity.getReason().trim();
-//			}
-//
-//			if (banEntity.getEndsAt() != null)
-//			{
-//				banDesc += " | Ends: " + banEndFormatter.format(banEntity.getEndsAt());
-//			}
 
-//			loginStatusVO.setDescription(banDesc);
+			loginStatusVO.setBan(ban);
+			// banDesc += " | Reason: " + banEntity.getReason().trim();
+			// }
+			//
+			// if (banEntity.getEndsAt() != null)
+			// {
+			// banDesc += " | Ends: " + banEndFormatter.format(banEntity.getEndsAt());
+			// }
+
+			// loginStatusVO.setDescription(banDesc);
 			return loginStatusVO;
 		}
 	}
