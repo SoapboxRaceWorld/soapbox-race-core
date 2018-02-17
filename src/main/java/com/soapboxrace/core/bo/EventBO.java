@@ -764,6 +764,9 @@ public class EventBO extends AccoladesFunc {
 	}
 
 	private Integer updateDamageCar(Long personaId, Long carId, Integer numberOfCollision, Long eventDuration) {
+		if (!parameterBO.getBoolParam("ENABLE_CAR_DAMAGE")) {
+			return 100;
+		}
 		OwnedCarTrans ownedCarTrans = personaBo.getDefaultCar(personaId);
 		if (ownedCarTrans.getDurability() > 10) {
 			Integer calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;

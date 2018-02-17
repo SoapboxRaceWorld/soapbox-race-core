@@ -22,6 +22,11 @@ INTO
     )
     ,
     (
+        'ENABLE_CAR_DAMAGE',
+        'false'
+    )
+    ,
+    (
         'ENABLE_METONATOR_LAUNCHER_PROTECTION',
         'false'
     )
