@@ -36,6 +36,7 @@ import com.soapboxrace.jaxb.http.LuckyDrawInfo;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
+import com.soapboxrace.jaxb.http.RewardPart;
 import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
 import com.soapboxrace.jaxb.http.RouteEntrantResult;
 import com.soapboxrace.jaxb.http.RouteEventResult;
@@ -480,6 +481,13 @@ public class EventBO extends AccoladesFunc {
 		cash *= parameterBO.getCashRewardMultiplier();
 
 		Accolades accolades = new Accolades();
+		if (!parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			cash = 0;
+			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
+			for (RewardPart rewardPart : rewardPartList) {
+				rewardPart.setTokenPart(0);
+			}
+		}
 		accolades.setFinalRewards(getFinalReward((int) exp, (int) cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int) exp));
 		if (!isBusted) {
@@ -544,6 +552,13 @@ public class EventBO extends AccoladesFunc {
 		cash *= parameterBO.getCashRewardMultiplier();
 
 		Accolades accolades = new Accolades();
+		if (!parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			cash = 0;
+			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
+			for (RewardPart rewardPart : rewardPartList) {
+				rewardPart.setTokenPart(0);
+			}
+		}
 		accolades.setFinalRewards(getFinalReward((int) exp, (int) cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int) exp));
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo(routeArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
@@ -606,11 +621,18 @@ public class EventBO extends AccoladesFunc {
 		cash *= parameterBO.getCashRewardMultiplier();
 
 		Accolades accolades = new Accolades();
+		if (!parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			cash = 0;
+			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
+			for (RewardPart rewardPart : rewardPartList) {
+				rewardPart.setTokenPart(0);
+			}
+		}
 		accolades.setFinalRewards(getFinalReward((int) exp, (int) cash));
+		accolades.setRewardInfo(arrayOfRewardPart);
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int) exp));
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo(dragArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
 		accolades.setOriginalRewards(getFinalReward((int) exp, (int) cash));
-		accolades.setRewardInfo(arrayOfRewardPart);
 
 		applyRaceReward((int) exp, (int) cash, personaEntity);
 		return accolades;
@@ -737,6 +759,13 @@ public class EventBO extends AccoladesFunc {
 		cash *= parameterBO.getCashRewardMultiplier();
 
 		Accolades accolades = new Accolades();
+		if (!parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			cash = 0;
+			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
+			for (RewardPart rewardPart : rewardPartList) {
+				rewardPart.setTokenPart(0);
+			}
+		}
 		accolades.setFinalRewards(getFinalReward((int) exp, (int) cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int) exp));
 		if (teamEscapeArbitrationPacket.getFinishReason() == 22) {

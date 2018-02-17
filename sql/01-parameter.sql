@@ -32,6 +32,11 @@ INTO
     )
     ,
     (
+        'ENABLE_ECONOMY',
+        'false'
+    )
+    ,
+    (
         'ENABLE_METONATOR_LAUNCHER_PROTECTION',
         'false'
     )

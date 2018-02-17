@@ -86,7 +86,6 @@ public class Personas {
 		arrayOfWalletTrans.getWalletTrans().add(walletTrans);
 
 		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
-		System.out.println(MarshalXML.marshal(commerceSessionTrans));
 		commerceSessionTrans.getUpdatedCar().setDurability(100);
 		
 		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());

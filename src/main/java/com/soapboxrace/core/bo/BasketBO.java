@@ -46,10 +46,10 @@ public class BasketBO {
 
 	@EJB
 	private PersonaDAO personaDao;
-	
+
 	@EJB
 	private TokenSessionBO tokenSessionBO;
-	
+
 	@EJB
 	private InventoryDAO inventoryDao;
 
@@ -67,93 +67,93 @@ public class BasketBO {
 
 	public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity) {
 		OwnedCarTrans defaultCar = personaBo.getDefaultCar(personaEntity.getPersonaId());
-		
-		int price = (int)(productDao.findByProductId(productId).getPrice() * (100 - defaultCar.getDurability()));
-		if(personaEntity.getCash() < price) {
+
+		int price = (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCar.getDurability()));
+		if (personaEntity.getCash() < price) {
 			return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
 		}
-		personaEntity.setCash(personaEntity.getCash() - price);
+		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			personaEntity.setCash(personaEntity.getCash() - price);
+		}
 		personaDao.update(personaEntity);
-		
+
 		defaultCar.setDurability(100);
-		
+
 		CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
 		defaultCarEntity.setOwnedCarTrans(MarshalXML.marshal(defaultCar));
-		
+
 		carSlotDAO.update(defaultCarEntity);
 		return CommerceResultStatus.SUCCESS;
 	}
-	
-	public CommerceResultStatus buyPowerups(String productId, PersonaEntity personaEntity)
-	{
+
+	public CommerceResultStatus buyPowerups(String productId, PersonaEntity personaEntity) {
+		if (!parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+		}
 		ProductEntity powerupProduct = productDao.findByProductId(productId);
 		InventoryEntity inventoryEntity = inventoryDao.findByPersonaId(personaEntity.getPersonaId());
-		
-		if (powerupProduct == null)
-		{
+
+		if (powerupProduct == null) {
 			return CommerceResultStatus.FAIL_INVALID_BASKET;
 		}
 
-		if(personaEntity.getCash() < powerupProduct.getPrice()) 
-		{
+		if (personaEntity.getCash() < powerupProduct.getPrice()) {
 			return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
 		}
-		
+
 		InventoryItemEntity item = null;
-		
-		for (InventoryItemEntity i : inventoryEntity.getItems())
-		{
-			if (i.getHash() == powerupProduct.getHash())
-			{
+
+		for (InventoryItemEntity i : inventoryEntity.getItems()) {
+			if (i.getHash() == powerupProduct.getHash()) {
 				item = i;
 				break;
 			}
 		}
-		
-		if (item == null)
-		{
+
+		if (item == null) {
 			return CommerceResultStatus.FAIL_INVALID_BASKET;
 		}
-		
+
 		boolean upgradedAmount = false;
 
 		int newUsageCount = item.getRemainingUseCount() + 15;
-		
+
 		if (newUsageCount > 250)
 			newUsageCount = 250;
-		
+
 		if (item.getRemainingUseCount() != newUsageCount)
 			upgradedAmount = true;
-		
+
 		item.setRemainingUseCount(newUsageCount);
 		inventoryItemDao.update(item);
-		
-		if (upgradedAmount)
-		{
+
+		if (upgradedAmount) {
 			personaEntity.setCash(personaEntity.getCash() - powerupProduct.getPrice());
 			personaDao.update(personaEntity);
 		}
-		
+
 		return CommerceResultStatus.SUCCESS;
 	}
 
 	public CommerceResultStatus buyCar(String productId, PersonaEntity personaEntity, String securityToken) {
-		if(getPersonaCarCount(personaEntity.getPersonaId()) >= parameterBO.getCarLimit(securityToken))
+		if (getPersonaCarCount(personaEntity.getPersonaId()) >= parameterBO.getCarLimit(securityToken))
 			return CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS;
-		
+
 		ProductEntity productEntity = productDao.findByProductId(productId);
-		if(personaEntity.getCash() < productEntity.getPrice())
+		if (personaEntity.getCash() < productEntity.getPrice())
 			return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
-		
+
 		String carXml = MarshalXML.marshal(getCar(productId));
 		CarSlotEntity carSlotEntity = new CarSlotEntity();
 		carSlotEntity.setPersona(personaEntity);
 		carSlotEntity.setOwnedCarTrans(carXml);
 		carSlotDAO.insert(carSlotEntity);
-		
-		personaEntity.setCash(personaEntity.getCash() - productEntity.getPrice());
+
+		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			personaEntity.setCash(personaEntity.getCash() - productEntity.getPrice());
+		}
 		personaDao.update(personaEntity);
-		
+
 		personaBo.changeDefaultCar(personaEntity.getPersonaId(), carSlotEntity.getId());
 		return CommerceResultStatus.SUCCESS;
 	}
@@ -168,22 +168,24 @@ public class BasketBO {
 
 	public boolean sellCar(String securityToken, Long personaId, Long serialNumber) {
 		this.tokenSessionBO.verifyPersona(securityToken, personaId);
-		
+
 		CarSlotEntity carSlotEntity = carSlotDAO.findById(serialNumber);
 		int personaCarCount = getPersonaCarCount(personaId);
 		if (carSlotEntity == null || personaCarCount <= 1) {
 			return false;
 		}
-		
+
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		final int maxCash = parameterBO.getMaxCash(securityToken);
-		if(personaEntity.getCash() < maxCash) {
+		if (personaEntity.getCash() < maxCash) {
 			OwnedCarTrans car = UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
-			int cashTotal = (int)(personaEntity.getCash() + car.getCustomCar().getResalePrice());
-			personaEntity.setCash(Math.max(0, Math.min(maxCash, cashTotal)));
+			int cashTotal = (int) (personaEntity.getCash() + car.getCustomCar().getResalePrice());
+			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+				personaEntity.setCash(Math.max(0, Math.min(maxCash, cashTotal)));
+			}
 			personaDao.update(personaEntity);
 		}
-		
+
 		carSlotDAO.delete(carSlotEntity);
 		return true;
 	}
