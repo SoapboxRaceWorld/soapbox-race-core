@@ -1,7 +1,5 @@
 package com.soapboxrace.core.xmpp;
 
-import javax.ejb.EJB;
-
 import com.soapboxrace.jaxb.xmpp.XMPP_EventTimingOutType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeDragEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeEventTimingOut;
@@ -12,11 +10,11 @@ public class XmppEvent {
 
 	private long personaId;
 
-	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
 
-	public XmppEvent(long personaId) {
+	public XmppEvent(long personaId, OpenFireSoapBoxCli openFireSoapBoxCli) {
 		this.personaId = personaId;
+		this.openFireSoapBoxCli = openFireSoapBoxCli;
 	}
 
 	public void sendRaceEnd(XMPP_ResponseTypeRouteEntrantResult routeEntrantResultResponse) {
