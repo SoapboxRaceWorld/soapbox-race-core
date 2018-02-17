@@ -33,7 +33,7 @@ public class Crypto {
 	public UdpRelayCryptoTicket relayCryptoTicket(@HeaderParam("securityToken") String securityToken, @PathParam("personaId") Long personaId) {
 		byte[] randomUUIDBytes = UUIDGen.getRandomUUIDBytes();
 		String ticketIV = Base64.getEncoder().encodeToString(randomUUIDBytes);
-		udpClient.sendUdpKey(randomUUIDBytes);
+		udpClient.sendRaceUdpKey(randomUUIDBytes);
 		UdpRelayCryptoTicket udpRelayCryptoTicket = new UdpRelayCryptoTicket();
 		String activeRelayCryptoTicket = tokenBO.getActiveRelayCryptoTicket(securityToken);
 		udpRelayCryptoTicket.setCryptoTicket(activeRelayCryptoTicket);
@@ -46,6 +46,9 @@ public class Crypto {
 	@Path("/cryptoticket")
 	@Produces(MediaType.APPLICATION_XML)
 	public String cryptoticket() {
+		byte[] randomUUIDBytes = UUIDGen.getRandomUUIDBytes();
+		String ticketIV = Base64.getEncoder().encodeToString(randomUUIDBytes);
+		udpClient.sendFreeroamUdpKey(randomUUIDBytes);
 		byte[] helloPacket = { 10, 11, 12, 13 };
 		ByteBuffer byteBuffer = ByteBuffer.allocate(32);
 		byteBuffer.put(helloPacket);
@@ -57,7 +60,9 @@ public class Crypto {
 		stringBuilder.append(cryptoTicketBase64);
 		stringBuilder.append("</CryptoTicket>\n");
 		stringBuilder.append("<SessionKey>AAAAAAAAAAAAAAAAAAAAAA==</SessionKey>\n");
-		stringBuilder.append("<TicketIv>AAAAAAAAAAAAAAAAAAAAAA==</TicketIv>\n");
+		stringBuilder.append("<TicketIv>");
+		stringBuilder.append(ticketIV);
+		stringBuilder.append("</TicketIv>\n");
 		stringBuilder.append("</ClientServerCryptoTicket>");
 		return stringBuilder.toString();
 	}
