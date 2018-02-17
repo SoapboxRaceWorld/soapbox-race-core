@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS
         minCarClassRating INT NOT NULL,
         minLevel INT NOT NULL,
         name VARCHAR(255) COLLATE utf8_unicode_ci,
+        maxPlayers INT NOT NULL DEFAULT 2,
         PRIMARY KEY (ID)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;

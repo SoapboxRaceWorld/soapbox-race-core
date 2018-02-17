@@ -124,7 +124,7 @@ public class LobbyBO {
 	private void joinLobby(PersonaEntity personaEntity, List<LobbyEntity> lobbys) {
 		LobbyEntity lobbyEntity = null;
 		for (LobbyEntity lobbyEntityTmp : lobbys) {
-			int maxEntrants = 2;
+			int maxEntrants = lobbyEntityTmp.getEvent().getMaxPlayers();
 			List<LobbyEntrantEntity> lobbyEntrants = lobbyEntityTmp.getEntrants();
 			int entrantsSize = lobbyEntrants.size();
 			if (entrantsSize < maxEntrants) {
