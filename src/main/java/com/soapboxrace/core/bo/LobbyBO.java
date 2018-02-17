@@ -117,7 +117,7 @@ public class LobbyBO {
 		lobbyDao.insert(lobbyEntity);
 
 		sendJoinEvent(personaEntity.getPersonaId(), lobbyEntity);
-		new LobbyCountDown(lobbyEntity.getId(), lobbyDao, eventSessionDao, tokenDAO).start();
+		new LobbyCountDown(lobbyEntity.getId(), lobbyDao, eventSessionDao, tokenDAO, parameterBO, openFireSoapBoxCli).start();
 	}
 
 	private void joinLobby(PersonaEntity personaEntity, List<LobbyEntity> lobbys) {
@@ -258,17 +258,18 @@ public class LobbyBO {
 
 		private TokenSessionDAO tokenDAO;
 
-		@EJB
 		private ParameterBO parameterBO;
 
-		@EJB
 		private OpenFireSoapBoxCli openFireSoapBoxCli;
 
-		public LobbyCountDown(Long lobbyId, LobbyDAO lobbyDao, EventSessionDAO eventSessionDao, TokenSessionDAO tokenDAO) {
+		public LobbyCountDown(Long lobbyId, LobbyDAO lobbyDao, EventSessionDAO eventSessionDao, TokenSessionDAO tokenDAO, ParameterBO parameterBO,
+				OpenFireSoapBoxCli openFireSoapBoxCli) {
 			this.lobbyId = lobbyId;
 			this.lobbyDao = lobbyDao;
 			this.eventSessionDao = eventSessionDao;
 			this.tokenDAO = tokenDAO;
+			this.parameterBO = parameterBO;
+			this.openFireSoapBoxCli = openFireSoapBoxCli;
 		}
 
 		public void run() {
