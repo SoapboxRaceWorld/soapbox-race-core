@@ -7,6 +7,7 @@ import javax.ejb.EJB;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.PersonaBO;
 import com.soapboxrace.core.dao.InventoryDAO;
 import com.soapboxrace.core.dao.InventoryItemDAO;
@@ -44,6 +45,9 @@ public class AccoladesFunc {
 	@EJB
 	private PersonaBO personaBo;
 
+	@EJB
+	private ParameterBO parameterBO;
+
 	private int[][] rankDrop = new int[][] { new int[] {}, new int[] { 0, 4, 2, 4, 2, 3, 2, 3, 2, 2 }, new int[] { 1, 3, 1, 1, 0, 3, 1, 1, 2, 2 },
 			new int[] { 2, 1, 1, 1, 1, 1, 2, 2, 2, 0 } };
 
@@ -51,6 +55,9 @@ public class AccoladesFunc {
 			new int[] { 3, 2, 3, 3, 3, 4, 2, 2, 4, 4 }, new int[] { 3, 2, 2, 4, 2, 2, 3, 3, 4, 4 }, new int[] { 2, 2, 3, 2, 2, 3, 2, 4, 3, 4 } };
 
 	public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
+		if (!parameterBO.getBoolParam("ENABLE_REPUTATION")) {
+			return;
+		}
 		// Cash parts
 		Integer cashMax = (int) personaEntity.getCash() + cash;
 		personaEntity.setCash(cashMax > 9999999 ? 9999999 : cashMax < 1 ? 1 : cashMax);
@@ -196,10 +203,10 @@ public class AccoladesFunc {
 				inventoryItemDao.insert(inventoryItemEntity);
 			}
 
-//			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-				int newCash = (int) personaEntity.getCash() + cashBonus;
-				personaEntity.setCash(newCash > 9999999 ? 9999999 : newCash < 1 ? 1 : newCash);
-//			}
+			// if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			int newCash = (int) personaEntity.getCash() + cashBonus;
+			personaEntity.setCash(newCash > 9999999 ? 9999999 : newCash < 1 ? 1 : newCash);
+			// }
 			personaDao.update(personaEntity);
 		} else { // Cash part
 			Integer cashBonus = new Random().nextInt(2500) + 1;

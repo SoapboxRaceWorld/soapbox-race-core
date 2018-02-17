@@ -47,6 +47,11 @@ INTO
     )
     ,
     (
+        'ENABLE_REPUTATION',
+        'false'
+    )
+    ,
+    (
         'ENABLE_TREASURE_HUNT',
         'false'
     )

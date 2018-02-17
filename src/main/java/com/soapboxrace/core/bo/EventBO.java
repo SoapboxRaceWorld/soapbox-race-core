@@ -488,6 +488,14 @@ public class EventBO extends AccoladesFunc {
 				rewardPart.setTokenPart(0);
 			}
 		}
+		if (!parameterBO.getBoolParam("ENABLE_REPUTATION")) {
+			exp = 0;
+			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
+			for (RewardPart rewardPart : rewardPartList) {
+				rewardPart.setRepPart(0);
+			}
+		}
+
 		accolades.setFinalRewards(getFinalReward((int) exp, (int) cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int) exp));
 		if (!isBusted) {
@@ -559,6 +567,13 @@ public class EventBO extends AccoladesFunc {
 				rewardPart.setTokenPart(0);
 			}
 		}
+		if (!parameterBO.getBoolParam("ENABLE_REPUTATION")) {
+			exp = 0;
+			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
+			for (RewardPart rewardPart : rewardPartList) {
+				rewardPart.setRepPart(0);
+			}
+		}
 		accolades.setFinalRewards(getFinalReward((int) exp, (int) cash));
 		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int) exp));
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo(routeArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
@@ -626,6 +641,13 @@ public class EventBO extends AccoladesFunc {
 			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
 			for (RewardPart rewardPart : rewardPartList) {
 				rewardPart.setTokenPart(0);
+			}
+		}
+		if (!parameterBO.getBoolParam("ENABLE_REPUTATION")) {
+			exp = 0;
+			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
+			for (RewardPart rewardPart : rewardPartList) {
+				rewardPart.setRepPart(0);
 			}
 		}
 		accolades.setFinalRewards(getFinalReward((int) exp, (int) cash));
@@ -764,6 +786,13 @@ public class EventBO extends AccoladesFunc {
 			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
 			for (RewardPart rewardPart : rewardPartList) {
 				rewardPart.setTokenPart(0);
+			}
+		}
+		if (!parameterBO.getBoolParam("ENABLE_REPUTATION")) {
+			exp = 0;
+			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
+			for (RewardPart rewardPart : rewardPartList) {
+				rewardPart.setRepPart(0);
 			}
 		}
 		accolades.setFinalRewards(getFinalReward((int) exp, (int) cash));
