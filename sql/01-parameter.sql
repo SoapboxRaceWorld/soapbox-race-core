@@ -143,7 +143,7 @@ INTO
     ,
     (
         'UDP_FREEROAM_PASSWORD',
-        '12345678'
+        null
     )
     ,
     (
@@ -158,7 +158,7 @@ INTO
     ,
     (
         'UDP_RACE_PASSWORD',
-        '12345678'
+        null
     )
     ,
     (

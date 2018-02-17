@@ -20,6 +20,9 @@ public class UDPClient {
 	public void sendRaceUdpKey(byte[] key) {
 		try {
 			String password = parameterBO.getStrParam("UDP_RACE_PASSWORD");
+			if (password == null || password.isEmpty()) {
+				return;
+			}
 			DatagramSocket clientSocket = new DatagramSocket();
 			InetAddress IPAddress = InetAddress.getByName(parameterBO.getStrParam("UDP_RACE_IP"));
 			byte[] receiveData = new byte[16];
@@ -48,6 +51,9 @@ public class UDPClient {
 	public void sendFreeroamUdpKey(byte[] key) {
 		try {
 			String password = parameterBO.getStrParam("UDP_FREEROAM_PASSWORD");
+			if (password == null || password.isEmpty()) {
+				return;
+			}
 			DatagramSocket clientSocket = new DatagramSocket();
 			InetAddress IPAddress = InetAddress.getByName(parameterBO.getStrParam("UDP_FREEROAM_IP"));
 			byte[] receiveData = new byte[16];
