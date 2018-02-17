@@ -21,7 +21,7 @@ public class LobbyKeepAliveBO {
 	@EJB
 	private LobbyBO lobbyBO;
 
-	@Schedule(second = "*/5", minute = "*", hour = "*", persistent = false)
+	@Schedule(second = "*/20", minute = "*", hour = "*", persistent = false)
 	public void run() {
 		List<LobbyEntity> findAllOpen = lobbyDao.findAllRunning();
 		if (findAllOpen != null) {

@@ -39,7 +39,7 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
 
 	public List<LobbyEntity> findAllRunning() {
 		Date dateNow = new Date();
-		Date datePast = new Date(dateNow.getTime() - 55000);
+		Date datePast = new Date(dateNow.getTime() - 50000);
 
 		TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findAllOpen", LobbyEntity.class);
 		query.setParameter("dateTime1", datePast);
