@@ -57,6 +57,11 @@ INTO
     )
     ,
     (
+        'FREEROAM_JSON_PATH',
+        '/tmp/freeroam-map.jsonp'
+    )
+    ,
+    (
         'MAX_CAR_SLOTS_FREE',
         '30'
     )
