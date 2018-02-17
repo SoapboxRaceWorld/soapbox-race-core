@@ -27,6 +27,11 @@ INTO
     )
     ,
     (
+        'ENABLE_DROP_ITEM',
+        'false'
+    )
+    ,
+    (
         'ENABLE_METONATOR_LAUNCHER_PROTECTION',
         'false'
     )

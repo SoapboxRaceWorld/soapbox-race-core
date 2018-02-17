@@ -750,10 +750,12 @@ public class EventBO extends AccoladesFunc {
 	}
 
 	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, PersonaEntity personaEntity) {
+		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
+		if (!parameterBO.getBoolParam("ENABLE_DROP_ITEM")) {
+			return luckyDrawInfo;
+		}
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
 		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, level, false, personaEntity));
-
-		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
 		luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
 		luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
 		return luckyDrawInfo;
