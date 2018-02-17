@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.InventoryBO;
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.xmpp.XMPP_PowerupActivatedType;
@@ -27,6 +28,9 @@ public class Powerups {
 
 	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
+
+	@EJB
+	private ParameterBO parameterBO;
 
 	@POST
 	@Secured
@@ -54,7 +58,9 @@ public class Powerups {
 			}
 		}
 
-		inventoryBO.decrementUsage(activePersonaId, powerupHash);
+		if (parameterBO.getBoolParam("ENABLE_POWERUP_DECREASE")) {
+			inventoryBO.decrementUsage(activePersonaId, powerupHash);
+		}
 
 		return "";
 	}

@@ -37,6 +37,11 @@ INTO
     )
     ,
     (
+        'ENABLE_POWERUP_DECREASE',
+        'false'
+    )
+    ,
+    (
         'ENABLE_TREASURE_HUNT',
         'false'
     )
