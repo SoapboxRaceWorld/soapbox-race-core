@@ -7,13 +7,11 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import javax.ejb.EJB;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.ParameterBO;
 
-@Startup
-@Singleton
+@Stateless
 public class UDPClient {
 
 	@EJB
@@ -39,10 +37,10 @@ public class UDPClient {
 			String modifiedSentence = new String(receivePacket.getData()).trim();
 			clientSocket.close();
 			if (modifiedSentence == null || !modifiedSentence.equals("0")) {
-				throw new Exception("UDP SERVER REJECTED PASSWORD");
+				throw new Exception("UDP SERVER REJECTED PASSWORD OR TIMED OUT");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 
 	}
