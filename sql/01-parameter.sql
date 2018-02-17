@@ -132,6 +132,11 @@ INTO
     )
     ,
     (
+        'STARTING_LEVEL_NUMBER',
+        '1'
+    )
+    ,
+    (
         'TE_MINIMUM_TIME',
         '60000'
     )
