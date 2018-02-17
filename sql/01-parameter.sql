@@ -32,6 +32,11 @@ INTO
     )
     ,
     (
+        'MAX_ONLINE_PLAYERS',
+        '50'
+    )
+    ,
+    (
         'MAX_PLAYER_CASH_FREE',
         '5000000'
     )
