@@ -27,6 +27,11 @@ INTO
     )
     ,
     (
+        'ENABLE_TREASURE_HUNT',
+        'false'
+    )
+    ,
+    (
         'MAX_CAR_SLOTS_FREE',
         '30'
     )

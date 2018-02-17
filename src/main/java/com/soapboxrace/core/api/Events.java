@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.EventBO;
 import com.soapboxrace.core.bo.EventsBO;
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.jaxb.http.ArrayOfEventDefinition;
@@ -27,12 +28,15 @@ public class Events {
 
 	@EJB
 	private EventBO eventBO;
-	
+
 	@EJB
 	private EventsBO eventsBO;
-	
+
 	@EJB
 	private TokenSessionBO tokenSessionBO;
+
+	@EJB
+	private ParameterBO parameterBO;
 
 	@GET
 	@Secured
@@ -40,7 +44,7 @@ public class Events {
 	@Produces(MediaType.APPLICATION_XML)
 	public EventsPacket availableAtLevel(@HeaderParam("securityToken") String securityToken) {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-		
+
 		EventsPacket eventsPacket = new EventsPacket();
 		ArrayOfEventDefinition arrayOfEventDefinition = new ArrayOfEventDefinition();
 		List<EventEntity> availableAtLevel = eventBO.availableAtLevel(activePersonaId);
@@ -89,10 +93,13 @@ public class Events {
 	@Path("/gettreasurehunteventsession")
 	@Produces(MediaType.APPLICATION_XML)
 	public TreasureHuntEventSession getTreasureHuntEventSession(@HeaderParam("securityToken") String securityToken) {
-		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-		return eventsBO.getTreasureHuntEventSession(activePersonaId);
+		if (parameterBO.getBoolParam("ENABLE_TREASURE_HUNT")) {
+			Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+			return eventsBO.getTreasureHuntEventSession(activePersonaId);
+		}
+		return new TreasureHuntEventSession();
 	}
-	
+
 	@GET
 	@Secured
 	@Path("/notifycoincollected")
@@ -101,7 +108,7 @@ public class Events {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
 		return eventsBO.notifyCoinCollected(activePersonaId, coins);
 	}
-	
+
 	@GET
 	@Secured
 	@Path("/accolades")
