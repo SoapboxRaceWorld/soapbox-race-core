@@ -1,8 +1,7 @@
 package com.soapboxrace.core.api.util;
 
-import com.soapboxrace.core.bo.AuthenticationBO;
-import com.soapboxrace.core.jpa.BanEntity;
-import com.soapboxrace.jaxb.login.LoginStatusVO;
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 import javax.annotation.Priority;
 import javax.ejb.EJB;
@@ -13,8 +12,10 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
-import java.time.format.DateTimeFormatter;
+
+import com.soapboxrace.core.bo.AuthenticationBO;
+import com.soapboxrace.core.jpa.BanEntity;
+import com.soapboxrace.jaxb.login.LoginStatusVO;
 
 @LauncherChecks
 @Provider

@@ -1,15 +1,16 @@
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
-import com.soapboxrace.core.jpa.InventoryItemEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.util.List;
+
+import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.jpa.InventoryItemEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 
 @Stateless
 public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {

@@ -1,12 +1,12 @@
 package com.soapboxrace.core.xmpp.standard;
 
+import java.net.Socket;
+
 import com.soapboxrace.core.xmpp.BaseOpenFireTalk;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 import com.soapboxrace.jaxb.xmpp.XMPP_IQPingType;
 import com.soapboxrace.jaxb.xmpp.XMPP_IQPongType;
-
-import java.net.Socket;
 
 public class StandardOpenFireTalk extends BaseOpenFireTalk
 {

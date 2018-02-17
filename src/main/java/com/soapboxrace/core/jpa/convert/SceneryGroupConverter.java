@@ -1,10 +1,11 @@
 package com.soapboxrace.core.jpa.convert;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
 @Converter
 public class SceneryGroupConverter implements AttributeConverter<List<String>, String> {

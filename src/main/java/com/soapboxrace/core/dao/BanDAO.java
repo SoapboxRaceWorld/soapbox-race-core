@@ -1,15 +1,15 @@
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
-import com.soapboxrace.core.jpa.BanEntity;
-import com.soapboxrace.core.jpa.UserEntity;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.time.LocalDateTime;
-import java.util.List;
+
+import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.jpa.BanEntity;
+import com.soapboxrace.core.jpa.UserEntity;
 
 @Stateless
 public class BanDAO extends BaseDAO<BanEntity>

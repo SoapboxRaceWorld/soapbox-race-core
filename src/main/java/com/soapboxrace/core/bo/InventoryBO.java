@@ -1,5 +1,8 @@
 package com.soapboxrace.core.bo;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
 import com.soapboxrace.core.dao.InventoryDAO;
 import com.soapboxrace.core.dao.InventoryItemDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
@@ -9,9 +12,6 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 
 @Stateless
 public class InventoryBO

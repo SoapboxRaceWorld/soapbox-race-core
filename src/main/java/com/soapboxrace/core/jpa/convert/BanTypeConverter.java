@@ -1,10 +1,9 @@
 package com.soapboxrace.core.jpa.convert;
 
-import com.soapboxrace.core.jpa.BanEntity;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.util.Arrays;
+
+import com.soapboxrace.core.jpa.BanEntity;
 
 @Converter
 public class BanTypeConverter implements AttributeConverter<BanEntity.BanType, String> {

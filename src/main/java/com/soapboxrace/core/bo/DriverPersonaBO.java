@@ -7,7 +7,13 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.dao.CarSlotDAO;
+import com.soapboxrace.core.dao.InventoryDAO;
+import com.soapboxrace.core.dao.InventoryItemDAO;
+import com.soapboxrace.core.dao.LobbyEntrantDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.TreasureHuntDAO;
+import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.core.jpa.UserEntity;

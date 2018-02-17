@@ -1,15 +1,34 @@
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.*;
-import com.soapboxrace.core.jpa.*;
-import com.soapboxrace.jaxb.http.*;
-import com.soapboxrace.jaxb.util.MarshalXML;
-import com.soapboxrace.jaxb.util.UnmarshalXML;
-import com.soapboxrace.util.ListDiffer;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.List;
+
+import com.soapboxrace.core.dao.CarSlotDAO;
+import com.soapboxrace.core.dao.InventoryDAO;
+import com.soapboxrace.core.dao.InventoryItemDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.ProductDAO;
+import com.soapboxrace.core.dao.VinylProductDAO;
+import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.InventoryEntity;
+import com.soapboxrace.core.jpa.InventoryItemEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.core.jpa.VinylProductEntity;
+import com.soapboxrace.jaxb.http.CommerceResultStatus;
+import com.soapboxrace.jaxb.http.CommerceSessionTrans;
+import com.soapboxrace.jaxb.http.CustomCarTrans;
+import com.soapboxrace.jaxb.http.CustomVinylTrans;
+import com.soapboxrace.jaxb.http.EntitlementItemTrans;
+import com.soapboxrace.jaxb.http.OwnedCarTrans;
+import com.soapboxrace.jaxb.http.PerformancePartTrans;
+import com.soapboxrace.jaxb.http.SkillModPartTrans;
+import com.soapboxrace.jaxb.http.VisualPartTrans;
+import com.soapboxrace.jaxb.util.MarshalXML;
+import com.soapboxrace.jaxb.util.UnmarshalXML;
+import com.soapboxrace.util.ListDiffer;
 
 @Stateless
 public class CommerceBO

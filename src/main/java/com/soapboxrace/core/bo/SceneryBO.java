@@ -1,8 +1,9 @@
 package com.soapboxrace.core.bo;
 
-import javax.ejb.Stateless;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.ejb.Stateless;
 
 @Stateless
 public class SceneryBO {

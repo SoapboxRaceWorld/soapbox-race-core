@@ -1,17 +1,20 @@
 package com.soapboxrace.core.bo.util;
 
-import java.security.MessageDigest;
 import java.util.List;
 import java.util.Random;
 
 import javax.ejb.EJB;
 
-import com.soapboxrace.core.dao.*;
-import com.soapboxrace.core.jpa.InventoryEntity;
-import com.soapboxrace.core.jpa.InventoryItemEntity;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import com.soapboxrace.core.bo.PersonaBO;
+import com.soapboxrace.core.dao.InventoryDAO;
+import com.soapboxrace.core.dao.InventoryItemDAO;
+import com.soapboxrace.core.dao.LevelRepDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.ProductDAO;
+import com.soapboxrace.core.jpa.InventoryEntity;
+import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.EnumRewardCategory;
