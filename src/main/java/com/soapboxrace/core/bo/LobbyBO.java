@@ -118,7 +118,6 @@ public class LobbyBO {
 
 		sendJoinEvent(personaEntity.getPersonaId(), lobbyEntity);
 		new LobbyCountDown(lobbyEntity.getId(), lobbyDao, eventSessionDao, tokenDAO, parameterBO, openFireSoapBoxCli).start();
-		new LobbyKeepAlive(lobbyDao).start();
 	}
 
 	private void joinLobby(PersonaEntity personaEntity, List<LobbyEntity> lobbys) {
@@ -216,7 +215,7 @@ public class LobbyBO {
 		return lobbyInfoType;
 	}
 
-	private void sendJoinMsg(Long personaId, List<LobbyEntrantEntity> lobbyEntrants) {
+	public void sendJoinMsg(Long personaId, List<LobbyEntrantEntity> lobbyEntrants) {
 		for (LobbyEntrantEntity lobbyEntrantEntity : lobbyEntrants) {
 			LobbyEntrantAdded lobbyEntrantAdded = new LobbyEntrantAdded();
 			if (!Objects.equals(personaId, lobbyEntrantEntity.getPersona().getPersonaId())) {
@@ -349,32 +348,4 @@ public class LobbyBO {
 		}
 	}
 
-	private class LobbyKeepAlive extends Thread {
-		private LobbyDAO lobbyDao;
-
-		public LobbyKeepAlive(LobbyDAO lobbyDao) {
-			this.lobbyDao = lobbyDao;
-		}
-
-		public void run() {
-			while (true) {
-				List<LobbyEntity> findAllOpen = lobbyDao.findAllRunning();
-				if (findAllOpen != null) {
-					for (LobbyEntity lobbyEntity : findAllOpen) {
-						List<LobbyEntrantEntity> entrants = lobbyEntity.getEntrants();
-						if (entrants != null) {
-							for (LobbyEntrantEntity lobbyEntrantEntity : entrants) {
-								sendJoinMsg(lobbyEntrantEntity.getPersona().getPersonaId(), entrants);
-							}
-						}
-					}
-				}
-				try {
-					Thread.sleep(5000);
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-				}
-			}
-		}
-	}
 }
