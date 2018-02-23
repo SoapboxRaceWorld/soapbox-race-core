@@ -15,4 +15,7 @@ public class OwnedCarDAO extends BaseDAO<OwnedCarEntity> {
 		this.entityManager = entityManager;
 	}
 
+	public OwnedCarEntity findById(Long id) {
+		return entityManager.find(OwnedCarEntity.class, id);
+	}
 }

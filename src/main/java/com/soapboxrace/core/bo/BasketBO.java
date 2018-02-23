@@ -202,17 +202,23 @@ public class BasketBO {
 	public boolean sellCar(String securityToken, Long personaId, Long serialNumber) {
 		this.tokenSessionBO.verifyPersona(securityToken, personaId);
 
-		CarSlotEntity carSlotEntity = carSlotDAO.findById(serialNumber);
+		OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(serialNumber);
+		if (ownedCarEntity == null) {
+			return false;
+		}
+		CarSlotEntity carSlotEntity = ownedCarEntity.getCarSlot();
+		if (carSlotEntity == null) {
+			return false;
+		}
 		int personaCarCount = getPersonaCarCount(personaId);
-		if (carSlotEntity == null || personaCarCount <= 1) {
+		if (personaCarCount <= 1) {
 			return false;
 		}
 
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		final int maxCash = parameterBO.getMaxCash(securityToken);
 		if (personaEntity.getCash() < maxCash) {
-			OwnedCarTrans car = UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
-			int cashTotal = (int) (personaEntity.getCash() + car.getCustomCar().getResalePrice());
+			int cashTotal = (int) (personaEntity.getCash() + carSlotEntity.getOwnedCar().getCustomCar().getResalePrice());
 			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
 				personaEntity.setCash(Math.max(0, Math.min(maxCash, cashTotal)));
 			}
