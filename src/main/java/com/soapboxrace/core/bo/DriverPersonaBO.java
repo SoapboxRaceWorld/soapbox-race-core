@@ -14,6 +14,7 @@ import com.soapboxrace.core.dao.LobbyEntrantDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.TreasureHuntDAO;
 import com.soapboxrace.core.dao.UserDAO;
+import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.core.jpa.UserEntity;
@@ -121,6 +122,10 @@ public class DriverPersonaBO {
 
 	public void deletePersona(Long personaId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
+		List<CarSlotEntity> carSlots = carSlotDAO.findByPersonaId(personaId);
+		for (CarSlotEntity carSlotEntity : carSlots) {
+			carSlotDAO.delete(carSlotEntity);
+		}
 		carSlotDAO.deleteByPersona(personaEntity);
 		lobbyEntrantDAO.deleteByPersona(personaEntity);
 		treasureHuntDAO.deleteByPersona(personaEntity.getPersonaId());
