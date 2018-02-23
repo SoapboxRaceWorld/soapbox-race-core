@@ -10,6 +10,7 @@ import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
+import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CardDecks;
@@ -34,7 +35,6 @@ import com.soapboxrace.jaxb.http.EnumRewardCategory;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.LuckyDrawInfo;
-import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
 import com.soapboxrace.jaxb.http.RewardPart;
@@ -44,7 +44,6 @@ import com.soapboxrace.jaxb.http.RouteEventResult;
 import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
 import com.soapboxrace.jaxb.http.TeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.TeamEscapeEventResult;
-import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.xmpp.XMPP_DragEntrantResultType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeDragEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
@@ -70,6 +69,9 @@ public class EventBO extends AccoladesFunc {
 
 	@EJB
 	private CarSlotDAO carSlotDao;
+
+	@EJB
+	private OwnedCarDAO ownedCarDAO;
 
 	@EJB
 	private SocialBO socialBo;
@@ -828,18 +830,17 @@ public class EventBO extends AccoladesFunc {
 		if (!parameterBO.getBoolParam("ENABLE_CAR_DAMAGE")) {
 			return 100;
 		}
-		CarSlotEntity carSlotEntity = carSlotDao.findById(carId);
-		OwnedCarEntity ownedCar = carSlotEntity.getOwnedCar();
-		int durability = ownedCar.getDurability();
+		OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(carId);
+		CarSlotEntity carSlotEntity = ownedCarEntity.getCarSlot();
+		int durability = ownedCarEntity.getDurability();
 		if (durability > 10) {
 			Integer calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
 			Integer newCarDamage = durability - calcDamage;
-			ownedCar.setDurability(newCarDamage < 10 ? 10 : newCarDamage);
-
+			ownedCarEntity.setDurability(newCarDamage < 10 ? 10 : newCarDamage);
 			if (carSlotEntity != null) {
 				carSlotDao.update(carSlotEntity);
 			}
 		}
-		return ownedCar.getDurability();
+		return ownedCarEntity.getDurability();
 	}
 }
