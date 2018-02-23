@@ -191,6 +191,9 @@ public class BasketBO {
 		for (CarSlotEntity carSlotEntity : findByPersonaId) {
 			CustomCarEntity customCar = carSlotEntity.getOwnedCar().getCustomCar();
 			customCar.getPaints().size();
+			customCar.getPerformanceParts().size();
+			customCar.getSkillModParts().size();
+			customCar.getVisualParts().size();
 			customCar.getVinyls().size();
 		}
 		return findByPersonaId;

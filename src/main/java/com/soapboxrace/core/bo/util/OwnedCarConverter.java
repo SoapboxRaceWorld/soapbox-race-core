@@ -6,7 +6,10 @@ import java.util.List;
 import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.core.jpa.PaintEntity;
+import com.soapboxrace.core.jpa.PerformancePartEntity;
+import com.soapboxrace.core.jpa.SkillModPartEntity;
 import com.soapboxrace.core.jpa.VinylEntity;
+import com.soapboxrace.core.jpa.VisualPartEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCustomPaintTrans;
 import com.soapboxrace.jaxb.http.ArrayOfCustomVinylTrans;
 import com.soapboxrace.jaxb.http.ArrayOfPerformancePartTrans;
@@ -16,6 +19,9 @@ import com.soapboxrace.jaxb.http.CustomCarTrans;
 import com.soapboxrace.jaxb.http.CustomPaintTrans;
 import com.soapboxrace.jaxb.http.CustomVinylTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
+import com.soapboxrace.jaxb.http.PerformancePartTrans;
+import com.soapboxrace.jaxb.http.SkillModPartTrans;
+import com.soapboxrace.jaxb.http.VisualPartTrans;
 
 public class OwnedCarConverter {
 
@@ -54,8 +60,26 @@ public class OwnedCarConverter {
 		}
 		customCarTrans.setPaints(arrayOfCustomPaintTrans);
 
-		customCarTrans.setPerformanceParts(new ArrayOfPerformancePartTrans());
-		customCarTrans.setSkillModParts(new ArrayOfSkillModPartTrans());
+		ArrayOfPerformancePartTrans arrayOfPerformancePartTrans = new ArrayOfPerformancePartTrans();
+		List<PerformancePartTrans> performancePartTransList = arrayOfPerformancePartTrans.getPerformancePartTrans();
+		List<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
+		for (PerformancePartEntity performancePartEntity : performanceParts) {
+			PerformancePartTrans performancePartTrans = new PerformancePartTrans();
+			performancePartTrans.setPerformancePartAttribHash(performancePartEntity.getPerformancePartAttribHash());
+			performancePartTransList.add(performancePartTrans);
+		}
+		customCarTrans.setPerformanceParts(arrayOfPerformancePartTrans);
+
+		ArrayOfSkillModPartTrans arrayOfSkillModPartTrans = new ArrayOfSkillModPartTrans();
+		List<SkillModPartTrans> skillModPartTransList = arrayOfSkillModPartTrans.getSkillModPartTrans();
+		List<SkillModPartEntity> skillModParts = customCarEntity.getSkillModParts();
+		for (SkillModPartEntity skillModPartEntity : skillModParts) {
+			SkillModPartTrans skillModPartTrans = new SkillModPartTrans();
+			skillModPartTrans.setIsFixed(skillModPartEntity.isFixed());
+			skillModPartTrans.setSkillModPartAttribHash(skillModPartEntity.getSkillModPartAttribHash());
+			skillModPartTransList.add(skillModPartTrans);
+		}
+		customCarTrans.setSkillModParts(arrayOfSkillModPartTrans);
 
 		ArrayOfCustomVinylTrans arrayOfCustomVinylTrans = new ArrayOfCustomVinylTrans();
 		List<CustomVinylTrans> customVinylTransList = arrayOfCustomVinylTrans.getCustomVinylTrans();
@@ -85,9 +109,18 @@ public class OwnedCarConverter {
 			customVinylTransTmp.setVar4(vinylEntity.getVar4());
 			customVinylTransList.add(customVinylTransTmp);
 		}
-
 		customCarTrans.setVinyls(arrayOfCustomVinylTrans);
-		customCarTrans.setVisualParts(new ArrayOfVisualPartTrans());
+
+		ArrayOfVisualPartTrans arrayOfVisualPartTrans = new ArrayOfVisualPartTrans();
+		List<VisualPartTrans> visualPartTransList = arrayOfVisualPartTrans.getVisualPartTrans();
+		List<VisualPartEntity> visualParts = customCarEntity.getVisualParts();
+		for (VisualPartEntity visualPartEntity : visualParts) {
+			VisualPartTrans visualPartTrans = new VisualPartTrans();
+			visualPartTrans.setPartHash(visualPartEntity.getPartHash());
+			visualPartTrans.setSlotHash(visualPartEntity.getSlotHash());
+			visualPartTransList.add(visualPartTrans);
+		}
+		customCarTrans.setVisualParts(arrayOfVisualPartTrans);
 
 		ownedCarTrans.setCustomCar(customCarTrans);
 		return ownedCarTrans;
@@ -130,8 +163,26 @@ public class OwnedCarConverter {
 		}
 		customCarEntity.setPaints(paintEntityList);
 
-		// customCarEntity.setPerformanceParts("");
-		// customCarEntity.setSkillModParts(skillModParts);
+		ArrayList<PerformancePartEntity> performancePartEntityList = new ArrayList<>();
+		List<PerformancePartTrans> performancePartTransList = customCarTrans.getPerformanceParts().getPerformancePartTrans();
+		for (PerformancePartTrans performancePartTransTmp : performancePartTransList) {
+			PerformancePartEntity performancePartEntity = new PerformancePartEntity();
+			performancePartEntity.setCustomCar(customCarEntity);
+			performancePartEntity.setPerformancePartAttribHash(performancePartTransTmp.getPerformancePartAttribHash());
+			performancePartEntityList.add(performancePartEntity);
+		}
+		customCarEntity.setPerformanceParts(performancePartEntityList);
+
+		ArrayList<SkillModPartEntity> skillModPartEntityList = new ArrayList<>();
+		List<SkillModPartTrans> skillModPartTransList = customCarTrans.getSkillModParts().getSkillModPartTrans();
+		for (SkillModPartTrans skillModPartTransTmp : skillModPartTransList) {
+			SkillModPartEntity skillModPartEntity = new SkillModPartEntity();
+			skillModPartEntity.setCustomCar(customCarEntity);
+			skillModPartEntity.setFixed(skillModPartTransTmp.isIsFixed());
+			skillModPartEntity.setSkillModPartAttribHash(skillModPartTransTmp.getSkillModPartAttribHash());
+			skillModPartEntityList.add(skillModPartEntity);
+		}
+		customCarEntity.setSkillModParts(skillModPartEntityList);
 
 		ArrayList<VinylEntity> vinylEntityList = new ArrayList<>();
 		List<CustomVinylTrans> customVinylTrans = customCarTrans.getVinyls().getCustomVinylTrans();
@@ -163,7 +214,16 @@ public class OwnedCarConverter {
 		}
 		customCarEntity.setVinyls(vinylEntityList);
 
-		// customCarEntity.setVisualParts(visualParts);
+		ArrayList<VisualPartEntity> visualPartEntityList = new ArrayList<>();
+		List<VisualPartTrans> visualPartTransList = customCarTrans.getVisualParts().getVisualPartTrans();
+		for (VisualPartTrans visualPartTransTmp : visualPartTransList) {
+			VisualPartEntity visualPartEntity = new VisualPartEntity();
+			visualPartEntity.setCustomCar(customCarEntity);
+			visualPartEntity.setPartHash(visualPartTransTmp.getPartHash());
+			visualPartEntity.setSlotHash(visualPartTransTmp.getSlotHash());
+			visualPartEntityList.add(visualPartEntity);
+		}
+		customCarEntity.setVisualParts(visualPartEntityList);
 	}
 
 }
