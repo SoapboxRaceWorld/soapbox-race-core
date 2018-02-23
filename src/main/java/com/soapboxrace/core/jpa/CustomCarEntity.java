@@ -2,14 +2,13 @@ package com.soapboxrace.core.jpa;
 
 import java.util.List;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -37,21 +36,19 @@ public class CustomCarEntity {
 	@JoinColumn(name = "ownedCarId", referencedColumnName = "ID")
 	private OwnedCarEntity ownedCar;
 
-	@Lob
-	@Column(length = 65535)
-	private String paints;
+	@OneToMany(mappedBy = "customCar", targetEntity = PaintEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<PaintEntity> paints;
 
-	@OneToMany(mappedBy = "customCar", targetEntity = PerformancePartEntity.class)
+	@OneToMany(mappedBy = "customCar", targetEntity = PerformancePartEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<PerformancePartEntity> performanceParts;
 
-	@OneToMany(mappedBy = "customCar", targetEntity = SkillModPartEntity.class)
+	@OneToMany(mappedBy = "customCar", targetEntity = SkillModPartEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<SkillModPartEntity> skillModParts;
 
-	@Lob
-	@Column(length = 65535)
-	private String vinyls;
+	@OneToMany(mappedBy = "customCar", targetEntity = VinylEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<VinylEntity> vinyls;
 
-	@OneToMany(mappedBy = "customCar", targetEntity = VisualPartEntity.class)
+	@OneToMany(mappedBy = "customCar", targetEntity = VisualPartEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<VisualPartEntity> visualParts;
 
 	public Long getId() {
@@ -174,19 +171,19 @@ public class CustomCarEntity {
 		this.visualParts = visualParts;
 	}
 
-	public String getPaints() {
+	public List<PaintEntity> getPaints() {
 		return paints;
 	}
 
-	public void setPaints(String paints) {
+	public void setPaints(List<PaintEntity> paints) {
 		this.paints = paints;
 	}
 
-	public String getVinyls() {
+	public List<VinylEntity> getVinyls() {
 		return vinyls;
 	}
 
-	public void setVinyls(String vinyls) {
+	public void setVinyls(List<VinylEntity> vinyls) {
 		this.vinyls = vinyls;
 	}
 

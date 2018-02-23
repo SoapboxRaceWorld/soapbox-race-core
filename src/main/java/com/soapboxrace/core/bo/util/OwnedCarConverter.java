@@ -1,5 +1,7 @@
 package com.soapboxrace.core.bo.util;
 
+import java.util.List;
+
 import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCustomPaintTrans;
@@ -8,6 +10,7 @@ import com.soapboxrace.jaxb.http.ArrayOfPerformancePartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfSkillModPartTrans;
 import com.soapboxrace.jaxb.http.ArrayOfVisualPartTrans;
 import com.soapboxrace.jaxb.http.CustomCarTrans;
+import com.soapboxrace.jaxb.http.CustomPaintTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 
 public class OwnedCarConverter {
