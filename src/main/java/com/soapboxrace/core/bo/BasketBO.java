@@ -5,17 +5,22 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.BasketDefinitionDAO;
 import com.soapboxrace.core.dao.CarSlotDAO;
+import com.soapboxrace.core.dao.CustomCarDAO;
 import com.soapboxrace.core.dao.InventoryDAO;
 import com.soapboxrace.core.dao.InventoryItemDAO;
+import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.BasketDefinitionEntity;
 import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.core.jpa.InventoryEntity;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
+import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
@@ -39,6 +44,12 @@ public class BasketBO {
 	private CarSlotDAO carSlotDAO;
 
 	@EJB
+	private OwnedCarDAO ownedCarDAO;
+
+	@EJB
+	private CustomCarDAO customCarDAO;
+
+	@EJB
 	private TokenSessionDAO tokenDAO;
 
 	@EJB
@@ -56,7 +67,7 @@ public class BasketBO {
 	@EJB
 	private InventoryItemDAO inventoryItemDao;
 
-	public OwnedCarTrans getCar(String productId) {
+	private OwnedCarTrans getCar(String productId) {
 		BasketDefinitionEntity basketDefinitonEntity = basketDefinitionsDAO.findById(productId);
 		if (basketDefinitonEntity == null) {
 			throw new IllegalArgumentException(String.format("No basket definition for %s", productId));
@@ -136,17 +147,29 @@ public class BasketBO {
 	}
 
 	public CommerceResultStatus buyCar(String productId, PersonaEntity personaEntity, String securityToken) {
-		if (getPersonaCarCount(personaEntity.getPersonaId()) >= parameterBO.getCarLimit(securityToken))
+		if (getPersonaCarCount(personaEntity.getPersonaId()) >= parameterBO.getCarLimit(securityToken)) {
 			return CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS;
+		}
 
 		ProductEntity productEntity = productDao.findByProductId(productId);
-		if (personaEntity.getCash() < productEntity.getPrice())
+		if (personaEntity.getCash() < productEntity.getPrice()) {
 			return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+		}
 
-		String carXml = MarshalXML.marshal(getCar(productId));
+		OwnedCarTrans ownedCarTrans = getCar(productId);
+		ownedCarTrans.setId(0L);
+		ownedCarTrans.getCustomCar().setId(0);
 		CarSlotEntity carSlotEntity = new CarSlotEntity();
 		carSlotEntity.setPersona(personaEntity);
-		carSlotEntity.setOwnedCarTrans(carXml);
+
+		OwnedCarEntity ownedCarEntity = new OwnedCarEntity();
+		ownedCarEntity.setCarSlot(carSlotEntity);
+		CustomCarEntity customCarEntity = new CustomCarEntity();
+		customCarEntity.setOwnedCar(ownedCarEntity);
+		ownedCarEntity.setCustomCar(customCarEntity);
+		carSlotEntity.setOwnedCar(ownedCarEntity);
+		OwnedCarConverter.Trans2Entity(ownedCarTrans, ownedCarEntity);
+
 		carSlotDAO.insert(carSlotEntity);
 
 		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {

@@ -34,7 +34,7 @@ public class CustomCarEntity {
 	private int version;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ownedCarId")
+	@JoinColumn(name = "ownedCarId", referencedColumnName = "ID")
 	private OwnedCarEntity ownedCar;
 
 	@Lob
@@ -188,6 +188,14 @@ public class CustomCarEntity {
 
 	public void setVinyls(String vinyls) {
 		this.vinyls = vinyls;
+	}
+
+	public OwnedCarEntity getOwnedCar() {
+		return ownedCar;
+	}
+
+	public void setOwnedCar(OwnedCarEntity ownedCar) {
+		this.ownedCar = ownedCar;
 	}
 
 }

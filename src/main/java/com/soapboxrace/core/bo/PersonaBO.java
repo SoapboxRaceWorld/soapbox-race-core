@@ -57,7 +57,7 @@ public class PersonaBO {
 			}
 			return carSlotList.get(curCarIndex);
 		}
-		throw new IllegalStateException(String.format("Persona %d has no default car", personaId));
+		return null;
 	}
 
 	public OwnedCarTrans getDefaultCar(Long personaId) {

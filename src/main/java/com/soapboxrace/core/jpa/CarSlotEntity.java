@@ -1,7 +1,9 @@
 package com.soapboxrace.core.jpa;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +35,7 @@ public class CarSlotEntity {
 	@Column(length = 65535)
 	private String ownedCarTrans;
 
-	@OneToOne(mappedBy = "carSlot", targetEntity = OwnedCarEntity.class)
+	@OneToOne(mappedBy = "carSlot", targetEntity = OwnedCarEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private OwnedCarEntity ownedCar;
 
 	public Long getId() {

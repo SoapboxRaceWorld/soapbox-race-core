@@ -2,6 +2,7 @@ package com.soapboxrace.core.jpa;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -28,7 +29,7 @@ public class OwnedCarEntity {
 	private Date expirationDate;
 	private String ownershipType = "CustomizedCar";
 
-	@OneToOne(mappedBy = "ownedCar", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "ownedCar", targetEntity = CustomCarEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private CustomCarEntity customCar;
 
 	public Long getId() {
