@@ -58,6 +58,34 @@ public class OwnedCarConverter {
 		customCarTrans.setSkillModParts(new ArrayOfSkillModPartTrans());
 
 		ArrayOfCustomVinylTrans arrayOfCustomVinylTrans = new ArrayOfCustomVinylTrans();
+		List<CustomVinylTrans> customVinylTransList = arrayOfCustomVinylTrans.getCustomVinylTrans();
+		List<VinylEntity> vinyls = customCarEntity.getVinyls();
+		for (VinylEntity vinylEntity : vinyls) {
+			CustomVinylTrans customVinylTransTmp = new CustomVinylTrans();
+			customVinylTransTmp.setHash(vinylEntity.getHash());
+			customVinylTransTmp.setHue1(vinylEntity.getHue1());
+			customVinylTransTmp.setHue2(vinylEntity.getHue2());
+			customVinylTransTmp.setHue3(vinylEntity.getHue3());
+			customVinylTransTmp.setHue4(vinylEntity.getHue4());
+			customVinylTransTmp.setLayer(vinylEntity.getLayer());
+			customVinylTransTmp.setMir(vinylEntity.isMir());
+			customVinylTransTmp.setRot(vinylEntity.getRot());
+			customVinylTransTmp.setSat1(vinylEntity.getSat1());
+			customVinylTransTmp.setSat2(vinylEntity.getSat2());
+			customVinylTransTmp.setSat3(vinylEntity.getSat3());
+			customVinylTransTmp.setSat4(vinylEntity.getSat4());
+			customVinylTransTmp.setScaleX(vinylEntity.getScalex());
+			customVinylTransTmp.setScaleY(vinylEntity.getScaley());
+			customVinylTransTmp.setShear(vinylEntity.getShear());
+			customVinylTransTmp.setTranX(vinylEntity.getTranx());
+			customVinylTransTmp.setTranY(vinylEntity.getTrany());
+			customVinylTransTmp.setVar1(vinylEntity.getVar1());
+			customVinylTransTmp.setVar2(vinylEntity.getVar2());
+			customVinylTransTmp.setVar3(vinylEntity.getVar3());
+			customVinylTransTmp.setVar4(vinylEntity.getVar4());
+			customVinylTransList.add(customVinylTransTmp);
+		}
+
 		customCarTrans.setVinyls(arrayOfCustomVinylTrans);
 		customCarTrans.setVisualParts(new ArrayOfVisualPartTrans());
 
