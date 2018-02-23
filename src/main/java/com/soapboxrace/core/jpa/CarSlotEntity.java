@@ -1,14 +1,12 @@
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -30,10 +28,6 @@ public class CarSlotEntity {
 	@ManyToOne
 	@JoinColumn(name = "PersonaId", referencedColumnName = "ID")
 	private PersonaEntity persona;
-
-	@Lob
-	@Column(length = 65535)
-	private String ownedCarTrans;
 
 	@OneToOne(mappedBy = "carSlot", targetEntity = OwnedCarEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private OwnedCarEntity ownedCar;
@@ -60,14 +54,6 @@ public class CarSlotEntity {
 
 	public void setOwnedCar(OwnedCarEntity ownedCar) {
 		this.ownedCar = ownedCar;
-	}
-
-	public String getOwnedCarTrans() {
-		return ownedCarTrans;
-	}
-
-	public void setOwnedCarTrans(String ownedCarTrans) {
-		this.ownedCarTrans = ownedCarTrans;
 	}
 
 }

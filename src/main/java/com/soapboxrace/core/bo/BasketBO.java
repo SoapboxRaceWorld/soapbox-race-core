@@ -25,7 +25,6 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
-import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Stateless

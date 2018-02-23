@@ -30,12 +30,14 @@ import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
 import com.soapboxrace.jaxb.http.ArrayOfWalletTrans;
+import com.soapboxrace.jaxb.http.BasketItemTrans;
 import com.soapboxrace.jaxb.http.BasketTrans;
 import com.soapboxrace.jaxb.http.CarSlotInfoTrans;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceResultTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionResultTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
+import com.soapboxrace.jaxb.http.EntitlementItemTrans;
 import com.soapboxrace.jaxb.http.InvalidBasketTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
@@ -89,11 +91,24 @@ public class Personas {
 		arrayOfWalletTrans.getWalletTrans().add(walletTrans);
 
 		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
+
+		List<BasketItemTrans> basketItemTrans = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
+		if (basketItemTrans == null || basketItemTrans.isEmpty()) {
+			List<EntitlementItemTrans> entitlementItemTrans = commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans();
+			if (entitlementItemTrans == null || entitlementItemTrans.isEmpty()) {
+				System.out.println("install from inventory, or removing stuff");
+			} else {
+				System.out.println("selling inventory stuff");
+			}
+		} else {
+			System.out.println("buying from basket");
+		}
+
 		commerceSessionTrans.getUpdatedCar().setDurability(100);
 
 		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
 		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
-		commerceSessionResultTrans.setStatus(commerceBO.updateCar(commerceSessionTrans, personaEntity));
+		commerceSessionResultTrans.setStatus(CommerceResultStatus.SUCCESS);
 		commerceSessionResultTrans.setUpdatedCar(commerceBO.responseCar(commerceSessionTrans));
 		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
 		return commerceSessionResultTrans;
