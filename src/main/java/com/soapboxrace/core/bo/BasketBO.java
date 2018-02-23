@@ -169,6 +169,7 @@ public class BasketBO {
 		ownedCarEntity.setCustomCar(customCarEntity);
 		carSlotEntity.setOwnedCar(ownedCarEntity);
 		OwnedCarConverter.Trans2Entity(ownedCarTrans, ownedCarEntity);
+		OwnedCarConverter.Details2NewEntity(ownedCarTrans, ownedCarEntity);
 
 		carSlotDAO.insert(carSlotEntity);
 
@@ -186,7 +187,13 @@ public class BasketBO {
 	}
 
 	public List<CarSlotEntity> getPersonasCar(Long personaId) {
-		return carSlotDAO.findByPersonaId(personaId);
+		List<CarSlotEntity> findByPersonaId = carSlotDAO.findByPersonaId(personaId);
+		for (CarSlotEntity carSlotEntity : findByPersonaId) {
+			CustomCarEntity customCar = carSlotEntity.getOwnedCar().getCustomCar();
+			customCar.getPaints().size();
+			customCar.getVinyls().size();
+		}
+		return findByPersonaId;
 	}
 
 	public boolean sellCar(String securityToken, Long personaId, Long serialNumber) {
