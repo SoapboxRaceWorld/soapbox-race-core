@@ -10,13 +10,13 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "CARSLOT")
-@NamedQueries({
-		@NamedQuery(name = "CarSlotEntity.findByPersonaId", //
-				query = "SELECT obj FROM CarSlotEntity obj WHERE obj.persona = :persona ORDER by obj.id"), //
+@NamedQueries({ @NamedQuery(name = "CarSlotEntity.findByPersonaId", //
+		query = "SELECT obj FROM CarSlotEntity obj WHERE obj.persona = :persona ORDER by obj.id"), //
 		@NamedQuery(name = "CarSlotEntity.deleteByPersona", //
 				query = "DELETE FROM CarSlotEntity obj WHERE obj.persona = :persona") //
 })
@@ -33,6 +33,9 @@ public class CarSlotEntity {
 	@Column(length = 65535)
 	private String ownedCarTrans;
 
+	@OneToOne(mappedBy = "carSlot", targetEntity = OwnedCarEntity.class)
+	private OwnedCarEntity ownedCar;
+
 	public Long getId() {
 		return id;
 	}
@@ -47,6 +50,14 @@ public class CarSlotEntity {
 
 	public void setPersona(PersonaEntity persona) {
 		this.persona = persona;
+	}
+
+	public OwnedCarEntity getOwnedCar() {
+		return ownedCar;
+	}
+
+	public void setOwnedCar(OwnedCarEntity ownedCar) {
+		this.ownedCar = ownedCar;
 	}
 
 	public String getOwnedCarTrans() {
