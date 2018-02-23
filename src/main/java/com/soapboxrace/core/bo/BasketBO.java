@@ -77,9 +77,8 @@ public class BasketBO {
 	}
 
 	public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity) {
-		OwnedCarTrans defaultCar = personaBo.getDefaultCar(personaEntity.getPersonaId());
-
-		int price = (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCar.getDurability()));
+		CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
+		int price = (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCarEntity.getOwnedCar().getDurability()));
 		if (personaEntity.getCash() < price) {
 			return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
 		}
@@ -88,10 +87,7 @@ public class BasketBO {
 		}
 		personaDao.update(personaEntity);
 
-		defaultCar.setDurability(100);
-
-		CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
-		defaultCarEntity.setOwnedCarTrans(MarshalXML.marshal(defaultCar));
+		defaultCarEntity.getOwnedCar().setDurability(100);
 
 		carSlotDAO.update(defaultCarEntity);
 		return CommerceResultStatus.SUCCESS;

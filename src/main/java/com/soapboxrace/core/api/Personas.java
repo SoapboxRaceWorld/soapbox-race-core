@@ -233,9 +233,7 @@ public class Personas {
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 		List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
 		for (CarSlotEntity carSlotEntity : personasCar) {
-			String ownedCarTransXml = carSlotEntity.getOwnedCarTrans();
-			OwnedCarTrans ownedCarTrans = UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
-			ownedCarTrans.setId(carSlotEntity.getId());
+			OwnedCarTrans ownedCarTrans = OwnedCarConverter.Entity2Trans(carSlotEntity.getOwnedCar());
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 		}
 		return arrayOfOwnedCarTrans;

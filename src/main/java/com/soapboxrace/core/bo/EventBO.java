@@ -16,6 +16,7 @@ import com.soapboxrace.core.jpa.CardDecks;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
@@ -827,18 +828,18 @@ public class EventBO extends AccoladesFunc {
 		if (!parameterBO.getBoolParam("ENABLE_CAR_DAMAGE")) {
 			return 100;
 		}
-		OwnedCarTrans ownedCarTrans = personaBo.getDefaultCar(personaId);
-		if (ownedCarTrans.getDurability() > 10) {
+		CarSlotEntity carSlotEntity = carSlotDao.findById(carId);
+		OwnedCarEntity ownedCar = carSlotEntity.getOwnedCar();
+		int durability = ownedCar.getDurability();
+		if (durability > 10) {
 			Integer calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
-			Integer newCarDamage = ownedCarTrans.getDurability() - calcDamage;
-			ownedCarTrans.setDurability(newCarDamage < 10 ? 10 : newCarDamage);
+			Integer newCarDamage = durability - calcDamage;
+			ownedCar.setDurability(newCarDamage < 10 ? 10 : newCarDamage);
 
-			CarSlotEntity carSlotEntity = carSlotDao.findById(carId);
 			if (carSlotEntity != null) {
-				carSlotEntity.setOwnedCarTrans(MarshalXML.marshal(ownedCarTrans));
 				carSlotDao.update(carSlotEntity);
 			}
 		}
-		return ownedCarTrans.getDurability();
+		return ownedCar.getDurability();
 	}
 }
