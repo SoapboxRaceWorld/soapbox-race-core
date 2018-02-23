@@ -44,6 +44,7 @@ public class OwnedCarConverter {
 		customCarTrans.setRating(customCarEntity.getRating());
 		customCarTrans.setResalePrice(customCarEntity.getResalePrice());
 		customCarTrans.setRideHeightDrop(customCarEntity.getRideHeightDrop());
+		customCarTrans.setSkillModSlotCount(customCarEntity.getSkillModSlotCount());
 		customCarTrans.setVersion(customCarEntity.getVersion());
 
 		ArrayOfCustomPaintTrans arrayOfCustomPaintTrans = new ArrayOfCustomPaintTrans();
@@ -142,6 +143,7 @@ public class OwnedCarConverter {
 		customCarEntity.setRating(customCarTrans.getRating());
 		customCarEntity.setResalePrice(customCarTrans.getResalePrice());
 		customCarEntity.setRideHeightDrop(customCarTrans.getRideHeightDrop());
+		customCarEntity.setSkillModSlotCount(customCarTrans.getSkillModSlotCount());
 		customCarEntity.setVersion(customCarTrans.getVersion());
 	}
 
