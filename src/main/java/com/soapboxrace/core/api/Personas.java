@@ -225,7 +225,7 @@ public class Personas {
 	@Produces(MediaType.APPLICATION_XML)
 	public String sellInventoryItem(@HeaderParam("securityToken") String securityToken, @PathParam("entitlementTag") String entitlementTag) {
 		long personaId = sessionBO.getActivePersonaId(securityToken);
-		inventoryBO.sellEntitlement(personaId, entitlementTag);
+		inventoryBO.sellPart(personaId, entitlementTag);
 		return "";
 	}
 

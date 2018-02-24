@@ -185,6 +185,5 @@ public class InventoryBO {
 	public void sellPart(Long personaId, String entitlementId) {
 		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, entitlementId);
 		inventoryItemDAO.delete(inventoryItemEntity);
-		System.out.println(entitlementId);
 	}
 }
