@@ -88,12 +88,12 @@ public class CommerceBO {
 		List<CustomVinylTrans> customVinylTransDB = customCarTransDB.getVinyls().getCustomVinylTrans();
 		List<VisualPartTrans> visualPartTransDB = customCarTransDB.getVisualParts().getVisualPartTrans();
 
-		CustomCarTrans customCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
-		List<CustomPaintTrans> customPaintTrans = customCar.getPaints().getCustomPaintTrans();
-		List<PerformancePartTrans> performancePartTrans = customCar.getPerformanceParts().getPerformancePartTrans();
-		List<SkillModPartTrans> skillModPartTrans = customCar.getSkillModParts().getSkillModPartTrans();
-		List<CustomVinylTrans> customVinylTrans = customCar.getVinyls().getCustomVinylTrans();
-		List<VisualPartTrans> visualPartTrans = customCar.getVisualParts().getVisualPartTrans();
+		CustomCarTrans customCarTrans = commerceSessionTrans.getUpdatedCar().getCustomCar();
+		List<CustomPaintTrans> customPaintTrans = customCarTrans.getPaints().getCustomPaintTrans();
+		List<PerformancePartTrans> performancePartTrans = customCarTrans.getPerformanceParts().getPerformancePartTrans();
+		List<SkillModPartTrans> skillModPartTrans = customCarTrans.getSkillModParts().getSkillModPartTrans();
+		List<CustomVinylTrans> customVinylTrans = customCarTrans.getVinyls().getCustomVinylTrans();
+		List<VisualPartTrans> visualPartTrans = customCarTrans.getVisualParts().getVisualPartTrans();
 
 		CustomCarEntity customCarDB = defaultCarEntity.getOwnedCar().getCustomCar();
 
@@ -101,26 +101,37 @@ public class CommerceBO {
 				|| !skillModPartTransDB.containsAll(skillModPartTrans)) {
 			System.out.println("skill logic");
 			skillModPartDAO.deleteByCustomCar(customCarDB);
+
+			OwnedCarConverter.skillModParts2NewEntity(customCarTrans, defaultCarEntity.getOwnedCar().getCustomCar());
+			carSlotDAO.update(defaultCarEntity);
 			return;
 		}
 		if (!performancePartTrans.containsAll(performancePartTransDB) || !performancePartTransDB.containsAll(performancePartTrans)) {
 			System.out.println("performance logic");
 			performancePartDAO.deleteByCustomCar(customCarDB);
+			OwnedCarConverter.performanceParts2NewEntity(customCarTrans, defaultCarEntity.getOwnedCar().getCustomCar());
+			carSlotDAO.update(defaultCarEntity);
 			return;
 		}
 		if (!visualPartTrans.containsAll(visualPartTransDB) || !visualPartTransDB.containsAll(visualPartTrans)) {
 			System.out.println("visual logic");
 			visualPartDAO.deleteByCustomCar(customCarDB);
+			OwnedCarConverter.visuallParts2NewEntity(customCarTrans, defaultCarEntity.getOwnedCar().getCustomCar());
+			carSlotDAO.update(defaultCarEntity);
 			return;
 		}
 		if (!customPaintTrans.containsAll(customPaintTransDB) || !customPaintTransDB.containsAll(customPaintTrans)) {
 			System.out.println("paint logic");
 			paintDAO.deleteByCustomCar(customCarDB);
+			OwnedCarConverter.paints2NewEntity(customCarTrans, defaultCarEntity.getOwnedCar().getCustomCar());
+			carSlotDAO.update(defaultCarEntity);
 			return;
 		}
 		if (!customVinylTrans.containsAll(customVinylTransDB) || !customVinylTransDB.containsAll(customVinylTrans)) {
 			System.out.println("vinyl logic");
+			OwnedCarConverter.vinyls2NewEntity(customCarTrans, defaultCarEntity.getOwnedCar().getCustomCar());
 			vinylDAO.deleteByCustomCar(customCarDB);
+			carSlotDAO.update(defaultCarEntity);
 		}
 	}
 
