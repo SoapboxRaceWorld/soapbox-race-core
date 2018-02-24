@@ -9,10 +9,16 @@ import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.InventoryDAO;
 import com.soapboxrace.core.dao.InventoryItemDAO;
+import com.soapboxrace.core.dao.PaintDAO;
+import com.soapboxrace.core.dao.PerformancePartDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ProductDAO;
+import com.soapboxrace.core.dao.SkillModPartDAO;
+import com.soapboxrace.core.dao.VinylDAO;
 import com.soapboxrace.core.dao.VinylProductDAO;
+import com.soapboxrace.core.dao.VisualPartDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
 import com.soapboxrace.jaxb.http.CustomCarTrans;
 import com.soapboxrace.jaxb.http.CustomPaintTrans;
@@ -48,6 +54,21 @@ public class CommerceBO {
 	@EJB
 	private ParameterBO parameterBO;
 
+	@EJB
+	private PaintDAO paintDAO;
+
+	@EJB
+	private PerformancePartDAO performancePartDAO;
+
+	@EJB
+	private SkillModPartDAO skillModPartDAO;
+
+	@EJB
+	private VinylDAO vinylDAO;
+
+	@EJB
+	private VisualPartDAO visualPartDAO;
+
 	public OwnedCarTrans responseCar(CommerceSessionTrans commerceSessionTrans) {
 		OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
 		ownedCarTrans.setCustomCar(commerceSessionTrans.getUpdatedCar().getCustomCar());
@@ -74,25 +95,32 @@ public class CommerceBO {
 		List<CustomVinylTrans> customVinylTrans = customCar.getVinyls().getCustomVinylTrans();
 		List<VisualPartTrans> visualPartTrans = customCar.getVisualParts().getVisualPartTrans();
 
+		CustomCarEntity customCarDB = defaultCarEntity.getOwnedCar().getCustomCar();
+
 		if (skillModPartTrans.size() != skillModPartTransDB.size() || !skillModPartTrans.containsAll(skillModPartTransDB)
 				|| !skillModPartTransDB.containsAll(skillModPartTrans)) {
 			System.out.println("skill logic");
+			skillModPartDAO.deleteByCustomCar(customCarDB);
 			return;
 		}
 		if (!performancePartTrans.containsAll(performancePartTransDB) || !performancePartTransDB.containsAll(performancePartTrans)) {
 			System.out.println("performance logic");
+			performancePartDAO.deleteByCustomCar(customCarDB);
 			return;
 		}
 		if (!visualPartTrans.containsAll(visualPartTransDB) || !visualPartTransDB.containsAll(visualPartTrans)) {
 			System.out.println("visual logic");
+			visualPartDAO.deleteByCustomCar(customCarDB);
 			return;
 		}
 		if (!customPaintTrans.containsAll(customPaintTransDB) || !customPaintTransDB.containsAll(customPaintTrans)) {
 			System.out.println("paint logic");
+			paintDAO.deleteByCustomCar(customCarDB);
 			return;
 		}
 		if (!customVinylTrans.containsAll(customVinylTransDB) || !customVinylTransDB.containsAll(customVinylTrans)) {
 			System.out.println("vinyl logic");
+			vinylDAO.deleteByCustomCar(customCarDB);
 		}
 	}
 

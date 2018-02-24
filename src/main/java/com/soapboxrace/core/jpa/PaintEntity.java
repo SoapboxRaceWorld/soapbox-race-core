@@ -7,10 +7,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "PAINT")
+@NamedQueries({ @NamedQuery(name = "PaintEntity.deleteByCustomCar", //
+		query = "DELETE FROM PaintEntity obj WHERE obj.customCar = :customCar") //
+})
 public class PaintEntity {
 
 	@Id
