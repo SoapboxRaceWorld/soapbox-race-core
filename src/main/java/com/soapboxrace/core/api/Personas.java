@@ -94,15 +94,18 @@ public class Personas {
 		commerceBO.updateCar(commerceSessionTrans, personaBO.getDefaultCarEntity(personaId));
 
 		List<BasketItemTrans> basketItemTrans = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
-		if (basketItemTrans == null || basketItemTrans.isEmpty()) {
-			List<EntitlementItemTrans> entitlementItemTrans = commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans();
-			if (entitlementItemTrans == null || entitlementItemTrans.isEmpty()) {
-				System.out.println("install from inventory, or removing stuff");
-			} else {
-				System.out.println("selling inventory stuff");
-			}
+		if (basketItemTrans != null && !basketItemTrans.isEmpty()) {
+			System.out.println("detected buying from basket");
+			System.out.println("can have removing stuff, adding from inventory or just selling from inventory");
 		} else {
-			System.out.println("buying from basket");
+			System.out.println("empty basket, removing stuff or adding from inventory");
+		}
+		List<EntitlementItemTrans> entitlementItemTrans = commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans();
+		if (entitlementItemTrans != null && !entitlementItemTrans.isEmpty()) {
+			System.out.println("detected selling inventory stuff");
+			for (EntitlementItemTrans entitlementItemTransTmp : entitlementItemTrans) {
+				inventoryBO.sellPart(personaId, entitlementItemTransTmp.getEntitlementId());
+			}
 		}
 
 		commerceSessionTrans.getUpdatedCar().setDurability(100);

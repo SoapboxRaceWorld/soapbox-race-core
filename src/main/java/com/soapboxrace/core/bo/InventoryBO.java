@@ -181,4 +181,10 @@ public class InventoryBO {
 		inventoryItemEntity.setPersona(personaEntity);
 		return inventoryItemEntity;
 	}
+
+	public void sellPart(Long personaId, String entitlementId) {
+		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, entitlementId);
+		inventoryItemDAO.delete(inventoryItemEntity);
+		System.out.println(entitlementId);
+	}
 }

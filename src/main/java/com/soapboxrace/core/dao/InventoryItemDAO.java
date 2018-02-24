@@ -14,38 +14,34 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 
 @Stateless
 public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+	@PersistenceContext
+	protected void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
 
-    public InventoryItemEntity findByEntitlementTagAndPersona(String entitlementTag, PersonaEntity personaEntity)
-    {
-        TypedQuery<InventoryItemEntity> query = entityManager.createQuery(
-                "SELECT obj FROM InventoryItemEntity obj WHERE obj.entitlementTag = :tag AND obj.persona = :persona", InventoryItemEntity.class);
-        query.setParameter("tag", entitlementTag);
-        query.setParameter("persona", personaEntity);
+	public InventoryItemEntity findByEntitlementTagAndPersona(Long personaId, String entitlementTag) {
+		TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity.findByPersonaEntitlEmentId", InventoryItemEntity.class);
+		query.setParameter("personaId", personaId);
+		query.setParameter("entitlementTag", entitlementTag);
 
-        List<InventoryItemEntity> list = query.getResultList();
-        
-        return list.isEmpty() ? null : list.get(0);
-    }
+		List<InventoryItemEntity> resultList = query.getResultList();
+		return !resultList.isEmpty() ? resultList.get(0) : null;
+	}
 
-    public List<InventoryItemEntity> findListByEntitlementTagAndPersona(String entitlementTag, PersonaEntity personaEntity)
-    {
-        TypedQuery<InventoryItemEntity> query = entityManager.createQuery(
-                "SELECT obj FROM InventoryItemEntity obj WHERE obj.entitlementTag = :tag AND obj.persona = :persona", InventoryItemEntity.class);
-        query.setParameter("tag", entitlementTag);
-        query.setParameter("persona", personaEntity);
+	public List<InventoryItemEntity> findListByEntitlementTagAndPersona(String entitlementTag, PersonaEntity personaEntity) {
+		TypedQuery<InventoryItemEntity> query = entityManager
+				.createQuery("SELECT obj FROM InventoryItemEntity obj WHERE obj.entitlementTag = :tag AND obj.persona = :persona", InventoryItemEntity.class);
+		query.setParameter("tag", entitlementTag);
+		query.setParameter("persona", personaEntity);
 
-        List<InventoryItemEntity> list = query.getResultList();
+		List<InventoryItemEntity> list = query.getResultList();
 
-        return list;
-    }
-    
-    public void deleteByPersona(Long personaId) {
-        Query query = entityManager.createNamedQuery("InventoryItemEntity.deleteByPersona");
-        query.setParameter("personaId", personaId);
-        query.executeUpdate();
-    }
+		return list;
+	}
+
+	public void deleteByPersona(Long personaId) {
+		Query query = entityManager.createNamedQuery("InventoryItemEntity.deleteByPersona");
+		query.setParameter("personaId", personaId);
+		query.executeUpdate();
+	}
 }

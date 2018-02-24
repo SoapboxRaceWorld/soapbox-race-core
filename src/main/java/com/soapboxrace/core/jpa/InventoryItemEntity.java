@@ -14,134 +14,140 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PERSONAINVENTORYITEM")
 @NamedQueries({ //
-        @NamedQuery(name = "InventoryItemEntity.findAllForInventory", query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventory = :inventory"),
-        @NamedQuery(name = "InventoryItemEntity.deleteByPersona", query = "DELETE FROM InventoryItemEntity obj WHERE obj.persona.id = :personaId")//
+		@NamedQuery(name = "InventoryItemEntity.findAllForInventory", //
+				query = "SELECT obj FROM InventoryItemEntity obj " //
+						+ " WHERE obj.inventory = :inventory"),
+		@NamedQuery(name = "InventoryItemEntity.findByPersonaEntitlEmentId", //
+				query = "SELECT obj FROM InventoryItemEntity obj " //
+						+ " WHERE obj.persona.id= :personaId and obj.entitlementTag =:entitlementTag"),
+		@NamedQuery(name = "InventoryItemEntity.deleteByPersona", //
+				query = "DELETE FROM InventoryItemEntity obj WHERE obj.persona.id = :personaId")//
 })
 public class InventoryItemEntity {
-    @Id
-    @Column(name = "ID", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    
-    @ManyToOne
-    @JoinColumn(name = "inventoryId", referencedColumnName = "ID")
-    private InventoryEntity inventory;
+	@Id
+	@Column(name = "ID", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "personaId")
-    private PersonaEntity persona;
+	@ManyToOne
+	@JoinColumn(name = "inventoryId", referencedColumnName = "ID")
+	private InventoryEntity inventory;
 
-    private String entitlementTag;
+	@ManyToOne
+	@JoinColumn(name = "personaId")
+	private PersonaEntity persona;
 
-    private String expirationDate;
+	private String entitlementTag;
 
-    private long hash;
+	private String expirationDate;
 
-    private String productId;
+	private long hash;
 
-    private int remainingUseCount;
+	private String productId;
 
-    private float resalePrice;
+	private int remainingUseCount;
 
-    private String status;
+	private float resalePrice;
 
-    private String stringHash;
+	private String status;
 
-    private String virtualItemType;
+	private String stringHash;
 
-    public int getId() {
-        return id;
-    }
+	private String virtualItemType;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public InventoryEntity getInventory() {
-        return inventory;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setInventory(InventoryEntity inventory) {
-        this.inventory = inventory;
-    }
+	public InventoryEntity getInventory() {
+		return inventory;
+	}
 
-    public PersonaEntity getPersona() {
-        return persona;
-    }
+	public void setInventory(InventoryEntity inventory) {
+		this.inventory = inventory;
+	}
 
-    public void setPersona(PersonaEntity persona) {
-        this.persona = persona;
-    }
+	public PersonaEntity getPersona() {
+		return persona;
+	}
 
-    public String getEntitlementTag() {
-        return entitlementTag;
-    }
+	public void setPersona(PersonaEntity persona) {
+		this.persona = persona;
+	}
 
-    public void setEntitlementTag(String entitlementTag) {
-        this.entitlementTag = entitlementTag;
-    }
+	public String getEntitlementTag() {
+		return entitlementTag;
+	}
 
-    public String getExpirationDate() {
-        return expirationDate;
-    }
+	public void setEntitlementTag(String entitlementTag) {
+		this.entitlementTag = entitlementTag;
+	}
 
-    public void setExpirationDate(String expirationDate) {
-        this.expirationDate = expirationDate;
-    }
+	public String getExpirationDate() {
+		return expirationDate;
+	}
 
-    public long getHash() {
-        return hash;
-    }
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
+	}
 
-    public void setHash(long hash) {
-        this.hash = hash;
-    }
+	public long getHash() {
+		return hash;
+	}
 
-    public String getProductId() {
-        return productId;
-    }
+	public void setHash(long hash) {
+		this.hash = hash;
+	}
 
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
+	public String getProductId() {
+		return productId;
+	}
 
-    public int getRemainingUseCount() {
-        return remainingUseCount;
-    }
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
 
-    public void setRemainingUseCount(int remainingUseCount) {
-        this.remainingUseCount = remainingUseCount;
-    }
+	public int getRemainingUseCount() {
+		return remainingUseCount;
+	}
 
-    public float getResalePrice() {
-        return resalePrice;
-    }
+	public void setRemainingUseCount(int remainingUseCount) {
+		this.remainingUseCount = remainingUseCount;
+	}
 
-    public void setResalePrice(float resalePrice) {
-        this.resalePrice = resalePrice;
-    }
+	public float getResalePrice() {
+		return resalePrice;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public void setResalePrice(float resalePrice) {
+		this.resalePrice = resalePrice;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public String getStringHash() {
-        return stringHash;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public void setStringHash(String stringHash) {
-        this.stringHash = stringHash;
-    }
+	public String getStringHash() {
+		return stringHash;
+	}
 
-    public String getVirtualItemType() {
-        return virtualItemType;
-    }
+	public void setStringHash(String stringHash) {
+		this.stringHash = stringHash;
+	}
 
-    public void setVirtualItemType(String virtualItemType) {
-        this.virtualItemType = virtualItemType;
-    }
+	public String getVirtualItemType() {
+		return virtualItemType;
+	}
+
+	public void setVirtualItemType(String virtualItemType) {
+		this.virtualItemType = virtualItemType;
+	}
 }
