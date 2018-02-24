@@ -72,7 +72,7 @@ public class PersonaBO {
 		if (carSlotEntity == null) {
 			return new OwnedCarTrans();
 		}
-		OwnedCarTrans ownedCarTrans = OwnedCarConverter.Entity2Trans(carSlotEntity.getOwnedCar());
+		OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
 		return ownedCarTrans;
 	}
 

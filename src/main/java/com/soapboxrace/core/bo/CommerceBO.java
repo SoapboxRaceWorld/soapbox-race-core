@@ -80,7 +80,7 @@ public class CommerceBO {
 	}
 
 	public void updateCar(CommerceSessionTrans commerceSessionTrans, CarSlotEntity defaultCarEntity) {
-		OwnedCarTrans ownedCarTrans = OwnedCarConverter.Entity2Trans(defaultCarEntity.getOwnedCar());
+		OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(defaultCarEntity.getOwnedCar());
 		CustomCarTrans customCarTransDB = ownedCarTrans.getCustomCar();
 		List<CustomPaintTrans> customPaintTransDB = customCarTransDB.getPaints().getCustomPaintTrans();
 		List<PerformancePartTrans> performancePartTransDB = customCarTransDB.getPerformanceParts().getPerformancePartTrans();

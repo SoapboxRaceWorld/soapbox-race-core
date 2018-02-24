@@ -174,7 +174,7 @@ public class Personas {
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 		for (CarSlotEntity carSlotEntity : personasCar) {
 			OwnedCarEntity ownedCarEntity = carSlotEntity.getOwnedCar();
-			OwnedCarTrans ownedCarTrans = OwnedCarConverter.Entity2Trans(ownedCarEntity);
+			OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 		}
 		CarSlotInfoTrans carSlotInfoTrans = new CarSlotInfoTrans();
@@ -249,7 +249,7 @@ public class Personas {
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 		List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
 		for (CarSlotEntity carSlotEntity : personasCar) {
-			OwnedCarTrans ownedCarTrans = OwnedCarConverter.Entity2Trans(carSlotEntity.getOwnedCar());
+			OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 		}
 		return arrayOfOwnedCarTrans;

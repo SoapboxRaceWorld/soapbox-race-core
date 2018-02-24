@@ -25,7 +25,7 @@ import com.soapboxrace.jaxb.http.VisualPartTrans;
 
 public class OwnedCarConverter {
 
-	public static OwnedCarTrans Entity2Trans(OwnedCarEntity ownedCarEntity) {
+	public static OwnedCarTrans entity2Trans(OwnedCarEntity ownedCarEntity) {
 		OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
 		ownedCarTrans.setId(ownedCarEntity.getId());
 		ownedCarTrans.setDurability(ownedCarEntity.getDurability());
@@ -127,7 +127,7 @@ public class OwnedCarConverter {
 		return ownedCarTrans;
 	}
 
-	public static void Trans2Entity(OwnedCarTrans ownedCarTrans, OwnedCarEntity ownedCarEntity) {
+	public static void trans2Entity(OwnedCarTrans ownedCarTrans, OwnedCarEntity ownedCarEntity) {
 		ownedCarEntity.setDurability(ownedCarTrans.getDurability());
 		// ownedCarEntity.setExpirationDate(expirationDate);
 		ownedCarEntity.setHeat(ownedCarTrans.getHeat());
@@ -147,10 +147,7 @@ public class OwnedCarConverter {
 		customCarEntity.setVersion(customCarTrans.getVersion());
 	}
 
-	public static void Details2NewEntity(OwnedCarTrans ownedCarTrans, OwnedCarEntity ownedCarEntity) {
-		CustomCarTrans customCarTrans = ownedCarTrans.getCustomCar();
-		CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
-
+	public static void paints2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
 		ArrayList<PaintEntity> paintEntityList = new ArrayList<>();
 		List<CustomPaintTrans> customPaintTrans = customCarTrans.getPaints().getCustomPaintTrans();
 		for (CustomPaintTrans customPaintTransTmp : customPaintTrans) {
@@ -164,7 +161,9 @@ public class OwnedCarConverter {
 			paintEntityList.add(paintEntity);
 		}
 		customCarEntity.setPaints(paintEntityList);
+	}
 
+	public static void performanceParts2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
 		ArrayList<PerformancePartEntity> performancePartEntityList = new ArrayList<>();
 		List<PerformancePartTrans> performancePartTransList = customCarTrans.getPerformanceParts().getPerformancePartTrans();
 		for (PerformancePartTrans performancePartTransTmp : performancePartTransList) {
@@ -174,7 +173,9 @@ public class OwnedCarConverter {
 			performancePartEntityList.add(performancePartEntity);
 		}
 		customCarEntity.setPerformanceParts(performancePartEntityList);
+	}
 
+	public static void skillModParts2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
 		ArrayList<SkillModPartEntity> skillModPartEntityList = new ArrayList<>();
 		List<SkillModPartTrans> skillModPartTransList = customCarTrans.getSkillModParts().getSkillModPartTrans();
 		for (SkillModPartTrans skillModPartTransTmp : skillModPartTransList) {
@@ -185,7 +186,9 @@ public class OwnedCarConverter {
 			skillModPartEntityList.add(skillModPartEntity);
 		}
 		customCarEntity.setSkillModParts(skillModPartEntityList);
+	}
 
+	public static void vinyls2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
 		ArrayList<VinylEntity> vinylEntityList = new ArrayList<>();
 		List<CustomVinylTrans> customVinylTrans = customCarTrans.getVinyls().getCustomVinylTrans();
 		for (CustomVinylTrans customVinylTransTmp : customVinylTrans) {
@@ -215,7 +218,9 @@ public class OwnedCarConverter {
 			vinylEntityList.add(vinylEntity);
 		}
 		customCarEntity.setVinyls(vinylEntityList);
+	}
 
+	public static void visuallParts2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
 		ArrayList<VisualPartEntity> visualPartEntityList = new ArrayList<>();
 		List<VisualPartTrans> visualPartTransList = customCarTrans.getVisualParts().getVisualPartTrans();
 		for (VisualPartTrans visualPartTransTmp : visualPartTransList) {
@@ -226,6 +231,17 @@ public class OwnedCarConverter {
 			visualPartEntityList.add(visualPartEntity);
 		}
 		customCarEntity.setVisualParts(visualPartEntityList);
+	}
+
+	public static void details2NewEntity(OwnedCarTrans ownedCarTrans, OwnedCarEntity ownedCarEntity) {
+		CustomCarTrans customCarTrans = ownedCarTrans.getCustomCar();
+		CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
+
+		paints2NewEntity(customCarTrans, customCarEntity);
+		performanceParts2NewEntity(customCarTrans, customCarEntity);
+		skillModParts2NewEntity(customCarTrans, customCarEntity);
+		vinyls2NewEntity(customCarTrans, customCarEntity);
+		visuallParts2NewEntity(customCarTrans, customCarEntity);
 	}
 
 }

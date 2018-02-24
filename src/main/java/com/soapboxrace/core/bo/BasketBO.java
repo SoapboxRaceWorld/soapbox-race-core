@@ -163,8 +163,8 @@ public class BasketBO {
 		customCarEntity.setOwnedCar(ownedCarEntity);
 		ownedCarEntity.setCustomCar(customCarEntity);
 		carSlotEntity.setOwnedCar(ownedCarEntity);
-		OwnedCarConverter.Trans2Entity(ownedCarTrans, ownedCarEntity);
-		OwnedCarConverter.Details2NewEntity(ownedCarTrans, ownedCarEntity);
+		OwnedCarConverter.trans2Entity(ownedCarTrans, ownedCarEntity);
+		OwnedCarConverter.details2NewEntity(ownedCarTrans, ownedCarEntity);
 
 		carSlotDAO.insert(carSlotEntity);
 
