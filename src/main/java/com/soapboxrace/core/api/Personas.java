@@ -91,6 +91,7 @@ public class Personas {
 		arrayOfWalletTrans.getWalletTrans().add(walletTrans);
 
 		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
+		commerceBO.updateCar(commerceSessionTrans, personaBO.getDefaultCarEntity(personaId));
 
 		List<BasketItemTrans> basketItemTrans = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
 		if (basketItemTrans == null || basketItemTrans.isEmpty()) {
@@ -258,9 +259,9 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
-	public String carsPut(@PathParam(value = "personaId") Long personaId, @HeaderParam("securityToken") String securityToken) {
+	public String carsPut(@PathParam(value = "personaId") Long personaId, @HeaderParam("securityToken") String securityToken, InputStream ownedCarXml) {
+		// update car (skill and performance shop)
 		sessionBO.verifyPersona(securityToken, personaId);
-
 		OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
 		return MarshalXML.marshal(ownedCarTrans);
 	}

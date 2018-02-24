@@ -10,6 +10,7 @@ import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.LevelRepDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.core.jpa.LevelRepEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
@@ -54,7 +55,14 @@ public class PersonaBO {
 				CarSlotEntity ownedCarEntity = carSlotList.get(curCarIndex);
 				changeDefaultCar(personaId, ownedCarEntity.getId());
 			}
-			return carSlotList.get(curCarIndex);
+			CarSlotEntity carSlotEntity = carSlotList.get(curCarIndex);
+			CustomCarEntity customCar = carSlotEntity.getOwnedCar().getCustomCar();
+			customCar.getPaints().size();
+			customCar.getPerformanceParts().size();
+			customCar.getSkillModParts().size();
+			customCar.getVisualParts().size();
+			customCar.getVinyls().size();
+			return carSlotEntity;
 		}
 		return null;
 	}

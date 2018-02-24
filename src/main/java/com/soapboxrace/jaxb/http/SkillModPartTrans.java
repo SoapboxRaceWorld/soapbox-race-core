@@ -6,11 +6,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for SkillModPartTrans complex type.
+ * <p>
+ * Java class for SkillModPartTrans complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="SkillModPartTrans">
@@ -28,46 +30,69 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "SkillModPartTrans", propOrder = {
-    "isFixed",
-    "skillModPartAttribHash"
-})
+@XmlType(name = "SkillModPartTrans", propOrder = { "isFixed", "skillModPartAttribHash" })
 public class SkillModPartTrans {
 
-    @XmlElement(name = "IsFixed")
-    protected boolean isFixed;
-    @XmlElement(name = "SkillModPartAttribHash")
-    protected int skillModPartAttribHash;
+	@XmlElement(name = "IsFixed")
+	protected boolean isFixed;
+	@XmlElement(name = "SkillModPartAttribHash")
+	protected int skillModPartAttribHash;
 
-    /**
-     * Gets the value of the isFixed property.
-     * 
-     */
-    public boolean isIsFixed() {
-        return isFixed;
-    }
+	/**
+	 * Gets the value of the isFixed property.
+	 * 
+	 */
+	public boolean isIsFixed() {
+		return isFixed;
+	}
 
-    /**
-     * Sets the value of the isFixed property.
-     * 
-     */
-    public void setIsFixed(boolean value) {
-        this.isFixed = value;
-    }
+	/**
+	 * Sets the value of the isFixed property.
+	 * 
+	 */
+	public void setIsFixed(boolean value) {
+		this.isFixed = value;
+	}
 
-    /**
-     * Gets the value of the skillModPartAttribHash property.
-     * 
-     */
-    public int getSkillModPartAttribHash() {
-        return skillModPartAttribHash;
-    }
+	/**
+	 * Gets the value of the skillModPartAttribHash property.
+	 * 
+	 */
+	public int getSkillModPartAttribHash() {
+		return skillModPartAttribHash;
+	}
 
-    /**
-     * Sets the value of the skillModPartAttribHash property.
-     * 
-     */
-    public void setSkillModPartAttribHash(int value) {
-        this.skillModPartAttribHash = value;
-    }
+	/**
+	 * Sets the value of the skillModPartAttribHash property.
+	 * 
+	 */
+	public void setSkillModPartAttribHash(int value) {
+		this.skillModPartAttribHash = value;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (isFixed ? 1231 : 1237);
+		result = prime * result + skillModPartAttribHash;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SkillModPartTrans other = (SkillModPartTrans) obj;
+		if (isFixed != other.isFixed)
+			return false;
+		if (skillModPartAttribHash != other.skillModPartAttribHash)
+			return false;
+		return true;
+	}
+
 }
