@@ -108,7 +108,7 @@ public class AccoladesFunc {
 	}
 
 	public LuckyDrawItem getItemFromProduct(Integer rank, Integer level, Boolean isTH, PersonaEntity personaEntity) {
-		long hash;
+		Long hash;
 		Integer count, price;
 		String desc, icon, vItem, vItemType;
 		Boolean isSold = false;
@@ -192,7 +192,7 @@ public class AccoladesFunc {
 				inventoryItemEntity.setPersona(personaEntity);
 				inventoryItemEntity.setInventory(inventoryEntity);
 				inventoryItemEntity.setEntitlementTag(md5);
-				inventoryItemEntity.setHash(hash);
+				inventoryItemEntity.setHash(hash.intValue());
 				inventoryItemEntity.setRemainingUseCount(count);
 				inventoryItemEntity.setResalePrice(price);
 				inventoryItemEntity.setStatus("ACTIVE");
