@@ -21,6 +21,7 @@ import com.soapboxrace.core.bo.InventoryBO;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.PersonaBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.bo.util.CommerceOp;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.OwnedCarEntity;
@@ -91,7 +92,10 @@ public class Personas {
 		arrayOfWalletTrans.getWalletTrans().add(walletTrans);
 
 		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
-		commerceBO.updateCar(commerceSessionTrans, personaBO.getDefaultCarEntity(personaId));
+		CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
+		CommerceOp commerceOp = commerceBO.detectCommerceOperation(commerceSessionTrans, defaultCarEntity);
+		inventoryBO.updateInventory(commerceOp, commerceSessionTrans, defaultCarEntity);
+		commerceBO.updateCar(commerceOp, commerceSessionTrans, defaultCarEntity);
 
 		List<BasketItemTrans> basketItemTrans = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
 		if (basketItemTrans != null && !basketItemTrans.isEmpty()) {

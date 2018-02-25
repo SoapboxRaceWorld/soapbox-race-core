@@ -1,17 +1,29 @@
 package com.soapboxrace.core.bo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.bo.util.CommerceOp;
+import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.InventoryDAO;
 import com.soapboxrace.core.dao.InventoryItemDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.InventoryEntity;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
+import com.soapboxrace.jaxb.http.CommerceSessionTrans;
+import com.soapboxrace.jaxb.http.CustomCarTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
+import com.soapboxrace.jaxb.http.OwnedCarTrans;
+import com.soapboxrace.jaxb.http.PerformancePartTrans;
+import com.soapboxrace.jaxb.http.SkillModPartTrans;
+import com.soapboxrace.jaxb.http.VisualPartTrans;
 
 @Stateless
 public class InventoryBO {
@@ -185,5 +197,46 @@ public class InventoryBO {
 	public void sellPart(Long personaId, String entitlementId) {
 		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, entitlementId);
 		inventoryItemDAO.delete(inventoryItemEntity);
+	}
+
+	public void updateInventory(CommerceOp commerceOp, CommerceSessionTrans commerceSessionTrans, CarSlotEntity defaultCarEntity) {
+		OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(defaultCarEntity.getOwnedCar());
+		CustomCarTrans customCarTransDB = ownedCarTrans.getCustomCar();
+		CustomCarTrans customCarTrans = commerceSessionTrans.getUpdatedCar().getCustomCar();
+		System.out.println(commerceOp.toString());
+		switch (commerceOp) {
+		case PERFORMANCE:
+			System.out.println("update performance inventory");
+			List<PerformancePartTrans> performancePartTransDB = customCarTransDB.getPerformanceParts().getPerformancePartTrans();
+			List<PerformancePartTrans> performancePartTrans = customCarTrans.getPerformanceParts().getPerformancePartTrans();
+			ArrayList<PerformancePartTrans> performancePartTransListTmp = new ArrayList<>(performancePartTrans);
+			performancePartTransListTmp.removeAll(performancePartTransDB);
+			for (PerformancePartTrans performancePartTransTmp : performancePartTransListTmp) {
+				System.out.println("diff: " + performancePartTransTmp.getPerformancePartAttribHash());
+			}
+			break;
+		case SKILL:
+			System.out.println("update skill inventory");
+			List<SkillModPartTrans> skillModPartTransDB = customCarTransDB.getSkillModParts().getSkillModPartTrans();
+			List<SkillModPartTrans> skillModPartTrans = customCarTrans.getSkillModParts().getSkillModPartTrans();
+			ArrayList<SkillModPartTrans> skillModPartTransListTmp = new ArrayList<>(skillModPartTrans);
+			skillModPartTransListTmp.removeAll(skillModPartTransDB);
+			for (SkillModPartTrans skillModPartTransTmp : skillModPartTransListTmp) {
+				System.out.println("diff: " + skillModPartTransTmp.getSkillModPartAttribHash());
+			}
+			break;
+		case VISUAL:
+			System.out.println("update visual inventory");
+			List<VisualPartTrans> visualPartTransDB = customCarTransDB.getVisualParts().getVisualPartTrans();
+			List<VisualPartTrans> visualPartTrans = customCarTrans.getVisualParts().getVisualPartTrans();
+			ArrayList<VisualPartTrans> visualPartTransListTmp = new ArrayList<>(visualPartTrans);
+			visualPartTransListTmp.removeAll(visualPartTransDB);
+			for (VisualPartTrans visualPartTransTmp : visualPartTransListTmp) {
+				System.out.println("diff: " + visualPartTransTmp.getPartHash());
+			}
+			break;
+		default:
+			break;
+		}
 	}
 }

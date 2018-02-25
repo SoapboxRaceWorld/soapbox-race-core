@@ -126,6 +126,8 @@ public class AccoladesFunc {
 			getProductItems = productDao.findForEndRace(getVisualCatgeory(new Random().nextInt(8)), "VISUALPART", level);
 		}
 
+		getProductItems = productDao.findForEndRace(getVisualCatgeory(new Random().nextInt(8)), "VISUALPART", level);
+		
 		if (getProductItems != null) { // Other part
 			Integer randomDrop = new Random().nextInt(getProductItems.size());
 			ProductEntity productEntity = getProductItems.get(randomDrop);
