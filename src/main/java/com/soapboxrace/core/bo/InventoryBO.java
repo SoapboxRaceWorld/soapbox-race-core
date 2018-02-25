@@ -93,50 +93,6 @@ public class InventoryBO {
 		return inventoryTrans;
 	}
 
-	public void sellEntitlement(long personaId, String entitlementTag) {
-		PersonaEntity personaEntity = personaDAO.findById(personaId);
-		InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
-		InventoryItemEntity inventoryItemEntity = null;
-
-		for (InventoryItemEntity item : inventoryEntity.getItems()) {
-			if (entitlementTag.equals(item.getEntitlementTag()) && "ACTIVE".equals(item.getStatus())) {
-				inventoryItemEntity = item;
-				break;
-			}
-		}
-
-		if (inventoryItemEntity != null) {
-			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-				int newCash = (int) (personaEntity.getCash() + inventoryItemEntity.getResalePrice());
-				if (newCash > 9999999) {
-					newCash = 9999999;
-				}
-
-				if (newCash < 1) {
-					newCash = 1;
-				}
-				personaEntity.setCash(newCash);
-			}
-			personaDAO.update(personaEntity);
-
-			inventoryItemDAO.delete(inventoryItemEntity);
-
-			switch (inventoryItemEntity.getVirtualItemType()) {
-			case "PERFORMANCEPART":
-				inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
-				break;
-			case "VISUALPART":
-				inventoryEntity.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount() - 1);
-				break;
-			case "SKILLMODPART":
-				inventoryEntity.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount() - 1);
-				break;
-			}
-
-			inventoryDAO.update(inventoryEntity);
-		}
-	}
-
 	public boolean hasItem(long personaId, long hash) {
 		InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
 
