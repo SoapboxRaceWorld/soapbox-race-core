@@ -168,6 +168,8 @@ public class AdminBO {
 				info.reason = reason;
 				break;
 			}
+			default:
+				break;
 			}
 
 			return info;
