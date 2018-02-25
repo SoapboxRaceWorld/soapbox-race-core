@@ -23,7 +23,6 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
 		TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity.findByPersonaEntitlEmentId", InventoryItemEntity.class);
 		query.setParameter("personaId", personaId);
 		query.setParameter("entitlementTag", entitlementTag);
-
 		List<InventoryItemEntity> resultList = query.getResultList();
 		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
@@ -43,5 +42,13 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
 		Query query = entityManager.createNamedQuery("InventoryItemEntity.deleteByPersona");
 		query.setParameter("personaId", personaId);
 		query.executeUpdate();
+	}
+
+	public InventoryItemEntity findByHashAndPersona(Long personaId, Long hash) {
+		TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity.findByPersonaHash", InventoryItemEntity.class);
+		query.setParameter("personaId", personaId);
+		query.setParameter("hash", hash);
+		List<InventoryItemEntity> resultList = query.getResultList();
+		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 }

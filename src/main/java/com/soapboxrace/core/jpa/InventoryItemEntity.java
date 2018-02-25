@@ -20,6 +20,9 @@ import javax.persistence.Table;
 		@NamedQuery(name = "InventoryItemEntity.findByPersonaEntitlEmentId", //
 				query = "SELECT obj FROM InventoryItemEntity obj " //
 						+ " WHERE obj.persona.id= :personaId and obj.entitlementTag =:entitlementTag"),
+		@NamedQuery(name = "InventoryItemEntity.findByPersonaHash", //
+				query = "SELECT obj FROM InventoryItemEntity obj " //
+						+ " WHERE obj.persona.id= :personaId and obj.hash =:hash"),
 		@NamedQuery(name = "InventoryItemEntity.deleteByPersona", //
 				query = "DELETE FROM InventoryItemEntity obj WHERE obj.persona.id = :personaId")//
 })
@@ -41,7 +44,7 @@ public class InventoryItemEntity {
 
 	private String expirationDate;
 
-	private long hash;
+	private Long hash;
 
 	private String productId;
 
@@ -95,11 +98,11 @@ public class InventoryItemEntity {
 		this.expirationDate = expirationDate;
 	}
 
-	public long getHash() {
+	public Long getHash() {
 		return hash;
 	}
 
-	public void setHash(long hash) {
+	public void setHash(Long hash) {
 		this.hash = hash;
 	}
 
