@@ -11,11 +11,14 @@ import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.InventoryDAO;
 import com.soapboxrace.core.dao.InventoryItemDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.InventoryEntity;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
+import com.soapboxrace.jaxb.http.BasketItemTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
 import com.soapboxrace.jaxb.http.CustomCarTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
@@ -38,6 +41,9 @@ public class InventoryBO {
 
 	@EJB
 	private ParameterBO parameterBO;
+
+	@EJB
+	private ProductDAO productDAO;
 
 	public InventoryTrans getInventory(Long personaId) {
 		InventoryTrans inventoryTrans = new InventoryTrans();
@@ -199,40 +205,82 @@ public class InventoryBO {
 		inventoryItemDAO.delete(inventoryItemEntity);
 	}
 
-	public void updateInventory(CommerceOp commerceOp, CommerceSessionTrans commerceSessionTrans, CarSlotEntity defaultCarEntity) {
+	private List<SkillModPartTrans> getSkillModPartsFromBasket(List<BasketItemTrans> basketItemTransList) {
+		List<SkillModPartTrans> skillModPartTransList = new ArrayList<>();
+		if (basketItemTransList != null) {
+			for (BasketItemTrans basketItemTransTmp : basketItemTransList) {
+				ProductEntity productEntity = productDAO.findByProductId(basketItemTransTmp.getProductId());
+				SkillModPartTrans skillModPartTrans = new SkillModPartTrans();
+				skillModPartTrans.setSkillModPartAttribHash(productEntity.getHash().intValue());
+				skillModPartTransList.add(skillModPartTrans);
+			}
+		}
+		return skillModPartTransList;
+	}
+
+	private List<PerformancePartTrans> getPerformancePartsFromBasket(List<BasketItemTrans> basketItemTransList) {
+		List<PerformancePartTrans> performancePartTransList = new ArrayList<>();
+		if (basketItemTransList != null) {
+			for (BasketItemTrans basketItemTransTmp : basketItemTransList) {
+				ProductEntity productEntity = productDAO.findByProductId(basketItemTransTmp.getProductId());
+				PerformancePartTrans performancePartTrans = new PerformancePartTrans();
+				performancePartTrans.setPerformancePartAttribHash(productEntity.getHash().intValue());
+				performancePartTransList.add(performancePartTrans);
+			}
+		}
+		return performancePartTransList;
+	}
+
+	private List<VisualPartTrans> getVisualPartsFromBasket(List<BasketItemTrans> basketItemTransList) {
+		List<VisualPartTrans> visualPartTransList = new ArrayList<>();
+		if (basketItemTransList != null) {
+			for (BasketItemTrans basketItemTransTmp : basketItemTransList) {
+				ProductEntity productEntity = productDAO.findByProductId(basketItemTransTmp.getProductId());
+				VisualPartTrans visualPartTrans = new VisualPartTrans();
+				visualPartTrans.setPartHash(productEntity.getHash().intValue());
+				visualPartTransList.add(visualPartTrans);
+			}
+		}
+		return visualPartTransList;
+	}
+
+	public void updateInventory(CommerceOp commerceOp, List<BasketItemTrans> basketItemTransList, CommerceSessionTrans commerceSessionTrans,
+			CarSlotEntity defaultCarEntity) {
 		OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(defaultCarEntity.getOwnedCar());
 		CustomCarTrans customCarTransDB = ownedCarTrans.getCustomCar();
 		CustomCarTrans customCarTrans = commerceSessionTrans.getUpdatedCar().getCustomCar();
-		System.out.println(commerceOp.toString());
 		switch (commerceOp) {
 		case PERFORMANCE:
-			System.out.println("update performance inventory");
 			List<PerformancePartTrans> performancePartTransDB = customCarTransDB.getPerformanceParts().getPerformancePartTrans();
 			List<PerformancePartTrans> performancePartTrans = customCarTrans.getPerformanceParts().getPerformancePartTrans();
 			ArrayList<PerformancePartTrans> performancePartTransListTmp = new ArrayList<>(performancePartTrans);
+			List<PerformancePartTrans> performancePartsFromBasket = getPerformancePartsFromBasket(basketItemTransList);
 			performancePartTransListTmp.removeAll(performancePartTransDB);
+			performancePartTransListTmp.removeAll(performancePartsFromBasket);
 			for (PerformancePartTrans performancePartTransTmp : performancePartTransListTmp) {
-				System.out.println("added: " + performancePartTransTmp.getPerformancePartAttribHash());
+				System.out.println("added from inventory: " + performancePartTransTmp.getPerformancePartAttribHash());
 			}
 			break;
 		case SKILL:
-			System.out.println("update skill inventory");
 			List<SkillModPartTrans> skillModPartTransDB = customCarTransDB.getSkillModParts().getSkillModPartTrans();
 			List<SkillModPartTrans> skillModPartTrans = customCarTrans.getSkillModParts().getSkillModPartTrans();
-			ArrayList<SkillModPartTrans> skillModPartTransListTmp = new ArrayList<>(skillModPartTrans);
+			List<SkillModPartTrans> skillModPartTransListTmp = new ArrayList<>(skillModPartTrans);
+			List<SkillModPartTrans> skillModPartsFromBasket = getSkillModPartsFromBasket(basketItemTransList);
 			skillModPartTransListTmp.removeAll(skillModPartTransDB);
+			skillModPartTransListTmp.removeAll(skillModPartsFromBasket);
 			for (SkillModPartTrans skillModPartTransTmp : skillModPartTransListTmp) {
-				System.out.println("added: " + skillModPartTransTmp.getSkillModPartAttribHash());
+				System.out.println("added from inventory: " + skillModPartTransTmp.getSkillModPartAttribHash());
 			}
 			break;
 		case VISUAL:
-			System.out.println("update visual inventory");
 			List<VisualPartTrans> visualPartTransDB = customCarTransDB.getVisualParts().getVisualPartTrans();
 			List<VisualPartTrans> visualPartTrans = customCarTrans.getVisualParts().getVisualPartTrans();
 			ArrayList<VisualPartTrans> visualPartTransListTmp = new ArrayList<>(visualPartTrans);
+			List<VisualPartTrans> visualPartsFromBasket = getVisualPartsFromBasket(basketItemTransList);
 			visualPartTransListTmp.removeAll(visualPartTransDB);
+			visualPartTransListTmp.removeAll(visualPartsFromBasket);
 			for (VisualPartTrans visualPartTransTmp : visualPartTransListTmp) {
-				System.out.println("added: " + visualPartTransTmp.getPartHash());
+				System.out.println("added from inventory: " + visualPartTransTmp.getPartHash());
 			}
 			break;
 		default:

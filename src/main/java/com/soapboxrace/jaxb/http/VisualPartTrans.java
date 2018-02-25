@@ -75,7 +75,6 @@ public class VisualPartTrans {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + partHash;
-		result = prime * result + slotHash;
 		return result;
 	}
 
@@ -89,8 +88,6 @@ public class VisualPartTrans {
 			return false;
 		VisualPartTrans other = (VisualPartTrans) obj;
 		if (partHash != other.partHash)
-			return false;
-		if (slotHash != other.slotHash)
 			return false;
 		return true;
 	}

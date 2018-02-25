@@ -92,11 +92,6 @@ public class Personas {
 		arrayOfWalletTrans.getWalletTrans().add(walletTrans);
 
 		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
-		CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
-		CommerceOp commerceOp = commerceBO.detectCommerceOperation(commerceSessionTrans, defaultCarEntity);
-		inventoryBO.updateInventory(commerceOp, commerceSessionTrans, defaultCarEntity);
-		commerceBO.updateCar(commerceOp, commerceSessionTrans, defaultCarEntity);
-
 		List<BasketItemTrans> basketItemTrans = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
 		if (basketItemTrans != null && !basketItemTrans.isEmpty()) {
 			System.out.println("detected buying from basket");
@@ -111,6 +106,10 @@ public class Personas {
 				inventoryBO.sellPart(personaId, entitlementItemTransTmp.getEntitlementId());
 			}
 		}
+		CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
+		CommerceOp commerceOp = commerceBO.detectCommerceOperation(commerceSessionTrans, defaultCarEntity);
+		inventoryBO.updateInventory(commerceOp, basketItemTrans, commerceSessionTrans, defaultCarEntity);
+		commerceBO.updateCar(commerceOp, commerceSessionTrans, defaultCarEntity);
 
 		commerceSessionTrans.getUpdatedCar().setDurability(100);
 
