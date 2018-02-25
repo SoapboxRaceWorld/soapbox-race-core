@@ -5,14 +5,15 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.LevelRepDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.core.jpa.LevelRepEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
-import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Stateless
 public class PersonaBO {
@@ -25,7 +26,7 @@ public class PersonaBO {
 
 	@EJB
 	private LevelRepDAO levelRepDAO;
-	
+
 	public void changeDefaultCar(Long personaId, Long defaultCarId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
 		List<CarSlotEntity> carSlotList = carSlotDAO.findByPersonaId(personaId);
@@ -44,7 +45,6 @@ public class PersonaBO {
 		return personaDAO.findById(personaId);
 	}
 
-
 	public CarSlotEntity getDefaultCarEntity(Long personaId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
 		List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
@@ -55,9 +55,16 @@ public class PersonaBO {
 				CarSlotEntity ownedCarEntity = carSlotList.get(curCarIndex);
 				changeDefaultCar(personaId, ownedCarEntity.getId());
 			}
-			return carSlotList.get(curCarIndex);
+			CarSlotEntity carSlotEntity = carSlotList.get(curCarIndex);
+			CustomCarEntity customCar = carSlotEntity.getOwnedCar().getCustomCar();
+			customCar.getPaints().size();
+			customCar.getPerformanceParts().size();
+			customCar.getSkillModParts().size();
+			customCar.getVisualParts().size();
+			customCar.getVinyls().size();
+			return carSlotEntity;
 		}
-		throw new IllegalStateException(String.format("Persona %d has no default car", personaId));
+		return null;
 	}
 
 	public OwnedCarTrans getDefaultCar(Long personaId) {
@@ -65,8 +72,7 @@ public class PersonaBO {
 		if (carSlotEntity == null) {
 			return new OwnedCarTrans();
 		}
-		OwnedCarTrans ownedCarTrans = UnmarshalXML.unMarshal(carSlotEntity.getOwnedCarTrans(), OwnedCarTrans.class);
-		ownedCarTrans.setId(carSlotEntity.getId());
+		OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
 		return ownedCarTrans;
 	}
 

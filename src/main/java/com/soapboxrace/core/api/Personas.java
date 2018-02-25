@@ -21,19 +21,24 @@ import com.soapboxrace.core.bo.InventoryBO;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.PersonaBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.bo.util.CommerceOp;
+import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
 import com.soapboxrace.jaxb.http.ArrayOfProductTrans;
 import com.soapboxrace.jaxb.http.ArrayOfWalletTrans;
+import com.soapboxrace.jaxb.http.BasketItemTrans;
 import com.soapboxrace.jaxb.http.BasketTrans;
 import com.soapboxrace.jaxb.http.CarSlotInfoTrans;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceResultTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionResultTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
+import com.soapboxrace.jaxb.http.EntitlementItemTrans;
 import com.soapboxrace.jaxb.http.InvalidBasketTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
@@ -60,7 +65,7 @@ public class Personas {
 
 	@EJB
 	private ParameterBO parameterBO;
-	
+
 	@EJB
 	private InventoryBO inventoryBO;
 
@@ -68,9 +73,10 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/commerce")
 	@Produces(MediaType.APPLICATION_XML)
-	public CommerceSessionResultTrans commerce(InputStream commerceXml, @HeaderParam("securityToken") String securityToken, @PathParam(value = "personaId") Long personaId) {
+	public CommerceSessionResultTrans commerce(InputStream commerceXml, @HeaderParam("securityToken") String securityToken,
+			@PathParam(value = "personaId") Long personaId) {
 		sessionBO.verifyPersona(securityToken, personaId);
-		
+
 		PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
 
 		CommerceSessionResultTrans commerceSessionResultTrans = new CommerceSessionResultTrans();
@@ -86,11 +92,30 @@ public class Personas {
 		arrayOfWalletTrans.getWalletTrans().add(walletTrans);
 
 		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
+		List<BasketItemTrans> basketItemTrans = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
+		if (basketItemTrans != null && !basketItemTrans.isEmpty()) {
+			System.out.println("detected buying from basket");
+			System.out.println("can have removing stuff, adding from inventory or just selling from inventory");
+		} else {
+			System.out.println("empty basket, removing stuff or adding from inventory");
+		}
+		List<EntitlementItemTrans> entitlementItemTrans = commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans();
+		if (entitlementItemTrans != null && !entitlementItemTrans.isEmpty()) {
+			System.out.println("detected selling inventory stuff");
+			for (EntitlementItemTrans entitlementItemTransTmp : entitlementItemTrans) {
+				inventoryBO.deletePart(personaId, entitlementItemTransTmp.getEntitlementId());
+			}
+		}
+		CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
+		CommerceOp commerceOp = commerceBO.detectCommerceOperation(commerceSessionTrans, defaultCarEntity);
+		inventoryBO.updateInventory(commerceOp, basketItemTrans, commerceSessionTrans, defaultCarEntity);
+		commerceBO.updateCar(commerceOp, commerceSessionTrans, defaultCarEntity);
+
 		commerceSessionTrans.getUpdatedCar().setDurability(100);
-		
+
 		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
 		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
-		commerceSessionResultTrans.setStatus(commerceBO.updateCar(commerceSessionTrans, personaEntity));
+		commerceSessionResultTrans.setStatus(CommerceResultStatus.SUCCESS);
 		commerceSessionResultTrans.setUpdatedCar(commerceBO.responseCar(commerceSessionTrans));
 		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
 		return commerceSessionResultTrans;
@@ -100,11 +125,12 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/baskets")
 	@Produces(MediaType.APPLICATION_XML)
-	public CommerceResultTrans baskets(@HeaderParam("securityToken") String securityToken, InputStream basketXml, @PathParam(value = "personaId") Long personaId) {
+	public CommerceResultTrans baskets(@HeaderParam("securityToken") String securityToken, InputStream basketXml,
+			@PathParam(value = "personaId") Long personaId) {
 		sessionBO.verifyPersona(securityToken, personaId);
-		
+
 		PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
-		
+
 		CommerceResultTrans commerceResultTrans = new CommerceResultTrans();
 
 		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
@@ -126,11 +152,11 @@ public class Personas {
 
 		BasketTrans basketTrans = UnmarshalXML.unMarshal(basketXml, BasketTrans.class);
 		String productId = basketTrans.getItems().getBasketItemTrans().get(0).getProductId();
-		if("-1".equals(productId) || "SRV-GARAGESLOT".equals(productId) || "SRV-THREVIVE".equals(productId)) {
+		if ("-1".equals(productId) || "SRV-GARAGESLOT".equals(productId) || "SRV-THREVIVE".equals(productId)) {
 			commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
 		} else if (productId.contains("SRV-POWERUP")) {
 			commerceResultTrans.setStatus(basketBO.buyPowerups(productId, personaEntity));
-		} else if("SRV-REPAIR".equals(productId)) {
+		} else if ("SRV-REPAIR".equals(productId)) {
 			commerceResultTrans.setStatus(basketBO.repairCar(productId, personaEntity));
 		} else { // Car
 			OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
@@ -153,9 +179,8 @@ public class Personas {
 		List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 		for (CarSlotEntity carSlotEntity : personasCar) {
-			String ownedCarTransXml = carSlotEntity.getOwnedCarTrans();
-			OwnedCarTrans ownedCarTrans = UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
-			ownedCarTrans.setId(carSlotEntity.getId());
+			OwnedCarEntity ownedCarEntity = carSlotEntity.getOwnedCar();
+			OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 		}
 		CarSlotInfoTrans carSlotInfoTrans = new CarSlotInfoTrans();
@@ -203,7 +228,7 @@ public class Personas {
 	@Produces(MediaType.APPLICATION_XML)
 	public String sellInventoryItem(@HeaderParam("securityToken") String securityToken, @PathParam("entitlementTag") String entitlementTag) {
 		long personaId = sessionBO.getActivePersonaId(securityToken);
-		inventoryBO.sellEntitlement(personaId, entitlementTag);
+		inventoryBO.deletePart(personaId, entitlementTag);
 		return "";
 	}
 
@@ -211,7 +236,8 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
-	public String carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber, @HeaderParam("securityToken") String securityToken) {
+	public String carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber,
+			@HeaderParam("securityToken") String securityToken) {
 		sessionBO.verifyPersona(securityToken, personaId);
 
 		if (basketBO.sellCar(securityToken, personaId, serialNumber)) {
@@ -229,9 +255,7 @@ public class Personas {
 		ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 		List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
 		for (CarSlotEntity carSlotEntity : personasCar) {
-			String ownedCarTransXml = carSlotEntity.getOwnedCarTrans();
-			OwnedCarTrans ownedCarTrans = UnmarshalXML.unMarshal(ownedCarTransXml, OwnedCarTrans.class);
-			ownedCarTrans.setId(carSlotEntity.getId());
+			OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
 			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 		}
 		return arrayOfOwnedCarTrans;
@@ -241,9 +265,9 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/cars")
 	@Produces(MediaType.APPLICATION_XML)
-	public String carsPut(@PathParam(value = "personaId") Long personaId, @HeaderParam("securityToken") String securityToken) {
+	public String carsPut(@PathParam(value = "personaId") Long personaId, @HeaderParam("securityToken") String securityToken, InputStream ownedCarXml) {
+		// update car (skill and performance shop)
 		sessionBO.verifyPersona(securityToken, personaId);
-
 		OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
 		return MarshalXML.marshal(ownedCarTrans);
 	}
@@ -260,7 +284,8 @@ public class Personas {
 	@Secured
 	@Path("/{personaId}/defaultcar/{carId}")
 	@Produces(MediaType.APPLICATION_XML)
-	public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId, @HeaderParam("securityToken") String securityToken) {
+	public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId,
+			@HeaderParam("securityToken") String securityToken) {
 		sessionBO.verifyPersona(securityToken, personaId);
 		personaBO.changeDefaultCar(personaId, carId);
 		return "";
