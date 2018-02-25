@@ -227,7 +227,7 @@ public class AccoladesFunc {
 
 		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
 		luckyDrawItem.setDescription(desc);
-		luckyDrawItem.setHash(hash);
+		luckyDrawItem.setHash(hash.intValue());
 		luckyDrawItem.setIcon(icon);
 		luckyDrawItem.setRemainingUseCount(count);
 		luckyDrawItem.setResellPrice(price);
