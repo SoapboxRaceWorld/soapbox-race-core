@@ -188,7 +188,7 @@ public class InventoryBO {
 	private InventoryItemEntity getPowerUpInventory(String tag, int hash, String strHash, InventoryEntity inventoryEntity, PersonaEntity personaEntity) {
 		InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
 		inventoryItemEntity.setEntitlementTag(tag);
-		inventoryItemEntity.setHash((long) hash);
+		inventoryItemEntity.setHash(hash);
 		inventoryItemEntity.setProductId("DO NOT USE ME");
 		inventoryItemEntity.setRemainingUseCount(250);
 		inventoryItemEntity.setResalePrice(0.00f);
@@ -206,7 +206,7 @@ public class InventoryBO {
 	}
 
 	public void sellPart(Long personaId, Integer hash) {
-		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByHashAndPersona(personaId, (long) hash);
+		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByHashAndPersona(personaId, hash);
 		inventoryItemDAO.delete(inventoryItemEntity);
 	}
 

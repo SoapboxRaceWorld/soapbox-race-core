@@ -44,7 +44,7 @@ public class InventoryItemEntity {
 
 	private String expirationDate;
 
-	private Long hash;
+	private Integer hash;
 
 	private String productId;
 
@@ -98,11 +98,11 @@ public class InventoryItemEntity {
 		this.expirationDate = expirationDate;
 	}
 
-	public Long getHash() {
+	public Integer getHash() {
 		return hash;
 	}
 
-	public void setHash(Long hash) {
+	public void setHash(Integer hash) {
 		this.hash = hash;
 	}
 

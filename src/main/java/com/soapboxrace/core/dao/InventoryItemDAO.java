@@ -44,7 +44,7 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
 		query.executeUpdate();
 	}
 
-	public InventoryItemEntity findByHashAndPersona(Long personaId, Long hash) {
+	public InventoryItemEntity findByHashAndPersona(Long personaId, Integer hash) {
 		TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity.findByPersonaHash", InventoryItemEntity.class);
 		query.setParameter("personaId", personaId);
 		query.setParameter("hash", hash);

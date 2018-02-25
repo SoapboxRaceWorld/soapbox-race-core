@@ -110,7 +110,7 @@ public class BasketBO {
 		InventoryItemEntity item = null;
 
 		for (InventoryItemEntity i : inventoryEntity.getItems()) {
-			if (i.getHash() == powerupProduct.getHash()) {
+			if (i.getHash().equals(powerupProduct.getHash().intValue())) {
 				item = i;
 				break;
 			}
