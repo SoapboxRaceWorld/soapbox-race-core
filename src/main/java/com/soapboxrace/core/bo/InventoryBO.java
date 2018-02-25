@@ -212,7 +212,7 @@ public class InventoryBO {
 			ArrayList<PerformancePartTrans> performancePartTransListTmp = new ArrayList<>(performancePartTrans);
 			performancePartTransListTmp.removeAll(performancePartTransDB);
 			for (PerformancePartTrans performancePartTransTmp : performancePartTransListTmp) {
-				System.out.println("diff: " + performancePartTransTmp.getPerformancePartAttribHash());
+				System.out.println("added: " + performancePartTransTmp.getPerformancePartAttribHash());
 			}
 			break;
 		case SKILL:
@@ -222,7 +222,7 @@ public class InventoryBO {
 			ArrayList<SkillModPartTrans> skillModPartTransListTmp = new ArrayList<>(skillModPartTrans);
 			skillModPartTransListTmp.removeAll(skillModPartTransDB);
 			for (SkillModPartTrans skillModPartTransTmp : skillModPartTransListTmp) {
-				System.out.println("diff: " + skillModPartTransTmp.getSkillModPartAttribHash());
+				System.out.println("added: " + skillModPartTransTmp.getSkillModPartAttribHash());
 			}
 			break;
 		case VISUAL:
@@ -232,7 +232,7 @@ public class InventoryBO {
 			ArrayList<VisualPartTrans> visualPartTransListTmp = new ArrayList<>(visualPartTrans);
 			visualPartTransListTmp.removeAll(visualPartTransDB);
 			for (VisualPartTrans visualPartTransTmp : visualPartTransListTmp) {
-				System.out.println("diff: " + visualPartTransTmp.getPartHash());
+				System.out.println("added: " + visualPartTransTmp.getPartHash());
 			}
 			break;
 		default:
