@@ -103,7 +103,7 @@ public class Personas {
 		if (entitlementItemTrans != null && !entitlementItemTrans.isEmpty()) {
 			System.out.println("detected selling inventory stuff");
 			for (EntitlementItemTrans entitlementItemTransTmp : entitlementItemTrans) {
-				inventoryBO.sellPart(personaId, entitlementItemTransTmp.getEntitlementId());
+				inventoryBO.deletePart(personaId, entitlementItemTransTmp.getEntitlementId());
 			}
 		}
 		CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
@@ -228,7 +228,7 @@ public class Personas {
 	@Produces(MediaType.APPLICATION_XML)
 	public String sellInventoryItem(@HeaderParam("securityToken") String securityToken, @PathParam("entitlementTag") String entitlementTag) {
 		long personaId = sessionBO.getActivePersonaId(securityToken);
-		inventoryBO.sellPart(personaId, entitlementTag);
+		inventoryBO.deletePart(personaId, entitlementTag);
 		return "";
 	}
 

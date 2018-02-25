@@ -200,12 +200,12 @@ public class InventoryBO {
 		return inventoryItemEntity;
 	}
 
-	public void sellPart(Long personaId, String entitlementId) {
+	public void deletePart(Long personaId, String entitlementId) {
 		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, entitlementId);
 		inventoryItemDAO.delete(inventoryItemEntity);
 	}
 
-	public void sellPart(Long personaId, Integer hash) {
+	public void deletePart(Long personaId, Integer hash) {
 		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByHashAndPersona(personaId, hash);
 		inventoryItemDAO.delete(inventoryItemEntity);
 	}
@@ -264,7 +264,7 @@ public class InventoryBO {
 			performancePartTransListTmp.removeAll(performancePartsFromBasket);
 			for (PerformancePartTrans performancePartTransTmp : performancePartTransListTmp) {
 				System.out.println("added from inventory: " + performancePartTransTmp.getPerformancePartAttribHash());
-				sellPart(defaultCarEntity.getPersona().getPersonaId(), performancePartTransTmp.getPerformancePartAttribHash());
+				deletePart(defaultCarEntity.getPersona().getPersonaId(), performancePartTransTmp.getPerformancePartAttribHash());
 			}
 			break;
 		case SKILL:
@@ -276,7 +276,7 @@ public class InventoryBO {
 			skillModPartTransListTmp.removeAll(skillModPartsFromBasket);
 			for (SkillModPartTrans skillModPartTransTmp : skillModPartTransListTmp) {
 				System.out.println("added from inventory: " + skillModPartTransTmp.getSkillModPartAttribHash());
-				sellPart(defaultCarEntity.getPersona().getPersonaId(), skillModPartTransTmp.getSkillModPartAttribHash());
+				deletePart(defaultCarEntity.getPersona().getPersonaId(), skillModPartTransTmp.getSkillModPartAttribHash());
 			}
 			break;
 		case VISUAL:
@@ -288,7 +288,7 @@ public class InventoryBO {
 			visualPartTransListTmp.removeAll(visualPartsFromBasket);
 			for (VisualPartTrans visualPartTransTmp : visualPartTransListTmp) {
 				System.out.println("added from inventory: " + visualPartTransTmp.getPartHash());
-				sellPart(defaultCarEntity.getPersona().getPersonaId(), visualPartTransTmp.getPartHash());
+				deletePart(defaultCarEntity.getPersona().getPersonaId(), visualPartTransTmp.getPartHash());
 			}
 			break;
 		default:
