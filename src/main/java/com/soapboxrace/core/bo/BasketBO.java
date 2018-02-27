@@ -213,7 +213,7 @@ public class BasketBO {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		final int maxCash = parameterBO.getMaxCash(securityToken);
 		if (personaEntity.getCash() < maxCash) {
-			int cashTotal = (int) (personaEntity.getCash() + carSlotEntity.getOwnedCar().getCustomCar().getResalePrice());
+			int cashTotal = (int) (personaEntity.getCash() + ownedCarEntity.getCustomCar().getResalePrice());
 			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
 				personaEntity.setCash(Math.max(0, Math.min(maxCash, cashTotal)));
 			}

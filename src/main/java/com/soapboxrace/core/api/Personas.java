@@ -116,7 +116,7 @@ public class Personas {
 		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
 		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
 		commerceSessionResultTrans.setStatus(CommerceResultStatus.SUCCESS);
-		commerceSessionResultTrans.setUpdatedCar(commerceBO.responseCar(commerceSessionTrans));
+		commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(defaultCarEntity.getOwnedCar()));
 		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
 		return commerceSessionResultTrans;
 	}
@@ -239,7 +239,6 @@ public class Personas {
 	public String carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber,
 			@HeaderParam("securityToken") String securityToken) {
 		sessionBO.verifyPersona(securityToken, personaId);
-
 		if (basketBO.sellCar(securityToken, personaId, serialNumber)) {
 			OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
 			return MarshalXML.marshal(ownedCarTrans);
