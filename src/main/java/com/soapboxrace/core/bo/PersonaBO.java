@@ -32,7 +32,7 @@ public class PersonaBO {
 		List<CarSlotEntity> carSlotList = carSlotDAO.findByPersonaId(personaId);
 		int i = 0;
 		for (CarSlotEntity carSlotEntity : carSlotList) {
-			if (carSlotEntity.getId().equals(defaultCarId)) {
+			if (carSlotEntity.getOwnedCar().getId().equals(defaultCarId)) {
 				break;
 			}
 			i++;
