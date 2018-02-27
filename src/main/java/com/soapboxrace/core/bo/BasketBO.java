@@ -173,7 +173,7 @@ public class BasketBO {
 		}
 		personaDao.update(personaEntity);
 
-		personaBo.changeDefaultCar(personaEntity.getPersonaId(), carSlotEntity.getId());
+		personaBo.changeDefaultCar(personaEntity.getPersonaId(), carSlotEntity.getOwnedCar().getId());
 		return CommerceResultStatus.SUCCESS;
 	}
 
