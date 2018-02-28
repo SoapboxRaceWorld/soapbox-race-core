@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS
         description VARCHAR(255) COLLATE utf8_unicode_ci,
         durationMinute INT NOT NULL,
         enabled bit NOT NULL,
-        hash bigint,
+        hash INT,
         icon VARCHAR(255) COLLATE utf8_unicode_ci,
         level INT NOT NULL,
         longDescription VARCHAR(255) COLLATE utf8_unicode_ci,
