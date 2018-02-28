@@ -203,11 +203,11 @@ public class AccoladesFunc {
 				inventoryItemDao.insert(inventoryItemEntity);
 			}
 
-			// if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-			int newCash = (int) personaEntity.getCash() + cashBonus;
-			personaEntity.setCash(newCash > 9999999 ? 9999999 : newCash < 1 ? 1 : newCash);
-			// }
-			personaDao.update(personaEntity);
+			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+				int newCash = (int) personaEntity.getCash() + cashBonus;
+				personaEntity.setCash(newCash > 9999999 ? 9999999 : newCash < 1 ? 1 : newCash);
+				personaDao.update(personaEntity);
+			}
 		} else { // Cash part
 			Integer cashBonus = new Random().nextInt(2500) + 1;
 			desc = "GM_CATALOG_00000190," + cashBonus;
@@ -220,9 +220,11 @@ public class AccoladesFunc {
 			price = 0;
 			isSold = false;
 
-			int newCash = (int) personaEntity.getCash() + cashBonus;
-			personaEntity.setCash(newCash > 9999999 ? 9999999 : newCash < 1 ? 1 : newCash);
-			personaDao.update(personaEntity);
+			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+				int newCash = (int) personaEntity.getCash() + cashBonus;
+				personaEntity.setCash(newCash > 9999999 ? 9999999 : newCash < 1 ? 1 : newCash);
+				personaDao.update(personaEntity);
+			}
 		}
 
 		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();

@@ -11,22 +11,22 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PRODUCT")
 @NamedQueries({ //
-	@NamedQuery(name = "ProductEntity.findByLevelEnabled", //
-		query = "SELECT obj FROM ProductEntity obj WHERE " //
-			+ "obj.enabled = :enabled AND "//
-			+ "obj.minLevel <= :minLevel AND " //
-			+ "(obj.premium = false or obj.premium = :premium )AND " //
-			+ "obj.categoryName = :categoryName AND "//
-			+ "obj.productType = :productType"), //
-	@NamedQuery(name = "ProductEntity.findForEndRace", //
-		query = "SELECT obj FROM ProductEntity obj WHERE " //
-			+ "obj.enabled = true AND " //
-			+ "obj.level <= :level AND " //
-			+ "obj.categoryName = :categoryName AND " //
-			+ "obj.isDropable = true AND " //
-			+ "obj.productType = :productType"), //
-	@NamedQuery(name = "ProductEntity.findByProductId", query = "SELECT obj FROM ProductEntity obj WHERE obj.productId = :productId"), //
-	@NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = :hash") //
+		@NamedQuery(name = "ProductEntity.findByLevelEnabled", //
+				query = "SELECT obj FROM ProductEntity obj WHERE " //
+						+ "obj.enabled = :enabled AND "//
+						+ "obj.minLevel <= :minLevel AND " //
+						+ "(obj.premium = false or obj.premium = :premium )AND " //
+						+ "obj.categoryName = :categoryName AND "//
+						+ "obj.productType = :productType"), //
+		@NamedQuery(name = "ProductEntity.findForEndRace", //
+				query = "SELECT obj FROM ProductEntity obj WHERE " //
+						+ "obj.enabled = true AND " //
+						+ "obj.level <= :level AND " //
+						+ "obj.categoryName = :categoryName AND " //
+						+ "obj.isDropable = true AND " //
+						+ "obj.productType = :productType"), //
+		@NamedQuery(name = "ProductEntity.findByProductId", query = "SELECT obj FROM ProductEntity obj WHERE obj.productId = :productId"), //
+		@NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = :hash") //
 })
 public class ProductEntity {
 
@@ -44,6 +44,7 @@ public class ProductEntity {
 	private int level;
 	private String longDescription;
 	private float price;
+	private float resalePrice;
 	private int priority;
 	private String productId;
 	private String productTitle;
@@ -261,6 +262,14 @@ public class ProductEntity {
 
 	public void setDropable(boolean isDropable) {
 		this.isDropable = isDropable;
+	}
+
+	public float getResalePrice() {
+		return resalePrice;
+	}
+
+	public void setResalePrice(float resalePrice) {
+		this.resalePrice = resalePrice;
 	}
 
 }

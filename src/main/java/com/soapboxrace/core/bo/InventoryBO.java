@@ -163,6 +163,8 @@ public class InventoryBO {
 			inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
 			inventoryDAO.update(inventoryEntity);
 			inventoryItemDAO.delete(inventoryItemEntity);
+		} else {
+			System.err.println("INVALID entitlementId: [" + entitlementId + "]");
 		}
 	}
 
@@ -173,10 +175,12 @@ public class InventoryBO {
 			inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
 			inventoryDAO.update(inventoryEntity);
 			inventoryItemDAO.delete(inventoryItemEntity);
+		} else {
+			System.err.println("INVALID hash: [" + hash + "]");
 		}
 	}
 
-	private List<SkillModPartTrans> getSkillModPartsFromBasket(List<BasketItemTrans> basketItemTransList) {
+	public List<SkillModPartTrans> getSkillModPartsFromBasket(List<BasketItemTrans> basketItemTransList) {
 		List<SkillModPartTrans> skillModPartTransList = new ArrayList<>();
 		if (basketItemTransList != null) {
 			for (BasketItemTrans basketItemTransTmp : basketItemTransList) {
@@ -189,7 +193,7 @@ public class InventoryBO {
 		return skillModPartTransList;
 	}
 
-	private List<PerformancePartTrans> getPerformancePartsFromBasket(List<BasketItemTrans> basketItemTransList) {
+	public List<PerformancePartTrans> getPerformancePartsFromBasket(List<BasketItemTrans> basketItemTransList) {
 		List<PerformancePartTrans> performancePartTransList = new ArrayList<>();
 		if (basketItemTransList != null) {
 			for (BasketItemTrans basketItemTransTmp : basketItemTransList) {
@@ -202,7 +206,7 @@ public class InventoryBO {
 		return performancePartTransList;
 	}
 
-	private List<VisualPartTrans> getVisualPartsFromBasket(List<BasketItemTrans> basketItemTransList) {
+	public List<VisualPartTrans> getVisualPartsFromBasket(List<BasketItemTrans> basketItemTransList) {
 		List<VisualPartTrans> visualPartTransList = new ArrayList<>();
 		if (basketItemTransList != null) {
 			for (BasketItemTrans basketItemTransTmp : basketItemTransList) {

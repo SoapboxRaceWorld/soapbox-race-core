@@ -38,7 +38,6 @@ import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceResultTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionResultTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
-import com.soapboxrace.jaxb.http.EntitlementItemTrans;
 import com.soapboxrace.jaxb.http.InvalidBasketTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
@@ -77,43 +76,26 @@ public class Personas {
 			@PathParam(value = "personaId") Long personaId) {
 		sessionBO.verifyPersona(securityToken, personaId);
 
-		PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
-
 		CommerceSessionResultTrans commerceSessionResultTrans = new CommerceSessionResultTrans();
 
+		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
+		List<BasketItemTrans> basketItemTrans = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
+		CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
+		CommerceOp commerceOp = commerceBO.detectCommerceOperation(commerceSessionTrans, defaultCarEntity);
+		inventoryBO.updateInventory(commerceOp, basketItemTrans, commerceSessionTrans, defaultCarEntity);
+		commerceBO.updateEconomy(commerceOp, basketItemTrans, commerceSessionTrans, defaultCarEntity);
+		commerceBO.updateCar(commerceOp, commerceSessionTrans, defaultCarEntity);
+
+		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
 		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
 		arrayOfInventoryItemTrans.getInventoryItemTrans().add(new InventoryItemTrans());
 
 		WalletTrans walletTrans = new WalletTrans();
-		walletTrans.setBalance(personaEntity.getCash());
+		walletTrans.setBalance(defaultCarEntity.getPersona().getCash());
 		walletTrans.setCurrency("CASH");
 
 		ArrayOfWalletTrans arrayOfWalletTrans = new ArrayOfWalletTrans();
 		arrayOfWalletTrans.getWalletTrans().add(walletTrans);
-
-		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
-		List<BasketItemTrans> basketItemTrans = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
-		if (basketItemTrans != null && !basketItemTrans.isEmpty()) {
-			System.out.println("detected buying from basket");
-			System.out.println("can have removing stuff, adding from inventory or just selling from inventory");
-		} else {
-			System.out.println("empty basket, removing stuff or adding from inventory");
-		}
-		List<EntitlementItemTrans> entitlementItemTrans = commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans();
-		if (entitlementItemTrans != null && !entitlementItemTrans.isEmpty()) {
-			System.out.println("detected selling inventory stuff");
-			for (EntitlementItemTrans entitlementItemTransTmp : entitlementItemTrans) {
-				inventoryBO.deletePart(personaId, entitlementItemTransTmp.getEntitlementId());
-			}
-		}
-		CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
-		CommerceOp commerceOp = commerceBO.detectCommerceOperation(commerceSessionTrans, defaultCarEntity);
-		inventoryBO.updateInventory(commerceOp, basketItemTrans, commerceSessionTrans, defaultCarEntity);
-		commerceBO.updateCar(commerceOp, commerceSessionTrans, defaultCarEntity);
-
-		commerceSessionTrans.getUpdatedCar().setDurability(100);
-
-		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
 		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
 		commerceSessionResultTrans.setStatus(CommerceResultStatus.SUCCESS);
 		commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(defaultCarEntity.getOwnedCar()));

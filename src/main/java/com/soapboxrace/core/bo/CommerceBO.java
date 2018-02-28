@@ -1,5 +1,6 @@
 package com.soapboxrace.core.bo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -20,6 +21,9 @@ import com.soapboxrace.core.dao.VinylProductDAO;
 import com.soapboxrace.core.dao.VisualPartDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CustomCarEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.jaxb.http.BasketItemTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
 import com.soapboxrace.jaxb.http.CustomCarTrans;
 import com.soapboxrace.jaxb.http.CustomPaintTrans;
@@ -34,13 +38,16 @@ public class CommerceBO {
 	private PersonaBO personaBO;
 
 	@EJB
+	private InventoryBO inventoryBO;
+
+	@EJB
 	private CarSlotDAO carSlotDAO;
 
 	@EJB
 	private PersonaDAO personaDAO;
 
 	@EJB
-	private ProductDAO productDao;
+	private ProductDAO productDAO;
 
 	@EJB
 	private VinylProductDAO vinylProductDao;
@@ -137,6 +144,70 @@ public class CommerceBO {
 			break;
 		}
 		carSlotDAO.update(defaultCarEntity);
+	}
+
+	public void updateEconomy(CommerceOp commerceOp, List<BasketItemTrans> basketItemTransList, CommerceSessionTrans commerceSessionTrans,
+			CarSlotEntity defaultCarEntity) {
+		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(defaultCarEntity.getOwnedCar());
+			CustomCarTrans customCarTransDB = ownedCarTrans.getCustomCar();
+			CustomCarTrans customCarTrans = commerceSessionTrans.getUpdatedCar().getCustomCar();
+			Float basketTotalValue = getBasketTotalValue(basketItemTransList);
+			Float resellTotalValue = 0F;
+			switch (commerceOp) {
+			case PERFORMANCE:
+				List<PerformancePartTrans> performancePartTransDB = customCarTransDB.getPerformanceParts().getPerformancePartTrans();
+				List<PerformancePartTrans> performancePartTrans = customCarTrans.getPerformanceParts().getPerformancePartTrans();
+				ArrayList<PerformancePartTrans> performancePartTransListTmp = new ArrayList<>(performancePartTransDB);
+				List<PerformancePartTrans> performancePartsFromBasket = inventoryBO.getPerformancePartsFromBasket(basketItemTransList);
+				performancePartTransListTmp.removeAll(performancePartsFromBasket);
+				performancePartTransListTmp.removeAll(performancePartTrans);
+				for (PerformancePartTrans performancePartTransTmp : performancePartTransListTmp) {
+					ProductEntity productEntity = productDAO.findByHash(performancePartTransTmp.getPerformancePartAttribHash());
+					if (productEntity != null) {
+						resellTotalValue = Float.sum(resellTotalValue, productEntity.getResalePrice());
+					} else {
+						System.err.println("INVALID HASH: [" + performancePartTransTmp.getPerformancePartAttribHash() + "]");
+					}
+				}
+				break;
+			case SKILL:
+				List<SkillModPartTrans> skillModPartTransDB = customCarTransDB.getSkillModParts().getSkillModPartTrans();
+				List<SkillModPartTrans> skillModPartTrans = customCarTrans.getSkillModParts().getSkillModPartTrans();
+				List<SkillModPartTrans> skillModPartTransListTmp = new ArrayList<>(skillModPartTransDB);
+				List<SkillModPartTrans> skillModPartsFromBasket = inventoryBO.getSkillModPartsFromBasket(basketItemTransList);
+				skillModPartTransListTmp.removeAll(skillModPartsFromBasket);
+				skillModPartTransListTmp.removeAll(skillModPartTrans);
+				for (SkillModPartTrans skillModPartTransTmp : skillModPartTransListTmp) {
+					ProductEntity productEntity = productDAO.findByHash(skillModPartTransTmp.getSkillModPartAttribHash());
+					if (productEntity != null) {
+						resellTotalValue = Float.sum(resellTotalValue, productEntity.getResalePrice());
+					} else {
+						System.err.println("INVALID HASH: [" + skillModPartTransTmp.getSkillModPartAttribHash() + "]");
+					}
+				}
+				break;
+			default:
+				break;
+			}
+			Float result = Float.sum(basketTotalValue, (resellTotalValue * -1)) * -1;
+			System.out.println("basket: [" + basketTotalValue + "]");
+			System.out.println("resell: [" + resellTotalValue + "]");
+			System.out.println("result: [" + result + "]");
+			PersonaEntity persona = defaultCarEntity.getPersona();
+			float cash = (float) persona.getCash();
+			persona.setCash(Float.sum(cash, result));
+			personaDAO.update(persona);
+		}
+	}
+
+	private Float getBasketTotalValue(List<BasketItemTrans> basketItemTransList) {
+		Float price = 0F;
+		for (BasketItemTrans basketItemTrans : basketItemTransList) {
+			ProductEntity productEntity = productDAO.findByProductId(basketItemTrans.getProductId());
+			price = Float.sum(price, productEntity.getPrice());
+		}
+		return price;
 	}
 
 }
