@@ -158,16 +158,22 @@ public class InventoryBO {
 
 	public void deletePart(Long personaId, String entitlementId) {
 		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, entitlementId);
-		InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
-		inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
-		inventoryItemDAO.delete(inventoryItemEntity);
+		if (inventoryItemEntity != null) {
+			InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
+			inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
+			inventoryDAO.update(inventoryEntity);
+			inventoryItemDAO.delete(inventoryItemEntity);
+		}
 	}
 
 	public void deletePart(Long personaId, Integer hash) {
 		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByHashAndPersona(personaId, hash);
-		InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
-		inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
-		inventoryItemDAO.delete(inventoryItemEntity);
+		if (inventoryItemEntity != null) {
+			InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
+			inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
+			inventoryDAO.update(inventoryEntity);
+			inventoryItemDAO.delete(inventoryItemEntity);
+		}
 	}
 
 	private List<SkillModPartTrans> getSkillModPartsFromBasket(List<BasketItemTrans> basketItemTransList) {
