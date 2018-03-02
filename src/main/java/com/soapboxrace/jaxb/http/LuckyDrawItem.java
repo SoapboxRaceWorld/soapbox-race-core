@@ -49,7 +49,7 @@ public class LuckyDrawItem {
     @XmlElement(name = "Description")
     protected String description;
     @XmlElement(name = "Hash")
-    protected int hash;
+    protected long hash;
     @XmlElement(name = "Icon")
     protected String icon;
     @XmlElement(name = "RemainingUseCount")
@@ -91,7 +91,7 @@ public class LuckyDrawItem {
      * Gets the value of the hash property.
      * 
      */
-    public int getHash() {
+    public long getHash() {
         return hash;
     }
 
@@ -99,7 +99,7 @@ public class LuckyDrawItem {
      * Sets the value of the hash property.
      * 
      */
-    public void setHash(int value) {
+    public void setHash(long value) {
         this.hash = value;
     }
 

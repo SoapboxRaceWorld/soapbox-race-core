@@ -14,8 +14,8 @@ import javax.xml.stream.XMLStreamReader;
 public class UnmarshalXML {
 
 	@SuppressWarnings("unchecked")
-	public static Object unMarshal(InputStream is, Class<? extends Object> classz) {
-		Object objTmp = null;
+	public static <T> T unMarshal(InputStream is, Class<T> classz) {
+		T objTmp = null;
 		try {
 			InputStreamReader inputStreamReader = new InputStreamReader(is);
 			JAXBContext jaxbContext = JAXBContext.newInstance(classz);
@@ -23,14 +23,14 @@ public class UnmarshalXML {
 			XMLStreamReader xsr = XMLInputFactory.newFactory().createXMLStreamReader(inputStreamReader);
 			XMLReaderWithoutNamespace xr = new XMLReaderWithoutNamespace(xsr);
 			JAXBElement<Object> jaxbElement = (JAXBElement<Object>) jaxbUnmarshaller.unmarshal(xr, classz);
-			objTmp = jaxbElement.getValue();
+			objTmp = (T) jaxbElement.getValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return objTmp;
 	}
 
-	public static Object unMarshal(String xmlStr, Class<? extends Object> classz) {
+	public static <T> T unMarshal(String xmlStr, Class<T> classz) {
 		InputStream is = new ByteArrayInputStream(xmlStr.getBytes(StandardCharsets.UTF_8));
 		return unMarshal(is, classz);
 	}

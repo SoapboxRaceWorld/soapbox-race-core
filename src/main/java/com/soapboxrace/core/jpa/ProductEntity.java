@@ -18,14 +18,15 @@ import javax.persistence.Table;
 			+ "(obj.premium = false or obj.premium = :premium )AND " //
 			+ "obj.categoryName = :categoryName AND "//
 			+ "obj.productType = :productType"), //
-		
 	@NamedQuery(name = "ProductEntity.findForEndRace", //
 		query = "SELECT obj FROM ProductEntity obj WHERE " //
 			+ "obj.enabled = true AND " //
 			+ "obj.level <= :level AND " //
 			+ "obj.categoryName = :categoryName AND " //
 			+ "obj.isDropable = true AND " //
-			+ "obj.productType = :productType") //
+			+ "obj.productType = :productType"), //
+	@NamedQuery(name = "ProductEntity.findByProductId", query = "SELECT obj FROM ProductEntity obj WHERE obj.productId = :productId"), //
+	@NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = :hash") //
 })
 public class ProductEntity {
 

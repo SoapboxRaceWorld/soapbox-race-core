@@ -1,10 +1,5 @@
 package com.soapboxrace.core.bo;
 
-import java.util.List;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.dao.InviteTicketDAO;
 import com.soapboxrace.core.dao.ServerInfoDAO;
@@ -12,12 +7,17 @@ import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.InviteTicketEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.UserEntity;
+import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.jaxb.http.ArrayOfProfileData;
 import com.soapboxrace.jaxb.http.ProfileData;
 import com.soapboxrace.jaxb.http.User;
 import com.soapboxrace.jaxb.http.UserInfo;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
-import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Stateless
 public class UserBO {
@@ -30,7 +30,7 @@ public class UserBO {
 
 	@EJB
 	private ServerInfoDAO serverInfoDAO;
-
+	
 	@EJB
 	private OpenFireRestApiCli xmppRestApiCli;
 
@@ -51,6 +51,8 @@ public class UserBO {
 		UserEntity userEntity = new UserEntity();
 		userEntity.setEmail(email);
 		userEntity.setPassword(passwd);
+		userEntity.setCreated(LocalDateTime.now());
+		userEntity.setLastLogin(LocalDateTime.now());
 		userDao.insert(userEntity);
 		return userEntity;
 	}

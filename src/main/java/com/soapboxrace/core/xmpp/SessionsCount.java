@@ -1,4 +1,4 @@
-package com.soapboxrace.xmpp.openfire;
+package com.soapboxrace.core.xmpp;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class SessionsCount {
 
 	private int clusterSessions;
-	private int localSessions;
+    private int localSessions;
 
 	public int getClusterSessions() {
 		return clusterSessions;

@@ -21,6 +21,12 @@ public class EventSessionEntity {
 	@ManyToOne
 	@JoinColumn(name = "EVENTID", referencedColumnName = "ID")
 	private EventEntity event;
+	
+	@Column(name = "STARTED")
+	private Long started;
+	
+	@Column(name = "ENDED")
+	private Long ended;
 
 	public Long getId() {
 		return id;
@@ -38,4 +44,23 @@ public class EventSessionEntity {
 		this.event = event;
 	}
 
+	public Long getEnded()
+	{
+		return ended;
+	}
+
+	public void setEnded(Long ended)
+	{
+		this.ended = ended;
+	}
+
+	public Long getStarted()
+	{
+		return started;
+	}
+
+	public void setStarted(Long started)
+	{
+		this.started = started;
+	}
 }

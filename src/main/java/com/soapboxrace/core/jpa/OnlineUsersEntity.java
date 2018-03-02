@@ -37,5 +37,4 @@ public class OnlineUsersEntity {
 	public void setTimeRecord(int timeRecord) {
 		this.timeRecord = timeRecord;
 	}
-
 }

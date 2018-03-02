@@ -70,5 +70,4 @@ public class SkillModPartTrans {
     public void setSkillModPartAttribHash(int value) {
         this.skillModPartAttribHash = value;
     }
-
 }

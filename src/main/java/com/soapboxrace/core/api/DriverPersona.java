@@ -1,6 +1,7 @@
 package com.soapboxrace.core.api;
 
 import java.io.InputStream;
+import java.util.regex.Pattern;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
@@ -12,6 +13,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+import javax.xml.ws.WebServiceException;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.DriverPersonaBO;
@@ -32,6 +35,8 @@ import com.soapboxrace.jaxb.util.UnmarshalXML;
 @Path("/DriverPersona")
 public class DriverPersona {
 
+	private final Pattern NAME_PATTERN = Pattern.compile("^[A-Z0-9]{3,15}$");
+	
 	@EJB
 	private DriverPersonaBO bo;
 
@@ -138,15 +143,40 @@ public class DriverPersona {
 	@Secured
 	@Path("/CreatePersona")
 	@Produces(MediaType.APPLICATION_XML)
-	public ProfileData createPersona(@HeaderParam("userId") Long userId, @HeaderParam("securityToken") String securityToken, @QueryParam("name") String name,
-			@QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan, @QueryParam("clanIcon") String clanIcon) {
+	public Response createPersona(@HeaderParam("userId") Long userId, @HeaderParam("securityToken") String securityToken, @QueryParam("name") String name,
+								  @QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan, @QueryParam("clanIcon") String clanIcon) {
+		if (!NAME_PATTERN.matcher(name).matches()) {
+			return Response
+					.status(Response.Status.NOT_ACCEPTABLE)
+					.entity("Invalid name. Can only contain A-Z, 0-9, and can be between 3 and 15 characters.")
+					.build();
+		}
+		
+		ArrayOfString nameReserveResult = bo.reserveName(name);
+		
+		if (!nameReserveResult.getString().isEmpty()) {
+			return Response
+					.status(Response.Status.NOT_ACCEPTABLE)
+					.entity("Player with this name already exists!")
+					.build();
+//			throw new WebServiceException("Player with this name already exists!");
+		}
+		
 		PersonaEntity personaEntity = new PersonaEntity();
 		personaEntity.setName(name);
 		personaEntity.setIconIndex(iconIndex);
 		ProfileData persona = bo.createPersona(userId, personaEntity);
+		
+		if (persona == null) {
+			return Response
+					.status(Response.Status.FORBIDDEN)
+					.entity("Can't have more than 3 personas")
+					.build();
+		}
+		
 		long personaId = persona.getPersonaId();
 		userBo.createXmppUser(personaId, securityToken.substring(0, 16));
-		return persona;
+		return Response.ok(persona).build();
 	}
 
 	@POST
@@ -163,7 +193,7 @@ public class DriverPersona {
 	@Path("/GetPersonaBaseFromList")
 	@Produces(MediaType.APPLICATION_XML)
 	public ArrayOfPersonaBase getPersonaBaseFromList(InputStream is) {
-		PersonaIdArray personaIdArray = (PersonaIdArray) UnmarshalXML.unMarshal(is, PersonaIdArray.class);
+		PersonaIdArray personaIdArray = UnmarshalXML.unMarshal(is, PersonaIdArray.class);
 		ArrayOfLong personaIds = personaIdArray.getPersonaIds();
 		return bo.getPersonaBaseFromList(personaIds.getLong());
 	}
@@ -193,7 +223,7 @@ public class DriverPersona {
 	@Path("/UpdateStatusMessage")
 	@Produces(MediaType.APPLICATION_XML)
 	public PersonaMotto updateStatusMessage(InputStream statusXml, @HeaderParam("securityToken") String securityToken, @Context Request request) {
-		PersonaMotto personaMotto = (PersonaMotto) UnmarshalXML.unMarshal(statusXml, PersonaMotto.class);
+		PersonaMotto personaMotto = UnmarshalXML.unMarshal(statusXml, PersonaMotto.class);
 		tokenSessionBo.verifyPersona(securityToken, personaMotto.getPersonaId());
 
 		bo.updateStatusMessage(personaMotto.getMessage(), personaMotto.getPersonaId());

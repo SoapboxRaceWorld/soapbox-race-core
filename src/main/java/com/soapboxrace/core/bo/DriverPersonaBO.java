@@ -1,25 +1,16 @@
 package com.soapboxrace.core.bo;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
-import com.soapboxrace.core.dao.CarSlotDAO;
-import com.soapboxrace.core.dao.LobbyEntrantDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.TreasureHuntDAO;
-import com.soapboxrace.core.dao.UserDAO;
+import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.core.jpa.UserEntity;
-import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
-import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
-import com.soapboxrace.jaxb.http.ArrayOfString;
-import com.soapboxrace.jaxb.http.PersonaBase;
-import com.soapboxrace.jaxb.http.PersonaPresence;
-import com.soapboxrace.jaxb.http.ProfileData;
+import com.soapboxrace.jaxb.http.*;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Stateless
 public class DriverPersonaBO {
@@ -38,12 +29,22 @@ public class DriverPersonaBO {
 
 	@EJB
 	private TreasureHuntDAO treasureHuntDAO;
-
+	
+	@EJB
+	private ParameterBO parameterBO;
+	
 	public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
 		UserEntity userEntity = userDao.findById(userId);
+		
+		if (userEntity.getListOfProfile().size() >= 3) { 
+			return null;
+//			throw new UnsupportedOperationException("Can't have more than 3 personas");
+		}
+		
 		personaEntity.setUser(userEntity);
-		personaEntity.setCash(6000000);
+		personaEntity.setCash(parameterBO.getStartingCash());
 		personaEntity.setLevel(1);
+		personaEntity.setCreated(LocalDateTime.now());
 		personaDao.insert(personaEntity);
 		
 		createThInformation(personaEntity);
@@ -102,6 +103,7 @@ public class DriverPersonaBO {
 		carSlotDAO.deleteByPersona(personaEntity);
 		lobbyEntrantDAO.deleteByPersona(personaEntity);
 		treasureHuntDAO.deleteByPersona(personaEntity.getPersonaId());
+		
 		personaDao.delete(personaEntity);
 	}
 

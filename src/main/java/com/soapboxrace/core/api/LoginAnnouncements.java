@@ -7,14 +7,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.LoginAnnoucementBO;
+import com.soapboxrace.core.bo.LoginAnnouncementBO;
 import com.soapboxrace.jaxb.http.LoginAnnouncementsDefinition;
 
 @Path("/LoginAnnouncements")
 public class LoginAnnouncements {
 	
 	@EJB
-	private LoginAnnoucementBO bo;
+	private LoginAnnouncementBO bo;
 
 	@GET
 	@Secured

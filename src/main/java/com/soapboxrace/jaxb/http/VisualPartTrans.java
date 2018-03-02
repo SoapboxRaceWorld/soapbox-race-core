@@ -70,5 +70,4 @@ public class VisualPartTrans {
     public void setSlotHash(int value) {
         this.slotHash = value;
     }
-
 }

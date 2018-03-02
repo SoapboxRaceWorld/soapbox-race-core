@@ -1,9 +1,7 @@
 package com.soapboxrace.core.bo;
 
 import java.nio.ByteBuffer;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -20,6 +18,8 @@ import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.LobbyEntrantEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
+import com.soapboxrace.core.xmpp.XmppLobby;
 import com.soapboxrace.jaxb.http.ArrayOfLobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.Entrants;
 import com.soapboxrace.jaxb.http.LobbyCountdown;
@@ -34,8 +34,6 @@ import com.soapboxrace.jaxb.xmpp.XMPP_EventSessionType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyInviteType;
 import com.soapboxrace.jaxb.xmpp.XMPP_LobbyLaunchedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_P2PCryptoTicketType;
-import com.soapboxrace.xmpp.openfire.XmppLobby;
-import com.soapboxrace.xmpp.openfire.OpenFireRestApiCli;
 
 @Stateless
 public class LobbyBO {
@@ -59,7 +57,10 @@ public class LobbyBO {
 	private LobbyEntrantDAO lobbyEntrantDao;
 	
 	@EJB
-	private OpenFireRestApiCli xmppRestApiCli;
+	private OpenFireRestApiCli openFireRestApiCli;
+	
+	@EJB
+	private ParameterBO parameterBO;
 	
 	public void joinFastLobby(Long personaId) {
 		List<LobbyEntity> lobbys = lobbyDao.findAllOpen();
@@ -78,7 +79,7 @@ public class LobbyBO {
 	}
 	
 	public void createPrivateLobby(Long personaId, int eventId) {
-		List<Long> listOfPersona = xmppRestApiCli.getAllPersonaByGroup(personaId);
+		List<Long> listOfPersona = openFireRestApiCli.getAllPersonaByGroup(personaId);
 		if(!listOfPersona.isEmpty()) {
 			PersonaEntity personaEntity = personaDao.findById(personaId);
 			createLobby(personaEntity, eventId, true);
@@ -119,7 +120,7 @@ public class LobbyBO {
 	private void joinLobby(PersonaEntity personaEntity, List<LobbyEntity> lobbys) {
 		LobbyEntity lobbyEntity = null;
 		for (LobbyEntity lobbyEntityTmp : lobbys) {
-			int maxEntrants = 2;
+			int maxEntrants = parameterBO.getMaxLobbyPlayers();
 			List<LobbyEntrantEntity> lobbyEntrants = lobbyEntityTmp.getEntrants();
 			int entrantsSize = lobbyEntrants.size();
 			if (entrantsSize < maxEntrants) {
@@ -141,7 +142,7 @@ public class LobbyBO {
 	private boolean isPersonaInside(Long personaId, List<LobbyEntrantEntity> lobbyEntrants) {
 		for (LobbyEntrantEntity lobbyEntrantEntity : lobbyEntrants) {
 			Long entrantPersonaId = lobbyEntrantEntity.getPersona().getPersonaId();
-			if (entrantPersonaId == personaId) {
+			if (Objects.equals(entrantPersonaId, personaId)) {
 				return true;
 			}
 		}
@@ -214,7 +215,7 @@ public class LobbyBO {
 	private void sendJoinMsg(Long personaId, List<LobbyEntrantEntity> lobbyEntrants) {
 		for (LobbyEntrantEntity lobbyEntrantEntity : lobbyEntrants) {
 			LobbyEntrantAdded lobbyEntrantAdded = new LobbyEntrantAdded();
-			if (personaId != lobbyEntrantEntity.getPersona().getPersonaId()) {
+			if (!Objects.equals(personaId, lobbyEntrantEntity.getPersona().getPersonaId())) {
 				lobbyEntrantAdded.setHeat(1);
 				lobbyEntrantAdded.setLevel(lobbyEntrantEntity.getPersona().getLevel());
 				lobbyEntrantAdded.setPersonaId(personaId);
@@ -236,7 +237,7 @@ public class LobbyBO {
 		List<LobbyEntrantEntity> listLobbyEntrantEntity = lobbyEntity.getEntrants();
 		for(LobbyEntrantEntity entity : listLobbyEntrantEntity) {
 			LobbyEntrantRemoved lobbyEntrantRemoved = new LobbyEntrantRemoved();
-			if(entity.getPersona().getPersonaId() != personaId) {
+			if(!Objects.equals(entity.getPersona().getPersonaId(), personaId)) {
 				lobbyEntrantRemoved.setPersonaId(personaId);
 				lobbyEntrantRemoved.setLobbyId(lobbyId);
 				XmppLobby xmppLobby = new XmppLobby(entity.getPersona().getPersonaId());
@@ -281,6 +282,7 @@ public class LobbyBO {
 			int i = 0;
 			byte numOfRacers = (byte) entrants.size();
 			EventSessionEntity eventDataEntity = new EventSessionEntity();
+			eventDataEntity.setStarted(System.currentTimeMillis());
 			eventDataEntity.setEvent(lobbyEntity.getEvent());
 			eventSessionDao.insert(eventDataEntity);
 			for (LobbyEntrantEntity lobbyEntrantEntity : entrants) {
