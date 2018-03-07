@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS
         level INT NOT NULL,
         longDescription VARCHAR(255) COLLATE utf8_unicode_ci,
         minLevel INT NOT NULL,
-        premium bit NOT NULL DEFAULT FALSE,
+        premium bit DEFAULT FALSE NOT NULL,
         price FLOAT NOT NULL,
         priority INT NOT NULL,
         productId VARCHAR(255) COLLATE utf8_unicode_ci,
@@ -219,7 +219,11 @@ CREATE TABLE IF NOT EXISTS
         visualStyle VARCHAR(255) COLLATE utf8_unicode_ci,
         webIcon VARCHAR(255) COLLATE utf8_unicode_ci,
         webLocation VARCHAR(255) COLLATE utf8_unicode_ci,
-        isDropable bit NOT NULL DEFAULT TRUE,
+        isDropable bit DEFAULT TRUE NOT NULL,
+        accel INT,
+        handling INT,
+        resalePrice FLOAT NOT NULL,
+        topSpeed INT,
         PRIMARY KEY (id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
