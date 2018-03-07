@@ -123,7 +123,7 @@ INTO
     ,
     (
         'STARTING_CASH_AMOUNT',
-        '350000'
+        '5000000'
     )
     ,
     (
@@ -143,7 +143,7 @@ INTO
     ,
     (
         'STARTING_LEVEL_NUMBER',
-        '1'
+        '60'
     )
     ,
     (
