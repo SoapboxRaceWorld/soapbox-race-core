@@ -152,7 +152,10 @@ public class CommerceBO {
 			OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(defaultCarEntity.getOwnedCar());
 			CustomCarTrans customCarTransDB = ownedCarTrans.getCustomCar();
 			CustomCarTrans customCarTrans = commerceSessionTrans.getUpdatedCar().getCustomCar();
-			Float basketTotalValue = getBasketTotalValue(basketItemTransList);
+			Float basketTotalValue = 0f;
+			if (!CommerceOp.VINYL.equals(commerceOp)) {
+				basketTotalValue = getBasketTotalValue(basketItemTransList);
+			}
 			Float resellTotalValue = 0F;
 			switch (commerceOp) {
 			case PERFORMANCE:
@@ -205,7 +208,11 @@ public class CommerceBO {
 		Float price = 0F;
 		for (BasketItemTrans basketItemTrans : basketItemTransList) {
 			ProductEntity productEntity = productDAO.findByProductId(basketItemTrans.getProductId());
-			price = Float.sum(price, productEntity.getPrice());
+			if (productEntity != null) {
+				price = Float.sum(price, productEntity.getPrice());
+			} else {
+				System.err.println("product [" + basketItemTrans.getProductId() + "] not found");
+			}
 		}
 		return price;
 	}
