@@ -55,32 +55,33 @@ public class AccoladesFunc {
 			new int[] { 3, 2, 3, 3, 3, 4, 2, 2, 4, 4 }, new int[] { 3, 2, 2, 4, 2, 2, 3, 3, 4, 4 }, new int[] { 2, 2, 3, 2, 2, 3, 2, 4, 3, 4 } };
 
 	public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
-		if (!parameterBO.getBoolParam("ENABLE_REPUTATION")) {
-			return;
-		}
 		// Cash parts
-		Integer cashMax = (int) personaEntity.getCash() + cash;
-		personaEntity.setCash(cashMax > 9999999 ? 9999999 : cashMax < 1 ? 1 : cashMax);
+		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			Integer cashMax = (int) personaEntity.getCash() + cash;
+			personaEntity.setCash(cashMax > 9999999 ? 9999999 : cashMax < 1 ? 1 : cashMax);
+		}
 
 		// Exp parts
-		if (personaEntity.getLevel() < 60) {
-			Long expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
-			Long expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
-			if (expMax >= expToNextLevel) {
-				Boolean isLeveledUp = true;
-				while (isLeveledUp) {
-					personaEntity.setLevel(personaEntity.getLevel() + 1);
-					personaEntity.setRepAtCurrentLevel((int) (expMax - expToNextLevel));
+		if (!parameterBO.getBoolParam("ENABLE_REPUTATION")) {
+			if (personaEntity.getLevel() < 60) {
+				Long expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
+				Long expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
+				if (expMax >= expToNextLevel) {
+					Boolean isLeveledUp = true;
+					while (isLeveledUp) {
+						personaEntity.setLevel(personaEntity.getLevel() + 1);
+						personaEntity.setRepAtCurrentLevel((int) (expMax - expToNextLevel));
 
-					expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
-					expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
+						expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
+						expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
 
-					isLeveledUp = (expMax >= expToNextLevel);
+						isLeveledUp = (expMax >= expToNextLevel);
+					}
+				} else {
+					personaEntity.setRepAtCurrentLevel(expMax.intValue());
 				}
-			} else {
-				personaEntity.setRepAtCurrentLevel(expMax.intValue());
+				personaEntity.setRep(personaEntity.getRep() + exp);
 			}
-			personaEntity.setRep(personaEntity.getRep() + exp);
 		}
 
 		// Save parts
