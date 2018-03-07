@@ -153,7 +153,7 @@ INTO
     ,
     (
         'TICKET_TOKEN',
-        '12345678'
+        null
     )
     ,
     (
