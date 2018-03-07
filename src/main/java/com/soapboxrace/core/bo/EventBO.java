@@ -417,6 +417,7 @@ public class EventBO extends AccoladesFunc {
 	}
 
 	private Accolades getPursuitAccolades(Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket, Boolean isBusted) {
+		// pursuit/evaded
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
 
 		// Maths begin
@@ -588,6 +589,9 @@ public class EventBO extends AccoladesFunc {
 	}
 
 	private Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
+		// rank/none
+		// amplifier/repamplifier
+		// amplifier/tokenamplifier
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
 
 		// Maths begin
@@ -603,13 +607,13 @@ public class EventBO extends AccoladesFunc {
 		float rankCash = dragArbitrationPacket.getRank() == 1 ? cash * 0.10f : cash * 0.05f; // + 10% if fist, + 5% else
 		rankExp = dragArbitrationPacket.getFinishReason() == 22 ? rankExp : rankExp / 10;
 		rankCash = dragArbitrationPacket.getFinishReason() == 22 ? rankCash : rankCash / 10;
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int) rankExp, (int) rankCash, EnumRewardCategory.RANK, EnumRewardType.PLAYER_1));
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int) rankExp, (int) rankCash, EnumRewardCategory.OBJECTIVE, EnumRewardType.PLAYER_1));
 
 		float timeRaceExp = exp * ((60000.0f / dragArbitrationPacket.getEventDurationInMilliseconds()) / 4.0f);
 		float timeRaceCash = cash * ((60000.0f / dragArbitrationPacket.getEventDurationInMilliseconds()) / 4.0f);
 		timeRaceExp = dragArbitrationPacket.getFinishReason() == 22 ? timeRaceExp : timeRaceExp / 10;
 		timeRaceCash = dragArbitrationPacket.getFinishReason() == 22 ? timeRaceCash : timeRaceCash / 10;
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int) timeRaceExp, (int) timeRaceCash, EnumRewardCategory.BONUS, EnumRewardType.TIME_BONUS));
+		arrayOfRewardPart.getRewardPart().add(getRewardPart((int) timeRaceExp, (int) timeRaceCash, EnumRewardCategory.OBJECTIVE, EnumRewardType.TIME_BONUS));
 
 		exp += (int) rankExp + (int) timeRaceExp;
 		cash += (int) rankCash + (int) timeRaceCash;
