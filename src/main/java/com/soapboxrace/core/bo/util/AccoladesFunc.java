@@ -62,7 +62,7 @@ public class AccoladesFunc {
 		}
 
 		// Exp parts
-		if (!parameterBO.getBoolParam("ENABLE_REPUTATION")) {
+		if (parameterBO.getBoolParam("ENABLE_REPUTATION")) {
 			if (personaEntity.getLevel() < 60) {
 				Long expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
 				Long expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
