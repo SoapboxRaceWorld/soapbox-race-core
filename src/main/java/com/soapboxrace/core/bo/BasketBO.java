@@ -211,16 +211,33 @@ public class BasketBO {
 		}
 
 		PersonaEntity personaEntity = personaDao.findById(personaId);
+
 		final int maxCash = parameterBO.getMaxCash(securityToken);
 		if (personaEntity.getCash() < maxCash) {
 			int cashTotal = (int) (personaEntity.getCash() + ownedCarEntity.getCustomCar().getResalePrice());
 			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
 				personaEntity.setCash(Math.max(0, Math.min(maxCash, cashTotal)));
 			}
-			personaDao.update(personaEntity);
 		}
 
+		CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaId);
+
+		int curCarIndex = personaEntity.getCurCarIndex();
+		if (defaultCarEntity.getId().equals(carSlotEntity.getId())) {
+			curCarIndex = 0;
+		} else {
+			List<CarSlotEntity> personasCar = personaBo.getPersonasCar(personaId);
+			int curCarIndexTmp = curCarIndex;
+			for (int i = 0; i < curCarIndexTmp; i++) {
+				if (personasCar.get(i).getId().equals(carSlotEntity.getId())) {
+					curCarIndex--;
+					break;
+				}
+			}
+		}
 		carSlotDAO.delete(carSlotEntity);
+		personaEntity.setCurCarIndex(curCarIndex);
+		personaDao.update(personaEntity);
 		return true;
 	}
 
