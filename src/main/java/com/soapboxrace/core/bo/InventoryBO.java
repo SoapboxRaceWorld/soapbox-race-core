@@ -21,6 +21,7 @@ import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.BasketItemTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
 import com.soapboxrace.jaxb.http.CustomCarTrans;
+import com.soapboxrace.jaxb.http.EntitlementItemTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
@@ -263,6 +264,13 @@ public class InventoryBO {
 			break;
 		default:
 			break;
+		}
+		List<EntitlementItemTrans> entitlementItemTransList = commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans();
+		if (entitlementItemTransList != null && !entitlementItemTransList.isEmpty()) {
+			for (EntitlementItemTrans entitlementItemTransTmp : entitlementItemTransList) {
+				String entitlementId = entitlementItemTransTmp.getEntitlementId();
+				deletePart(defaultCarEntity.getPersona().getPersonaId(), entitlementId);
+			}
 		}
 	}
 }

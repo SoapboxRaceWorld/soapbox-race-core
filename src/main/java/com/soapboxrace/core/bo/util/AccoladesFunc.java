@@ -141,7 +141,7 @@ public class AccoladesFunc {
 			}
 			hash = productEntity.getHash();
 			icon = productEntity.getIcon();
-			price = (int) (productEntity.getPrice() / 3.5);
+			price = (int) (productEntity.getResalePrice());
 			vItem = DigestUtils.md5Hex(productEntity.getHash().toString());
 			vItemType = productEntity.getProductType();
 

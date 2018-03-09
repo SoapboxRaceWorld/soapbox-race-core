@@ -82,9 +82,9 @@ public class Personas {
 		List<BasketItemTrans> basketItemTrans = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
 		CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
 		CommerceOp commerceOp = commerceBO.detectCommerceOperation(commerceSessionTrans, defaultCarEntity);
-		inventoryBO.updateInventory(commerceOp, basketItemTrans, commerceSessionTrans, defaultCarEntity);
 		commerceBO.updateEconomy(commerceOp, basketItemTrans, commerceSessionTrans, defaultCarEntity);
 		commerceBO.updateCar(commerceOp, commerceSessionTrans, defaultCarEntity);
+		inventoryBO.updateInventory(commerceOp, basketItemTrans, commerceSessionTrans, defaultCarEntity);
 
 		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
 		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();

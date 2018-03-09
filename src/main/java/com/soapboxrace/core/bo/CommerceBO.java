@@ -21,12 +21,14 @@ import com.soapboxrace.core.dao.VinylProductDAO;
 import com.soapboxrace.core.dao.VisualPartDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CustomCarEntity;
+import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.BasketItemTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
 import com.soapboxrace.jaxb.http.CustomCarTrans;
 import com.soapboxrace.jaxb.http.CustomPaintTrans;
+import com.soapboxrace.jaxb.http.EntitlementItemTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.PerformancePartTrans;
 import com.soapboxrace.jaxb.http.SkillModPartTrans;
@@ -192,6 +194,19 @@ public class CommerceBO {
 				break;
 			default:
 				break;
+			}
+			List<EntitlementItemTrans> entitlementItemTransList = commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans();
+			if (entitlementItemTransList != null && !entitlementItemTransList.isEmpty()) {
+				for (EntitlementItemTrans entitlementItemTransTmp : entitlementItemTransList) {
+					String entitlementId = entitlementItemTransTmp.getEntitlementId();
+					Long personaId = defaultCarEntity.getPersona().getPersonaId();
+					InventoryItemEntity inventoryItem = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, entitlementId);
+					Integer hash = inventoryItem.getHash();
+					ProductEntity productEntity = productDAO.findByHash(hash);
+					if (productEntity != null) {
+						resellTotalValue = Float.sum(resellTotalValue, productEntity.getResalePrice());
+					}
+				}
 			}
 			Float result = Float.sum(basketTotalValue, (resellTotalValue * -1)) * -1;
 			System.out.println("basket: [" + basketTotalValue + "]");
