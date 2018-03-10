@@ -26,6 +26,7 @@ import com.soapboxrace.core.bo.ParameterBO;
 public class OpenFireRestApiCli {
 	private String openFireToken;
 	private String openFireAddress;
+	private boolean restApiEnabled = false;
 
 	@EJB
 	private ParameterBO parameterBO;
@@ -35,8 +36,9 @@ public class OpenFireRestApiCli {
 		openFireToken = parameterBO.getStrParam("OPENFIRE_TOKEN");
 		openFireAddress = parameterBO.getStrParam("OPENFIRE_ADDRESS");
 		if (openFireToken != null && openFireAddress != null) {
-			createUpdatePersona("sbrw.engine.engine", openFireToken);
+			restApiEnabled = true;
 		}
+		createUpdatePersona("sbrw.engine.engine", openFireToken);
 	}
 
 	private Builder getBuilder(String path) {
@@ -48,6 +50,9 @@ public class OpenFireRestApiCli {
 	}
 
 	public void createUpdatePersona(String user, String password) {
+		if (!restApiEnabled) {
+			return;
+		}
 		Builder builder = getBuilder("users/" + user);
 		Response response = builder.get();
 		if (response.getStatus() == 200) {
@@ -71,6 +76,9 @@ public class OpenFireRestApiCli {
 	}
 
 	public int getTotalOnlineUsers() {
+		if (!restApiEnabled) {
+			return 0;
+		}
 		Builder builder = getBuilder("system/statistics/sessions");
 		SessionsCount sessionsCount = builder.get(SessionsCount.class);
 		int clusterSessions = sessionsCount.getClusterSessions();
@@ -81,6 +89,9 @@ public class OpenFireRestApiCli {
 	}
 
 	public List<Long> getAllPersonaByGroup(Long personaId) {
+		if (!restApiEnabled) {
+			return new ArrayList<>();
+		}
 		Builder builder = getBuilder("chatrooms");
 		MUCRoomEntities roomEntities = builder.get(MUCRoomEntities.class);
 		List<MUCRoomEntity> listRoomEntity = roomEntities.getMucRooms();
