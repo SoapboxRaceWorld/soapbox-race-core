@@ -33,12 +33,12 @@ public class Session {
 	@Produces(MediaType.APPLICATION_XML)
 	public ChatServer getChatInfo() {
 		ChatServer chatServer = new ChatServer();
-		chatServer.setIp(parameterBO.getStrParam("XMPP_IP"));
+		String xmppIp = parameterBO.getStrParam("XMPP_IP");
 		if ("127.0.0.1".equals(parameterBO.getStrParam("XMPP_IP"))) {
 			URI myUri = uri.getBaseUri();
-			String host = myUri.getHost();
-			chatServer.setIp(host);
+			xmppIp = myUri.getHost();
 		}
+		chatServer.setIp(xmppIp);
 		chatServer.setPort(parameterBO.getIntParam("XMPP_PORT"));
 		chatServer.setPrefix("sbrw");
 		chatServer.setRooms(bo.getAllChatRoom());
