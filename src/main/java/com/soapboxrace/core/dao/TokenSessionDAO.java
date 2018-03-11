@@ -20,6 +20,10 @@ public class TokenSessionDAO extends BaseDAO<TokenSessionEntity> {
 		return entityManager.find(TokenSessionEntity.class, securityToken);
 	}
 
+	public TokenSessionEntity findByPersonaId(Long personaId) {
+		return null;
+	}
+
 	public void deleteByUserId(Long userId) {
 		Query query = entityManager.createNamedQuery("TokenSessionEntity.deleteByUserId");
 		query.setParameter("userId", userId);
@@ -32,7 +36,7 @@ public class TokenSessionDAO extends BaseDAO<TokenSessionEntity> {
 		query.setParameter("relayCryptoTicket", relayCryptoTicket);
 		query.executeUpdate();
 	}
-	
+
 	public void updateLobbyIdByPersonaId(Long personaId, Long lobbyId) {
 		Query query = entityManager.createNamedQuery("TokenSessionEntity.updateRelayCrytoTicket");
 		query.setParameter("personaId", personaId);
