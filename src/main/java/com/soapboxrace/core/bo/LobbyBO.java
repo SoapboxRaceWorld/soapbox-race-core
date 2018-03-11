@@ -326,7 +326,7 @@ public class LobbyBO {
 				lobbyEntrantInfoType.setState(LobbyEntrantState.UNKNOWN);
 
 				if ("127.0.0.1".equals(udpRaceIp)) {
-					TokenSessionEntity tokenEntity = tokenDAO.findByPersonaId(personaId);
+					TokenSessionEntity tokenEntity = tokenDAO.findByUserId(lobbyEntrantEntity.getPersona().getUser().getId());
 					lobbyEntrantInfoType.setUdpRaceHostIp(tokenEntity.getClientHostIp());
 				}
 

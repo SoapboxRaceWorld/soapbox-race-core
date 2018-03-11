@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "TOKEN_SESSION")
 @NamedQueries({ //
-		@NamedQuery(name = "TokenSessionEntity.findByPersonaId", query = "SELECT FROM TokenSessionEntity obj WHERE obj.personaId = :personaId"), //
+		@NamedQuery(name = "TokenSessionEntity.findByUserId", query = "SELECT obj FROM TokenSessionEntity obj WHERE obj.userId = :userId"), //
 		@NamedQuery(name = "TokenSessionEntity.deleteByUserId", query = "DELETE FROM TokenSessionEntity obj WHERE obj.userId = :userId"), //
 		@NamedQuery(name = "TokenSessionEntity.updateRelayCrytoTicket", //
 				query = "UPDATE TokenSessionEntity obj " //
