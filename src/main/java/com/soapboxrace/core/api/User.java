@@ -1,5 +1,7 @@
 package com.soapboxrace.core.api;
 
+import java.net.URI;
+
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -11,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.soapboxrace.core.api.util.LaunchFilter;
 import com.soapboxrace.core.api.util.LauncherChecks;
@@ -28,11 +31,14 @@ import com.soapboxrace.jaxb.login.LoginStatusVO;
 public class User {
 
 	@Context
+	UriInfo uri;
+
+	@Context
 	private HttpServletRequest sr;
-	
+
 	@EJB
 	private AuthenticationBO authenticationBO;
-	
+
 	@EJB
 	private UserBO userBO;
 
@@ -49,30 +55,26 @@ public class User {
 	public Response getPermanentSession(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId) {
 		UserEntity userEntity = tokenBO.getUser(securityToken);
 		BanEntity ban = authenticationBO.checkUserBan(userEntity);
-		
-		if (ban != null && ban.stillApplies())
-		{
-			return Response
-					.status(Response.Status.UNAUTHORIZED)
-					.entity(new LaunchFilter.BanUtil(ban).invoke())
-					.build();
+
+		if (ban != null && ban.stillApplies()) {
+			return Response.status(Response.Status.UNAUTHORIZED).entity(new LaunchFilter.BanUtil(ban).invoke()).build();
 		}
-		
+
 		tokenBO.deleteByUserId(userId);
-		String randomUUID = tokenBO.createToken(userId);
+		URI myUri = uri.getBaseUri();
+		String randomUUID = tokenBO.createToken(userId, myUri.getHost());
 		UserInfo userInfo = userBO.getUserById(userId);
 		userInfo.getUser().setSecurityToken(randomUUID);
 		userBO.createXmppUser(userInfo);
-		return Response
-				.ok(userInfo)
-				.build();
+		return Response.ok(userInfo).build();
 	}
 
 	@POST
 	@Secured
 	@Path("SecureLoginPersona")
 	@Produces(MediaType.APPLICATION_XML)
-	public String secureLoginPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId, @QueryParam("personaId") Long personaId) {
+	public String secureLoginPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
+			@QueryParam("personaId") Long personaId) {
 		tokenBO.setActivePersonaId(securityToken, personaId, false);
 		userBO.secureLoginPersona(userId, personaId);
 		return "";
@@ -82,7 +84,8 @@ public class User {
 	@Secured
 	@Path("SecureLogoutPersona")
 	@Produces(MediaType.APPLICATION_XML)
-	public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId, @QueryParam("personaId") Long personaId) {
+	public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
+			@QueryParam("personaId") Long personaId) {
 		tokenBO.setActivePersonaId(securityToken, 0L, true);
 		return "";
 	}
