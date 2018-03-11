@@ -51,7 +51,7 @@ public class TokenSessionBO {
 		tokenDAO.update(tokenSessionEntity);
 	}
 
-	public String createToken(Long userId) {
+	public String createToken(Long userId, String clientHostName) {
 		TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
 		Date expirationDate = getMinutes(15);
 		tokenSessionEntity.setExpirationDate(expirationDate);
@@ -60,6 +60,7 @@ public class TokenSessionBO {
 		tokenSessionEntity.setUserId(userId);
 		UserEntity userEntity = userDAO.findById(userId);
 		tokenSessionEntity.setPremium(userEntity.isPremium());
+		tokenSessionEntity.setClientHostIp(clientHostName);
 		tokenDAO.insert(tokenSessionEntity);
 		return randomUUID;
 	}
@@ -120,7 +121,7 @@ public class TokenSessionBO {
 					userDAO.update(userEntity);
 					Long userId = userEntity.getId();
 					deleteByUserId(userId);
-					String randomUUID = createToken(userId);
+					String randomUUID = createToken(userId, null);
 					loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
 					loginStatusVO.setDescription("");
 

@@ -21,6 +21,7 @@ import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.LobbyEntrantEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppLobby;
 import com.soapboxrace.jaxb.http.ArrayOfLobbyEntrantInfo;
@@ -295,6 +296,7 @@ public class LobbyBO {
 			eventDataEntity.setStarted(System.currentTimeMillis());
 			eventDataEntity.setEvent(lobbyEntity.getEvent());
 			eventSessionDao.insert(eventDataEntity);
+			String udpRaceIp = parameterBO.getStrParam("UDP_RACE_IP");
 			for (LobbyEntrantEntity lobbyEntrantEntity : entrants) {
 				// eventDataEntity.setIsSinglePlayer(false);
 				Long personaId = lobbyEntrantEntity.getPersona().getPersonaId();
@@ -322,6 +324,12 @@ public class LobbyBO {
 				lobbyEntrantInfoType.setHeat(1);
 				lobbyEntrantInfoType.setGridIndex(i++);
 				lobbyEntrantInfoType.setState(LobbyEntrantState.UNKNOWN);
+
+				if ("127.0.0.1".equals(udpRaceIp)) {
+					TokenSessionEntity tokenEntity = tokenDAO.findByUserId(lobbyEntrantEntity.getPersona().getUser().getId());
+					lobbyEntrantInfoType.setUdpRaceHostIp(tokenEntity.getClientHostIp());
+				}
+
 				lobbyEntrantInfo.add(lobbyEntrantInfoType);
 			}
 			XMPP_EventSessionType xMPP_EventSessionType = new XMPP_EventSessionType();
@@ -336,7 +344,7 @@ public class LobbyBO {
 			xMPP_EventSessionType.setSessionId(eventDataEntity.getId());
 			lobbyLaunched.setNewRelayServer(true);
 			lobbyLaunched.setLobbyId(lobbyEntity.getId());
-			lobbyLaunched.setUdpRelayHost(parameterBO.getStrParam("UDP_RACE_IP"));
+			lobbyLaunched.setUdpRelayHost(udpRaceIp);
 			lobbyLaunched.setUdpRelayPort(parameterBO.getIntParam("UDP_RACE_PORT"));
 
 			lobbyLaunched.setEntrants(entrantsType);

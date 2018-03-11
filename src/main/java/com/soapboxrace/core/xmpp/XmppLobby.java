@@ -64,6 +64,10 @@ public class XmppLobby {
 					cryptoTicketsTypeTmp.getP2PCryptoTicket().add(p2pCryptoTicketType);
 				}
 			}
+			String udpRaceHostIp = lobbyEntrantInfoType.getUdpRaceHostIp();
+			if (udpRaceHostIp != null) {
+				lobbyLaunched.setUdpRelayHost(udpRaceHostIp);
+			}
 			lobbyLaunched.setCryptoTickets(cryptoTicketsTypeTmp);
 			XMPP_ResponseTypeLobbyLaunched responseType = new XMPP_ResponseTypeLobbyLaunched();
 			responseType.setLobbyInvite(lobbyLaunched);
