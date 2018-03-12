@@ -42,11 +42,7 @@ public class DropBO {
 		luckyDrawItem.setDescription(productEntity.getProductTitle());
 		luckyDrawItem.setHash(productEntity.getHash());
 		luckyDrawItem.setIcon(productEntity.getIcon());
-		Integer count = 1;
-		if ("POWERUP".equals(productEntity.getProductType())) {
-			count = 15;
-		}
-		luckyDrawItem.setRemainingUseCount(count);
+		luckyDrawItem.setRemainingUseCount(productEntity.getUseCount());
 		luckyDrawItem.setResellPrice(productEntity.getResalePrice());
 		luckyDrawItem.setVirtualItem(DigestUtils.md5Hex(productEntity.getHash().toString()));
 		luckyDrawItem.setVirtualItemType(productEntity.getProductType());
