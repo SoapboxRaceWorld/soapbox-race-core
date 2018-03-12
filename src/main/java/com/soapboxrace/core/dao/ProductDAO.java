@@ -58,21 +58,17 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
 		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 
-	public ProductEntity getRandomDrop() {
+	public ProductEntity getRandomDrop(String productType) {
 		StringBuilder sqlWhere = new StringBuilder();
 		sqlWhere.append(" WHERE obj.isDropable=true ");
-		sqlWhere.append(" AND obj.productType IN ( ");
-		sqlWhere.append(" 'PERFORMANCEPART' ");
-		sqlWhere.append(" ,'POWERUP' ");
-		sqlWhere.append(" ,'SKILLMODPART' ");
-		sqlWhere.append(" ,'VISUALPART' ");
-		sqlWhere.append(" ) ");
+		sqlWhere.append(" AND obj.productType=:productType");
 
 		StringBuilder sqlCount = new StringBuilder();
 		sqlCount.append("SELECT COUNT(*) FROM ProductEntity obj ");
 		sqlCount.append(sqlWhere.toString());
 
 		Query countQuery = entityManager.createQuery(sqlCount.toString());
+		countQuery.setParameter("productType", productType);
 		Long count = (Long) countQuery.getSingleResult();
 
 		Random random = new Random();
@@ -83,6 +79,7 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
 		sqlProduct.append(sqlWhere.toString());
 
 		TypedQuery<ProductEntity> productQuery = entityManager.createQuery(sqlProduct.toString(), ProductEntity.class);
+		productQuery.setParameter("productType", productType);
 
 		productQuery.setFirstResult(number);
 		productQuery.setMaxResults(1);

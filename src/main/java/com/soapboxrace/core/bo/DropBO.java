@@ -1,5 +1,7 @@
 package com.soapboxrace.core.bo;
 
+import java.util.Random;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -31,7 +33,11 @@ public class DropBO {
 	private ProductDAO productDao;
 
 	public LuckyDrawItem getRandomItem() {
-		ProductEntity productEntity = productDao.getRandomDrop();
+		String[] productTypeArr = { "PERFORMANCEPART", "POWERUP", "SKILLMODPART", "VISUALPART" };
+		Random random = new Random();
+		int number = random.nextInt(productTypeArr.length - 1);
+
+		ProductEntity productEntity = productDao.getRandomDrop(productTypeArr[number]);
 		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
 		luckyDrawItem.setDescription(productEntity.getProductTitle());
 		luckyDrawItem.setHash(productEntity.getHash());
