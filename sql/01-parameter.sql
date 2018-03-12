@@ -2,6 +2,10 @@ INSERT
 INTO
     SOAPBOX.PARAMETER VALUES
     (
+        'ANNOUNCEMENT_DOMAIN',
+        'http://i.imgur.com/'
+    ),
+    (
         'CASH_REWARD_MULTIPLIER',
         '1'
     )
