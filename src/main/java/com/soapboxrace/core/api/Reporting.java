@@ -51,6 +51,14 @@ public class Reporting {
 		return "";
 	}
 
+	@GET
+	@Secured
+	@Path("/LoginAnnouncementClicked")
+	@Produces(MediaType.APPLICATION_XML)
+	public String loginAnnouncementClicked() {
+		return "";
+	}
+
 	@PUT
 	@Path("{path:.*}")
 	@Produces(MediaType.APPLICATION_XML)
