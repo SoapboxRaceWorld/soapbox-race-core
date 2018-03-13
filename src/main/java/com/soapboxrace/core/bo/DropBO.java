@@ -32,12 +32,14 @@ public class DropBO {
 	@EJB
 	private ProductDAO productDao;
 
-	public LuckyDrawItem getRandomItem() {
+	public ProductEntity getRandomProductItem() {
 		String[] productTypeArr = { "PERFORMANCEPART", "POWERUP", "SKILLMODPART", "VISUALPART" };
 		Random random = new Random();
 		int number = random.nextInt(productTypeArr.length - 1);
+		return productDao.getRandomDrop(productTypeArr[number]);
+	}
 
-		ProductEntity productEntity = productDao.getRandomDrop(productTypeArr[number]);
+	public LuckyDrawItem copyProduct2LuckyDraw(ProductEntity productEntity) {
 		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
 		luckyDrawItem.setDescription(productEntity.getProductTitle());
 		luckyDrawItem.setHash(productEntity.getHash());

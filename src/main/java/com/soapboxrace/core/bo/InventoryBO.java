@@ -6,6 +6,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import com.soapboxrace.core.bo.util.CommerceOp;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.InventoryDAO;
@@ -272,5 +274,24 @@ public class InventoryBO {
 				deletePart(defaultCarEntity.getPersona().getPersonaId(), entitlementId);
 			}
 		}
+	}
+
+	public void addDroppedItem(ProductEntity productEntity, PersonaEntity personaEntity) {
+		InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
+
+		String entitlementTag = DigestUtils.md5Hex(String.valueOf(productEntity.getHash()));
+		InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
+		inventoryItemEntity.setPersona(personaEntity);
+		inventoryItemEntity.setInventory(inventoryEntity);
+		inventoryItemEntity.setEntitlementTag(entitlementTag);
+		inventoryItemEntity.setHash(productEntity.getHash());
+		inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
+		inventoryItemEntity.setResalePrice(productEntity.getResalePrice());
+		inventoryItemEntity.setStatus("ACTIVE");
+		inventoryItemEntity.setStringHash("0x" + Integer.toHexString(productEntity.getHash()));
+		inventoryItemEntity.setVirtualItemType(productEntity.getProductType());
+		inventoryItemEntity.setProductId(productEntity.getProductId());
+
+		inventoryItemDAO.insert(inventoryItemEntity);
 	}
 }
