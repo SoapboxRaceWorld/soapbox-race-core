@@ -19,6 +19,7 @@ import com.soapboxrace.core.jpa.InventoryEntity;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.core.jpa.ProductType;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.BasketItemTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
@@ -292,6 +293,59 @@ public class InventoryBO {
 		inventoryItemEntity.setVirtualItemType(productEntity.getProductType());
 		inventoryItemEntity.setProductId(productEntity.getProductId());
 
+		ProductType productTypeEnum = detectProductType(productEntity);
+		switch (productTypeEnum) {
+		case PERFORMANCEPART:
+			int performancePartsUsedSlotCount = inventoryEntity.getPerformancePartsUsedSlotCount() + 1;
+			inventoryEntity.setPerformancePartsUsedSlotCount(performancePartsUsedSlotCount);
+			break;
+		case SKILLMODPART:
+			int skillModPartsUsedSlotCount = inventoryEntity.getSkillModPartsUsedSlotCount() + 1;
+			inventoryEntity.setSkillModPartsUsedSlotCount(skillModPartsUsedSlotCount);
+			break;
+		case VISUALPART:
+			int visualPartsUsedSlotCount = inventoryEntity.getVisualPartsUsedSlotCount() + 1;
+			inventoryEntity.setVisualPartsUsedSlotCount(visualPartsUsedSlotCount);
+			break;
+		case POWERUP:
+			break;
+		default:
+			break;
+		}
 		inventoryItemDAO.insert(inventoryItemEntity);
+		inventoryDAO.update(inventoryEntity);
+	}
+
+	public ProductType detectProductType(ProductEntity productEntity) {
+		return ProductType.valueOf(productEntity.getProductType());
+	}
+
+	public boolean isInventoryFull(ProductEntity productEntity, PersonaEntity personaEntity) {
+		InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
+		ProductType productTypeEnum = detectProductType(productEntity);
+		int capacity = 0;
+		int usedSlotCount = 0;
+		switch (productTypeEnum) {
+		case PERFORMANCEPART:
+			capacity = inventoryEntity.getPerformancePartsCapacity();
+			usedSlotCount = inventoryEntity.getPerformancePartsUsedSlotCount();
+			break;
+		case SKILLMODPART:
+			capacity = inventoryEntity.getSkillModPartsCapacity();
+			usedSlotCount = inventoryEntity.getSkillModPartsUsedSlotCount();
+			break;
+		case VISUALPART:
+			capacity = inventoryEntity.getVisualPartsCapacity();
+			usedSlotCount = inventoryEntity.getVisualPartsUsedSlotCount();
+			break;
+		case POWERUP:
+			return false;
+		default:
+			break;
+		}
+		if (usedSlotCount < capacity) {
+			return false;
+		}
+		return true;
 	}
 }

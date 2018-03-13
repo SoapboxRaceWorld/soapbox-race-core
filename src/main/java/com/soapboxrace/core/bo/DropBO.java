@@ -36,7 +36,8 @@ public class DropBO {
 		String[] productTypeArr = { "PERFORMANCEPART", "POWERUP", "SKILLMODPART", "VISUALPART" };
 		Random random = new Random();
 		int number = random.nextInt(productTypeArr.length - 1);
-		return productDao.getRandomDrop(productTypeArr[number]);
+//		return productDao.getRandomDrop(productTypeArr[number]);
+		return productDao.getRandomDrop(productTypeArr[0]);
 	}
 
 	public LuckyDrawItem copyProduct2LuckyDraw(ProductEntity productEntity) {
