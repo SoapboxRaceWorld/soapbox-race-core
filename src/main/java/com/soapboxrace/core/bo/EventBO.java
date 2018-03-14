@@ -418,9 +418,7 @@ public class EventBO extends AccoladesFunc {
 	}
 
 	private Accolades getPursuitAccolades(Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket, Boolean isBusted) {
-		// pursuit/evaded
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-
 		RewardVO rewardVO = new RewardVO(parameterBO.getBoolParam("ENABLE_ECONOMY"), parameterBO.getBoolParam("ENABLE_REPUTATION"));
 
 		float rep = 0;
@@ -474,7 +472,6 @@ public class EventBO extends AccoladesFunc {
 			rewardVO.add((int) spikeStripsDodgedExp, (int) spikeStripsDodgedCash, EnumRewardCategory.PURSUIT, EnumRewardType.SPIKE_STRIPS_DODGED);
 
 		}
-		// Maths ending
 
 		float repMult = rewardVO.getRep() * parameterBO.getRepRewardMultiplier();
 		float cashMult = rewardVO.getCash() * parameterBO.getCashRewardMultiplier();
@@ -497,88 +494,68 @@ public class EventBO extends AccoladesFunc {
 
 	private Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
+		RewardVO rewardVO = new RewardVO(parameterBO.getBoolParam("ENABLE_ECONOMY"), parameterBO.getBoolParam("ENABLE_REPUTATION"));
 
-		// Maths begin
-		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		float exp = personaEntity.getLevel() >= 60 ? 0 : 200 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
-		float cash = personaEntity.getCash() >= 9999999 ? 0 : 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int) exp, (int) cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		float rep = 0;
+		float cash = 0;
 
-		cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 0);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int) cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
+		if (personaEntity.getLevel() < 60) {
+			rep = 200 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
+		}
+		if (personaEntity.getCash() < 9999999) {
+			cash = 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
+		}
+		rewardVO.add((int) rep, (int) cash, EnumRewardCategory.BASE, EnumRewardType.NONE);
 
-		float rankExp = routeArbitrationPacket.getRank() == 1 ? exp * 0.10f : exp * 0.05f; // + 10% if fist, + 5% else
+		float skillCash = cash * getSkillMultiplicater(personaEntity.getPersonaId(), 0);
+		rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
+
+		float rankExp = routeArbitrationPacket.getRank() == 1 ? rep * 0.10f : rep * 0.05f; // + 10% if fist, + 5% else
 		float rankCash = routeArbitrationPacket.getRank() == 1 ? cash * 0.10f : cash * 0.05f; // + 10% if fist, + 5% else
 		rankExp = routeArbitrationPacket.getFinishReason() == 22 ? rankExp : rankExp / 10;
 		rankCash = routeArbitrationPacket.getFinishReason() == 22 ? rankCash : rankCash / 10;
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int) rankExp, (int) rankCash, EnumRewardCategory.RANK, EnumRewardType.PLAYER_1));
+		rewardVO.add((int) rankExp, (int) rankCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
 
-		float timeRaceExp = exp * (((routeArbitrationPacket.getEventDurationInMilliseconds() / 1000.0f) / routeArbitrationPacket.getRank()) / 100.0f);
+		float timeRaceExp = rep * (((routeArbitrationPacket.getEventDurationInMilliseconds() / 1000.0f) / routeArbitrationPacket.getRank()) / 100.0f);
 		float timeRaceCash = cash * (((routeArbitrationPacket.getEventDurationInMilliseconds() / 1000.0f) / routeArbitrationPacket.getRank()) / 100.0f);
 		timeRaceExp = routeArbitrationPacket.getFinishReason() == 22 ? timeRaceExp : timeRaceExp / 10;
 		timeRaceCash = routeArbitrationPacket.getFinishReason() == 22 ? timeRaceCash : timeRaceCash / 10;
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int) timeRaceExp, (int) timeRaceCash, EnumRewardCategory.BONUS, EnumRewardType.TIME_BONUS));
-
-		exp += (int) rankExp + (int) timeRaceExp;
-		cash += (int) rankCash + (int) timeRaceCash;
+		rewardVO.add((int) timeRaceExp, (int) timeRaceCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
 
 		if (routeArbitrationPacket.getPerfectStart() == 1) {
-			float perfectStartExp = exp * 0.10f; // + 10%
+			float perfectStartExp = rep * 0.10f; // + 10%
 			float perfectStartCash = cash * 0.10f; // + 10%
 			perfectStartExp = routeArbitrationPacket.getFinishReason() == 22 ? perfectStartExp : perfectStartExp / 10;
 			perfectStartCash = routeArbitrationPacket.getFinishReason() == 22 ? perfectStartCash : perfectStartCash / 10;
-			exp += (int) perfectStartExp;
-			cash += (int) perfectStartCash;
-			arrayOfRewardPart.getRewardPart().add(getRewardPart((int) perfectStartExp, (int) perfectStartCash, EnumRewardCategory.BONUS, EnumRewardType.NONE));
+			rewardVO.add((int) perfectStartExp, (int) perfectStartCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
 		}
 
 		if (routeArbitrationPacket.getTopSpeed() >= 70.0f) {
-			float highSpeedExp = exp * 0.10f; // + 10%
+			float highSpeedExp = rep * 0.10f; // + 10%
 			float highSpeedCash = cash * 0.10f; // + 10%
 			highSpeedExp = routeArbitrationPacket.getFinishReason() == 22 ? highSpeedExp : highSpeedExp / 10;
 			highSpeedCash = routeArbitrationPacket.getFinishReason() == 22 ? highSpeedCash : highSpeedCash / 10;
-			exp += (int) highSpeedExp;
-			cash += (int) highSpeedCash;
-			arrayOfRewardPart.getRewardPart().add(getRewardPart((int) highSpeedExp, (int) highSpeedCash, EnumRewardCategory.BONUS, EnumRewardType.NONE));
+			rewardVO.add((int) highSpeedExp, (int) highSpeedCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
 		}
-		// Maths ending
 
-		exp *= parameterBO.getRepRewardMultiplier();
-		cash *= parameterBO.getCashRewardMultiplier();
+		float repMult = rewardVO.getRep() * parameterBO.getRepRewardMultiplier();
+		float cashMult = rewardVO.getCash() * parameterBO.getCashRewardMultiplier();
+		rewardVO.add((int) repMult, 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
+		rewardVO.add(0, (int) cashMult, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
 
 		Accolades accolades = new Accolades();
-		if (!parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-			cash = 0;
-			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
-			for (RewardPart rewardPart : rewardPartList) {
-				rewardPart.setTokenPart(0);
-			}
-		}
-		if (!parameterBO.getBoolParam("ENABLE_REPUTATION")) {
-			exp = 0;
-			List<RewardPart> rewardPartList = arrayOfRewardPart.getRewardPart();
-			for (RewardPart rewardPart : rewardPartList) {
-				rewardPart.setRepPart(0);
-			}
-		}
-		accolades.setFinalRewards(getFinalReward((int) exp, (int) cash));
-		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int) exp));
+		accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo(routeArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
-		accolades.setOriginalRewards(getFinalReward((int) exp, (int) cash));
-		accolades.setRewardInfo(arrayOfRewardPart);
+		accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
 
-		applyRaceReward((int) exp, (int) cash, personaEntity);
+		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
 		return accolades;
 	}
 
 	private Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
-		// rank/none
-		// amplifier/repamplifier
-		// amplifier/tokenamplifier
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-
-		// Maths begin
-
 		RewardVO rewardVO = new RewardVO(parameterBO.getBoolParam("ENABLE_ECONOMY"), parameterBO.getBoolParam("ENABLE_REPUTATION"));
 
 		float rep = 0;
@@ -621,7 +598,6 @@ public class EventBO extends AccoladesFunc {
 			highSpeedCash = dragArbitrationPacket.getFinishReason() == 22 ? highSpeedCash : highSpeedCash / 10;
 			rewardVO.add((int) highSpeedExp, (int) highSpeedCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
 		}
-		// Maths ending
 
 		float repMult = rewardVO.getRep() * parameterBO.getRepRewardMultiplier();
 		float cashMult = rewardVO.getCash() * parameterBO.getCashRewardMultiplier();
