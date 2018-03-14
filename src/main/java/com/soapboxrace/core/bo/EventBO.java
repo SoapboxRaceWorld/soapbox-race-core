@@ -465,12 +465,12 @@ public class EventBO extends AccoladesFunc {
 			float infractionsCash = cash * (pursuitArbitrationPacket.getInfractions() / 100.0f);
 			rewardVO.add((int) infractionsExp, (int) infractionsCash, EnumRewardCategory.PURSUIT, EnumRewardType.INFRACTIONS);
 
-			float roadBlocksDodgedExp = rep * (pursuitArbitrationPacket.getRoadBlocksDodged() / 50.0f) + 111;
-			float roadBlocksDodgedCash = cash * (pursuitArbitrationPacket.getRoadBlocksDodged() / 50.0f) + 222;
+			float roadBlocksDodgedExp = rep * (pursuitArbitrationPacket.getRoadBlocksDodged() / 50.0f);
+			float roadBlocksDodgedCash = cash * (pursuitArbitrationPacket.getRoadBlocksDodged() / 50.0f);
 			rewardVO.add((int) roadBlocksDodgedExp, (int) roadBlocksDodgedCash, EnumRewardCategory.PURSUIT, EnumRewardType.ROADBLOCKS_DODGED);
 
-			float spikeStripsDodgedExp = rep * (pursuitArbitrationPacket.getSpikeStripsDodged() / 50.0f) + 333;
-			float spikeStripsDodgedCash = cash * (pursuitArbitrationPacket.getSpikeStripsDodged() / 50.0f) + 444;
+			float spikeStripsDodgedExp = rep * (pursuitArbitrationPacket.getSpikeStripsDodged() / 50.0f);
+			float spikeStripsDodgedCash = cash * (pursuitArbitrationPacket.getSpikeStripsDodged() / 50.0f);
 			rewardVO.add((int) spikeStripsDodgedExp, (int) spikeStripsDodgedCash, EnumRewardCategory.PURSUIT, EnumRewardType.SPIKE_STRIPS_DODGED);
 
 		}
