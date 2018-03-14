@@ -49,7 +49,6 @@ import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_RouteEntrantResultType;
 import com.soapboxrace.jaxb.xmpp.XMPP_TeamEscapeEntrantResultType;
-//import com.soapboxrace.xmpp.openfire.XmppEvent;
 
 @Stateless
 public class EventBO extends AccoladesFunc {
