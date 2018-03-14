@@ -1,10 +1,12 @@
 package com.soapboxrace.core.dao;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
@@ -55,4 +57,33 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
 		List<ProductEntity> resultList = query.getResultList();
 		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
+
+	public ProductEntity getRandomDrop(String productType) {
+		StringBuilder sqlWhere = new StringBuilder();
+		sqlWhere.append(" WHERE obj.isDropable=true ");
+		sqlWhere.append(" AND obj.productType=:productType");
+
+		StringBuilder sqlCount = new StringBuilder();
+		sqlCount.append("SELECT COUNT(*) FROM ProductEntity obj ");
+		sqlCount.append(sqlWhere.toString());
+
+		Query countQuery = entityManager.createQuery(sqlCount.toString());
+		countQuery.setParameter("productType", productType);
+		Long count = (Long) countQuery.getSingleResult();
+
+		Random random = new Random();
+		int number = random.nextInt(count.intValue());
+
+		StringBuilder sqlProduct = new StringBuilder();
+		sqlProduct.append("SELECT obj FROM ProductEntity obj");
+		sqlProduct.append(sqlWhere.toString());
+
+		TypedQuery<ProductEntity> productQuery = entityManager.createQuery(sqlProduct.toString(), ProductEntity.class);
+		productQuery.setParameter("productType", productType);
+
+		productQuery.setFirstResult(number);
+		productQuery.setMaxResults(1);
+		return productQuery.getSingleResult();
+	}
+
 }

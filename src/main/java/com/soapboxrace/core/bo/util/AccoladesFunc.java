@@ -7,6 +7,8 @@ import javax.ejb.EJB;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import com.soapboxrace.core.bo.DropBO;
+import com.soapboxrace.core.bo.InventoryBO;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.PersonaBO;
 import com.soapboxrace.core.dao.InventoryDAO;
@@ -47,6 +49,12 @@ public class AccoladesFunc {
 
 	@EJB
 	private ParameterBO parameterBO;
+
+	@EJB
+	private DropBO dropBO;
+
+	@EJB
+	private InventoryBO inventoryBO;
 
 	private int[][] rankDrop = new int[][] { new int[] {}, new int[] { 0, 4, 2, 4, 2, 3, 2, 3, 2, 2 }, new int[] { 1, 3, 1, 1, 0, 3, 1, 1, 2, 2 },
 			new int[] { 2, 1, 1, 1, 1, 1, 2, 2, 2, 0 } };
@@ -109,6 +117,24 @@ public class AccoladesFunc {
 	}
 
 	public LuckyDrawItem getItemFromProduct(Integer rank, Integer level, Boolean isTH, PersonaEntity personaEntity) {
+		ProductEntity productEntity = dropBO.getRandomProductItem();
+		LuckyDrawItem luckyDrawItem = dropBO.copyProduct2LuckyDraw(productEntity);
+		boolean inventoryFull = inventoryBO.isInventoryFull(productEntity, personaEntity);
+		if (inventoryFull) {
+			luckyDrawItem.setWasSold(true);
+			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+				float resalePrice = productEntity.getResalePrice();
+				double cash = personaEntity.getCash();
+				personaEntity.setCash(cash + resalePrice);
+				personaDao.update(personaEntity);
+			}
+		} else {
+			inventoryBO.addDroppedItem(productEntity, personaEntity);
+		}
+		return luckyDrawItem;
+	}
+
+	public LuckyDrawItem getItemFromProductOld(Integer rank, Integer level, Boolean isTH, PersonaEntity personaEntity) {
 		Integer hash;
 		Integer count, price;
 		String desc, icon, vItem, vItemType;
