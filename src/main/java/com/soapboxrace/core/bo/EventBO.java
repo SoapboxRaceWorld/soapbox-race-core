@@ -598,13 +598,13 @@ public class EventBO extends AccoladesFunc {
 		float rankCash = dragArbitrationPacket.getRank() == 1 ? cash * 0.10f : cash * 0.05f; // + 10% if fist, + 5% else
 		rankExp = dragArbitrationPacket.getFinishReason() == 22 ? rankExp : rankExp / 10;
 		rankCash = dragArbitrationPacket.getFinishReason() == 22 ? rankCash : rankCash / 10;
-		rewardVO.add((int) rankExp, (int) rankCash, EnumRewardCategory.OBJECTIVE, EnumRewardType.PLAYER_1);
+		rewardVO.add((int) rankExp, (int) rankCash, EnumRewardCategory.OBJECTIVE, EnumRewardType.NONE);
 
 		float timeRaceExp = rep * ((60000.0f / dragArbitrationPacket.getEventDurationInMilliseconds()) / 4.0f);
 		float timeRaceCash = cash * ((60000.0f / dragArbitrationPacket.getEventDurationInMilliseconds()) / 4.0f);
 		timeRaceExp = dragArbitrationPacket.getFinishReason() == 22 ? timeRaceExp : timeRaceExp / 10;
 		timeRaceCash = dragArbitrationPacket.getFinishReason() == 22 ? timeRaceCash : timeRaceCash / 10;
-		rewardVO.add((int) timeRaceExp, (int) timeRaceCash, EnumRewardCategory.OBJECTIVE, EnumRewardType.TIME_BONUS);
+		rewardVO.add((int) timeRaceExp, (int) timeRaceCash, EnumRewardCategory.OBJECTIVE, EnumRewardType.NONE);
 
 		if (dragArbitrationPacket.getPerfectStart() == 1) {
 			float perfectStartExp = rep * 0.10f; // + 10%
