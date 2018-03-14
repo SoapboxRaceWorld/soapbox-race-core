@@ -820,7 +820,7 @@ public class EventBO extends AccoladesFunc {
 			return luckyDrawInfo;
 		}
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(rank, level, false, personaEntity));
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(personaEntity));
 		luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
 		luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
 		return luckyDrawInfo;

@@ -51,12 +51,6 @@ public class AccoladesFunc {
 	@EJB
 	private InventoryBO inventoryBO;
 
-	private int[][] rankDrop = new int[][] { new int[] {}, new int[] { 0, 4, 2, 4, 2, 3, 2, 3, 2, 2 }, new int[] { 1, 3, 1, 1, 0, 3, 1, 1, 2, 2 },
-			new int[] { 2, 1, 1, 1, 1, 1, 2, 2, 2, 0 } };
-
-	private int[][] rankDropTH = new int[][] { new int[] {}, new int[] { 2, 3, 4, 4, 4, 2, 3, 4, 4, 3 }, new int[] { 2, 3, 2, 4, 4, 4, 3, 3, 4, 2 },
-			new int[] { 3, 2, 3, 3, 3, 4, 2, 2, 4, 4 }, new int[] { 3, 2, 2, 4, 2, 2, 3, 3, 4, 4 }, new int[] { 2, 2, 3, 2, 2, 3, 2, 4, 3, 4 } };
-
 	public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
 		// Cash parts
 		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
@@ -111,7 +105,7 @@ public class AccoladesFunc {
 		return (long) (personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
 	}
 
-	public LuckyDrawItem getItemFromProduct(Integer rank, Integer level, Boolean isTH, PersonaEntity personaEntity) {
+	public LuckyDrawItem getItemFromProduct(PersonaEntity personaEntity) {
 		ProductEntity productEntity = dropBO.getRandomProductItem();
 		LuckyDrawItem luckyDrawItem = dropBO.copyProduct2LuckyDraw(productEntity);
 		boolean inventoryFull = inventoryBO.isInventoryFull(productEntity, personaEntity);
@@ -329,34 +323,4 @@ public class AccoladesFunc {
 		return multi;
 	}
 
-	private String getVisualCatgeory(Integer nRandom) {
-		switch (nRandom) {
-		case 0:
-			return "NFSW_NA_EP_VISUALPARTS_LICENSEPLATES";
-		case 1:
-			return "NFSW_NA_EP_VISUALPARTS_NEONS";
-		case 2:
-			return "NFSW_NA_EP_VISUALPARTS_WHEELS";
-		case 3:
-			return "STORE_VANITY_LICENSE_PLATE";
-		case 4:
-			return "STORE_VANITY_LOWERING_KIT";
-		case 5:
-			return "STORE_VANITY_NEON";
-		case 6:
-			return "STORE_VANITY_WHEEL";
-		case 7:
-			return "STORE_VANITY_WINDOW";
-		default:
-			return "STORE_VANITY_LICENSE_PLATE";
-		}
-	}
-
-	private Integer getRandomCat(Integer rank, Boolean isTH, Integer random) {
-		if (isTH) {
-			return rankDropTH[rank][random];
-		} else {
-			return rank > 3 ? 1 : rankDrop[rank][random];
-		}
-	}
 }
