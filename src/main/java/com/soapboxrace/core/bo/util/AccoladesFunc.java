@@ -1,11 +1,8 @@
 package com.soapboxrace.core.bo.util;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.ejb.EJB;
-
-import org.apache.commons.codec.digest.DigestUtils;
 
 import com.soapboxrace.core.bo.DropBO;
 import com.soapboxrace.core.bo.InventoryBO;
@@ -16,8 +13,6 @@ import com.soapboxrace.core.dao.InventoryItemDAO;
 import com.soapboxrace.core.dao.LevelRepDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ProductDAO;
-import com.soapboxrace.core.jpa.InventoryEntity;
-import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.EnumRewardCategory;
@@ -131,138 +126,6 @@ public class AccoladesFunc {
 		} else {
 			inventoryBO.addDroppedItem(productEntity, personaEntity);
 		}
-		return luckyDrawItem;
-	}
-
-	public LuckyDrawItem getItemFromProductOld(Integer rank, Integer level, Boolean isTH, PersonaEntity personaEntity) {
-		Integer hash;
-		Integer count, price;
-		String desc, icon, vItem, vItemType;
-		Boolean isSold = false;
-
-		List<ProductEntity> getProductItems = null;
-
-		Integer randomCategory = getRandomCat(rank, isTH, new Random().nextInt(10));
-		if (randomCategory == 1) { // Powerup
-			getProductItems = productDao.findForEndRace("STORE_POWERUPS", "POWERUP", level);
-		} else if (randomCategory == 2) { // Perf
-			getProductItems = productDao.findForEndRace("NFSW_NA_EP_PERFORMANCEPARTS", "PERFORMANCEPART", level);
-		} else if (randomCategory == 3) { // Skill
-			getProductItems = productDao.findForEndRace("NFSW_NA_EP_SKILLMODPARTS", "SKILLMODPART", level);
-		} else if (randomCategory == 4) { // Visual
-			getProductItems = productDao.findForEndRace(getVisualCatgeory(new Random().nextInt(8)), "VISUALPART", level);
-		}
-
-		if (getProductItems != null) { // Other part
-			Integer randomDrop = new Random().nextInt(getProductItems.size());
-			ProductEntity productEntity = getProductItems.get(randomDrop);
-
-			if (randomCategory == 1) {
-				String strCut = productEntity.getProductTitle().replace("x15", "");
-				count = new Random().nextInt(15) + 1;
-				desc = strCut + " x" + count;
-			} else {
-				desc = productEntity.getProductTitle();
-				count = 1;
-			}
-			hash = productEntity.getHash();
-			icon = productEntity.getIcon();
-			price = (int) (productEntity.getResalePrice());
-			vItem = DigestUtils.md5Hex(productEntity.getHash().toString());
-			vItemType = productEntity.getProductType();
-
-			InventoryEntity inventoryEntity = inventoryDao.findByPersonaId(personaEntity.getPersonaId());
-
-			int cashBonus = 0;
-			int maxUsage = 0;
-			int currentUsage = 0;
-
-			switch (randomCategory) {
-			case 2: {
-				currentUsage = inventoryEntity.getPerformancePartsUsedSlotCount() + 1;
-				maxUsage = inventoryEntity.getPerformancePartsCapacity();
-				break;
-			}
-			case 3: {
-				currentUsage = inventoryEntity.getSkillModPartsUsedSlotCount() + 1;
-				maxUsage = inventoryEntity.getSkillModPartsCapacity();
-				break;
-			}
-			case 4: {
-				currentUsage = inventoryEntity.getVisualPartsUsedSlotCount() + 1;
-				maxUsage = inventoryEntity.getVisualPartsCapacity();
-				break;
-			}
-			default:
-				break;
-			}
-
-			if (currentUsage > maxUsage) {
-				isSold = true;
-				cashBonus += price;
-			}
-
-			if (!isSold) {
-				if (randomCategory == 2) {
-					inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() + 1);
-				} else if (randomCategory == 3) {
-					inventoryEntity.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount() + 1);
-				} else if (randomCategory == 4) {
-					inventoryEntity.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount() + 1);
-				}
-
-				inventoryDao.update(inventoryEntity);
-
-				String md5 = DigestUtils.md5Hex(String.valueOf(hash)).replace("MD5:", "");
-
-				InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-				inventoryItemEntity.setPersona(personaEntity);
-				inventoryItemEntity.setInventory(inventoryEntity);
-				inventoryItemEntity.setEntitlementTag(md5);
-				inventoryItemEntity.setHash(hash.intValue());
-				inventoryItemEntity.setRemainingUseCount(count);
-				inventoryItemEntity.setResalePrice(price);
-				inventoryItemEntity.setStatus("ACTIVE");
-				inventoryItemEntity.setStringHash("0x" + Long.toHexString(hash));
-				inventoryItemEntity.setVirtualItemType(vItemType);
-				inventoryItemEntity.setProductId(productEntity.getProductId());
-
-				inventoryItemDao.insert(inventoryItemEntity);
-			}
-
-			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-				int newCash = (int) personaEntity.getCash() + cashBonus;
-				personaEntity.setCash(newCash > 9999999 ? 9999999 : newCash < 1 ? 1 : newCash);
-				personaDao.update(personaEntity);
-			}
-		} else { // Cash part
-			Integer cashBonus = new Random().nextInt(2500) + 1;
-			desc = "GM_CATALOG_00000190," + cashBonus;
-			// desc = String.valueOf(cashBonus) + " CASH";
-			icon = "128_cash";
-			vItem = "TOKEN_REWARD";
-			vItemType = "REWARD";
-			hash = Long.valueOf(-429893590L).intValue();
-			count = cashBonus;
-			price = 0;
-			isSold = false;
-
-			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-				int newCash = (int) personaEntity.getCash() + cashBonus;
-				personaEntity.setCash(newCash > 9999999 ? 9999999 : newCash < 1 ? 1 : newCash);
-				personaDao.update(personaEntity);
-			}
-		}
-
-		LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
-		luckyDrawItem.setDescription(desc);
-		luckyDrawItem.setHash(hash.intValue());
-		luckyDrawItem.setIcon(icon);
-		luckyDrawItem.setRemainingUseCount(count);
-		luckyDrawItem.setResellPrice(price);
-		luckyDrawItem.setVirtualItem(vItem);
-		luckyDrawItem.setVirtualItemType(vItemType);
-		luckyDrawItem.setWasSold(isSold);
 		return luckyDrawItem;
 	}
 
