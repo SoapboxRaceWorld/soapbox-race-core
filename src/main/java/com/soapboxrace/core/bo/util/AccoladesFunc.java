@@ -131,56 +131,6 @@ public class AccoladesFunc {
 		} else {
 			inventoryBO.addDroppedItem(productEntity, personaEntity);
 		}
-
-		// Boolean isSold = false;
-		//
-		// List<ProductEntity> getProductItems = null;
-		//
-		// Integer randomCategory = getRandomCat(rank, isTH, new Random().nextInt(10));
-		// if (randomCategory == 1) { // Powerup
-		// getProductItems = productDao.findForEndRace("STORE_POWERUPS", "POWERUP",
-		// level);
-		// } else if (randomCategory == 2) { // Perf
-		// getProductItems = productDao.findForEndRace("NFSW_NA_EP_PERFORMANCEPARTS",
-		// "PERFORMANCEPART", level);
-		// } else if (randomCategory == 3) { // Skill
-		// getProductItems = productDao.findForEndRace("NFSW_NA_EP_SKILLMODPARTS",
-		// "SKILLMODPART", level);
-		// } else if (randomCategory == 4) { // Visual
-		// getProductItems = productDao.findForEndRace(getVisualCatgeory(new
-		// Random().nextInt(8)), "VISUALPART", level);
-		// }
-		//
-		// if (getProductItems != null) { // Other part
-		//
-		// InventoryEntity inventoryEntity =
-		// inventoryDao.findByPersonaId(personaEntity.getPersonaId());
-		//
-		// int cashBonus = 0;
-		//
-		// if (!isSold) {
-		// if (randomCategory == 2) {
-		// inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount()
-		// + 1);
-		// } else if (randomCategory == 3) {
-		// inventoryEntity.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount()
-		// + 1);
-		// } else if (randomCategory == 4) {
-		// inventoryEntity.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount()
-		// + 1);
-		// }
-		//
-		// inventoryDao.update(inventoryEntity);
-		// }
-		//
-		// if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-		// int newCash = (int) personaEntity.getCash() + cashBonus;
-		// personaEntity.setCash(newCash > 9999999 ? 9999999 : newCash < 1 ? 1 :
-		// newCash);
-		// personaDao.update(personaEntity);
-		// }
-		// }
-
 		return luckyDrawItem;
 	}
 
