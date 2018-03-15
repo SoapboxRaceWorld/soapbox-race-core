@@ -24,6 +24,7 @@ import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.core.jpa.VinylProductEntity;
 import com.soapboxrace.jaxb.http.BasketItemTrans;
 import com.soapboxrace.jaxb.http.CommerceSessionTrans;
 import com.soapboxrace.jaxb.http.CustomCarTrans;
@@ -155,7 +156,9 @@ public class CommerceBO {
 			CustomCarTrans customCarTransDB = ownedCarTrans.getCustomCar();
 			CustomCarTrans customCarTrans = commerceSessionTrans.getUpdatedCar().getCustomCar();
 			Float basketTotalValue = 0f;
-			if (!CommerceOp.VINYL.equals(commerceOp)) {
+			if (CommerceOp.VINYL.equals(commerceOp)) {
+				basketTotalValue = getVinylTotalValue(basketItemTransList);
+			} else {
 				basketTotalValue = getBasketTotalValue(basketItemTransList);
 			}
 			Float resellTotalValue = 0F;
@@ -217,6 +220,19 @@ public class CommerceBO {
 			persona.setCash(Float.sum(cash, result));
 			personaDAO.update(persona);
 		}
+	}
+
+	private Float getVinylTotalValue(List<BasketItemTrans> basketItemTransList) {
+		Float price = 0F;
+		for (BasketItemTrans basketItemTrans : basketItemTransList) {
+			VinylProductEntity vinylProductEntity = vinylProductDao.findByProductId(basketItemTrans.getProductId());
+			if (vinylProductEntity != null) {
+				price = Float.sum(price, vinylProductEntity.getPrice());
+			} else {
+				System.err.println("product [" + basketItemTrans.getProductId() + "] not found");
+			}
+		}
+		return price;
 	}
 
 	private Float getBasketTotalValue(List<BasketItemTrans> basketItemTransList) {
