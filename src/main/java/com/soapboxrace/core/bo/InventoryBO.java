@@ -109,17 +109,10 @@ public class InventoryBO {
 		return false;
 	}
 
-	public void decrementUsage(long personaId, long hash) {
-		InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
-
-		for (InventoryItemEntity item : inventoryEntity.getItems()) {
-			if (item.getHash() == hash) {
-				item.setRemainingUseCount(item.getRemainingUseCount() - 1);
-				inventoryItemDAO.update(item);
-
-				break;
-			}
-		}
+	public void decrementUsage(Long personaId, Integer hash) {
+		InventoryItemEntity item = inventoryItemDAO.findByHashAndPersona(personaId, hash);
+		item.setRemainingUseCount(item.getRemainingUseCount() - 1);
+		inventoryItemDAO.update(item);
 	}
 
 	public InventoryEntity createInventory(PersonaEntity personaEntity) {
@@ -298,22 +291,29 @@ public class InventoryBO {
 		case PERFORMANCEPART:
 			int performancePartsUsedSlotCount = inventoryEntity.getPerformancePartsUsedSlotCount() + 1;
 			inventoryEntity.setPerformancePartsUsedSlotCount(performancePartsUsedSlotCount);
+			inventoryItemDAO.insert(inventoryItemEntity);
+			inventoryDAO.update(inventoryEntity);
 			break;
 		case SKILLMODPART:
 			int skillModPartsUsedSlotCount = inventoryEntity.getSkillModPartsUsedSlotCount() + 1;
 			inventoryEntity.setSkillModPartsUsedSlotCount(skillModPartsUsedSlotCount);
+			inventoryItemDAO.insert(inventoryItemEntity);
+			inventoryDAO.update(inventoryEntity);
 			break;
 		case VISUALPART:
 			int visualPartsUsedSlotCount = inventoryEntity.getVisualPartsUsedSlotCount() + 1;
 			inventoryEntity.setVisualPartsUsedSlotCount(visualPartsUsedSlotCount);
+			inventoryItemDAO.insert(inventoryItemEntity);
+			inventoryDAO.update(inventoryEntity);
 			break;
 		case POWERUP:
+			inventoryItemEntity = inventoryItemDAO.findByHashAndPersona(personaEntity.getPersonaId(), productEntity.getHash());
+			inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() + productEntity.getUseCount());
+			inventoryItemDAO.update(inventoryItemEntity);
 			break;
 		default:
 			break;
 		}
-		inventoryItemDAO.insert(inventoryItemEntity);
-		inventoryDAO.update(inventoryEntity);
 	}
 
 	public ProductType detectProductType(ProductEntity productEntity) {
