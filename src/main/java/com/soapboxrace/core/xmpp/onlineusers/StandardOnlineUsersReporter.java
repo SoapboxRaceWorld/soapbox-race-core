@@ -1,11 +1,11 @@
 package com.soapboxrace.core.xmpp.onlineusers;
 
+import java.util.Date;
+
 import com.soapboxrace.core.dao.OnlineUsersDAO;
 import com.soapboxrace.core.jpa.OnlineUsersEntity;
 import com.soapboxrace.core.xmpp.OnlineUsersReporter;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
-
-import java.util.Date;
 
 public class StandardOnlineUsersReporter implements OnlineUsersReporter
 {

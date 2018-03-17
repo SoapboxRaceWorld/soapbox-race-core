@@ -6,12 +6,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.soapboxrace.core.api.util.Config;
-
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "XMPP_IQPongType", propOrder = { "from", "to", "id", "type" })
 @XmlRootElement(name = "iq")
 public class XMPP_IQPongType {
+
 	@XmlAttribute(name = "from")
 	private String from;
 	@XmlAttribute(name = "to")
@@ -24,9 +23,9 @@ public class XMPP_IQPongType {
 	public XMPP_IQPongType() {
 	}
 
-	public XMPP_IQPongType(String id) {
-		from = String.format("sbrw.engine.engine@%s/EA_Chat", Config.getXmppIp());
-		to = Config.getXmppIp();
+	public XMPP_IQPongType(String id, String xmppIp) {
+		from = String.format("sbrw.engine.engine@%s/EA_Chat", xmppIp);
+		to = xmppIp;
 		this.id = id;
 	}
 

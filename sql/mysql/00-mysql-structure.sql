@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS
         minCarClassRating INT NOT NULL,
         minLevel INT NOT NULL,
         name VARCHAR(255) COLLATE utf8_unicode_ci,
+        maxPlayers INT NOT NULL DEFAULT 2,
         PRIMARY KEY (ID)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -202,12 +203,12 @@ CREATE TABLE IF NOT EXISTS
         description VARCHAR(255) COLLATE utf8_unicode_ci,
         durationMinute INT NOT NULL,
         enabled bit NOT NULL,
-        hash bigint,
+        hash INT,
         icon VARCHAR(255) COLLATE utf8_unicode_ci,
         level INT NOT NULL,
         longDescription VARCHAR(255) COLLATE utf8_unicode_ci,
         minLevel INT NOT NULL,
-        premium bit NOT NULL DEFAULT FALSE,
+        premium bit DEFAULT FALSE NOT NULL,
         price FLOAT NOT NULL,
         priority INT NOT NULL,
         productId VARCHAR(255) COLLATE utf8_unicode_ci,
@@ -218,7 +219,11 @@ CREATE TABLE IF NOT EXISTS
         visualStyle VARCHAR(255) COLLATE utf8_unicode_ci,
         webIcon VARCHAR(255) COLLATE utf8_unicode_ci,
         webLocation VARCHAR(255) COLLATE utf8_unicode_ci,
-        isDropable bit NOT NULL DEFAULT TRUE,
+        isDropable bit DEFAULT TRUE NOT NULL,
+        accel INT,
+        handling INT,
+        resalePrice FLOAT NOT NULL,
+        topSpeed INT,
         PRIMARY KEY (id)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -298,7 +303,7 @@ CREATE TABLE IF NOT EXISTS
         description VARCHAR(255) COLLATE utf8_unicode_ci,
         durationMinute INT NOT NULL,
         enabled bit NOT NULL,
-        hash bigint NOT NULL,
+        hash INT NOT NULL,
         icon VARCHAR(255) COLLATE utf8_unicode_ci,
         level INT NOT NULL,
         longDescription VARCHAR(255) COLLATE utf8_unicode_ci,
@@ -330,6 +335,231 @@ CREATE TABLE IF NOT EXISTS
         INDEX FK_PROMOCODE_USER (UserId)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS SOAPBOX.PARAMETER (
+  name varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  value varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+-- TODO fix random fk names
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.ACHIEVEMENT_DEFINITION
+    (
+        id INT NOT NULL AUTO_INCREMENT,
+        friendlyIdentifier VARCHAR(255) COLLATE utf8_unicode_ci,
+        isVisible bit,
+        progressText VARCHAR(255) COLLATE utf8_unicode_ci,
+        statConversion VARCHAR(255) COLLATE utf8_unicode_ci,
+        badgeDefinitionId bigint,
+        PRIMARY KEY (id)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.ACHIEVEMENT_RANK
+    (
+        id INT NOT NULL AUTO_INCREMENT,
+        isRare bit,
+        points SMALLINT,
+        rank SMALLINT,
+        rarity FLOAT,
+        rewardDescription VARCHAR(255) COLLATE utf8_unicode_ci,
+        rewardType VARCHAR(255) COLLATE utf8_unicode_ci,
+        rewardVisualStyle VARCHAR(255) COLLATE utf8_unicode_ci,
+        thresholdValue bigint,
+        achievementId INT,
+        PRIMARY KEY (id)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.BADGEDEFINITION
+    (
+        id bigint NOT NULL AUTO_INCREMENT,
+        background VARCHAR(255) COLLATE utf8_unicode_ci,
+        border VARCHAR(255) COLLATE utf8_unicode_ci,
+        description VARCHAR(255) COLLATE utf8_unicode_ci,
+        icon VARCHAR(255) COLLATE utf8_unicode_ci,
+        name VARCHAR(255) COLLATE utf8_unicode_ci,
+        PRIMARY KEY (id)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.BAN
+    (
+        id bigint NOT NULL AUTO_INCREMENT,
+        data VARCHAR(255) COLLATE utf8_unicode_ci,
+        endsAt DATETIME,
+        reason VARCHAR(255) COLLATE utf8_unicode_ci,
+        type VARCHAR(255) COLLATE utf8_unicode_ci,
+        user_id bigint,
+        PRIMARY KEY (id)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.CUSTOMCAR
+    (
+        id bigint NOT NULL AUTO_INCREMENT,
+        baseCar INT NOT NULL,
+        carClassHash INT NOT NULL,
+        isPreset bit NOT NULL,
+        level INT NOT NULL,
+        name VARCHAR(255) COLLATE utf8_unicode_ci,
+        physicsProfileHash INT NOT NULL,
+        rating INT NOT NULL,
+        resalePrice FLOAT NOT NULL,
+        rideHeightDrop FLOAT NOT NULL,
+        skillModSlotCount INT NOT NULL,
+        version INT NOT NULL,
+        ownedCarId bigint,
+        PRIMARY KEY (id)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.OWNEDCAR
+    (
+        id bigint NOT NULL AUTO_INCREMENT,
+        durability INT NOT NULL,
+        expirationDate DATETIME,
+        heat FLOAT NOT NULL,
+        ownershipType VARCHAR(255) COLLATE utf8_unicode_ci,
+        carSlotId bigint,
+        PRIMARY KEY (id)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.PAINT
+    (
+        id bigint NOT NULL AUTO_INCREMENT,
+        paintGroup INT,
+        hue INT NOT NULL,
+        sat INT NOT NULL,
+        slot INT NOT NULL,
+        paintVar INT,
+        customCarId bigint,
+        PRIMARY KEY (id)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.PERFORMANCEPART
+    (
+        id bigint NOT NULL AUTO_INCREMENT,
+        performancePartAttribHash INT NOT NULL,
+        customCarId bigint,
+        PRIMARY KEY (id)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.PERSONAINVENTORY
+    (
+        ID INT NOT NULL AUTO_INCREMENT,
+        performancePartsCapacity INT NOT NULL,
+        performancePartsUsedSlotCount INT NOT NULL,
+        skillModPartsCapacity INT NOT NULL,
+        skillModPartsUsedSlotCount INT NOT NULL,
+        visualPartsCapacity INT NOT NULL,
+        visualPartsUsedSlotCount INT NOT NULL,
+        personaId bigint,
+        PRIMARY KEY (ID)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.PERSONAINVENTORYITEM
+    (
+        ID INT NOT NULL AUTO_INCREMENT,
+        entitlementTag VARCHAR(255) COLLATE utf8_unicode_ci,
+        expirationDate VARCHAR(255) COLLATE utf8_unicode_ci,
+        hash INT,
+        productId VARCHAR(255) COLLATE utf8_unicode_ci,
+        remainingUseCount INT NOT NULL,
+        resalePrice FLOAT NOT NULL,
+        status VARCHAR(255) COLLATE utf8_unicode_ci,
+        stringHash VARCHAR(255) COLLATE utf8_unicode_ci,
+        virtualItemType VARCHAR(255) COLLATE utf8_unicode_ci,
+        inventoryId INT,
+        personaId bigint,
+        PRIMARY KEY (ID)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.SKILLMODPART
+    (
+        id bigint NOT NULL AUTO_INCREMENT,
+        isFixed bit NOT NULL,
+        skillModPartAttribHash INT NOT NULL,
+        customCarId bigint,
+        PRIMARY KEY (id)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.TREASURE_HUNT
+    (
+        personaId bigint NOT NULL,
+        coinsCollected INT,
+        isStreakBroken bit,
+        numCoins INT,
+        seed INT,
+        streak INT,
+        thDate DATE,
+        PRIMARY KEY (personaId)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.VINYL
+    (
+        id bigint NOT NULL AUTO_INCREMENT,
+        hash INT NOT NULL,
+        hue1 INT NOT NULL,
+        hue2 INT NOT NULL,
+        hue3 INT NOT NULL,
+        hue4 INT NOT NULL,
+        layer INT NOT NULL,
+        mir bit NOT NULL,
+        rot INT NOT NULL,
+        sat1 INT NOT NULL,
+        sat2 INT NOT NULL,
+        sat3 INT NOT NULL,
+        sat4 INT NOT NULL,
+        scalex INT NOT NULL,
+        scaley INT NOT NULL,
+        shear INT NOT NULL,
+        tranx INT NOT NULL,
+        trany INT NOT NULL,
+        var1 INT NOT NULL,
+        var2 INT NOT NULL,
+        var3 INT NOT NULL,
+        var4 INT NOT NULL,
+        customCarId bigint,
+        PRIMARY KEY (id)
+    )
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS 
+    SOAPBOX.VISUALPART
+    (
+        id bigint NOT NULL AUTO_INCREMENT,
+        partHash INT NOT NULL,
+        slotHash INT NOT NULL,
+        customCarId bigint,
+        PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- END TODO FIX FK RANDOM NAMES
+
 ALTER TABLE
     SOAPBOX.CARSLOT ADD CONSTRAINT FK_CARSLOT_PERSONA FOREIGN KEY (PersonaId) REFERENCES
     SOAPBOX.PERSONA (ID);

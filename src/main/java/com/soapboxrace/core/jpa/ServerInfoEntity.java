@@ -1,9 +1,17 @@
 package com.soapboxrace.core.jpa;
 
-import com.soapboxrace.core.jpa.convert.SceneryGroupConverter;
-
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.soapboxrace.core.jpa.convert.SceneryGroupConverter;
 
 @Entity
 @Table(name = "SERVER_INFO")

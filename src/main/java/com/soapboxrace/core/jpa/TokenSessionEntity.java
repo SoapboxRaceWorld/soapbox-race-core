@@ -12,6 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "TOKEN_SESSION")
 @NamedQueries({ //
+		@NamedQuery(name = "TokenSessionEntity.findByUserId", query = "SELECT obj FROM TokenSessionEntity obj WHERE obj.userId = :userId"), //
 		@NamedQuery(name = "TokenSessionEntity.deleteByUserId", query = "DELETE FROM TokenSessionEntity obj WHERE obj.userId = :userId"), //
 		@NamedQuery(name = "TokenSessionEntity.updateRelayCrytoTicket", //
 				query = "UPDATE TokenSessionEntity obj " //
@@ -37,6 +38,8 @@ public class TokenSessionEntity {
 	private Long activeLobbyId;
 
 	private boolean premium = false;
+
+	private String clientHostIp;
 
 	public String getSecurityToken() {
 		return securityToken;
@@ -92,6 +95,14 @@ public class TokenSessionEntity {
 
 	public void setPremium(boolean premium) {
 		this.premium = premium;
+	}
+
+	public String getClientHostIp() {
+		return clientHostIp;
+	}
+
+	public void setClientHostIp(String clientHostIp) {
+		this.clientHostIp = clientHostIp;
 	}
 
 }

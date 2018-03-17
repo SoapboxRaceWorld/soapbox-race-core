@@ -1,5 +1,8 @@
 package com.soapboxrace.core.api;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -7,7 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.google.inject.Injector;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.GetServerInformationBO;
 import com.soapboxrace.core.bo.SceneryBO;
@@ -15,9 +17,6 @@ import com.soapboxrace.core.jpa.ServerInfoEntity;
 import com.soapboxrace.jaxb.http.ArrayOfLong;
 import com.soapboxrace.jaxb.http.ArrayOfString;
 import com.soapboxrace.jaxb.http.UserSettings;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/getusersettings")
 public class GetUserSettings {

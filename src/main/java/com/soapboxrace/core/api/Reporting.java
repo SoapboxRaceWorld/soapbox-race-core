@@ -52,18 +52,10 @@ public class Reporting {
 	}
 
 	@GET
-	@Path("{path:.*}")
+	@Secured
+	@Path("/LoginAnnouncementClicked")
 	@Produces(MediaType.APPLICATION_XML)
-	public String genericEmptyGet(@PathParam("path") String path) {
-		System.out.println("empty GET!!!");
-		return "";
-	}
-
-	@POST
-	@Path("{path:.*}")
-	@Produces(MediaType.APPLICATION_XML)
-	public String genericEmptyPost(@PathParam("path") String path) {
-		System.out.println("empty POST!!!");
+	public String loginAnnouncementClicked() {
 		return "";
 	}
 

@@ -1,162 +1,145 @@
 package com.soapboxrace.core.jpa;
 
-import com.soapboxrace.jaxb.http.AchievementRankPacket;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-import javax.persistence.*;
+import com.soapboxrace.jaxb.http.AchievementRankPacket;
 
 @Entity
 @Table(name = "ACHIEVEMENT_RANK")
-public class AchievementRankEntity
-{
-    private static final long serialVersionUID = 5314835854384144788L;
+public class AchievementRankEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private int id;
 
-    @JoinColumn(name = "achievementId", referencedColumnName = "id")
-    @ManyToOne
-    private AchievementDefinitionEntity achievementDefinition;
+	@JoinColumn(name = "achievementId", referencedColumnName = "id")
+	@ManyToOne
+	private AchievementDefinitionEntity achievementDefinition;
 
-    @Column(name = "isRare")
-    private boolean isRare;
+	@Column(name = "isRare")
+	private boolean isRare;
 
-    @Column(name = "points")
-    private short points;
+	@Column(name = "points")
+	private short points;
 
-    @Column(name = "rank")
-    private short rank;
+	@Column(name = "rank")
+	private short rank;
 
 	@Column(name = "rarity")
 	private float rarity = 0.000f;
 
-    @Column(name = "rewardDescription")
-    private String rewardDescription;
+	@Column(name = "rewardDescription")
+	private String rewardDescription;
 
-    @Column(name = "rewardType")
-    private String rewardType;
+	@Column(name = "rewardType")
+	private String rewardType;
 
-    @Column(name = "rewardVisualStyle")
-    private String rewardVisualStyle;
+	@Column(name = "rewardVisualStyle")
+	private String rewardVisualStyle;
 
-    @Column(name = "thresholdValue")
-    private Long thresholdValue;
+	@Column(name = "thresholdValue")
+	private Long thresholdValue;
 
-    public AchievementRankPacket toBasePacket()
-    {
-        AchievementRankPacket packet = new AchievementRankPacket();
-        packet.setAchievementRankId(id);
-        packet.setIsRare(isRare);
-        packet.setRarity(getRarity());
-        packet.setRank(rank);
-        packet.setThresholdValue(thresholdValue);
-        packet.setRewardDescription(rewardDescription);
-        packet.setRewardType(rewardType);
-        packet.setRewardVisualStyle(rewardVisualStyle);
-        packet.setPoints(points);
+	public AchievementRankPacket toBasePacket() {
+		AchievementRankPacket packet = new AchievementRankPacket();
+		packet.setAchievementRankId(id);
+		packet.setIsRare(isRare);
+		packet.setRarity(getRarity());
+		packet.setRank(rank);
+		packet.setThresholdValue(thresholdValue);
+		packet.setRewardDescription(rewardDescription);
+		packet.setRewardType(rewardType);
+		packet.setRewardVisualStyle(rewardVisualStyle);
+		packet.setPoints(points);
 
-        return packet;
-    }
+		return packet;
+	}
 
-    public int getId()
-    {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id)
-    {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public AchievementDefinitionEntity getAchievementDefinition()
-    {
-        return achievementDefinition;
-    }
+	public AchievementDefinitionEntity getAchievementDefinition() {
+		return achievementDefinition;
+	}
 
-    public void setAchievementDefinition(AchievementDefinitionEntity achievementDefinition)
-    {
-        this.achievementDefinition = achievementDefinition;
-    }
+	public void setAchievementDefinition(AchievementDefinitionEntity achievementDefinition) {
+		this.achievementDefinition = achievementDefinition;
+	}
 
-    public boolean isRare()
-    {
-        return isRare;
-    }
+	public boolean isRare() {
+		return isRare;
+	}
 
-    public void setRare(boolean rare)
-    {
-        isRare = rare;
-    }
+	public void setRare(boolean rare) {
+		isRare = rare;
+	}
 
-    public short getPoints()
-    {
-        return points;
-    }
+	public short getPoints() {
+		return points;
+	}
 
-    public void setPoints(short points)
-    {
-        this.points = points;
-    }
+	public void setPoints(short points) {
+		this.points = points;
+	}
 
-    public short getRank()
-    {
-        return rank;
-    }
+	public short getRank() {
+		return rank;
+	}
 
-    public void setRank(short rank)
-    {
-        this.rank = rank;
-    }
+	public void setRank(short rank) {
+		this.rank = rank;
+	}
 
-
-    public float getRarity()
-	{
+	public float getRarity() {
 		return rarity;
 	}
 
-	public void setRarity(float rarity)
-	{
+	public void setRarity(float rarity) {
 		this.rarity = rarity;
 	}
 
-    public String getRewardDescription()
-    {
-        return rewardDescription;
-    }
+	public String getRewardDescription() {
+		return rewardDescription;
+	}
 
-    public void setRewardDescription(String rewardDescription)
-    {
-        this.rewardDescription = rewardDescription;
-    }
+	public void setRewardDescription(String rewardDescription) {
+		this.rewardDescription = rewardDescription;
+	}
 
-    public String getRewardType()
-    {
-        return rewardType;
-    }
+	public String getRewardType() {
+		return rewardType;
+	}
 
-    public void setRewardType(String rewardType)
-    {
-        this.rewardType = rewardType;
-    }
+	public void setRewardType(String rewardType) {
+		this.rewardType = rewardType;
+	}
 
-    public String getRewardVisualStyle()
-    {
-        return rewardVisualStyle;
-    }
+	public String getRewardVisualStyle() {
+		return rewardVisualStyle;
+	}
 
-    public void setRewardVisualStyle(String rewardVisualStyle)
-    {
-        this.rewardVisualStyle = rewardVisualStyle;
-    }
+	public void setRewardVisualStyle(String rewardVisualStyle) {
+		this.rewardVisualStyle = rewardVisualStyle;
+	}
 
-    public Long getThresholdValue()
-    {
-        return thresholdValue;
-    }
+	public Long getThresholdValue() {
+		return thresholdValue;
+	}
 
-    public void setThresholdValue(Long thresholdValue)
-    {
-        this.thresholdValue = thresholdValue;
-    }
+	public void setThresholdValue(Long thresholdValue) {
+		this.thresholdValue = thresholdValue;
+	}
 }

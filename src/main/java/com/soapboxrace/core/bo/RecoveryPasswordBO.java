@@ -15,7 +15,6 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.dao.RecoveryPasswordDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.RecoveryPasswordEntity;
@@ -29,6 +28,9 @@ public class RecoveryPasswordBO {
 
 	@EJB
 	private UserDAO userDao;
+
+	@EJB
+	private ParameterBO parameterBO;
 
 	@Resource(mappedName = "java:jboss/mail/Gmail")
 	private Session mailSession;
@@ -83,7 +85,7 @@ public class RecoveryPasswordBO {
 	private Boolean sendEmail(String randomKey, UserEntity userEntity) {
 		try {
 			MimeMessage message = new MimeMessage(mailSession);
-			message.setFrom(new InternetAddress(Config.getEmailFrom()));
+			message.setFrom(new InternetAddress(parameterBO.getStrParam("EMAIL_FROM")));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(userEntity.getEmail()));
 			message.setSubject("Recovery Password Email");
 			StringBuilder stringBuilder = new StringBuilder();
@@ -91,7 +93,7 @@ public class RecoveryPasswordBO {
 			stringBuilder.append("Someone requested to recover forgotten password in our soapbox race world server.\n\n");
 			stringBuilder.append("If wasn't you, just ignore this email.\n\n");
 			stringBuilder.append("You can click this link to reset your password:\n\n");
-			stringBuilder.append(Config.getServerAddress());
+			stringBuilder.append(parameterBO.getStrParam("SERVER_ADDRESS"));
 			stringBuilder.append("/soapbox-race-core/password.jsp?randomKey=");
 			stringBuilder.append(randomKey);
 			stringBuilder.append("\n\nThanks for playing!\n\n");

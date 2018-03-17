@@ -6,11 +6,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for CustomPaintTrans complex type.
+ * <p>
+ * Java class for CustomPaintTrans complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="CustomPaintTrans">
@@ -31,104 +33,132 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CustomPaintTrans", propOrder = {
-    "group",
-    "hue",
-    "sat",
-    "slot",
-    "var"
-})
+@XmlType(name = "CustomPaintTrans", propOrder = { "group", "hue", "sat", "slot", "var" })
 public class CustomPaintTrans {
 
-    @XmlElement(name = "Group")
-    protected int group;
-    @XmlElement(name = "Hue")
-    protected int hue;
-    @XmlElement(name = "Sat")
-    protected int sat;
-    @XmlElement(name = "Slot")
-    protected int slot;
-    @XmlElement(name = "Var")
-    protected int var;
+	@XmlElement(name = "Group")
+	protected int group;
+	@XmlElement(name = "Hue")
+	protected int hue;
+	@XmlElement(name = "Sat")
+	protected int sat;
+	@XmlElement(name = "Slot")
+	protected int slot;
+	@XmlElement(name = "Var")
+	protected int var;
 
-    /**
-     * Gets the value of the group property.
-     * 
-     */
-    public int getGroup() {
-        return group;
-    }
+	/**
+	 * Gets the value of the group property.
+	 * 
+	 */
+	public int getGroup() {
+		return group;
+	}
 
-    /**
-     * Sets the value of the group property.
-     * 
-     */
-    public void setGroup(int value) {
-        this.group = value;
-    }
+	/**
+	 * Sets the value of the group property.
+	 * 
+	 */
+	public void setGroup(int value) {
+		this.group = value;
+	}
 
-    /**
-     * Gets the value of the hue property.
-     * 
-     */
-    public int getHue() {
-        return hue;
-    }
+	/**
+	 * Gets the value of the hue property.
+	 * 
+	 */
+	public int getHue() {
+		return hue;
+	}
 
-    /**
-     * Sets the value of the hue property.
-     * 
-     */
-    public void setHue(int value) {
-        this.hue = value;
-    }
+	/**
+	 * Sets the value of the hue property.
+	 * 
+	 */
+	public void setHue(int value) {
+		this.hue = value;
+	}
 
-    /**
-     * Gets the value of the sat property.
-     * 
-     */
-    public int getSat() {
-        return sat;
-    }
+	/**
+	 * Gets the value of the sat property.
+	 * 
+	 */
+	public int getSat() {
+		return sat;
+	}
 
-    /**
-     * Sets the value of the sat property.
-     * 
-     */
-    public void setSat(int value) {
-        this.sat = value;
-    }
+	/**
+	 * Sets the value of the sat property.
+	 * 
+	 */
+	public void setSat(int value) {
+		this.sat = value;
+	}
 
-    /**
-     * Gets the value of the slot property.
-     * 
-     */
-    public int getSlot() {
-        return slot;
-    }
+	/**
+	 * Gets the value of the slot property.
+	 * 
+	 */
+	public int getSlot() {
+		return slot;
+	}
 
-    /**
-     * Sets the value of the slot property.
-     * 
-     */
-    public void setSlot(int value) {
-        this.slot = value;
-    }
+	/**
+	 * Sets the value of the slot property.
+	 * 
+	 */
+	public void setSlot(int value) {
+		this.slot = value;
+	}
 
-    /**
-     * Gets the value of the var property.
-     * 
-     */
-    public int getVar() {
-        return var;
-    }
+	/**
+	 * Gets the value of the var property.
+	 * 
+	 */
+	public int getVar() {
+		return var;
+	}
 
-    /**
-     * Sets the value of the var property.
-     * 
-     */
-    public void setVar(int value) {
-        this.var = value;
-    }
+	/**
+	 * Sets the value of the var property.
+	 * 
+	 */
+	public void setVar(int value) {
+		this.var = value;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + group;
+		result = prime * result + hue;
+		result = prime * result + sat;
+		result = prime * result + slot;
+		result = prime * result + var;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CustomPaintTrans other = (CustomPaintTrans) obj;
+		if (group != other.group)
+			return false;
+		if (hue != other.hue)
+			return false;
+		if (sat != other.sat)
+			return false;
+		if (slot != other.slot)
+			return false;
+		if (var != other.var)
+			return false;
+		return true;
+	}
 
 }

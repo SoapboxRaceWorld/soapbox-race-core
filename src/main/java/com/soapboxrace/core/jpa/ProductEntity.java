@@ -11,22 +11,22 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PRODUCT")
 @NamedQueries({ //
-	@NamedQuery(name = "ProductEntity.findByLevelEnabled", //
-		query = "SELECT obj FROM ProductEntity obj WHERE " //
-			+ "obj.enabled = :enabled AND "//
-			+ "obj.minLevel <= :minLevel AND " //
-			+ "(obj.premium = false or obj.premium = :premium )AND " //
-			+ "obj.categoryName = :categoryName AND "//
-			+ "obj.productType = :productType"), //
-	@NamedQuery(name = "ProductEntity.findForEndRace", //
-		query = "SELECT obj FROM ProductEntity obj WHERE " //
-			+ "obj.enabled = true AND " //
-			+ "obj.level <= :level AND " //
-			+ "obj.categoryName = :categoryName AND " //
-			+ "obj.isDropable = true AND " //
-			+ "obj.productType = :productType"), //
-	@NamedQuery(name = "ProductEntity.findByProductId", query = "SELECT obj FROM ProductEntity obj WHERE obj.productId = :productId"), //
-	@NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = :hash") //
+		@NamedQuery(name = "ProductEntity.findByLevelEnabled", //
+				query = "SELECT obj FROM ProductEntity obj WHERE " //
+						+ "obj.enabled = :enabled AND "//
+						+ "obj.minLevel <= :minLevel AND " //
+						+ "(obj.premium = false or obj.premium = :premium )AND " //
+						+ "obj.categoryName = :categoryName AND "//
+						+ "obj.productType = :productType"), //
+		@NamedQuery(name = "ProductEntity.findForEndRace", //
+				query = "SELECT obj FROM ProductEntity obj WHERE " //
+						+ "obj.enabled = true AND " //
+						+ "obj.level <= :level AND " //
+						+ "obj.categoryName = :categoryName AND " //
+						+ "obj.isDropable = true AND " //
+						+ "obj.productType = :productType"), //
+		@NamedQuery(name = "ProductEntity.findByProductId", query = "SELECT obj FROM ProductEntity obj WHERE obj.productId = :productId"), //
+		@NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = :hash") //
 })
 public class ProductEntity {
 
@@ -39,11 +39,12 @@ public class ProductEntity {
 	private String currency;
 	private String description;
 	private int durationMinute;
-	private Long hash;
+	private Integer hash;
 	private String icon;
 	private int level;
 	private String longDescription;
 	private float price;
+	private float resalePrice;
 	private int priority;
 	private String productId;
 	private String productTitle;
@@ -58,6 +59,9 @@ public class ProductEntity {
 	private int minLevel;
 	private boolean premium = false;
 	private boolean isDropable;
+	private Integer topSpeed = 0;
+	private Integer accel = 0;
+	private Integer handling = 0;
 
 	public Long getId() {
 		return id;
@@ -107,11 +111,11 @@ public class ProductEntity {
 		this.durationMinute = durationMinute;
 	}
 
-	public Long getHash() {
+	public Integer getHash() {
 		return hash;
 	}
 
-	public void setHash(Long hash) {
+	public void setHash(Integer hash) {
 		this.hash = hash;
 	}
 
@@ -243,10 +247,6 @@ public class ProductEntity {
 		this.minLevel = minLevel;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	public boolean isPremium() {
 		return premium;
 	}
@@ -263,4 +263,35 @@ public class ProductEntity {
 		this.isDropable = isDropable;
 	}
 
+	public float getResalePrice() {
+		return resalePrice;
+	}
+
+	public void setResalePrice(float resalePrice) {
+		this.resalePrice = resalePrice;
+	}
+
+	public Integer getTopSpeed() {
+		return topSpeed;
+	}
+
+	public void setTopSpeed(Integer topSpeed) {
+		this.topSpeed = topSpeed;
+	}
+
+	public Integer getAccel() {
+		return accel;
+	}
+
+	public void setAccel(Integer accel) {
+		this.accel = accel;
+	}
+
+	public Integer getHandling() {
+		return handling;
+	}
+
+	public void setHandling(Integer handling) {
+		this.handling = handling;
+	}
 }

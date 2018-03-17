@@ -1,112 +1,45 @@
 package com.soapboxrace.core.xmpp;
 
-import com.google.inject.Binder;
-import com.google.inject.Injector;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+
 import com.soapboxrace.core.bo.ParameterBO;
-import com.soapboxrace.core.inject.InjectorFactory;
-import com.soapboxrace.core.xmpp.onlineusers.ShardedOnlineUsersReporter;
-import com.soapboxrace.core.xmpp.onlineusers.StandardOnlineUsersReporter;
-import com.soapboxrace.core.xmpp.shard.MultiServerHandshake;
-import com.soapboxrace.core.xmpp.standard.Handshake;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
-public class OpenFireSoapBoxCli
-{
-    private static final ParameterBO parameterBO = new ParameterBO();
-    private final Injector injector = InjectorFactory.getInjector();
+@Startup
+@Singleton
+public class OpenFireSoapBoxCli {
 
-    private IOpenFireTalk xmppTalk;
+	@EJB
+	private ParameterBO parameterBO;
 
-    private static OpenFireSoapBoxCli instance;
+	@EJB
+	private IHandshake handshake;
 
-    public static OpenFireSoapBoxCli getInstance()
-    {
-        if (instance == null)
-        {
-            instance = new OpenFireSoapBoxCli();
-        }
-        return instance;
-    }
+	private IOpenFireTalk xmppTalk;
 
-    public static void bindOnlineUsers(Binder binder)
-    {
-        Class<? extends OnlineUsersReporter> usersReporterClass;
+	@PostConstruct
+	public void init() {
+		this.xmppTalk = handshake.getXmppTalk();
+	}
 
-        if (parameterBO.isShardingEnabled())
-        {
-            System.out.println("[XMPP-DI] Using ShardedOnlineUsersReporter");
-            usersReporterClass = ShardedOnlineUsersReporter.class;
-        } else
-        {
-            System.out.println("[XMPP-DI] Using StandardOnlineUsersReporter");
-            usersReporterClass = StandardOnlineUsersReporter.class;
-        }
+	public void send(String msg, String to) {
+		xmppTalk.send(msg, to, parameterBO);
+	}
 
-        binder.bind(OnlineUsersReporter.class).to(usersReporterClass);
-    }
+	public void send(String msg, Long to) {
+		xmppTalk.send(msg, to, parameterBO);
+	}
 
-    public static void bindHandshake(Binder binder)
-    {
-        Class<? extends IHandshake> handshakeClass;
+	public void send(Object object, Long to) {
+		String responseXmlStr = MarshalXML.marshal(object);
+		this.send(responseXmlStr, to);
+	}
 
-//        if (parameterBO.isShardingEnabled())
-//        {
-//            // MultiXMPP handshake
-//            System.out.println("[XMPP-DI] Using MultiServerHandshake");
-//            handshakeClass = MultiServerHandshake.class;
-//        } else
-        {
-            // Normal handshake
-            System.out.println("[XMPP-DI] Using (normal) Handshake");
-            handshakeClass = Handshake.class;
-        }
+	public void setXmppTalk(IOpenFireTalk xmppTalk) {
+		this.xmppTalk = xmppTalk;
+	}
 
-        binder.bind(IHandshake.class).to(handshakeClass);
-    }
-
-    private OpenFireSoapBoxCli()
-    {
-        IHandshake handshake = this.resolveHandshake();
-        this.xmppTalk = handshake.getXmppTalk();
-    }
-
-    public void send(String msg, String to)
-    {
-        xmppTalk.send(msg, to);
-    }
-
-    public void send(String msg, Long to)
-    {
-        xmppTalk.send(msg, to);
-    }
-
-    public void send(Object object, Long to)
-    {
-        String responseXmlStr = MarshalXML.marshal(object);
-        this.send(responseXmlStr, to);
-    }
-
-    public IOpenFireTalk getXmppTalk()
-    {
-        return xmppTalk;
-    }
-
-    /**
-     * utter hack
-     * @param xmppTalk
-     */
-    public void setXmppTalk(IOpenFireTalk xmppTalk)
-    {
-        this.xmppTalk = xmppTalk;
-    }
-
-    public void disconnect()
-    {
-        instance = null;
-    }
-
-    private IHandshake resolveHandshake()
-    {
-        return injector.getInstance(IHandshake.class);
-    }
 }

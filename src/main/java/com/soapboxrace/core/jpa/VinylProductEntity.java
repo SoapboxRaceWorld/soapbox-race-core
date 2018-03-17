@@ -16,9 +16,8 @@ import javax.persistence.Table;
 		@NamedQuery(name = "VinylProductEntity.findByProductId", //
 				query = "SELECT obj FROM VinylProductEntity obj " //
 						+ "WHERE obj.productId = :productId"), //
-		@NamedQuery(name = "VinylProductEntity.findByHash",
-				query =  "SELECT obj FROM VinylProductEntity obj " //
-						+ "WHERE obj.hash = :hash"),
+		@NamedQuery(name = "VinylProductEntity.findByHash", query = "SELECT obj FROM VinylProductEntity obj " //
+				+ "WHERE obj.hash = :hash"),
 		@NamedQuery(name = "VinylProductEntity.findByCategoryLevelEnabled", //
 				query = "SELECT obj FROM VinylProductEntity obj " //
 						+ "WHERE obj.category = :category " //
@@ -30,14 +29,14 @@ public class VinylProductEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
 	private String bundleItems;
 	private String categoryId;
 	private String currency;
 	private String description;
 	private int durationMinute;
-	private long hash;
+	private int hash;
 	private String icon;
 	private int level;
 	private String longDescription;
@@ -109,11 +108,11 @@ public class VinylProductEntity {
 		this.durationMinute = durationMinute;
 	}
 
-	public long getHash() {
+	public int getHash() {
 		return hash;
 	}
 
-	public void setHash(long hash) {
+	public void setHash(int hash) {
 		this.hash = hash;
 	}
 

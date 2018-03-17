@@ -12,8 +12,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.jaxb.http.UdpRelayCryptoTicket;
+import com.soapboxrace.udp.UDPClient;
 
 @Path("/crypto")
 public class Crypto {
@@ -21,31 +23,32 @@ public class Crypto {
 	@EJB
 	private TokenSessionBO tokenBO;
 
+	@EJB
+	private UDPClient udpClient;
+
 	@GET
 	@Secured
 	@Path("/relaycryptoticket/{personaId}")
 	@Produces(MediaType.APPLICATION_XML)
 	public UdpRelayCryptoTicket relayCryptoTicket(@HeaderParam("securityToken") String securityToken, @PathParam("personaId") Long personaId) {
+		byte[] randomUUIDBytes = UUIDGen.getRandomUUIDBytes();
+		String ticketIV = Base64.getEncoder().encodeToString(randomUUIDBytes);
+		udpClient.sendRaceUdpKey(randomUUIDBytes);
 		UdpRelayCryptoTicket udpRelayCryptoTicket = new UdpRelayCryptoTicket();
 		String activeRelayCryptoTicket = tokenBO.getActiveRelayCryptoTicket(securityToken);
 		udpRelayCryptoTicket.setCryptoTicket(activeRelayCryptoTicket);
 		udpRelayCryptoTicket.setSessionKey("AAAAAAAAAAAAAAAAAAAAAA==");
-		udpRelayCryptoTicket.setTicketIv("AAAAAAAAAAAAAAAAAAAAAA==");
+		udpRelayCryptoTicket.setTicketIv(ticketIV);
 		return udpRelayCryptoTicket;
-	}
-
-	@GET
-	@Path("{path:.*}")
-	@Produces(MediaType.APPLICATION_XML)
-	public String genericEmptyGet(@PathParam("path") String path) {
-		System.out.println("empty GET!!!");
-		return "";
 	}
 
 	@GET
 	@Path("/cryptoticket")
 	@Produces(MediaType.APPLICATION_XML)
 	public String cryptoticket() {
+		byte[] randomUUIDBytes = UUIDGen.getRandomUUIDBytes();
+		String ticketIV = Base64.getEncoder().encodeToString(randomUUIDBytes);
+		udpClient.sendFreeroamUdpKey(randomUUIDBytes);
 		byte[] helloPacket = { 10, 11, 12, 13 };
 		ByteBuffer byteBuffer = ByteBuffer.allocate(32);
 		byteBuffer.put(helloPacket);
@@ -57,7 +60,9 @@ public class Crypto {
 		stringBuilder.append(cryptoTicketBase64);
 		stringBuilder.append("</CryptoTicket>\n");
 		stringBuilder.append("<SessionKey>AAAAAAAAAAAAAAAAAAAAAA==</SessionKey>\n");
-		stringBuilder.append("<TicketIv>AAAAAAAAAAAAAAAAAAAAAA==</TicketIv>\n");
+		stringBuilder.append("<TicketIv>");
+		stringBuilder.append(ticketIV);
+		stringBuilder.append("</TicketIv>\n");
 		stringBuilder.append("</ClientServerCryptoTicket>");
 		return stringBuilder.toString();
 	}

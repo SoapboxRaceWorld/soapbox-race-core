@@ -1,11 +1,11 @@
 package com.soapboxrace.core.bo;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
 import com.soapboxrace.core.dao.BanDAO;
 import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.UserEntity;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
 
 @Stateless
 public class AuthenticationBO

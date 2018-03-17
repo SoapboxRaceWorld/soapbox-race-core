@@ -1,8 +1,5 @@
 package com.soapboxrace.core.api;
 
-import com.google.inject.Injector;
-
-import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;

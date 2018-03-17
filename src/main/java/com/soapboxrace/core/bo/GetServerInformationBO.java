@@ -3,7 +3,6 @@ package com.soapboxrace.core.bo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.soapboxrace.core.api.util.Config;
 import com.soapboxrace.core.dao.ServerInfoDAO;
 import com.soapboxrace.core.jpa.ServerInfoEntity;
 
@@ -16,10 +15,13 @@ public class GetServerInformationBO {
 	@EJB
 	private OnlineUsersBO onlineUsersBO;
 
+	@EJB
+	private ParameterBO parameterBO;
+
 	public ServerInfoEntity getServerInformation() {
 		ServerInfoEntity serverInfoEntity = serverInfoDAO.findInfo();
 		serverInfoEntity.setOnlineNumber(onlineUsersBO.getNumberOfUsersOnlineNow());
-		String ticketToken = Config.getTicketToken();
+		String ticketToken = parameterBO.getStrParam("TICKET_TOKEN");
 		if (ticketToken != null && !ticketToken.equals("null")) {
 			serverInfoEntity.setRequireTicket(true);
 		}

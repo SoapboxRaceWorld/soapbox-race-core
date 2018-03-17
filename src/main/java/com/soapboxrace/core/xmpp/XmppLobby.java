@@ -17,10 +17,12 @@ import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeLobbyLaunched;
 public class XmppLobby {
 
 	private long personaId;
-    private static OpenFireSoapBoxCli openFireSoapBoxCli = OpenFireSoapBoxCli.getInstance();
 
-	public XmppLobby(long personaId) {
+	private OpenFireSoapBoxCli openFireSoapBoxCli;
+
+	public XmppLobby(long personaId, OpenFireSoapBoxCli openFireSoapBoxCli) {
 		this.personaId = personaId;
+		this.openFireSoapBoxCli = openFireSoapBoxCli;
 	}
 
 	public void joinQueueEvent(XMPP_LobbyInviteType xMPP_LobbyInviteType) {
@@ -51,7 +53,7 @@ public class XmppLobby {
 		openFireSoapBoxCli.send(responseType, personaId);
 	}
 
-	public static void sendRelay(XMPP_LobbyLaunchedType lobbyLaunched, XMPP_CryptoTicketsType xMPP_CryptoTicketsType) {
+	public void sendRelay(XMPP_LobbyLaunchedType lobbyLaunched, XMPP_CryptoTicketsType xMPP_CryptoTicketsType) {
 		List<LobbyEntrantInfo> lobbyEntrantInfo = lobbyLaunched.getEntrants().getLobbyEntrantInfo();
 		for (LobbyEntrantInfo lobbyEntrantInfoType : lobbyEntrantInfo) {
 			long personaId = lobbyEntrantInfoType.getPersonaId();
@@ -62,13 +64,17 @@ public class XmppLobby {
 					cryptoTicketsTypeTmp.getP2PCryptoTicket().add(p2pCryptoTicketType);
 				}
 			}
+			String udpRaceHostIp = lobbyEntrantInfoType.getUdpRaceHostIp();
+			if (udpRaceHostIp != null) {
+				lobbyLaunched.setUdpRelayHost(udpRaceHostIp);
+			}
 			lobbyLaunched.setCryptoTickets(cryptoTicketsTypeTmp);
 			XMPP_ResponseTypeLobbyLaunched responseType = new XMPP_ResponseTypeLobbyLaunched();
 			responseType.setLobbyInvite(lobbyLaunched);
 			openFireSoapBoxCli.send(responseType, personaId);
 		}
 	}
-	
+
 	public void sendLobbyInvite(XMPP_LobbyInviteType lobbyInviteType) {
 		openFireSoapBoxCli.send(lobbyInviteType, personaId);
 	}
