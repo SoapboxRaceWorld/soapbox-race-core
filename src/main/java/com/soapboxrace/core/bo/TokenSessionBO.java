@@ -93,9 +93,9 @@ public class TokenSessionBO {
 		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
 
 		int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
-		int maxOlinePayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
-		if (numberOfUsersOnlineNow >= maxOlinePayers) {
-			loginStatusVO.setDescription("SERVER FULL");
+		int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
+		if (maxOnlinePlayers != 0 && numberOfUsersOnlineNow >= maxOnlinePlayers) {
+			loginStatusVO.setDescription("The server is currently full! Try again later.");
 			return loginStatusVO;
 		}
 
