@@ -513,8 +513,8 @@ public class EventBO extends AccoladesFunc {
 		rankCash = routeArbitrationPacket.getFinishReason() == 22 ? rankCash : rankCash / 10;
 		rewardVO.add((int) rankExp, (int) rankCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
 
-		float timeRaceExp = rep * (((routeArbitrationPacket.getEventDurationInMilliseconds() / 1000.0f) / routeArbitrationPacket.getRank()) / 100.0f);
-		float timeRaceCash = cash * (((routeArbitrationPacket.getEventDurationInMilliseconds() / 1000.0f) / routeArbitrationPacket.getRank()) / 100.0f);
+		float timeRaceExp = rep * (((100000000f / routeArbitrationPacket.getEventDurationInMilliseconds()) / routeArbitrationPacket.getRank()) / 100.0f);
+		float timeRaceCash = cash * (((100000000f / routeArbitrationPacket.getEventDurationInMilliseconds()) / routeArbitrationPacket.getRank()) / 100.0f);
 		timeRaceExp = routeArbitrationPacket.getFinishReason() == 22 ? timeRaceExp : timeRaceExp / 10;
 		timeRaceCash = routeArbitrationPacket.getFinishReason() == 22 ? timeRaceCash : timeRaceCash / 10;
 		rewardVO.add((int) timeRaceExp, (int) timeRaceCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
