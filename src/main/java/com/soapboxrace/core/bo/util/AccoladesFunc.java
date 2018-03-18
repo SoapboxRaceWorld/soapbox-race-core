@@ -108,7 +108,7 @@ public class AccoladesFunc {
 	public LuckyDrawItem getItemFromProduct(PersonaEntity personaEntity) {
 		ProductEntity productEntity = dropBO.getRandomProductItem();
 		
-		if (productEntity == null) return new LuckyDrawItem();
+		if (productEntity == null) return null;
 		
 		LuckyDrawItem luckyDrawItem = dropBO.copyProduct2LuckyDraw(productEntity);
 		boolean inventoryFull = inventoryBO.isInventoryFull(productEntity, personaEntity);

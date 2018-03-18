@@ -22,27 +22,7 @@ import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
-import com.soapboxrace.jaxb.http.Accolades;
-import com.soapboxrace.jaxb.http.ArbitrationPacket;
-import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
-import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
-import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
-import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
-import com.soapboxrace.jaxb.http.DragArbitrationPacket;
-import com.soapboxrace.jaxb.http.DragEntrantResult;
-import com.soapboxrace.jaxb.http.DragEventResult;
-import com.soapboxrace.jaxb.http.EnumRewardCategory;
-import com.soapboxrace.jaxb.http.EnumRewardType;
-import com.soapboxrace.jaxb.http.ExitPath;
-import com.soapboxrace.jaxb.http.LuckyDrawInfo;
-import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
-import com.soapboxrace.jaxb.http.PursuitEventResult;
-import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
-import com.soapboxrace.jaxb.http.RouteEntrantResult;
-import com.soapboxrace.jaxb.http.RouteEventResult;
-import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
-import com.soapboxrace.jaxb.http.TeamEscapeEntrantResult;
-import com.soapboxrace.jaxb.http.TeamEscapeEventResult;
+import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.xmpp.XMPP_DragEntrantResultType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeDragEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
@@ -737,7 +717,11 @@ public class EventBO extends AccoladesFunc {
 			return luckyDrawInfo;
 		}
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(personaEntity));
+		final LuckyDrawItem item = getItemFromProduct(personaEntity);
+		
+		if (item == null) return luckyDrawInfo;
+		
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(item);
 		luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
 		luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
 		return luckyDrawInfo;
