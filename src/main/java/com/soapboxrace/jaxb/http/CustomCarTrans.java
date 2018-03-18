@@ -72,7 +72,7 @@ public class CustomCarTrans {
     protected int id;
     @XmlElement(name = "IsPreset")
     protected boolean isPreset;
-    @XmlElement(name = "Level")
+    @XmlElement(name = "Level")w
     protected int level;
     @XmlElement(name = "Name")
     protected String name;

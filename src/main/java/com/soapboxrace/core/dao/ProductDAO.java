@@ -71,6 +71,8 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
 		countQuery.setParameter("productType", productType);
 		Long count = (Long) countQuery.getSingleResult();
 
+		if (count == 0) return null;
+		
 		Random random = new Random();
 		int number = random.nextInt(count.intValue());
 
