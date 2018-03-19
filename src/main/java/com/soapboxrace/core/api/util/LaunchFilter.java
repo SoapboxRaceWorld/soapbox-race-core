@@ -76,15 +76,6 @@ public class LaunchFilter implements ContainerRequestFilter {
 			ban.setExpires(banEntity.getEndsAt() == null ? null : banEndFormatter.format(banEntity.getEndsAt()));
 
 			loginStatusVO.setBan(ban);
-			// banDesc += " | Reason: " + banEntity.getReason().trim();
-			// }
-			//
-			// if (banEntity.getEndsAt() != null)
-			// {
-			// banDesc += " | Ends: " + banEndFormatter.format(banEntity.getEndsAt());
-			// }
-
-			// loginStatusVO.setDescription(banDesc);
 			return loginStatusVO;
 		}
 	}
