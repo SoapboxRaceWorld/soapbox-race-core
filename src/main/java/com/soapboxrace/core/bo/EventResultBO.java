@@ -92,7 +92,7 @@ public class EventResultBO {
 	@EJB
 	private EventResultBO eventResultBO;
 
-	public PursuitEventResult getPursitEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
+	public PursuitEventResult handlePursitEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
 			Boolean isBusted) {
 		Long eventSessionId = eventSessionEntity.getId();
 		eventSessionEntity.setEnded(System.currentTimeMillis());
@@ -140,7 +140,7 @@ public class EventResultBO {
 		return pursuitEventResult;
 	}
 
-	public RouteEventResult getRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
+	public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
 		Long eventSessionId = eventSessionEntity.getId();
 		eventSessionEntity.setEnded(System.currentTimeMillis());
 
@@ -217,7 +217,7 @@ public class EventResultBO {
 		return routeEventResult;
 	}
 
-	public DragEventResult getDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
+	public DragEventResult handleDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
 		Long eventSessionId = eventSessionEntity.getId();
 		eventSessionEntity.setEnded(System.currentTimeMillis());
 
@@ -291,7 +291,7 @@ public class EventResultBO {
 		return dragEventResult;
 	}
 
-	public TeamEscapeEventResult getTeamEscapeEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
+	public TeamEscapeEventResult handleTeamEscapeEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
 			TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
 		Long eventSessionId = eventSessionEntity.getId();
 		eventSessionEntity.setEnded(System.currentTimeMillis());
