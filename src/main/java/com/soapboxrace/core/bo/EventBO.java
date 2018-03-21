@@ -5,7 +5,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.EventDataDAO;
@@ -28,8 +27,6 @@ import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.DragArbitrationPacket;
 import com.soapboxrace.jaxb.http.DragEntrantResult;
 import com.soapboxrace.jaxb.http.DragEventResult;
-import com.soapboxrace.jaxb.http.EnumRewardCategory;
-import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
@@ -81,6 +78,15 @@ public class EventBO {
 
 	@EJB
 	private RewardRouteBO rewardRouteBO;
+
+	@EJB
+	private RewardDragBO rewardDragBO;
+
+	@EJB
+	private RewardPursuitBO rewardPursuitBO;
+
+	@EJB
+	private RewardTeamEscapeBO rewardTeamEscapeBO;
 
 	@EJB
 	private RewardBO rewardBO;
@@ -149,7 +155,7 @@ public class EventBO {
 		eventDataDao.update(eventDataEntity);
 
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
-		pursuitEventResult.setAccolades(legit ? getPursuitAccolades(activePersonaId, pursuitArbitrationPacket, isBusted) : new Accolades());
+		pursuitEventResult.setAccolades(legit ? rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket, isBusted) : new Accolades());
 		pursuitEventResult.setDurability(
 				updateDamageCar(activePersonaId, pursuitArbitrationPacket.getCarId(), 0, pursuitArbitrationPacket.getEventDurationInMilliseconds()));
 		pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
@@ -321,7 +327,7 @@ public class EventBO {
 		}
 
 		DragEventResult dragEventResult = new DragEventResult();
-		dragEventResult.setAccolades(legit ? getDragAccolades(activePersonaId, dragArbitrationPacket) : new Accolades());
+		dragEventResult.setAccolades(legit ? rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket) : new Accolades());
 		dragEventResult.setDurability(updateDamageCar(activePersonaId, dragArbitrationPacket.getCarId(), dragArbitrationPacket.getNumberOfCollisions(),
 				dragArbitrationPacket.getEventDurationInMilliseconds()));
 		dragEventResult.setEntrants(arrayOfDragEntrantResult);
@@ -403,7 +409,7 @@ public class EventBO {
 		}
 
 		TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
-		teamEscapeEventResult.setAccolades(legit ? getTeamEscapeAccolades(activePersonaId, teamEscapeArbitrationPacket) : new Accolades());
+		teamEscapeEventResult.setAccolades(legit ? rewardTeamEscapeBO.getTeamEscapeAccolades(activePersonaId, teamEscapeArbitrationPacket) : new Accolades());
 		teamEscapeEventResult.setDurability(updateDamageCar(activePersonaId, teamEscapeArbitrationPacket.getCarId(),
 				teamEscapeArbitrationPacket.getNumberOfCollisions(), teamEscapeArbitrationPacket.getEventDurationInMilliseconds()));
 		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
@@ -414,261 +420,6 @@ public class EventBO {
 		teamEscapeEventResult.setLobbyInviteId(0);
 		teamEscapeEventResult.setPersonaId(activePersonaId);
 		return teamEscapeEventResult;
-	}
-
-	private Accolades getPursuitAccolades(Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket, Boolean isBusted) {
-		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-		RewardVO rewardVO = new RewardVO(parameterBO.getBoolParam("ENABLE_ECONOMY"), parameterBO.getBoolParam("ENABLE_REPUTATION"));
-
-		float rep = 0;
-		float cash = 0;
-
-		if (!isBusted) {
-			if (personaEntity.getLevel() < 60) {
-				rep = 200.0f * (personaEntity.getLevel() / 10.0f);
-			}
-			if (personaEntity.getCash() < 9999999) {
-				cash = 600.0f * (personaEntity.getLevel() / 10.0f);
-			}
-			rewardVO.add((int) rep, (int) cash, EnumRewardCategory.PURSUIT, EnumRewardType.EVADED);
-			float skillCash = cash * rewardBO.getSkillMultiplicater(personaEntity.getPersonaId(), 1);
-			rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
-
-			float copsDeployedExp = rep * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
-			float copsDeployedCash = cash * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
-			rewardVO.add((int) copsDeployedExp, (int) copsDeployedCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DEPLOYED);
-
-			float copsDisabledExp = rep * (pursuitArbitrationPacket.getCopsDisabled() / 100.0f);
-			float copsDisabledCash = cash * (pursuitArbitrationPacket.getCopsDisabled() / 100.0f);
-			rewardVO.add((int) copsDisabledExp, (int) copsDisabledCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DISABLED);
-
-			float copsRammedExp = rep * (pursuitArbitrationPacket.getCopsRammed() / 150.0f);
-			float copsRammedCash = cash * (pursuitArbitrationPacket.getCopsRammed() / 150.0f);
-			rewardVO.add((int) copsRammedExp, (int) copsRammedCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_RAMMED);
-
-			float costToStateExp = rep * ((pursuitArbitrationPacket.getCostToState() / 5000.0f) / 150.0f);
-			float costToStateCash = cash * ((pursuitArbitrationPacket.getCostToState() / 5000.0f) / 150.0f);
-			rewardVO.add((int) costToStateExp, (int) costToStateCash, EnumRewardCategory.PURSUIT, EnumRewardType.COST_TO_STATE);
-
-			float eventDurationExp = rep * ((pursuitArbitrationPacket.getEventDurationInMilliseconds() / 2500.0f) / 150.0f);
-			float eventDurationCash = cash * ((pursuitArbitrationPacket.getEventDurationInMilliseconds() / 2500.0f) / 150.0f);
-			rewardVO.add((int) eventDurationExp, (int) eventDurationCash, EnumRewardCategory.PURSUIT, EnumRewardType.PURSUIT_LENGTH);
-
-			float heatExp = rep * (pursuitArbitrationPacket.getHeat() / 5.0f);
-			float heatCash = cash * (pursuitArbitrationPacket.getHeat() / 5.0f);
-			rewardVO.add((int) heatExp, (int) heatCash, EnumRewardCategory.PURSUIT, EnumRewardType.HEAT_LEVEL);
-
-			float infractionsExp = rep * (pursuitArbitrationPacket.getInfractions() / 100.0f);
-			float infractionsCash = cash * (pursuitArbitrationPacket.getInfractions() / 100.0f);
-			rewardVO.add((int) infractionsExp, (int) infractionsCash, EnumRewardCategory.PURSUIT, EnumRewardType.INFRACTIONS);
-
-			float roadBlocksDodgedExp = rep * (pursuitArbitrationPacket.getRoadBlocksDodged() / 50.0f);
-			float roadBlocksDodgedCash = cash * (pursuitArbitrationPacket.getRoadBlocksDodged() / 50.0f);
-			rewardVO.add((int) roadBlocksDodgedExp, (int) roadBlocksDodgedCash, EnumRewardCategory.PURSUIT, EnumRewardType.ROADBLOCKS_DODGED);
-
-			float spikeStripsDodgedExp = rep * (pursuitArbitrationPacket.getSpikeStripsDodged() / 50.0f);
-			float spikeStripsDodgedCash = cash * (pursuitArbitrationPacket.getSpikeStripsDodged() / 50.0f);
-			rewardVO.add((int) spikeStripsDodgedExp, (int) spikeStripsDodgedCash, EnumRewardCategory.PURSUIT, EnumRewardType.SPIKE_STRIPS_DODGED);
-
-		}
-
-		float repMult = rewardVO.getRep() * parameterBO.getRepRewardMultiplier();
-		float cashMult = rewardVO.getCash() * parameterBO.getCashRewardMultiplier();
-		rewardVO.add((int) repMult, 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
-		rewardVO.add(0, (int) cashMult, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
-
-		Accolades accolades = new Accolades();
-
-		accolades.setFinalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setHasLeveledUp(rewardBO.isLeveledUp(personaEntity, rewardVO.getRep()));
-		if (!isBusted) {
-			accolades.setLuckyDrawInfo(rewardBO.getLuckyDrawInfo(1, personaEntity.getLevel(), personaEntity));
-		}
-		accolades.setOriginalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
-
-		rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
-		return accolades;
-	}
-
-	private Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
-		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-		RewardVO rewardVO = new RewardVO(parameterBO.getBoolParam("ENABLE_ECONOMY"), parameterBO.getBoolParam("ENABLE_REPUTATION"));
-
-		float rep = 0;
-		float cash = 0;
-		if (personaEntity.getLevel() < 60) {
-			rep = 100 * (personaEntity.getLevel() / 5.0f);
-		}
-		if (personaEntity.getCash() < 9999999) {
-			cash = 200 * (personaEntity.getLevel() / 5.0f);
-		}
-		rewardVO.add((int) rep, (int) cash, EnumRewardCategory.BASE, EnumRewardType.NONE);
-
-		float skillCash = cash * rewardBO.getSkillMultiplicater(personaEntity.getPersonaId(), 0);
-		rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
-
-		float rankExp = dragArbitrationPacket.getRank() == 1 ? rep * 0.10f : rep * 0.05f; // + 10% if fist, + 5% else
-		float rankCash = dragArbitrationPacket.getRank() == 1 ? cash * 0.10f : cash * 0.05f; // + 10% if fist, + 5% else
-		rankExp = dragArbitrationPacket.getFinishReason() == 22 ? rankExp : rankExp / 10;
-		rankCash = dragArbitrationPacket.getFinishReason() == 22 ? rankCash : rankCash / 10;
-		rewardVO.add((int) rankExp, (int) rankCash, EnumRewardCategory.OBJECTIVE, EnumRewardType.NONE);
-
-		float timeRaceExp = rep * ((60000.0f / dragArbitrationPacket.getEventDurationInMilliseconds()) / 4.0f);
-		float timeRaceCash = cash * ((60000.0f / dragArbitrationPacket.getEventDurationInMilliseconds()) / 4.0f);
-		timeRaceExp = dragArbitrationPacket.getFinishReason() == 22 ? timeRaceExp : timeRaceExp / 10;
-		timeRaceCash = dragArbitrationPacket.getFinishReason() == 22 ? timeRaceCash : timeRaceCash / 10;
-		rewardVO.add((int) timeRaceExp, (int) timeRaceCash, EnumRewardCategory.OBJECTIVE, EnumRewardType.NONE);
-
-		if (dragArbitrationPacket.getPerfectStart() == 1) {
-			float perfectStartExp = rep * 0.10f; // + 10%
-			float perfectStartCash = cash * 0.10f; // + 10%
-			perfectStartExp = dragArbitrationPacket.getFinishReason() == 22 ? perfectStartExp : perfectStartExp / 10;
-			perfectStartCash = dragArbitrationPacket.getFinishReason() == 22 ? perfectStartCash : perfectStartCash / 10;
-			rewardVO.add((int) perfectStartExp, (int) perfectStartCash, EnumRewardCategory.OBJECTIVE, EnumRewardType.NONE);
-		}
-
-		if (dragArbitrationPacket.getTopSpeed() >= 70.0f) {
-			float highSpeedExp = rep * 0.10f; // + 10%
-			float highSpeedCash = cash * 0.10f; // + 10%
-			highSpeedExp = dragArbitrationPacket.getFinishReason() == 22 ? highSpeedExp : highSpeedExp / 10;
-			highSpeedCash = dragArbitrationPacket.getFinishReason() == 22 ? highSpeedCash : highSpeedCash / 10;
-			rewardVO.add((int) highSpeedExp, (int) highSpeedCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
-		}
-
-		float repMult = rewardVO.getRep() * parameterBO.getRepRewardMultiplier();
-		float cashMult = rewardVO.getCash() * parameterBO.getCashRewardMultiplier();
-		rewardVO.add((int) repMult, 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
-		rewardVO.add(0, (int) cashMult, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
-
-		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
-		accolades.setHasLeveledUp(rewardBO.isLeveledUp(personaEntity, rewardVO.getRep()));
-		accolades.setLuckyDrawInfo(rewardBO.getLuckyDrawInfo(dragArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
-		accolades.setOriginalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-
-		rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
-		return accolades;
-	}
-
-	private Accolades getTeamEscapeAccolades(Long activePersonaId, TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
-		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-		RewardVO rewardVO = new RewardVO(parameterBO.getBoolParam("ENABLE_ECONOMY"), parameterBO.getBoolParam("ENABLE_REPUTATION"));
-
-		float rep = 0;
-		float cash = 0;
-
-		if (personaEntity.getLevel() < 60) {
-			rep = 200.0f * ((personaEntity.getLevel() + 1.0f) / 10.0f);
-		}
-		if (personaEntity.getCash() < 9999999) {
-			cash = 600.0f * ((personaEntity.getLevel() + 1.0f) / 10.0f);
-		}
-		rewardVO.add((int) rep, (int) cash, EnumRewardCategory.BASE, EnumRewardType.NONE);
-
-		Integer bustedCount = teamEscapeArbitrationPacket.getBustedCount();
-		Integer finishReason = teamEscapeArbitrationPacket.getFinishReason();
-
-		float skillCash = cash * rewardBO.getSkillMultiplicater(personaEntity.getPersonaId(), 1);
-		rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
-
-		float copsDeployedExp = rep * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);
-		float copsDeployedCash = cash * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);
-		copsDeployedExp = bustedCount > 0 && finishReason == 22 ? copsDeployedExp / (bustedCount * 2.0f)
-				: finishReason != 22 ? copsDeployedExp / 10 : copsDeployedExp;
-		copsDeployedCash = bustedCount > 0 && finishReason == 22 ? copsDeployedCash / (bustedCount * 2.0f)
-				: finishReason != 22 ? copsDeployedCash / 10 : copsDeployedCash;
-		rewardVO.add((int) copsDeployedExp, (int) copsDeployedCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DEPLOYED);
-
-		float copsDisabledExp = rep * (teamEscapeArbitrationPacket.getCopsDisabled() / 100.0f);
-		float copsDisabledCash = cash * (teamEscapeArbitrationPacket.getCopsDisabled() / 100.0f);
-		copsDisabledExp = bustedCount > 0 && finishReason == 22 ? copsDisabledExp / (bustedCount * 2.0f)
-				: finishReason != 22 ? copsDisabledExp / 10 : copsDisabledExp;
-		copsDisabledCash = bustedCount > 0 && finishReason == 22 ? copsDisabledCash / (bustedCount * 2.0f)
-				: finishReason != 22 ? copsDisabledCash / 10 : copsDisabledCash;
-		rewardVO.add((int) copsDisabledExp, (int) copsDisabledCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_DISABLED);
-
-		float copsRammedExp = rep * (teamEscapeArbitrationPacket.getCopsRammed() / 150.0f);
-		float copsRammedCash = cash * (teamEscapeArbitrationPacket.getCopsRammed() / 150.0f);
-		copsRammedExp = bustedCount > 0 && finishReason == 22 ? copsRammedExp / (bustedCount * 2.0f) : finishReason != 22 ? copsRammedExp / 10 : copsRammedExp;
-		copsRammedCash = bustedCount > 0 && finishReason == 22 ? copsRammedCash / (bustedCount * 2.0f)
-				: finishReason != 22 ? copsRammedCash / 10 : copsRammedCash;
-		rewardVO.add((int) copsRammedExp, (int) copsRammedCash, EnumRewardCategory.PURSUIT, EnumRewardType.COP_CARS_RAMMED);
-
-		float costToStateExp = rep * ((teamEscapeArbitrationPacket.getCostToState() / 2500.0f) / 100.0f);
-		float costToStateCash = cash * ((teamEscapeArbitrationPacket.getCostToState() / 2500.0f) / 100.0f);
-		costToStateExp = bustedCount > 0 && finishReason == 22 ? costToStateExp / (bustedCount * 2.0f)
-				: finishReason != 22 ? costToStateExp / 10 : costToStateExp;
-		costToStateCash = bustedCount > 0 && finishReason == 22 ? costToStateCash / (bustedCount * 2.0f)
-				: finishReason != 22 ? costToStateCash / 10 : costToStateCash;
-		rewardVO.add((int) costToStateExp, (int) costToStateCash, EnumRewardCategory.PURSUIT, EnumRewardType.COST_TO_STATE);
-
-		float infractionsExp = rep * (teamEscapeArbitrationPacket.getInfractions() / 100.0f);
-		float infractionsCash = cash * (teamEscapeArbitrationPacket.getInfractions() / 100.0f);
-		infractionsExp = bustedCount > 0 && finishReason == 22 ? infractionsExp / (bustedCount * 2.0f)
-				: finishReason != 22 ? infractionsExp / 10 : infractionsExp;
-		infractionsCash = bustedCount > 0 && finishReason == 22 ? infractionsCash / (bustedCount * 2.0f)
-				: finishReason != 22 ? infractionsCash / 10 : infractionsCash;
-		rewardVO.add((int) infractionsExp, (int) infractionsCash, EnumRewardCategory.PURSUIT, EnumRewardType.INFRACTIONS);
-
-		float roadBlocksDodgedExp = rep * (teamEscapeArbitrationPacket.getRoadBlocksDodged() / 50.0f);
-		float roadBlocksDodgedCash = cash * (teamEscapeArbitrationPacket.getRoadBlocksDodged() / 50.0f);
-		roadBlocksDodgedExp = bustedCount > 0 && finishReason == 22 ? roadBlocksDodgedExp / (bustedCount * 2.0f)
-				: finishReason != 22 ? roadBlocksDodgedExp / 10 : roadBlocksDodgedExp;
-		roadBlocksDodgedCash = bustedCount > 0 && finishReason == 22 ? roadBlocksDodgedCash / (bustedCount * 2.0f)
-				: finishReason != 22 ? roadBlocksDodgedCash / 10 : roadBlocksDodgedCash;
-		rewardVO.add((int) roadBlocksDodgedExp, (int) roadBlocksDodgedCash, EnumRewardCategory.PURSUIT, EnumRewardType.ROADBLOCKS_DODGED);
-
-		float spikeStripsDodgedExp = rep * (teamEscapeArbitrationPacket.getSpikeStripsDodged() / 50.0f);
-		float spikeStripsDodgedCash = cash * (teamEscapeArbitrationPacket.getSpikeStripsDodged() / 50.0f);
-		spikeStripsDodgedExp = bustedCount > 0 && finishReason == 22 ? spikeStripsDodgedExp / (bustedCount * 2.0f)
-				: finishReason != 22 ? spikeStripsDodgedExp / 10 : spikeStripsDodgedExp;
-		spikeStripsDodgedCash = bustedCount > 0 && finishReason == 22 ? spikeStripsDodgedCash / (bustedCount * 2.0f)
-				: finishReason != 22 ? spikeStripsDodgedCash / 10 : spikeStripsDodgedCash;
-		rewardVO.add((int) spikeStripsDodgedExp, (int) spikeStripsDodgedCash, EnumRewardCategory.PURSUIT, EnumRewardType.SPIKE_STRIPS_DODGED);
-
-		float rankExp = teamEscapeArbitrationPacket.getRank() == 1 ? rep * 0.10f : rep * 0.05f; // + 10% if fist, + 5% else
-		float rankCash = teamEscapeArbitrationPacket.getRank() == 1 ? cash * 0.10f : cash * 0.05f; // + 10% if fist, + 5% else
-		rankExp = bustedCount > 0 && finishReason == 22 ? rankExp / (bustedCount * 2.0f) : finishReason != 22 ? rankExp / 10 : rankExp;
-		rankCash = bustedCount > 0 && finishReason == 22 ? rankCash / (bustedCount * 2.0f) : finishReason != 22 ? rankCash / 10 : rankCash;
-		rewardVO.add((int) rankExp, (int) rankCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
-
-		if (teamEscapeArbitrationPacket.getPerfectStart() == 1) {
-			float perfectStartExp = rep * 0.10f; // + 10%
-			float perfectStartCash = cash * 0.10f; // + 10%
-			perfectStartExp = bustedCount > 0 && finishReason == 22 ? perfectStartExp / (bustedCount * 2.0f)
-					: finishReason != 22 ? perfectStartExp / 10 : perfectStartExp;
-			perfectStartCash = bustedCount > 0 && finishReason == 22 ? perfectStartCash / (bustedCount * 2.0f)
-					: finishReason != 22 ? perfectStartCash / 10 : perfectStartCash;
-			rewardVO.add((int) perfectStartExp, (int) perfectStartCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
-		}
-
-		if (teamEscapeArbitrationPacket.getTopSpeed() >= 70.0f) {
-			float highSpeedExp = rep * 0.10f; // + 10%
-			float highSpeedCash = cash * 0.10f; // + 10%
-			highSpeedExp = bustedCount > 0 && finishReason == 22 ? highSpeedExp / (bustedCount * 2.0f) : finishReason != 22 ? highSpeedExp / 10 : highSpeedExp;
-			highSpeedCash = bustedCount > 0 && finishReason == 22 ? highSpeedCash / (bustedCount * 2.0f)
-					: finishReason != 22 ? highSpeedCash / 10 : highSpeedCash;
-			rewardVO.add((int) highSpeedExp, (int) highSpeedCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
-		}
-
-		float repMult = rewardVO.getRep() * parameterBO.getRepRewardMultiplier();
-		float cashMult = rewardVO.getCash() * parameterBO.getCashRewardMultiplier();
-		rewardVO.add((int) repMult, 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
-		rewardVO.add(0, (int) cashMult, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
-
-		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setHasLeveledUp(rewardBO.isLeveledUp(personaEntity, rewardVO.getRep()));
-		if (teamEscapeArbitrationPacket.getFinishReason() == 22) {
-			accolades.setLuckyDrawInfo(rewardBO.getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
-		}
-		accolades.setOriginalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
-
-		rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
-		return accolades;
 	}
 
 	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
