@@ -5,7 +5,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.soapboxrace.core.bo.util.AccoladesFunc;
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.EventDAO;
@@ -14,7 +13,6 @@ import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
-import com.soapboxrace.core.jpa.CardDecks;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
@@ -25,7 +23,6 @@ import com.soapboxrace.core.xmpp.XmppEvent;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
 import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
-import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
 import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
 import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.DragArbitrationPacket;
@@ -34,7 +31,6 @@ import com.soapboxrace.jaxb.http.DragEventResult;
 import com.soapboxrace.jaxb.http.EnumRewardCategory;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.ExitPath;
-import com.soapboxrace.jaxb.http.LuckyDrawInfo;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
 import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
@@ -51,7 +47,7 @@ import com.soapboxrace.jaxb.xmpp.XMPP_RouteEntrantResultType;
 import com.soapboxrace.jaxb.xmpp.XMPP_TeamEscapeEntrantResultType;
 
 @Stateless
-public class EventBO extends AccoladesFunc {
+public class EventBO {
 
 	@EJB
 	private EventDAO eventDao;
@@ -82,6 +78,12 @@ public class EventBO extends AccoladesFunc {
 
 	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
+
+	@EJB
+	private RewardRouteBO rewardRouteBO;
+
+	@EJB
+	private RewardBO rewardBO;
 
 	public List<EventEntity> availableAtLevel(Long personaId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
@@ -245,7 +247,7 @@ public class EventBO extends AccoladesFunc {
 		}
 
 		RouteEventResult routeEventResult = new RouteEventResult();
-		routeEventResult.setAccolades(legit ? getRouteAccolades(activePersonaId, routeArbitrationPacket) : new Accolades());
+		routeEventResult.setAccolades(legit ? rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket) : new Accolades());
 		routeEventResult.setDurability(updateDamageCar(activePersonaId, routeArbitrationPacket.getCarId(), routeArbitrationPacket.getNumberOfCollisions(),
 				routeArbitrationPacket.getEventDurationInMilliseconds()));
 		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
@@ -429,7 +431,7 @@ public class EventBO extends AccoladesFunc {
 				cash = 600.0f * (personaEntity.getLevel() / 10.0f);
 			}
 			rewardVO.add((int) rep, (int) cash, EnumRewardCategory.PURSUIT, EnumRewardType.EVADED);
-			float skillCash = cash * getSkillMultiplicater(personaEntity.getPersonaId(), 1);
+			float skillCash = cash * rewardBO.getSkillMultiplicater(personaEntity.getPersonaId(), 1);
 			rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
 
 			float copsDeployedExp = rep * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
@@ -477,77 +479,15 @@ public class EventBO extends AccoladesFunc {
 
 		Accolades accolades = new Accolades();
 
-		accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
+		accolades.setFinalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setHasLeveledUp(rewardBO.isLeveledUp(personaEntity, rewardVO.getRep()));
 		if (!isBusted) {
-			accolades.setLuckyDrawInfo(getLuckyDrawInfo(1, personaEntity.getLevel(), personaEntity));
+			accolades.setLuckyDrawInfo(rewardBO.getLuckyDrawInfo(1, personaEntity.getLevel(), personaEntity));
 		}
-		accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setOriginalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
 		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
 
-		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
-		return accolades;
-	}
-
-	private Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
-		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-		RewardVO rewardVO = new RewardVO(parameterBO.getBoolParam("ENABLE_ECONOMY"), parameterBO.getBoolParam("ENABLE_REPUTATION"));
-
-		float rep = 0;
-		float cash = 0;
-
-		if (personaEntity.getLevel() < 60) {
-			rep = 200 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
-		}
-		if (personaEntity.getCash() < 9999999) {
-			cash = 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
-		}
-		rewardVO.add((int) rep, (int) cash, EnumRewardCategory.BASE, EnumRewardType.NONE);
-
-		float skillCash = cash * getSkillMultiplicater(personaEntity.getPersonaId(), 0);
-		rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
-
-		float rankExp = routeArbitrationPacket.getRank() == 1 ? rep * 0.10f : rep * 0.05f; // + 10% if fist, + 5% else
-		float rankCash = routeArbitrationPacket.getRank() == 1 ? cash * 0.10f : cash * 0.05f; // + 10% if fist, + 5% else
-		rankExp = routeArbitrationPacket.getFinishReason() == 22 ? rankExp : rankExp / 10;
-		rankCash = routeArbitrationPacket.getFinishReason() == 22 ? rankCash : rankCash / 10;
-		rewardVO.add((int) rankExp, (int) rankCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
-
-		float timeRaceExp = rep * (((100000000f / routeArbitrationPacket.getEventDurationInMilliseconds()) / routeArbitrationPacket.getRank()) / 100.0f);
-		float timeRaceCash = cash * (((100000000f / routeArbitrationPacket.getEventDurationInMilliseconds()) / routeArbitrationPacket.getRank()) / 100.0f);
-		timeRaceExp = routeArbitrationPacket.getFinishReason() == 22 ? timeRaceExp : timeRaceExp / 10;
-		timeRaceCash = routeArbitrationPacket.getFinishReason() == 22 ? timeRaceCash : timeRaceCash / 10;
-		rewardVO.add((int) timeRaceExp, (int) timeRaceCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
-
-		if (routeArbitrationPacket.getPerfectStart() == 1) {
-			float perfectStartExp = rep * 0.10f; // + 10%
-			float perfectStartCash = cash * 0.10f; // + 10%
-			perfectStartExp = routeArbitrationPacket.getFinishReason() == 22 ? perfectStartExp : perfectStartExp / 10;
-			perfectStartCash = routeArbitrationPacket.getFinishReason() == 22 ? perfectStartCash : perfectStartCash / 10;
-			rewardVO.add((int) perfectStartExp, (int) perfectStartCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
-		}
-
-		if (routeArbitrationPacket.getTopSpeed() >= 70.0f) {
-			float highSpeedExp = rep * 0.10f; // + 10%
-			float highSpeedCash = cash * 0.10f; // + 10%
-			highSpeedExp = routeArbitrationPacket.getFinishReason() == 22 ? highSpeedExp : highSpeedExp / 10;
-			highSpeedCash = routeArbitrationPacket.getFinishReason() == 22 ? highSpeedCash : highSpeedCash / 10;
-			rewardVO.add((int) highSpeedExp, (int) highSpeedCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
-		}
-
-		float repMult = rewardVO.getRep() * parameterBO.getRepRewardMultiplier();
-		float cashMult = rewardVO.getCash() * parameterBO.getCashRewardMultiplier();
-		rewardVO.add((int) repMult, 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
-		rewardVO.add(0, (int) cashMult, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
-
-		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(routeArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
-		accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
-
-		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+		rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
 		return accolades;
 	}
 
@@ -565,7 +505,7 @@ public class EventBO extends AccoladesFunc {
 		}
 		rewardVO.add((int) rep, (int) cash, EnumRewardCategory.BASE, EnumRewardType.NONE);
 
-		float skillCash = cash * getSkillMultiplicater(personaEntity.getPersonaId(), 0);
+		float skillCash = cash * rewardBO.getSkillMultiplicater(personaEntity.getPersonaId(), 0);
 		rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
 
 		float rankExp = dragArbitrationPacket.getRank() == 1 ? rep * 0.10f : rep * 0.05f; // + 10% if fist, + 5% else
@@ -602,13 +542,13 @@ public class EventBO extends AccoladesFunc {
 		rewardVO.add(0, (int) cashMult, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
 
 		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setFinalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
 		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
-		accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(dragArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
-		accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setHasLeveledUp(rewardBO.isLeveledUp(personaEntity, rewardVO.getRep()));
+		accolades.setLuckyDrawInfo(rewardBO.getLuckyDrawInfo(dragArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
+		accolades.setOriginalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
 
-		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+		rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
 		return accolades;
 	}
 
@@ -630,7 +570,7 @@ public class EventBO extends AccoladesFunc {
 		Integer bustedCount = teamEscapeArbitrationPacket.getBustedCount();
 		Integer finishReason = teamEscapeArbitrationPacket.getFinishReason();
 
-		float skillCash = cash * getSkillMultiplicater(personaEntity.getPersonaId(), 1);
+		float skillCash = cash * rewardBO.getSkillMultiplicater(personaEntity.getPersonaId(), 1);
 		rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
 
 		float copsDeployedExp = rep * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);
@@ -719,28 +659,16 @@ public class EventBO extends AccoladesFunc {
 		rewardVO.add(0, (int) cashMult, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
 
 		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
+		accolades.setFinalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setHasLeveledUp(rewardBO.isLeveledUp(personaEntity, rewardVO.getRep()));
 		if (teamEscapeArbitrationPacket.getFinishReason() == 22) {
-			accolades.setLuckyDrawInfo(getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
+			accolades.setLuckyDrawInfo(rewardBO.getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
 		}
-		accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setOriginalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
 		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
 
-		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+		rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
 		return accolades;
-	}
-
-	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, PersonaEntity personaEntity) {
-		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
-		if (!parameterBO.getBoolParam("ENABLE_DROP_ITEM")) {
-			return luckyDrawInfo;
-		}
-		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(personaEntity));
-		luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
-		luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
-		return luckyDrawInfo;
 	}
 
 	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
