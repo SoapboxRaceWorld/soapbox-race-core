@@ -43,7 +43,8 @@ public class EventResultPursuitBO {
 		boolean legit = legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity);
 
 		if (pursuitArbitrationPacket.getHacksDetected() > 0) {
-			sendReportFromServer(activePersonaId, (int) pursuitArbitrationPacket.getCarId(), pursuitArbitrationPacket.getHacksDetected());
+			socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", (int) pursuitArbitrationPacket.getCarId(), 0,
+					pursuitArbitrationPacket.getHacksDetected());
 		}
 
 		EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
@@ -79,10 +80,6 @@ public class EventResultPursuitBO {
 		pursuitEventResult.setLobbyInviteId(0);
 		pursuitEventResult.setPersonaId(activePersonaId);
 		return pursuitEventResult;
-	}
-
-	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
-		socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", carId, 0, hacksDetected);
 	}
 
 }

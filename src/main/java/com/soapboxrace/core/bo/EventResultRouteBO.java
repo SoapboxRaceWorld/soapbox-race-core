@@ -51,7 +51,8 @@ public class EventResultRouteBO {
 		boolean legit = legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity);
 
 		if (routeArbitrationPacket.getHacksDetected() > 0) {
-			sendReportFromServer(activePersonaId, (int) routeArbitrationPacket.getCarId(), routeArbitrationPacket.getHacksDetected());
+			socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", (int) routeArbitrationPacket.getCarId(), 0,
+					routeArbitrationPacket.getHacksDetected());
 		}
 
 		XMPP_RouteEntrantResultType xmppRouteResult = new XMPP_RouteEntrantResultType();
@@ -117,10 +118,6 @@ public class EventResultRouteBO {
 		routeEventResult.setLobbyInviteId(0);
 		routeEventResult.setPersonaId(activePersonaId);
 		return routeEventResult;
-	}
-
-	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
-		socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", carId, 0, hacksDetected);
 	}
 
 }

@@ -52,7 +52,8 @@ public class EventResultTeamEscapeBO {
 		boolean legit = legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity);
 
 		if (teamEscapeArbitrationPacket.getHacksDetected() > 0) {
-			sendReportFromServer(activePersonaId, (int) teamEscapeArbitrationPacket.getCarId(), teamEscapeArbitrationPacket.getHacksDetected());
+			socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", (int) teamEscapeArbitrationPacket.getCarId(), 0,
+					teamEscapeArbitrationPacket.getHacksDetected());
 		}
 
 		XMPP_TeamEscapeEntrantResultType xmppTeamEscapeResult = new XMPP_TeamEscapeEntrantResultType();
@@ -123,10 +124,6 @@ public class EventResultTeamEscapeBO {
 		teamEscapeEventResult.setLobbyInviteId(0);
 		teamEscapeEventResult.setPersonaId(activePersonaId);
 		return teamEscapeEventResult;
-	}
-
-	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
-		socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", carId, 0, hacksDetected);
 	}
 
 }

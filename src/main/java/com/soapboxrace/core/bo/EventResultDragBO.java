@@ -51,7 +51,8 @@ public class EventResultDragBO {
 		boolean legit = legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity);
 
 		if (dragArbitrationPacket.getHacksDetected() > 0) {
-			sendReportFromServer(activePersonaId, (int) dragArbitrationPacket.getCarId(), dragArbitrationPacket.getHacksDetected());
+			socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", (int) dragArbitrationPacket.getCarId(), 0,
+					dragArbitrationPacket.getHacksDetected());
 		}
 
 		XMPP_DragEntrantResultType xmppDragResult = new XMPP_DragEntrantResultType();
@@ -114,10 +115,6 @@ public class EventResultDragBO {
 		dragEventResult.setLobbyInviteId(0);
 		dragEventResult.setPersonaId(activePersonaId);
 		return dragEventResult;
-	}
-
-	private void sendReportFromServer(Long activePersonaId, Integer carId, Long hacksDetected) {
-		socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", carId, 0, hacksDetected);
 	}
 
 }
