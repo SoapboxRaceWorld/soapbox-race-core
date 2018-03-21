@@ -92,13 +92,14 @@ public class EventResultBO {
 	@EJB
 	private EventResultBO eventResultBO;
 
-	public PursuitEventResult getPursitEnd(Long eventSessionId, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket, Boolean isBusted) {
-		EventSessionEntity sessionEntity = eventSessionDao.findById(eventSessionId);
-		sessionEntity.setEnded(System.currentTimeMillis());
+	public PursuitEventResult getPursitEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
+			Boolean isBusted) {
+		Long eventSessionId = eventSessionEntity.getId();
+		eventSessionEntity.setEnded(System.currentTimeMillis());
 
-		eventSessionDao.update(sessionEntity);
+		eventSessionDao.update(eventSessionEntity);
 
-		boolean legit = legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, sessionEntity);
+		boolean legit = legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity);
 
 		if (pursuitArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int) pursuitArbitrationPacket.getCarId(), pursuitArbitrationPacket.getHacksDetected());
@@ -139,13 +140,13 @@ public class EventResultBO {
 		return pursuitEventResult;
 	}
 
-	public RouteEventResult getRaceEnd(Long eventSessionId, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
-		EventSessionEntity sessionEntity = eventSessionDao.findById(eventSessionId);
-		sessionEntity.setEnded(System.currentTimeMillis());
+	public RouteEventResult getRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
+		Long eventSessionId = eventSessionEntity.getId();
+		eventSessionEntity.setEnded(System.currentTimeMillis());
 
-		eventSessionDao.update(sessionEntity);
+		eventSessionDao.update(eventSessionEntity);
 
-		boolean legit = legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, sessionEntity);
+		boolean legit = legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity);
 
 		if (routeArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int) routeArbitrationPacket.getCarId(), routeArbitrationPacket.getHacksDetected());
@@ -216,13 +217,13 @@ public class EventResultBO {
 		return routeEventResult;
 	}
 
-	public DragEventResult getDragEnd(Long eventSessionId, Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
-		EventSessionEntity sessionEntity = eventSessionDao.findById(eventSessionId);
-		sessionEntity.setEnded(System.currentTimeMillis());
+	public DragEventResult getDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
+		Long eventSessionId = eventSessionEntity.getId();
+		eventSessionEntity.setEnded(System.currentTimeMillis());
 
-		eventSessionDao.update(sessionEntity);
+		eventSessionDao.update(eventSessionEntity);
 
-		boolean legit = legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, sessionEntity);
+		boolean legit = legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity);
 
 		if (dragArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int) dragArbitrationPacket.getCarId(), dragArbitrationPacket.getHacksDetected());
@@ -290,13 +291,14 @@ public class EventResultBO {
 		return dragEventResult;
 	}
 
-	public TeamEscapeEventResult getTeamEscapeEnd(Long eventSessionId, Long activePersonaId, TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
-		EventSessionEntity sessionEntity = eventSessionDao.findById(eventSessionId);
-		sessionEntity.setEnded(System.currentTimeMillis());
+	public TeamEscapeEventResult getTeamEscapeEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
+			TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
+		Long eventSessionId = eventSessionEntity.getId();
+		eventSessionEntity.setEnded(System.currentTimeMillis());
 
-		eventSessionDao.update(sessionEntity);
+		eventSessionDao.update(eventSessionEntity);
 
-		boolean legit = legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, sessionEntity);
+		boolean legit = legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity);
 
 		if (teamEscapeArbitrationPacket.getHacksDetected() > 0) {
 			sendReportFromServer(activePersonaId, (int) teamEscapeArbitrationPacket.getCarId(), teamEscapeArbitrationPacket.getHacksDetected());
