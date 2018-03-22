@@ -31,6 +31,9 @@ public class EventEntity {
 	private boolean isEnabled;
 	private boolean isLocked;
 	private String name;
+	private int cashReward;
+	private int repReward;
+	private long legitTime;
 
 	public int getId() {
 		return id;
@@ -110,6 +113,30 @@ public class EventEntity {
 
 	public void setMaxPlayers(int maxPlayers) {
 		this.maxPlayers = maxPlayers;
+	}
+
+	public int getCashReward() {
+		return cashReward;
+	}
+
+	public void setCashReward(int cashReward) {
+		this.cashReward = cashReward;
+	}
+
+	public int getRepReward() {
+		return repReward;
+	}
+
+	public void setRepReward(int repReward) {
+		this.repReward = repReward;
+	}
+
+	public long getLegitTime() {
+		return legitTime;
+	}
+
+	public void setLegitTime(long legitTime) {
+		this.legitTime = legitTime;
 	}
 
 }

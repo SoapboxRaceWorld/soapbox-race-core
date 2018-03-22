@@ -5,6 +5,7 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.Accolades;
@@ -31,6 +32,7 @@ public class RewardRouteBO {
 		if (!legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity)) {
 			return new Accolades();
 		}
+		EventEntity eventEntity = eventSessionEntity.getEvent();
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
 		RewardVO rewardVO = new RewardVO(parameterBO.getBoolParam("ENABLE_ECONOMY"), parameterBO.getBoolParam("ENABLE_REPUTATION"));
 
@@ -54,8 +56,13 @@ public class RewardRouteBO {
 		rankCash = routeArbitrationPacket.getFinishReason() == 22 ? rankCash : rankCash / 10;
 		rewardVO.add((int) rankExp, (int) rankCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
 
-		float timeRaceExp = rep * (((100000000f / routeArbitrationPacket.getEventDurationInMilliseconds()) / routeArbitrationPacket.getRank()) / 100.0f);
-		float timeRaceCash = cash * (((100000000f / routeArbitrationPacket.getEventDurationInMilliseconds()) / routeArbitrationPacket.getRank()) / 100.0f);
+		float legitTime = eventEntity.getLegitTime();
+		float cashReward = eventEntity.getCashReward();
+		float repReward = eventEntity.getRepReward();
+		float eventDurationInMilliseconds = routeArbitrationPacket.getEventDurationInMilliseconds();
+		float rank = routeArbitrationPacket.getRank();
+		float timeRaceExp = rep * repReward * (legitTime / eventDurationInMilliseconds / rank);
+		float timeRaceCash = cash * cashReward * (legitTime / eventDurationInMilliseconds / rank);
 		timeRaceExp = routeArbitrationPacket.getFinishReason() == 22 ? timeRaceExp : timeRaceExp / 10;
 		timeRaceCash = routeArbitrationPacket.getFinishReason() == 22 ? timeRaceCash : timeRaceCash / 10;
 		rewardVO.add((int) timeRaceExp, (int) timeRaceCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
