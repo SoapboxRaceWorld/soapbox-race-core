@@ -9,6 +9,7 @@ import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
+import com.soapboxrace.jaxb.http.ArbitrationPacket;
 import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
@@ -42,13 +43,7 @@ public class EventResultRouteBO {
 		eventSessionDao.update(eventSessionEntity);
 
 		EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
-		// ArbitrationPacket
-		eventDataEntity.setAlternateEventDurationInMilliseconds(routeArbitrationPacket.getAlternateEventDurationInMilliseconds());
-		eventDataEntity.setCarId(routeArbitrationPacket.getCarId());
-		eventDataEntity.setEventDurationInMilliseconds(routeArbitrationPacket.getEventDurationInMilliseconds());
-		eventDataEntity.setFinishReason(routeArbitrationPacket.getFinishReason());
-		eventDataEntity.setHacksDetected(routeArbitrationPacket.getHacksDetected());
-		eventDataEntity.setRank(routeArbitrationPacket.getRank());
+		updateEventDataEntity(eventDataEntity, routeArbitrationPacket);
 
 		// RouteArbitrationPacket
 		eventDataEntity.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
@@ -89,6 +84,15 @@ public class EventResultRouteBO {
 		routeEventResult.setPersonaId(activePersonaId);
 		sendXmppPacket(eventSessionId, activePersonaId, routeArbitrationPacket);
 		return routeEventResult;
+	}
+
+	private void updateEventDataEntity(EventDataEntity eventDataEntity, ArbitrationPacket arbitrationPacket) {
+		eventDataEntity.setAlternateEventDurationInMilliseconds(arbitrationPacket.getAlternateEventDurationInMilliseconds());
+		eventDataEntity.setCarId(arbitrationPacket.getCarId());
+		eventDataEntity.setEventDurationInMilliseconds(arbitrationPacket.getEventDurationInMilliseconds());
+		eventDataEntity.setFinishReason(arbitrationPacket.getFinishReason());
+		eventDataEntity.setHacksDetected(arbitrationPacket.getHacksDetected());
+		eventDataEntity.setRank(arbitrationPacket.getRank());
 	}
 
 	private void sendXmppPacket(Long eventSessionId, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
