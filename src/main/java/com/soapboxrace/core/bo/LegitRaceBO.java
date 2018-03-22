@@ -37,6 +37,10 @@ public class LegitRaceBO {
 		if (!legit) {
 			socialBo.sendReport(0L, activePersonaId, 3, String.format("Abnormal event time: %d", timeDiff), (int) arbitrationPacket.getCarId(), 0, 0L);
 		}
+		if (arbitrationPacket.getHacksDetected() > 0) {
+			socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", (int) arbitrationPacket.getCarId(), 0,
+					arbitrationPacket.getHacksDetected());
+		}
 		return legit;
 	}
 }

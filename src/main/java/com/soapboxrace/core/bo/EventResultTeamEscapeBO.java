@@ -28,9 +28,6 @@ public class EventResultTeamEscapeBO {
 	private EventDataDAO eventDataDao;
 
 	@EJB
-	private SocialBO socialBo;
-
-	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
 
 	@EJB
@@ -48,13 +45,6 @@ public class EventResultTeamEscapeBO {
 		eventSessionEntity.setEnded(System.currentTimeMillis());
 
 		eventSessionDao.update(eventSessionEntity);
-
-		boolean legit = legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity);
-
-		if (teamEscapeArbitrationPacket.getHacksDetected() > 0) {
-			socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", (int) teamEscapeArbitrationPacket.getCarId(), 0,
-					teamEscapeArbitrationPacket.getHacksDetected());
-		}
 
 		XMPP_TeamEscapeEntrantResultType xmppTeamEscapeResult = new XMPP_TeamEscapeEntrantResultType();
 		xmppTeamEscapeResult.setEventDurationInMilliseconds(teamEscapeArbitrationPacket.getEventDurationInMilliseconds());
@@ -112,6 +102,7 @@ public class EventResultTeamEscapeBO {
 			}
 		}
 
+		boolean legit = legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity);
 		TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
 		teamEscapeEventResult.setAccolades(legit ? rewardTeamEscapeBO.getTeamEscapeAccolades(activePersonaId, teamEscapeArbitrationPacket) : new Accolades());
 		teamEscapeEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, teamEscapeArbitrationPacket.getCarId(),

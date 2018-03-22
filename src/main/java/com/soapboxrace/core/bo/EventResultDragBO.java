@@ -28,9 +28,6 @@ public class EventResultDragBO {
 	private EventDataDAO eventDataDao;
 
 	@EJB
-	private SocialBO socialBo;
-
-	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
 
 	@EJB
@@ -47,13 +44,6 @@ public class EventResultDragBO {
 		eventSessionEntity.setEnded(System.currentTimeMillis());
 
 		eventSessionDao.update(eventSessionEntity);
-
-		boolean legit = legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity);
-
-		if (dragArbitrationPacket.getHacksDetected() > 0) {
-			socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", (int) dragArbitrationPacket.getCarId(), 0,
-					dragArbitrationPacket.getHacksDetected());
-		}
 
 		XMPP_DragEntrantResultType xmppDragResult = new XMPP_DragEntrantResultType();
 		xmppDragResult.setEventDurationInMilliseconds(dragArbitrationPacket.getEventDurationInMilliseconds());
@@ -103,6 +93,7 @@ public class EventResultDragBO {
 			}
 		}
 
+		boolean legit = legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity);
 		DragEventResult dragEventResult = new DragEventResult();
 		dragEventResult.setAccolades(legit ? rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket) : new Accolades());
 		dragEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, dragArbitrationPacket.getCarId(),

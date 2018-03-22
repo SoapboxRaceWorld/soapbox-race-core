@@ -22,9 +22,6 @@ public class EventResultPursuitBO {
 	private EventDataDAO eventDataDao;
 
 	@EJB
-	private SocialBO socialBo;
-
-	@EJB
 	private RewardPursuitBO rewardPursuitBO;
 
 	@EJB
@@ -39,13 +36,6 @@ public class EventResultPursuitBO {
 		eventSessionEntity.setEnded(System.currentTimeMillis());
 
 		eventSessionDao.update(eventSessionEntity);
-
-		boolean legit = legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity);
-
-		if (pursuitArbitrationPacket.getHacksDetected() > 0) {
-			socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", (int) pursuitArbitrationPacket.getCarId(), 0,
-					pursuitArbitrationPacket.getHacksDetected());
-		}
 
 		EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
 		eventDataEntity.setAlternateEventDurationInMilliseconds(pursuitArbitrationPacket.getAlternateEventDurationInMilliseconds());
@@ -68,6 +58,7 @@ public class EventResultPursuitBO {
 		eventDataEntity.setTopSpeed(pursuitArbitrationPacket.getTopSpeed());
 		eventDataDao.update(eventDataEntity);
 
+		boolean legit = legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity);
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
 		pursuitEventResult.setAccolades(legit ? rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket, isBusted) : new Accolades());
 		pursuitEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, pursuitArbitrationPacket.getCarId(), 0,
