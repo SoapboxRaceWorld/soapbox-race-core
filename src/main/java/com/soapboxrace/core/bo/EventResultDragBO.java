@@ -9,7 +9,6 @@ import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
-import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
 import com.soapboxrace.jaxb.http.DragArbitrationPacket;
 import com.soapboxrace.jaxb.http.DragEntrantResult;
@@ -32,9 +31,6 @@ public class EventResultDragBO {
 
 	@EJB
 	private RewardDragBO rewardDragBO;
-
-	@EJB
-	private LegitRaceBO legitRaceBO;
 
 	@EJB
 	private CarDamageBO carDamageBO;
@@ -93,9 +89,8 @@ public class EventResultDragBO {
 			}
 		}
 
-		boolean legit = legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity);
 		DragEventResult dragEventResult = new DragEventResult();
-		dragEventResult.setAccolades(legit ? rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket) : new Accolades());
+		dragEventResult.setAccolades(rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket, eventSessionEntity));
 		dragEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, dragArbitrationPacket.getCarId(),
 				dragArbitrationPacket.getNumberOfCollisions(), dragArbitrationPacket.getEventDurationInMilliseconds()));
 		dragEventResult.setEntrants(arrayOfDragEntrantResult);

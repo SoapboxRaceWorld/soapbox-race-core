@@ -9,7 +9,6 @@ import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
-import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
@@ -32,9 +31,6 @@ public class EventResultTeamEscapeBO {
 
 	@EJB
 	private RewardTeamEscapeBO rewardTeamEscapeBO;
-
-	@EJB
-	private LegitRaceBO legitRaceBO;
 
 	@EJB
 	private CarDamageBO carDamageBO;
@@ -102,9 +98,8 @@ public class EventResultTeamEscapeBO {
 			}
 		}
 
-		boolean legit = legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity);
 		TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
-		teamEscapeEventResult.setAccolades(legit ? rewardTeamEscapeBO.getTeamEscapeAccolades(activePersonaId, teamEscapeArbitrationPacket) : new Accolades());
+		teamEscapeEventResult.setAccolades(rewardTeamEscapeBO.getTeamEscapeAccolades(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity));
 		teamEscapeEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, teamEscapeArbitrationPacket.getCarId(),
 				teamEscapeArbitrationPacket.getNumberOfCollisions(), teamEscapeArbitrationPacket.getEventDurationInMilliseconds()));
 		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);

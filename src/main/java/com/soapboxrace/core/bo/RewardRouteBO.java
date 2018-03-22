@@ -5,6 +5,7 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.EnumRewardCategory;
@@ -23,7 +24,13 @@ public class RewardRouteBO {
 	@EJB
 	private RewardBO rewardBO;
 
-	public Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
+	@EJB
+	private LegitRaceBO legitRaceBO;
+
+	public Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket, EventSessionEntity eventSessionEntity) {
+		if (!legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity)) {
+			return new Accolades();
+		}
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
 		RewardVO rewardVO = new RewardVO(parameterBO.getBoolParam("ENABLE_ECONOMY"), parameterBO.getBoolParam("ENABLE_REPUTATION"));
 

@@ -7,7 +7,6 @@ import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
@@ -23,9 +22,6 @@ public class EventResultPursuitBO {
 
 	@EJB
 	private RewardPursuitBO rewardPursuitBO;
-
-	@EJB
-	private LegitRaceBO legitRaceBO;
 
 	@EJB
 	private CarDamageBO carDamageBO;
@@ -58,9 +54,8 @@ public class EventResultPursuitBO {
 		eventDataEntity.setTopSpeed(pursuitArbitrationPacket.getTopSpeed());
 		eventDataDao.update(eventDataEntity);
 
-		boolean legit = legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity);
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
-		pursuitEventResult.setAccolades(legit ? rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket, isBusted) : new Accolades());
+		pursuitEventResult.setAccolades(rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket, eventSessionEntity, isBusted));
 		pursuitEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, pursuitArbitrationPacket.getCarId(), 0,
 				pursuitArbitrationPacket.getEventDurationInMilliseconds()));
 		pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());

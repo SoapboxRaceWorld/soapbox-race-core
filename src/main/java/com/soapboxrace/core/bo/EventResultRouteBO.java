@@ -9,7 +9,6 @@ import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
-import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
@@ -32,9 +31,6 @@ public class EventResultRouteBO {
 
 	@EJB
 	private RewardRouteBO rewardRouteBO;
-
-	@EJB
-	private LegitRaceBO legitRaceBO;
 
 	@EJB
 	private CarDamageBO carDamageBO;
@@ -96,9 +92,8 @@ public class EventResultRouteBO {
 			}
 		}
 
-		boolean legit = legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity);
 		RouteEventResult routeEventResult = new RouteEventResult();
-		routeEventResult.setAccolades(legit ? rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket) : new Accolades());
+		routeEventResult.setAccolades(rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket, eventSessionEntity));
 		routeEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, routeArbitrationPacket.getCarId(),
 				routeArbitrationPacket.getNumberOfCollisions(), routeArbitrationPacket.getEventDurationInMilliseconds()));
 		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
