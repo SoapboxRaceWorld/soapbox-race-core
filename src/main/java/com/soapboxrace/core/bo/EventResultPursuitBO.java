@@ -56,8 +56,7 @@ public class EventResultPursuitBO {
 
 		PursuitEventResult pursuitEventResult = new PursuitEventResult();
 		pursuitEventResult.setAccolades(rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket, eventSessionEntity, isBusted));
-		pursuitEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, pursuitArbitrationPacket.getCarId(), 0,
-				pursuitArbitrationPacket.getEventDurationInMilliseconds()));
+		pursuitEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, pursuitArbitrationPacket, 0));
 		pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
 		pursuitEventResult.setEventSessionId(eventSessionId);
 		pursuitEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);

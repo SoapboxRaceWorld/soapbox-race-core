@@ -7,6 +7,7 @@ import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.OwnedCarEntity;
+import com.soapboxrace.jaxb.http.ArbitrationPacket;
 
 @Stateless
 public class CarDamageBO {
@@ -20,10 +21,12 @@ public class CarDamageBO {
 	@EJB
 	private ParameterBO parameterBO;
 
-	public Integer updateDamageCar(Long personaId, Long carId, Integer numberOfCollision, Long eventDuration) {
+	public Integer updateDamageCar(Long personaId, ArbitrationPacket arbitrationPacket, Integer numberOfCollision) {
 		if (!parameterBO.getBoolParam("ENABLE_CAR_DAMAGE")) {
 			return 100;
 		}
+		Long carId = arbitrationPacket.getCarId();
+		Long eventDuration = arbitrationPacket.getEventDurationInMilliseconds();
 		OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(carId);
 		CarSlotEntity carSlotEntity = ownedCarEntity.getCarSlot();
 		int durability = ownedCarEntity.getDurability();
