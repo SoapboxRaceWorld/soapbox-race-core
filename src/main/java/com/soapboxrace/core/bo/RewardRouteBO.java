@@ -57,8 +57,8 @@ public class RewardRouteBO {
 		rewardVO.add((int) rankExp, (int) rankCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
 
 		float legitTime = eventEntity.getLegitTime();
-		float cashReward = eventEntity.getCashReward();
-		float repReward = eventEntity.getRepReward();
+		float cashReward = eventEntity.getBaseCashReward();
+		float repReward = eventEntity.getBaseRepReward();
 		float eventDurationInMilliseconds = routeArbitrationPacket.getEventDurationInMilliseconds();
 		float rank = routeArbitrationPacket.getRank();
 		float timeRaceExp = rep * repReward * (legitTime / eventDurationInMilliseconds / rank);
