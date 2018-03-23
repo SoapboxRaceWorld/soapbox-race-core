@@ -28,16 +28,29 @@ public class RewardRouteBO {
 	@EJB
 	private LegitRaceBO legitRaceBO;
 
-	public void setBaseReward(PersonaEntity personaEntity, EventEntity eventEntity, RouteArbitrationPacket routeArbitrationPacket, RewardVO rewardVO) {
-		Float baseCashReward = (float) eventEntity.getBaseCashReward();
-		Float levelCashRewardMultiplier = eventEntity.getLevelCashRewardMultiplier();
-		Float level = (float) personaEntity.getLevel();
-		Float routeTime = (float) routeArbitrationPacket.getEventDurationInMilliseconds();
-		Float legitTime = (float) eventEntity.getLegitTime();
+	public Float getPlayerLevelConst(int playerLevel, float levelCashRewardMultiplier) {
+		Float level = (float) playerLevel;
+		return levelCashRewardMultiplier * level.floatValue();
+	}
+
+	public Float getTimeConst(Long legitTime, Long routeTime) {
 		Float timeConst = legitTime.floatValue() / routeTime.floatValue();
-		timeConst = Math.min(timeConst, 1);
-		baseCashReward = baseCashReward.floatValue() * levelCashRewardMultiplier.floatValue() * level.floatValue() * timeConst.floatValue();
-		rewardVO.setBaseCash(baseCashReward.intValue());
+		return Math.min(timeConst, 1f);
+	}
+
+	public int getBaseReward(float baseReward, float playerLevelConst, float timeConst) {
+		Float baseRewardResult = baseReward * playerLevelConst * timeConst;
+		return baseRewardResult.intValue();
+	}
+
+	public void setBaseReward(PersonaEntity personaEntity, EventEntity eventEntity, RouteArbitrationPacket routeArbitrationPacket, RewardVO rewardVO) {
+		Float baseRep = (float) eventEntity.getBaseRepReward();
+		Float baseCash = (float) eventEntity.getBaseCashReward();
+		Float playerLevelRepConst = getPlayerLevelConst(personaEntity.getLevel(), eventEntity.getLevelRepRewardMultiplier());
+		Float playerLevelCashConst = getPlayerLevelConst(personaEntity.getLevel(), eventEntity.getLevelCashRewardMultiplier());
+		Float timeConst = getTimeConst(eventEntity.getLegitTime(), routeArbitrationPacket.getEventDurationInMilliseconds());
+		rewardVO.setBaseRep(getBaseReward(baseRep, playerLevelRepConst, timeConst));
+		rewardVO.setBaseCash(getBaseReward(baseCash, playerLevelCashConst, timeConst));
 	}
 
 	public Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket, EventSessionEntity eventSessionEntity) {
