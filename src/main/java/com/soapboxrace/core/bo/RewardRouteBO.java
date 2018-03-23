@@ -28,6 +28,18 @@ public class RewardRouteBO {
 	@EJB
 	private LegitRaceBO legitRaceBO;
 
+	public void setBaseReward(PersonaEntity personaEntity, EventEntity eventEntity, RouteArbitrationPacket routeArbitrationPacket, RewardVO rewardVO) {
+		Float baseCashReward = (float) eventEntity.getBaseCashReward();
+		Float levelCashRewardMultiplier = eventEntity.getLevelCashRewardMultiplier();
+		Float level = (float) personaEntity.getLevel();
+		Float routeTime = (float) routeArbitrationPacket.getEventDurationInMilliseconds();
+		Float legitTime = (float) eventEntity.getLegitTime();
+		Float timeConst = legitTime.floatValue() / routeTime.floatValue();
+		timeConst = Math.min(timeConst, 1);
+		baseCashReward = baseCashReward.floatValue() * levelCashRewardMultiplier.floatValue() * level.floatValue() * timeConst.floatValue();
+		rewardVO.setBaseCash(baseCashReward.intValue());
+	}
+
 	public Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket, EventSessionEntity eventSessionEntity) {
 		if (!legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity)) {
 			return new Accolades();
