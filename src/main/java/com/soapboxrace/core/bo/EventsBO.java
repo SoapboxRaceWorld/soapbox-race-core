@@ -7,14 +7,16 @@ import java.util.Random;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.TreasureHuntDAO;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.SkillModRewardType;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.jaxb.http.Accolades;
+import com.soapboxrace.jaxb.http.ArbitrationPacket;
 import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawBox;
 import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
-import com.soapboxrace.jaxb.http.ArrayOfRewardPart;
 import com.soapboxrace.jaxb.http.EnumRewardCategory;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.LuckyDrawBox;
@@ -108,35 +110,30 @@ public class EventsBO {
 	private Accolades getTreasureHuntAccolades(Long activePersonaId, TreasureHuntEntity treasureHuntEntity) {
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
 
-		// Maths begin
-		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		float exp = personaEntity.getLevel() >= 60 ? 0 : 200 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
-		float cash = personaEntity.getCash() >= 9999999 ? 0 : 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
-		arrayOfRewardPart.getRewardPart().add(rewardBO.getRewardPart((int) exp, (int) cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		Float baseRep = 200 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
+		Float baseCash = 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
 
-		cash += cash * rewardBO.getSkillMultiplicater(personaEntity.getPersonaId(), 2);
-		arrayOfRewardPart.getRewardPart().add(rewardBO.getRewardPart(0, (int) cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
+		RewardVO rewardVO = rewardBO.getRewardVO(personaEntity);
+		rewardVO.setBaseRep(baseRep.intValue());
+		rewardVO.setBaseCash(baseCash.intValue());
 
-		float dayExp = exp + (100 * treasureHuntEntity.getStreak()); // + 100 per day
-		float dayCash = cash + (100 * treasureHuntEntity.getStreak()); // + 100 per day
-		arrayOfRewardPart.getRewardPart().add(rewardBO.getRewardPart((int) dayExp, (int) dayCash, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		Float dayRep = baseRep + (100f * treasureHuntEntity.getStreak()); // + 100 per day
+		Float dayCash = baseCash + (100f * treasureHuntEntity.getStreak()); // + 100 per day
 
-		exp += (int) dayExp;
-		cash += (int) dayCash;
-		// Maths ending
+		rewardVO.add(dayRep.intValue(), dayCash.intValue(), EnumRewardCategory.BASE, EnumRewardType.NONE);
+		rewardBO.setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.EXPLORER);
 
-		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(rewardBO.getFinalReward((int) exp, (int) cash));
-		accolades.setHasLeveledUp(rewardBO.isLeveledUp(personaEntity, (int) exp));
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(getRank(treasureHuntEntity.getStreak()), personaEntity.getLevel(), treasureHuntEntity));
-		accolades.setOriginalRewards(rewardBO.getFinalReward((int) exp, (int) cash));
-		accolades.setRewardInfo(arrayOfRewardPart);
+		rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
 
-		rewardBO.applyRaceReward((int) exp, (int) cash, personaEntity);
+		ArbitrationPacket arbitrationPacket = new ArbitrationPacket();
+		arbitrationPacket.setRank(1);
+		Accolades accolades = rewardBO.getAccolades(personaEntity, arbitrationPacket, rewardVO);
+		accolades.setLuckyDrawInfo(getLuckyDrawInfo(treasureHuntEntity));
+
 		return accolades;
 	}
 
-	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, TreasureHuntEntity treasureHuntEntity) {
+	private LuckyDrawInfo getLuckyDrawInfo(TreasureHuntEntity treasureHuntEntity) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
 		arrayOfLuckyDrawItem.getLuckyDrawItem().add(rewardBO.getItemFromProduct(personaDao.findById(treasureHuntEntity.getPersonaId())));
 
@@ -160,16 +157,4 @@ public class EventsBO {
 		return luckyDrawInfo;
 	}
 
-	private Integer getRank(Integer days) {
-		if (days >= 100) {
-			return 1;
-		} else if (days >= 70) {
-			return 2;
-		} else if (days >= 50) {
-			return 3;
-		} else if (days >= 30) {
-			return 4;
-		}
-		return 5;
-	}
 }
