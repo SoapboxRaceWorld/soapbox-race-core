@@ -32,7 +32,7 @@ public class ProductEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
 	private String bundleItems;
 	private String categoryId;
@@ -62,6 +62,7 @@ public class ProductEntity {
 	private Integer topSpeed = 0;
 	private Integer accel = 0;
 	private Integer handling = 0;
+	private Float skillValue;
 
 	public Long getId() {
 		return id;
@@ -294,4 +295,13 @@ public class ProductEntity {
 	public void setHandling(Integer handling) {
 		this.handling = handling;
 	}
+
+	public Float getSkillValue() {
+		return skillValue;
+	}
+
+	public void setSkillValue(Float skillValue) {
+		this.skillValue = skillValue;
+	}
+
 }
