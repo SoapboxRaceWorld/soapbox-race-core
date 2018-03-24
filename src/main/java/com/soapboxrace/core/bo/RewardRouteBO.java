@@ -8,6 +8,7 @@ import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.SkillModRewardType;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
 
@@ -32,7 +33,7 @@ public class RewardRouteBO extends RewardBO {
 		setRankReward(eventEntity, routeArbitrationPacket, rewardVO);
 		setPerfectStartReward(eventEntity, routeArbitrationPacket.getPerfectStart(), rewardVO);
 		setTopSpeedReward(eventEntity, routeArbitrationPacket.getTopSpeed(), rewardVO);
-		setSkillMultiplierReward(personaEntity, rewardVO);
+		setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.SOCIALITE);
 		setMultiplierReward(eventEntity, rewardVO);
 
 		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);

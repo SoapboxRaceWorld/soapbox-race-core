@@ -8,10 +8,14 @@ import javax.ejb.Stateless;
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.LevelRepDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.ProductDAO;
+import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CardDecks;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.core.jpa.SkillModPartEntity;
+import com.soapboxrace.core.jpa.SkillModRewardType;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
 import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
@@ -43,6 +47,9 @@ public class RewardBO {
 
 	@EJB
 	private PersonaDAO personaDao;
+
+	@EJB
+	private ProductDAO productDAO;
 
 	public float getSkillMultiplicater(Long personaId, Integer type) {
 		float multi = 0.0f;
@@ -331,10 +338,25 @@ public class RewardBO {
 		}
 	}
 
-	public void setSkillMultiplierReward(PersonaEntity personaEntity, RewardVO rewardVO) {
-		// TODO getCarSkillMultipliers from db
-		rewardVO.add(0, 0, EnumRewardCategory.SKILL_MOD, EnumRewardType.REP_AMPLIFIER);
-		rewardVO.add(0, 0, EnumRewardCategory.SKILL_MOD, EnumRewardType.TOKEN_AMPLIFIER);
+	public void setSkillMultiplierReward(PersonaEntity personaEntity, RewardVO rewardVO, SkillModRewardType skillModRewardType) {
+		CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
+		List<SkillModPartEntity> skillModParts = defaultCarEntity.getOwnedCar().getCustomCar().getSkillModParts();
+		float skillMultiplier = 0f;
+		float maxSkillMultiplier = 30f;
+		if (SkillModRewardType.EXPLORER.equals(skillModRewardType)) {
+			maxSkillMultiplier = 50f;
+		}
+		for (SkillModPartEntity skillModPartEntity : skillModParts) {
+			ProductEntity productEntity = productDAO.findByHash(skillModPartEntity.getSkillModPartAttribHash());
+			if (productEntity != null && productEntity.getProductTitle().equals(skillModRewardType.toString())) {
+				float skillValue = productEntity.getSkillValue();
+				skillMultiplier = skillMultiplier + skillValue;
+			}
+		}
+		float finalSkillMultiplier = Math.min(maxSkillMultiplier, skillMultiplier) / 100;
+		float cash = rewardVO.getCash();
+		Float finalCash = cash * finalSkillMultiplier;
+		rewardVO.add(0, finalCash.intValue(), EnumRewardCategory.SKILL_MOD, EnumRewardType.TOKEN_AMPLIFIER);
 	}
 
 	public Accolades getAccolades(PersonaEntity personaEntity, ArbitrationPacket routeArbitrationPacket, RewardVO rewardVO) {
