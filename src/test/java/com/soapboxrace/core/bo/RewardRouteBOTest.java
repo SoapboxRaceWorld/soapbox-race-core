@@ -1,7 +1,7 @@
 package com.soapboxrace.core.bo;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.soapboxrace.core.bo.util.RewardVO;
@@ -11,14 +11,14 @@ import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
 
 public class RewardRouteBOTest {
 
-	private RewardRouteBO rewardRouteBO;
-	private EventEntity eventEntity;
-	private RouteArbitrationPacket routeArbitrationPacket;
-	private RewardVO rewardVO;
-	private PersonaEntity personaEntity;
+	private static RewardRouteBO rewardRouteBO;
+	private static EventEntity eventEntity;
+	private static RouteArbitrationPacket routeArbitrationPacket;
+	private static RewardVO rewardVO;
+	private static PersonaEntity personaEntity;
 
-	@Before
-	public void mock() {
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 		rewardRouteBO = new RewardRouteBO();
 		eventEntity = new EventEntity();
 		routeArbitrationPacket = new RouteArbitrationPacket();
