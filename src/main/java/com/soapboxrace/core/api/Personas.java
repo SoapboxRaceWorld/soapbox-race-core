@@ -243,7 +243,7 @@ public class Personas {
 	}
 
 	@GET
-//	@Secured
+	@Secured
 	@Path("/{personaId}/cars/{carId}")
 	@Produces(MediaType.APPLICATION_XML)
 	public OwnedCarTrans carsGet(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId) {
