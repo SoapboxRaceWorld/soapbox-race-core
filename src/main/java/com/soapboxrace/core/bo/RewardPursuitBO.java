@@ -13,16 +13,13 @@ import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 
 @Stateless
-public class RewardPursuitBO {
+public class RewardPursuitBO extends RewardBO {
 
 	@EJB
 	private PersonaDAO personaDao;
 
 	@EJB
 	private ParameterBO parameterBO;
-
-	@EJB
-	private RewardBO rewardBO;
 
 	@EJB
 	private LegitRaceBO legitRaceBO;
@@ -46,7 +43,7 @@ public class RewardPursuitBO {
 				cash = 600.0f * (personaEntity.getLevel() / 10.0f);
 			}
 			rewardVO.add((int) rep, (int) cash, EnumRewardCategory.PURSUIT, EnumRewardType.EVADED);
-			float skillCash = cash * rewardBO.getSkillMultiplicater(personaEntity.getPersonaId(), 1);
+			float skillCash = cash * getSkillMultiplicater(personaEntity.getPersonaId(), 1);
 			rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
 
 			float copsDeployedExp = rep * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
@@ -94,15 +91,15 @@ public class RewardPursuitBO {
 
 		Accolades accolades = new Accolades();
 
-		accolades.setFinalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setHasLeveledUp(rewardBO.isLeveledUp(personaEntity, rewardVO.getRep()));
+		accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
 		if (!isBusted) {
-			accolades.setLuckyDrawInfo(rewardBO.getLuckyDrawInfo(1, personaEntity.getLevel(), personaEntity));
+			accolades.setLuckyDrawInfo(getLuckyDrawInfo(1, personaEntity.getLevel(), personaEntity));
 		}
-		accolades.setOriginalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
 		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
 
-		rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
 		return accolades;
 	}
 }

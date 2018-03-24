@@ -13,16 +13,13 @@ import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
 
 @Stateless
-public class RewardTeamEscapeBO {
+public class RewardTeamEscapeBO extends RewardBO {
 
 	@EJB
 	private PersonaDAO personaDao;
 
 	@EJB
 	private ParameterBO parameterBO;
-
-	@EJB
-	private RewardBO rewardBO;
 
 	@EJB
 	private LegitRaceBO legitRaceBO;
@@ -50,7 +47,7 @@ public class RewardTeamEscapeBO {
 		Integer bustedCount = teamEscapeArbitrationPacket.getBustedCount();
 		Integer finishReason = teamEscapeArbitrationPacket.getFinishReason();
 
-		float skillCash = cash * rewardBO.getSkillMultiplicater(personaEntity.getPersonaId(), 1);
+		float skillCash = cash * getSkillMultiplicater(personaEntity.getPersonaId(), 1);
 		rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
 
 		float copsDeployedExp = rep * (teamEscapeArbitrationPacket.getCopsDeployed() / 175.0f);
@@ -139,15 +136,15 @@ public class RewardTeamEscapeBO {
 		rewardVO.add(0, (int) cashMult, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
 
 		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setHasLeveledUp(rewardBO.isLeveledUp(personaEntity, rewardVO.getRep()));
+		accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
 		if (teamEscapeArbitrationPacket.getFinishReason() == 22) {
-			accolades.setLuckyDrawInfo(rewardBO.getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
+			accolades.setLuckyDrawInfo(getLuckyDrawInfo(teamEscapeArbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
 		}
-		accolades.setOriginalRewards(rewardBO.getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+		accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
 		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
 
-		rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
 		return accolades;
 	}
 }
