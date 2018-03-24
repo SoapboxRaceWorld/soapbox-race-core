@@ -1,10 +1,13 @@
 package com.soapboxrace.core.bo;
 
+import java.util.Random;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.Accolades;
@@ -29,21 +32,13 @@ public class RewardPursuitBO extends RewardBO {
 		if (!legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity) || isBusted) {
 			return new Accolades();
 		}
+		EventEntity eventEntity = eventSessionEntity.getEvent();
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-		RewardVO rewardVO = new RewardVO(parameterBO.getBoolParam("ENABLE_ECONOMY"), parameterBO.getBoolParam("ENABLE_REPUTATION"));
+		RewardVO rewardVO = getRewardVO(personaEntity);
 
-		float rep = 0;
-		float cash = 0;
-
-		if (personaEntity.getLevel() < 60) {
-			rep = 200.0f * (personaEntity.getLevel() / 10.0f);
-		}
-		if (personaEntity.getCash() < 9999999) {
-			cash = 600.0f * (personaEntity.getLevel() / 10.0f);
-		}
-		rewardVO.add((int) rep, (int) cash, EnumRewardCategory.PURSUIT, EnumRewardType.EVADED);
-		float skillCash = cash * getSkillMultiplicater(personaEntity.getPersonaId(), 1);
-		rewardVO.add(0, (int) skillCash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD);
+		setBaseReward(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
+		float rep = rewardVO.getBaseRep();
+		float cash = rewardVO.getBaseCash();
 
 		float copsDeployedExp = rep * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
 		float copsDeployedCash = cash * (pursuitArbitrationPacket.getCopsDeployed() / 200.0f);
@@ -81,20 +76,13 @@ public class RewardPursuitBO extends RewardBO {
 		float spikeStripsDodgedCash = cash * (pursuitArbitrationPacket.getSpikeStripsDodged() / 50.0f);
 		rewardVO.add((int) spikeStripsDodgedExp, (int) spikeStripsDodgedCash, EnumRewardCategory.PURSUIT, EnumRewardType.SPIKE_STRIPS_DODGED);
 
-		float repMult = rewardVO.getRep() * parameterBO.getRepRewardMultiplier();
-		float cashMult = rewardVO.getCash() * parameterBO.getCashRewardMultiplier();
-		rewardVO.add((int) repMult, 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
-		rewardVO.add(0, (int) cashMult, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
+		setTopSpeedReward(eventEntity, pursuitArbitrationPacket.getTopSpeed(), rewardVO);
+		setSkillMultiplierReward(personaEntity, rewardVO);
+		setMultiplierReward(eventEntity, rewardVO);
 
-		Accolades accolades = new Accolades();
-
-		accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(1, personaEntity.getLevel(), personaEntity));
-		accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
-		accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
-
+		Random random = new Random();
+		pursuitArbitrationPacket.setRank(random.nextInt(4));
 		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
-		return accolades;
+		return getAccolades(personaEntity, pursuitArbitrationPacket, rewardVO);
 	}
 }
