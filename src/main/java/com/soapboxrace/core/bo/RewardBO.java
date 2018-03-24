@@ -279,36 +279,33 @@ public class RewardBO {
 	}
 
 	public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
-		// Cash parts
 		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
 			Integer cashMax = (int) personaEntity.getCash() + cash;
 			personaEntity.setCash(cashMax > 9999999 ? 9999999 : cashMax < 1 ? 1 : cashMax);
 		}
 
-		// Exp parts
-		if (parameterBO.getBoolParam("ENABLE_REPUTATION")) {
-			if (personaEntity.getLevel() < 60) {
-				Long expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
-				Long expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
-				if (expMax >= expToNextLevel) {
-					Boolean isLeveledUp = true;
-					while (isLeveledUp) {
-						personaEntity.setLevel(personaEntity.getLevel() + 1);
-						personaEntity.setRepAtCurrentLevel((int) (expMax - expToNextLevel));
+		if (parameterBO.getBoolParam("ENABLE_REPUTATION") && personaEntity.getLevel() < 60) {
+			Long expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
+			Long expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
+			if (expMax >= expToNextLevel) {
+				Boolean isLeveledUp = true;
+				while (isLeveledUp) {
+					personaEntity.setLevel(personaEntity.getLevel() + 1);
+					personaEntity.setRepAtCurrentLevel((int) (expMax - expToNextLevel));
 
-						expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
-						expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
+					expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
+					expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
 
-						isLeveledUp = (expMax >= expToNextLevel);
+					isLeveledUp = (expMax >= expToNextLevel);
+					if (personaEntity.getLevel() >= 60) {
+						isLeveledUp = false;
 					}
-				} else {
-					personaEntity.setRepAtCurrentLevel(expMax.intValue());
 				}
-				personaEntity.setRep(personaEntity.getRep() + exp);
+			} else {
+				personaEntity.setRepAtCurrentLevel(expMax.intValue());
 			}
+			personaEntity.setRep(personaEntity.getRep() + exp);
 		}
-
-		// Save parts
 		personaDao.update(personaEntity);
 	}
 
@@ -454,5 +451,20 @@ public class RewardBO {
 			enableEconomy = false;
 		}
 		return new RewardVO(enableEconomy, enableReputation);
+	}
+
+	public void setPursitParamReward(float rewardValue, EnumRewardType enumRewardType, RewardVO rewardVO) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("PURSUIT_");
+		stringBuilder.append(enumRewardType.toString());
+		String rewardMultiplierStr = stringBuilder.toString().concat("_REP_MULTIPLIER");
+		String cashMultiplierStr = stringBuilder.toString().concat("_CASH_MULTIPLIER");
+		float rewardMultiplier = parameterBO.getFloatParam(rewardMultiplierStr);
+		float cashMultiplier = parameterBO.getFloatParam(cashMultiplierStr);
+		float baseRep = rewardVO.getBaseRep();
+		float baseCash = rewardVO.getBaseCash();
+		Float repReward = baseRep * rewardValue * rewardMultiplier;
+		Float cashReward = baseCash * rewardValue * cashMultiplier;
+		rewardVO.add(repReward.intValue(), cashReward.intValue(), EnumRewardCategory.PURSUIT, enumRewardType);
 	}
 }
