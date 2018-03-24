@@ -1,49 +1,32 @@
-package com.soapboxrace.core.bo.util;
+package com.soapboxrace.core.bo;
 
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
-import com.soapboxrace.core.bo.DropBO;
-import com.soapboxrace.core.bo.InventoryBO;
-import com.soapboxrace.core.bo.ParameterBO;
-import com.soapboxrace.core.bo.PersonaBO;
-import com.soapboxrace.core.dao.InventoryDAO;
-import com.soapboxrace.core.dao.InventoryItemDAO;
 import com.soapboxrace.core.dao.LevelRepDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.ProductDAO;
+import com.soapboxrace.core.jpa.CardDecks;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
 import com.soapboxrace.jaxb.http.EnumRewardCategory;
 import com.soapboxrace.jaxb.http.EnumRewardType;
+import com.soapboxrace.jaxb.http.LuckyDrawInfo;
 import com.soapboxrace.jaxb.http.LuckyDrawItem;
 import com.soapboxrace.jaxb.http.Reward;
 import com.soapboxrace.jaxb.http.RewardPart;
 import com.soapboxrace.jaxb.http.SkillModPartTrans;
 
-public class AccoladesFunc {
-
-	@EJB
-	private PersonaDAO personaDao;
-
-	@EJB
-	private InventoryDAO inventoryDao;
-
-	@EJB
-	private InventoryItemDAO inventoryItemDao;
-
-	@EJB
-	private LevelRepDAO levelRepDao;
-
-	@EJB
-	private ProductDAO productDao;
+@Stateless
+public class RewardBO {
 
 	@EJB
 	private PersonaBO personaBo;
 
 	@EJB
-	private ParameterBO parameterBO;
+	private LevelRepDAO levelRepDao;
 
 	@EJB
 	private DropBO dropBO;
@@ -51,85 +34,12 @@ public class AccoladesFunc {
 	@EJB
 	private InventoryBO inventoryBO;
 
-	public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
-		// Cash parts
-		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-			Integer cashMax = (int) personaEntity.getCash() + cash;
-			personaEntity.setCash(cashMax > 9999999 ? 9999999 : cashMax < 1 ? 1 : cashMax);
-		}
+	@EJB
+	private ParameterBO parameterBO;
 
-		// Exp parts
-		if (parameterBO.getBoolParam("ENABLE_REPUTATION")) {
-			if (personaEntity.getLevel() < 60) {
-				Long expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
-				Long expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
-				if (expMax >= expToNextLevel) {
-					Boolean isLeveledUp = true;
-					while (isLeveledUp) {
-						personaEntity.setLevel(personaEntity.getLevel() + 1);
-						personaEntity.setRepAtCurrentLevel((int) (expMax - expToNextLevel));
+	@EJB
+	private PersonaDAO personaDao;
 
-						expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
-						expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
-
-						isLeveledUp = (expMax >= expToNextLevel);
-					}
-				} else {
-					personaEntity.setRepAtCurrentLevel(expMax.intValue());
-				}
-				personaEntity.setRep(personaEntity.getRep() + exp);
-			}
-		}
-
-		// Save parts
-		personaDao.update(personaEntity);
-	}
-
-	public Reward getFinalReward(Integer rep, Integer cash) {
-		Reward finalReward = new Reward();
-		finalReward.setRep(rep);
-		finalReward.setTokens(cash);
-		return finalReward;
-	}
-
-	public RewardPart getRewardPart(Integer rep, Integer cash, EnumRewardCategory category, EnumRewardType type) {
-		RewardPart rewardPart = new RewardPart();
-		rewardPart.setRepPart(rep);
-		rewardPart.setRewardCategory(category);
-		rewardPart.setRewardType(type);
-		rewardPart.setTokenPart(cash);
-		return rewardPart;
-	}
-
-	public Boolean isLeveledUp(PersonaEntity personaEntity, Integer exp) {
-		return (long) (personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
-	}
-
-	public LuckyDrawItem getItemFromProduct(PersonaEntity personaEntity) {
-		ProductEntity productEntity = dropBO.getRandomProductItem();
-		LuckyDrawItem luckyDrawItem = dropBO.copyProduct2LuckyDraw(productEntity);
-		boolean inventoryFull = inventoryBO.isInventoryFull(productEntity, personaEntity);
-		if (inventoryFull) {
-			luckyDrawItem.setWasSold(true);
-			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-				float resalePrice = productEntity.getResalePrice();
-				double cash = personaEntity.getCash();
-				personaEntity.setCash(cash + resalePrice);
-				personaDao.update(personaEntity);
-			}
-		} else {
-			inventoryBO.addDroppedItem(productEntity, personaEntity);
-		}
-		return luckyDrawItem;
-	}
-
-	/**
-	 * @param personaId
-	 * @param type
-	 *            [0 = race, 1 = pursuit & team escape, 2 = treasur hunter
-	 *            (freeroam)]
-	 * @return
-	 */
 	public float getSkillMultiplicater(Long personaId, Integer type) {
 		float multi = 0.0f;
 
@@ -323,4 +233,87 @@ public class AccoladesFunc {
 		return multi;
 	}
 
+	public Reward getFinalReward(Integer rep, Integer cash) {
+		Reward finalReward = new Reward();
+		finalReward.setRep(rep);
+		finalReward.setTokens(cash);
+		return finalReward;
+	}
+
+	public Boolean isLeveledUp(PersonaEntity personaEntity, Integer exp) {
+		return (long) (personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
+	}
+
+	public LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, PersonaEntity personaEntity) {
+		LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
+		if (!parameterBO.getBoolParam("ENABLE_DROP_ITEM")) {
+			return luckyDrawInfo;
+		}
+		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(personaEntity));
+		luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
+		luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
+		return luckyDrawInfo;
+	}
+
+	public LuckyDrawItem getItemFromProduct(PersonaEntity personaEntity) {
+		ProductEntity productEntity = dropBO.getRandomProductItem();
+		LuckyDrawItem luckyDrawItem = dropBO.copyProduct2LuckyDraw(productEntity);
+		boolean inventoryFull = inventoryBO.isInventoryFull(productEntity, personaEntity);
+		if (inventoryFull) {
+			luckyDrawItem.setWasSold(true);
+			if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+				float resalePrice = productEntity.getResalePrice();
+				double cash = personaEntity.getCash();
+				personaEntity.setCash(cash + resalePrice);
+				personaDao.update(personaEntity);
+			}
+		} else {
+			inventoryBO.addDroppedItem(productEntity, personaEntity);
+		}
+		return luckyDrawItem;
+	}
+
+	public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
+		// Cash parts
+		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+			Integer cashMax = (int) personaEntity.getCash() + cash;
+			personaEntity.setCash(cashMax > 9999999 ? 9999999 : cashMax < 1 ? 1 : cashMax);
+		}
+
+		// Exp parts
+		if (parameterBO.getBoolParam("ENABLE_REPUTATION")) {
+			if (personaEntity.getLevel() < 60) {
+				Long expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
+				Long expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
+				if (expMax >= expToNextLevel) {
+					Boolean isLeveledUp = true;
+					while (isLeveledUp) {
+						personaEntity.setLevel(personaEntity.getLevel() + 1);
+						personaEntity.setRepAtCurrentLevel((int) (expMax - expToNextLevel));
+
+						expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
+						expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
+
+						isLeveledUp = (expMax >= expToNextLevel);
+					}
+				} else {
+					personaEntity.setRepAtCurrentLevel(expMax.intValue());
+				}
+				personaEntity.setRep(personaEntity.getRep() + exp);
+			}
+		}
+
+		// Save parts
+		personaDao.update(personaEntity);
+	}
+
+	public RewardPart getRewardPart(Integer rep, Integer cash, EnumRewardCategory category, EnumRewardType type) {
+		RewardPart rewardPart = new RewardPart();
+		rewardPart.setRepPart(rep);
+		rewardPart.setRewardCategory(category);
+		rewardPart.setRewardType(type);
+		rewardPart.setTokenPart(cash);
+		return rewardPart;
+	}
 }
