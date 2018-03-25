@@ -7,6 +7,8 @@ import com.soapboxrace.jaxb.http.RewardPart;
 
 public class RewardVO {
 
+	int baseRep = 0;
+	int baseCash = 0;
 	int rep = 0;
 	int cash = 0;
 	ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
@@ -16,6 +18,22 @@ public class RewardVO {
 	public RewardVO(boolean enableEconomy, boolean enableReputation) {
 		this.enableEconomy = enableEconomy;
 		this.enableReputation = enableReputation;
+	}
+
+	public int getBaseRep() {
+		return baseRep;
+	}
+
+	public void setBaseRep(int baseRep) {
+		this.baseRep = baseRep;
+	}
+
+	public int getBaseCash() {
+		return baseCash;
+	}
+
+	public void setBaseCash(int baseCash) {
+		this.baseCash = baseCash;
 	}
 
 	public void add(int rep, int cash, EnumRewardCategory enumRewardCategory, EnumRewardType enumRewardType) {

@@ -153,12 +153,36 @@ public class InventoryBO {
 		return inventoryItemEntity;
 	}
 
+	private ProductType detectProductType(Integer hash) {
+		ProductEntity productEntity = productDAO.findByHash(hash);
+		return ProductType.valueOf(productEntity.getProductType());
+	}
+
+	private void decreaseInventory(InventoryEntity inventoryEntity, Integer hash) {
+		ProductType productType = detectProductType(hash);
+		switch (productType) {
+		case PERFORMANCEPART:
+			inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
+			break;
+		case SKILLMODPART:
+			inventoryEntity.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount() - 1);
+			break;
+		case VISUALPART:
+			inventoryEntity.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount() - 1);
+			break;
+		case POWERUP:
+			break;
+		default:
+			break;
+		}
+		inventoryDAO.update(inventoryEntity);
+	}
+
 	public void deletePart(Long personaId, String entitlementId) {
 		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, entitlementId);
 		if (inventoryItemEntity != null) {
 			InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
-			inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
-			inventoryDAO.update(inventoryEntity);
+			decreaseInventory(inventoryEntity, inventoryItemEntity.getHash());
 			inventoryItemDAO.delete(inventoryItemEntity);
 		} else {
 			System.err.println("INVALID entitlementId: [" + entitlementId + "]");
@@ -169,8 +193,7 @@ public class InventoryBO {
 		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByHashAndPersona(personaId, hash);
 		if (inventoryItemEntity != null) {
 			InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
-			inventoryEntity.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount() - 1);
-			inventoryDAO.update(inventoryEntity);
+			decreaseInventory(inventoryEntity, inventoryItemEntity.getHash());
 			inventoryItemDAO.delete(inventoryItemEntity);
 		} else {
 			System.err.println("INVALID hash: [" + hash + "]");
