@@ -53,7 +53,7 @@ public class CommerceBO {
 	private ProductDAO productDAO;
 
 	@EJB
-	private VinylProductDAO vinylProductDao;
+	private VinylProductDAO vinylProductDAO;
 
 	@EJB
 	private InventoryDAO inventoryDAO;
@@ -149,13 +149,29 @@ public class CommerceBO {
 		carSlotDAO.update(defaultCarEntity);
 	}
 
+	private void disableItem(ProductEntity productEntity) {
+		Boolean disableItemAfterBuy = parameterBO.getBoolParam("DISABLE_ITEM_AFTER_BUY");
+		if (disableItemAfterBuy) {
+			productEntity.setEnabled(false);
+			productDAO.update(productEntity);
+		}
+	}
+
+	private void disableItem(VinylProductEntity vinylProductEntity) {
+		Boolean disableItemAfterBuy = parameterBO.getBoolParam("DISABLE_ITEM_AFTER_BUY");
+		if (disableItemAfterBuy) {
+			vinylProductEntity.setEnabled(false);
+			vinylProductDAO.update(vinylProductEntity);
+		}
+	}
+
 	public void updateEconomy(CommerceOp commerceOp, List<BasketItemTrans> basketItemTransList, CommerceSessionTrans commerceSessionTrans,
 			CarSlotEntity defaultCarEntity) {
 		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
 			OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(defaultCarEntity.getOwnedCar());
 			CustomCarTrans customCarTransDB = ownedCarTrans.getCustomCar();
 			CustomCarTrans customCarTrans = commerceSessionTrans.getUpdatedCar().getCustomCar();
-			Float basketTotalValue = 0f;
+			Float basketTotalValue;
 			if (CommerceOp.VINYL.equals(commerceOp)) {
 				basketTotalValue = getVinylTotalValue(basketItemTransList);
 			} else {
@@ -225,9 +241,10 @@ public class CommerceBO {
 	private Float getVinylTotalValue(List<BasketItemTrans> basketItemTransList) {
 		Float price = 0F;
 		for (BasketItemTrans basketItemTrans : basketItemTransList) {
-			VinylProductEntity vinylProductEntity = vinylProductDao.findByProductId(basketItemTrans.getProductId());
+			VinylProductEntity vinylProductEntity = vinylProductDAO.findByProductId(basketItemTrans.getProductId());
 			if (vinylProductEntity != null) {
 				price = Float.sum(price, vinylProductEntity.getPrice());
+				disableItem(vinylProductEntity);
 			} else {
 				System.err.println("product [" + basketItemTrans.getProductId() + "] not found");
 			}
@@ -241,6 +258,7 @@ public class CommerceBO {
 			ProductEntity productEntity = productDAO.findByProductId(basketItemTrans.getProductId());
 			if (productEntity != null) {
 				price = Float.sum(price, productEntity.getPrice());
+				disableItem(productEntity);
 			} else {
 				System.err.println("product [" + basketItemTrans.getProductId() + "] not found");
 			}

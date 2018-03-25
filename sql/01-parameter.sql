@@ -8,6 +8,10 @@ INTO
     (
         'CASH_REWARD_MULTIPLIER',
         '1'
+    ),
+    (
+        'DISABLE_ITEM_AFTER_BUY',
+        'false'
     )
     ,
     (
