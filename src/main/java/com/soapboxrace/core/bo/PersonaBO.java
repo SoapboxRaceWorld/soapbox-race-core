@@ -8,10 +8,12 @@ import javax.ejb.Stateless;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.LevelRepDAO;
+import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.core.jpa.LevelRepEntity;
+import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 
@@ -26,6 +28,9 @@ public class PersonaBO {
 
 	@EJB
 	private LevelRepDAO levelRepDAO;
+
+	@EJB
+	private OwnedCarDAO ownedCarDAO;
 
 	public void changeDefaultCar(Long personaId, Long defaultCarId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
@@ -49,7 +54,7 @@ public class PersonaBO {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
 		List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
 		Integer curCarIndex = personaEntity.getCurCarIndex();
-		if (carSlotList.size() > 0) {
+		if (!carSlotList.isEmpty()) {
 			if (curCarIndex >= carSlotList.size()) {
 				curCarIndex = carSlotList.size() - 1;
 				CarSlotEntity ownedCarEntity = carSlotList.get(curCarIndex);
@@ -72,8 +77,7 @@ public class PersonaBO {
 		if (carSlotEntity == null) {
 			return new OwnedCarTrans();
 		}
-		OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
-		return ownedCarTrans;
+		return OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
 	}
 
 	public List<CarSlotEntity> getPersonasCar(Long personaId) {
@@ -82,6 +86,17 @@ public class PersonaBO {
 
 	public LevelRepEntity getLevelInfoByLevel(Long level) {
 		return levelRepDAO.findByLevel(level);
+	}
+
+	public OwnedCarEntity getCarByOwnedCarId(Long ownedCarId) {
+		OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(ownedCarId);
+		CustomCarEntity customCar = ownedCarEntity.getCustomCar();
+		customCar.getPaints().size();
+		customCar.getPerformanceParts().size();
+		customCar.getSkillModParts().size();
+		customCar.getVisualParts().size();
+		customCar.getVinyls().size();
+		return ownedCarEntity;
 	}
 
 }
