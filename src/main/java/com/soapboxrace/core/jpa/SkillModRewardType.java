@@ -5,7 +5,6 @@ public enum SkillModRewardType {
 
 	@Override
 	public String toString() {
-		System.out.println(super.toString());
 		return super.toString().replace("_", " ");
 	}
 }

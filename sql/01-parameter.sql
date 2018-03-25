@@ -168,6 +168,13 @@ INTO
         '60'
     )
     ,
+    ('TH_BASE_REP','1000'),
+    ('TH_BASE_CASH','200'),
+    ('TH_REP_MULTIPLIER','0.1'),
+    ('TH_CASH_MULTIPLIER','0.1'),
+    ('TH_DAY_REP_MULTIPLIER','100'),
+    ('TH_DAY_CASH_MULTIPLIER','100')
+    ,
     (
         'TE_MINIMUM_TIME',
         '60000'

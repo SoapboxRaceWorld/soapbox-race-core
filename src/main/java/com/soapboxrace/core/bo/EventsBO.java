@@ -39,6 +39,9 @@ public class EventsBO {
 	@EJB
 	private RewardBO rewardBO;
 
+	@EJB
+	private ParameterBO parameterBO;
+
 	public TreasureHuntEventSession getTreasureHuntEventSession(Long activePersonaId) {
 		TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
 		if (treasureHuntEntity == null) {
@@ -110,23 +113,37 @@ public class EventsBO {
 	private Accolades getTreasureHuntAccolades(Long activePersonaId, TreasureHuntEntity treasureHuntEntity) {
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
 
-		Float baseRep = 200 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
-		Float baseCash = 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
-
 		RewardVO rewardVO = rewardBO.getRewardVO(personaEntity);
+
+		float baseRepTh = parameterBO.getFloatParam("TH_BASE_REP");
+		float baseCashTh = parameterBO.getFloatParam("TH_BASE_CASH");
+
+		float playerLevelRepConst = rewardBO.getPlayerLevelConst(personaEntity.getLevel(), baseRepTh);
+		float playerLevelCashConst = rewardBO.getPlayerLevelConst(personaEntity.getLevel(), baseCashTh);
+
+		float repThMultiplier = parameterBO.getFloatParam("TH_REP_MULTIPLIER");
+		float cashThMultiplier = parameterBO.getFloatParam("TH_CASH_MULTIPLIER");
+
+		Float baseRep = playerLevelRepConst * repThMultiplier;
+		Float baseCash = playerLevelCashConst * cashThMultiplier;
+
 		rewardVO.setBaseRep(baseRep.intValue());
 		rewardVO.setBaseCash(baseCash.intValue());
 
-		Float dayRep = baseRep + (100f * treasureHuntEntity.getStreak()); // + 100 per day
-		Float dayCash = baseCash + (100f * treasureHuntEntity.getStreak()); // + 100 per day
+		float repDayMultiplier = parameterBO.getFloatParam("TH_REP_MULTIPLIER");
+		float cashDayMultiplier = parameterBO.getFloatParam("TH_DAY_CASH_MULTIPLIER");
+
+		Float dayRep = baseRep + (repDayMultiplier * treasureHuntEntity.getStreak());
+		Float dayCash = baseCash + (cashDayMultiplier * treasureHuntEntity.getStreak());
 
 		rewardVO.add(dayRep.intValue(), dayCash.intValue(), EnumRewardCategory.BASE, EnumRewardType.NONE);
 		rewardBO.setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.EXPLORER);
 
-		rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
-
 		ArbitrationPacket arbitrationPacket = new ArbitrationPacket();
 		arbitrationPacket.setRank(1);
+		if (!treasureHuntEntity.getIsStreakBroken()) {
+			rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+		}
 		Accolades accolades = rewardBO.getAccolades(personaEntity, arbitrationPacket, rewardVO);
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo(treasureHuntEntity));
 
