@@ -25,7 +25,13 @@ public class GetServerInformationBO {
 		if (ticketToken != null && !ticketToken.equals("null")) {
 			serverInfoEntity.setRequireTicket(true);
 		}
-		serverInfoEntity.setServerVersion("0.0.7");
+		serverInfoEntity.setServerVersion("0.0.8");
+
+		int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
+		if (maxOnlinePlayers != 0) {
+			serverInfoEntity.setMaxUsersAllowed(maxOnlinePlayers);
+		}
+
 		return serverInfoEntity;
 	}
 
