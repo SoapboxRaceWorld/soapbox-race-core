@@ -42,7 +42,7 @@ public class Catalog {
 			ProductTrans productTrans = new ProductTrans();
 			productTrans.setCurrency(productEntity.getCurrency());
 			productTrans.setDurationMinute(productEntity.getDurationMinute());
-			productTrans.setHash(productEntity.getHash().intValue());
+			productTrans.setHash(productEntity.getHash());
 			productTrans.setIcon(productEntity.getIcon());
 			productTrans.setLevel(productEntity.getLevel());
 			productTrans.setPrice(productEntity.getPrice());
@@ -51,6 +51,9 @@ public class Catalog {
 			productTrans.setProductTitle(productEntity.getProductTitle());
 			productTrans.setProductType(productEntity.getProductType());
 			productTrans.setUseCount(productEntity.getUseCount());
+			productTrans.setSecondaryIcon(productEntity.getSecondaryIcon());
+			productTrans.setWebIcon(productEntity.getWebIcon());
+			productTrans.setWebLocation(productEntity.getWebLocation());
 			arrayOfProductTrans.getProductTrans().add(productTrans);
 		}
 		return arrayOfProductTrans;

@@ -7,15 +7,16 @@ import java.util.Random;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.soapboxrace.core.bo.util.AccoladesFunc;
+import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.TreasureHuntDAO;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.SkillModRewardType;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.jaxb.http.Accolades;
+import com.soapboxrace.jaxb.http.ArbitrationPacket;
 import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawBox;
 import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
-import com.soapboxrace.jaxb.http.ArrayOfRewardPart;
 import com.soapboxrace.jaxb.http.EnumRewardCategory;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.LuckyDrawBox;
@@ -24,7 +25,7 @@ import com.soapboxrace.jaxb.http.TreasureHuntEventSession;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
 @Stateless
-public class EventsBO extends AccoladesFunc {
+public class EventsBO {
 
 	@EJB
 	private PersonaDAO personaDao;
@@ -34,6 +35,12 @@ public class EventsBO extends AccoladesFunc {
 
 	@EJB
 	private DriverPersonaBO driverPersonaBo;
+
+	@EJB
+	private RewardBO rewardBO;
+
+	@EJB
+	private ParameterBO parameterBO;
 
 	public TreasureHuntEventSession getTreasureHuntEventSession(Long activePersonaId) {
 		TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
@@ -106,37 +113,46 @@ public class EventsBO extends AccoladesFunc {
 	private Accolades getTreasureHuntAccolades(Long activePersonaId, TreasureHuntEntity treasureHuntEntity) {
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
 
-		// Maths begin
-		ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-		float exp = personaEntity.getLevel() >= 60 ? 0 : 200 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
-		float cash = personaEntity.getCash() >= 9999999 ? 0 : 600 * ((personaEntity.getLevel() + 1.0f) / 5.0f);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int) exp, (int) cash, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		RewardVO rewardVO = rewardBO.getRewardVO(personaEntity);
 
-		cash += cash * getSkillMultiplicater(personaEntity.getPersonaId(), 2);
-		arrayOfRewardPart.getRewardPart().add(getRewardPart(0, (int) cash, EnumRewardCategory.SKILL, EnumRewardType.SKILL_MOD));
+		float baseRepTh = parameterBO.getFloatParam("TH_BASE_REP");
+		float baseCashTh = parameterBO.getFloatParam("TH_BASE_CASH");
 
-		float dayExp = exp + (100 * treasureHuntEntity.getStreak()); // + 100 per day
-		float dayCash = cash + (100 * treasureHuntEntity.getStreak()); // + 100 per day
-		arrayOfRewardPart.getRewardPart().add(getRewardPart((int) dayExp, (int) dayCash, EnumRewardCategory.BASE, EnumRewardType.NONE));
+		float playerLevelRepConst = rewardBO.getPlayerLevelConst(personaEntity.getLevel(), baseRepTh);
+		float playerLevelCashConst = rewardBO.getPlayerLevelConst(personaEntity.getLevel(), baseCashTh);
 
-		exp += (int) dayExp;
-		cash += (int) dayCash;
-		// Maths ending
+		float repThMultiplier = parameterBO.getFloatParam("TH_REP_MULTIPLIER");
+		float cashThMultiplier = parameterBO.getFloatParam("TH_CASH_MULTIPLIER");
 
-		Accolades accolades = new Accolades();
-		accolades.setFinalRewards(getFinalReward((int) exp, (int) cash));
-		accolades.setHasLeveledUp(isLeveledUp(personaEntity, (int) exp));
-		accolades.setLuckyDrawInfo(getLuckyDrawInfo(getRank(treasureHuntEntity.getStreak()), personaEntity.getLevel(), treasureHuntEntity));
-		accolades.setOriginalRewards(getFinalReward((int) exp, (int) cash));
-		accolades.setRewardInfo(arrayOfRewardPart);
+		Float baseRep = playerLevelRepConst * repThMultiplier;
+		Float baseCash = playerLevelCashConst * cashThMultiplier;
 
-		applyRaceReward((int) exp, (int) cash, personaEntity);
+		rewardVO.setBaseRep(baseRep.intValue());
+		rewardVO.setBaseCash(baseCash.intValue());
+
+		float repDayMultiplier = parameterBO.getFloatParam("TH_REP_MULTIPLIER");
+		float cashDayMultiplier = parameterBO.getFloatParam("TH_DAY_CASH_MULTIPLIER");
+
+		Float dayRep = baseRep + (repDayMultiplier * treasureHuntEntity.getStreak());
+		Float dayCash = baseCash + (cashDayMultiplier * treasureHuntEntity.getStreak());
+
+		rewardVO.add(dayRep.intValue(), dayCash.intValue(), EnumRewardCategory.BASE, EnumRewardType.NONE);
+		rewardBO.setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.EXPLORER);
+
+		ArbitrationPacket arbitrationPacket = new ArbitrationPacket();
+		arbitrationPacket.setRank(1);
+		if (!treasureHuntEntity.getIsStreakBroken()) {
+			rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+		}
+		Accolades accolades = rewardBO.getAccolades(personaEntity, arbitrationPacket, rewardVO);
+		accolades.setLuckyDrawInfo(getLuckyDrawInfo(treasureHuntEntity));
+
 		return accolades;
 	}
 
-	private LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, TreasureHuntEntity treasureHuntEntity) {
+	private LuckyDrawInfo getLuckyDrawInfo(TreasureHuntEntity treasureHuntEntity) {
 		ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-		arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(personaDao.findById(treasureHuntEntity.getPersonaId())));
+		arrayOfLuckyDrawItem.getLuckyDrawItem().add(rewardBO.getItemFromProduct(personaDao.findById(treasureHuntEntity.getPersonaId())));
 
 		ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();
 		LuckyDrawBox luckyDrawBox = new LuckyDrawBox();
@@ -158,16 +174,4 @@ public class EventsBO extends AccoladesFunc {
 		return luckyDrawInfo;
 	}
 
-	private Integer getRank(Integer days) {
-		if (days >= 100) {
-			return 1;
-		} else if (days >= 70) {
-			return 2;
-		} else if (days >= 50) {
-			return 3;
-		} else if (days >= 30) {
-			return 4;
-		}
-		return 5;
-	}
 }

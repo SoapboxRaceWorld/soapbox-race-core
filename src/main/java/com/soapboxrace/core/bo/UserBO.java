@@ -2,6 +2,7 @@ package com.soapboxrace.core.bo;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -63,13 +64,14 @@ public class UserBO {
 	public LoginStatusVO createUserWithTicket(String email, String passwd, String ticket) {
 		//Very primitive way to check if email is actually an email (using REGEX (i could use RFC822, but why...))
 		//EDIT: If email is valid == return error? fixed typo
-		Pattern emailPattern = Pattern.compile("\\b[A-Z0-9._%-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b");
+		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
+
+    Pattern emailPattern = Pattern.compile("\\b[A-Z0-9._%-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b");
 		if(!emailPattern.matcher(email).matches()) {
 			loginStatusVO.setDescription("Registration Error: Invalid Email Format!");
 			return loginStatusVO;
 		}
 
-		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
 		InviteTicketEntity inviteTicketEntity = new InviteTicketEntity();
 		inviteTicketEntity.setTicket("empty-ticket");
 		String ticketToken = parameterBO.getStrParam("TICKET_TOKEN");

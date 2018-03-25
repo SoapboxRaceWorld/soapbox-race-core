@@ -244,4 +244,9 @@ public class ParameterBO {
 		return getParameter(parameter);
 	}
 
+	public Float getFloatParam(String parameter) {
+		String parameterFromDB = getParameter(parameter);
+		return Float.valueOf(parameterFromDB);
+	}
+
 }

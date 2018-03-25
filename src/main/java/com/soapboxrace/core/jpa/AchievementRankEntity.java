@@ -33,9 +33,6 @@ public class AchievementRankEntity {
 	@Column(name = "rank")
 	private short rank;
 
-	@Column(name = "rarity")
-	private float rarity = 0.000f;
-
 	@Column(name = "rewardDescription")
 	private String rewardDescription;
 
@@ -52,7 +49,7 @@ public class AchievementRankEntity {
 		AchievementRankPacket packet = new AchievementRankPacket();
 		packet.setAchievementRankId(id);
 		packet.setIsRare(isRare);
-		packet.setRarity(getRarity());
+		packet.setRarity(0.0f);
 		packet.setRank(rank);
 		packet.setThresholdValue(thresholdValue);
 		packet.setRewardDescription(rewardDescription);
@@ -101,14 +98,6 @@ public class AchievementRankEntity {
 
 	public void setRank(short rank) {
 		this.rank = rank;
-	}
-
-	public float getRarity() {
-		return rarity;
-	}
-
-	public void setRarity(float rarity) {
-		this.rarity = rarity;
 	}
 
 	public String getRewardDescription() {
