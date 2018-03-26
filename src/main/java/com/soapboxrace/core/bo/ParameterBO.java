@@ -249,4 +249,11 @@ public class ParameterBO {
 		return Float.valueOf(parameterFromDB);
 	}
 
+	public String getPasswordHashing() {
+		String parameter = getParameter("SRV_PASSWORD_HASH");
+		if (parameter != null) {
+			return parameter;
+		}
+		return "SHA1";
+	}
 }

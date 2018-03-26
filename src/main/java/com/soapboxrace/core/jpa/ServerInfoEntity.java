@@ -35,6 +35,7 @@ public class ServerInfoEntity {
 	private String ownerList;
 	private Integer numberOfRegistered;
 	private Integer maxUsersAllowed;
+	private String passwordHashing;
 
 	@Convert(converter = SceneryGroupConverter.class)
 	private List<String> activatedHolidaySceneryGroups;
@@ -183,5 +184,13 @@ public class ServerInfoEntity {
 
 	public void setMaxUsersAllowed(Integer maxUsersAllowed) {
 		this.maxUsersAllowed = maxUsersAllowed;
+	}
+
+	public String getPasswordHashing() {
+		return passwordHashing;
+	}
+
+	public void setPasswordHashing(String passwordHashing) {
+		this.passwordHashing = passwordHashing;
 	}
 }

@@ -32,6 +32,8 @@ public class GetServerInformationBO {
 			serverInfoEntity.setMaxUsersAllowed(maxOnlinePlayers);
 		}
 
+		serverInfoEntity.setPasswordHashing(parameterBO.getPasswordHashing());
+
 		return serverInfoEntity;
 	}
 
