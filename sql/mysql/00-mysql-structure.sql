@@ -287,7 +287,7 @@ CREATE TABLE IF NOT EXISTS
     (
         ID bigint NOT NULL AUTO_INCREMENT,
         EMAIL VARCHAR(255) COLLATE utf8_unicode_ci,
-        PASSWORD VARCHAR(50) COLLATE utf8_unicode_ci,
+        PASSWORD VARCHAR(100) COLLATE utf8_unicode_ci,
         premium bit NOT NULL DEFAULT FALSE,
         PRIMARY KEY (ID)
     )
