@@ -1,6 +1,7 @@
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ public class PromoCodeEntity {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "USERID", referencedColumnName = "ID")
+	@JoinColumn(name = "USERID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PROMOCODE_USER"))
 	private UserEntity user;
 
 	private String promoCode;

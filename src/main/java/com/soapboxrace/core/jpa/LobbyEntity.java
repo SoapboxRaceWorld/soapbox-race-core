@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,16 +35,16 @@ public class LobbyEntity {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "EVENTID", referencedColumnName = "ID")
+	@JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBY_EVENT"))
 	private EventEntity event;
 
 	@OneToMany(mappedBy = "lobby", targetEntity = LobbyEntrantEntity.class, cascade = CascadeType.MERGE)
 	private List<LobbyEntrantEntity> entrants;
 
 	private Date lobbyDateTimeStart = new Date();
-	
+
 	private Boolean isPrivate;
-	
+
 	private Long personaId;
 
 	@Transient
@@ -80,19 +81,19 @@ public class LobbyEntity {
 	public void setLobbyDateTimeStart(Date lobbyDateTimeStart) {
 		this.lobbyDateTimeStart = lobbyDateTimeStart;
 	}
-	
+
 	public Boolean getIsPrivate() {
 		return isPrivate;
 	}
-	
+
 	public void setIsPrivate(Boolean isPrivate) {
 		this.isPrivate = isPrivate;
 	}
-	
+
 	public Long getPersonaId() {
 		return personaId;
 	}
-	
+
 	public void setPersonaId(Long personaId) {
 		this.personaId = personaId;
 	}

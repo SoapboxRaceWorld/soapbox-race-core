@@ -1,6 +1,7 @@
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ public class VinylEntity {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "customCarId", referencedColumnName = "ID")
+	@JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_VINYL_CUSTOMCAR"))
 	private CustomCarEntity customCar;
 
 	private int hash;

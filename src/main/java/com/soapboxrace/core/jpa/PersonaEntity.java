@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,9 +39,9 @@ public class PersonaEntity {
 	private int score;
 	private int curCarIndex = 0;
 	@ManyToOne
-	@JoinColumn(name = "USERID", referencedColumnName = "ID")
+	@JoinColumn(name = "USERID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PERSONA_USER"))
 	private UserEntity user;
-	
+
 	@Column(name = "created")
 	private LocalDateTime created;
 
@@ -156,13 +157,11 @@ public class PersonaEntity {
 		this.curCarIndex = curCarIndex;
 	}
 
-	public LocalDateTime getCreated()
-	{
+	public LocalDateTime getCreated() {
 		return created;
 	}
 
-	public void setCreated(LocalDateTime created)
-	{
+	public void setCreated(LocalDateTime created) {
 		this.created = created;
 	}
 }

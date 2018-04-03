@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class CustomCarEntity {
 	private int version;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ownedCarId", referencedColumnName = "ID")
+	@JoinColumn(name = "ownedCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_CUSTOMCAR_OWNEDCAR"))
 	private OwnedCarEntity ownedCar;
 
 	@OneToMany(mappedBy = "customCar", targetEntity = PaintEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
