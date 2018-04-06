@@ -3,6 +3,7 @@ package com.soapboxrace.core.jpa;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ public class CarSlotEntity {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "PersonaId", referencedColumnName = "ID")
+	@JoinColumn(name = "PersonaId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_CARSLOT_PERSONA"))
 	private PersonaEntity persona;
 
 	@OneToOne(mappedBy = "carSlot", targetEntity = OwnedCarEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)

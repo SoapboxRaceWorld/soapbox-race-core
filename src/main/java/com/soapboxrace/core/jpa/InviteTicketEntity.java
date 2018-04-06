@@ -2,6 +2,7 @@ package com.soapboxrace.core.jpa;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,7 +33,7 @@ public class InviteTicketEntity {
 	private String discordName;
 
 	@ManyToOne
-	@JoinColumn(name = "USERID", referencedColumnName = "ID")
+	@JoinColumn(name = "USERID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_INVITETICKET_USER"))
 	private UserEntity user;
 
 	public void setId(Long id) {

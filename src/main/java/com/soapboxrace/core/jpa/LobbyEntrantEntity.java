@@ -1,6 +1,7 @@
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,12 +25,12 @@ public class LobbyEntrantEntity implements Comparable<LobbyEntrantEntity> {
 
 	@ManyToOne
 	@XmlTransient
-	@JoinColumn(name = "PERSONAID", referencedColumnName = "ID")
+	@JoinColumn(name = "PERSONAID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBYENTRANT_PERSONA"))
 	private PersonaEntity persona;
 
 	@ManyToOne
 	@XmlTransient
-	@JoinColumn(name = "LOBBYID", referencedColumnName = "ID")
+	@JoinColumn(name = "LOBBYID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBYENTRANT_LOBBY"))
 	private LobbyEntity lobby;
 
 	private int gridIndex;

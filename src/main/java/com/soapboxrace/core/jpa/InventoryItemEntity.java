@@ -2,6 +2,7 @@ package com.soapboxrace.core.jpa;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class InventoryItemEntity {
 	private int id;
 
 	@ManyToOne
-	@JoinColumn(name = "inventoryId", referencedColumnName = "ID")
+	@JoinColumn(name = "inventoryId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PERSINVITEM_PERSINV"))
 	private InventoryEntity inventory;
 
 	@ManyToOne
