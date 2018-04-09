@@ -1,6 +1,7 @@
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,7 +53,7 @@ public class VinylProductEntity {
 	private String webLocation;
 
 	@ManyToOne
-	@JoinColumn(name = "parentCategoryId", referencedColumnName = "idcategory")
+	@JoinColumn(name = "parentCategoryId", referencedColumnName = "idcategory", foreignKey = @ForeignKey(name = "FK_VINYLPRODUCT_CATEGORY"))
 	private CategoryEntity category;
 
 	private String categoryName;

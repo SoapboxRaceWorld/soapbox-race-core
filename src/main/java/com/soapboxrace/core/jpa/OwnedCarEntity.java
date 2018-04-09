@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +22,7 @@ public class OwnedCarEntity {
 	private Long id;
 
 	@OneToOne
-	@JoinColumn(name = "carSlotId", referencedColumnName = "ID")
+	@JoinColumn(name = "carSlotId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_OWNEDCAR_CARSLOT"))
 	private CarSlotEntity carSlot;
 
 	private int durability;
