@@ -181,7 +181,7 @@ public class ServerInfoEntity {
 		return maxUsersAllowed;
 	}
 
-	public void setMaxUsersAllowed(Integer maxUsersAllowed) {
-		this.maxUsersAllowed = maxUsersAllowed;
+	public void setMaxUsersAllowed(Integer timezone) {
+		this.maxUsersAllowed = timezone;
 	}
 }
