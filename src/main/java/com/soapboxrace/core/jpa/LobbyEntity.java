@@ -1,7 +1,5 @@
 package com.soapboxrace.core.jpa;
 
-import com.soapboxrace.core.bo.ParameterBO;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,8 +29,6 @@ import javax.persistence.Transient;
 })
 public class LobbyEntity {
 
-	private static final ParameterBO parameterBO = new ParameterBO();
-	
 	@Id
 	@Column(name = "ID", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +46,9 @@ public class LobbyEntity {
 	private Boolean isPrivate;
 
 	private Long personaId;
+
+	@Transient
+	private Long lobbyCountdownInMilliseconds = 60000L;
 
 	public Long getId() {
 		return id;
@@ -110,10 +109,10 @@ public class LobbyEntity {
 		if (lobbyDateTimeStart != null) {
 			Date now = new Date();
 			Long time = now.getTime() - lobbyDateTimeStart.getTime();
-			time = parameterBO.getLobbyCountdown() - time;
+			time = 60000L - time;
 			return time.intValue();
 		}
-		return parameterBO.getLobbyCountdown();
+		return lobbyCountdownInMilliseconds.intValue();
 	}
 
 }

@@ -35,7 +35,7 @@ public class DropBO {
 	public ProductEntity getRandomProductItem() {
 		String[] productTypeArr = { "PERFORMANCEPART", "POWERUP", "SKILLMODPART", "VISUALPART" };
 		Random random = new Random();
-		int number = random.nextInt(productTypeArr.length - 1);
+		int number = random.nextInt(productTypeArr.length);
 		return productDao.getRandomDrop(productTypeArr[number]);
 	}
 
