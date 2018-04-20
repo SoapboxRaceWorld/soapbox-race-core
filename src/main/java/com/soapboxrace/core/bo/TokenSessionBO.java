@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.NotAuthorizedException;
 
+import com.soapboxrace.core.api.util.GeoIp2;
 import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.dao.UserDAO;
@@ -25,6 +26,9 @@ public class TokenSessionBO {
 
 	@EJB
 	private ParameterBO parameterBO;
+
+	@EJB
+	private GetServerInformationBO serverInfoBO;
 
 	@EJB
 	private OnlineUsersBO onlineUsersBO;
@@ -89,8 +93,27 @@ public class TokenSessionBO {
 		return date;
 	}
 
-	public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
+	public LoginStatusVO checkGeoIp(String ip) {
 		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
+		String allowedCountries = serverInfoBO.getServerInformation().getAllowedCountries();
+		if (allowedCountries != null && !allowedCountries.isEmpty()) {
+			String geoip2DbFilePath = parameterBO.getStrParam("GEOIP2_DB_FILE_PATH");
+			GeoIp2 geoIp2 = GeoIp2.getInstance(geoip2DbFilePath);
+			if (geoIp2.isCountryAllowed(ip, allowedCountries)) {
+				return new LoginStatusVO(0L, "", true);
+			} else {
+				loginStatusVO.setDescription(
+						"GEOIP BLOCK ACTIVE IN THIS SERVER, ALLOWED COUNTRIES: [" + allowedCountries + "]");
+			}
+		}
+		return loginStatusVO;
+	}
+
+	public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
+		LoginStatusVO loginStatusVO = checkGeoIp(httpRequest.getRemoteAddr());
+		if (!loginStatusVO.isLoginOk()) {
+			return loginStatusVO;
+		}
 
 		int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
 		int maxOlinePayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
@@ -109,8 +132,10 @@ public class TokenSessionBO {
 
 					if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty()) {
 						String forwardedFor;
-						if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.useForwardedFor()) {
-							userEntity.setIpAddress(parameterBO.googleLoadBalancing() ? forwardedFor.split(",")[0] : forwardedFor);
+						if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null
+								&& parameterBO.useForwardedFor()) {
+							userEntity.setIpAddress(
+									parameterBO.googleLoadBalancing() ? forwardedFor.split(",")[0] : forwardedFor);
 						} else {
 							userEntity.setIpAddress(httpRequest.getRemoteAddr());
 						}

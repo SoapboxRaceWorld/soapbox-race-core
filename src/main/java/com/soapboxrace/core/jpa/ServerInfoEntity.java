@@ -34,6 +34,7 @@ public class ServerInfoEntity {
 	private String adminList;
 	private String ownerList;
 	private Integer numberOfRegistered;
+	private String allowedCountries;
 
 	@Convert(converter = SceneryGroupConverter.class)
 	private List<String> activatedHolidaySceneryGroups;
@@ -175,4 +176,13 @@ public class ServerInfoEntity {
 	public List<String> getDisactivatedHolidaySceneryGroups() {
 		return this.disactivatedHolidaySceneryGroups;
 	}
+
+	public String getAllowedCountries() {
+		return allowedCountries;
+	}
+
+	public void setAllowedCountries(String allowedCountries) {
+		this.allowedCountries = allowedCountries;
+	}
+
 }
