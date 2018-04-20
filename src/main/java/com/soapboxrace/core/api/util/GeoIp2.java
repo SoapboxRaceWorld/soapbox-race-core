@@ -2,6 +2,8 @@ package com.soapboxrace.core.api.util;
 
 import java.io.File;
 import java.net.InetAddress;
+import java.util.Arrays;
+import java.util.List;
 
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CountryResponse;
@@ -46,5 +48,18 @@ public class GeoIp2 {
 			System.err.println("error inside geoip class [" + e.getMessage() + "]");
 		}
 		return countryIso;
+	}
+
+	public boolean isCountryAllowed(String ip, String countries) {
+		try {
+			String countryIso = getCountryIso(ip);
+			List<String> countriesList = Arrays.asList(countries.split(";"));
+			if (countriesList.contains(countryIso)) {
+				return true;
+			}
+		} catch (Exception e) {
+			System.err.println("error inside geoip class [" + e.getMessage() + "]");
+		}
+		return false;
 	}
 }
