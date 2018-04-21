@@ -103,11 +103,9 @@ public class User {
 	@Produces(MediaType.APPLICATION_XML)
 //	@LauncherChecks
 	public Response authenticateUser(@QueryParam("email") String email, @QueryParam("password") String password) {
-		LoginStatusVO loginStatusVO = tokenBO.login(email, password, sr);
-		if (loginStatusVO.isLoginOk()) {
-			return Response.ok(loginStatusVO).build();
-		}
-		return Response.serverError().entity(loginStatusVO).build();
+		LoginStatusVO test = new LoginStatusVO();
+		test.setDescription("test");
+		return Response.serverError().entity(test).build();
 	}
 
 	@GET
