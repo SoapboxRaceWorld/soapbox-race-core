@@ -83,6 +83,16 @@ INTO
     )
     ,
     (
+        'MAX_LEVEL_PREMIUM',
+        '70'
+    )
+    ,
+    (
+        'MAX_LEVEL_FREE',
+        '60'
+    )
+    ,
+    (
         'MAX_ONLINE_PLAYERS',
         '50'
     )
