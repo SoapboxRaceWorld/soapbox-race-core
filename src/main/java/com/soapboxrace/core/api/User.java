@@ -104,7 +104,7 @@ public class User {
 //	@LauncherChecks
 	public Response authenticateUser(@QueryParam("email") String email, @QueryParam("password") String password) {
 		LoginStatusVO test = new LoginStatusVO();
-		test.setDescription("test");
+		test.setDescription(String.format("testing! %s/%s", email, password));
 		return Response.serverError().entity(test).build();
 	}
 
