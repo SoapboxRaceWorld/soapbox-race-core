@@ -102,8 +102,7 @@ public class TokenSessionBO {
 			if (geoIp2.isCountryAllowed(ip, allowedCountries)) {
 				return new LoginStatusVO(0L, "", true);
 			} else {
-				loginStatusVO.setDescription(
-						"GEOIP BLOCK ACTIVE IN THIS SERVER, ALLOWED COUNTRIES: [" + allowedCountries + "]");
+				loginStatusVO.setDescription("GEOIP BLOCK ACTIVE IN THIS SERVER, ALLOWED COUNTRIES: [" + allowedCountries + "]");
 			}
 		} else {
 			return new LoginStatusVO(0L, "", true);
@@ -134,10 +133,8 @@ public class TokenSessionBO {
 
 					if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty()) {
 						String forwardedFor;
-						if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null
-								&& parameterBO.useForwardedFor()) {
-							userEntity.setIpAddress(
-									parameterBO.googleLoadBalancing() ? forwardedFor.split(",")[0] : forwardedFor);
+						if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.getBoolParam("USE_FORWARDED_FOR")) {
+							userEntity.setIpAddress(parameterBO.getBoolParam("GOOGLE_LB_ENABLED") ? forwardedFor.split(",")[0] : forwardedFor);
 						} else {
 							userEntity.setIpAddress(httpRequest.getRemoteAddr());
 						}
