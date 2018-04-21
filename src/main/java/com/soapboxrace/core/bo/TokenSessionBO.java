@@ -118,16 +118,15 @@ public class TokenSessionBO {
 		}
 		loginStatusVO = new LoginStatusVO(0L, "", false);
 
-		int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
-		int maxOlinePayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
-		if (numberOfUsersOnlineNow >= maxOlinePayers) {
-			loginStatusVO.setDescription("SERVER FULL");
-			return loginStatusVO;
-		}
-
 		if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
 			UserEntity userEntity = userDAO.findByEmail(email);
 			if (userEntity != null) {
+				int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
+				int maxOlinePayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
+				if (numberOfUsersOnlineNow >= maxOlinePayers && !userEntity.isPremium()) {
+					loginStatusVO.setDescription("SERVER FULL");
+					return loginStatusVO;
+				}
 				if (password.equals(userEntity.getPassword())) {
 					if (userEntity.getHwid() == null || userEntity.getHwid().trim().isEmpty()) {
 						userEntity.setHwid(httpRequest.getHeader("X-HWID"));
