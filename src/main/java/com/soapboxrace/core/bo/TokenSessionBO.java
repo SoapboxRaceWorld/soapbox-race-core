@@ -99,37 +99,7 @@ public class TokenSessionBO {
 			return loginStatusVO;
 		}
 
-		if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
-			UserEntity userEntity = userDAO.findByEmail(email);
-			if (userEntity != null) {
-				if (password.equals(userEntity.getPassword())) {
-					if (userEntity.getHwid() == null || userEntity.getHwid().trim().isEmpty()) {
-						userEntity.setHwid(httpRequest.getHeader("X-HWID"));
-					}
-
-					if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty()) {
-						String forwardedFor;
-						if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.useForwardedFor()) {
-							userEntity.setIpAddress(parameterBO.googleLoadBalancing() ? forwardedFor.split(",")[0] : forwardedFor);
-						} else {
-							userEntity.setIpAddress(httpRequest.getRemoteAddr());
-						}
-						// userEntity.setIpAddress(httpRequest.getHea);
-					}
-
-					userEntity.setLastLogin(LocalDateTime.now());
-					userDAO.update(userEntity);
-					Long userId = userEntity.getId();
-					deleteByUserId(userId);
-					String randomUUID = createToken(userId, null);
-					loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
-					loginStatusVO.setDescription("");
-
-					return loginStatusVO;
-				}
-			}
-		}
-		loginStatusVO.setDescription("LOGIN ERROR");
+		loginStatusVO.setDescription("Testing: " + email + "/" + password);
 		return loginStatusVO;
 	}
 
