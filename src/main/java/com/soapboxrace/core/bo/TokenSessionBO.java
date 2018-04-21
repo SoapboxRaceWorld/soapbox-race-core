@@ -105,6 +105,8 @@ public class TokenSessionBO {
 				loginStatusVO.setDescription(
 						"GEOIP BLOCK ACTIVE IN THIS SERVER, ALLOWED COUNTRIES: [" + allowedCountries + "]");
 			}
+		} else {
+			return new LoginStatusVO(0L, "", true);
 		}
 		return loginStatusVO;
 	}
@@ -114,6 +116,7 @@ public class TokenSessionBO {
 		if (!loginStatusVO.isLoginOk()) {
 			return loginStatusVO;
 		}
+		loginStatusVO = new LoginStatusVO(0L, "", false);
 
 		int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
 		int maxOlinePayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");

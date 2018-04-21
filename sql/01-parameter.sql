@@ -24,6 +24,9 @@ INTO
         'myemail@gmail.com'
     )
     ,
+    (   'GEOIP2_DB_FILE_PATH',
+        'GeoLite2-Country.mmdb')
+    ,
     (
         'GOOGLE_LB_ENABLED',
         'false'
