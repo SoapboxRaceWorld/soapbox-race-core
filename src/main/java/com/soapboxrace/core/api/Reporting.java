@@ -2,6 +2,7 @@ package com.soapboxrace.core.api;
 
 import java.io.InputStream;
 
+import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -11,19 +12,23 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.HardwareInfoBO;
 import com.soapboxrace.jaxb.http.HardwareInfo;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 @Path("/Reporting")
 public class Reporting {
 
+	@EJB
+	private HardwareInfoBO hardwareInfoBO;
+
 	@POST
 	@Secured
 	@Path("/SendHardwareInfo")
 	@Produces(MediaType.APPLICATION_XML)
 	public String sendHardwareInfo(InputStream is) {
-		HardwareInfo unMarshal = (HardwareInfo) UnmarshalXML.unMarshal(is, HardwareInfo.class);
-		System.out.println(unMarshal);
+		HardwareInfo hardwareInfo = UnmarshalXML.unMarshal(is, HardwareInfo.class);
+		hardwareInfoBO.save(hardwareInfo);
 		return "";
 	}
 
