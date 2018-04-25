@@ -11,6 +11,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.NotAuthorizedException;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Stateless
@@ -98,13 +99,21 @@ public class TokenSessionBO {
 		}
 		
 		if (user.getPassword().equals(password)) {
-			loginStatusVO.setDescription("This is fine.");
+			if (user.getHwid() == null || user.getHwid().trim().isEmpty()) {
+				user.setHwid(httpRequest.getHeader("X-HWID"));
+			}
+			
+			user.setLastLogin(LocalDateTime.now());
+			userDAO.update(user);
+
+			deleteByUserId(user.getId());
+			loginStatusVO = new LoginStatusVO(user.getId(), createToken(user.getId(), null), true);
+			loginStatusVO.setDescription("");
 		} else {
-			loginStatusVO.setDescription("This is not fine.");
+			loginStatusVO.setDescription("Incorrect password.");
 			return loginStatusVO;
 		}
 
-//		loginStatusVO.setDescription("Testing: " + email + "/" + password);
 		return loginStatusVO;
 	}
 

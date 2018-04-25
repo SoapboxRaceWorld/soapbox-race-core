@@ -58,7 +58,6 @@ public class LaunchFilter implements ContainerRequestFilter {
 			LoginStatusVO loginStatusVO = new BanUtil(banEntity).invoke();
 
 			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
-			return;
 		}
 	}
 
