@@ -103,13 +103,15 @@ public class User {
 	@Produces(MediaType.APPLICATION_XML)
 //	@LauncherChecks
 	public Response authenticateUser(@QueryParam("email") String email, @QueryParam("password") String password) {
-		LoginStatusVO test = new LoginStatusVO();
-		test.setDescription(String.format("testing! %s/%s", email, password));
-		return Response.serverError().entity(test).build();
+		LoginStatusVO loginStatusVO = tokenBO.login(email, password, sr);
+		if (loginStatusVO.isLoginOk()) {
+			return Response.ok(loginStatusVO).build();
+		}
+		return Response.serverError().entity(loginStatusVO).build();
 	}
 
 	@GET
-	@Path("createUser")
+	@Path("createUse") // temporary
 	@Produces(MediaType.APPLICATION_XML)
 //	@LauncherChecks
 	public Response createUser(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("inviteTicket") String inviteTicket) {

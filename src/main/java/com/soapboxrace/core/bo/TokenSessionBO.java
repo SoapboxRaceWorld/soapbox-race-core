@@ -1,19 +1,17 @@
 package com.soapboxrace.core.bo;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.NotAuthorizedException;
-
 import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.NotAuthorizedException;
+import java.util.Date;
 
 @Stateless
 public class TokenSessionBO {
@@ -90,9 +88,10 @@ public class TokenSessionBO {
 	}
 
 	public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
-		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
+		LoginStatusVO loginStatusVO = new LoginStatusVO();
 
-		loginStatusVO.setDescription("Testing: " + email + "/" + password);
+		loginStatusVO.setDescription(userDAO.findByEmail(email).toString());
+//		loginStatusVO.setDescription("Testing: " + email + "/" + password);
 		return loginStatusVO;
 	}
 
