@@ -88,9 +88,22 @@ public class TokenSessionBO {
 	}
 
 	public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
-		LoginStatusVO loginStatusVO = new LoginStatusVO();
+		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
+		
+		UserEntity user = userDAO.findByEmail(email);
+		
+		if (user == null) {
+			loginStatusVO.setDescription("Account not found.");
+			return loginStatusVO;
+		}
+		
+		if (user.getPassword().equals(password)) {
+			loginStatusVO.setDescription("This is fine.");
+		} else {
+			loginStatusVO.setDescription("This is not fine.");
+			return loginStatusVO;
+		}
 
-		loginStatusVO.setDescription(userDAO.findByEmail(email).toString());
 //		loginStatusVO.setDescription("Testing: " + email + "/" + password);
 		return loginStatusVO;
 	}
