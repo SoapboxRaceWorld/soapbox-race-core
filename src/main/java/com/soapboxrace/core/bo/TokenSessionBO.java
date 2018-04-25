@@ -102,6 +102,10 @@ public class TokenSessionBO {
 			if (user.getHwid() == null || user.getHwid().trim().isEmpty()) {
 				user.setHwid(httpRequest.getHeader("X-HWID"));
 			}
+
+			if (user.getIpAddress() == null || user.getIpAddress().trim().isEmpty()) {
+				user.setIpAddress(httpRequest.getRemoteAddr());
+			}
 			
 			user.setLastLogin(LocalDateTime.now());
 			userDAO.update(user);
