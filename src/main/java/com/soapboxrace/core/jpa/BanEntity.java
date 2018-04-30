@@ -16,7 +16,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.soapboxrace.core.jpa.convert.BanTypeConverter;
 import com.soapboxrace.core.jpa.convert.LocalDateTimeConverter;
 
 @Entity
@@ -34,8 +33,7 @@ public class BanEntity {
 	private UserEntity userEntity;
 
 	@Column
-	@Convert(converter = BanTypeConverter.class)
-	private BanType type;
+	private String type;
 
 	@Column
 	private String data;
@@ -63,11 +61,11 @@ public class BanEntity {
 		this.userEntity = userEntity;
 	}
 
-	public BanType getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(BanType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
