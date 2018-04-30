@@ -23,6 +23,8 @@ public class HardwareInfoBO {
 	}
 
 	public void save(HardwareInfo hardwareInfo) {
+		long userId = hardwareInfo.getUserID();
+
 		hardwareInfo.setAvailableMem(0);
 		hardwareInfo.setCpuid10(0);
 		hardwareInfo.setCpuid11(0);
@@ -34,9 +36,13 @@ public class HardwareInfoBO {
 		HardwareInfoEntity hardwareInfoEntityTmp = hardwareInfoDAO.findByHardwareHash(calcHardwareInfoHash);
 		if (hardwareInfoEntityTmp == null) {
 			HardwareInfoEntity hardwareInfoEntity = new HardwareInfoEntity();
+			hardwareInfoEntity.setUserId(userId);
 			hardwareInfoEntity.setHardwareInfo(hardwareInfoXml);
 			hardwareInfoEntity.setHardwareHash(calcHardwareInfoHash);
 			hardwareInfoDAO.insert(hardwareInfoEntity);
+		} else {
+			hardwareInfoEntityTmp.setUserId(userId);
+			hardwareInfoDAO.update(hardwareInfoEntityTmp);
 		}
 	}
 
