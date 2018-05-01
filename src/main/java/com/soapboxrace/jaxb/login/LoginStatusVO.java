@@ -19,12 +19,11 @@ public class LoginStatusVO {
 	private String description;
 	@XmlElement(name = "Ban")
 	private Ban ban;
-	
+
 	@XmlTransient
 	private boolean loginOk;
 
-	public LoginStatusVO()
-	{
+	public LoginStatusVO() {
 	}
 
 	public LoginStatusVO(Long userId, String loginToken, boolean loginOk) {
@@ -49,56 +48,48 @@ public class LoginStatusVO {
 		this.description = description;
 	}
 
-	public Ban getBan()
-	{
+	public Ban getBan() {
 		return ban;
 	}
 
-	public void setBan(Ban ban)
-	{
+	public void setBan(Ban ban) {
 		this.ban = ban;
 	}
 
 	public boolean isLoginOk() {
 		return loginOk;
 	}
-	
+
 	@XmlRootElement
 	@XmlAccessorType(XmlAccessType.FIELD)
 	public static class Ban {
 		@XmlElement(name = "Reason")
 		private String reason;
-		
+
 		@XmlElement(name = "Expires")
 		private String expires;
 
-		public Ban()
-		{
+		public Ban() {
 		}
 
-		public Ban(String reason, String expires)
-		{
+		public Ban(String reason, String expires) {
 			this.reason = reason;
 			this.expires = expires;
 		}
 
-		public String getReason()
-		{
+		public String getReason() {
 			return reason;
 		}
 
-		public void setReason(String reason)
-		{
+		public void setReason(String reason) {
 			this.reason = reason;
 		}
 
-		public String getExpires()
-		{
+		public String getExpires() {
 			return expires;
 		}
 
-		public void setExpires(String expires)
-		{
+		public void setExpires(String expires) {
 			this.expires = expires;
 		}
 	}

@@ -138,7 +138,6 @@ public class TokenSessionBO {
 						} else {
 							userEntity.setIpAddress(httpRequest.getRemoteAddr());
 						}
-						// userEntity.setIpAddress(httpRequest.getHea);
 					}
 
 					userEntity.setLastLogin(LocalDateTime.now());

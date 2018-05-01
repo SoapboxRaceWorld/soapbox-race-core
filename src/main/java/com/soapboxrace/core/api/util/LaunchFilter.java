@@ -1,7 +1,6 @@
 package com.soapboxrace.core.api.util;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 
 import javax.annotation.Priority;
 import javax.ejb.EJB;
@@ -15,7 +14,6 @@ import javax.ws.rs.ext.Provider;
 
 import com.soapboxrace.core.bo.AuthenticationBO;
 import com.soapboxrace.core.bo.ParameterBO;
-import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
 
 @LauncherChecks
@@ -28,8 +26,6 @@ public class LaunchFilter implements ContainerRequestFilter {
 
 	@EJB
 	private ParameterBO parameterBO;
-
-	public static final DateTimeFormatter banEndFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 	@Context
 	private HttpServletRequest sr;
@@ -52,40 +48,11 @@ public class LaunchFilter implements ContainerRequestFilter {
 			}
 		}
 
-		BanEntity banEntity = authenticationBO.checkNonUserBan(hwid, sr.getRemoteAddr(), sr.getParameter("email"));
-
-		if (banEntity != null) {
-			LoginStatusVO loginStatusVO = new BanUtil(banEntity).invoke();
-
-			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
+		LoginStatusVO checkIsBanned = authenticationBO.checkIsBanned(hwid, sr.getParameter("email"));
+		if (checkIsBanned != null) {
+			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(checkIsBanned).build());
 			return;
 		}
 	}
 
-	public static class BanUtil {
-		private BanEntity banEntity;
-
-		public BanUtil(BanEntity banEntity) {
-			this.banEntity = banEntity;
-		}
-
-		public LoginStatusVO invoke() {
-			LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-			LoginStatusVO.Ban ban = new LoginStatusVO.Ban();
-			ban.setReason(banEntity.getReason());
-			ban.setExpires(banEntity.getEndsAt() == null ? null : banEndFormatter.format(banEntity.getEndsAt()));
-
-			loginStatusVO.setBan(ban);
-			// banDesc += " | Reason: " + banEntity.getReason().trim();
-			// }
-			//
-			// if (banEntity.getEndsAt() != null)
-			// {
-			// banDesc += " | Ends: " + banEndFormatter.format(banEntity.getEndsAt());
-			// }
-
-			// loginStatusVO.setDescription(banDesc);
-			return loginStatusVO;
-		}
-	}
 }
