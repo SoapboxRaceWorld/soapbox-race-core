@@ -22,7 +22,7 @@ public class HardwareInfoBO {
 		return "empty";
 	}
 
-	public void save(HardwareInfo hardwareInfo) {
+	public HardwareInfoEntity save(HardwareInfo hardwareInfo) {
 		long userId = hardwareInfo.getUserID();
 
 		hardwareInfo.setAvailableMem(0);
@@ -44,6 +44,15 @@ public class HardwareInfoBO {
 			hardwareInfoEntityTmp.setUserId(userId);
 			hardwareInfoDAO.update(hardwareInfoEntityTmp);
 		}
+		return hardwareInfoEntityTmp;
+	}
+
+	public boolean isHardwareHashBanned(String hardwareHash) {
+		HardwareInfoEntity hardwareInfoEntity = hardwareInfoDAO.findByHardwareHash(hardwareHash);
+		if (hardwareInfoEntity != null) {
+			return hardwareInfoEntity.isBanned();
+		}
+		return false;
 	}
 
 }

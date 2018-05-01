@@ -13,7 +13,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "HARDWARE_INFO")
 @NamedQueries({ //
-		@NamedQuery(name = "HardwareInfoEntity.findByHardwareHash", query = "SELECT obj FROM HardwareInfoEntity obj WHERE obj.hardwareHash = :hardwareHash") //
+		@NamedQuery(name = "HardwareInfoEntity.findByHardwareHash", query = "SELECT obj FROM HardwareInfoEntity obj WHERE obj.hardwareHash = :hardwareHash"), //
+		@NamedQuery(name = "HardwareInfoEntity.findByUserId", query = "SELECT obj FROM HardwareInfoEntity obj WHERE obj.userId = :userId") //
 })
 public class HardwareInfoEntity {
 
@@ -29,6 +30,8 @@ public class HardwareInfoEntity {
 	private String hardwareHash;
 
 	private Long userId;
+
+	private boolean banned;
 
 	public Long getId() {
 		return id;
@@ -60,6 +63,14 @@ public class HardwareInfoEntity {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public boolean isBanned() {
+		return banned;
+	}
+
+	public void setBanned(boolean banned) {
+		this.banned = banned;
 	}
 
 }

@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import com.soapboxrace.core.api.util.HwBan;
 import com.soapboxrace.core.api.util.LauncherChecks;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.AuthenticationBO;
@@ -61,6 +62,7 @@ public class User {
 
 	@POST
 	@Secured
+	@HwBan
 	@Path("SecureLoginPersona")
 	@Produces(MediaType.APPLICATION_XML)
 	public String secureLoginPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
