@@ -35,11 +35,11 @@ public class HardwareInfoBO {
 		String calcHardwareInfoHash = calcHardwareInfoHash(hardwareInfoXml);
 		HardwareInfoEntity hardwareInfoEntityTmp = hardwareInfoDAO.findByHardwareHash(calcHardwareInfoHash);
 		if (hardwareInfoEntityTmp == null) {
-			HardwareInfoEntity hardwareInfoEntity = new HardwareInfoEntity();
-			hardwareInfoEntity.setUserId(userId);
-			hardwareInfoEntity.setHardwareInfo(hardwareInfoXml);
-			hardwareInfoEntity.setHardwareHash(calcHardwareInfoHash);
-			hardwareInfoDAO.insert(hardwareInfoEntity);
+			hardwareInfoEntityTmp = new HardwareInfoEntity();
+			hardwareInfoEntityTmp.setUserId(userId);
+			hardwareInfoEntityTmp.setHardwareInfo(hardwareInfoXml);
+			hardwareInfoEntityTmp.setHardwareHash(calcHardwareInfoHash);
+			hardwareInfoDAO.insert(hardwareInfoEntityTmp);
 		} else {
 			hardwareInfoEntityTmp.setUserId(userId);
 			hardwareInfoDAO.update(hardwareInfoEntityTmp);
