@@ -9,10 +9,12 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.api.util.BanCommands;
 import com.soapboxrace.core.dao.BanDAO;
+import com.soapboxrace.core.dao.HardwareInfoDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.BanEntity.BanType;
+import com.soapboxrace.core.jpa.HardwareInfoEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
@@ -31,6 +33,9 @@ public class AdminBO {
 
 	@EJB
 	private BanDAO banDAO;
+
+	@EJB
+	private HardwareInfoDAO hardwareInfoDAO;
 
 	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
@@ -61,6 +66,9 @@ public class AdminBO {
 			switch (banCommand) {
 			case UNBAN:
 				banDAO.unbanUser(personaEntity.getUser());
+				HardwareInfoEntity hardwareInfoEntity = hardwareInfoDAO.findByUserId(personaEntity.getUser().getId());
+				hardwareInfoEntity.setBanned(false);
+				hardwareInfoDAO.update(hardwareInfoEntity);
 				break;
 			case BAN:
 				totalBanTime = 10 * 365 * 24 * 60 * 60 * 1000;
@@ -98,6 +106,11 @@ public class AdminBO {
 		banEntity.setType(BanType.HWID_BAN.toString());
 		banEntity.setEndsAt(endsOn);
 		banDAO.insert(banEntity);
+
+		HardwareInfoEntity hardwareInfoEntity = hardwareInfoDAO.findByUserId(userEntity.getId());
+		hardwareInfoEntity.setBanned(true);
+		hardwareInfoDAO.update(hardwareInfoEntity);
+
 		sendKick(userEntity.getId(), personaEntity.getPersonaId());
 		openFireSoapBoxCli.send(XmppChat.createSystemMessage("Ban successful!"), actor);
 	}
