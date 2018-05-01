@@ -67,8 +67,10 @@ public class AdminBO {
 			case UNBAN:
 				banDAO.unbanUser(personaEntity.getUser());
 				HardwareInfoEntity hardwareInfoEntity = hardwareInfoDAO.findByUserId(personaEntity.getUser().getId());
-				hardwareInfoEntity.setBanned(false);
-				hardwareInfoDAO.update(hardwareInfoEntity);
+				if (hardwareInfoEntity != null) {
+					hardwareInfoEntity.setBanned(false);
+					hardwareInfoDAO.update(hardwareInfoEntity);
+				}
 				break;
 			case BAN:
 				totalBanTime = 10 * 365 * 24 * 60 * 60 * 1000;
@@ -108,8 +110,10 @@ public class AdminBO {
 		banDAO.insert(banEntity);
 
 		HardwareInfoEntity hardwareInfoEntity = hardwareInfoDAO.findByUserId(userEntity.getId());
-		hardwareInfoEntity.setBanned(true);
-		hardwareInfoDAO.update(hardwareInfoEntity);
+		if (hardwareInfoEntity != null) {
+			hardwareInfoEntity.setBanned(true);
+			hardwareInfoDAO.update(hardwareInfoEntity);
+		}
 
 		sendKick(userEntity.getId(), personaEntity.getPersonaId());
 		openFireSoapBoxCli.send(XmppChat.createSystemMessage("Ban successful!"), actor);
