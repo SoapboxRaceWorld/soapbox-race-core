@@ -2,6 +2,7 @@ package com.soapboxrace.core.jpa;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,12 +20,12 @@ public class EventSessionEntity {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "EVENTID", referencedColumnName = "ID")
+	@JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENTSESSION_EVENT"))
 	private EventEntity event;
-	
+
 	@Column(name = "STARTED")
 	private Long started;
-	
+
 	@Column(name = "ENDED")
 	private Long ended;
 
@@ -44,23 +45,19 @@ public class EventSessionEntity {
 		this.event = event;
 	}
 
-	public Long getEnded()
-	{
+	public Long getEnded() {
 		return ended;
 	}
 
-	public void setEnded(Long ended)
-	{
+	public void setEnded(Long ended) {
 		this.ended = ended;
 	}
 
-	public Long getStarted()
-	{
+	public Long getStarted() {
 		return started;
 	}
 
-	public void setStarted(Long started)
-	{
+	public void setStarted(Long started) {
 		this.started = started;
 	}
 }

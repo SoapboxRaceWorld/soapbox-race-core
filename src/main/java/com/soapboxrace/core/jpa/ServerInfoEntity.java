@@ -34,6 +34,8 @@ public class ServerInfoEntity {
 	private String adminList;
 	private String ownerList;
 	private Integer numberOfRegistered;
+
+	@Transient
 	private Integer maxUsersAllowed;
 	private String passwordHashing;
 

@@ -1,6 +1,7 @@
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +25,7 @@ public class VisualPartEntity {
 	private int slotHash;
 
 	@ManyToOne
-	@JoinColumn(name = "customCarId", referencedColumnName = "ID")
+	@JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_VISUALPART_CUSTOMCAR"))
 	private CustomCarEntity customCar;
 
 	public Long getId() {

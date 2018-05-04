@@ -1,7 +1,5 @@
 package com.soapboxrace.core.jpa;
 
-import com.soapboxrace.core.bo.ParameterBO;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,25 +29,26 @@ import javax.persistence.Transient;
 })
 public class LobbyEntity {
 
-	private static final ParameterBO parameterBO = new ParameterBO();
-	
 	@Id
 	@Column(name = "ID", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "EVENTID", referencedColumnName = "ID")
+	@JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBY_EVENT"))
 	private EventEntity event;
 
 	@OneToMany(mappedBy = "lobby", targetEntity = LobbyEntrantEntity.class, cascade = CascadeType.MERGE)
 	private List<LobbyEntrantEntity> entrants;
 
 	private Date lobbyDateTimeStart = new Date();
-	
+
 	private Boolean isPrivate;
-	
+
 	private Long personaId;
+
+	@Transient
+	private Long lobbyCountdownInMilliseconds = 60000L;
 
 	public Long getId() {
 		return id;
@@ -81,19 +81,19 @@ public class LobbyEntity {
 	public void setLobbyDateTimeStart(Date lobbyDateTimeStart) {
 		this.lobbyDateTimeStart = lobbyDateTimeStart;
 	}
-	
+
 	public Boolean getIsPrivate() {
 		return isPrivate;
 	}
-	
+
 	public void setIsPrivate(Boolean isPrivate) {
 		this.isPrivate = isPrivate;
 	}
-	
+
 	public Long getPersonaId() {
 		return personaId;
 	}
-	
+
 	public void setPersonaId(Long personaId) {
 		this.personaId = personaId;
 	}
@@ -109,10 +109,10 @@ public class LobbyEntity {
 		if (lobbyDateTimeStart != null) {
 			Date now = new Date();
 			Long time = now.getTime() - lobbyDateTimeStart.getTime();
-			time = parameterBO.getLobbyCountdown() - time;
+			time = 60000L - time;
 			return time.intValue();
 		}
-		return parameterBO.getLobbyCountdown();
+		return lobbyCountdownInMilliseconds.intValue();
 	}
 
 }

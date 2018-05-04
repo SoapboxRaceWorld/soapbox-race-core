@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,103 +22,84 @@ import com.soapboxrace.core.jpa.convert.LocalDateTimeConverter;
 @Entity
 @Table(name = "BAN")
 @NamedQueries({ //
-        @NamedQuery(name = "BanEntity.findAll", query = "SELECT obj FROM BanEntity obj")
-})
-public class BanEntity
-{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
-    
-    @OneToOne(targetEntity = UserEntity.class, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity userEntity;
-    
-    @Column
-    @Convert(converter = BanTypeConverter.class)
-    private BanType type;
-    
-    @Column
-    private String data;
-    
-    @Column
-    private String reason;
-    
-    @Column
-    @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime endsAt;
+		@NamedQuery(name = "BanEntity.findAll", query = "SELECT obj FROM BanEntity obj") })
+public class BanEntity {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
+	private Long id;
 
-    public Long getId()
-    {
-        return id;
-    }
+	@OneToOne(targetEntity = UserEntity.class, cascade = CascadeType.REMOVE)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BAN_USER"))
+	private UserEntity userEntity;
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+	@Column
+	@Convert(converter = BanTypeConverter.class)
+	private BanType type;
 
-    public UserEntity getUserEntity()
-    {
-        return userEntity;
-    }
+	@Column
+	private String data;
 
-    public void setUserEntity(UserEntity userEntity)
-    {
-        this.userEntity = userEntity;
-    }
+	@Column
+	private String reason;
 
-    public BanType getType()
-    {
-        return type;
-    }
+	@Column
+	@Convert(converter = LocalDateTimeConverter.class)
+	private LocalDateTime endsAt;
 
-    public void setType(BanType type)
-    {
-        this.type = type;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getData()
-    {
-        return data;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setData(String data)
-    {
-        this.data = data;
-    }
+	public UserEntity getUserEntity() {
+		return userEntity;
+	}
 
-    public LocalDateTime getEndsAt()
-    {
-        return endsAt;
-    }
+	public void setUserEntity(UserEntity userEntity) {
+		this.userEntity = userEntity;
+	}
 
-    public void setEndsAt(LocalDateTime endsAt)
-    {
-        this.endsAt = endsAt;
-    }
+	public BanType getType() {
+		return type;
+	}
 
-    public String getReason()
-    {
-        return reason;
-    }
+	public void setType(BanType type) {
+		this.type = type;
+	}
 
-    public void setReason(String reason)
-    {
-        this.reason = reason;
-    }
+	public String getData() {
+		return data;
+	}
 
-    public boolean stillApplies() 
-    {
-        return this.endsAt == null || LocalDateTime.now().isBefore(this.endsAt);    
-    }
-    
-    public enum BanType
-    {
-        USER_BAN,
-        IP_BAN,
-        HWID_BAN,
-        EMAIL_BAN
-    }
+	public void setData(String data) {
+		this.data = data;
+	}
+
+	public LocalDateTime getEndsAt() {
+		return endsAt;
+	}
+
+	public void setEndsAt(LocalDateTime endsAt) {
+		this.endsAt = endsAt;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public boolean stillApplies() {
+		return this.endsAt == null || LocalDateTime.now().isBefore(this.endsAt);
+	}
+
+	public enum BanType {
+		USER_BAN, IP_BAN, HWID_BAN, EMAIL_BAN
+	}
 }

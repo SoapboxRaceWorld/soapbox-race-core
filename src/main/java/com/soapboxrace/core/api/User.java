@@ -101,7 +101,7 @@ public class User {
 	@GET
 	@Path("authenticateUser")
 	@Produces(MediaType.APPLICATION_XML)
-	@LauncherChecks
+//	@LauncherChecks
 	public Response authenticateUser(@QueryParam("email") String email, @QueryParam("password") String password) {
 		LoginStatusVO loginStatusVO = tokenBO.login(email, password, sr);
 		if (loginStatusVO.isLoginOk()) {
@@ -111,9 +111,9 @@ public class User {
 	}
 
 	@GET
-	@Path("createUser")
+	@Path("createUser") // temporary
 	@Produces(MediaType.APPLICATION_XML)
-	@LauncherChecks
+//	@LauncherChecks
 	public Response createUser(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("inviteTicket") String inviteTicket) {
 		LoginStatusVO loginStatusVO = userBO.createUserWithTicket(email, password, inviteTicket);
 		if (loginStatusVO != null && loginStatusVO.isLoginOk()) {

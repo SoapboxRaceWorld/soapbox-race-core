@@ -1,19 +1,18 @@
 package com.soapboxrace.core.bo;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.NotAuthorizedException;
-
 import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.NotAuthorizedException;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Stateless
 public class TokenSessionBO {
@@ -91,45 +90,34 @@ public class TokenSessionBO {
 
 	public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
 		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
+		
+		UserEntity user = userDAO.findByEmail(email);
+		
+		if (user == null) {
+			loginStatusVO.setDescription("Account not found.");
+			return loginStatusVO;
+		}
+		
+		if (user.getPassword().equals(password)) {
+			if (user.getHwid() == null || user.getHwid().trim().isEmpty()) {
+				user.setHwid(httpRequest.getHeader("X-HWID"));
+			}
 
-		int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
-		int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
-		if (maxOnlinePlayers != 0 && numberOfUsersOnlineNow >= maxOnlinePlayers) {
-			loginStatusVO.setDescription("The server is currently full! Try again later.");
+			if (user.getIpAddress() == null || user.getIpAddress().trim().isEmpty()) {
+				user.setIpAddress(httpRequest.getRemoteAddr());
+			}
+			
+			user.setLastLogin(LocalDateTime.now());
+			userDAO.update(user);
+
+			deleteByUserId(user.getId());
+			loginStatusVO = new LoginStatusVO(user.getId(), createToken(user.getId(), null), true);
+			loginStatusVO.setDescription("");
+		} else {
+			loginStatusVO.setDescription("Incorrect password.");
 			return loginStatusVO;
 		}
 
-		if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
-			UserEntity userEntity = userDAO.findByEmail(email);
-			if (userEntity != null) {
-				if (password.equals(userEntity.getPassword())) {
-					if (userEntity.getHwid() == null || userEntity.getHwid().trim().isEmpty()) {
-						userEntity.setHwid(httpRequest.getHeader("X-HWID"));
-					}
-
-					if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty()) {
-						String forwardedFor;
-						if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.useForwardedFor()) {
-							userEntity.setIpAddress(parameterBO.googleLoadBalancing() ? forwardedFor.split(",")[0] : forwardedFor);
-						} else {
-							userEntity.setIpAddress(httpRequest.getRemoteAddr());
-						}
-						// userEntity.setIpAddress(httpRequest.getHea);
-					}
-
-					userEntity.setLastLogin(LocalDateTime.now());
-					userDAO.update(userEntity);
-					Long userId = userEntity.getId();
-					deleteByUserId(userId);
-					String randomUUID = createToken(userId, null);
-					loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
-					loginStatusVO.setDescription("");
-
-					return loginStatusVO;
-				}
-			}
-		}
-		loginStatusVO.setDescription("LOGIN ERROR");
 		return loginStatusVO;
 	}
 

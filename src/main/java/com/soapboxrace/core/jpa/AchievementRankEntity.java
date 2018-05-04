@@ -2,6 +2,7 @@ package com.soapboxrace.core.jpa;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,7 +21,7 @@ public class AchievementRankEntity {
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@JoinColumn(name = "achievementId", referencedColumnName = "id")
+	@JoinColumn(name = "achievementId", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_ACHRANK_ACHDEF"))
 	@ManyToOne
 	private AchievementDefinitionEntity achievementDefinition;
 
