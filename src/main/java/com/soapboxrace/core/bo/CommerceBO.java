@@ -159,16 +159,69 @@ public class CommerceBO {
 	private void calcNewCarClass(CustomCarEntity customCarEntity) {
 		String name = customCarEntity.getName();
 		CarClassesEntity carClassesEntity = carClassesDAO.findById(name);
-		ProductEntity carBase = productDAO.findByProductId(carClassesEntity.getProductId());
 		List<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
+		int topSpeed = 0;
+		int accel = 0;
+		int handling = 0;
 		for (PerformancePartEntity performancePartEntity : performanceParts) {
 			int perfHash = performancePartEntity.getPerformancePartAttribHash();
 			ProductEntity productEntity = productDAO.findByHash(perfHash);
-			Integer topSpeed = productEntity.getTopSpeed();
-			Integer accel = productEntity.getAccel();
-			Integer handling = productEntity.getHandling();
+			topSpeed = productEntity.getTopSpeed().intValue() + topSpeed;
+			accel = productEntity.getAccel().intValue() + accel;
+			handling = productEntity.getHandling().intValue() + handling;
+		}
+		float tt = (float) (topSpeed * 0.01);
+		float ta = (float) (accel * 0.01);
+		float th = (float) (handling * 0.01);
+		float totalChanges = 1 / (((tt + ta + th) * 0.666666666666666f) + 1f);
+		tt = tt * totalChanges;
+		ta = ta * totalChanges;
+		th = th * totalChanges;
+		float finalConstant = 1 - tt - ta - th;
+
+		Float finalTopSpeed1 = carClassesEntity.getTsVar1().floatValue() * th;
+		Float finalTopSpeed2 = carClassesEntity.getTsVar2().floatValue() * ta;
+		Float finalTopSpeed3 = carClassesEntity.getTsVar3().floatValue() * tt;
+		Float finalTopSpeed = (finalConstant * carClassesEntity.getTsStock().floatValue()) + finalTopSpeed1.floatValue() + finalTopSpeed2.floatValue()
+				+ finalTopSpeed3.floatValue();
+
+		System.out.println(finalTopSpeed.intValue());
+
+		Float finalAccel1 = carClassesEntity.getAcVar1().floatValue() * th;
+		Float finalAccel2 = carClassesEntity.getAcVar2().floatValue() * ta;
+		Float finalAccel3 = carClassesEntity.getAcVar3().floatValue() * tt;
+		Float finalAccel = (finalConstant * carClassesEntity.getAcStock().floatValue()) + finalAccel1.floatValue() + finalAccel2.floatValue()
+				+ finalAccel3.floatValue();
+
+		System.out.println(finalAccel.intValue());
+
+		Float finalHandling1 = carClassesEntity.getHaVar1().floatValue() * th;
+		Float finalHandling2 = carClassesEntity.getHaVar2().floatValue() * ta;
+		Float finalHandling3 = carClassesEntity.getHaVar3().floatValue() * tt;
+		Float finalHandling = (finalConstant * carClassesEntity.getHaStock().floatValue()) + finalHandling1.floatValue() + finalHandling2.floatValue()
+				+ finalHandling3.floatValue();
+
+		System.out.println(finalHandling.intValue());
+
+		Float finalClass = (finalTopSpeed.intValue() + finalAccel.intValue() + finalHandling.intValue()) / 3f;
+		System.out.println(finalClass.intValue());
+		int finalClassInt = finalClass.intValue();
+		
+		// move to new method
+		int carclassHash = 872416321;
+		if (finalClassInt >= 250 && finalClassInt < 400) {
+			carclassHash = 415909161;
+		} else if (finalClassInt >= 400 && finalClassInt < 500) {
+			carclassHash = 1866825865;
+		} else if (finalClassInt >= 500 && finalClassInt < 600) {
+			carclassHash = -406473455;
+		} else if (finalClassInt >= 600 && finalClassInt < 750) {
+			carclassHash = -405837480;
+		} else if (finalClassInt >= 750) {
+			carclassHash = -2142411446;
 		}
 
+		customCarEntity.setCarClassHash(carclassHash);
 	}
 
 	private void disableItem(ProductEntity productEntity) {
