@@ -84,7 +84,8 @@ CREATE TABLE
         ha_var1 INT,
         ha_var2 INT,
         ha_var3 INT,
-        hash INT
+        hash INT,
+        product_id VARCHAR(255) COLLATE utf8_unicode_ci
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE

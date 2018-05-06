@@ -159,6 +159,7 @@ public class CommerceBO {
 	private void calcNewCarClass(CustomCarEntity customCarEntity) {
 		String name = customCarEntity.getName();
 		CarClassesEntity carClassesEntity = carClassesDAO.findById(name);
+		ProductEntity carBase = productDAO.findByProductId(carClassesEntity.getProductId());
 		List<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
 		for (PerformancePartEntity performancePartEntity : performanceParts) {
 			int perfHash = performancePartEntity.getPerformancePartAttribHash();

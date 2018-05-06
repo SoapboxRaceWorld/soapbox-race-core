@@ -15,6 +15,8 @@ public class CarClassesEntity implements Serializable {
 	@Id
 	@Column(name = "store_name")
 	private String storeName;
+	@Column(name = "product_id")
+	private String productId;
 	@Column(name = "hash")
 	private Integer hash;
 	@Column(name = "full_name")
@@ -182,6 +184,14 @@ public class CarClassesEntity implements Serializable {
 
 	public void setHash(Integer hash) {
 		this.hash = hash;
+	}
+
+	public String getProductId() {
+		return productId;
+	}
+
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
 
 }
