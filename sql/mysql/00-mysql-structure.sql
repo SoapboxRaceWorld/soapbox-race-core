@@ -66,6 +66,28 @@ CREATE TABLE
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE
+    SOAPBOX.CAR_CLASSES
+    (
+        store_name text COLLATE utf8_unicode_ci,
+        full_name text COLLATE utf8_unicode_ci,
+        manufactor text COLLATE utf8_unicode_ci,
+        model text COLLATE utf8_unicode_ci,
+        ts_stock INT,
+        ts_var1 INT,
+        ts_var2 INT,
+        ts_var3 INT,
+        ac_stock INT,
+        ac_var1 INT,
+        ac_var2 INT,
+        ac_var3 INT,
+        ha_stock INT,
+        ha_var1 INT,
+        ha_var2 INT,
+        ha_var3 INT,
+        hash INT
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE
     SOAPBOX.CARSLOT
     (
         id bigint NOT NULL AUTO_INCREMENT,
