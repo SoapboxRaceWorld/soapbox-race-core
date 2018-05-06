@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.util.CommerceOp;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
+import com.soapboxrace.core.dao.CarClassesDAO;
 import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.InventoryDAO;
 import com.soapboxrace.core.dao.InventoryItemDAO;
@@ -19,9 +20,11 @@ import com.soapboxrace.core.dao.SkillModPartDAO;
 import com.soapboxrace.core.dao.VinylDAO;
 import com.soapboxrace.core.dao.VinylProductDAO;
 import com.soapboxrace.core.dao.VisualPartDAO;
+import com.soapboxrace.core.jpa.CarClassesEntity;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
+import com.soapboxrace.core.jpa.PerformancePartEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.core.jpa.VinylProductEntity;
@@ -79,6 +82,9 @@ public class CommerceBO {
 	@EJB
 	private VisualPartDAO visualPartDAO;
 
+	@EJB
+	private CarClassesDAO carClassesDAO;
+
 	public OwnedCarTrans responseCar(CommerceSessionTrans commerceSessionTrans) {
 		OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
 		ownedCarTrans.setCustomCar(commerceSessionTrans.getUpdatedCar().getCustomCar());
@@ -130,6 +136,7 @@ public class CommerceBO {
 		case PERFORMANCE:
 			performancePartDAO.deleteByCustomCar(customCarEntity);
 			OwnedCarConverter.performanceParts2NewEntity(customCarTrans, customCarEntity);
+			calcNewCarClass(customCarEntity);
 			break;
 		case SKILL:
 			skillModPartDAO.deleteByCustomCar(customCarEntity);
@@ -147,6 +154,20 @@ public class CommerceBO {
 			break;
 		}
 		carSlotDAO.update(defaultCarEntity);
+	}
+
+	private void calcNewCarClass(CustomCarEntity customCarEntity) {
+		String name = customCarEntity.getName();
+		CarClassesEntity carClassesEntity = carClassesDAO.findById(name);
+		List<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
+		for (PerformancePartEntity performancePartEntity : performanceParts) {
+			int perfHash = performancePartEntity.getPerformancePartAttribHash();
+			ProductEntity productEntity = productDAO.findByHash(perfHash);
+			Integer topSpeed = productEntity.getTopSpeed();
+			Integer accel = productEntity.getAccel();
+			Integer handling = productEntity.getHandling();
+		}
+
 	}
 
 	private void disableItem(ProductEntity productEntity) {
