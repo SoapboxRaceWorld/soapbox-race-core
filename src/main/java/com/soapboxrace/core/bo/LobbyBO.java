@@ -275,7 +275,7 @@ public class LobbyBO {
 
 		public void run() {
 			try {
-				Thread.sleep(parameterBO.getLobbyCountdown());
+				Thread.sleep(60000);
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}

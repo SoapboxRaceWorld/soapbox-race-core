@@ -1,12 +1,18 @@
 package com.soapboxrace.core.bo.util;
 
+import java.io.Serializable;
+
 import com.soapboxrace.jaxb.http.ArrayOfRewardPart;
 import com.soapboxrace.jaxb.http.EnumRewardCategory;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.RewardPart;
 
-public class RewardVO {
+public class RewardVO implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -884222055031833226L;
 	int baseRep = 0;
 	int baseCash = 0;
 	int rep = 0;

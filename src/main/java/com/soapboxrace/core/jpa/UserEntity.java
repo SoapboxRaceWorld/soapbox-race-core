@@ -31,10 +31,12 @@ public class UserEntity {
 
 	@Column(name = "PASSWORD", length = 50)
 	private String password;
-	
+
 	@Column(name = "HWID")
 	private String hwid;
-	
+
+	private String gameHardwareHash;
+
 	@Column(name = "IP_ADDRESS")
 	private String ipAddress;
 
@@ -46,10 +48,10 @@ public class UserEntity {
 
 	@Column(name = "isAdmin")
 	private boolean isAdmin;
-	
+
 	@Column(name = "created")
 	private LocalDateTime created;
-	
+
 	@Column(name = "lastLogin")
 	private LocalDateTime lastLogin;
 
@@ -81,23 +83,19 @@ public class UserEntity {
 		return listOfProfile;
 	}
 
-	public String getHwid()
-	{
+	public String getHwid() {
 		return hwid;
 	}
 
-	public void setHwid(String hwid)
-	{
+	public void setHwid(String hwid) {
 		this.hwid = hwid;
 	}
 
-	public String getIpAddress()
-	{
+	public String getIpAddress() {
 		return ipAddress;
 	}
 
-	public void setIpAddress(String ipAddress)
-	{
+	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
 	}
 
@@ -113,33 +111,36 @@ public class UserEntity {
 		return this.listOfProfile.stream().anyMatch(p -> p.getPersonaId().equals(id));
 	}
 
-	public boolean isAdmin()
-	{
+	public boolean isAdmin() {
 		return isAdmin;
 	}
 
-	public void setAdmin(boolean admin)
-	{
+	public void setAdmin(boolean admin) {
 		isAdmin = admin;
 	}
 
-	public LocalDateTime getLastLogin()
-	{
+	public LocalDateTime getLastLogin() {
 		return lastLogin;
 	}
 
-	public void setLastLogin(LocalDateTime lastLogin)
-	{
+	public void setLastLogin(LocalDateTime lastLogin) {
 		this.lastLogin = lastLogin;
 	}
 
-	public LocalDateTime getCreated()
-	{
+	public LocalDateTime getCreated() {
 		return created;
 	}
 
-	public void setCreated(LocalDateTime created)
-	{
+	public void setCreated(LocalDateTime created) {
 		this.created = created;
 	}
+
+	public String getGameHardwareHash() {
+		return gameHardwareHash;
+	}
+
+	public void setGameHardwareHash(String gameHardwareHash) {
+		this.gameHardwareHash = gameHardwareHash;
+	}
+
 }
