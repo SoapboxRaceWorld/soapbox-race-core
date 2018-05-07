@@ -31,8 +31,8 @@ public class SystemInfo {
 		systemInfo.setNucleusNamespace("sbrw-live");
 		systemInfo.setNucleusNamespaceWeb("sbr_web");
 		systemInfo.setPersonaCacheTimeout(900);
-		systemInfo.setPortalDomain("soapboxraceworld.com");
-		systemInfo.setPortalStoreFailurePage("soapboxraceworld.com/fail");
+		systemInfo.setPortalDomain("soapboxrace.world");
+		systemInfo.setPortalStoreFailurePage("soapboxrace.world/fail");
 		systemInfo.setPortalTimeOut("6000");
 		systemInfo.setShardName("CORE");
 		GregorianCalendar c = new GregorianCalendar();
