@@ -118,9 +118,9 @@ public class InventoryBO {
 	public InventoryEntity createInventory(PersonaEntity personaEntity) {
 		InventoryEntity inventoryEntity = new InventoryEntity();
 		inventoryEntity.setPersona(personaEntity);
-		inventoryEntity.setSkillModPartsCapacity(parameterBO.getStartingInventorySkillSlots());
-		inventoryEntity.setPerformancePartsCapacity(parameterBO.getStartingInventoryPerfSlots());
-		inventoryEntity.setVisualPartsCapacity(parameterBO.getStartingInventoryVisualSlots());
+		inventoryEntity.setSkillModPartsCapacity(parameterBO.getIntParam("STARTING_INVENTORY_SKILL_SLOTS"));
+		inventoryEntity.setPerformancePartsCapacity(parameterBO.getIntParam("STARTING_INVENTORY_PERF_SLOTS"));
+		inventoryEntity.setVisualPartsCapacity(parameterBO.getIntParam("STARTING_INVENTORY_VISUAL_SLOTS"));
 		inventoryDAO.insert(inventoryEntity);
 
 		inventoryItemDAO.insert(getPowerUpInventory("nosshot", -1681514783, "0x9bc61ee1", inventoryEntity, personaEntity));

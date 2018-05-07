@@ -24,6 +24,9 @@ INTO
         'myemail@gmail.com'
     )
     ,
+    (   'GEOIP2_DB_FILE_PATH',
+        'GeoLite2-Country.mmdb')
+    ,
     (
         'GOOGLE_LB_ENABLED',
         'false'
@@ -76,6 +79,16 @@ INTO
     ,
     (
         'MAX_CAR_SLOTS_PREMIUM',
+        '60'
+    )
+    ,
+    (
+        'MAX_LEVEL_PREMIUM',
+        '70'
+    )
+    ,
+    (
+        'MAX_LEVEL_FREE',
         '60'
     )
     ,

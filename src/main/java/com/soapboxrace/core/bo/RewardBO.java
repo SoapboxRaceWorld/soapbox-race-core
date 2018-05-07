@@ -92,12 +92,18 @@ public class RewardBO {
 	}
 
 	public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
+		int maxLevel = 60;
+		if (personaEntity.getUser().isPremium()) {
+			maxLevel = parameterBO.getIntParam("MAX_LEVEL_PREMIUM");
+		} else {
+			maxLevel = parameterBO.getIntParam("MAX_LEVEL_FREE");
+		}
 		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
 			Integer cashMax = (int) personaEntity.getCash() + cash;
 			personaEntity.setCash(cashMax > 9999999 ? 9999999 : cashMax < 1 ? 1 : cashMax);
 		}
 
-		if (parameterBO.getBoolParam("ENABLE_REPUTATION") && personaEntity.getLevel() < 60) {
+		if (parameterBO.getBoolParam("ENABLE_REPUTATION") && personaEntity.getLevel() < maxLevel) {
 			Long expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
 			Long expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
 			if (expMax >= expToNextLevel) {
@@ -110,7 +116,7 @@ public class RewardBO {
 					expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
 
 					isLeveledUp = (expMax >= expToNextLevel);
-					if (personaEntity.getLevel() >= 60) {
+					if (personaEntity.getLevel() >= maxLevel) {
 						isLeveledUp = false;
 					}
 				}

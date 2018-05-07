@@ -34,9 +34,7 @@ public class ServerInfoEntity {
 	private String adminList;
 	private String ownerList;
 	private Integer numberOfRegistered;
-
-	@Transient
-	private Integer maxUsersAllowed;
+	private String allowedCountries;
 
 	@Convert(converter = SceneryGroupConverter.class)
 	private List<String> activatedHolidaySceneryGroups;
@@ -179,11 +177,12 @@ public class ServerInfoEntity {
 		return this.disactivatedHolidaySceneryGroups;
 	}
 
-	public Integer getMaxUsersAllowed() {
-		return maxUsersAllowed;
+	public String getAllowedCountries() {
+		return allowedCountries;
 	}
 
-	public void setMaxUsersAllowed(Integer maxUsersAllowed) {
-		this.maxUsersAllowed = maxUsersAllowed;
+	public void setAllowedCountries(String allowedCountries) {
+		this.allowedCountries = allowedCountries;
 	}
+
 }

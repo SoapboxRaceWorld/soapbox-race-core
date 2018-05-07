@@ -1,18 +1,20 @@
 package com.soapboxrace.core.bo;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.NotAuthorizedException;
+
+import com.soapboxrace.core.api.util.GeoIp2;
 import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.NotAuthorizedException;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Stateless
 public class TokenSessionBO {
@@ -24,6 +26,9 @@ public class TokenSessionBO {
 
 	@EJB
 	private ParameterBO parameterBO;
+
+	@EJB
+	private GetServerInformationBO serverInfoBO;
 
 	@EJB
 	private OnlineUsersBO onlineUsersBO;
@@ -88,36 +93,66 @@ public class TokenSessionBO {
 		return date;
 	}
 
-	public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
+	public LoginStatusVO checkGeoIp(String ip) {
 		LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-		
-		UserEntity user = userDAO.findByEmail(email);
-		
-		if (user == null) {
-			loginStatusVO.setDescription("Account not found.");
-			return loginStatusVO;
-		}
-		
-		if (user.getPassword().equals(password)) {
-			if (user.getHwid() == null || user.getHwid().trim().isEmpty()) {
-				user.setHwid(httpRequest.getHeader("X-HWID"));
+		String allowedCountries = serverInfoBO.getServerInformation().getAllowedCountries();
+		if (allowedCountries != null && !allowedCountries.isEmpty()) {
+			String geoip2DbFilePath = parameterBO.getStrParam("GEOIP2_DB_FILE_PATH");
+			GeoIp2 geoIp2 = GeoIp2.getInstance(geoip2DbFilePath);
+			if (geoIp2.isCountryAllowed(ip, allowedCountries)) {
+				return new LoginStatusVO(0L, "", true);
+			} else {
+				loginStatusVO.setDescription("GEOIP BLOCK ACTIVE IN THIS SERVER, ALLOWED COUNTRIES: [" + allowedCountries + "]");
 			}
-
-			if (user.getIpAddress() == null || user.getIpAddress().trim().isEmpty()) {
-				user.setIpAddress(httpRequest.getRemoteAddr());
-			}
-			
-			user.setLastLogin(LocalDateTime.now());
-			userDAO.update(user);
-
-			deleteByUserId(user.getId());
-			loginStatusVO = new LoginStatusVO(user.getId(), createToken(user.getId(), null), true);
-			loginStatusVO.setDescription("");
 		} else {
-			loginStatusVO.setDescription("Incorrect password.");
+			return new LoginStatusVO(0L, "", true);
+		}
+		return loginStatusVO;
+	}
+
+	public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
+		LoginStatusVO loginStatusVO = checkGeoIp(httpRequest.getRemoteAddr());
+		if (!loginStatusVO.isLoginOk()) {
 			return loginStatusVO;
 		}
+		loginStatusVO = new LoginStatusVO(0L, "", false);
 
+		if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
+			UserEntity userEntity = userDAO.findByEmail(email);
+			if (userEntity != null) {
+				int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
+				int maxOlinePayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
+				if (numberOfUsersOnlineNow >= maxOlinePayers && !userEntity.isPremium()) {
+					loginStatusVO.setDescription("SERVER FULL");
+					return loginStatusVO;
+				}
+				if (password.equals(userEntity.getPassword())) {
+					if (userEntity.getHwid() == null || userEntity.getHwid().trim().isEmpty()) {
+						userEntity.setHwid(httpRequest.getHeader("X-HWID"));
+					}
+
+					if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty()) {
+						String forwardedFor;
+						if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.getBoolParam("USE_FORWARDED_FOR")) {
+							userEntity.setIpAddress(parameterBO.getBoolParam("GOOGLE_LB_ENABLED") ? forwardedFor.split(",")[0] : forwardedFor);
+						} else {
+							userEntity.setIpAddress(httpRequest.getRemoteAddr());
+						}
+					}
+
+					userEntity.setLastLogin(LocalDateTime.now());
+					userDAO.update(userEntity);
+					Long userId = userEntity.getId();
+					deleteByUserId(userId);
+					String randomUUID = createToken(userId, null);
+					loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
+					loginStatusVO.setDescription("");
+
+					return loginStatusVO;
+				}
+			}
+		}
+		loginStatusVO.setDescription("LOGIN ERROR");
 		return loginStatusVO;
 	}
 

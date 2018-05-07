@@ -62,6 +62,7 @@ public class ProductBO {
 			productTrans.setDurationMinute(entity.getDurationMinute());
 			productTrans.setHash((int) entity.getHash());
 			productTrans.setIcon(entity.getIcon());
+			productTrans.setSecondaryIcon(entity.getSecondaryIcon());
 			productTrans.setLevel(entity.getLevel());
 			productTrans.setPrice(entity.getPrice());
 			productTrans.setPriority(entity.getPriority());

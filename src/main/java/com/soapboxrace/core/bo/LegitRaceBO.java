@@ -23,13 +23,13 @@ public class LegitRaceBO {
 		int minimumTime = 0;
 
 		if (arbitrationPacket instanceof PursuitArbitrationPacket)
-			minimumTime = parameterBO.getMinPursuitTime();
+			minimumTime = parameterBO.getIntParam("PURSUIT_MINIMUM_TIME");
 		else if (arbitrationPacket instanceof RouteArbitrationPacket)
-			minimumTime = parameterBO.getMinRouteTime();
+			minimumTime = parameterBO.getIntParam("ROUTE_MINIMUM_TIME");
 		else if (arbitrationPacket instanceof TeamEscapeArbitrationPacket)
-			minimumTime = parameterBO.getMinTETime();
+			minimumTime = parameterBO.getIntParam("TE_MINIMUM_TIME");
 		else if (arbitrationPacket instanceof DragArbitrationPacket)
-			minimumTime = parameterBO.getMinDragTime();
+			minimumTime = parameterBO.getIntParam("DRAG_MINIMUM_TIME");
 
 		final long timeDiff = sessionEntity.getEnded() - sessionEntity.getStarted();
 		boolean legit = timeDiff >= minimumTime;

@@ -33,6 +33,15 @@ public class RewardPursuitBO extends RewardBO {
 		PersonaEntity personaEntity = personaDao.findById(activePersonaId);
 		RewardVO rewardVO = getRewardVO(personaEntity);
 
+		setPursuitRewards(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
+
+		Random random = new Random();
+		pursuitArbitrationPacket.setRank(random.nextInt(4));
+		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+		return getAccolades(personaEntity, pursuitArbitrationPacket, rewardVO);
+	}
+
+	public void setPursuitRewards(PersonaEntity personaEntity, EventEntity eventEntity, PursuitArbitrationPacket pursuitArbitrationPacket, RewardVO rewardVO) {
 		setBaseReward(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
 		setPursitParamReward(pursuitArbitrationPacket.getCopsDeployed(), EnumRewardType.COP_CARS_DEPLOYED, rewardVO);
 		setPursitParamReward(pursuitArbitrationPacket.getCopsDisabled(), EnumRewardType.COP_CARS_DISABLED, rewardVO);
@@ -47,10 +56,5 @@ public class RewardPursuitBO extends RewardBO {
 		setTopSpeedReward(eventEntity, pursuitArbitrationPacket.getTopSpeed(), rewardVO);
 		setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.BOUNTY_HUNTER);
 		setMultiplierReward(eventEntity, rewardVO);
-
-		Random random = new Random();
-		pursuitArbitrationPacket.setRank(random.nextInt(4));
-		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
-		return getAccolades(personaEntity, pursuitArbitrationPacket, rewardVO);
 	}
 }

@@ -44,6 +44,7 @@ public class Catalog {
 			productTrans.setDurationMinute(productEntity.getDurationMinute());
 			productTrans.setHash(productEntity.getHash());
 			productTrans.setIcon(productEntity.getIcon());
+			productTrans.setSecondaryIcon(productEntity.getSecondaryIcon());
 			productTrans.setLevel(productEntity.getLevel());
 			productTrans.setPrice(productEntity.getPrice());
 			productTrans.setPriority(productEntity.getPriority());
