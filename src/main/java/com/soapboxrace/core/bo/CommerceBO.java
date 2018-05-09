@@ -159,6 +159,9 @@ public class CommerceBO {
 	private void calcNewCarClass(CustomCarEntity customCarEntity) {
 		int physicsProfileHash = customCarEntity.getPhysicsProfileHash();
 		CarClassesEntity carClassesEntity = carClassesDAO.findByHash(physicsProfileHash);
+		if(carClassesEntity == null) {
+			return;
+		}
 		List<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
 		int topSpeed = 0;
 		int accel = 0;

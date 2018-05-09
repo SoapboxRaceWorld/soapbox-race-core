@@ -23,6 +23,11 @@ public class CarClassesDAO extends BaseDAO<CarClassesEntity> {
 	public CarClassesEntity findByHash(int hash) {
 		TypedQuery<CarClassesEntity> query = entityManager.createQuery("SELECT obj FROM CarClassesEntity obj WHERE obj.hash = :hash", CarClassesEntity.class);
 		query.setParameter("hash", hash);
-		return query.getSingleResult();
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
 	}
 }
