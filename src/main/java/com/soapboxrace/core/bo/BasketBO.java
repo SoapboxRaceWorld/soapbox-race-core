@@ -147,7 +147,7 @@ public class BasketBO {
 		}
 
 		ProductEntity productEntity = productDao.findByProductId(productId);
-		if (personaEntity.getCash() < productEntity.getPrice()) {
+		if (productEntity == null || personaEntity.getCash() < productEntity.getPrice()) {
 			return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
 		}
 
