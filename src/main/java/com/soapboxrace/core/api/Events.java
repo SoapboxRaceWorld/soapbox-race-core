@@ -14,12 +14,14 @@ import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.EventBO;
 import com.soapboxrace.core.bo.EventsBO;
 import com.soapboxrace.core.bo.ParameterBO;
+import com.soapboxrace.core.bo.PersonaBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.jaxb.http.ArrayOfEventDefinition;
 import com.soapboxrace.jaxb.http.ArrayOfInt;
 import com.soapboxrace.jaxb.http.EventDefinition;
 import com.soapboxrace.jaxb.http.EventsPacket;
+import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.TreasureHuntEventSession;
 import com.soapboxrace.jaxb.http.Vector3;
 
@@ -38,17 +40,25 @@ public class Events {
 	@EJB
 	private ParameterBO parameterBO;
 
+	@EJB
+	private PersonaBO personaBO;
+
 	@GET
 	@Secured
 	@Path("/availableatlevel")
 	@Produces(MediaType.APPLICATION_XML)
 	public EventsPacket availableAtLevel(@HeaderParam("securityToken") String securityToken) {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
+		int carClassHash = defaultCar.getCustomCar().getCarClassHash();
 
 		EventsPacket eventsPacket = new EventsPacket();
 		ArrayOfEventDefinition arrayOfEventDefinition = new ArrayOfEventDefinition();
 		List<EventEntity> availableAtLevel = eventBO.availableAtLevel(activePersonaId);
 		for (EventEntity eventEntity : availableAtLevel) {
+			if (eventEntity.getCarClassHash() != 607077938 && carClassHash != eventEntity.getCarClassHash()) {
+				eventEntity.setLocked(true);
+			}
 			arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(eventEntity));
 		}
 		eventsPacket.setEvents(arrayOfEventDefinition);
@@ -57,7 +67,7 @@ public class Events {
 
 	private EventDefinition getEventDefinitionWithId(EventEntity eventEntity) {
 		EventDefinition eventDefinition = new EventDefinition();
-		eventDefinition.setCarClassHash(607077938);
+		eventDefinition.setCarClassHash(eventEntity.getCarClassHash());
 		eventDefinition.setCoins(0);
 		Vector3 vector3 = new Vector3();
 		vector3.setX(0);

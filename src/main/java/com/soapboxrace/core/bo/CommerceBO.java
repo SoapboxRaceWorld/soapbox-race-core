@@ -157,8 +157,11 @@ public class CommerceBO {
 	}
 
 	private void calcNewCarClass(CustomCarEntity customCarEntity) {
-		String name = customCarEntity.getName();
-		CarClassesEntity carClassesEntity = carClassesDAO.findById(name);
+		int physicsProfileHash = customCarEntity.getPhysicsProfileHash();
+		CarClassesEntity carClassesEntity = carClassesDAO.findByHash(physicsProfileHash);
+		if(carClassesEntity == null) {
+			return;
+		}
 		List<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
 		int topSpeed = 0;
 		int accel = 0;
@@ -206,7 +209,7 @@ public class CommerceBO {
 		Float finalClass = (finalTopSpeed.intValue() + finalAccel.intValue() + finalHandling.intValue()) / 3f;
 		System.out.println(finalClass.intValue());
 		int finalClassInt = finalClass.intValue();
-		
+
 		// move to new method
 		int carclassHash = 872416321;
 		if (finalClassInt >= 250 && finalClassInt < 400) {

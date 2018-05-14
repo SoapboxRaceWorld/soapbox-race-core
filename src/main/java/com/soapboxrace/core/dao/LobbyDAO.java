@@ -27,13 +27,14 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
 		return lobbyEntity;
 	}
 
-	public List<LobbyEntity> findAllOpen() {
+	public List<LobbyEntity> findAllOpen(int carClassHash) {
 		Date dateNow = new Date();
 		Date datePast = new Date(dateNow.getTime() - 35000);
 
-		TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findAllOpen", LobbyEntity.class);
+		TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findAllOpenByCarClass", LobbyEntity.class);
 		query.setParameter("dateTime1", datePast);
 		query.setParameter("dateTime2", dateNow);
+		query.setParameter("carClassHash", carClassHash);
 		return query.getResultList();
 	}
 

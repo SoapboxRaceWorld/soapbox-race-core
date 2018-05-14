@@ -25,6 +25,7 @@ public class EventEntity {
 	private int eventModeId;
 	private int minLevel;
 	private int maxLevel;
+	private int carClassHash;
 	private int minCarClassRating;
 	private int maxCarClassRating;
 	private int maxPlayers;
@@ -370,6 +371,14 @@ public class EventEntity {
 
 	public void setLocked(boolean isLocked) {
 		this.isLocked = isLocked;
+	}
+
+	public int getCarClassHash() {
+		return carClassHash;
+	}
+
+	public void setCarClassHash(int carClassHash) {
+		this.carClassHash = carClassHash;
 	}
 
 }
