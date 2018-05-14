@@ -66,8 +66,8 @@ public class LobbyBO {
 	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
 
-	public void joinFastLobby(Long personaId) {
-		List<LobbyEntity> lobbys = lobbyDao.findAllOpen();
+	public void joinFastLobby(Long personaId, int carClassHash) {
+		List<LobbyEntity> lobbys = lobbyDao.findAllOpen(carClassHash);
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		joinLobby(personaEntity, lobbys);
 	}

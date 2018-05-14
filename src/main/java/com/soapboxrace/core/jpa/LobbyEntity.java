@@ -23,7 +23,12 @@ import javax.persistence.Transient;
 @Table(name = "LOBBY")
 @NamedQueries({ //
 		@NamedQuery(name = "LobbyEntity.findAll", query = "SELECT obj FROM UserEntity obj"), //
-		@NamedQuery(name = "LobbyEntity.findAllOpen", query = "SELECT obj FROM LobbyEntity obj WHERE obj.lobbyDateTimeStart between :dateTime1 and :dateTime2"), //
+		@NamedQuery(name = "LobbyEntity.findAllOpen", //
+				query = "SELECT obj FROM LobbyEntity obj WHERE obj.lobbyDateTimeStart between :dateTime1 and :dateTime2 "), //
+		@NamedQuery(name = "LobbyEntity.findAllOpenByCarClass", //
+				query = "SELECT obj FROM LobbyEntity obj " //
+						+ "WHERE obj.lobbyDateTimeStart between :dateTime1 and :dateTime2 " //
+						+ "and (obj.event.carClassHash = 607077938 or obj.event.carClassHash = :carClassHash )"),
 		@NamedQuery(name = "LobbyEntity.findByEventStarted", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event = :event AND obj.lobbyDateTimeStart between :dateTime1 AND :dateTime2 AND obj.isPrivate = false"), //
 		@NamedQuery(name = "LobbyEntity.findByEventAndPersona", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event = :event AND obj.lobbyDateTimeStart between :dateTime1 AND :dateTime2 AND obj.isPrivate = true AND obj.personaId = :personaId") //
 })

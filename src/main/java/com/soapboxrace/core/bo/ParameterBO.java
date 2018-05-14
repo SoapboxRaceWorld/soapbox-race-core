@@ -50,6 +50,27 @@ public class ParameterBO {
 		return property.trim();
 	}
 
+	public String getMultiXmppHost() {
+		String property = System.getProperty("sharding.multixmpp.host");
+
+		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
+	}
+
+	public String getMultiXmppToken() {
+		String property = System.getProperty("sharding.multixmpp.token");
+
+		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
+	}
+
+	public int getMultiXmppPort() {
+		String property = System.getProperty("sharding.multixmpp.port");
+
+		if (!isShardingEnabled()) {
+			return -1;
+		}
+		return property != null && !property.trim().isEmpty() ? Integer.parseInt(property) : -1;
+	}
+
 	public int getCarLimit(String securityToken) {
 		TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
 		if (tokenSession.isPremium()) {

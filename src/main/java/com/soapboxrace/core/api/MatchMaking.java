@@ -13,9 +13,11 @@ import javax.ws.rs.core.MediaType;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.EventBO;
 import com.soapboxrace.core.bo.LobbyBO;
+import com.soapboxrace.core.bo.PersonaBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.jaxb.http.LobbyInfo;
+import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.http.SecurityChallenge;
 import com.soapboxrace.jaxb.http.SessionInfo;
 
@@ -31,13 +33,17 @@ public class MatchMaking {
 	@EJB
 	private TokenSessionBO tokenSessionBO;
 
+	@EJB
+	private PersonaBO personaBO;
+
 	@PUT
 	@Secured
 	@Path("/joinqueueracenow")
 	@Produces(MediaType.APPLICATION_XML)
 	public String joinQueueRaceNow(@HeaderParam("securityToken") String securityToken) {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-		lobbyBO.joinFastLobby(activePersonaId);
+		OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
+		lobbyBO.joinFastLobby(activePersonaId, defaultCar.getCustomCar().getCarClassHash());
 		return "";
 	}
 
@@ -66,7 +72,7 @@ public class MatchMaking {
 	public String leavelobby(@HeaderParam("securityToken") String securityToken) {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
 		Long activeLobbyId = tokenSessionBO.getActiveLobbyId(securityToken);
-		if(activeLobbyId != null && !activeLobbyId.equals(0L)){
+		if (activeLobbyId != null && !activeLobbyId.equals(0L)) {
 			lobbyBO.deleteLobbyEntrant(activePersonaId, activeLobbyId);
 		}
 		return "";
