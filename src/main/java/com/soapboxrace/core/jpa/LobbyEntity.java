@@ -114,7 +114,7 @@ public class LobbyEntity {
 		if (lobbyDateTimeStart != null) {
 			Date now = new Date();
 			Long time = now.getTime() - lobbyDateTimeStart.getTime();
-			time = 60000L - time;
+			time = 15000L - time;
 			return time.intValue();
 		}
 		return lobbyCountdownInMilliseconds.intValue();
