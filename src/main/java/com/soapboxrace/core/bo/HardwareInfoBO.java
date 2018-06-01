@@ -52,7 +52,7 @@ public class HardwareInfoBO {
 		if (hardwareInfoEntity != null) {
 			return hardwareInfoEntity.isBanned();
 		}
-		return true;
+		return false;
 	}
 
 }

@@ -87,34 +87,45 @@ public class OpenFireRestApiCli {
 		}
 		return 0;
 	}
+	
+	public List<MUCRoomEntity> getAllRooms() {
+		Builder builder = getBuilder("chatrooms");
+		MUCRoomEntities roomEntities = builder.get(MUCRoomEntities.class);
 
-	public List<Long> getAllPersonaByGroup(Long personaId) {
+		return roomEntities.getMucRooms();
+	}
+
+	public List<Long> getGroupMembers(Long personaId) {
 		if (!restApiEnabled) {
 			return new ArrayList<>();
 		}
-		Builder builder = getBuilder("chatrooms");
-		MUCRoomEntities roomEntities = builder.get(MUCRoomEntities.class);
-		List<MUCRoomEntity> listRoomEntity = roomEntities.getMucRooms();
+		
+		List<MUCRoomEntity> listRoomEntity = getAllRooms();
+		
 		for (MUCRoomEntity entity : listRoomEntity) {
 			String roomName = entity.getRoomName();
 			if (roomName.contains("group.channel.")) {
 				Long idOwner = Long.parseLong(roomName.substring(roomName.lastIndexOf('.') + 1));
 				if (idOwner.equals(personaId)) {
-					return getAllOccupantInGroup(roomName);
+					return getAllOccupantsInRoom(roomName);
 				}
 			}
 		}
 		return new ArrayList<>();
 	}
 
-	private List<Long> getAllOccupantInGroup(String roomName) {
+	public List<Long> getAllOccupantsInRoom(String roomName) {
 		Builder builder = getBuilder("chatrooms/" + roomName + "/occupants");
 		OccupantEntities occupantEntities = builder.get(OccupantEntities.class);
 		List<Long> listOfPersona = new ArrayList<Long>();
 		for (OccupantEntity entity : occupantEntities.getOccupants()) {
 			String jid = entity.getJid();
-			Long personaId = Long.parseLong(jid.substring(jid.lastIndexOf('.') + 1));
-			listOfPersona.add(personaId);
+			try {
+				Long personaId = Long.parseLong(jid.substring(jid.lastIndexOf('.') + 1));
+				listOfPersona.add(personaId);
+			} catch (Exception e) {
+				//
+			}
 		}
 		return listOfPersona;
 	}
