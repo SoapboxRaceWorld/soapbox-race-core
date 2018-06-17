@@ -34,4 +34,12 @@ public class UserDAO extends BaseDAO<UserEntity> {
 		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 
+	public UserEntity findByAuthservUUID(String uuid) {
+		TypedQuery<UserEntity> query = entityManager.createNamedQuery("UserEntity.findByAuthservUUID", UserEntity.class);
+		query.setParameter("uuid", uuid);
+
+		List<UserEntity> resultList = query.getResultList();
+		return !resultList.isEmpty() ? resultList.get(0) : null;
+	}
+
 }

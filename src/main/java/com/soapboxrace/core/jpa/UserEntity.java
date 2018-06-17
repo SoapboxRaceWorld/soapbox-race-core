@@ -17,7 +17,8 @@ import javax.persistence.Table;
 @Table(name = "USER")
 @NamedQueries({ //
 		@NamedQuery(name = "UserEntity.findAll", query = "SELECT obj FROM UserEntity obj"),
-		@NamedQuery(name = "UserEntity.findByEmail", query = "SELECT obj FROM UserEntity obj WHERE obj.email = :email") //
+		@NamedQuery(name = "UserEntity.findByEmail", query = "SELECT obj FROM UserEntity obj WHERE obj.email = :email"), //
+		@NamedQuery(name = "UserEntity.findByAuthservUUID", query = "SELECT obj FROM UserEntity obj WHERE obj.authservUUID = :uuid")
 })
 public class UserEntity {
 
@@ -54,6 +55,9 @@ public class UserEntity {
 
 	@Column(name = "lastLogin")
 	private LocalDateTime lastLogin;
+
+	@Column(name = "authservUUID")
+	private String authservUUID;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -141,6 +145,14 @@ public class UserEntity {
 
 	public void setGameHardwareHash(String gameHardwareHash) {
 		this.gameHardwareHash = gameHardwareHash;
+	}
+
+	public String getAuthservUUID() {
+		return authservUUID;
+	}
+
+	public void setAuthservUUID(String authservUUID) {
+		this.authservUUID = authservUUID;
 	}
 
 }

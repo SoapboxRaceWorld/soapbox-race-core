@@ -156,6 +156,44 @@ public class TokenSessionBO {
 		return loginStatusVO;
 	}
 
+	public LoginStatusVO loginAuthserv(String uuid, HttpServletRequest httpRequest) {
+		LoginStatusVO loginStatusVO = checkGeoIp(httpRequest.getRemoteAddr());
+		if (!loginStatusVO.isLoginOk()) {
+			return loginStatusVO;
+		}
+		loginStatusVO = new LoginStatusVO(0L, "", false);
+
+		UserEntity userEntity = userDAO.findByAuthservUUID(uuid);
+		int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
+		int maxOnlinePayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
+		if (numberOfUsersOnlineNow >= maxOnlinePayers && !userEntity.isPremium()) {
+			loginStatusVO.setDescription("SERVER FULL");
+			return loginStatusVO;
+		}
+		if (userEntity.getHwid() == null || userEntity.getHwid().trim().isEmpty()) {
+			userEntity.setHwid(httpRequest.getHeader("X-HWID"));
+		}
+
+		if (userEntity.getIpAddress() == null || userEntity.getIpAddress().trim().isEmpty()) {
+			String forwardedFor;
+			if ((forwardedFor = httpRequest.getHeader("X-Forwarded-For")) != null && parameterBO.getBoolParam("USE_FORWARDED_FOR")) {
+				userEntity.setIpAddress(parameterBO.getBoolParam("GOOGLE_LB_ENABLED") ? forwardedFor.split(",")[0] : forwardedFor);
+			} else {
+				userEntity.setIpAddress(httpRequest.getRemoteAddr());
+			}
+		}
+
+		userEntity.setLastLogin(LocalDateTime.now());
+		userDAO.update(userEntity);
+		Long userId = userEntity.getId();
+		deleteByUserId(userId);
+		String randomUUID = createToken(userId, null);
+		loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
+		loginStatusVO.setDescription("");
+
+		return loginStatusVO;
+	}
+
 	public Long getActivePersonaId(String securityToken) {
 		TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
 		return tokenSessionEntity.getActivePersonaId();

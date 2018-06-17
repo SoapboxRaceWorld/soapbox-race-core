@@ -32,6 +32,11 @@ public class GetServerInformationBO {
 //			serverInfoEntity.setMaxUsersAllowed(maxOnlinePlayers);
 		}
 
+		Boolean authservEnabled = parameterBO.getBoolParam("AUTHSERV_ENABLED");
+		String authservEndpoint = parameterBO.getStrParam("AUTHSERV_ENDPOINT");
+		serverInfoEntity.setAuthservEnabled(authservEnabled && authservEndpoint != null && !authservEndpoint.equals(""));
+
+
 		return serverInfoEntity;
 	}
 
