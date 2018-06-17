@@ -48,6 +48,8 @@ public class ServerInfoEntity {
 	private boolean requireTicket = false;
 	@Transient
 	private String serverVersion;
+	@Transient
+	private boolean authservEnabled = false;
 
 	public String getMessageSrv() {
 		return messageSrv;
@@ -160,6 +162,10 @@ public class ServerInfoEntity {
 	public void setServerVersion(String serverVersion) {
 		this.serverVersion = serverVersion;
 	}
+
+	public boolean isAuthservEnabled() { return authservEnabled; }
+
+	public void setAuthservEnabled(boolean authservEnabled) { this.authservEnabled = authservEnabled; }
 
 	public void setActivatedHolidaySceneryGroups(List<String> activatedHolidaySceneryGroups) {
 		this.activatedHolidaySceneryGroups = activatedHolidaySceneryGroups;

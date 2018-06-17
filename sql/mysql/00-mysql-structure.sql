@@ -541,6 +541,7 @@ CREATE TABLE
         lastLogin DATETIME,
         PASSWORD VARCHAR(50) COLLATE utf8_unicode_ci,
         premium bit,
+        authservUUID VARCHAR(36) COLLATE utf8_unicode_ci,
         PRIMARY KEY (ID)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
