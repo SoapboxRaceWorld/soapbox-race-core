@@ -13,7 +13,7 @@ import com.soapboxrace.jaxb.http.PersonaFriendsList;
 public class GetFriendListFromUserId {
 
 	@GET
-	@Secured
+//	@Secured
 	@Produces(MediaType.APPLICATION_XML)
 	@XsiSchemaLocation(schemaLocation = "http://schemas.datacontract.org/2004/07/Victory.TransferObjects.DriverPersona")
 	public PersonaFriendsList getFriendListFromUserId() {
