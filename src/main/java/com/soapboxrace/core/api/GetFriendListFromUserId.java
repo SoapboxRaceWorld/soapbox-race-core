@@ -1,10 +1,7 @@
 package com.soapboxrace.core.api;
 
 import javax.ejb.EJB;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
@@ -33,10 +30,10 @@ public class GetFriendListFromUserId
 	@Secured
 	@Produces(MediaType.APPLICATION_XML)
 	@XsiSchemaLocation(schemaLocation = "http://schemas.datacontract.org/2004/07/Victory.TransferObjects.DriverPersona")
-	public PersonaFriendsList getFriendListFromUserId(@QueryParam("userId") Long userId)
+	public PersonaFriendsList getFriendListFromUserId(@HeaderParam("userId") Long userId)
 	{
 		PersonaFriendsList personaFriendsList = new PersonaFriendsList();
-		personaFriendsList.setFriendPersona(new ArrayOfFriendPersona());
+		ArrayOfFriendPersona arrayOfFriendPersona = new ArrayOfFriendPersona();
 
 		for (FriendEntity friendEntity : friendDAO.findByUserId(userId))
 		{
@@ -54,8 +51,10 @@ public class GetFriendListFromUserId
 			friendPersona.setOriginalName(friendEntity.getOtherPersona().getName());
 			friendPersona.setIconIndex(friendEntity.getOtherPersona().getIconIndex());
 
-			personaFriendsList.getFriendPersona().getFriendPersona().add(friendPersona);
+			arrayOfFriendPersona.getFriendPersona().add(friendPersona);
 		}
+		
+		personaFriendsList.setFriendPersona(arrayOfFriendPersona);
 
 		return personaFriendsList;
 	}
