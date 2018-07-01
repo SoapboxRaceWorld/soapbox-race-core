@@ -85,7 +85,7 @@ public class AddFriendRequest
 		openFireSoapBoxCli.send(MarshalXML.marshal(friendPersona), target.getPersonaId());
 
 		FriendEntity friendEntity = new FriendEntity();
-		friendEntity.setOtherPersona(active);
+		friendEntity.setPersonaId(active.getPersonaId());
 		friendEntity.setUser(target.getUser());
 		friendEntity.setStatus(0);
 

@@ -135,7 +135,7 @@ public class User
 
 			personaPacket.setPersonaBase(xmppPersonaBase);
 
-			openFireSoapBoxCli.send(personaPacket, friend.getOtherPersona().getPersonaId());
+			openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
 		}
 
 		return "";
@@ -177,7 +177,7 @@ public class User
 
 			personaPacket.setPersonaBase(xmppPersonaBase);
 
-			openFireSoapBoxCli.send(personaPacket, friend.getOtherPersona().getPersonaId());
+			openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
 		}
 
 		return "";

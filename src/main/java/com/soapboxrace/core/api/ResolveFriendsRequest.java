@@ -110,7 +110,7 @@ public class ResolveFriendsRequest
             FriendEntity otherFriendEntity = new FriendEntity();
             otherFriendEntity.setStatus(1);
             otherFriendEntity.setUser(sender.getUser());
-            otherFriendEntity.setOtherPersona(recipient);
+            otherFriendEntity.setPersonaId(recipient.getPersonaId());
 
             friendDAO.insert(otherFriendEntity);
 

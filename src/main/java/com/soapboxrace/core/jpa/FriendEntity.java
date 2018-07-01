@@ -1,13 +1,12 @@
 package com.soapboxrace.core.jpa;
 
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "FRIEND")
 @NamedQueries({ //
         @NamedQuery(name = "FriendEntity.findByUser", query = "SELECT obj FROM FriendEntity obj WHERE obj.user.id = :id"), //
-        @NamedQuery(name = "FriendEntity.findBySenderAndRecipient", query = "SELECT obj FROM FriendEntity obj WHERE obj.user.id = :recipientUserId AND obj.otherPersona.id = :senderId"), //
+        @NamedQuery(name = "FriendEntity.findBySenderAndRecipient", query = "SELECT obj FROM FriendEntity obj WHERE obj.user.id = :recipientUserId AND obj.personaId = :senderId"), //
 })
 public class FriendEntity
 {
@@ -20,9 +19,8 @@ public class FriendEntity
     @JoinColumn(name = "userId")
     private UserEntity user;
 
-    @OneToOne
-    @JoinColumn(name = "otherPersonaId")
-    private PersonaEntity otherPersona;
+    @Column
+    private Long personaId;
     
     @Column
     private int status; // 0=pending,1=accepted
@@ -37,14 +35,14 @@ public class FriendEntity
         this.id = id;
     }
 
-    public PersonaEntity getOtherPersona()
+    public Long getPersonaId()
     {
-        return otherPersona;
+        return personaId;
     }
 
-    public void setOtherPersona(PersonaEntity otherPersona)
+    public void setPersonaId(Long personaId)
     {
-        this.otherPersona = otherPersona;
+        this.personaId = personaId;
     }
 
     public int getStatus()
