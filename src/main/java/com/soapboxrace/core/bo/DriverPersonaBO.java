@@ -18,6 +18,7 @@ import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.core.jpa.UserEntity;
+import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
 import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
 import com.soapboxrace.jaxb.http.ArrayOfString;
@@ -54,6 +55,12 @@ public class DriverPersonaBO {
 
 	@EJB
 	private InventoryBO inventoryBO;
+
+	@EJB
+	private OpenFireRestApiCli restApiCli;
+
+	@EJB
+	private PresenceManager presenceManager;
 
 	public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
 		UserEntity userEntity = userDao.findById(userId);
@@ -111,7 +118,7 @@ public class DriverPersonaBO {
 			personaBase.setLevel(personaEntity.getLevel());
 			personaBase.setMotto(personaEntity.getMotto());
 			personaBase.setName(personaEntity.getName());
-			personaBase.setPresence(1);
+			personaBase.setPresence(presenceManager.getPresence(personaEntity.getPersonaId()));
 			personaBase.setPersonaId(personaEntity.getPersonaId());
 			personaBase.setScore(personaEntity.getScore());
 			personaBase.setUserId(personaEntity.getUser().getId());
@@ -140,7 +147,7 @@ public class DriverPersonaBO {
 		if (personaEntity != null) {
 			PersonaPresence personaPresence = new PersonaPresence();
 			personaPresence.setPersonaId(personaEntity.getPersonaId());
-			personaPresence.setPresence(1);
+			personaPresence.setPresence(presenceManager.getPresence(personaEntity.getPersonaId()));
 			personaPresence.setUserId(personaEntity.getUser().getId());
 			return personaPresence;
 		}

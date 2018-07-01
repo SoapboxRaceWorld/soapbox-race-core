@@ -1,6 +1,7 @@
 package com.soapboxrace.core.api;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -15,18 +16,27 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import com.soapboxrace.core.api.util.HwBan;
+import com.soapboxrace.core.api.util.BanUtil;
+import com.soapboxrace.core.api.util.LaunchFilter;
 import com.soapboxrace.core.api.util.LauncherChecks;
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.AuthenticationBO;
-import com.soapboxrace.core.bo.InviteTicketBO;
-import com.soapboxrace.core.bo.TokenSessionBO;
-import com.soapboxrace.core.bo.UserBO;
+import com.soapboxrace.core.bo.*;
+import com.soapboxrace.core.dao.FriendDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.jpa.BanEntity;
+import com.soapboxrace.core.jpa.FriendEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.UserEntity;
+import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
+import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
+import com.soapboxrace.jaxb.http.PersonaBase;
 import com.soapboxrace.jaxb.http.UserInfo;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
+import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePersonaBase;
 
 @Path("User")
-public class User {
+public class User
+{
 
 	@Context
 	UriInfo uri;
@@ -46,11 +56,32 @@ public class User {
 	@EJB
 	private InviteTicketBO inviteTicketBO;
 
+	@EJB
+	private PresenceManager presenceManager;
+
+	@EJB
+	private FriendDAO friendDAO;
+
+	@EJB
+	private PersonaDAO personaDAO;
+
+	@EJB
+	private OpenFireSoapBoxCli openFireSoapBoxCli;
+
 	@POST
 	@Secured
 	@Path("GetPermanentSession")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getPermanentSession(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId) {
+	public Response getPermanentSession(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId)
+	{
+		UserEntity userEntity = tokenBO.getUser(securityToken);
+		BanEntity ban = authenticationBO.checkUserBan(userEntity);
+
+		if (ban != null && ban.stillApplies())
+		{
+			return Response.status(Response.Status.UNAUTHORIZED).entity(new BanUtil(ban).invoke()).build();
+		}
+
 		tokenBO.deleteByUserId(userId);
 		URI myUri = uri.getBaseUri();
 		String randomUUID = tokenBO.createToken(userId, myUri.getHost());
@@ -62,11 +93,11 @@ public class User {
 
 	@POST
 	@Secured
-	@HwBan
 	@Path("SecureLoginPersona")
 	@Produces(MediaType.APPLICATION_XML)
 	public String secureLoginPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
-			@QueryParam("personaId") Long personaId) {
+									 @QueryParam("personaId") Long personaId)
+	{
 		tokenBO.setActivePersonaId(securityToken, personaId, false);
 		userBO.secureLoginPersona(userId, personaId);
 		return "";
@@ -77,8 +108,36 @@ public class User {
 	@Path("SecureLogoutPersona")
 	@Produces(MediaType.APPLICATION_XML)
 	public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
-			@QueryParam("personaId") Long personaId) {
+									  @QueryParam("personaId") Long personaId)
+	{
+		long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+		PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
 		tokenBO.setActivePersonaId(securityToken, 0L, true);
+
+		presenceManager.removePresence(activePersonaId);
+
+		List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
+
+		for (FriendEntity friend : friends)
+		{
+			XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
+			PersonaBase xmppPersonaBase = new PersonaBase();
+
+			xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
+			xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
+			xmppPersonaBase.setLevel(personaEntity.getLevel());
+			xmppPersonaBase.setMotto(personaEntity.getMotto());
+			xmppPersonaBase.setName(personaEntity.getName());
+			xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
+			xmppPersonaBase.setPresence(0);
+			xmppPersonaBase.setScore(personaEntity.getScore());
+			xmppPersonaBase.setUserId(personaEntity.getUser().getId());
+
+			personaPacket.setPersonaBase(xmppPersonaBase);
+
+			openFireSoapBoxCli.send(personaPacket, friend.getOtherPersona().getPersonaId());
+		}
+
 		return "";
 	}
 
@@ -86,17 +145,53 @@ public class User {
 	@Secured
 	@Path("SecureLogout")
 	@Produces(MediaType.APPLICATION_XML)
-	public String secureLogout() {
+	public String secureLogout(@HeaderParam("securityToken") String securityToken)
+	{
+		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+
+		if (activePersonaId == 0L)
+		{
+			return "";
+		}
+
+		PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+		tokenBO.setActivePersonaId(securityToken, 0L, true);
+		presenceManager.removePresence(activePersonaId);
+
+		List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
+
+		for (FriendEntity friend : friends)
+		{
+			XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
+			PersonaBase xmppPersonaBase = new PersonaBase();
+
+			xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
+			xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
+			xmppPersonaBase.setLevel(personaEntity.getLevel());
+			xmppPersonaBase.setMotto(personaEntity.getMotto());
+			xmppPersonaBase.setName(personaEntity.getName());
+			xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
+			xmppPersonaBase.setPresence(0);
+			xmppPersonaBase.setScore(personaEntity.getScore());
+			xmppPersonaBase.setUserId(personaEntity.getUser().getId());
+
+			personaPacket.setPersonaBase(xmppPersonaBase);
+
+			openFireSoapBoxCli.send(personaPacket, friend.getOtherPersona().getPersonaId());
+		}
+
 		return "";
 	}
 
 	@GET
 	@Path("authenticateUser")
 	@Produces(MediaType.APPLICATION_XML)
-//	@LauncherChecks
-	public Response authenticateUser(@QueryParam("email") String email, @QueryParam("password") String password) {
+	@LauncherChecks
+	public Response authenticateUser(@QueryParam("email") String email, @QueryParam("password") String password)
+	{
 		LoginStatusVO loginStatusVO = tokenBO.login(email, password, sr);
-		if (loginStatusVO.isLoginOk()) {
+		if (loginStatusVO.isLoginOk())
+		{
 			return Response.ok(loginStatusVO).build();
 		}
 		return Response.serverError().entity(loginStatusVO).build();
@@ -105,18 +200,15 @@ public class User {
 	@GET
 	@Path("createUser")
 	@Produces(MediaType.APPLICATION_XML)
-//	@LauncherChecks
-	public Response createUser(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("inviteTicket") String inviteTicket) {
-		LoginStatusVO loginStatusVO = tokenBO.checkGeoIp(sr.getRemoteAddr());
-		if (!loginStatusVO.isLoginOk()) {
-			return Response.serverError().entity(loginStatusVO).build();
-		}
-		loginStatusVO = userBO.createUserWithTicket(email, password, inviteTicket);
-		if (loginStatusVO != null && loginStatusVO.isLoginOk()) {
+	@LauncherChecks
+	public Response createUser(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("inviteTicket") String inviteTicket)
+	{
+		LoginStatusVO loginStatusVO = userBO.createUserWithTicket(email, password, inviteTicket);
+		if (loginStatusVO != null && loginStatusVO.isLoginOk())
+		{
 			loginStatusVO = tokenBO.login(email, password, sr);
 			return Response.ok(loginStatusVO).build();
 		}
 		return Response.serverError().entity(loginStatusVO).build();
 	}
-
 }

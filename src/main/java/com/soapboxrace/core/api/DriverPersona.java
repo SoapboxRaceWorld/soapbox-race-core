@@ -1,6 +1,7 @@
 package com.soapboxrace.core.api;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.ejb.EJB;
@@ -17,22 +18,22 @@ import javax.ws.rs.core.Response;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.DriverPersonaBO;
+import com.soapboxrace.core.bo.PresenceManager;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.bo.UserBO;
+import com.soapboxrace.core.dao.FriendDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.jpa.FriendEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.jaxb.http.ArrayOfInt;
-import com.soapboxrace.jaxb.http.ArrayOfLong;
-import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
-import com.soapboxrace.jaxb.http.ArrayOfString;
-import com.soapboxrace.jaxb.http.PersonaIdArray;
-import com.soapboxrace.jaxb.http.PersonaMotto;
-import com.soapboxrace.jaxb.http.PersonaPresence;
-import com.soapboxrace.jaxb.http.ProfileData;
+import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
+import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
+import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePersonaBase;
 
 @Path("/DriverPersona")
-public class DriverPersona {
+public class DriverPersona
+{
 
 	private final Pattern NAME_PATTERN = Pattern.compile("^[A-Z0-9]{3,15}$");
 
@@ -45,11 +46,24 @@ public class DriverPersona {
 	@EJB
 	private TokenSessionBO tokenSessionBo;
 
+	@EJB
+	private PresenceManager presenceManager;
+
+	@EJB
+	private FriendDAO friendDAO;
+
+	@EJB
+	private PersonaDAO personaDAO;
+
+	@EJB
+	private OpenFireSoapBoxCli openFireSoapBoxCli;
+
 	@GET
 	@Secured
 	@Path("/GetExpLevelPointsMap")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfInt getExpLevelPointsMap() {
+	public ArrayOfInt getExpLevelPointsMap()
+	{
 		ArrayOfInt arrayOfInt = new ArrayOfInt();
 		arrayOfInt.getInt().add(100);
 		arrayOfInt.getInt().add(975);
@@ -118,7 +132,8 @@ public class DriverPersona {
 	@Secured
 	@Path("/GetPersonaInfo")
 	@Produces(MediaType.APPLICATION_XML)
-	public ProfileData getPersonaInfo(@QueryParam("personaId") Long personaId) {
+	public ProfileData getPersonaInfo(@QueryParam("personaId") Long personaId)
+	{
 		return bo.getPersonaInfo(personaId);
 	}
 
@@ -126,7 +141,8 @@ public class DriverPersona {
 	@Secured
 	@Path("/ReserveName")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfString reserveName(@QueryParam("name") String name) {
+	public ArrayOfString reserveName(@QueryParam("name") String name)
+	{
 		return bo.reserveName(name);
 	}
 
@@ -134,7 +150,8 @@ public class DriverPersona {
 	@Secured
 	@Path("/UnreserveName")
 	@Produces(MediaType.APPLICATION_XML)
-	public String UnreserveName(@QueryParam("name") String name) {
+	public String UnreserveName(@QueryParam("name") String name)
+	{
 		return "";
 	}
 
@@ -143,15 +160,18 @@ public class DriverPersona {
 	@Path("/CreatePersona")
 	@Produces(MediaType.APPLICATION_XML)
 	public Response createPersona(@HeaderParam("userId") Long userId, @HeaderParam("securityToken") String securityToken, @QueryParam("name") String name,
-			@QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan, @QueryParam("clanIcon") String clanIcon) {
-		if (!NAME_PATTERN.matcher(name).matches()) {
+								  @QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan, @QueryParam("clanIcon") String clanIcon)
+	{
+		if (!NAME_PATTERN.matcher(name).matches())
+		{
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Invalid name. Can only contain A-Z, 0-9, and can be between 3 and 15 characters.")
 					.build();
 		}
 
 		ArrayOfString nameReserveResult = bo.reserveName(name);
 
-		if (!nameReserveResult.getString().isEmpty()) {
+		if (!nameReserveResult.getString().isEmpty())
+		{
 			return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Player with this name already exists!").build();
 			// throw new WebServiceException("Player with this name already exists!");
 		}
@@ -161,7 +181,8 @@ public class DriverPersona {
 		personaEntity.setIconIndex(iconIndex);
 		ProfileData persona = bo.createPersona(userId, personaEntity);
 
-		if (persona == null) {
+		if (persona == null)
+		{
 			return Response.status(Response.Status.FORBIDDEN).entity("Can't have more than 3 personas").build();
 		}
 
@@ -174,7 +195,8 @@ public class DriverPersona {
 	@Secured
 	@Path("/DeletePersona")
 	@Produces(MediaType.APPLICATION_XML)
-	public String deletePersona(@QueryParam("personaId") Long personaId, @HeaderParam("securityToken") String securityToken) {
+	public String deletePersona(@QueryParam("personaId") Long personaId, @HeaderParam("securityToken") String securityToken)
+	{
 		tokenSessionBo.verifyPersona(securityToken, personaId);
 		bo.deletePersona(personaId);
 		return "<long>0</long>";
@@ -183,7 +205,8 @@ public class DriverPersona {
 	@POST
 	@Path("/GetPersonaBaseFromList")
 	@Produces(MediaType.APPLICATION_XML)
-	public ArrayOfPersonaBase getPersonaBaseFromList(InputStream is) {
+	public ArrayOfPersonaBase getPersonaBaseFromList(InputStream is)
+	{
 		PersonaIdArray personaIdArray = UnmarshalXML.unMarshal(is, PersonaIdArray.class);
 		ArrayOfLong personaIds = personaIdArray.getPersonaIds();
 		return bo.getPersonaBaseFromList(personaIds.getLong());
@@ -193,7 +216,36 @@ public class DriverPersona {
 	@Secured
 	@Path("/UpdatePersonaPresence")
 	@Produces(MediaType.APPLICATION_XML)
-	public String updatePersonaPresence() {
+	public String updatePersonaPresence(@HeaderParam("securityToken") String securityToken, @QueryParam("presence") int presence)
+	{
+		if (tokenSessionBo.getActivePersonaId(securityToken) == 0L)
+			return "";
+
+		PersonaEntity personaEntity = personaDAO.findById(tokenSessionBo.getActivePersonaId(securityToken));
+		presenceManager.setPresence(personaEntity.getPersonaId(), presence);
+
+		List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
+
+		for (FriendEntity friend : friends)
+		{
+			XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
+			PersonaBase xmppPersonaBase = new PersonaBase();
+
+			xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
+			xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
+			xmppPersonaBase.setLevel(personaEntity.getLevel());
+			xmppPersonaBase.setMotto(personaEntity.getMotto());
+			xmppPersonaBase.setName(personaEntity.getName());
+			xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
+			xmppPersonaBase.setPresence(presence);
+			xmppPersonaBase.setScore(personaEntity.getScore());
+			xmppPersonaBase.setUserId(personaEntity.getUser().getId());
+
+			personaPacket.setPersonaBase(xmppPersonaBase);
+
+			openFireSoapBoxCli.send(personaPacket, friend.getOtherPersona().getPersonaId());
+		}
+
 		return "";
 	}
 
@@ -201,9 +253,11 @@ public class DriverPersona {
 	@Secured
 	@Path("/GetPersonaPresenceByName")
 	@Produces(MediaType.APPLICATION_XML)
-	public String getPersonaPresenceByName(@QueryParam("displayName") String displayName) {
+	public String getPersonaPresenceByName(@QueryParam("displayName") String displayName)
+	{
 		PersonaPresence personaPresenceByName = bo.getPersonaPresenceByName(displayName);
-		if (personaPresenceByName.getPersonaId() == 0) {
+		if (personaPresenceByName.getPersonaId() == 0)
+		{
 			return "";
 		}
 		return MarshalXML.marshal(personaPresenceByName);
@@ -213,7 +267,8 @@ public class DriverPersona {
 	@Secured
 	@Path("/UpdateStatusMessage")
 	@Produces(MediaType.APPLICATION_XML)
-	public PersonaMotto updateStatusMessage(InputStream statusXml, @HeaderParam("securityToken") String securityToken, @Context Request request) {
+	public PersonaMotto updateStatusMessage(InputStream statusXml, @HeaderParam("securityToken") String securityToken, @Context Request request)
+	{
 		PersonaMotto personaMotto = UnmarshalXML.unMarshal(statusXml, PersonaMotto.class);
 		tokenSessionBo.verifyPersona(securityToken, personaMotto.getPersonaId());
 
