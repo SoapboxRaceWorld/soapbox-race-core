@@ -21,48 +21,56 @@ import java.util.List;
 @Path("/getfriendlistfromuserid")
 public class GetFriendListFromUserId
 {
-	@EJB
-	private FriendDAO friendDAO;
-	
-	@EJB
-	private PersonaDAO personaDAO;
+    @EJB
+    private FriendDAO friendDAO;
 
-	@EJB
-	private OpenFireRestApiCli restApiCli;
+    @EJB
+    private PersonaDAO personaDAO;
 
-	@EJB
-	private PresenceManager presenceManager;
+    @EJB
+    private OpenFireRestApiCli restApiCli;
 
-	@GET
-	@Secured
-	@Produces(MediaType.APPLICATION_XML)
-	public PersonaFriendsList getFriendListFromUserId(@QueryParam("userId") Long userId)
-	{
-		ArrayOfFriendPersona arrayOfFriendPersona = new ArrayOfFriendPersona();
-		List<FriendEntity> friendList = friendDAO.findByUserId(userId);
-		
-		for (FriendEntity friendEntity : friendList)
-		{
-			PersonaEntity personaEntity = personaDAO.findById(friendEntity.getPersonaId());
-			
-			if (personaEntity == null) continue;
-			
-			FriendPersona friendPersona = new FriendPersona();
-			friendPersona.setIconIndex(personaEntity.getIconIndex());
-			friendPersona.setLevel(personaEntity.getLevel());
-			friendPersona.setName(personaEntity.getName());
-			friendPersona.setOriginalName(personaEntity.getName());
-			friendPersona.setPersonaId(personaEntity.getPersonaId());
-			friendPersona.setPresence(1);
-			friendPersona.setSocialNetwork(0);
-			friendPersona.setUserId(personaEntity.getUser().getId());
-			
-			arrayOfFriendPersona.getFriendPersona().add(friendPersona);
-		}
+    @EJB
+    private PresenceManager presenceManager;
 
-		PersonaFriendsList personaFriendsList = new PersonaFriendsList();
-		personaFriendsList.setFriendPersona(arrayOfFriendPersona);
+    @GET
+    @Secured
+    @Produces(MediaType.APPLICATION_XML)
+    public PersonaFriendsList getFriendListFromUserId(@QueryParam("userId") Long userId)
+    {
+        ArrayOfFriendPersona arrayOfFriendPersona = new ArrayOfFriendPersona();
+        List<FriendEntity> friendList = friendDAO.findByUserId(userId);
 
-		return personaFriendsList;
-	}
+        for (FriendEntity friendEntity : friendList)
+        {
+            PersonaEntity personaEntity = personaDAO.findById(friendEntity.getPersonaId());
+
+            if (personaEntity == null) continue;
+
+            FriendPersona friendPersona = new FriendPersona();
+            friendPersona.setIconIndex(personaEntity.getIconIndex());
+            friendPersona.setLevel(personaEntity.getLevel());
+            friendPersona.setName(personaEntity.getName());
+            friendPersona.setOriginalName(personaEntity.getName());
+            friendPersona.setPersonaId(personaEntity.getPersonaId());
+
+            if (friendEntity.getStatus() == 1)
+            {
+                friendPersona.setPresence(presenceManager.getPresence(personaEntity.getPersonaId()));
+            } else
+            {
+                friendPersona.setPresence(3);
+            }
+
+            friendPersona.setSocialNetwork(0);
+            friendPersona.setUserId(personaEntity.getUser().getId());
+
+            arrayOfFriendPersona.getFriendPersona().add(friendPersona);
+        }
+
+        PersonaFriendsList personaFriendsList = new PersonaFriendsList();
+        personaFriendsList.setFriendPersona(arrayOfFriendPersona);
+
+        return personaFriendsList;
+    }
 }
