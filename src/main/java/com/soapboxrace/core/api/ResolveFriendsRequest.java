@@ -39,7 +39,7 @@ public class ResolveFriendsRequest
 
     @EJB
     private FriendDAO friendDAO;
-    
+
     @EJB
     private PresenceManager presenceManager;
 
@@ -64,6 +64,12 @@ public class ResolveFriendsRequest
         if (friendEntity == null)
         {
             System.err.println("Invalid friend request!");
+            return "";
+        }
+
+        if (friendEntity.getStatus() == 1)
+        {
+            System.err.println("Already resolved friend request!");
             return "";
         }
 
@@ -105,17 +111,17 @@ public class ResolveFriendsRequest
             otherFriendEntity.setStatus(1);
             otherFriendEntity.setUser(sender.getUser());
             otherFriendEntity.setOtherPersona(recipient);
-            
+
             friendDAO.insert(otherFriendEntity);
-            
+
             friendEntity.setStatus(1);
             friendDAO.update(friendEntity);
-            
+
             return MarshalXML.marshal(personaBase);
         } else
         {
             friendDAO.delete(friendEntity);
-            
+
             return "";
         }
     }
