@@ -40,7 +40,6 @@ public class BanDAO extends BaseDAO<BanEntity> {
 
 	public BanEntity findByUser(UserEntity userEntity) {
 		TypedQuery<BanEntity> query = entityManager.createQuery("SELECT obj FROM BanEntity obj WHERE obj.userEntity = :user", BanEntity.class);
-		query.setParameter("type", BanEntity.BanType.USER_BAN);
 		query.setParameter("user", userEntity);
 
 		List<BanEntity> results = query.getResultList();
