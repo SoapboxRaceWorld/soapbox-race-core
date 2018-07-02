@@ -25,10 +25,10 @@ public class FriendDAO extends BaseDAO<FriendEntity>
         return query.getResultList();
     }
 
-    public FriendEntity findBySenderAndRecipient(Long senderId, Long recipientId)
+    public FriendEntity findBySenderAndRecipient(Long recipientUserId, Long senderId)
     {
         TypedQuery<FriendEntity> query = entityManager.createNamedQuery("FriendEntity.findBySenderAndRecipient", FriendEntity.class);
-        query.setParameter("recipientUserId", recipientId);
+        query.setParameter("recipientUserId", recipientUserId);
         query.setParameter("senderId", senderId);
         List<FriendEntity> results = query.getResultList();
         
