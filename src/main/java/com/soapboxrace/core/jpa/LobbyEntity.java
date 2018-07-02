@@ -1,5 +1,7 @@
 package com.soapboxrace.core.jpa;
 
+import com.soapboxrace.core.bo.ParameterBO;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +35,8 @@ import javax.persistence.Transient;
 		@NamedQuery(name = "LobbyEntity.findByEventAndPersona", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event = :event AND obj.lobbyDateTimeStart between :dateTime1 AND :dateTime2 AND obj.isPrivate = true AND obj.personaId = :personaId") //
 })
 public class LobbyEntity {
-
+	private static final ParameterBO PARAMETER_BO = new ParameterBO();
+	
 	@Id
 	@Column(name = "ID", nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -114,7 +117,7 @@ public class LobbyEntity {
 		if (lobbyDateTimeStart != null) {
 			Date now = new Date();
 			Long time = now.getTime() - lobbyDateTimeStart.getTime();
-			time = 15000L - time;
+			time = PARAMETER_BO.getIntParam("LOBBY_COUNTDOWN_TIME") - time;
 			return time.intValue();
 		}
 		return lobbyCountdownInMilliseconds.intValue();
