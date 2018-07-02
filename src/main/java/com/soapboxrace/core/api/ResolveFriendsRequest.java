@@ -59,7 +59,7 @@ public class ResolveFriendsRequest
 
         System.out.println("Recipient: " + recipient.getName() + " - Sender: " + sender.getName() + " - Resolution: " + resolution);
 
-        FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(sender.getPersonaId(), recipient.getUser().getId());
+        FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(sender.getUser().getId(), recipient.getPersonaId());
 
         if (friendEntity == null)
         {
