@@ -115,6 +115,12 @@ public class EventResultDragBO {
 				achievementDAO.findByName("achievement_ACH_CLOCKED_AIRTIME"),
 				dragArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
 		
+		if (dragArbitrationPacket.getRank() == 1) {
+			achievementsBO.update(personaDAO.findById(activePersonaId),
+					achievementDAO.findByName("achievement_ACH_WIN_DRAG"),
+					1L);
+		}
+		
 		return dragEventResult;
 	}
 

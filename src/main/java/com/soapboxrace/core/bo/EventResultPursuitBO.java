@@ -79,6 +79,17 @@ public class EventResultPursuitBO {
 		achievementsBO.update(personaDAO.findById(activePersonaId),
 				achievementDAO.findByName("achievement_ACH_CLOCKED_AIRTIME"),
 				pursuitArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
+		achievementsBO.update(personaDAO.findById(activePersonaId),
+				achievementDAO.findByName("achievement_ACH_INCUR_COSTTOSTATE"),
+				(long) pursuitArbitrationPacket.getCostToState());
+		
+		if (!isBusted) {
+			// achievement_ACH_PURSUIT
+			achievementsBO.update(personaDAO.findById(activePersonaId),
+					achievementDAO.findByName("achievement_ACH_PURSUIT"),
+					1L);
+		}
+		
 		return pursuitEventResult;
 	}
 

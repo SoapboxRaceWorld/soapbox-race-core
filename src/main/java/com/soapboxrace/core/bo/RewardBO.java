@@ -137,6 +137,9 @@ public class RewardBO {
 				achievementDAO.findByName("achievement_ACH_REACH_DRIVERLEVEL"),
 				(long) personaEntity.getLevel(),
 				false);
+		achievementsBO.update(personaEntity,
+				achievementDAO.findByName("achievement_ACH_EARN_CASH_EVENT"),
+				cash.longValue());
 	}
 
 	public RewardPart getRewardPart(Integer rep, Integer cash, EnumRewardCategory category, EnumRewardType type) {

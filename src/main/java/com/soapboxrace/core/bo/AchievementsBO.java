@@ -275,7 +275,7 @@ public class AchievementsBO
 
                 broadcastRanks.add(personaRank);
                 
-                update(personaEntity, achievementDAO.findByName("achievement_ACH_EARN_DRIVERSCORE"), (long) rank.getPoints());
+                update(personaEntity, achievementDAO.findByName("achievement_ACH_EARN_DRIVERSCORE"), (long) personaEntity.getScore(), false);
             } else if (state.equalsIgnoreCase("InProgress"))
             {
                 broadcastRanks.add(personaRank);
