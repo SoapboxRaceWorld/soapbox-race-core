@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.util.RewardVO;
+import com.soapboxrace.core.dao.AchievementDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.TreasureHuntDAO;
 import com.soapboxrace.core.jpa.PersonaEntity;
@@ -41,6 +42,15 @@ public class EventsBO {
 
 	@EJB
 	private ParameterBO parameterBO;
+
+	@EJB
+	private AchievementDAO achievementDAO;
+
+	@EJB
+	private PersonaDAO personaDAO;
+
+	@EJB
+	private AchievementsBO achievementsBO;
 
 	public TreasureHuntEventSession getTreasureHuntEventSession(Long activePersonaId) {
 		TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
@@ -90,6 +100,10 @@ public class EventsBO {
 
 		treasureHuntEntity.setThDate(LocalDate.now());
 		treasureHuntDao.update(treasureHuntEntity);
+		
+		achievementsBO.update(personaDAO.findById(activePersonaId),
+				achievementDAO.findByName("achievement_ACH_COMPLETE_TH"),
+				1L);
 
 		return MarshalXML.marshal(getTreasureHuntAccolades(activePersonaId, treasureHuntEntity));
 	}

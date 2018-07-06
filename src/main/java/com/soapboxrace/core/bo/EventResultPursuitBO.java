@@ -3,8 +3,10 @@ package com.soapboxrace.core.bo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.dao.AchievementDAO;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.jaxb.http.ExitPath;
@@ -19,6 +21,15 @@ public class EventResultPursuitBO {
 
 	@EJB
 	private EventDataDAO eventDataDao;
+
+	@EJB
+	private AchievementDAO achievementDAO;
+
+	@EJB
+	private PersonaDAO personaDAO;
+
+	@EJB
+	private AchievementsBO achievementsBO;
 
 	@EJB
 	private RewardPursuitBO rewardPursuitBO;
@@ -64,6 +75,10 @@ public class EventResultPursuitBO {
 		pursuitEventResult.setInviteLifetimeInMilliseconds(0);
 		pursuitEventResult.setLobbyInviteId(0);
 		pursuitEventResult.setPersonaId(activePersonaId);
+
+		achievementsBO.update(personaDAO.findById(activePersonaId),
+				achievementDAO.findByName("achievement_ACH_CLOCKED_AIRTIME"),
+				pursuitArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
 		return pursuitEventResult;
 	}
 

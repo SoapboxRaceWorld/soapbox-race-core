@@ -1,20 +1,18 @@
 package com.soapboxrace.core.bo;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
-import com.soapboxrace.core.dao.CarSlotDAO;
-import com.soapboxrace.core.dao.LevelRepDAO;
-import com.soapboxrace.core.dao.OwnedCarDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.CarSlotEntity;
-import com.soapboxrace.core.jpa.CustomCarEntity;
-import com.soapboxrace.core.jpa.LevelRepEntity;
-import com.soapboxrace.core.jpa.OwnedCarEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.jpa.*;
+import com.soapboxrace.jaxb.http.BadgeBundle;
+import com.soapboxrace.jaxb.http.BadgeInput;
+import com.soapboxrace.jaxb.http.BadgePacket;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 
 @Stateless
@@ -31,7 +29,57 @@ public class PersonaBO {
 
 	@EJB
 	private OwnedCarDAO ownedCarDAO;
+	
+	@EJB
+	private BadgeDefinitionDAO badgeDefinitionDAO;
+	
+	@EJB
+	private AchievementDAO achievementDAO;
+	
+	@EJB
+	private PersonaAchievementRankDAO personaAchievementRankDAO;
 
+	public void updateBadges(long idPersona, BadgeBundle badgeBundle) {
+		PersonaEntity persona = personaDAO.findById(idPersona);
+
+		List<BadgePacket> badgePackets = new ArrayList<>();
+
+		for (BadgeInput input : badgeBundle.getBadgeInputs()) {
+			BadgeDefinitionEntity badge = badgeDefinitionDAO.findById((long) input.getBadgeDefinitionId());
+			if (badge == null) continue;
+
+			AchievementDefinitionEntity achievement = achievementDAO.findByBadgeId(badge.getId());
+
+			if (achievement == null) continue;
+
+			BadgePacket packet = new BadgePacket();
+			packet.setSlotId(input.getSlotId());
+			packet.setBadgeDefinitionId(badge.getId().intValue());
+
+			List<AchievementRankEntity> ranks = personaAchievementRankDAO
+					.findAllForPersonaAchievement(persona, achievement)
+					.stream()
+					.filter(pr -> !pr.getState().equals("Locked"))
+					.map(PersonaAchievementRankEntity::getRank)
+					.collect(Collectors.toList());
+
+			if (ranks.isEmpty()) {
+				packet.setIsRare(false);
+				packet.setRarity(0f);
+				packet.setAchievementRankId(-1);
+			} else {
+				packet.setIsRare(ranks.get(ranks.size() - 1).isRare());
+				packet.setRarity(0.0f);
+				packet.setAchievementRankId(Math.toIntExact(ranks.get(ranks.size() - 1).getId()));
+			}
+
+			badgePackets.add(packet);
+		}
+
+		persona.setBadges(badgePackets);
+		personaDAO.update(persona);
+	}
+	
 	public void changeDefaultCar(Long personaId, Long defaultCarId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
 		List<CarSlotEntity> carSlotList = carSlotDAO.findByPersonaId(personaId);

@@ -293,7 +293,7 @@ public class InventoryBO {
 		}
 	}
 
-	public void addDroppedItem(ProductEntity productEntity, PersonaEntity personaEntity) {
+	public InventoryItemEntity addDroppedItem(ProductEntity productEntity, PersonaEntity personaEntity) {
 		InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
 
 		String entitlementTag = DigestUtils.md5Hex(String.valueOf(productEntity.getHash()));
@@ -337,6 +337,7 @@ public class InventoryBO {
 		default:
 			break;
 		}
+		return inventoryItemEntity;
 	}
 
 	public ProductType detectProductType(ProductEntity productEntity) {

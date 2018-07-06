@@ -3,8 +3,10 @@ package com.soapboxrace.core.bo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.dao.AchievementDAO;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
@@ -26,7 +28,16 @@ public class EventResultRouteBO {
 
 	@EJB
 	private EventDataDAO eventDataDao;
+	
+	@EJB
+	private AchievementDAO achievementDAO;
+	
+	@EJB
+	private PersonaDAO personaDAO;
 
+	@EJB
+	private AchievementsBO achievementsBO;
+	
 	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
 
@@ -35,6 +46,7 @@ public class EventResultRouteBO {
 
 	@EJB
 	private CarDamageBO carDamageBO;
+	
 
 	public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
 		Long eventSessionId = eventSessionEntity.getId();
@@ -82,6 +94,44 @@ public class EventResultRouteBO {
 		routeEventResult.setLobbyInviteId(0);
 		routeEventResult.setPersonaId(activePersonaId);
 		sendXmppPacket(eventSessionId, activePersonaId, routeArbitrationPacket);
+		
+		// Achievements
+		if (routeArbitrationPacket.getRank() == 1)
+        {
+            switch (eventDataEntity.getEvent().getCarClassHash())
+            {
+                case -405837480: { // A class
+                    achievementsBO.update(personaDAO.findById(activePersonaId), achievementDAO.findByName("achievement_ACH_WIN_RACES_ACLASS"), 1L);
+                    break;
+                }
+                case -406473455: { // B class
+                    achievementsBO.update(personaDAO.findById(activePersonaId), achievementDAO.findByName("achievement_ACH_WIN_RACES_BCLASS"), 1L);
+                    break;
+                }
+                case 1866825865: { // C class
+                    achievementsBO.update(personaDAO.findById(activePersonaId), achievementDAO.findByName("achievement_ACH_WIN_RACES_CCLASS"), 1L);
+                    break;
+                }
+                case 415909161: { // D class
+                    achievementsBO.update(personaDAO.findById(activePersonaId), achievementDAO.findByName("achievement_ACH_WIN_RACES_DCLASS"), 1L);
+                    break;
+                }
+                case 872416321: { // E class
+                    achievementsBO.update(personaDAO.findById(activePersonaId), achievementDAO.findByName("achievement_ACH_WIN_RACES_ECLASS"), 1L);
+                    break;
+                }
+                case -2142411446: { // S class
+                    achievementsBO.update(personaDAO.findById(activePersonaId), achievementDAO.findByName("achievement_ACH_WIN_RACES_SCLASS"), 1L);
+                    break;
+                }
+                default:break;
+            }
+        }
+        
+        achievementsBO.update(personaDAO.findById(activePersonaId), 
+                achievementDAO.findByName("achievement_ACH_CLOCKED_AIRTIME"), 
+                routeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
+		
 		return routeEventResult;
 	}
 

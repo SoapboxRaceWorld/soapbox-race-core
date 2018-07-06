@@ -16,6 +16,11 @@ public class BadgeDefinitionDAO extends BaseDAO<BadgeDefinitionEntity>
     {
         this.entityManager = entityManager;
     }
+
+    public BadgeDefinitionEntity findById(Long id)
+    {
+        return entityManager.find(BadgeDefinitionEntity.class, id);
+    }
     
     public List<BadgeDefinitionEntity> getAll()
     {

@@ -3,8 +3,10 @@ package com.soapboxrace.core.bo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.dao.AchievementDAO;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
@@ -25,6 +27,15 @@ public class EventResultDragBO {
 
 	@EJB
 	private EventDataDAO eventDataDao;
+	
+	@EJB
+	private AchievementDAO achievementDAO;
+
+	@EJB
+	private PersonaDAO personaDAO;
+
+	@EJB
+	private AchievementsBO achievementsBO;
 
 	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
@@ -99,6 +110,11 @@ public class EventResultDragBO {
 		dragEventResult.setInviteLifetimeInMilliseconds(0);
 		dragEventResult.setLobbyInviteId(0);
 		dragEventResult.setPersonaId(activePersonaId);
+
+		achievementsBO.update(personaDAO.findById(activePersonaId),
+				achievementDAO.findByName("achievement_ACH_CLOCKED_AIRTIME"),
+				dragArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
+		
 		return dragEventResult;
 	}
 

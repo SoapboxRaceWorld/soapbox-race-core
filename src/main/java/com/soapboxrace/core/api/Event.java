@@ -12,9 +12,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.AchievementsBO;
 import com.soapboxrace.core.bo.EventBO;
 import com.soapboxrace.core.bo.EventResultBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.dao.AchievementDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
@@ -36,6 +39,15 @@ public class Event {
 
 	@EJB
 	private EventResultBO eventResultBO;
+
+	@EJB
+	private AchievementDAO achievementDAO;
+
+	@EJB
+	private PersonaDAO personaDAO;
+
+	@EJB
+	private AchievementsBO achievementsBO;
 
 	@POST
 	@Secured
@@ -65,10 +77,13 @@ public class Event {
 		EventEntity event = eventSessionEntity.getEvent();
 		EventMode eventMode = EventMode.fromId(event.getEventModeId());
 		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-
+		
 		switch (eventMode) {
 		case CIRCUIT:
 		case SPRINT:
+			achievementsBO.update(personaDAO.findById(activePersonaId),
+					achievementDAO.findByName("achievement_ACH_PLAY_EVENTS"),
+					1L);
 			RouteArbitrationPacket routeArbitrationPacket = UnmarshalXML.unMarshal(arbitrationXml, RouteArbitrationPacket.class);
 			return eventResultBO.handleRaceEnd(eventSessionEntity, activePersonaId, routeArbitrationPacket);
 		case DRAG:
@@ -85,6 +100,7 @@ public class Event {
 		default:
 			break;
 		}
+		
 		return "";
 	}
 
@@ -94,10 +110,8 @@ public class Event {
 	@Produces(MediaType.APPLICATION_XML)
 	public PursuitEventResult bust(InputStream bustXml, @HeaderParam("securityToken") String securityToken, @QueryParam("eventSessionId") Long eventSessionId) {
 		EventSessionEntity eventSessionEntity = eventBO.findEventSessionById(eventSessionId);
-		PursuitArbitrationPacket pursuitArbitrationPacket = (PursuitArbitrationPacket) UnmarshalXML.unMarshal(bustXml, PursuitArbitrationPacket.class);
-		PursuitEventResult pursuitEventResult = new PursuitEventResult();
+		PursuitArbitrationPacket pursuitArbitrationPacket = UnmarshalXML.unMarshal(bustXml, PursuitArbitrationPacket.class);
 		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-		pursuitEventResult = eventResultBO.handlePursitEnd(eventSessionEntity, activePersonaId, pursuitArbitrationPacket, true);
-		return pursuitEventResult;
+		return eventResultBO.handlePursitEnd(eventSessionEntity, activePersonaId, pursuitArbitrationPacket, true);
 	}
 }

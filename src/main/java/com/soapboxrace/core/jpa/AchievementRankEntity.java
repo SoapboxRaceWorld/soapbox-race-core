@@ -19,7 +19,7 @@ public class AchievementRankEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
-	private int id;
+	private Long id;
 
 	@JoinColumn(name = "achievementId", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_ACHRANK_ACHDEF"))
 	@ManyToOne
@@ -48,7 +48,7 @@ public class AchievementRankEntity {
 
 	public AchievementRankPacket toBasePacket() {
 		AchievementRankPacket packet = new AchievementRankPacket();
-		packet.setAchievementRankId(id);
+		packet.setAchievementRankId(id.intValue());
 		packet.setIsRare(isRare);
 		packet.setRarity(0.0f);
 		packet.setRank(rank);
@@ -61,11 +61,11 @@ public class AchievementRankEntity {
 		return packet;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

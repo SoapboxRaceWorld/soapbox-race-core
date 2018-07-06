@@ -169,9 +169,9 @@ public class CommerceBO {
 		for (PerformancePartEntity performancePartEntity : performanceParts) {
 			int perfHash = performancePartEntity.getPerformancePartAttribHash();
 			ProductEntity productEntity = productDAO.findByHash(perfHash);
-			topSpeed = productEntity.getTopSpeed().intValue() + topSpeed;
-			accel = productEntity.getAccel().intValue() + accel;
-			handling = productEntity.getHandling().intValue() + handling;
+			topSpeed = productEntity.getTopSpeed() + topSpeed;
+			accel = productEntity.getAccel() + accel;
+			handling = productEntity.getHandling() + handling;
 		}
 		float tt = (float) (topSpeed * 0.01);
 		float ta = (float) (accel * 0.01);
@@ -185,24 +185,24 @@ public class CommerceBO {
 		Float finalTopSpeed1 = carClassesEntity.getTsVar1().floatValue() * th;
 		Float finalTopSpeed2 = carClassesEntity.getTsVar2().floatValue() * ta;
 		Float finalTopSpeed3 = carClassesEntity.getTsVar3().floatValue() * tt;
-		Float finalTopSpeed = (finalConstant * carClassesEntity.getTsStock().floatValue()) + finalTopSpeed1.floatValue() + finalTopSpeed2.floatValue()
-				+ finalTopSpeed3.floatValue();
+		Float finalTopSpeed = (finalConstant * carClassesEntity.getTsStock().floatValue()) + finalTopSpeed1 + finalTopSpeed2
+				+ finalTopSpeed3;
 
 		System.out.println(finalTopSpeed.intValue());
 
 		Float finalAccel1 = carClassesEntity.getAcVar1().floatValue() * th;
 		Float finalAccel2 = carClassesEntity.getAcVar2().floatValue() * ta;
 		Float finalAccel3 = carClassesEntity.getAcVar3().floatValue() * tt;
-		Float finalAccel = (finalConstant * carClassesEntity.getAcStock().floatValue()) + finalAccel1.floatValue() + finalAccel2.floatValue()
-				+ finalAccel3.floatValue();
+		Float finalAccel = (finalConstant * carClassesEntity.getAcStock().floatValue()) + finalAccel1 + finalAccel2
+				+ finalAccel3;
 
 		System.out.println(finalAccel.intValue());
 
 		Float finalHandling1 = carClassesEntity.getHaVar1().floatValue() * th;
 		Float finalHandling2 = carClassesEntity.getHaVar2().floatValue() * ta;
 		Float finalHandling3 = carClassesEntity.getHaVar3().floatValue() * tt;
-		Float finalHandling = (finalConstant * carClassesEntity.getHaStock().floatValue()) + finalHandling1.floatValue() + finalHandling2.floatValue()
-				+ finalHandling3.floatValue();
+		Float finalHandling = (finalConstant * carClassesEntity.getHaStock().floatValue()) + finalHandling1 + finalHandling2
+				+ finalHandling3;
 
 		System.out.println(finalHandling.intValue());
 

@@ -6,6 +6,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.util.RewardVO;
+import com.soapboxrace.core.dao.AchievementDAO;
 import com.soapboxrace.core.dao.LevelRepDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ProductDAO;
@@ -49,6 +50,12 @@ public class RewardBO {
 
 	@EJB
 	private ProductDAO productDAO;
+	
+	@EJB
+	private AchievementsBO achievementsBO;
+	
+	@EJB
+	private AchievementDAO achievementDAO;
 
 	public Reward getFinalReward(Integer rep, Integer cash) {
 		Reward finalReward = new Reward();
@@ -126,6 +133,10 @@ public class RewardBO {
 			personaEntity.setRep(personaEntity.getRep() + exp);
 		}
 		personaDao.update(personaEntity);
+		achievementsBO.update(personaEntity,
+				achievementDAO.findByName("achievement_ACH_REACH_DRIVERLEVEL"),
+				(long) personaEntity.getLevel(),
+				false);
 	}
 
 	public RewardPart getRewardPart(Integer rep, Integer cash, EnumRewardCategory category, EnumRewardType type) {

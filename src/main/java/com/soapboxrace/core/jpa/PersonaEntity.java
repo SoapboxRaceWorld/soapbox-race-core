@@ -1,19 +1,13 @@
 
 package com.soapboxrace.core.jpa;
 
-import java.time.LocalDateTime;
+import com.soapboxrace.core.jpa.convert.BadgesConverter;
+import com.soapboxrace.jaxb.http.BadgePacket;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "PERSONA")
@@ -44,6 +38,10 @@ public class PersonaEntity {
 
 	@Column(name = "created")
 	private LocalDateTime created;
+	
+	@Column(length = 2048)
+	@Convert(converter = BadgesConverter.class)
+	private List<BadgePacket> badges;
 
 	public double getBoost() {
 		return boost;
@@ -163,5 +161,15 @@ public class PersonaEntity {
 
 	public void setCreated(LocalDateTime created) {
 		this.created = created;
+	}
+
+	public List<BadgePacket> getBadges()
+	{
+		return badges;
+	}
+
+	public void setBadges(List<BadgePacket> badges)
+	{
+		this.badges = badges;
 	}
 }

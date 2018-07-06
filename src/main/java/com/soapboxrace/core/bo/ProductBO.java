@@ -60,7 +60,7 @@ public class ProductBO {
 			ProductTrans productTrans = new ProductTrans();
 			productTrans.setCurrency(entity.getCurrency());
 			productTrans.setDurationMinute(entity.getDurationMinute());
-			productTrans.setHash((int) entity.getHash());
+			productTrans.setHash(entity.getHash());
 			productTrans.setIcon(entity.getIcon());
 			productTrans.setSecondaryIcon(entity.getSecondaryIcon());
 			productTrans.setLevel(entity.getLevel());
@@ -75,4 +75,5 @@ public class ProductBO {
 		return arrayOfProductTrans;
 	}
 
+	
 }

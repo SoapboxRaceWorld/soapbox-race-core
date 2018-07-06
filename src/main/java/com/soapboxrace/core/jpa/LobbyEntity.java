@@ -22,7 +22,7 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "LOBBY")
 @NamedQueries({ //
-		@NamedQuery(name = "LobbyEntity.findAll", query = "SELECT obj FROM UserEntity obj"), //
+		@NamedQuery(name = "LobbyEntity.findAll", query = "SELECT obj FROM LobbyEntity obj"), //
 		@NamedQuery(name = "LobbyEntity.findAllOpen", //
 				query = "SELECT obj FROM LobbyEntity obj WHERE obj.lobbyDateTimeStart between :dateTime1 and :dateTime2 "), //
 		@NamedQuery(name = "LobbyEntity.findAllOpenByCarClass", //

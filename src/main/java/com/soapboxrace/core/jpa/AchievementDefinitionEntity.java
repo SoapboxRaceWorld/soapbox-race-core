@@ -20,7 +20,7 @@ public class AchievementDefinitionEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
-	private int id;
+	private Long id;
 
 	@Column(name = "friendlyIdentifier")
 	private String friendlyIdentifier;
@@ -41,11 +41,11 @@ public class AchievementDefinitionEntity {
 	@Column(name = "statConversion")
 	private String statConversion;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

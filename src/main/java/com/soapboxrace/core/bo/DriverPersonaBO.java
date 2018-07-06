@@ -19,12 +19,7 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
-import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
-import com.soapboxrace.jaxb.http.ArrayOfPersonaBase;
-import com.soapboxrace.jaxb.http.ArrayOfString;
-import com.soapboxrace.jaxb.http.PersonaBase;
-import com.soapboxrace.jaxb.http.PersonaPresence;
-import com.soapboxrace.jaxb.http.ProfileData;
+import com.soapboxrace.jaxb.http.*;
 
 @Stateless
 public class DriverPersonaBO {
@@ -95,7 +90,14 @@ public class DriverPersonaBO {
 	public ProfileData getPersonaInfo(Long personaId) {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		ProfileData profileData = castPersonaEntity(personaEntity);
-		profileData.setBadges(new ArrayOfBadgePacket());
+		
+		ArrayOfBadgePacket arrayOfBadgePacket = new ArrayOfBadgePacket();
+		
+		for (BadgePacket badgePacket : personaEntity.getBadges()) {
+			arrayOfBadgePacket.getBadgePacket().add(badgePacket);
+		}
+		
+		profileData.setBadges(arrayOfBadgePacket);
 		profileData.setMotto(personaEntity.getMotto());
 		profileData.setPercentToLevel(personaEntity.getPercentToLevel());
 		profileData.setRating(personaEntity.getRating());
@@ -113,7 +115,13 @@ public class DriverPersonaBO {
 				return arrayOfPersonaBase;
 			}
 			PersonaBase personaBase = new PersonaBase();
-			personaBase.setBadges(new ArrayOfBadgePacket());
+            ArrayOfBadgePacket arrayOfBadgePacket = new ArrayOfBadgePacket();
+
+            for (BadgePacket badgePacket : personaEntity.getBadges()) {
+                arrayOfBadgePacket.getBadgePacket().add(badgePacket);
+            }
+
+            personaBase.setBadges(arrayOfBadgePacket);
 			personaBase.setIconIndex(personaEntity.getIconIndex());
 			personaBase.setLevel(personaEntity.getLevel());
 			personaBase.setMotto(personaEntity.getMotto());
