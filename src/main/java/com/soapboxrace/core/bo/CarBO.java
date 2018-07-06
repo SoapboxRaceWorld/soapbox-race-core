@@ -47,7 +47,7 @@ public class CarBO
         carBrandMap.put("CHALLENGER", "DODGE");
         carBrandMap.put("CHARGER", "DODGE");
         carBrandMap.put("CHEVELLE", "CHEVROLET");
-        carBrandMap.put("CLIO", "RENAULT");
+        carBrandMap.put("CLIO", "RENAULTSPORT");
         carBrandMap.put("COBALT", "CHEVROLET");
         carBrandMap.put("COBRA", "CHEVROLET");
         carBrandMap.put("COBRADAYTONA", "CHEVROLET");
@@ -56,7 +56,7 @@ public class CarBO
         carBrandMap.put("CORVETTE", "CHEVROLET");
         carBrandMap.put("COUNTACH", "LAMBORGHINI");
         carBrandMap.put("CROWNVICTORIA", "FORD");
-        carBrandMap.put("CTSV", "CADDILAC");
+        carBrandMap.put("CTSV", "CADILLAC");
         carBrandMap.put("DBS", "ASTONMARTIN");
         carBrandMap.put("DELTAHF", "LANCIA");
         carBrandMap.put("DIABLOSV", "LAMBORGHINI");
@@ -79,7 +79,7 @@ public class CarBO
         carBrandMap.put("FIREBIRDFORMULA", "PONTIAC");
         carBrandMap.put("FOCUS", "FORD");
         carBrandMap.put("FORDGT", "FORD");
-        carBrandMap.put("G35", "INFINITY");
+        carBrandMap.put("G35", "INFINITI");
         carBrandMap.put("GALLARDO", "LAMBORGHINI");
         carBrandMap.put("GOLF", "VOLKSWAGEN");
         carBrandMap.put("GOLFMK1", "VOLKSWAGEN");
@@ -109,7 +109,7 @@ public class CarBO
         carBrandMap.put("M3GTRE46", "BMW");
         carBrandMap.put("M6", "BMW");
         carBrandMap.put("M6CONV", "BMW");
-        carBrandMap.put("MARUSSIA", "MARRUSIA");
+        carBrandMap.put("MARUSSIA", "MARUSSIA");
         carBrandMap.put("MAZDA3", "MAZDA");
         carBrandMap.put("MCLAREN", "MCLAREN");
         carBrandMap.put("MEGANE", "RENAULTSPORT");

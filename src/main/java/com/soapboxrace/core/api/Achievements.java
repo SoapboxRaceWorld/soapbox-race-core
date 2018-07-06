@@ -62,6 +62,7 @@ public class Achievements
             System.err.println("rank is null");
             return new AchievementRewards();
         }
+        
         PersonaAchievementEntity personaAchievementEntity = personaAchievementDAO.getForPersonaAchievement(persona, rank.getAchievementDefinition());
         PersonaAchievementRankEntity personaAchievementRankEntity = personaAchievementRankDAO.findByPersonaAchievement(persona, rank.getAchievementDefinition(), rank);
 
@@ -77,8 +78,6 @@ public class Achievements
             System.err.println(personaAchievementRankEntity.getState());
             return new AchievementRewards();
         }
-
-        
 
         if (rank.getRank() == rank.getAchievementDefinition().getRanks().size())
         {

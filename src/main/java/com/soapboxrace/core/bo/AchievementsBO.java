@@ -112,7 +112,6 @@ public class AchievementsBO
                 rankPacket.setState(AchievementState.LOCKED);
                 rankPacket.setThresholdValue(rank.getThresholdValue());
 //                rankPacket.setAchievedOn(GregorianCalendar.from(ZonedDateTime.from(Instant.parse("0001-01-01T00:00:00"))));
-                rankPacket.setState(AchievementState.LOCKED);
 
                 if (personaRank != null)
                 {
@@ -182,6 +181,10 @@ public class AchievementsBO
             personaAchievementEntity = createPersonaAchievement(personaEntity, achievement);
         }
 
+        if (!personaAchievementEntity.isCanProgress()) {
+            return;
+        }
+        
         Long maxValue = achievement.getMaximumValue(),
                 currentValue = personaAchievementEntity.getCurrentValue();
 
