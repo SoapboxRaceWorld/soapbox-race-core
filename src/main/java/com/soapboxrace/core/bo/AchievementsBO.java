@@ -225,6 +225,10 @@ public class AchievementsBO
             boolean stop = false;
 
             Long threshold = rank.getThresholdValue();
+            
+            if (personaRank.getState().equalsIgnoreCase("RewardWaiting") || personaRank.getState().equalsIgnoreCase("Completed")) {
+                continue;
+            }
 
             if (value >= threshold && !currentValue.equals(value))
             {
