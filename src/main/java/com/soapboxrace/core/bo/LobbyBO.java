@@ -1,7 +1,11 @@
 package com.soapboxrace.core.bo;
 
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -168,7 +172,7 @@ public class LobbyBO {
 		LobbyCountdown lobbyCountdown = new LobbyCountdown();
 		lobbyCountdown.setLobbyId(lobbyInviteId);
 		lobbyCountdown.setEventId(eventId);
-		lobbyCountdown.setLobbyCountdownInMilliseconds(getLobbyCountdownInMilliseconds(lobbyEntity));
+		lobbyCountdown.setLobbyCountdownInMilliseconds(lobbyEntity.getLobbyCountdownInMilliseconds());
 		lobbyCountdown.setLobbyStuckDurationInMilliseconds(10000);
 
 		ArrayOfLobbyEntrantInfo arrayOfLobbyEntrantInfo = new ArrayOfLobbyEntrantInfo();
@@ -210,17 +214,6 @@ public class LobbyBO {
 		lobbyInfoType.setLobbyId(lobbyInviteId);
 
 		return lobbyInfoType;
-	}
-	
-	public int getLobbyCountdownInMilliseconds(LobbyEntity lobbyEntity) {
-		if (lobbyEntity.getLobbyDateTimeStart() == null) {
-			return parameterBO.getLobbyCountdownTime();
-		}
-
-        Date now = new Date();
-        Long time = now.getTime() - lobbyEntity.getLobbyDateTimeStart().getTime();
-        time = parameterBO.getLobbyCountdownTime() - time;
-        return time.intValue();
 	}
 
 	public void sendJoinMsg(Long personaId, List<LobbyEntrantEntity> lobbyEntrants) {
@@ -282,7 +275,7 @@ public class LobbyBO {
 
 		public void run() {
 			try {
-				Thread.sleep(parameterBO.getLobbyCountdownTime());
+				Thread.sleep(60000L);
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}

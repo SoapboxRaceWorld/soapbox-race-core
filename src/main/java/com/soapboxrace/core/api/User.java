@@ -120,8 +120,6 @@ public class User
 
 		for (FriendEntity friend : friends)
 		{
-			if (presenceManager.getPresence(friend.getPersonaId()) == 0) continue;
-			
 			XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
 			PersonaBase xmppPersonaBase = new PersonaBase();
 
@@ -151,11 +149,6 @@ public class User
 	{
 		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 
-		if (activePersonaId == null)
-		{
-			return "";
-		}
-		
 		if (activePersonaId == 0L)
 		{
 			return "";

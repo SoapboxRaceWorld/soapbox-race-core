@@ -116,7 +116,6 @@ public class UserBO {
 		for (PersonaEntity personaEntity : listOfProfile) {
 			// switch to apache beanutils copy
 			ProfileData profileData = new ProfileData();
-			profileData.setBoost(personaEntity.getBoost());
 			profileData.setName(personaEntity.getName());
 			profileData.setCash(personaEntity.getCash());
 			profileData.setIconIndex(personaEntity.getIconIndex());

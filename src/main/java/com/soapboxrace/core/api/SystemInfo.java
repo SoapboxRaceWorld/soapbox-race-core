@@ -2,7 +2,6 @@ package com.soapboxrace.core.api;
 
 import java.util.GregorianCalendar;
 
-import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -11,24 +10,14 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.ParameterBO;
 
 @Path("/systeminfo")
 public class SystemInfo {
 
-	@EJB
-	private ParameterBO parameterBO;
-	
 	@GET
 	@Secured
 	@Produces(MediaType.APPLICATION_XML)
 	public com.soapboxrace.jaxb.http.SystemInfo systemInfo() {
-		String serverAddress = parameterBO.getStrParam("SERVER_ADDRESS");
-		
-		if (serverAddress == null) {
-			serverAddress = "soapboxrace.world";
-		}
-		
 		com.soapboxrace.jaxb.http.SystemInfo systemInfo = new com.soapboxrace.jaxb.http.SystemInfo();
 		systemInfo.setBranch("production");
 		systemInfo.setChangeList("620384");
@@ -53,7 +42,7 @@ public class SystemInfo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		systemInfo.setVersion("SBRW 0.0.7 (1614b)");
+		systemInfo.setVersion("1599");
 		return systemInfo;
 	}
 }

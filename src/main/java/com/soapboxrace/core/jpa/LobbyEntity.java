@@ -53,7 +53,7 @@ public class LobbyEntity {
 	private Long personaId;
 
 	@Transient
-	private Long lobbyCountdownInMilliseconds = 15000L;
+	private Long lobbyCountdownInMilliseconds = 60000L;
 
 	public Long getId() {
 		return id;
@@ -110,14 +110,14 @@ public class LobbyEntity {
 		return entrants.add(e);
 	}
 
-//	public int getLobbyCountdownInMilliseconds() {
-//		if (lobbyDateTimeStart != null) {
-//			Date now = new Date();
-//			Long time = now.getTime() - lobbyDateTimeStart.getTime();
-//			time = 15000L - time;
-//			return time.intValue();
-//		}
-//		return lobbyCountdownInMilliseconds.intValue();
-//	}
+	public int getLobbyCountdownInMilliseconds() {
+		if (lobbyDateTimeStart != null) {
+			Date now = new Date();
+			Long time = now.getTime() - lobbyDateTimeStart.getTime();
+			time = 60000L - time;
+			return time.intValue();
+		}
+		return lobbyCountdownInMilliseconds.intValue();
+	}
 
 }
