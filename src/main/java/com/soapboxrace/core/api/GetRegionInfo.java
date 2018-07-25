@@ -15,7 +15,7 @@ public class GetRegionInfo {
 	@Produces(MediaType.APPLICATION_XML)
 	public RegionInfo getRegionInfo() {
 		RegionInfo regionInfo = new RegionInfo();
-		regionInfo.setCountdownProposalInMilliseconds(3000);
+		regionInfo.setCountdownProposalInMilliseconds(10000);
 		regionInfo.setDirectConnectTimeoutInMilliseconds(1000);
 		regionInfo.setDropOutTimeInMilliseconds(15000);
 		regionInfo.setEventLoadTimeoutInMilliseconds(30000);

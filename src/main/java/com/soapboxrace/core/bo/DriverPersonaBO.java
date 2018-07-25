@@ -79,6 +79,7 @@ public class DriverPersonaBO {
 	private ProfileData castPersonaEntity(PersonaEntity personaEntity) {
 		ProfileData profileData = new ProfileData();
 		// switch to apache beanutils copy
+		profileData.setBoost(personaEntity.getBoost());
 		profileData.setName(personaEntity.getName());
 		profileData.setCash(personaEntity.getCash());
 		profileData.setIconIndex(personaEntity.getIconIndex());
@@ -97,6 +98,7 @@ public class DriverPersonaBO {
 			arrayOfBadgePacket.getBadgePacket().add(badgePacket);
 		}
 		
+		profileData.setBoost(personaEntity.getBoost());
 		profileData.setBadges(arrayOfBadgePacket);
 		profileData.setMotto(personaEntity.getMotto());
 		profileData.setPercentToLevel(personaEntity.getPercentToLevel());

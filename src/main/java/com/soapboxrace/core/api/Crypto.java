@@ -46,24 +46,19 @@ public class Crypto {
 	@Path("/cryptoticket")
 	@Produces(MediaType.APPLICATION_XML)
 	public String cryptoticket() {
-		byte[] randomUUIDBytes = UUIDGen.getRandomUUIDBytes();
-		String ticketIV = Base64.getEncoder().encodeToString(randomUUIDBytes);
-		udpClient.sendFreeroamUdpKey(randomUUIDBytes);
 		byte[] helloPacket = { 10, 11, 12, 13 };
+		
 		ByteBuffer byteBuffer = ByteBuffer.allocate(32);
 		byteBuffer.put(helloPacket);
+		
 		byte[] cryptoTicketBytes = byteBuffer.array();
 		String cryptoTicketBase64 = Base64.getEncoder().encodeToString(cryptoTicketBytes);
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("<ClientServerCryptoTicket>\n");
-		stringBuilder.append("<CryptoTicket>");
-		stringBuilder.append(cryptoTicketBase64);
-		stringBuilder.append("</CryptoTicket>\n");
-		stringBuilder.append("<SessionKey>AAAAAAAAAAAAAAAAAAAAAA==</SessionKey>\n");
-		stringBuilder.append("<TicketIv>");
-		stringBuilder.append(ticketIV);
-		stringBuilder.append("</TicketIv>\n");
-		stringBuilder.append("</ClientServerCryptoTicket>");
-		return stringBuilder.toString();
+		return "<ClientServerCryptoTicket>\n" +
+				"<CryptoTicket>" +
+				cryptoTicketBase64 +
+				"</CryptoTicket>\n" +
+				"<SessionKey>AAAAAAAAAAAAAAAAAAAAAA==</SessionKey>\n" +
+				"<TicketIv>AAAAAAAAAAAAAAAAAAAAAA==</TicketIv>\n" +
+				"</ClientServerCryptoTicket>";
 	}
 }

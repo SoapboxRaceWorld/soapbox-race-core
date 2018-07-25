@@ -228,6 +228,8 @@ public class DriverPersona
 
 		for (FriendEntity friend : friends)
 		{
+			if (presenceManager.getPresence(friend.getPersonaId()) == 0) continue;
+			
 			XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
 			PersonaBase xmppPersonaBase = new PersonaBase();
 

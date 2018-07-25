@@ -32,7 +32,7 @@ public class Security {
 	@Path("/generateWebToken")
 	@Produces(MediaType.APPLICATION_XML)
 	public String generateWebToken() {
-		return "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+		return "<token>canigetsomeboost</token><success code=\"SUCCESS\"/>";
 	}
 
 }

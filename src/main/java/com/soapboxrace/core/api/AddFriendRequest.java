@@ -12,10 +12,7 @@ import com.soapboxrace.core.jpa.FriendEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppChat;
-import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
-import com.soapboxrace.jaxb.http.FriendPersona;
-import com.soapboxrace.jaxb.http.FriendResult;
-import com.soapboxrace.jaxb.http.PersonaBase;
+import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.xmpp.XMPP_FriendPersonaType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePersonaBase;
@@ -90,25 +87,25 @@ public class AddFriendRequest
 		friendEntity.setStatus(0);
 
 		friendDAO.insert(friendEntity);
+////
+////		// Send friend request packet to target
+////		XMPP_ResponseTypePersonaBase senderToTarget = new XMPP_ResponseTypePersonaBase();
+////		PersonaBase xmppPersonaBase = new PersonaBase();
+////
+////		xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
+////		xmppPersonaBase.setIconIndex(active.getIconIndex());
+////		xmppPersonaBase.setLevel(active.getLevel());
+////		xmppPersonaBase.setMotto(active.getMotto());
+////		xmppPersonaBase.setName(active.getName());
+////		xmppPersonaBase.setPersonaId(active.getPersonaId());
+////		xmppPersonaBase.setPresence(3); // friend request
+////		xmppPersonaBase.setScore(active.getScore());
+////		xmppPersonaBase.setUserId(active.getUser().getId());
+////
+////		senderToTarget.setPersonaBase(xmppPersonaBase);
+////		
+////		openFireSoapBoxCli.send(senderToTarget, target.getPersonaId());
 //
-//		// Send friend request packet to target
-//		XMPP_ResponseTypePersonaBase senderToTarget = new XMPP_ResponseTypePersonaBase();
-//		PersonaBase xmppPersonaBase = new PersonaBase();
-//
-//		xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
-//		xmppPersonaBase.setIconIndex(active.getIconIndex());
-//		xmppPersonaBase.setLevel(active.getLevel());
-//		xmppPersonaBase.setMotto(active.getMotto());
-//		xmppPersonaBase.setName(active.getName());
-//		xmppPersonaBase.setPersonaId(active.getPersonaId());
-//		xmppPersonaBase.setPresence(3); // friend request
-//		xmppPersonaBase.setScore(active.getScore());
-//		xmppPersonaBase.setUserId(active.getUser().getId());
-//
-//		senderToTarget.setPersonaBase(xmppPersonaBase);
-//		
-//		openFireSoapBoxCli.send(senderToTarget, target.getPersonaId());
-
 		return MarshalXML.marshal(friendResult);
 	}
 }
