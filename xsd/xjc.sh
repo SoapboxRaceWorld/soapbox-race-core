@@ -14,7 +14,9 @@ xjc -p com.soapboxrace.jaxb.http \
    Victory.DataLayer.Serialization.HeartBeat.xsd \
    Victory.DataLayer.Serialization.Event.EventDefinition.xsd \
    Victory.DataLayer.Serialization.CommerceResultTrans.xsd \
-   Victory.DataLayer.Serialization.ProductTrans.xsd
+   Victory.DataLayer.Serialization.ProductTrans.xsd \
+   Victory.EngineErrorCode.xsd \
+   Victory.Service.EngineExceptionTrans.xsd
 
 #Victory.DataLayer.Serialization.OwnedCarTrans.xsd 
    

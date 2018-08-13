@@ -10,7 +10,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "LEVEL_REP")
-@NamedQueries({ //
+@NamedQueries({ 
+    @NamedQuery(name = "LevelRepEntity.findAll", query = "SELECT obj FROM LevelRepEntity obj"), //
 	@NamedQuery(name = "LevelRepEntity.findByLevel", query = "SELECT obj FROM LevelRepEntity obj WHERE obj.level = :level") //
 })
 public class LevelRepEntity {

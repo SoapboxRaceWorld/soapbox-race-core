@@ -92,6 +92,11 @@ public class ParameterBO {
 		return Integer.valueOf(parameterFromDB);
 	}
 
+	public Integer getIntParam(String parameter, Integer defaultValue) {
+		String parameterFromDB = getParameter(parameter);
+		return parameterFromDB == null || parameterFromDB.isEmpty() ? defaultValue : Integer.valueOf(parameterFromDB);
+	}
+
 	public Boolean getBoolParam(String parameter) {
 		String parameterFromDB = getParameter(parameter);
 		return Boolean.valueOf(parameterFromDB);

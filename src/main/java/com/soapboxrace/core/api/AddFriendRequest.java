@@ -90,24 +90,6 @@ public class AddFriendRequest
 		friendEntity.setStatus(0);
 
 		friendDAO.insert(friendEntity);
-//
-//		// Send friend request packet to target
-//		XMPP_ResponseTypePersonaBase senderToTarget = new XMPP_ResponseTypePersonaBase();
-//		PersonaBase xmppPersonaBase = new PersonaBase();
-//
-//		xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
-//		xmppPersonaBase.setIconIndex(active.getIconIndex());
-//		xmppPersonaBase.setLevel(active.getLevel());
-//		xmppPersonaBase.setMotto(active.getMotto());
-//		xmppPersonaBase.setName(active.getName());
-//		xmppPersonaBase.setPersonaId(active.getPersonaId());
-//		xmppPersonaBase.setPresence(3); // friend request
-//		xmppPersonaBase.setScore(active.getScore());
-//		xmppPersonaBase.setUserId(active.getUser().getId());
-//
-//		senderToTarget.setPersonaBase(xmppPersonaBase);
-//		
-//		openFireSoapBoxCli.send(senderToTarget, target.getPersonaId());
 
 		return MarshalXML.marshal(friendResult);
 	}

@@ -11,10 +11,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.EventBO;
-import com.soapboxrace.core.bo.LobbyBO;
-import com.soapboxrace.core.bo.PersonaBO;
-import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.jaxb.http.LobbyInfo;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
@@ -35,6 +32,9 @@ public class MatchMaking {
 
 	@EJB
 	private PersonaBO personaBO;
+	
+	@EJB
+	private MatchmakingBO matchmakingBO;
 
 	@PUT
 	@Secured
@@ -53,6 +53,7 @@ public class MatchMaking {
 	@Produces(MediaType.APPLICATION_XML)
 	public String joinQueueEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
 		lobbyBO.joinQueueEvent(activePersonaId, eventId);
 		return "";
 	}
@@ -61,7 +62,8 @@ public class MatchMaking {
 	@Secured
 	@Path("/leavequeue")
 	@Produces(MediaType.APPLICATION_XML)
-	public String leaveQueue() {
+	public String leaveQueue(@HeaderParam("securityToken") String securityToken) {
+		matchmakingBO.removeFromQueue(tokenSessionBO.getActivePersonaId(securityToken));
 		return "";
 	}
 
@@ -103,6 +105,7 @@ public class MatchMaking {
 	@Produces(MediaType.APPLICATION_XML)
 	public String makePrivateLobby(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+		OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
 		lobbyBO.createPrivateLobby(activePersonaId, eventId);
 		return "";
 	}

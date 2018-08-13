@@ -8,6 +8,7 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -72,5 +73,12 @@ public class PersonaAchievementDAO extends BaseDAO<PersonaAchievementEntity>
         List<PersonaAchievementEntity> results = query.getResultList();
 
         return results.isEmpty() ? null : results.get(0);
+    }
+
+    public void deleteByPersona(Long personaId)
+    {
+        Query query = entityManager.createNamedQuery("PersonaAchievementEntity.deleteByPersona");
+        query.setParameter("personaId", personaId);
+        query.executeUpdate();
     }
 }

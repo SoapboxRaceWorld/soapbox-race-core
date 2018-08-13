@@ -1,5 +1,6 @@
 package com.soapboxrace.core.dao;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
 	}
 
 	public List<LobbyEntity> findAllOpen(int carClassHash) {
-		Date dateNow = new Date();
-		Date datePast = new Date(dateNow.getTime() - 35000);
+		LocalDateTime dateNow = LocalDateTime.now();
+		LocalDateTime datePast = LocalDateTime.now().minusSeconds(35);
 
 		TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findAllOpenByCarClass", LobbyEntity.class);
 		query.setParameter("dateTime1", datePast);
@@ -56,8 +57,11 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
 	}
 
 	public List<LobbyEntity> findByEventStarted(int eventId) {
-		Date dateNow = new Date();
-		Date datePast = new Date(dateNow.getTime() - 35000);
+//		Date dateNow = new Date();
+//		Date datePast = new Date(dateNow.getTime() - 35000);
+		LocalDateTime dateNow = LocalDateTime.now();
+		LocalDateTime datePast = LocalDateTime.now().minusSeconds(35);
+		
 		EventEntity eventEntity = new EventEntity();
 		eventEntity.setId(eventId);
 
@@ -69,8 +73,8 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
 	}
 
 	public LobbyEntity findByEventAndPersona(int eventId, Long personaId) {
-		Date dateNow = new Date();
-		Date datePast = new Date(dateNow.getTime() - 35000);
+		LocalDateTime dateNow = LocalDateTime.now();
+		LocalDateTime datePast = LocalDateTime.now().minusSeconds(35);
 		EventEntity eventEntity = new EventEntity();
 		eventEntity.setId(eventId);
 

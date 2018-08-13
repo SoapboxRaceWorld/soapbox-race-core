@@ -7,17 +7,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.soapboxrace.core.dao.CarSlotDAO;
-import com.soapboxrace.core.dao.InventoryDAO;
-import com.soapboxrace.core.dao.InventoryItemDAO;
-import com.soapboxrace.core.dao.LobbyEntrantDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.TreasureHuntDAO;
-import com.soapboxrace.core.dao.UserDAO;
-import com.soapboxrace.core.jpa.CarSlotEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.TreasureHuntEntity;
-import com.soapboxrace.core.jpa.UserEntity;
+import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.jaxb.http.*;
 
@@ -32,6 +23,9 @@ public class DriverPersonaBO {
 
 	@EJB
 	private LobbyEntrantDAO lobbyEntrantDAO;
+	
+	@EJB
+	private LevelRepDAO levelRepDAO;
 
 	@EJB
 	private CarSlotDAO carSlotDAO;
@@ -44,7 +38,13 @@ public class DriverPersonaBO {
 
 	@EJB
 	private InventoryItemDAO inventoryItemDAO;
+	
+	@EJB
+	private PersonaAchievementDAO personaAchievementDAO;
 
+	@EJB
+	private PersonaAchievementRankDAO personaAchievementRankDAO;
+	
 	@EJB
 	private ParameterBO parameterBO;
 
@@ -85,6 +85,18 @@ public class DriverPersonaBO {
 		profileData.setPersonaId(personaEntity.getPersonaId());
 		profileData.setLevel(personaEntity.getLevel());
 		return profileData;
+	}
+	
+	public ArrayOfInt getExpLevelPointsMap() {
+		ArrayOfInt arrayOfInt = new ArrayOfInt();
+		int rep = 0;
+		
+		for (LevelRepEntity levelRepEntity : levelRepDAO.findAll()) {
+			rep += levelRepEntity.getExpPoint().intValue();
+			arrayOfInt.getInt().add(rep);
+		}
+		
+		return arrayOfInt;
 	}
 
 	public ProfileData getPersonaInfo(Long personaId) {
@@ -146,6 +158,8 @@ public class DriverPersonaBO {
 		treasureHuntDAO.deleteByPersona(personaEntity.getPersonaId());
 		inventoryItemDAO.deleteByPersona(personaId);
 		inventoryDAO.deleteByPersona(personaId);
+		personaAchievementRankDAO.deleteByPersona(personaId);
+		personaAchievementDAO.deleteByPersona(personaId);
 
 		personaDao.delete(personaEntity);
 	}

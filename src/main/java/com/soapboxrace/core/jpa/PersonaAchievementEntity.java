@@ -10,7 +10,8 @@ import javax.persistence.*;
         @NamedQuery(name = "PersonaAchievementEntity.findAllForAchievement", 
                 query = "SELECT obj FROM PersonaAchievementEntity obj WHERE obj.achievement.id = :id"),
         @NamedQuery(name = "PersonaAchievementEntity.getForPersonaAchievement",
-                query = "SELECT obj FROM PersonaAchievementEntity obj WHERE obj.persona.id = :personaId AND obj.achievement.id = :achId"),
+                query = "SELECT obj FROM PersonaAchievementEntity obj WHERE obj.persona.id = :personaId AND obj.achievement.id = :achId"), 
+        @NamedQuery(name = "PersonaAchievementEntity.deleteByPersona", query = "DELETE FROM PersonaAchievementEntity obj WHERE obj.persona.id = :personaId")
 })
 public class PersonaAchievementEntity
 {

@@ -2,6 +2,7 @@ package com.soapboxrace.core.api;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import com.soapboxrace.core.api.util.BanUtil;
-import com.soapboxrace.core.api.util.LaunchFilter;
-import com.soapboxrace.core.api.util.LauncherChecks;
-import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.api.util.*;
 import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.dao.FriendDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
@@ -52,9 +50,6 @@ public class User
 
 	@EJB
 	private TokenSessionBO tokenBO;
-
-	@EJB
-	private InviteTicketBO inviteTicketBO;
 
 	@EJB
 	private PresenceManager presenceManager;
@@ -116,27 +111,29 @@ public class User
 
 		presenceManager.removePresence(activePersonaId);
 
-		List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
+		ConcurrentUtil.EXECUTOR_SERVICE.submit(() -> {
+			List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
 
-		for (FriendEntity friend : friends)
-		{
-			XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
-			PersonaBase xmppPersonaBase = new PersonaBase();
+			for (FriendEntity friend : friends)
+			{
+				XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
+				PersonaBase xmppPersonaBase = new PersonaBase();
 
-			xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
-			xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
-			xmppPersonaBase.setLevel(personaEntity.getLevel());
-			xmppPersonaBase.setMotto(personaEntity.getMotto());
-			xmppPersonaBase.setName(personaEntity.getName());
-			xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
-			xmppPersonaBase.setPresence(0);
-			xmppPersonaBase.setScore(personaEntity.getScore());
-			xmppPersonaBase.setUserId(personaEntity.getUser().getId());
+				xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
+				xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
+				xmppPersonaBase.setLevel(personaEntity.getLevel());
+				xmppPersonaBase.setMotto(personaEntity.getMotto());
+				xmppPersonaBase.setName(personaEntity.getName());
+				xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
+				xmppPersonaBase.setPresence(0);
+				xmppPersonaBase.setScore(personaEntity.getScore());
+				xmppPersonaBase.setUserId(personaEntity.getUser().getId());
 
-			personaPacket.setPersonaBase(xmppPersonaBase);
+				personaPacket.setPersonaBase(xmppPersonaBase);
 
-			openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
-		}
+				openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
+			}
+		});
 
 		return "";
 	}
@@ -149,7 +146,7 @@ public class User
 	{
 		Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 
-		if (activePersonaId == 0L)
+		if (Objects.isNull(activePersonaId) || activePersonaId == 0L)
 		{
 			return "";
 		}
@@ -158,27 +155,29 @@ public class User
 		tokenBO.setActivePersonaId(securityToken, 0L, true);
 		presenceManager.removePresence(activePersonaId);
 
-		List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
+		ConcurrentUtil.EXECUTOR_SERVICE.submit(() -> {
+			List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
 
-		for (FriendEntity friend : friends)
-		{
-			XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
-			PersonaBase xmppPersonaBase = new PersonaBase();
+			for (FriendEntity friend : friends)
+			{
+				XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
+				PersonaBase xmppPersonaBase = new PersonaBase();
 
-			xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
-			xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
-			xmppPersonaBase.setLevel(personaEntity.getLevel());
-			xmppPersonaBase.setMotto(personaEntity.getMotto());
-			xmppPersonaBase.setName(personaEntity.getName());
-			xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
-			xmppPersonaBase.setPresence(0);
-			xmppPersonaBase.setScore(personaEntity.getScore());
-			xmppPersonaBase.setUserId(personaEntity.getUser().getId());
+				xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
+				xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
+				xmppPersonaBase.setLevel(personaEntity.getLevel());
+				xmppPersonaBase.setMotto(personaEntity.getMotto());
+				xmppPersonaBase.setName(personaEntity.getName());
+				xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
+				xmppPersonaBase.setPresence(0);
+				xmppPersonaBase.setScore(personaEntity.getScore());
+				xmppPersonaBase.setUserId(personaEntity.getUser().getId());
 
-			personaPacket.setPersonaBase(xmppPersonaBase);
+				personaPacket.setPersonaBase(xmppPersonaBase);
 
-			openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
-		}
+				openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
+			}
+		});
 
 		return "";
 	}

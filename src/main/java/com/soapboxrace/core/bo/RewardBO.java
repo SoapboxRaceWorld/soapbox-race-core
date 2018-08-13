@@ -99,15 +99,15 @@ public class RewardBO {
 	}
 
 	public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
-		int maxLevel = 60;
+		int maxLevel;
 		if (personaEntity.getUser().isPremium()) {
 			maxLevel = parameterBO.getIntParam("MAX_LEVEL_PREMIUM");
 		} else {
 			maxLevel = parameterBO.getIntParam("MAX_LEVEL_FREE");
 		}
 		if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-			Integer cashMax = (int) personaEntity.getCash() + cash;
-			personaEntity.setCash(cashMax > 9999999 ? 9999999 : cashMax < 1 ? 1 : cashMax);
+			int cashMax = (int) personaEntity.getCash() + cash;
+			personaEntity.setCash(cashMax > parameterBO.getIntParam("MAX_CASH", 9999999) ? parameterBO.getIntParam("MAX_CASH", 9999999) : cashMax < 1 ? 1 : cashMax);
 		}
 
 		if (parameterBO.getBoolParam("ENABLE_REPUTATION") && personaEntity.getLevel() < maxLevel) {

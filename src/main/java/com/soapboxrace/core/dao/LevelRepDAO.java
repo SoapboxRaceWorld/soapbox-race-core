@@ -26,4 +26,8 @@ public class LevelRepDAO extends BaseDAO<LevelRepEntity> {
 		return !resultList.isEmpty() ? resultList.get(0) : null;
 	}
 
+	public List<LevelRepEntity> findAll() {
+		TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findAll", LevelRepEntity.class);
+		return query.getResultList();
+	}
 }

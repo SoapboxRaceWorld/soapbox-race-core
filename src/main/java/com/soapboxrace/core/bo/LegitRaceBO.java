@@ -32,13 +32,13 @@ public class LegitRaceBO {
 			minimumTime = parameterBO.getIntParam("DRAG_MINIMUM_TIME");
 
 		final long timeDiff = sessionEntity.getEnded() - sessionEntity.getStarted();
-		boolean legit = timeDiff >= minimumTime;
+		boolean legit = timeDiff > minimumTime + 1;
 
 		if (!legit) {
-			socialBo.sendReport(0L, activePersonaId, 3, String.format("Abnormal event time: %d", timeDiff), (int) arbitrationPacket.getCarId(), 0, 0L);
+			socialBo.sendReport(0L, activePersonaId, 3, String.format("Abnormal event time: %d", timeDiff), (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
 		}
 		if (arbitrationPacket.getHacksDetected() > 0) {
-			socialBo.sendReport(0L, activePersonaId, 3, "Server sent a report for cheat", (int) arbitrationPacket.getCarId(), 0,
+			socialBo.sendReport(0L, activePersonaId, 3, "hacksDetected > 0", (int) arbitrationPacket.getCarId(), 0,
 					arbitrationPacket.getHacksDetected());
 		}
 		return legit;

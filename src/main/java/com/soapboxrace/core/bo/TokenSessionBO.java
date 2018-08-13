@@ -65,6 +65,7 @@ public class TokenSessionBO {
 		UserEntity userEntity = userDAO.findById(userId);
 		tokenSessionEntity.setPremium(userEntity.isPremium());
 		tokenSessionEntity.setClientHostIp(clientHostName);
+		tokenSessionEntity.setActivePersonaId(0L);
 		tokenDAO.insert(tokenSessionEntity);
 		return randomUUID;
 	}
