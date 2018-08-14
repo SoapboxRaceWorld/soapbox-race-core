@@ -3,6 +3,7 @@ package com.soapboxrace.core.bo;
 import javax.ejb.Singleton;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Singleton
 public class MatchmakingBO
@@ -19,9 +20,9 @@ public class MatchmakingBO
         queue.put(personaId, carClass);
     }
 
-    public Long getByClass(Integer carClass)
+    public Long get(Integer carClass)
     {
-        System.out.println("getByClass: " + carClass);
+        System.out.println("get: " + carClass);
         for (Map.Entry<Long, Integer> entry : queue.entrySet()) {
             if (entry.getValue().equals(carClass)) {
                 System.out.println("found one!");
@@ -29,7 +30,13 @@ public class MatchmakingBO
             }
         }
         
-        return null;
+        if (queue.isEmpty()) {
+            return null;
+        }
+
+        final Optional<Long> firstEntry = queue.entrySet().stream().findFirst().map(Map.Entry::getKey);
+
+        return firstEntry.orElse(null);
     }
 
     public void removeFromQueue(Long personaId)

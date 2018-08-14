@@ -142,7 +142,7 @@ public class LobbyBO {
 			    if (lobbyEntity.getEntrants().size() >= lobbyEntity.getEvent().getMaxPlayers()) break;
 
 			    System.out.println("search player " + i);
-				Long queuePersona = matchmakingBO.getByClass(carClassHash);
+				Long queuePersona = matchmakingBO.get(carClassHash);
 
 				if (queuePersona != null) {
 					System.out.println("queued personaID: " + queuePersona);

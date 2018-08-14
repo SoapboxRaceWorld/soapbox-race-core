@@ -53,7 +53,6 @@ public class MatchMaking {
 	@Produces(MediaType.APPLICATION_XML)
 	public String joinQueueEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
 		Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-		OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
 		lobbyBO.joinQueueEvent(activePersonaId, eventId);
 		return "";
 	}
