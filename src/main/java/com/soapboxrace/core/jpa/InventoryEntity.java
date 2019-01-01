@@ -3,18 +3,7 @@ package com.soapboxrace.core.jpa;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "PERSONAINVENTORY")
@@ -44,7 +33,7 @@ public class InventoryEntity {
 
 	private int visualPartsUsedSlotCount;
 
-	@OneToMany(mappedBy = "inventory", targetEntity = InventoryItemEntity.class)
+	@OneToMany(mappedBy = "inventory", targetEntity = InventoryItemEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<InventoryItemEntity> items = new ArrayList<>();
 
 	public int getId() {
