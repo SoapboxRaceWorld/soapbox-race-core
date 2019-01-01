@@ -12,7 +12,6 @@ import com.soapboxrace.jaxb.http.FraudConfig;
 
 @Path("/security")
 public class Security {
-
 	@GET
 	@Secured
 	@Path("/fraudConfig")
@@ -32,7 +31,6 @@ public class Security {
 	@Path("/generateWebToken")
 	@Produces(MediaType.APPLICATION_XML)
 	public String generateWebToken() {
-		return "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+		return "";
 	}
-
 }

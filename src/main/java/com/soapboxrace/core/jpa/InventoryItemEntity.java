@@ -1,16 +1,9 @@
 package com.soapboxrace.core.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import com.soapboxrace.core.jpa.convert.LocalDateTimeToStringConverter;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "PERSONAINVENTORYITEM")
@@ -43,7 +36,10 @@ public class InventoryItemEntity {
 
 	private String entitlementTag;
 
-	private String expirationDate;
+	@Convert(converter = LocalDateTimeToStringConverter.class)
+	private LocalDateTime expirationDate;
+	
+	private boolean expirable = false;
 
 	private Integer hash;
 
@@ -91,11 +87,11 @@ public class InventoryItemEntity {
 		this.entitlementTag = entitlementTag;
 	}
 
-	public String getExpirationDate() {
+	public LocalDateTime getExpirationDate() {
 		return expirationDate;
 	}
 
-	public void setExpirationDate(String expirationDate) {
+	public void setExpirationDate(LocalDateTime expirationDate) {
 		this.expirationDate = expirationDate;
 	}
 
@@ -153,5 +149,15 @@ public class InventoryItemEntity {
 
 	public void setVirtualItemType(String virtualItemType) {
 		this.virtualItemType = virtualItemType;
+	}
+
+	public boolean isExpirable()
+	{
+		return expirable;
+	}
+
+	public void setExpirable(boolean expirable)
+	{
+		this.expirable = expirable;
 	}
 }

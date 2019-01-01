@@ -56,7 +56,7 @@ public class InventoryItemTrans {
     protected String entitlementTag;
     @XmlElement(name = "ExpirationDate", required = true)
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar expirationDate;
+    protected String expirationDate;
     @XmlElement(name = "Hash")
     protected int hash;
     @XmlElement(name = "InventoryId")
@@ -106,7 +106,7 @@ public class InventoryItemTrans {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getExpirationDate() {
+    public String getExpirationDate() {
         return expirationDate;
     }
 
@@ -118,7 +118,7 @@ public class InventoryItemTrans {
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setExpirationDate(XMLGregorianCalendar value) {
+    public void setExpirationDate(String value) {
         this.expirationDate = value;
     }
 

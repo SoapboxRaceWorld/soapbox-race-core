@@ -35,7 +35,8 @@ public class RewardDragBO extends RewardBO {
 		setTopSpeedReward(eventEntity, dragArbitrationPacket.getTopSpeed(), rewardVO);
 		setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.SOCIALITE);
 		setMultiplierReward(eventEntity, rewardVO);
-
+		setAmplifierReward(personaEntity, rewardVO);
+		
 		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
 		return getAccolades(personaEntity, dragArbitrationPacket, rewardVO);
 	}

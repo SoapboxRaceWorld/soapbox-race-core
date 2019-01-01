@@ -56,5 +56,6 @@ public class RewardPursuitBO extends RewardBO {
 		setTopSpeedReward(eventEntity, pursuitArbitrationPacket.getTopSpeed(), rewardVO);
 		setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.BOUNTY_HUNTER);
 		setMultiplierReward(eventEntity, rewardVO);
+		setAmplifierReward(personaEntity, rewardVO);
 	}
 }

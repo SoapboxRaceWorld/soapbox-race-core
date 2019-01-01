@@ -6,17 +6,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.util.RewardVO;
-import com.soapboxrace.core.dao.AchievementDAO;
-import com.soapboxrace.core.dao.LevelRepDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.ProductDAO;
-import com.soapboxrace.core.jpa.CarSlotEntity;
-import com.soapboxrace.core.jpa.CardDecks;
-import com.soapboxrace.core.jpa.EventEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.ProductEntity;
-import com.soapboxrace.core.jpa.SkillModPartEntity;
-import com.soapboxrace.core.jpa.SkillModRewardType;
+import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
 import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
@@ -47,6 +38,9 @@ public class RewardBO {
 
 	@EJB
 	private PersonaDAO personaDao;
+	
+	@EJB
+	private InventoryItemDAO inventoryItemDao;
 
 	@EJB
 	private ProductDAO productDAO;
@@ -215,6 +209,19 @@ public class RewardBO {
 			Float perfectStartRep = baseRep * perfectStartRepMultiplier;
 			Float perfectStartCash = baseCash * perfectStartCashMultiplier;
 			rewardVO.add(perfectStartRep.intValue(), perfectStartCash.intValue(), EnumRewardCategory.BONUS, EnumRewardType.NONE);
+		}
+	}
+	
+	public void setAmplifierReward(PersonaEntity personaEntity, RewardVO rewardVO) {
+		InventoryItemEntity repAmp = inventoryItemDao.findByEntitlementTagAndPersona(personaEntity.getPersonaId(), "REP_AMPLIFIER_2X");
+		InventoryItemEntity cashAmp = inventoryItemDao.findByEntitlementTagAndPersona(personaEntity.getPersonaId(), "CASH_AMPLIFIER_2X");
+		
+		if (repAmp != null) {
+			rewardVO.add(rewardVO.getRep(), 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
+		}
+
+		if (cashAmp != null) {
+			rewardVO.add(0, rewardVO.getCash(), EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
 		}
 	}
 

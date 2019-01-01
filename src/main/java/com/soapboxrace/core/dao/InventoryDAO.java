@@ -33,7 +33,16 @@ public class InventoryDAO extends BaseDAO<InventoryEntity> {
         query.setParameter("persona", personaEntity);
 
         List<InventoryEntity> resultList = query.getResultList();
-        return !resultList.isEmpty() ? resultList.get(0) : null;
+        
+        if (!resultList.isEmpty()) {
+            InventoryEntity inventoryEntity = resultList.get(0);
+            inventoryEntity.getItems().size();
+            
+            return inventoryEntity;
+        }
+        
+        return null;
+//        return !resultList.isEmpty() ? resultList.get(0) : null;
     }
 
     public void deleteByPersona(Long personaId) {

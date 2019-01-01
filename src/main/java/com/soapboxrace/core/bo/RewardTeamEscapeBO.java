@@ -63,6 +63,7 @@ public class RewardTeamEscapeBO extends RewardBO {
 		setTopSpeedReward(eventEntity, teamEscapeArbitrationPacket.getTopSpeed(), rewardVO);
 		setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.BOUNTY_HUNTER);
 		setMultiplierReward(eventEntity, rewardVO);
+		setAmplifierReward(personaEntity, rewardVO);
 
 		Random random = new Random();
 		teamEscapeArbitrationPacket.setRank(random.nextInt(4));

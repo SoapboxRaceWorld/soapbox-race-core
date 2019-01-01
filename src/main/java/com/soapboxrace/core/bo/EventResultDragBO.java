@@ -106,7 +106,7 @@ public class EventResultDragBO {
 		dragEventResult.setEntrants(arrayOfDragEntrantResult);
 		dragEventResult.setEventId(eventDataEntity.getEvent().getId());
 		dragEventResult.setEventSessionId(eventSessionId);
-		dragEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
+		dragEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM : ExitPath.EXIT_TO_LOBBY);
 		dragEventResult.setInviteLifetimeInMilliseconds(0);
 		dragEventResult.setLobbyInviteId(0);
 		dragEventResult.setPersonaId(activePersonaId);
@@ -115,7 +115,7 @@ public class EventResultDragBO {
 				achievementDAO.findByName("achievement_ACH_CLOCKED_AIRTIME"),
 				dragArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
 		
-		if (dragArbitrationPacket.getRank() == 1) {
+		if (dragArbitrationPacket.getRank() == 1 && eventSessionEntity.getLobby() != null) {
 			achievementsBO.update(personaDAO.findById(activePersonaId),
 					achievementDAO.findByName("achievement_ACH_WIN_DRAG"),
 					1L);

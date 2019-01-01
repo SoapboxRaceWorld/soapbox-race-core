@@ -2,19 +2,7 @@ package com.soapboxrace.core.jpa;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.soapboxrace.core.jpa.convert.LocalDateTimeConverter;
 
@@ -28,22 +16,27 @@ public class BanEntity {
 	@Column
 	private Long id;
 
-	@OneToOne(targetEntity = UserEntity.class, cascade = CascadeType.REMOVE)
+	@OneToOne(targetEntity = UserEntity.class)
 	@JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BAN_USER"))
 	private UserEntity userEntity;
-
-	@Column
-	private String type;
-
-	@Column
-	private String data;
+	
+	@ManyToOne(targetEntity = PersonaEntity.class)
+	@JoinColumn(name = "banned_by_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BANNED_BY"))
+	private PersonaEntity bannedBy;
 
 	@Column
 	private String reason;
 
 	@Column
 	@Convert(converter = LocalDateTimeConverter.class)
+	private LocalDateTime started;
+	
+	@Column
+	@Convert(converter = LocalDateTimeConverter.class)
 	private LocalDateTime endsAt;
+	
+	@Column
+	private boolean willEnd;
 
 	public Long getId() {
 		return id;
@@ -61,20 +54,14 @@ public class BanEntity {
 		this.userEntity = userEntity;
 	}
 
-	public String getType() {
-		return type;
+	public PersonaEntity getBannedBy()
+	{
+		return bannedBy;
 	}
 
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getData() {
-		return data;
-	}
-
-	public void setData(String data) {
-		this.data = data;
+	public void setBannedBy(PersonaEntity bannedBy)
+	{
+		this.bannedBy = bannedBy;
 	}
 
 	public LocalDateTime getEndsAt() {
@@ -93,11 +80,23 @@ public class BanEntity {
 		this.reason = reason;
 	}
 
-	public boolean stillApplies() {
-		return this.endsAt == null || LocalDateTime.now().isBefore(this.endsAt);
+	public boolean isWillEnd()
+	{
+		return willEnd;
 	}
 
-	public enum BanType {
-		USER_BAN, IP_BAN, HWID_BAN, EMAIL_BAN
+	public void setWillEnd(boolean willEnd)
+	{
+		this.willEnd = willEnd;
+	}
+
+	public LocalDateTime getStarted()
+	{
+		return started;
+	}
+
+	public void setStarted(LocalDateTime started)
+	{
+		this.started = started;
 	}
 }

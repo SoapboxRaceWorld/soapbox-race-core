@@ -59,7 +59,6 @@ public class Achievements
 
         if (rank == null)
         {
-            System.err.println("rank is null");
             return new AchievementRewards();
         }
         
@@ -68,14 +67,11 @@ public class Achievements
 
         if (personaAchievementEntity == null || personaAchievementRankEntity == null)
         {
-            System.out.println(personaAchievementEntity);
-            System.out.println(personaAchievementRankEntity);
             return new AchievementRewards();
         }
 
         if (!personaAchievementRankEntity.getState().equalsIgnoreCase("RewardWaiting"))
         {
-            System.err.println(personaAchievementRankEntity.getState());
             return new AchievementRewards();
         }
 

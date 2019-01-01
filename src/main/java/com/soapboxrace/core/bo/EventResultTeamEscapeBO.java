@@ -116,7 +116,7 @@ public class EventResultTeamEscapeBO {
 		teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
 		teamEscapeEventResult.setEventId(eventDataEntity.getEvent().getId());
 		teamEscapeEventResult.setEventSessionId(eventSessionId);
-		teamEscapeEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
+		teamEscapeEventResult.setExitPath(ExitPath.EXIT_TO_LOBBY);
 		teamEscapeEventResult.setInviteLifetimeInMilliseconds(0);
 		teamEscapeEventResult.setLobbyInviteId(0);
 		teamEscapeEventResult.setPersonaId(activePersonaId);

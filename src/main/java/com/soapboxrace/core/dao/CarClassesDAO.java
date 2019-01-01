@@ -20,6 +20,17 @@ public class CarClassesDAO extends BaseDAO<CarClassesEntity> {
 		return entityManager.find(CarClassesEntity.class, productId);
 	}
 
+	public CarClassesEntity findByProductId(String productId) {
+		TypedQuery<CarClassesEntity> query = entityManager.createQuery("SELECT obj FROM CarClassesEntity obj WHERE obj.productId = :productId", CarClassesEntity.class);
+		query.setParameter("productId", productId);
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
+
 	public CarClassesEntity findByHash(int hash) {
 		TypedQuery<CarClassesEntity> query = entityManager.createQuery("SELECT obj FROM CarClassesEntity obj WHERE obj.hash = :hash", CarClassesEntity.class);
 		query.setParameter("hash", hash);

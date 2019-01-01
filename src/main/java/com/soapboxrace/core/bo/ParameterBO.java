@@ -29,13 +29,13 @@ public class ParameterBO {
 	public boolean isShardingEnabled() {
 		String property = System.getProperty("sharding.enabled");
 
-		return property != null && Boolean.parseBoolean(property);
+		return Boolean.parseBoolean(property);
 	}
 
 	public boolean isShardingMaster() {
 		String property = System.getProperty("sharding.master");
 
-		return property != null && Boolean.parseBoolean(property);
+		return Boolean.parseBoolean(property);
 	}
 
 	public String getShardId() {
@@ -48,27 +48,6 @@ public class ParameterBO {
 		if (!isShardingEnabled() || isShardingMaster())
 			return null;
 		return property.trim();
-	}
-
-	public String getMultiXmppHost() {
-		String property = System.getProperty("sharding.multixmpp.host");
-
-		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
-	}
-
-	public String getMultiXmppToken() {
-		String property = System.getProperty("sharding.multixmpp.token");
-
-		return isShardingEnabled() ? (property != null && !property.trim().isEmpty() ? property.trim() : null) : null;
-	}
-
-	public int getMultiXmppPort() {
-		String property = System.getProperty("sharding.multixmpp.port");
-
-		if (!isShardingEnabled()) {
-			return -1;
-		}
-		return property != null && !property.trim().isEmpty() ? Integer.parseInt(property) : -1;
 	}
 
 	public int getCarLimit(String securityToken) {

@@ -1,5 +1,6 @@
 package com.soapboxrace.core.dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -19,28 +20,10 @@ public class BanDAO extends BaseDAO<BanEntity> {
 		this.entityManager = entityManager;
 	}
 
-	private BanEntity findByTypeAndData(BanEntity.BanType type, String data) {
-		TypedQuery<BanEntity> query = entityManager.createQuery("SELECT obj FROM BanEntity obj " + "WHERE obj.type = :type AND obj.data = :data AND ("
-				+ "   obj.endsAt is null OR CURRENT_TIMESTAMP < obj.endsAt" + ") ORDER BY obj.id DESC", BanEntity.class);
-		query.setParameter("type", type.toString());
-		query.setParameter("data", data);
-
-		List<BanEntity> results = query.getResultList();
-
-		return results.isEmpty() ? null : results.get(results.size() - 1);
-	}
-
-	public BanEntity findByEmail(String email) {
-		return findByTypeAndData(BanEntity.BanType.EMAIL_BAN, email);
-	}
-
-	public BanEntity findByHWID(String hwid) {
-		return findByTypeAndData(BanEntity.BanType.HWID_BAN, hwid);
-	}
-
 	public BanEntity findByUser(UserEntity userEntity) {
-		TypedQuery<BanEntity> query = entityManager.createQuery("SELECT obj FROM BanEntity obj WHERE obj.userEntity = :user", BanEntity.class);
+		TypedQuery<BanEntity> query = entityManager.createQuery("SELECT obj FROM BanEntity obj WHERE obj.userEntity = :user AND (obj.willEnd = false OR obj.endsAt > :now)", BanEntity.class);
 		query.setParameter("user", userEntity);
+		query.setParameter("now", LocalDateTime.now());
 
 		List<BanEntity> results = query.getResultList();
 

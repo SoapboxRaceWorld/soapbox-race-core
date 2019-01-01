@@ -1,14 +1,6 @@
 package com.soapboxrace.core.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "EVENT_SESSION")
@@ -22,6 +14,10 @@ public class EventSessionEntity {
 	@ManyToOne
 	@JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENTSESSION_EVENT"))
 	private EventEntity event;
+
+	@OneToOne
+	@JoinColumn(name = "LOBBYID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENTSESSION_LOBBY"))
+	private LobbyEntity lobby;
 
 	@Column(name = "STARTED")
 	private Long started;
@@ -43,6 +39,16 @@ public class EventSessionEntity {
 
 	public void setEvent(EventEntity event) {
 		this.event = event;
+	}
+
+	public LobbyEntity getLobby()
+	{
+		return lobby;
+	}
+
+	public void setLobby(LobbyEntity lobby)
+	{
+		this.lobby = lobby;
 	}
 
 	public Long getEnded() {

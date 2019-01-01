@@ -89,14 +89,14 @@ public class EventResultRouteBO {
 		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
 		routeEventResult.setEventId(eventDataEntity.getEvent().getId());
 		routeEventResult.setEventSessionId(eventSessionId);
-		routeEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
+		routeEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM : ExitPath.EXIT_TO_LOBBY);
 		routeEventResult.setInviteLifetimeInMilliseconds(0);
 		routeEventResult.setLobbyInviteId(0);
 		routeEventResult.setPersonaId(activePersonaId);
 		sendXmppPacket(eventSessionId, activePersonaId, routeArbitrationPacket);
 		
 		// Achievements
-		if (routeArbitrationPacket.getRank() == 1)
+		if (routeArbitrationPacket.getRank() == 1 && eventSessionEntity.getLobby() != null)
         {
             switch (eventDataEntity.getEvent().getCarClassHash())
             {

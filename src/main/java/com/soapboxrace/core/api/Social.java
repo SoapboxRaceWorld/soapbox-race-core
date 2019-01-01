@@ -33,7 +33,7 @@ public class Social {
 			@QueryParam("abuserPersonaId") Long abuserPersonaId, @QueryParam("petitionType") Integer petitionType,
 			@QueryParam("description") String description, @QueryParam("customCarID") Integer customCarID, @QueryParam("chatMinutes") Integer chatMinutes) {
 		if (tokenSessionBo.isAdmin(securityToken) && description.startsWith("/")) {
-			adminBo.sendCommand(personaId, abuserPersonaId, description);
+			adminBo.sendCommand(tokenSessionBo.getActivePersonaId(securityToken), abuserPersonaId, description);
 		} else {
 			bo.sendReport(personaId, abuserPersonaId, petitionType, description, customCarID, chatMinutes, 0L);
 		}

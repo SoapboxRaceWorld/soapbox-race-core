@@ -11,7 +11,7 @@ import javax.persistence.Converter;
 public class SceneryGroupConverter implements AttributeConverter<List<String>, String> {
     @Override
     public String convertToDatabaseColumn(List<String> attribute) {
-        return attribute.stream().collect(Collectors.joining(";"));
+        return String.join(";", attribute);
     }
 
     @Override

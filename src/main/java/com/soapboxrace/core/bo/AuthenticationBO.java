@@ -17,17 +17,4 @@ public class AuthenticationBO {
 	public BanEntity checkUserBan(UserEntity userEntity) {
 		return banDAO.findByUser(userEntity);
 	}
-
-	public LoginStatusVO checkIsBanned(String hwid, String email) {
-		BanEntity banEntity;
-		banEntity = banDAO.findByHWID(hwid);
-		if (banEntity != null) {
-			return new BanUtil(banEntity).invoke();
-		}
-		banEntity = banDAO.findByEmail(email);
-		if (banEntity != null) {
-			return new BanUtil(banEntity).invoke();
-		}
-		return null;
-	}
 }

@@ -50,6 +50,12 @@ public class User
 
 	@EJB
 	private TokenSessionBO tokenBO;
+	
+	@EJB
+	private OnlineUsersBO onlineUsersBO;
+	
+	@EJB
+	private ParameterBO parameterBO;
 
 	@EJB
 	private PresenceManager presenceManager;
@@ -72,9 +78,33 @@ public class User
 		UserEntity userEntity = tokenBO.getUser(securityToken);
 		BanEntity ban = authenticationBO.checkUserBan(userEntity);
 
-		if (ban != null && ban.stillApplies())
+		if (ban != null)
 		{
-			return Response.status(Response.Status.UNAUTHORIZED).entity(new BanUtil(ban).invoke()).build();
+			// Ideally this will never happen. Then again, plenty of weird stuff has happened.
+			tokenBO.deleteByUserId(userId);
+			
+			return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(
+					"<EngineExceptionTrans xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\">" +
+						"<ErrorCode>-1613</ErrorCode>" +
+						"<InnerException>" +
+							"<ErrorCode>-1613</ErrorCode>" +
+						"</InnerException>" +
+					"</EngineExceptionTrans>").build();
+		}
+
+		int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
+		int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
+		
+		if (maxOnlinePlayers != -1) {
+			if (numberOfUsersOnlineNow >= maxOnlinePlayers && !userEntity.isPremium()) {
+				return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(
+						"<EngineExceptionTrans xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\">" +
+							"<ErrorCode>-521</ErrorCode>" + 
+							"<InnerException>" +
+								"<ErrorCode>-521</ErrorCode>" + 
+							"</InnerException>" +
+						"</EngineExceptionTrans>").build();
+			}
 		}
 
 		tokenBO.deleteByUserId(userId);
@@ -202,7 +232,7 @@ public class User
 	@LauncherChecks
 	public Response createUser(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("inviteTicket") String inviteTicket)
 	{
-		LoginStatusVO loginStatusVO = userBO.createUserWithTicket(email, password, inviteTicket);
+		LoginStatusVO loginStatusVO = userBO.createUserWithTicket(email, password, sr.getRemoteAddr(), inviteTicket);
 		if (loginStatusVO != null && loginStatusVO.isLoginOk())
 		{
 			loginStatusVO = tokenBO.login(email, password, sr);

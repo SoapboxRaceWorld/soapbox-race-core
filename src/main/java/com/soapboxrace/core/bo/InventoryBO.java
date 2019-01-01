@@ -1,9 +1,14 @@
 package com.soapboxrace.core.bo;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -79,6 +84,7 @@ public class InventoryBO {
 			inventoryItemTrans.setStringHash(inventoryItemEntity.getStringHash());
 			inventoryItemTrans.setStatus(inventoryItemEntity.getStatus());
 			inventoryItemTrans.setVirtualItemType(inventoryItemEntity.getVirtualItemType());
+			inventoryItemTrans.setExpirationDate(inventoryItemEntity.getExpirationDate() != null ? DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss").format(inventoryItemEntity.getExpirationDate()) : null);
 
 			arrayOfInventoryItemTrans.getInventoryItemTrans().add(inventoryItemTrans);
 		}
@@ -371,5 +377,17 @@ public class InventoryBO {
 			return false;
 		}
 		return true;
+	}
+	
+	@Schedule(minute = "*/5", hour = "*")
+	public void doItemCleanup() {
+		List<InventoryItemEntity> items = inventoryItemDAO.findExpirableItems();
+		
+		for (InventoryItemEntity inventoryItemEntity : items) {
+		    if (inventoryItemEntity.getExpirationDate().isBefore(LocalDateTime.now())) {
+		    	System.out.println("Removing item: " + inventoryItemEntity.getEntitlementTag() + " with expiration date " + DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withZone(ZoneId.systemDefault()).format(inventoryItemEntity.getExpirationDate()));
+				inventoryItemDAO.delete(inventoryItemEntity);
+			}
+        }
 	}
 }

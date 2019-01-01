@@ -14,7 +14,7 @@ public class MiscUtils
 
         for (int i = 0; i < lifeMatch.length; i++)
         {
-            Matcher matcher = Pattern.compile("([0-9]*)" + lifeMatch[i]).matcher(string);
+            Matcher matcher = Pattern.compile("([0-9]+)" + lifeMatch[i]).matcher(string);
             while (matcher.find())
             {
                 seconds += Integer.parseInt(matcher.group(1)) * lifeInterval[i];

@@ -4,8 +4,10 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.soapboxrace.core.dao.CarSlotDAO;
+import com.soapboxrace.core.dao.InventoryItemDAO;
 import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
 
@@ -20,11 +22,21 @@ public class CarDamageBO {
 
 	@EJB
 	private ParameterBO parameterBO;
+	
+	@EJB
+	private InventoryItemDAO inventoryItemDAO;
 
 	public Integer updateDamageCar(Long personaId, ArbitrationPacket arbitrationPacket, Integer numberOfCollision) {
 		if (!parameterBO.getBoolParam("ENABLE_CAR_DAMAGE")) {
 			return 100;
 		}
+
+		InventoryItemEntity insurance = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, "INSURANCE_AMPLIFIER");
+
+		if (insurance != null) {
+			return 100;
+		}
+		
 		Long carId = arbitrationPacket.getCarId();
 		Long eventDuration = arbitrationPacket.getEventDurationInMilliseconds();
 		OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(carId);

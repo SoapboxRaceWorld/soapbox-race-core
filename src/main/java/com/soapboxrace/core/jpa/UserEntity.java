@@ -17,7 +17,8 @@ import javax.persistence.Table;
 @Table(name = "USER")
 @NamedQueries({ //
 		@NamedQuery(name = "UserEntity.findAll", query = "SELECT obj FROM UserEntity obj"),
-		@NamedQuery(name = "UserEntity.findByEmail", query = "SELECT obj FROM UserEntity obj WHERE obj.email = :email") //
+		@NamedQuery(name = "UserEntity.findByEmail", query = "SELECT obj FROM UserEntity obj WHERE obj.email = :email"), //
+		@NamedQuery(name = "UserEntity.findByIpAddress", query = "SELECT obj FROM UserEntity obj WHERE obj.ipAddress = :ipAddress") //
 })
 public class UserEntity {
 
@@ -48,6 +49,9 @@ public class UserEntity {
 
 	@Column(name = "isAdmin")
 	private boolean isAdmin;
+
+	@Column(name = "isLocked")
+	private boolean isLocked;
 
 	@Column(name = "created")
 	private LocalDateTime created;
@@ -117,6 +121,16 @@ public class UserEntity {
 
 	public void setAdmin(boolean admin) {
 		isAdmin = admin;
+	}
+
+	public boolean isLocked()
+	{
+		return isLocked;
+	}
+
+	public void setLocked(boolean locked)
+	{
+		isLocked = locked;
 	}
 
 	public LocalDateTime getLastLogin() {

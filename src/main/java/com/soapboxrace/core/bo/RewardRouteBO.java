@@ -35,6 +35,7 @@ public class RewardRouteBO extends RewardBO {
 		setTopSpeedReward(eventEntity, routeArbitrationPacket.getTopSpeed(), rewardVO);
 		setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.SOCIALITE);
 		setMultiplierReward(eventEntity, rewardVO);
+		setAmplifierReward(personaEntity, rewardVO);
 
 		applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
 		return getAccolades(personaEntity, routeArbitrationPacket, rewardVO);

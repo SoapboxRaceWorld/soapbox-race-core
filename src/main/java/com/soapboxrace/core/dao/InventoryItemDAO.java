@@ -1,7 +1,9 @@
 package com.soapboxrace.core.dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,9 +35,7 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
 		query.setParameter("tag", entitlementTag);
 		query.setParameter("persona", personaEntity);
 
-		List<InventoryItemEntity> list = query.getResultList();
-
-		return list;
+		return query.getResultList();
 	}
 
 	public void deleteByPersona(Long personaId) {
@@ -50,5 +50,12 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
 		query.setParameter("hash", hash);
 		List<InventoryItemEntity> resultList = query.getResultList();
 		return !resultList.isEmpty() ? resultList.get(0) : null;
+	}
+
+	public List<InventoryItemEntity> findExpirableItems() {
+		TypedQuery<InventoryItemEntity> query = entityManager
+				.createQuery("SELECT obj FROM InventoryItemEntity obj WHERE obj.expirable = true", InventoryItemEntity.class);
+		
+		return query.getResultList();
 	}
 }

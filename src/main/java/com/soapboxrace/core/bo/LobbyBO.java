@@ -340,10 +340,11 @@ public class LobbyBO {
 			List<XMPP_P2PCryptoTicketType> p2pCryptoTicket = xMPP_CryptoTicketsType.getP2PCryptoTicket();
 			int i = 0;
 			byte numOfRacers = (byte) entrants.size();
-			EventSessionEntity eventDataEntity = new EventSessionEntity();
-			eventDataEntity.setStarted(System.currentTimeMillis());
-			eventDataEntity.setEvent(lobbyEntity.getEvent());
-			eventSessionDao.insert(eventDataEntity);
+			EventSessionEntity eventSessionEntity = new EventSessionEntity();
+			eventSessionEntity.setStarted(System.currentTimeMillis());
+			eventSessionEntity.setEvent(lobbyEntity.getEvent());
+			eventSessionEntity.setLobby(lobbyEntity);
+			eventSessionDao.insert(eventSessionEntity);
 			String udpRaceIp = parameterBO.getStrParam("UDP_RACE_IP");
 			for (LobbyEntrantEntity lobbyEntrantEntity : entrants) {
 				// eventDataEntity.setIsSinglePlayer(false);
@@ -354,7 +355,7 @@ public class LobbyBO {
 				ByteBuffer byteBuffer = ByteBuffer.allocate(48);
 				byteBuffer.put(gridIndex);
 				byteBuffer.put(helloPacket);
-				byteBuffer.putInt(eventDataEntity.getId().intValue());
+				byteBuffer.putInt(eventSessionEntity.getId().intValue());
 				byteBuffer.put(numOfRacers);
 				byteBuffer.putInt(personaId.intValue());
 				byte[] cryptoTicketBytes = byteBuffer.array();
@@ -389,7 +390,7 @@ public class LobbyBO {
 
 			xMPP_EventSessionType.setEventId(lobbyEntity.getEvent().getId());
 			xMPP_EventSessionType.setChallenge(challengeType);
-			xMPP_EventSessionType.setSessionId(eventDataEntity.getId());
+			xMPP_EventSessionType.setSessionId(eventSessionEntity.getId());
 			lobbyLaunched.setNewRelayServer(true);
 			lobbyLaunched.setLobbyId(lobbyEntity.getId());
 			lobbyLaunched.setUdpRelayHost(udpRaceIp);

@@ -152,6 +152,7 @@ public class EventsBO {
 
 		rewardVO.add(dayRep.intValue(), dayCash.intValue(), EnumRewardCategory.BASE, EnumRewardType.NONE);
 		rewardBO.setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.EXPLORER);
+		rewardBO.setAmplifierReward(personaEntity, rewardVO);
 
 		ArbitrationPacket arbitrationPacket = new ArbitrationPacket();
 		arbitrationPacket.setRank(1);
