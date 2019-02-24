@@ -33,7 +33,7 @@ public class InventoryEntity {
 
 	private int visualPartsUsedSlotCount;
 
-	@OneToMany(mappedBy = "inventory", targetEntity = InventoryItemEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "inventory", targetEntity = InventoryItemEntity.class, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<InventoryItemEntity> items = new ArrayList<>();
 
 	public int getId() {
