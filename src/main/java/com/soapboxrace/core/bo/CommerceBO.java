@@ -82,7 +82,6 @@ public class CommerceBO {
         List<BasketItemTrans> basketItems = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
         List<ProductEntity> productsFromBasket = new ArrayList<>();
         List<VinylProductEntity> vinylProducts = new ArrayList<>();
-        boolean vinylMode = false;
         String basketProductType = null;
 
         int deductCash = 0;
@@ -95,6 +94,36 @@ public class CommerceBO {
         OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
         CustomCarTrans customCarTrans = ownedCarTrans.getCustomCar();
 
+        // sell entitlements
+        if (commerceSessionTrans.getEntitlementsToSell() != null
+                && commerceSessionTrans.getEntitlementsToSell().getItems() != null
+                && !commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans().isEmpty()) {
+            for (EntitlementItemTrans entitlementItemTrans : commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans()) {
+                for (int i = 0; i < entitlementItemTrans.getQuantity(); i++) {
+                    InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, entitlementItemTrans.getEntitlementId());
+
+                    if (inventoryItemEntity != null) {
+                        ProductEntity productEntity = productDAO.findByHash(inventoryItemEntity.getHash());
+
+                        if (productEntity != null) {
+                            switch (productEntity.getCurrency()) {
+                                case "CASH":
+                                    addCash += productEntity.getPrice();
+                                    break;
+                                case "_NS":
+                                    addBoost += productEntity.getPrice();
+                                    break;
+                                default:
+                                    System.out.println("I don't know what you did... but it's not good");
+                            }
+                        }
+
+                        inventoryBO.deletePart(personaId, entitlementItemTrans.getEntitlementId());
+                    }
+                }
+            }
+        }
+
         for (BasketItemTrans basketItemTrans : basketItems) {
             ProductEntity findById = productDAO.findByProductId(basketItemTrans.getProductId());
 
@@ -105,7 +134,6 @@ public class CommerceBO {
                     continue;
                 } else {
                     vinylProducts.add(vinylProductEntity);
-                    vinylMode = true;
                     continue;
                 }
             }
@@ -283,7 +311,6 @@ public class CommerceBO {
 
                 if (vinylProductEntity == null) {
                     System.out.println("[Commerce] Vinyl doesn't exist, let's skip this");
-                    continue;
                 } else {
                     removedVinylProducts.add(vinylProductEntity);
                 }
