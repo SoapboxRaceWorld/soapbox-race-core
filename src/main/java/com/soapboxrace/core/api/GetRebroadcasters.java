@@ -31,10 +31,6 @@ public class GetRebroadcasters {
 		ArrayOfUdpRelayInfo arrayOfUdpRelayInfo = new ArrayOfUdpRelayInfo();
 		UdpRelayInfo udpRelayInfo = new UdpRelayInfo();
 		String freeroamIp = parameterBO.getStrParam("UDP_FREEROAM_IP");
-		if ("127.0.0.1".equals(freeroamIp)) {
-			URI myUri = uri.getBaseUri();
-			freeroamIp = myUri.getHost();
-		}
 		udpRelayInfo.setHost(freeroamIp);
 		udpRelayInfo.setPort(parameterBO.getIntParam("UDP_FREEROAM_PORT"));
 		arrayOfUdpRelayInfo.getUdpRelayInfo().add(udpRelayInfo);

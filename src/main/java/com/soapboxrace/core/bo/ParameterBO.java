@@ -85,6 +85,12 @@ public class ParameterBO {
 		return getParameter(parameter);
 	}
 
+	public String getStrParam(String parameter, String defaultValue) {
+		String parameterFromDB = getParameter(parameter);
+
+		return parameterFromDB == null || parameterFromDB.isEmpty() ? defaultValue : parameterFromDB;
+	}
+
 	public Float getFloatParam(String parameter) {
 		String parameterFromDB = getParameter(parameter);
 		return Float.valueOf(parameterFromDB);

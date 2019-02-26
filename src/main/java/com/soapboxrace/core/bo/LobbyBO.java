@@ -374,11 +374,6 @@ public class LobbyBO {
 				lobbyEntrantInfoType.setGridIndex(i++);
 				lobbyEntrantInfoType.setState(LobbyEntrantState.UNKNOWN);
 
-				if ("127.0.0.1".equals(udpRaceIp)) {
-					TokenSessionEntity tokenEntity = tokenDAO.findByUserId(lobbyEntrantEntity.getPersona().getUser().getId());
-					lobbyEntrantInfoType.setUdpRaceHostIp(tokenEntity.getClientHostIp());
-				}
-
 				lobbyEntrantInfo.add(lobbyEntrantInfoType);
 			}
 			XMPP_EventSessionType xMPP_EventSessionType = new XMPP_EventSessionType();

@@ -23,7 +23,7 @@ public class VinylProductDAO extends BaseDAO<VinylProductEntity> {
 		return entityManager.find(VinylProductEntity.class, id);
 	}
 
-	public VinylProductEntity findByHash(long hash) {
+	public VinylProductEntity findByHash(Integer hash) {
 		TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByHash", VinylProductEntity.class);
 		query.setParameter("hash", hash);
 

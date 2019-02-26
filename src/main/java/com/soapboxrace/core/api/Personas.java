@@ -1,7 +1,10 @@
 package com.soapboxrace.core.api;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
@@ -26,6 +29,7 @@ import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
@@ -75,32 +79,13 @@ public class Personas {
 	public CommerceSessionResultTrans commerce(InputStream commerceXml, @HeaderParam("securityToken") String securityToken,
 			@PathParam(value = "personaId") Long personaId) {
 		sessionBO.verifyPersona(securityToken, personaId);
+		String xml = new BufferedReader(new InputStreamReader(commerceXml))
+				.lines().collect(Collectors.joining("\n"));
+		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(xml, CommerceSessionTrans.class);
+		
+		System.out.println(xml);
 
-		CommerceSessionResultTrans commerceSessionResultTrans = new CommerceSessionResultTrans();
-
-		CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(commerceXml, CommerceSessionTrans.class);
-		List<BasketItemTrans> basketItemTrans = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
-		CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
-		CommerceOp commerceOp = commerceBO.detectCommerceOperation(commerceSessionTrans, defaultCarEntity);
-		commerceBO.updateEconomy(commerceOp, basketItemTrans, commerceSessionTrans, defaultCarEntity);
-		inventoryBO.updateInventory(commerceOp, basketItemTrans, commerceSessionTrans, defaultCarEntity);
-		commerceBO.updateCar(commerceOp, commerceSessionTrans, defaultCarEntity);
-
-		commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
-		ArrayOfInventoryItemTrans arrayOfInventoryItemTrans = new ArrayOfInventoryItemTrans();
-		arrayOfInventoryItemTrans.getInventoryItemTrans().add(new InventoryItemTrans());
-
-		WalletTrans walletTrans = new WalletTrans();
-		walletTrans.setBalance(defaultCarEntity.getPersona().getCash());
-		walletTrans.setCurrency("CASH");
-
-		ArrayOfWalletTrans arrayOfWalletTrans = new ArrayOfWalletTrans();
-		arrayOfWalletTrans.getWalletTrans().add(walletTrans);
-		commerceSessionResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
-		commerceSessionResultTrans.setStatus(CommerceResultStatus.SUCCESS);
-		commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(defaultCarEntity.getOwnedCar()));
-		commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
-		return commerceSessionResultTrans;
+		return commerceBO.doCommerce(commerceSessionTrans, personaId);
 	}
 
 	@POST
@@ -140,12 +125,16 @@ public class Personas {
             commerceResultTrans.setStatus(basketBO.buyCashAmplifier(productId, personaEntity));
         } else if ("SRV-AMP-REP".equals(productId)) {
             commerceResultTrans.setStatus(basketBO.buyRepAmplifier(productId, personaEntity));
-		} else { // Car
-			OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
-			commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
-			arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
+		} else {
+			ProductEntity productEntity = basketBO.findProduct(productId);
 
-			commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken));
+			if (productEntity != null && productEntity.getProductType().equalsIgnoreCase("PRESETCAR")) {
+				OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
+				commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
+				arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
+
+				commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken));
+			}
 		}
 
 		WalletTrans cashWallet = new WalletTrans();

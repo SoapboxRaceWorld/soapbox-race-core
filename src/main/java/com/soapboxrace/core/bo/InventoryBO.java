@@ -181,6 +181,7 @@ public class InventoryBO {
 		default:
 			break;
 		}
+
 		inventoryDAO.update(inventoryEntity);
 	}
 
@@ -247,56 +248,7 @@ public class InventoryBO {
 
 	public void updateInventory(CommerceOp commerceOp, List<BasketItemTrans> basketItemTransList, CommerceSessionTrans commerceSessionTrans,
 			CarSlotEntity defaultCarEntity) {
-		OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(defaultCarEntity.getOwnedCar());
-		CustomCarTrans customCarTransDB = ownedCarTrans.getCustomCar();
-		CustomCarTrans customCarTrans = commerceSessionTrans.getUpdatedCar().getCustomCar();
-		switch (commerceOp) {
-		case PERFORMANCE:
-			List<PerformancePartTrans> performancePartTransDB = customCarTransDB.getPerformanceParts().getPerformancePartTrans();
-			List<PerformancePartTrans> performancePartTrans = customCarTrans.getPerformanceParts().getPerformancePartTrans();
-			ArrayList<PerformancePartTrans> performancePartTransListTmp = new ArrayList<>(performancePartTrans);
-			List<PerformancePartTrans> performancePartsFromBasket = getPerformancePartsFromBasket(basketItemTransList);
-			performancePartTransListTmp.removeAll(performancePartTransDB);
-			performancePartTransListTmp.removeAll(performancePartsFromBasket);
-			for (PerformancePartTrans performancePartTransTmp : performancePartTransListTmp) {
-				System.out.println("added from inventory: " + performancePartTransTmp.getPerformancePartAttribHash());
-				deletePart(defaultCarEntity.getPersona().getPersonaId(), performancePartTransTmp.getPerformancePartAttribHash());
-			}
-			break;
-		case SKILL:
-			List<SkillModPartTrans> skillModPartTransDB = customCarTransDB.getSkillModParts().getSkillModPartTrans();
-			List<SkillModPartTrans> skillModPartTrans = customCarTrans.getSkillModParts().getSkillModPartTrans();
-			List<SkillModPartTrans> skillModPartTransListTmp = new ArrayList<>(skillModPartTrans);
-			List<SkillModPartTrans> skillModPartsFromBasket = getSkillModPartsFromBasket(basketItemTransList);
-			skillModPartTransListTmp.removeAll(skillModPartTransDB);
-			skillModPartTransListTmp.removeAll(skillModPartsFromBasket);
-			for (SkillModPartTrans skillModPartTransTmp : skillModPartTransListTmp) {
-				System.out.println("added from inventory: " + skillModPartTransTmp.getSkillModPartAttribHash());
-				deletePart(defaultCarEntity.getPersona().getPersonaId(), skillModPartTransTmp.getSkillModPartAttribHash());
-			}
-			break;
-		case VISUAL:
-			List<VisualPartTrans> visualPartTransDB = customCarTransDB.getVisualParts().getVisualPartTrans();
-			List<VisualPartTrans> visualPartTrans = customCarTrans.getVisualParts().getVisualPartTrans();
-			ArrayList<VisualPartTrans> visualPartTransListTmp = new ArrayList<>(visualPartTrans);
-			List<VisualPartTrans> visualPartsFromBasket = getVisualPartsFromBasket(basketItemTransList);
-			visualPartTransListTmp.removeAll(visualPartTransDB);
-			visualPartTransListTmp.removeAll(visualPartsFromBasket);
-			for (VisualPartTrans visualPartTransTmp : visualPartTransListTmp) {
-				System.out.println("added from inventory: " + visualPartTransTmp.getPartHash());
-				deletePart(defaultCarEntity.getPersona().getPersonaId(), visualPartTransTmp.getPartHash());
-			}
-			break;
-		default:
-			break;
-		}
-		List<EntitlementItemTrans> entitlementItemTransList = commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans();
-		if (entitlementItemTransList != null && !entitlementItemTransList.isEmpty()) {
-			for (EntitlementItemTrans entitlementItemTransTmp : entitlementItemTransList) {
-				String entitlementId = entitlementItemTransTmp.getEntitlementId();
-				deletePart(defaultCarEntity.getPersona().getPersonaId(), entitlementId);
-			}
-		}
+
 	}
 
 	public InventoryItemEntity addDroppedItem(ProductEntity productEntity, PersonaEntity personaEntity) {
@@ -385,7 +337,6 @@ public class InventoryBO {
 		
 		for (InventoryItemEntity inventoryItemEntity : items) {
 		    if (inventoryItemEntity.getExpirationDate().isBefore(LocalDateTime.now())) {
-		    	System.out.println("Removing item: " + inventoryItemEntity.getEntitlementTag() + " with expiration date " + DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withZone(ZoneId.systemDefault()).format(inventoryItemEntity.getExpirationDate()));
 				inventoryItemDAO.delete(inventoryItemEntity);
 			}
         }

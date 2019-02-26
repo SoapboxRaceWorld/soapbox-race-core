@@ -37,7 +37,7 @@ public class VinylProductEntity {
 	private String currency;
 	private String description;
 	private int durationMinute;
-	private int hash;
+	private Integer hash;
 	private String icon;
 	private int level;
 	private String longDescription;

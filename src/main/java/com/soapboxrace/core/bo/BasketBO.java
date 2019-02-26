@@ -71,6 +71,10 @@ public class BasketBO
     @EJB
     private TreasureHuntDAO treasureHuntDAO;
 
+    public ProductEntity findProduct(String productId) {
+        return productDao.findByProductId(productId);
+    }
+
     private OwnedCarTrans getCar(String productId)
     {
         BasketDefinitionEntity basketDefinitonEntity = basketDefinitionsDAO.findById(productId);
@@ -245,8 +249,6 @@ public class BasketBO
         personaEntity.setBoost(personaEntity.getBoost() - productEntity.getPrice());
         personaDao.update(personaEntity);
 
-        inventoryDao.findByPersonaId(personaEntity.getPersonaId()).getItems();
-
         return CommerceResultStatus.SUCCESS;
     }
 
@@ -282,8 +284,6 @@ public class BasketBO
 
         personaEntity.setBoost(personaEntity.getBoost() - productEntity.getPrice());
         personaDao.update(personaEntity);
-
-        inventoryDao.findByPersonaId(personaEntity.getPersonaId()).getItems();
 
         return CommerceResultStatus.SUCCESS;
     }
@@ -328,16 +328,17 @@ public class BasketBO
 
         carSlotDAO.insert(carSlotEntity);
 
-        CarClassesEntity carClasses = carClassesDAO.findByProductId(productId);
-//        String longDesc = productEntity.getLongDescription();
-//        String carId = longDesc.split("_")[1];
-//        String brand = carBO.getBrand(carId);
-//
-        if (carClasses != null) {
-            AchievementDefinitionEntity achievement = achievementDAO.findByName("achievement_ACH_OWN_" + carClasses.getManufactor().replace(' ', '-'));
+        if (productEntity.getLongDescription() != null && !productEntity.getLongDescription().isEmpty()) {
+            String longDesc = productEntity.getLongDescription();
+            String carId = longDesc.split("_")[1];
+            String brand = carBO.getBrand(carId);
+
+            AchievementDefinitionEntity achievement = achievementDAO.findByName("achievement_ACH_OWN_" + brand);
 
             if (achievement != null) {
                 achievementsBO.update(personaEntity, achievement, 1L);
+            } else {
+                System.out.println("Could not find achievement for brand " + brand + " (" + longDesc + ")");
             }
         }
 

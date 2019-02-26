@@ -114,10 +114,9 @@ public class OpenFireRestApiCli
 			String roomName = entity.getRoomName();
 			if (roomName.contains("group.channel."))
 			{
-				Long idOwner = Long.parseLong(roomName.substring(roomName.lastIndexOf('.') + 1));
-				if (idOwner.equals(personaId))
-				{
-					return getAllOccupantsInRoom(roomName);
+				List<Long> groupMembers = getAllOccupantsInRoom(roomName);
+				if (groupMembers.contains(personaId)) {
+					return groupMembers;
 				}
 			}
 		}

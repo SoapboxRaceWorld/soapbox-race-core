@@ -55,9 +55,6 @@ public class AddFriendRequest
 			return "";
 		}
 
-//		openFireSoapBoxCli.send(XmppChat.createSystemMessage("Sent friend request!"), activePersonaId);
-//		openFireSoapBoxCli.send(XmppChat.createSystemMessage(String.format("You received a friend request from %s!", active.getName())), target.getPersonaId());
-
 		FriendResult friendResult = new FriendResult();
 		FriendPersona resultFriendPersona = new FriendPersona();
 

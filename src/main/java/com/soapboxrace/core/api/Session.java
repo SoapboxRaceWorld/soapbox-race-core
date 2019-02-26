@@ -34,10 +34,6 @@ public class Session {
 	public ChatServer getChatInfo() {
 		ChatServer chatServer = new ChatServer();
 		String xmppIp = parameterBO.getStrParam("XMPP_IP");
-		if ("127.0.0.1".equals(parameterBO.getStrParam("XMPP_IP"))) {
-			URI myUri = uri.getBaseUri();
-			xmppIp = myUri.getHost();
-		}
 		chatServer.setIp(xmppIp);
 		chatServer.setPort(parameterBO.getIntParam("XMPP_PORT"));
 		chatServer.setPrefix("sbrw");

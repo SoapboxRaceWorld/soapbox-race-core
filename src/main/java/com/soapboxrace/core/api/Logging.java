@@ -25,23 +25,6 @@ public class Logging {
 	@Path("/client")
 	@Produces(MediaType.APPLICATION_XML)
 	public String client() {
-		return "<ClientConfigTrans><clientConfigs><ClientConfig></ClientConfig></clientConfigs></ClientConfigTrans>";
-	}
-	
-	@POST
-	@Secured
-	@Path("/client/{group}")
-	public String doLog(InputStream inputStream, @PathParam("group") String group) {
-		String xml = new BufferedReader(new InputStreamReader(inputStream))
-				.lines().collect(Collectors.joining("\n"));
-		try {
-			ClientLog clientLog = UnmarshalXML.unMarshal(xml, ClientLog.class);
-			
-			System.out.println("CLIENT LOG [" + group + "]: " + clientLog.getMessage());
-		} catch (Exception e) {
-			System.out.println("Could not parse client log: " + xml);
-		}
-		
-		return "";
+		return "<ClientConfigTrans/>";
 	}
 }
