@@ -189,8 +189,8 @@ public class InventoryBO {
 		InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, entitlementId);
 		if (inventoryItemEntity != null) {
 			InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
+			inventoryEntity.getItems().remove(inventoryItemEntity);
 			decreaseInventory(inventoryEntity, inventoryItemEntity.getHash());
-			inventoryItemDAO.delete(inventoryItemEntity);
 		} else {
 			System.err.println("INVALID entitlementId: [" + entitlementId + "]");
 		}

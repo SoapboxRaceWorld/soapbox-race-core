@@ -26,7 +26,7 @@ public class InventoryItemEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "inventoryId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PERSINVITEM_PERSINV"))
 	private InventoryEntity inventory;
 
