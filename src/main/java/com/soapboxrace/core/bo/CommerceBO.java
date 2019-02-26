@@ -102,12 +102,7 @@ public class CommerceBO {
                 VinylProductEntity vinylProductEntity = vinylProductDAO.findByProductId(basketItemTrans.getProductId());
 
                 if (vinylProductEntity == null) {
-                    commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
-                    commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
-                    commerceSessionResultTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
-                    commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(ownedCarEntity));
-
-                    return commerceSessionResultTrans;
+                    continue;
                 } else {
                     vinylProducts.add(vinylProductEntity);
                     vinylMode = true;
@@ -116,11 +111,7 @@ public class CommerceBO {
             }
 
             if (basketProductType != null && !basketProductType.equals(findById.getProductType())) {
-                commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
-                commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
-                commerceSessionResultTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
-                commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(ownedCarEntity));
-                return commerceSessionResultTrans;
+                continue;
             }
 
             basketProductType = findById.getProductType();
@@ -248,12 +239,7 @@ public class CommerceBO {
                         ProductEntity productEntity = productDAO.findByHash(addedItem.getValue());
 
                         if (productEntity == null) {
-                            System.out.println("[Commerce] Not in catalog, let's just bail on this thing");
-                            commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
-                            commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
-                            commerceSessionResultTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
-                            commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(ownedCarEntity));
-                            return commerceSessionResultTrans;
+                            System.out.println("[Commerce] Not in catalog, let's just skip it");
                         } else {
                             addedFromCatalog.put(addedItem.getKey(), productEntity);
 
@@ -296,16 +282,12 @@ public class CommerceBO {
                 vinylProductEntity = vinylProductDAO.findByHash(removedHash);
 
                 if (vinylProductEntity == null) {
-                    System.out.println("[Commerce] Vinyl doesn't exist, let's get out of here");
-                    commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
-                    commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
-                    commerceSessionResultTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
-                    commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(ownedCarEntity));
-                    return commerceSessionResultTrans;
+                    System.out.println("[Commerce] Vinyl doesn't exist, let's skip this");
+                    continue;
+                } else {
+                    removedVinylProducts.add(vinylProductEntity);
                 }
-            }
-
-            if (!vinylMode && productEntity != null) {
+            } else {
                 switch (productEntity.getProductType()) {
                     case "PERFORMANCEPART":
                     case "SKILLMODPART":
@@ -325,8 +307,6 @@ public class CommerceBO {
                 }
 
                 removedProducts.add(productEntity);
-            } else if (vinylProductEntity != null) {
-                removedVinylProducts.add(vinylProductEntity);
             }
         }
 
