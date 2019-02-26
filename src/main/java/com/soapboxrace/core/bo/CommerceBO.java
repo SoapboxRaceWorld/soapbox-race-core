@@ -5,13 +5,11 @@ import java.util.*;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.soapboxrace.core.bo.util.CommerceOp;
 import com.soapboxrace.core.bo.util.ListDifferences;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.*;
-import sun.misc.Perf;
 
 @Stateless
 public class CommerceBO {
@@ -132,6 +130,7 @@ public class CommerceBO {
         }
 
         if (!ownedCarEntity.getId().equals(commerceSessionTrans.getUpdatedCar().getId())) {
+            System.out.println("car IDs don't match: " + ownedCarEntity.getId() + " vs " + commerceSessionTrans.getUpdatedCar().getId());
             commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
             commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
             commerceSessionResultTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
