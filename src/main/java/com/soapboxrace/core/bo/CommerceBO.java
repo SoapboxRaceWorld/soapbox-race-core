@@ -117,8 +117,6 @@ public class CommerceBO {
                                     System.out.println("I don't know what you did... but it's not good");
                             }
                         }
-
-                        inventoryBO.deletePart(personaId, entitlementItemTrans.getEntitlementId());
                     }
                 }
             }
