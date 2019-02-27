@@ -30,7 +30,7 @@ public class ProductEntity {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "productId", referencedColumnName = "productId")
+	@JoinColumn(name = "parentProductId", referencedColumnName = "productId")
 	private ProductEntity parentProduct;
 	private String categoryId;
 	private String currency;
