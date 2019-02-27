@@ -40,6 +40,29 @@ public class Catalog {
 		List<ProductEntity> productsInCategory = productBO.productsInCategory(categoryName, clientProductType, activePersonaId);
 		for (ProductEntity productEntity : productsInCategory) {
 			ProductTrans productTrans = new ProductTrans();
+			productTrans.setBundleItems(new ArrayOfProductTrans());
+
+			for (ProductEntity bundleProduct : productEntity.getBundleItems()) {
+				ProductTrans bundleProductTrans = new ProductTrans();
+				bundleProductTrans.setCurrency(bundleProduct.getCurrency());
+				bundleProductTrans.setDurationMinute(bundleProduct.getDurationMinute());
+				bundleProductTrans.setHash(bundleProduct.getHash());
+				bundleProductTrans.setIcon(bundleProduct.getIcon());
+				bundleProductTrans.setSecondaryIcon(bundleProduct.getSecondaryIcon());
+				bundleProductTrans.setLevel(bundleProduct.getLevel());
+				bundleProductTrans.setPrice(bundleProduct.getPrice());
+				bundleProductTrans.setPriority(bundleProduct.getPriority());
+				bundleProductTrans.setProductId(bundleProduct.getProductId());
+				bundleProductTrans.setProductTitle(bundleProduct.getProductTitle());
+				bundleProductTrans.setProductType(bundleProduct.getProductType());
+				bundleProductTrans.setUseCount(bundleProduct.getUseCount());
+				bundleProductTrans.setSecondaryIcon(bundleProduct.getSecondaryIcon());
+				bundleProductTrans.setWebIcon(bundleProduct.getWebIcon());
+				bundleProductTrans.setWebLocation(bundleProduct.getWebLocation());
+
+				productTrans.getBundleItems().getProductTrans().add(bundleProductTrans);
+			}
+
 			productTrans.setCurrency(productEntity.getCurrency());
 			productTrans.setDurationMinute(productEntity.getDurationMinute());
 			productTrans.setHash(productEntity.getHash());

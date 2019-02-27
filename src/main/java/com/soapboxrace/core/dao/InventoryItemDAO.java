@@ -1,61 +1,76 @@
 package com.soapboxrace.core.dao;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.jpa.InventoryItemEntity;
 
-import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import com.soapboxrace.core.dao.util.BaseDAO;
-import com.soapboxrace.core.jpa.InventoryItemEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
+import java.util.List;
 
 @Stateless
 public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
-	@PersistenceContext
-	protected void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
+    @PersistenceContext
+    protected void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
-	public InventoryItemEntity findByEntitlementTagAndPersona(Long personaId, String entitlementTag) {
-		TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity.findByPersonaEntitlEmentId", InventoryItemEntity.class);
-		query.setParameter("personaId", personaId);
-		query.setParameter("entitlementTag", entitlementTag);
-		List<InventoryItemEntity> resultList = query.getResultList();
-		return !resultList.isEmpty() ? resultList.get(0) : null;
-	}
+    public List<InventoryItemEntity> findAllByInventoryId(Long inventoryId) {
+        return entityManager.createNamedQuery("InventoryItemEntity.findAllByInventoryId", InventoryItemEntity.class)
+                .setParameter("inventoryId", inventoryId)
+                .getResultList();
+    }
 
-	public List<InventoryItemEntity> findListByEntitlementTagAndPersona(String entitlementTag, PersonaEntity personaEntity) {
-		TypedQuery<InventoryItemEntity> query = entityManager
-				.createQuery("SELECT obj FROM InventoryItemEntity obj WHERE obj.entitlementTag = :tag AND obj.persona = :persona", InventoryItemEntity.class);
-		query.setParameter("tag", entitlementTag);
-		query.setParameter("persona", personaEntity);
+    public List<InventoryItemEntity> findAllByPersonaId(Long personaId) {
+        return entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaId", InventoryItemEntity.class)
+                .setParameter("personaId", personaId)
+                .getResultList();
+    }
 
-		return query.getResultList();
-	}
+    public List<InventoryItemEntity> findAllByInventoryAndType(Long inventoryId, String type) {
+        return entityManager.createNamedQuery("InventoryItemEntity.findAllByInventoryIdAndType", InventoryItemEntity.class)
+                .setParameter("inventoryId", inventoryId)
+                .setParameter("virtualItemType", type)
+                .getResultList();
+    }
 
-	public void deleteByPersona(Long personaId) {
-		Query query = entityManager.createNamedQuery("InventoryItemEntity.deleteByPersona");
-		query.setParameter("personaId", personaId);
-		query.executeUpdate();
-	}
+    public List<InventoryItemEntity> findAllByPersonaIdAndEntitlementTag(Long personaId, String entitlementTag) {
+        return entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaIdAndTag", InventoryItemEntity.class)
+                .setParameter("personaId", personaId)
+                .setParameter("entitlementTag", entitlementTag)
+                .getResultList();
+    }
 
-	public InventoryItemEntity findByHashAndPersona(Long personaId, Integer hash) {
-		TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity.findByPersonaHash", InventoryItemEntity.class);
-		query.setParameter("personaId", personaId);
-		query.setParameter("hash", hash);
-		List<InventoryItemEntity> resultList = query.getResultList();
-		return !resultList.isEmpty() ? resultList.get(0) : null;
-	}
+    public InventoryItemEntity findByPersonaIdAndHash(Long personaId, Integer hash) {
+        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaIdAndHash", InventoryItemEntity.class);
+        query.setParameter("personaId", personaId);
+        query.setParameter("hash", hash);
 
-	public List<InventoryItemEntity> findExpirableItems() {
-		TypedQuery<InventoryItemEntity> query = entityManager
-				.createQuery("SELECT obj FROM InventoryItemEntity obj WHERE obj.expirable = true", InventoryItemEntity.class);
-		
-		return query.getResultList();
-	}
+        List<InventoryItemEntity> results = query.getResultList();
+
+        if (!results.isEmpty()) {
+            return results.get(0);
+        }
+
+        return null;
+    }
+
+    public InventoryItemEntity findByPersonaIdAndEntitlementTag(Long personaId, String entitlementTag) {
+        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaIdAndTag", InventoryItemEntity.class);
+        query.setParameter("personaId", personaId);
+        query.setParameter("entitlementTag", entitlementTag);
+
+        List<InventoryItemEntity> results = query.getResultList();
+
+        if (!results.isEmpty()) {
+            return results.get(0);
+        }
+
+        return null;
+    }
+
+    public void deleteByPersona(Long personaId) {
+
+    }
 }

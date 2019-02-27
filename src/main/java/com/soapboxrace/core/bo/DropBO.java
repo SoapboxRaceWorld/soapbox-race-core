@@ -5,13 +5,9 @@ import java.util.Random;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.dao.*;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import com.soapboxrace.core.dao.InventoryDAO;
-import com.soapboxrace.core.dao.InventoryItemDAO;
-import com.soapboxrace.core.dao.LevelRepDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.LuckyDrawItem;
 

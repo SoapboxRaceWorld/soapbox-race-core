@@ -70,7 +70,7 @@ public class DriverPersonaBO {
 		personaEntity.setCreated(LocalDateTime.now());
 		personaDao.insert(personaEntity);
 
-		inventoryBO.createInventory(personaEntity);
+		inventoryBO.createInventory(personaEntity.getPersonaId());
 		createThInformation(personaEntity);
 
 		return castPersonaEntity(personaEntity);

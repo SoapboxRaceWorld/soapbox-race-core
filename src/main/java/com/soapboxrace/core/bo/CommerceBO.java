@@ -64,6 +64,15 @@ public class CommerceBO {
     @EJB
     private OwnedCarDAO ownedCarDAO;
 
+    @EJB
+    private AchievementsBO achievementsBO;
+
+    @EJB
+    private AchievementDAO achievementDAO;
+
+    @EJB
+    private VirtualItemDAO virtualItemDAO;
+
     public OwnedCarTrans responseCar(CommerceSessionTrans commerceSessionTrans) {
         OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
         ownedCarTrans.setCustomCar(commerceSessionTrans.getUpdatedCar().getCustomCar());
@@ -93,34 +102,6 @@ public class CommerceBO {
         CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
         OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
         CustomCarTrans customCarTrans = ownedCarTrans.getCustomCar();
-
-        // sell entitlements
-        if (commerceSessionTrans.getEntitlementsToSell() != null
-                && commerceSessionTrans.getEntitlementsToSell().getItems() != null
-                && !commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans().isEmpty()) {
-            for (EntitlementItemTrans entitlementItemTrans : commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans()) {
-                for (int i = 0; i < entitlementItemTrans.getQuantity(); i++) {
-                    InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByEntitlementTagAndPersona(personaId, entitlementItemTrans.getEntitlementId());
-
-                    if (inventoryItemEntity != null) {
-                        ProductEntity productEntity = productDAO.findByHash(inventoryItemEntity.getHash());
-
-                        if (productEntity != null) {
-                            switch (productEntity.getCurrency()) {
-                                case "CASH":
-                                    addCash += productEntity.getPrice();
-                                    break;
-                                case "_NS":
-                                    addBoost += productEntity.getPrice();
-                                    break;
-                                default:
-                                    System.out.println("I don't know what you did... but it's not good");
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         for (BasketItemTrans basketItemTrans : basketItems) {
             ProductEntity findById = productDAO.findByProductId(basketItemTrans.getProductId());
@@ -256,7 +237,7 @@ public class CommerceBO {
                     }
                 } else {
                     System.out.println("[Commerce] Not in basket, check inventory");
-                    InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByHashAndPersona(personaId, addedItem.getValue());
+                    InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaId, addedItem.getValue());
 
                     if (inventoryItemEntity != null) {
                         addedFromInventory.put(addedItem.getKey(), inventoryItemEntity);
@@ -302,7 +283,7 @@ public class CommerceBO {
             System.out.println("removedHash: " + removedHash);
 
             ProductEntity productEntity = productDAO.findByHash(removedHash);
-            VinylProductEntity vinylProductEntity = null;
+            VinylProductEntity vinylProductEntity;
 
             if (productEntity == null) {
                 vinylProductEntity = vinylProductDAO.findByHash(removedHash);
@@ -332,6 +313,34 @@ public class CommerceBO {
                 }
 
                 removedProducts.add(productEntity);
+            }
+        }
+
+        // sell entitlements
+        if (commerceSessionTrans.getEntitlementsToSell() != null
+                && commerceSessionTrans.getEntitlementsToSell().getItems() != null
+                && !commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans().isEmpty()) {
+            for (EntitlementItemTrans entitlementItemTrans : commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans()) {
+                for (int i = 0; i < entitlementItemTrans.getQuantity(); i++) {
+                    InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId, entitlementItemTrans.getEntitlementId());
+
+                    if (inventoryItemEntity != null) {
+                        ProductEntity productEntity = productDAO.findByHash(inventoryItemEntity.getHash());
+
+                        if (productEntity != null) {
+                            switch (productEntity.getCurrency()) {
+                                case "CASH":
+                                    addCash += productEntity.getPrice();
+                                    break;
+                                case "_NS":
+                                    addBoost += productEntity.getPrice();
+                                    break;
+                                default:
+                                    System.out.println("I don't know what you did... but it's not good");
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -450,17 +459,39 @@ public class CommerceBO {
             switch (productEntity.getProductType()) {
                 case "PERFORMANCEPART":
                     addPerformancePart(customCarEntity, customizationObject, productEntity.getHash());
+                    achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_PERFORMANCEPART"), 1L);
                     break;
                 case "SKILLMODPART":
                     addSkillPart(customCarEntity, customizationObject, productEntity.getHash());
+                    VirtualItemEntity skillVirtualItem = virtualItemDAO.findByHash(productEntity.getHash());
+
+                    if (skillVirtualItem != null
+                            && skillVirtualItem.getType().equalsIgnoreCase("skillmodpart")
+                            && (skillVirtualItem.getItemName().contains("_03_")
+                                || skillVirtualItem.getItemName().contains("_04_")
+                                || skillVirtualItem.getItemName().contains("_05_"))) {
+                        switch (skillVirtualItem.getSubType()) {
+                            case "skillmod_race":
+                                achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_RACE_SKILLS"), 1L);
+                                break;
+                            case "skillmod_explore":
+                                achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_EXPLORE_SKILLS"), 1L);
+                                break;
+                            case "skillmod_pursuit":
+                                achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_PURSUIT_SKILLS"), 1L);
+                                break;
+                        }
+                    }
+
                     break;
                 case "VISUALPART":
                     addVisualPart(customCarEntity, customizationObject, productEntity.getHash());
+                    achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_AFTERMARKETPART"), 1L);
                     break;
                 case "PAINT_BODY":
                 case "PAINT_WHEEL":
-                    System.out.println("add paint");
                     addPaint(customCarEntity, customizationObject, productEntity.getHash());
+                    achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_PAINTS"), 1L);
                     break;
                 default:
                     System.out.println("[Commerce] I don't know how to handle this: " + productEntity.getProductType());
@@ -470,7 +501,7 @@ public class CommerceBO {
         for (Map.Entry<Object, InventoryItemEntity> addedInventoryItem : addedFromInventory.entrySet()) {
             InventoryItemEntity inventoryItemEntity = addedInventoryItem.getValue();
             Object customizationObject = addedInventoryItem.getKey();
-            switch (inventoryItemEntity.getVirtualItemType()) {
+            switch (inventoryItemEntity.getVirtualItemType().toUpperCase()) {
                 case "PERFORMANCEPART":
                     addPerformancePart(customCarEntity, customizationObject, inventoryItemEntity.getHash());
                     break;
@@ -485,13 +516,28 @@ public class CommerceBO {
             inventoryBO.deletePart(personaId, inventoryItemEntity.getHash());
         }
 
+        // sell entitlements
+        if (commerceSessionTrans.getEntitlementsToSell() != null
+                && commerceSessionTrans.getEntitlementsToSell().getItems() != null
+                && !commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans().isEmpty()) {
+            for (EntitlementItemTrans entitlementItemTrans : commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans()) {
+                for (int i = 0; i < entitlementItemTrans.getQuantity(); i++) {
+                    InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId, entitlementItemTrans.getEntitlementId());
+
+                    if (inventoryItemEntity != null) {
+                        inventoryBO.deletePart(personaId, entitlementItemTrans.getEntitlementId());
+                    }
+                }
+            }
+        }
+
         for (Map.Entry<Object, VinylProductEntity> addedVinylProduct : addedVinylsFromCatalog.entrySet()) {
             VinylProductEntity productEntity = addedVinylProduct.getValue();
             Object customizationObject = addedVinylProduct.getKey();
 
             addVinyl(customCarEntity, customizationObject, productEntity.getHash());
+            achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_VINYLS"), 1L);
         }
-
 
         personaEntity.setCash(finalCash);
         personaEntity.setBoost(finalBoost);
@@ -525,8 +571,6 @@ public class CommerceBO {
     }
 
     private void addPaint(CustomCarEntity customCarEntity, Object customizationObject, Integer hash) {
-        System.out.println(customizationObject);
-        System.out.println(hash);
         if (customizationObject instanceof CustomPaintTrans) {
             CustomPaintTrans customPaintTrans = (CustomPaintTrans) customizationObject;
             PaintEntity paintEntity = new PaintEntity();
@@ -634,15 +678,11 @@ public class CommerceBO {
         Float finalTopSpeed = (finalConstant * carClassesEntity.getTsStock().floatValue()) + finalTopSpeed1 + finalTopSpeed2
                 + finalTopSpeed3;
 
-        System.out.println(finalTopSpeed.intValue());
-
         Float finalAccel1 = carClassesEntity.getAcVar1().floatValue() * th;
         Float finalAccel2 = carClassesEntity.getAcVar2().floatValue() * ta;
         Float finalAccel3 = carClassesEntity.getAcVar3().floatValue() * tt;
         Float finalAccel = (finalConstant * carClassesEntity.getAcStock().floatValue()) + finalAccel1 + finalAccel2
                 + finalAccel3;
-
-        System.out.println(finalAccel.intValue());
 
         Float finalHandling1 = carClassesEntity.getHaVar1().floatValue() * th;
         Float finalHandling2 = carClassesEntity.getHaVar2().floatValue() * ta;
@@ -650,10 +690,7 @@ public class CommerceBO {
         Float finalHandling = (finalConstant * carClassesEntity.getHaStock().floatValue()) + finalHandling1 + finalHandling2
                 + finalHandling3;
 
-        System.out.println(finalHandling.intValue());
-
         Float finalClass = (finalTopSpeed.intValue() + finalAccel.intValue() + finalHandling.intValue()) / 3f;
-        System.out.println(finalClass.intValue());
         int finalClassInt = finalClass.intValue();
 
         // move to new method

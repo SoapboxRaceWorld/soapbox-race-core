@@ -86,12 +86,6 @@ public class Powerups
                 1L
         );
 
-//		achievementsBO.update(
-//				personaDAO.findById(activePersonaId),
-//				achievementDAO.findByName("achievement_ACH_WIN_DRAG"),
-//				2L
-//		);
-
         return "";
     }
 }

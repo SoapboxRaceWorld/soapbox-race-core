@@ -87,7 +87,7 @@ public class RewardBO {
 				personaDao.update(personaEntity);
 			}
 		} else {
-			inventoryBO.addDroppedItem(productEntity, personaEntity);
+			inventoryBO.addFromCatalog(productEntity, personaEntity);
 		}
 		return luckyDrawItem;
 	}
@@ -213,8 +213,8 @@ public class RewardBO {
 	}
 	
 	public void setAmplifierReward(PersonaEntity personaEntity, RewardVO rewardVO) {
-		InventoryItemEntity repAmp = inventoryItemDao.findByEntitlementTagAndPersona(personaEntity.getPersonaId(), "REP_AMPLIFIER_2X");
-		InventoryItemEntity cashAmp = inventoryItemDao.findByEntitlementTagAndPersona(personaEntity.getPersonaId(), "CASH_AMPLIFIER_2X");
+		InventoryItemEntity repAmp = inventoryItemDao.findByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(), "REP_AMPLIFIER_2X");
+		InventoryItemEntity cashAmp = inventoryItemDao.findByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(), "CASH_AMPLIFIER_2X");
 		
 		if (repAmp != null) {
 			rewardVO.add(rewardVO.getRep(), 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);

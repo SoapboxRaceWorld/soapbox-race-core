@@ -121,7 +121,7 @@ public class BasketBO
 
         InventoryItemEntity item = null;
 
-        for (InventoryItemEntity i : inventoryEntity.getItems()) {
+        for (InventoryItemEntity i : inventoryEntity.getInventoryItems()) {
             if (i.getHash().equals(powerupProduct.getHash())) {
                 item = i;
                 break;
@@ -186,32 +186,28 @@ public class BasketBO
             return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
         }
         
-        List<InventoryItemEntity> existing = inventoryItemDao.findListByEntitlementTagAndPersona("INSURANCE_AMPLIFIER", personaEntity);
+        List<InventoryItemEntity> existing = inventoryItemDao.findAllByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(), "INSURANCE_AMPLIFIER");
         
         if (!existing.isEmpty()) {
             return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;
         }
         
         InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-        inventoryItemEntity.setInventory(inventoryEntity);
-        inventoryItemEntity.setPersona(personaEntity);
+        inventoryItemEntity.setInventoryEntity(inventoryEntity);
         inventoryItemEntity.setRemainingUseCount(0);
         inventoryItemEntity.setEntitlementTag("INSURANCE_AMPLIFIER");
         inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusDays(7));
         inventoryItemEntity.setStatus("ACTIVE");
-        inventoryItemEntity.setStringHash("0x81737f"); // binhash("INSURANCE_AMPLIFIER")
         inventoryItemEntity.setVirtualItemType("amplifier");
-        inventoryItemEntity.setResalePrice(0.0f);
         inventoryItemEntity.setProductId("DO NOT USE ME");
         inventoryItemEntity.setHash(8483711); // binhash("INSURANCE_AMPLIFIER")
-        inventoryItemEntity.setExpirable(true);
-        
+
         inventoryItemDao.insert(inventoryItemEntity);
         
         personaEntity.setBoost(personaEntity.getBoost() - productEntity.getPrice());
         personaDao.update(personaEntity);
         
-        inventoryDao.findByPersonaId(personaEntity.getPersonaId()).getItems();
+        inventoryDao.findByPersonaId(personaEntity.getPersonaId()).getInventoryItems();
         
         return CommerceResultStatus.SUCCESS;
     }
@@ -224,25 +220,21 @@ public class BasketBO
             return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
         }
 
-        List<InventoryItemEntity> existing = inventoryItemDao.findListByEntitlementTagAndPersona("CASH_AMPLIFIER_2X", personaEntity);
+        List<InventoryItemEntity> existing = inventoryItemDao.findAllByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(), "CASH_AMPLIFIER_2X");
 
         if (!existing.isEmpty()) {
             return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;
         }
 
         InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-        inventoryItemEntity.setInventory(inventoryEntity);
-        inventoryItemEntity.setPersona(personaEntity);
+        inventoryItemEntity.setInventoryEntity(inventoryEntity);
         inventoryItemEntity.setRemainingUseCount(0);
         inventoryItemEntity.setEntitlementTag("CASH_AMPLIFIER_2X");
         inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusDays(10));
         inventoryItemEntity.setStatus("ACTIVE");
-        inventoryItemEntity.setStringHash("0x1F596B8F");
         inventoryItemEntity.setVirtualItemType("amplifier");
-        inventoryItemEntity.setResalePrice(0.0f);
         inventoryItemEntity.setProductId("DO NOT USE ME");
         inventoryItemEntity.setHash(525953935);
-        inventoryItemEntity.setExpirable(true);
 
         inventoryItemDao.insert(inventoryItemEntity);
 
@@ -260,25 +252,21 @@ public class BasketBO
             return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
         }
 
-        List<InventoryItemEntity> existing = inventoryItemDao.findListByEntitlementTagAndPersona("REP_AMPLIFIER_2X", personaEntity);
+        List<InventoryItemEntity> existing = inventoryItemDao.findAllByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(), "REP_AMPLIFIER_2X");
 
         if (!existing.isEmpty()) {
             return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;
         }
 
         InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-        inventoryItemEntity.setInventory(inventoryEntity);
-        inventoryItemEntity.setPersona(personaEntity);
+        inventoryItemEntity.setInventoryEntity(inventoryEntity);
         inventoryItemEntity.setRemainingUseCount(0);
         inventoryItemEntity.setEntitlementTag("REP_AMPLIFIER_2X");
         inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusDays(10));
         inventoryItemEntity.setStatus("ACTIVE");
-        inventoryItemEntity.setStringHash("0x31CE9F92");
         inventoryItemEntity.setVirtualItemType("amplifier");
-        inventoryItemEntity.setResalePrice(0.0f);
         inventoryItemEntity.setProductId("DO NOT USE ME");
         inventoryItemEntity.setHash(835624850);
-        inventoryItemEntity.setExpirable(true);
 
         inventoryItemDao.insert(inventoryItemEntity);
 

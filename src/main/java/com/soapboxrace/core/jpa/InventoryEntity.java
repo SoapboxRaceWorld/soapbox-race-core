@@ -1,110 +1,112 @@
 package com.soapboxrace.core.jpa;
 
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
 
-import javax.persistence.*;
-
 @Entity
-@Table(name = "PERSONAINVENTORY")
-@NamedQueries({ //
-		@NamedQuery(name = "InventoryEntity.findByPersona", query = "SELECT obj FROM InventoryEntity obj WHERE obj.persona = :persona"), //
-		@NamedQuery(name = "InventoryEntity.deleteByPersona", query = "DELETE FROM InventoryEntity obj WHERE obj.persona.id = :personaId") //
+@Table(name = "INVENTORY")
+@NamedQueries({
+        @NamedQuery(name = "InventoryEntity.findByPersonaId", query = "SELECT obj FROM InventoryEntity obj WHERE obj.personaEntity.id = :personaId")
 })
 public class InventoryEntity {
-	@Id
-	@Column(name = "ID", nullable = false)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
 
-	@OneToOne
-	@JoinColumn(name = "personaId", foreignKey = @ForeignKey(name = "FK_PERSINV_PERSONA"))
-	private PersonaEntity persona;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	private int performancePartsCapacity;
+    @OneToOne(targetEntity = PersonaEntity.class)
+    private PersonaEntity personaEntity;
 
-	private int performancePartsUsedSlotCount;
+    @OneToMany(mappedBy = "inventoryEntity", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    private List<InventoryItemEntity> inventoryItems;
 
-	private int skillModPartsCapacity;
+    @Column
+    private int performancePartsCapacity;
 
-	private int skillModPartsUsedSlotCount;
+    @Column
+    private int performancePartsUsedSlotCount;
 
-	private int visualPartsCapacity;
+    @Column
+    private int skillModPartsCapacity;
 
-	private int visualPartsUsedSlotCount;
+    @Column
+    private int skillModPartsUsedSlotCount;
 
-	@OneToMany(mappedBy = "inventory", targetEntity = InventoryItemEntity.class, orphanRemoval = true)
-	private List<InventoryItemEntity> items = new ArrayList<>();
+    @Column
+    private int visualPartsCapacity;
 
-	public int getId() {
-		return id;
-	}
+    @Column
+    private int visualPartsUsedSlotCount;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public PersonaEntity getPersona() {
-		return persona;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setPersona(PersonaEntity persona) {
-		this.persona = persona;
-	}
+    public PersonaEntity getPersonaEntity() {
+        return personaEntity;
+    }
 
-	public List<InventoryItemEntity> getItems() {
-		return items;
-	}
+    public void setPersonaEntity(PersonaEntity personaEntity) {
+        this.personaEntity = personaEntity;
+    }
 
-	public void setItems(List<InventoryItemEntity> items) {
-		this.items = items;
-	}
+    public List<InventoryItemEntity> getInventoryItems() {
+        return inventoryItems;
+    }
 
-	public int getPerformancePartsCapacity() {
-		return performancePartsCapacity;
-	}
+    public void setInventoryItems(List<InventoryItemEntity> inventoryItems) {
+        this.inventoryItems = inventoryItems;
+    }
 
-	public void setPerformancePartsCapacity(int performancePartsCapacity) {
-		this.performancePartsCapacity = performancePartsCapacity;
-	}
+    public int getPerformancePartsCapacity() {
+        return performancePartsCapacity;
+    }
 
-	public int getSkillModPartsCapacity() {
-		return skillModPartsCapacity;
-	}
+    public void setPerformancePartsCapacity(int performancePartsCapacity) {
+        this.performancePartsCapacity = performancePartsCapacity;
+    }
 
-	public void setSkillModPartsCapacity(int skillModPartsCapacity) {
-		this.skillModPartsCapacity = skillModPartsCapacity;
-	}
+    public int getPerformancePartsUsedSlotCount() {
+        return performancePartsUsedSlotCount;
+    }
 
-	public int getVisualPartsCapacity() {
-		return visualPartsCapacity;
-	}
+    public void setPerformancePartsUsedSlotCount(int performancePartsUsedSlotCount) {
+        this.performancePartsUsedSlotCount = performancePartsUsedSlotCount;
+    }
 
-	public void setVisualPartsCapacity(int visualPartsCapacity) {
-		this.visualPartsCapacity = visualPartsCapacity;
-	}
+    public int getSkillModPartsCapacity() {
+        return skillModPartsCapacity;
+    }
 
-	public int getPerformancePartsUsedSlotCount() {
-		return performancePartsUsedSlotCount;
-	}
+    public void setSkillModPartsCapacity(int skillModPartsCapacity) {
+        this.skillModPartsCapacity = skillModPartsCapacity;
+    }
 
-	public void setPerformancePartsUsedSlotCount(int performancePartsUsedSlotCount) {
-		this.performancePartsUsedSlotCount = performancePartsUsedSlotCount;
-	}
+    public int getSkillModPartsUsedSlotCount() {
+        return skillModPartsUsedSlotCount;
+    }
 
-	public int getSkillModPartsUsedSlotCount() {
-		return skillModPartsUsedSlotCount;
-	}
+    public void setSkillModPartsUsedSlotCount(int skillModPartsUsedSlotCount) {
+        this.skillModPartsUsedSlotCount = skillModPartsUsedSlotCount;
+    }
 
-	public void setSkillModPartsUsedSlotCount(int skillModPartsUsedSlotCount) {
-		this.skillModPartsUsedSlotCount = skillModPartsUsedSlotCount;
-	}
+    public int getVisualPartsCapacity() {
+        return visualPartsCapacity;
+    }
 
-	public int getVisualPartsUsedSlotCount() {
-		return visualPartsUsedSlotCount;
-	}
+    public void setVisualPartsCapacity(int visualPartsCapacity) {
+        this.visualPartsCapacity = visualPartsCapacity;
+    }
 
-	public void setVisualPartsUsedSlotCount(int visualPartsUsedSlotCount) {
-		this.visualPartsUsedSlotCount = visualPartsUsedSlotCount;
-	}
+    public int getVisualPartsUsedSlotCount() {
+        return visualPartsUsedSlotCount;
+    }
+
+    public void setVisualPartsUsedSlotCount(int visualPartsUsedSlotCount) {
+        this.visualPartsUsedSlotCount = visualPartsUsedSlotCount;
+    }
 }

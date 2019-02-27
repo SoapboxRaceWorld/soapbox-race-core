@@ -1,12 +1,7 @@
 package com.soapboxrace.core.jpa;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "PRODUCT")
@@ -34,7 +29,9 @@ public class ProductEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String bundleItems;
+	@ManyToOne
+	@JoinColumn(name = "productId", referencedColumnName = "productId")
+	private ProductEntity parentProduct;
 	private String categoryId;
 	private String currency;
 	private String description;
@@ -64,20 +61,15 @@ public class ProductEntity {
 	private Integer handling = 0;
 	private Float skillValue;
 
+	@OneToMany(mappedBy = "parentProduct", targetEntity = ProductEntity.class)
+	private List<ProductEntity> bundleItems;
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getBundleItems() {
-		return bundleItems;
-	}
-
-	public void setBundleItems(String bundleItems) {
-		this.bundleItems = bundleItems;
 	}
 
 	public String getCategoryId() {
@@ -304,4 +296,19 @@ public class ProductEntity {
 		this.skillValue = skillValue;
 	}
 
+	public ProductEntity getParentProduct() {
+		return parentProduct;
+	}
+
+	public void setParentProduct(ProductEntity parentProduct) {
+		this.parentProduct = parentProduct;
+	}
+
+	public List<ProductEntity> getBundleItems() {
+		return bundleItems;
+	}
+
+	public void setBundleItems(List<ProductEntity> bundleItems) {
+		this.bundleItems = bundleItems;
+	}
 }

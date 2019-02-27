@@ -1,16 +1,13 @@
 package com.soapboxrace.core.dao;
 
-import java.util.List;
+import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.jpa.InventoryEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import com.soapboxrace.core.dao.util.BaseDAO;
-import com.soapboxrace.core.jpa.InventoryEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
+import java.util.List;
 
 @Stateless
 public class InventoryDAO extends BaseDAO<InventoryEntity> {
@@ -19,35 +16,29 @@ public class InventoryDAO extends BaseDAO<InventoryEntity> {
         this.entityManager = entityManager;
     }
 
-    public InventoryEntity findById(Long id) {
-        InventoryEntity inventoryEntity = entityManager.find(InventoryEntity.class, id);
-        inventoryEntity.getItems().size();
-        return inventoryEntity;
-    }
-
     public InventoryEntity findByPersonaId(Long personaId) {
-        PersonaEntity personaEntity = new PersonaEntity();
-        personaEntity.setPersonaId(personaId);
+        TypedQuery<InventoryEntity> query = entityManager.createNamedQuery("InventoryEntity.findByPersonaId", InventoryEntity.class);
+        query.setParameter("personaId", personaId);
 
-        TypedQuery<InventoryEntity> query = entityManager.createNamedQuery("InventoryEntity.findByPersona", InventoryEntity.class);
-        query.setParameter("persona", personaEntity);
+        List<InventoryEntity> results = query.getResultList();
 
-        List<InventoryEntity> resultList = query.getResultList();
-        
-        if (!resultList.isEmpty()) {
-            InventoryEntity inventoryEntity = resultList.get(0);
-            inventoryEntity.getItems().size();
-            
-            return inventoryEntity;
+        if (!results.isEmpty()) {
+            return results.get(0);
         }
-        
+
         return null;
-//        return !resultList.isEmpty() ? resultList.get(0) : null;
     }
 
+    /**
+     * Delete the inventory associated with the given persona ID.
+     *
+     * @param personaId The ID of the persona whose inventory should be deleted.
+     */
     public void deleteByPersona(Long personaId) {
-        Query query = entityManager.createNamedQuery("InventoryEntity.deleteByPersona");
-        query.setParameter("personaId", personaId);
-        query.executeUpdate();
+        InventoryEntity inventoryEntity = findByPersonaId(personaId);
+
+        if (inventoryEntity != null) {
+            this.delete(inventoryEntity);
+        }
     }
 }

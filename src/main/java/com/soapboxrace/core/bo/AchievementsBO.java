@@ -2,7 +2,6 @@ package com.soapboxrace.core.bo;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.soapboxrace.core.bo.util.TimeConverter;
@@ -16,10 +15,8 @@ import com.soapboxrace.jaxb.xmpp.AchievementsAwarded;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeAchievementsAwarded;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -458,7 +455,7 @@ public class AchievementsBO
                                     .collect(Collectors.toList());
                             int productIndex = new Random().nextInt(engines.size());
 
-                            inventoryBO.addDroppedItem(
+                            inventoryBO.addFromCatalog(
                                     engines.get(productIndex),
                                     persona
                             );
@@ -481,7 +478,7 @@ public class AchievementsBO
                                     .collect(Collectors.toList());
                             int productIndex = new Random().nextInt(forcedInductions.size());
 
-                            inventoryBO.addDroppedItem(
+                            inventoryBO.addFromCatalog(
                                     forcedInductions.get(productIndex),
                                     persona
                             );
@@ -504,7 +501,7 @@ public class AchievementsBO
                                     .collect(Collectors.toList());
                             int productIndex = new Random().nextInt(transmissions.size());
 
-                            inventoryBO.addDroppedItem(
+                            inventoryBO.addFromCatalog(
                                     transmissions.get(productIndex),
                                     persona
                             );
@@ -527,7 +524,7 @@ public class AchievementsBO
                                     .collect(Collectors.toList());
                             int productIndex = new Random().nextInt(suspensions.size());
 
-                            inventoryBO.addDroppedItem(
+                            inventoryBO.addFromCatalog(
                                     suspensions.get(productIndex),
                                     persona
                             );
@@ -548,7 +545,7 @@ public class AchievementsBO
                                     .collect(Collectors.toList());
                             int productIndex = new Random().nextInt(brakes.size());
 
-                            inventoryBO.addDroppedItem(
+                            inventoryBO.addFromCatalog(
                                     brakes.get(productIndex),
                                     persona
                             );
@@ -569,7 +566,7 @@ public class AchievementsBO
                                     .collect(Collectors.toList());
                             int productIndex = new Random().nextInt(tires.size());
 
-                            inventoryBO.addDroppedItem(
+                            inventoryBO.addFromCatalog(
                                     tires.get(productIndex),
                                     persona
                             );
@@ -720,7 +717,7 @@ public class AchievementsBO
                                     .collect(Collectors.toList())
                                     .get(rating - 1);
 
-                            inventoryBO.addDroppedItem(
+                            inventoryBO.addFromCatalog(
                                     productEntity,
                                     persona
                             );
@@ -761,7 +758,7 @@ public class AchievementsBO
                                     .collect(Collectors.toList())
                                     .get(rating - 1);
 
-                            inventoryBO.addDroppedItem(
+                            inventoryBO.addFromCatalog(
                                     productEntity,
                                     persona
                             );
@@ -791,7 +788,7 @@ public class AchievementsBO
                                     .collect(Collectors.toList())
                                     .get(rating - 1);
 
-                            inventoryBO.addDroppedItem(
+                            inventoryBO.addFromCatalog(
                                     productEntity,
                                     persona
                             );
@@ -813,7 +810,7 @@ public class AchievementsBO
                                     .collect(Collectors.toList())
                                     .get(rating - 1);
 
-                            inventoryBO.addDroppedItem(
+                            inventoryBO.addFromCatalog(
                                     productEntity,
                                     persona
                             );
@@ -905,7 +902,7 @@ public class AchievementsBO
 
                     ProductEntity productEntity = productDAO.findByProductId(productId);
                     productEntity.setUseCount(amount);
-                    InventoryItemEntity inventoryItemEntity = inventoryBO.addDroppedItem(productEntity, persona);
+                    InventoryItemEntity inventoryItemEntity = inventoryBO.addFromCatalog(productEntity, persona);
 
                     commerceItems.add(new CommerceItemTrans()
                     {
@@ -921,8 +918,8 @@ public class AchievementsBO
                     inventoryItemTrans.setInventoryId(inventoryItemEntity.getId());
                     inventoryItemTrans.setProductId("DO NOT USE ME");
                     inventoryItemTrans.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount());
-                    inventoryItemTrans.setResellPrice(inventoryItemEntity.getResalePrice());
-                    inventoryItemTrans.setStringHash(inventoryItemEntity.getStringHash());
+                    inventoryItemTrans.setResellPrice(inventoryItemEntity.getResellPrice());
+                    inventoryItemTrans.setStringHash("0x" + String.format("%08X", inventoryItemEntity.getHash()));
                     inventoryItemTrans.setStatus(inventoryItemEntity.getStatus());
                     inventoryItemTrans.setVirtualItemType(inventoryItemEntity.getVirtualItemType());
 
@@ -957,7 +954,7 @@ public class AchievementsBO
                 final ProductEntity productEntity = productDAO.findByProductId(productId);
                 productEntity.setUseCount(amount);
 
-                inventoryBO.addDroppedItem(productEntity, persona);
+                inventoryBO.addFromCatalog(productEntity, persona);
 
                 commerceItems.add(new CommerceItemTrans()
                 {

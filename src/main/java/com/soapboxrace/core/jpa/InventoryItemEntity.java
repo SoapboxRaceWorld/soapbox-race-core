@@ -1,163 +1,137 @@
 package com.soapboxrace.core.jpa;
 
-import com.soapboxrace.core.jpa.convert.LocalDateTimeToStringConverter;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "PERSONAINVENTORYITEM")
-@NamedQueries({ //
-		@NamedQuery(name = "InventoryItemEntity.findAllForInventory", //
-				query = "SELECT obj FROM InventoryItemEntity obj " //
-						+ " WHERE obj.inventory = :inventory"),
-		@NamedQuery(name = "InventoryItemEntity.findByPersonaEntitlEmentId", //
-				query = "SELECT obj FROM InventoryItemEntity obj " //
-						+ " WHERE obj.persona.id= :personaId and obj.entitlementTag =:entitlementTag"),
-		@NamedQuery(name = "InventoryItemEntity.findByPersonaHash", //
-				query = "SELECT obj FROM InventoryItemEntity obj " //
-						+ " WHERE obj.persona.id= :personaId and obj.hash =:hash"),
-		@NamedQuery(name = "InventoryItemEntity.deleteByPersona", //
-				query = "DELETE FROM InventoryItemEntity obj WHERE obj.persona.id = :personaId")//
+@Table(name = "INVENTORY_ITEM")
+@NamedQueries({
+        @NamedQuery(
+                name = "InventoryItemEntity.findAllByInventoryId",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = :inventoryId"),
+        @NamedQuery(
+                name = "InventoryItemEntity.findAllByPersonaId",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = :personaId"),
+        @NamedQuery(
+                name = "InventoryItemEntity.findAllByInventoryIdAndType",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = :inventoryId AND obj.virtualItemType = :virtualItemType"),
+        @NamedQuery(
+                name = "InventoryItemEntity.findAllByPersonaIdAndTag",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = :personaId AND obj.entitlementTag = :entitlementTag"),
+        @NamedQuery(
+                name = "InventoryItemEntity.findAllByPersonaIdAndHash",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = :personaId AND obj.hash = :hash")
 })
 public class InventoryItemEntity {
-	@Id
-	@Column(name = "ID", nullable = false)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "inventoryId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PERSINVITEM_PERSINV"))
-	private InventoryEntity inventory;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "personaId")
-	private PersonaEntity persona;
+    @ManyToOne(targetEntity = InventoryEntity.class, optional = false)
+    private InventoryEntity inventoryEntity;
 
-	private String entitlementTag;
+    @Column(nullable = false)
+    private String entitlementTag;
 
-	@Convert(converter = LocalDateTimeToStringConverter.class)
-	private LocalDateTime expirationDate;
-	
-	private boolean expirable = false;
+    @Column
+    private LocalDateTime expirationDate;
 
-	private Integer hash;
+    @Column(nullable = false)
+    private Integer hash; // bStringHash(entitlementTag.toUpperCase())
 
-	private String productId;
+    @Column(nullable = false)
+    private String productId;
 
-	private int remainingUseCount;
+    @Column
+    private int remainingUseCount;
 
-	private float resalePrice;
+    @Column
+    private int resellPrice;
 
-	private String status;
+    @Column(nullable = false)
+    private String status;
 
-	private String stringHash;
+    @Column(nullable = false)
+    private String virtualItemType;
 
-	private String virtualItemType;
+    public Long getId() {
+        return id;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public InventoryEntity getInventoryEntity() {
+        return inventoryEntity;
+    }
 
-	public InventoryEntity getInventory() {
-		return inventory;
-	}
+    public void setInventoryEntity(InventoryEntity inventoryEntity) {
+        this.inventoryEntity = inventoryEntity;
+    }
 
-	public void setInventory(InventoryEntity inventory) {
-		this.inventory = inventory;
-	}
+    public String getEntitlementTag() {
+        return entitlementTag;
+    }
 
-	public PersonaEntity getPersona() {
-		return persona;
-	}
+    public void setEntitlementTag(String entitlementTag) {
+        this.entitlementTag = entitlementTag;
+    }
 
-	public void setPersona(PersonaEntity persona) {
-		this.persona = persona;
-	}
+    public LocalDateTime getExpirationDate() {
+        return expirationDate;
+    }
 
-	public String getEntitlementTag() {
-		return entitlementTag;
-	}
+    public void setExpirationDate(LocalDateTime expirationDate) {
+        this.expirationDate = expirationDate;
+    }
 
-	public void setEntitlementTag(String entitlementTag) {
-		this.entitlementTag = entitlementTag;
-	}
+    public Integer getHash() {
+        return hash;
+    }
 
-	public LocalDateTime getExpirationDate() {
-		return expirationDate;
-	}
+    public void setHash(Integer hash) {
+        this.hash = hash;
+    }
 
-	public void setExpirationDate(LocalDateTime expirationDate) {
-		this.expirationDate = expirationDate;
-	}
+    public String getProductId() {
+        return productId;
+    }
 
-	public Integer getHash() {
-		return hash;
-	}
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
-	public void setHash(Integer hash) {
-		this.hash = hash;
-	}
+    public int getRemainingUseCount() {
+        return remainingUseCount;
+    }
 
-	public String getProductId() {
-		return productId;
-	}
+    public void setRemainingUseCount(int remainingUseCount) {
+        this.remainingUseCount = remainingUseCount;
+    }
 
-	public void setProductId(String productId) {
-		this.productId = productId;
-	}
+    public int getResellPrice() {
+        return resellPrice;
+    }
 
-	public int getRemainingUseCount() {
-		return remainingUseCount;
-	}
+    public void setResellPrice(int resellPrice) {
+        this.resellPrice = resellPrice;
+    }
 
-	public void setRemainingUseCount(int remainingUseCount) {
-		this.remainingUseCount = remainingUseCount;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public float getResalePrice() {
-		return resalePrice;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setResalePrice(float resalePrice) {
-		this.resalePrice = resalePrice;
-	}
+    public String getVirtualItemType() {
+        return virtualItemType;
+    }
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getStringHash() {
-		return stringHash;
-	}
-
-	public void setStringHash(String stringHash) {
-		this.stringHash = stringHash;
-	}
-
-	public String getVirtualItemType() {
-		return virtualItemType;
-	}
-
-	public void setVirtualItemType(String virtualItemType) {
-		this.virtualItemType = virtualItemType;
-	}
-
-	public boolean isExpirable()
-	{
-		return expirable;
-	}
-
-	public void setExpirable(boolean expirable)
-	{
-		this.expirable = expirable;
-	}
+    public void setVirtualItemType(String virtualItemType) {
+        this.virtualItemType = virtualItemType;
+    }
 }
