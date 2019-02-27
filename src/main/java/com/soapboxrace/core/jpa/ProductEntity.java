@@ -61,7 +61,7 @@ public class ProductEntity {
 	private Integer handling = 0;
 	private Float skillValue;
 
-	@OneToMany(mappedBy = "parentProduct", targetEntity = ProductEntity.class)
+	@OneToMany(mappedBy = "parentProduct", targetEntity = ProductEntity.class, fetch = FetchType.EAGER)
 	private List<ProductEntity> bundleItems;
 
 	public Long getId() {
