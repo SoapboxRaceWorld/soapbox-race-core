@@ -36,23 +36,27 @@ public class InventoryBO {
             VirtualItemEntity virtualItemEntity = virtualItemDAO.findByHash(productEntity.getHash());
 
             if (virtualItemEntity != null) {
+                System.out.println("productHash: " + productEntity.getHash());
+                System.out.println("virtualItemId: " + virtualItemEntity.getId());
+                System.out.println("virtualItemName: " + virtualItemEntity.getItemName());
+
                 InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
                 inventoryItemEntity.setInventoryEntity(inventoryEntity);
-                inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
-                inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
+                inventoryItemEntity.setEntitlementTag(virtualItemEntity.getItemName());
 
                 if (productEntity.getDurationMinute() > 0) {
                     inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
                 }
 
+                inventoryItemEntity.setHash(virtualItemEntity.getHash());
+                inventoryItemEntity.setProductId("DO NOT USE ME");
+                inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
+                inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
                 inventoryItemEntity.setStatus("ACTIVE");
                 inventoryItemEntity.setVirtualItemType(virtualItemEntity.getType());
-                inventoryItemEntity.setProductId("DO NOT USE ME");
-                inventoryItemEntity.setHash(productEntity.getHash());
-                inventoryItemEntity.setEntitlementTag(virtualItemEntity.getItemName());
 
-                inventoryEntity.getInventoryItems().add(inventoryItemEntity);
                 updateInventoryCapacities(inventoryEntity, inventoryItemEntity, true);
+                inventoryItemDAO.insert(inventoryItemEntity);
 
                 return inventoryItemEntity;
             }
@@ -77,23 +81,7 @@ public class InventoryBO {
                 VirtualItemEntity virtualItemEntity = virtualItemDAO.findByHash(productEntity.getHash());
 
                 if (virtualItemEntity != null) {
-                    InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-                    inventoryItemEntity.setInventoryEntity(inventoryEntity);
-                    inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
-                    inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
-
-                    if (productEntity.getDurationMinute() > 0) {
-                        inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
-                    }
-
-                    inventoryItemEntity.setStatus("ACTIVE");
-                    inventoryItemEntity.setVirtualItemType(virtualItemEntity.getType());
-                    inventoryItemEntity.setProductId("DO NOT USE ME");
-                    inventoryItemEntity.setHash(productEntity.getHash());
-                    inventoryItemEntity.setEntitlementTag(virtualItemEntity.getItemName());
-
-                    inventoryEntity.getInventoryItems().add(inventoryItemEntity);
-                    updateInventoryCapacities(inventoryEntity, inventoryItemEntity, true);
+                    addFromCatalog(productEntity, personaDAO.findById(personaId));
                 }
             }
         }
@@ -198,38 +186,6 @@ public class InventoryBO {
         return getInventoryTrans(inventoryEntity);
     }
 
-    private InventoryTrans getInventoryTrans(InventoryEntity inventoryEntity) {
-        InventoryTrans inventoryTrans = new InventoryTrans();
-        inventoryTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
-        inventoryTrans.setPerformancePartsCapacity(inventoryEntity.getPerformancePartsCapacity());
-        inventoryTrans.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount());
-        inventoryTrans.setSkillModPartsCapacity(inventoryEntity.getSkillModPartsCapacity());
-        inventoryTrans.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount());
-        inventoryTrans.setVisualPartsCapacity(inventoryEntity.getVisualPartsCapacity());
-        inventoryTrans.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount());
-
-        for (InventoryItemEntity inventoryItemEntity : inventoryEntity.getInventoryItems()) {
-            InventoryItemTrans inventoryItemTrans = new InventoryItemTrans();
-            inventoryItemTrans.setEntitlementTag(inventoryItemEntity.getEntitlementTag());
-            inventoryItemTrans.setInventoryId(inventoryItemEntity.getId());
-            inventoryItemTrans.setProductId(inventoryItemEntity.getProductId());
-            inventoryItemTrans.setHash(inventoryItemEntity.getHash());
-            inventoryItemTrans.setStringHash("0x" + String.format("%08X", inventoryItemEntity.getHash()));
-            inventoryItemTrans.setVirtualItemType(inventoryItemEntity.getVirtualItemType());
-            inventoryItemTrans.setStatus(inventoryItemEntity.getStatus());
-            inventoryItemTrans.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount());
-            inventoryItemTrans.setResellPrice(inventoryItemEntity.getResellPrice());
-
-            if (inventoryItemEntity.getExpirationDate() != null) {
-                inventoryItemTrans.setExpirationDate(inventoryItemEntity.getExpirationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
-            }
-
-            inventoryTrans.getInventoryItems().getInventoryItemTrans().add(inventoryItemTrans);
-        }
-
-        return inventoryTrans;
-    }
-
     public void decrementUsage(Long activePersonaId, Integer hash) {
         InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(activePersonaId, hash);
 
@@ -286,5 +242,37 @@ public class InventoryBO {
         inventoryItemEntity.setProductId("DO NOT USE ME");
         inventoryItemEntity.setInventoryEntity(inventoryEntity);
         return inventoryItemEntity;
+    }
+
+    private InventoryTrans getInventoryTrans(InventoryEntity inventoryEntity) {
+        InventoryTrans inventoryTrans = new InventoryTrans();
+        inventoryTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
+        inventoryTrans.setPerformancePartsCapacity(inventoryEntity.getPerformancePartsCapacity());
+        inventoryTrans.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount());
+        inventoryTrans.setSkillModPartsCapacity(inventoryEntity.getSkillModPartsCapacity());
+        inventoryTrans.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount());
+        inventoryTrans.setVisualPartsCapacity(inventoryEntity.getVisualPartsCapacity());
+        inventoryTrans.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount());
+
+        for (InventoryItemEntity inventoryItemEntity : inventoryEntity.getInventoryItems()) {
+            InventoryItemTrans inventoryItemTrans = new InventoryItemTrans();
+            inventoryItemTrans.setEntitlementTag(inventoryItemEntity.getEntitlementTag());
+            inventoryItemTrans.setInventoryId(inventoryItemEntity.getId());
+            inventoryItemTrans.setProductId(inventoryItemEntity.getProductId());
+            inventoryItemTrans.setHash(inventoryItemEntity.getHash());
+            inventoryItemTrans.setStringHash("0x" + String.format("%08X", inventoryItemEntity.getHash()));
+            inventoryItemTrans.setVirtualItemType(inventoryItemEntity.getVirtualItemType());
+            inventoryItemTrans.setStatus(inventoryItemEntity.getStatus());
+            inventoryItemTrans.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount());
+            inventoryItemTrans.setResellPrice(inventoryItemEntity.getResellPrice());
+
+            if (inventoryItemEntity.getExpirationDate() != null) {
+                inventoryItemTrans.setExpirationDate(inventoryItemEntity.getExpirationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+            }
+
+            inventoryTrans.getInventoryItems().getInventoryItemTrans().add(inventoryItemTrans);
+        }
+
+        return inventoryTrans;
     }
 }
