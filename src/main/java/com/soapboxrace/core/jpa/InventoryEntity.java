@@ -1,6 +1,7 @@
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,10 +16,11 @@ public class InventoryEntity {
     private Long id;
 
     @OneToOne(targetEntity = PersonaEntity.class)
+    @JoinColumn(name = "personaId", foreignKey = @ForeignKey(name = "FK_INVENTORY_PERSONA"))
     private PersonaEntity personaEntity;
 
     @OneToMany(mappedBy = "inventoryEntity", orphanRemoval = true, cascade = CascadeType.PERSIST)
-    private List<InventoryItemEntity> inventoryItems;
+    private List<InventoryItemEntity> inventoryItems = new ArrayList<>();
 
     @Column
     private int performancePartsCapacity;

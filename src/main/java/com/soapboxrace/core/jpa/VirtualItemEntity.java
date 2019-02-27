@@ -5,7 +5,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "VIRTUAL_ITEM")
 @NamedQueries({
-        @NamedQuery(name = "VirtualItemEntity.findByHash", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.hash = :hash")
+        @NamedQuery(name = "VirtualItemEntity.findByHash", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.hash = :hash"),
+        @NamedQuery(name = "VirtualItemEntity.findByItemName", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.itemName = :itemName"),
 })
 public class VirtualItemEntity {
     @Id

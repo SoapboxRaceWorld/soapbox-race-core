@@ -1,12 +1,7 @@
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.InventoryDAO;
-import com.soapboxrace.core.dao.InventoryItemDAO;
-import com.soapboxrace.core.dao.ProductDAO;
-import com.soapboxrace.core.jpa.InventoryEntity;
-import com.soapboxrace.core.jpa.InventoryItemEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.ArrayOfInventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
@@ -28,6 +23,44 @@ public class InventoryBO {
     @EJB
     private ProductDAO productDAO;
 
+    @EJB
+    private PersonaDAO personaDAO;
+
+    @EJB
+    private VirtualItemDAO virtualItemDAO;
+
+    public InventoryItemEntity addFromCatalog(ProductEntity productEntity, PersonaEntity personaEntity) {
+        InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
+
+        if (inventoryEntity != null) {
+            VirtualItemEntity virtualItemEntity = virtualItemDAO.findByHash(productEntity.getHash());
+
+            if (virtualItemEntity != null) {
+                InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
+                inventoryItemEntity.setInventoryEntity(inventoryEntity);
+                inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
+                inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
+
+                if (productEntity.getDurationMinute() > 0) {
+                    inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+                }
+
+                inventoryItemEntity.setStatus("ACTIVE");
+                inventoryItemEntity.setVirtualItemType(virtualItemEntity.getType());
+                inventoryItemEntity.setProductId("DO NOT USE ME");
+                inventoryItemEntity.setHash(productEntity.getHash());
+                inventoryItemEntity.setEntitlementTag(virtualItemEntity.getItemName());
+
+                inventoryEntity.getInventoryItems().add(inventoryItemEntity);
+                updateInventoryCapacities(inventoryEntity, inventoryItemEntity, true);
+
+                return inventoryItemEntity;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Add the product with the given ID to the inventory of the persona with the given ID.
      *
@@ -41,22 +74,27 @@ public class InventoryBO {
             InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
 
             if (inventoryEntity != null) {
-                InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-                inventoryItemEntity.setInventoryEntity(inventoryEntity);
-                inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
-                inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
+                VirtualItemEntity virtualItemEntity = virtualItemDAO.findByHash(productEntity.getHash());
 
-                if (productEntity.getDurationMinute() > 0) {
-                    inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+                if (virtualItemEntity != null) {
+                    InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
+                    inventoryItemEntity.setInventoryEntity(inventoryEntity);
+                    inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
+                    inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
+
+                    if (productEntity.getDurationMinute() > 0) {
+                        inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+                    }
+
+                    inventoryItemEntity.setStatus("ACTIVE");
+                    inventoryItemEntity.setVirtualItemType(virtualItemEntity.getType());
+                    inventoryItemEntity.setProductId("DO NOT USE ME");
+                    inventoryItemEntity.setHash(productEntity.getHash());
+                    inventoryItemEntity.setEntitlementTag(virtualItemEntity.getItemName());
+
+                    inventoryEntity.getInventoryItems().add(inventoryItemEntity);
+                    updateInventoryCapacities(inventoryEntity, inventoryItemEntity, true);
                 }
-
-                inventoryItemEntity.setStatus("ACTIVE");
-                inventoryItemEntity.setVirtualItemType(productEntity.getProductType());
-                inventoryItemEntity.setProductId("DO NOT USE ME");
-                inventoryItemEntity.setHash(productEntity.getHash());
-
-                inventoryEntity.getInventoryItems().add(inventoryItemEntity);
-                updateInventoryCapacities(inventoryEntity, inventoryItemEntity, true);
             }
         }
     }
@@ -65,7 +103,7 @@ public class InventoryBO {
      * Delete an inventory item and update the capacity information of its associated inventory.
      *
      * @param personaId The ID of the persona whose inventory contains the item to be deleted.
-     * @param hash The hash of the item to be deleted.
+     * @param hash      The hash of the item to be deleted.
      */
     public void deletePart(Long personaId, Integer hash) {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
@@ -83,7 +121,7 @@ public class InventoryBO {
     /**
      * Delete an inventory item and update the capacity information of its associated inventory.
      *
-     * @param personaId The ID of the persona whose inventory contains the item to be deleted.
+     * @param personaId      The ID of the persona whose inventory contains the item to be deleted.
      * @param entitlementTag The entitlement tag of the item to be deleted.
      */
     public void deletePart(Long personaId, String entitlementTag) {
@@ -101,13 +139,9 @@ public class InventoryBO {
 
     /**
      * Create a base inventory for the given persona.
-     *
-     * @param personaId The ID of the persona entity to create an inventory for.
      */
-    public InventoryEntity createInventory(Long personaId) {
+    public InventoryEntity createInventory(PersonaEntity personaEntity) {
         InventoryEntity inventoryEntity = new InventoryEntity();
-        PersonaEntity personaEntity = new PersonaEntity();
-        personaEntity.setPersonaId(personaId);
         inventoryEntity.setPersonaEntity(personaEntity);
 
         inventoryEntity.setVisualPartsUsedSlotCount(0);
@@ -117,9 +151,22 @@ public class InventoryBO {
         inventoryEntity.setSkillModPartsCapacity(250);
         inventoryEntity.setPerformancePartsCapacity(250);
 
+        inventoryEntity.getInventoryItems().add(getPowerupItem("nosshot", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("runflattires", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("instantcooldown", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("shield", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("slingshot", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("ready", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("juggernaut", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("emergencyevade", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("team_emergencyevade", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("onemorelap", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("team_slingshot", inventoryEntity));
+        inventoryEntity.getInventoryItems().add(getPowerupItem("trafficmagnet", inventoryEntity));
+
         inventoryDAO.insert(inventoryEntity);
 
-        return inventoryEntity;
+        return inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
     }
 
     /**
@@ -144,12 +191,14 @@ public class InventoryBO {
     public InventoryTrans getInventory(long personaId) {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
 
-        if (inventoryEntity == null)
-        {
-            this.createInventory(personaId);
-            return getInventory(personaId);
+        if (inventoryEntity == null) {
+            return getInventoryTrans(this.createInventory(personaDAO.findById(personaId)));
         }
 
+        return getInventoryTrans(inventoryEntity);
+    }
+
+    private InventoryTrans getInventoryTrans(InventoryEntity inventoryEntity) {
         InventoryTrans inventoryTrans = new InventoryTrans();
         inventoryTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
         inventoryTrans.setPerformancePartsCapacity(inventoryEntity.getPerformancePartsCapacity());
@@ -190,21 +239,6 @@ public class InventoryBO {
         }
     }
 
-    public InventoryItemEntity addFromCatalog(ProductEntity productEntity, PersonaEntity persona) {
-        InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(persona.getPersonaId());
-
-        if (inventoryEntity == null)
-            throw new IllegalArgumentException("Persona has no inventory!");
-
-        InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-        inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
-        inventoryItemEntity.setVirtualItemType(productEntity.getProductType().toLowerCase());
-        inventoryItemEntity.setHash(productEntity.getHash());
-        inventoryItemEntity.setProductId("DO NOT USE ME");
-
-        return inventoryItemEntity;
-    }
-
     public boolean isInventoryFull(ProductEntity productEntity, PersonaEntity personaEntity) {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
 
@@ -236,5 +270,21 @@ public class InventoryBO {
         }
 
         inventoryDAO.update(inventoryEntity);
+    }
+
+    private InventoryItemEntity getPowerupItem(String entitlementTag, InventoryEntity inventoryEntity) {
+        VirtualItemEntity virtualItemEntity = virtualItemDAO.findByItemName(entitlementTag);
+
+        InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
+        inventoryItemEntity.setResellPrice(0);
+        inventoryItemEntity.setStatus("ACTIVE");
+        inventoryItemEntity.setRemainingUseCount(250);
+        inventoryItemEntity.setHash(virtualItemEntity.getHash());
+        inventoryItemEntity.setEntitlementTag(entitlementTag);
+        inventoryItemEntity.setExpirationDate(null);
+        inventoryItemEntity.setVirtualItemType("powerup");
+        inventoryItemEntity.setProductId("DO NOT USE ME");
+        inventoryItemEntity.setInventoryEntity(inventoryEntity);
+        return inventoryItemEntity;
     }
 }

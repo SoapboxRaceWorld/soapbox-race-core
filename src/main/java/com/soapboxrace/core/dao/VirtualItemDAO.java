@@ -23,4 +23,12 @@ public class VirtualItemDAO extends BaseDAO<VirtualItemEntity> {
 
         return results.isEmpty() ? null : results.get(0);
     }
+
+    public VirtualItemEntity findByItemName(String itemName) {
+        TypedQuery<VirtualItemEntity> query = this.entityManager.createNamedQuery("VirtualItemEntity.findByItemName", VirtualItemEntity.class);
+        query.setParameter("itemName", itemName);
+        List<VirtualItemEntity> results = query.getResultList();
+
+        return results.isEmpty() ? null : results.get(0);
+    }
 }
