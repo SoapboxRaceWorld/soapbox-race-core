@@ -29,8 +29,8 @@ public class ProductEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "parentProductId", referencedColumnName = "productId")
+	@ManyToOne(targetEntity = ProductEntity.class)
+	@JoinColumn(name = "parentProductId", referencedColumnName = "id")
 	private ProductEntity parentProduct;
 	private String categoryId;
 	private String currency;
