@@ -330,13 +330,11 @@ public class CommerceBO {
                         if (productEntity != null) {
                             switch (productEntity.getCurrency()) {
                                 case "CASH":
-                                    addCash += productEntity.getPrice();
+                                    addCash += calcProductSellPrice(productEntity);
                                     break;
                                 case "_NS":
-                                    addBoost += productEntity.getPrice();
+                                    addBoost += calcProductSellPrice(productEntity);
                                     break;
-                                default:
-                                    System.out.println("I don't know what you did... but it's not good");
                             }
                         }
                     }
