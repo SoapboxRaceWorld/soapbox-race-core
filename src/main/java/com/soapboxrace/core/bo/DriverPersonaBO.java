@@ -40,12 +40,6 @@ public class DriverPersonaBO {
 	private InventoryItemDAO inventoryItemDAO;
 	
 	@EJB
-	private PersonaAchievementDAO personaAchievementDAO;
-
-	@EJB
-	private PersonaAchievementRankDAO personaAchievementRankDAO;
-	
-	@EJB
 	private ParameterBO parameterBO;
 
 	@EJB
@@ -158,8 +152,6 @@ public class DriverPersonaBO {
 		treasureHuntDAO.deleteByPersona(personaEntity.getPersonaId());
 		inventoryItemDAO.deleteByPersona(personaId);
 		inventoryDAO.deleteByPersona(personaId);
-		personaAchievementRankDAO.deleteByPersona(personaId);
-		personaAchievementDAO.deleteByPersona(personaId);
 
 		personaDao.delete(personaEntity);
 	}

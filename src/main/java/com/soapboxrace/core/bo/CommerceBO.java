@@ -65,12 +65,6 @@ public class CommerceBO {
     private OwnedCarDAO ownedCarDAO;
 
     @EJB
-    private AchievementsBO achievementsBO;
-
-    @EJB
-    private AchievementDAO achievementDAO;
-
-    @EJB
     private VirtualItemDAO virtualItemDAO;
 
     public OwnedCarTrans responseCar(CommerceSessionTrans commerceSessionTrans) {
@@ -450,52 +444,6 @@ public class CommerceBO {
 
         customCarDAO.update(customCarEntity);
 
-        for (Map.Entry<Object, ProductEntity> addedProduct : addedFromCatalog.entrySet()) {
-            ProductEntity productEntity = addedProduct.getValue();
-            Object customizationObject = addedProduct.getKey();
-
-            switch (productEntity.getProductType()) {
-                case "PERFORMANCEPART":
-                    addPerformancePart(customCarEntity, customizationObject, productEntity.getHash());
-                    achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_PERFORMANCEPART"), 1L);
-                    break;
-                case "SKILLMODPART":
-                    addSkillPart(customCarEntity, customizationObject, productEntity.getHash());
-                    VirtualItemEntity skillVirtualItem = virtualItemDAO.findByHash(productEntity.getHash());
-
-                    if (skillVirtualItem != null
-                            && skillVirtualItem.getType().equalsIgnoreCase("skillmodpart")
-                            && (skillVirtualItem.getItemName().contains("_03_")
-                                || skillVirtualItem.getItemName().contains("_04_")
-                                || skillVirtualItem.getItemName().contains("_05_"))) {
-                        switch (skillVirtualItem.getSubType()) {
-                            case "skillmod_race":
-                                achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_RACE_SKILLS"), 1L);
-                                break;
-                            case "skillmod_explore":
-                                achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_EXPLORE_SKILLS"), 1L);
-                                break;
-                            case "skillmod_pursuit":
-                                achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_PURSUIT_SKILLS"), 1L);
-                                break;
-                        }
-                    }
-
-                    break;
-                case "VISUALPART":
-                    addVisualPart(customCarEntity, customizationObject, productEntity.getHash());
-                    achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_AFTERMARKETPART"), 1L);
-                    break;
-                case "PAINT_BODY":
-                case "PAINT_WHEEL":
-                    addPaint(customCarEntity, customizationObject, productEntity.getHash());
-                    achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_PAINTS"), 1L);
-                    break;
-                default:
-                    System.out.println("[Commerce] I don't know how to handle this: " + productEntity.getProductType());
-            }
-        }
-
         for (Map.Entry<Object, InventoryItemEntity> addedInventoryItem : addedFromInventory.entrySet()) {
             InventoryItemEntity inventoryItemEntity = addedInventoryItem.getValue();
             Object customizationObject = addedInventoryItem.getKey();
@@ -534,7 +482,6 @@ public class CommerceBO {
             Object customizationObject = addedVinylProduct.getKey();
 
             addVinyl(customCarEntity, customizationObject, productEntity.getHash());
-            achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_VINYLS"), 1L);
         }
 
         personaEntity.setCash(finalCash);

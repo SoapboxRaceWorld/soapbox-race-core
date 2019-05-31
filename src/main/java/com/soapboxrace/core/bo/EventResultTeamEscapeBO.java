@@ -3,7 +3,6 @@ package com.soapboxrace.core.bo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import com.soapboxrace.core.dao.AchievementDAO;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
@@ -29,13 +28,7 @@ public class EventResultTeamEscapeBO {
 	private EventDataDAO eventDataDao;
 
 	@EJB
-	private AchievementDAO achievementDAO;
-
-	@EJB
 	private PersonaDAO personaDAO;
-
-	@EJB
-	private AchievementsBO achievementsBO;
 
 	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
@@ -121,9 +114,6 @@ public class EventResultTeamEscapeBO {
 		teamEscapeEventResult.setLobbyInviteId(0);
 		teamEscapeEventResult.setPersonaId(activePersonaId);
 
-		achievementsBO.update(personaDAO.findById(activePersonaId),
-				achievementDAO.findByName("achievement_ACH_CLOCKED_AIRTIME"),
-				teamEscapeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
 		return teamEscapeEventResult;
 	}
 

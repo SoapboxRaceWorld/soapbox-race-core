@@ -44,12 +44,6 @@ public class RewardBO {
 
 	@EJB
 	private ProductDAO productDAO;
-	
-	@EJB
-	private AchievementsBO achievementsBO;
-	
-	@EJB
-	private AchievementDAO achievementDAO;
 
 	public Reward getFinalReward(Integer rep, Integer cash) {
 		Reward finalReward = new Reward();
@@ -127,13 +121,6 @@ public class RewardBO {
 			personaEntity.setRep(personaEntity.getRep() + exp);
 		}
 		personaDao.update(personaEntity);
-		achievementsBO.update(personaEntity,
-				achievementDAO.findByName("achievement_ACH_REACH_DRIVERLEVEL"),
-				(long) personaEntity.getLevel(),
-				false);
-		achievementsBO.update(personaEntity,
-				achievementDAO.findByName("achievement_ACH_EARN_CASH_EVENT"),
-				cash.longValue());
 	}
 
 	public RewardPart getRewardPart(Integer rep, Integer cash, EnumRewardCategory category, EnumRewardType type) {

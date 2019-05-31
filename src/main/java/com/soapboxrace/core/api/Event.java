@@ -12,12 +12,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.AchievementsBO;
 import com.soapboxrace.core.bo.EventBO;
 import com.soapboxrace.core.bo.EventResultBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
-import com.soapboxrace.core.dao.AchievementDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
@@ -39,15 +36,6 @@ public class Event {
 
 	@EJB
 	private EventResultBO eventResultBO;
-
-	@EJB
-	private AchievementDAO achievementDAO;
-
-	@EJB
-	private PersonaDAO personaDAO;
-
-	@EJB
-	private AchievementsBO achievementsBO;
 
 	@POST
 	@Secured
@@ -81,9 +69,6 @@ public class Event {
 		switch (eventMode) {
 		case CIRCUIT:
 		case SPRINT:
-			achievementsBO.update(personaDAO.findById(activePersonaId),
-					achievementDAO.findByName("achievement_ACH_PLAY_EVENTS"),
-					1L);
 			RouteArbitrationPacket routeArbitrationPacket = UnmarshalXML.unMarshal(arbitrationXml, RouteArbitrationPacket.class);
 			return eventResultBO.handleRaceEnd(eventSessionEntity, activePersonaId, routeArbitrationPacket);
 		case DRAG:

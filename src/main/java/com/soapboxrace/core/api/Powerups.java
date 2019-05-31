@@ -10,12 +10,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.AchievementsBO;
 import com.soapboxrace.core.bo.InventoryBO;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
-import com.soapboxrace.core.dao.AchievementDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.xmpp.XMPP_PowerupActivatedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePowerupActivated;
@@ -35,15 +32,6 @@ public class Powerups
 
     @EJB
     private ParameterBO parameterBO;
-
-    @EJB
-    private AchievementsBO achievementsBO;
-
-    @EJB
-    private AchievementDAO achievementDAO;
-
-    @EJB
-    private PersonaDAO personaDAO;
 
     @POST
     @Secured
@@ -79,12 +67,6 @@ public class Powerups
         {
             inventoryBO.decrementUsage(activePersonaId, powerupHash);
         }
-
-        achievementsBO.update(
-                personaDAO.findById(activePersonaId),
-                achievementDAO.findByName("achievement_ACH_USE_NOS"),
-                1L
-        );
 
         return "";
     }
