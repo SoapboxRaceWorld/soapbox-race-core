@@ -98,11 +98,7 @@ public class DriverPersonaBO {
 		ProfileData profileData = castPersonaEntity(personaEntity);
 		
 		ArrayOfBadgePacket arrayOfBadgePacket = new ArrayOfBadgePacket();
-		
-		for (BadgePacket badgePacket : personaEntity.getBadges()) {
-			arrayOfBadgePacket.getBadgePacket().add(badgePacket);
-		}
-		
+
 		profileData.setBadges(arrayOfBadgePacket);
 		profileData.setMotto(personaEntity.getMotto());
 		profileData.setPercentToLevel(personaEntity.getPercentToLevel());
@@ -122,10 +118,6 @@ public class DriverPersonaBO {
 			}
 			PersonaBase personaBase = new PersonaBase();
             ArrayOfBadgePacket arrayOfBadgePacket = new ArrayOfBadgePacket();
-
-            for (BadgePacket badgePacket : personaEntity.getBadges()) {
-                arrayOfBadgePacket.getBadgePacket().add(badgePacket);
-            }
 
             personaBase.setBadges(arrayOfBadgePacket);
 			personaBase.setIconIndex(personaEntity.getIconIndex());

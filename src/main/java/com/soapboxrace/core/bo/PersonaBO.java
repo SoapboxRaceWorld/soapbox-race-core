@@ -24,9 +24,6 @@ public class PersonaBO {
 	@EJB
 	private OwnedCarDAO ownedCarDAO;
 	
-	@EJB
-	private BadgeDefinitionDAO badgeDefinitionDAO;
-	
 	public void changeDefaultCar(Long personaId, Long defaultCarId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);
 		List<CarSlotEntity> carSlotList = carSlotDAO.findByPersonaId(personaId);

@@ -1,12 +1,7 @@
 
 package com.soapboxrace.core.jpa;
 
-import com.soapboxrace.core.jpa.convert.BadgesConverter;
-import com.soapboxrace.jaxb.http.BadgePacket;
-
 import java.time.LocalDateTime;
-import java.util.List;
-
 import javax.persistence.*;
 
 @Entity
@@ -38,10 +33,6 @@ public class PersonaEntity {
 
 	@Column(name = "created")
 	private LocalDateTime created;
-	
-	@Column(length = 2048)
-	@Convert(converter = BadgesConverter.class)
-	private List<BadgePacket> badges;
 
 	public double getBoost() {
 		return boost;
@@ -161,15 +152,5 @@ public class PersonaEntity {
 
 	public void setCreated(LocalDateTime created) {
 		this.created = created;
-	}
-
-	public List<BadgePacket> getBadges()
-	{
-		return badges;
-	}
-
-	public void setBadges(List<BadgePacket> badges)
-	{
-		this.badges = badges;
 	}
 }
