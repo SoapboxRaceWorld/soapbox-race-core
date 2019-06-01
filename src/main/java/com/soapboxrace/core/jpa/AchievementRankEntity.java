@@ -1,0 +1,114 @@
+package com.soapboxrace.core.jpa;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "ACHIEVEMENT_RANK")
+public class AchievementRankEntity {
+
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(targetEntity = AchievementEntity.class, cascade = CascadeType.DETACH)
+    @JoinColumn(
+            name = "achievement_id",
+            referencedColumnName = "ID",
+            nullable = false
+    )
+    private AchievementEntity achievementEntity;
+
+    @Column
+    private Integer points;
+
+    @Column
+    private Integer rank;
+
+    @Column
+    private Float rarity;
+
+    @Column(name = "reward_description")
+    private String rewardDescription;
+
+    @Column(name = "reward_type")
+    private String rewardType;
+
+    @Column(name = "reward_visual_style")
+    private String rewardVisualStyle;
+
+    @Column(name = "threshold_value")
+    private Integer thresholdValue;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public AchievementEntity getAchievementEntity() {
+        return achievementEntity;
+    }
+
+    public void setAchievementEntity(AchievementEntity achievementEntity) {
+        this.achievementEntity = achievementEntity;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
+    public Float getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(Float rarity) {
+        this.rarity = rarity;
+    }
+
+    public String getRewardDescription() {
+        return rewardDescription;
+    }
+
+    public void setRewardDescription(String rewardDescription) {
+        this.rewardDescription = rewardDescription;
+    }
+
+    public String getRewardType() {
+        return rewardType;
+    }
+
+    public void setRewardType(String rewardType) {
+        this.rewardType = rewardType;
+    }
+
+    public String getRewardVisualStyle() {
+        return rewardVisualStyle;
+    }
+
+    public void setRewardVisualStyle(String rewardVisualStyle) {
+        this.rewardVisualStyle = rewardVisualStyle;
+    }
+
+    public Integer getThresholdValue() {
+        return thresholdValue;
+    }
+
+    public void setThresholdValue(Integer thresholdValue) {
+        this.thresholdValue = thresholdValue;
+    }
+}

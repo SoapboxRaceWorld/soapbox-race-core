@@ -60,6 +60,9 @@ public class ProductEntity {
 	private Integer accel = 0;
 	private Integer handling = 0;
 	private Float skillValue;
+	private String entitlementTag;
+	private String subType;
+	private String brand;
 
 	@OneToMany(mappedBy = "parentProduct", targetEntity = ProductEntity.class, fetch = FetchType.EAGER)
 	private List<ProductEntity> bundleItems;
@@ -310,5 +313,29 @@ public class ProductEntity {
 
 	public void setBundleItems(List<ProductEntity> bundleItems) {
 		this.bundleItems = bundleItems;
+	}
+
+	public String getEntitlementTag() {
+		return entitlementTag;
+	}
+
+	public void setEntitlementTag(String entitlementTag) {
+		this.entitlementTag = entitlementTag;
+	}
+
+	public String getSubType() {
+		return subType;
+	}
+
+	public void setSubType(String subType) {
+		this.subType = subType;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
 	}
 }
