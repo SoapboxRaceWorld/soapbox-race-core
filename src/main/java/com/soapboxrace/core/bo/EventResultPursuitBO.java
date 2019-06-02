@@ -3,14 +3,18 @@ package com.soapboxrace.core.bo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
+import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
+
+import java.util.HashMap;
 
 @Stateless
 public class EventResultPursuitBO {
@@ -30,8 +34,11 @@ public class EventResultPursuitBO {
 	@EJB
 	private CarDamageBO carDamageBO;
 
-	public PursuitEventResult handlePursitEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
-			Boolean isBusted) {
+	@EJB
+	private AchievementBO achievementBO;
+
+	public PursuitEventResult handlePursuitEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
+											   Boolean isBusted) {
 		Long eventSessionId = eventSessionEntity.getId();
 		eventSessionEntity.setEnded(System.currentTimeMillis());
 
@@ -68,6 +75,16 @@ public class EventResultPursuitBO {
 		pursuitEventResult.setInviteLifetimeInMilliseconds(0);
 		pursuitEventResult.setLobbyInviteId(0);
 		pursuitEventResult.setPersonaId(activePersonaId);
+
+		achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
+			put("persona", personaDAO.findById(activePersonaId));
+			put("event", eventDataEntity.getEvent());
+			put("eventData", eventDataEntity);
+			put("eventContext", new AchievementEventContext(
+					EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
+					pursuitArbitrationPacket,
+					eventSessionEntity));
+		}});
 
 		return pursuitEventResult;
 	}

@@ -16,8 +16,8 @@ public class CarClassesDAO extends BaseDAO<CarClassesEntity> {
 		this.entityManager = entityManager;
 	}
 
-	public CarClassesEntity findById(String productId) {
-		return entityManager.find(CarClassesEntity.class, productId);
+	public CarClassesEntity findById(String vltName) {
+		return entityManager.find(CarClassesEntity.class, vltName);
 	}
 
 	public CarClassesEntity findByProductId(String productId) {

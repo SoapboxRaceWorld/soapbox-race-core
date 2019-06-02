@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "BADGE_DEFINITION")
+@NamedQueries({
+        @NamedQuery(name = "BadgeDefinitionEntity.findAll", query = "SELECT b FROM BadgeDefinitionEntity b")
+})
 public class BadgeDefinitionEntity {
 
     @Id
@@ -25,6 +28,9 @@ public class BadgeDefinitionEntity {
 
     @Column
     private String name;
+
+    @ManyToOne
+    private AchievementEntity achievementEntity;
 
     public Long getId() {
         return id;
@@ -72,5 +78,13 @@ public class BadgeDefinitionEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public AchievementEntity getAchievementEntity() {
+        return achievementEntity;
+    }
+
+    public void setAchievementEntity(AchievementEntity achievementEntity) {
+        this.achievementEntity = achievementEntity;
     }
 }

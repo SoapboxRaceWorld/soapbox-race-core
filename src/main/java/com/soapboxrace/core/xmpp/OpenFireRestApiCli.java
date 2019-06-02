@@ -1,6 +1,8 @@
 package com.soapboxrace.core.xmpp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +17,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.soapboxrace.core.dao.ChatRoomDAO;
+import com.soapboxrace.core.jpa.ChatRoomEntity;
 import org.igniterealtime.restclient.entity.MUCRoomEntities;
 import org.igniterealtime.restclient.entity.MUCRoomEntity;
 import org.igniterealtime.restclient.entity.UserEntity;
@@ -32,6 +36,9 @@ public class OpenFireRestApiCli
 	@EJB
 	private ParameterBO parameterBO;
 
+	@EJB
+	private ChatRoomDAO chatRoomDAO;
+
 	@PostConstruct
 	public void init()
 	{
@@ -42,6 +49,12 @@ public class OpenFireRestApiCli
 			restApiEnabled = true;
 		}
 		createUpdatePersona("sbrw.engine.engine", openFireToken);
+
+		for (ChatRoomEntity chatRoomEntity : chatRoomDAO.findAll()) {
+			for (int i = 1; i <= chatRoomEntity.getAmount(); i++) {
+				createGeneralChatRoom(chatRoomEntity.getShortName(), i);
+			}
+		}
 	}
 
 	private Builder getBuilder(String path)
@@ -146,5 +159,18 @@ public class OpenFireRestApiCli
 		MUCRoomEntities roomEntities = builder.get(MUCRoomEntities.class);
 
 		return roomEntities.getMucRooms();
+	}
+
+	private MUCRoomEntity createGeneralChatRoom(String language, Integer number) {
+		String name = "channel." + language + "__" + number;
+		Builder builder = getBuilder("chatrooms");
+		MUCRoomEntity mucRoomEntity = new MUCRoomEntity();
+		mucRoomEntity.setRoomName(name);
+		mucRoomEntity.setNaturalName(name);
+		mucRoomEntity.setDescription(name);
+
+		builder.post(Entity.entity(mucRoomEntity, MediaType.APPLICATION_XML));
+
+		return mucRoomEntity;
 	}
 }

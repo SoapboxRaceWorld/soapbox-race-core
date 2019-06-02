@@ -1,13 +1,15 @@
 
 package com.soapboxrace.core.jpa;
 
-import java.time.LocalDateTime;
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "PERSONA")
 @NamedQueries({ //
-		@NamedQuery(name = "PersonaEntity.findByName", query = "SELECT obj FROM PersonaEntity obj WHERE obj.name = :name") //
+		@NamedQuery(name = "PersonaEntity.findByName", query = "SELECT obj FROM PersonaEntity obj WHERE obj.name = :name"), //
+		@NamedQuery(name = "PersonaEntity.countPersonas", query = "SELECT count(*) FROM PersonaEntity")
 })
 public class PersonaEntity {
 
@@ -33,6 +35,12 @@ public class PersonaEntity {
 
 	@Column(name = "created")
 	private LocalDateTime created;
+
+	@Column(name = "first_login")
+	private LocalDateTime firstLogin;
+
+	@Column(name = "last_login")
+	private LocalDateTime lastLogin;
 
 	public double getBoost() {
 		return boost;
@@ -152,5 +160,27 @@ public class PersonaEntity {
 
 	public void setCreated(LocalDateTime created) {
 		this.created = created;
+	}
+
+    public LocalDateTime getFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(LocalDateTime firstLogin) {
+        this.firstLogin = firstLogin;
+    }
+
+    public Long getDaysSinceFirstLogin() {
+		if (this.firstLogin == null)
+			return 0L;
+		return this.firstLogin.until(LocalDateTime.now(), ChronoUnit.DAYS);
+	}
+
+	public LocalDateTime getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(LocalDateTime lastLogin) {
+		this.lastLogin = lastLogin;
 	}
 }

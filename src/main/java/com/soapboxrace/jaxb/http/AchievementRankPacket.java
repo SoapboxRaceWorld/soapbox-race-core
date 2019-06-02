@@ -55,8 +55,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class AchievementRankPacket {
 
     @XmlElement(name = "AchievedOn", required = true)
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar achievedOn;
+    protected String achievedOn;
     @XmlElement(name = "AchievementRankId")
     protected int achievementRankId;
     @XmlElement(name = "IsRare")
@@ -84,10 +83,10 @@ public class AchievementRankPacket {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getAchievedOn() {
+    public String getAchievedOn() {
         return achievedOn;
     }
 
@@ -96,10 +95,10 @@ public class AchievementRankPacket {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setAchievedOn(XMLGregorianCalendar value) {
+    public void setAchievedOn(String value) {
         this.achievedOn = value;
     }
 

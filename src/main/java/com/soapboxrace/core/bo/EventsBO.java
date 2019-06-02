@@ -146,7 +146,7 @@ public class EventsBO {
 		ArbitrationPacket arbitrationPacket = new ArbitrationPacket();
 		arbitrationPacket.setRank(1);
 		if (!treasureHuntEntity.getIsStreakBroken()) {
-			rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+			rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, false);
 		}
 		Accolades accolades = rewardBO.getAccolades(personaEntity, arbitrationPacket, rewardVO);
 		accolades.setLuckyDrawInfo(getLuckyDrawInfo(treasureHuntEntity));

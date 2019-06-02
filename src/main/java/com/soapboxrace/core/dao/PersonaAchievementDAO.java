@@ -7,6 +7,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Stateless
@@ -31,5 +34,19 @@ public class PersonaAchievementDAO extends BaseDAO<PersonaAchievementEntity> {
         List<PersonaAchievementEntity> results = query.getResultList();
 
         return results.isEmpty() ? null : results.get(0);
+    }
+
+    public Long countPersonasWithRank(Long achievementId, Long threshold) {
+        CriteriaBuilder qb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = qb.createQuery(Long.class);
+        cq.select(qb.count(cq.from(PersonaAchievementEntity.class)));
+        Root<PersonaAchievementEntity> personaAchievementEntityRoot = cq.from(PersonaAchievementEntity.class);
+        cq.where(qb.equal(personaAchievementEntityRoot.get("achievementEntity").get("id"), achievementId));
+        cq.where(qb.greaterThanOrEqualTo(personaAchievementEntityRoot.get("currentValue"), threshold));
+        return entityManager.createQuery(cq).getSingleResult();
+//        TypedQuery<Long> query = this.entityManager.createNamedQuery("PersonaAchievementEntity.countPersonasWithRank", Long.class);
+//        query.setParameter("achievementId", achievementId);
+//        query.setParameter("threshold", threshold);
+//        return query.getSingleResult();
     }
 }

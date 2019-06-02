@@ -7,7 +7,8 @@ import java.util.List;
 @Table(name = "PERSONA_ACHIEVEMENT")
 @NamedQueries({
         @NamedQuery(name = "PersonaAchievementEntity.findAllByPersonaId", query = "SELECT p FROM PersonaAchievementEntity p WHERE p.personaEntity.personaId = :personaId"),
-        @NamedQuery(name = "PersonaAchievementEntity.findByPersonaIdAndAchievementId", query = "SELECT p FROM PersonaAchievementEntity p WHERE p.personaEntity.personaId = :personaId AND p.achievementEntity.id = :achievementId")
+        @NamedQuery(name = "PersonaAchievementEntity.findByPersonaIdAndAchievementId", query = "SELECT p FROM PersonaAchievementEntity p WHERE p.personaEntity.personaId = :personaId AND p.achievementEntity.id = :achievementId"),
+//        @NamedQuery(name = "PersonaAchievementEntity.countPersonasWithRank", query = "SELECT COUNT(*) FROM PersonaAchievementEntity p WHERE p.achievementEntity.id = :achievementId AND p.currentValue >= :threshold")
 })
 public class PersonaAchievementEntity {
 

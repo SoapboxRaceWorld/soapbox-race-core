@@ -3,10 +3,12 @@ package com.soapboxrace.core.bo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
+import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
@@ -17,6 +19,8 @@ import com.soapboxrace.jaxb.http.TeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.http.TeamEscapeEventResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_TeamEscapeEntrantResultType;
+
+import java.util.HashMap;
 
 @Stateless
 public class EventResultTeamEscapeBO {
@@ -38,6 +42,9 @@ public class EventResultTeamEscapeBO {
 
 	@EJB
 	private CarDamageBO carDamageBO;
+
+	@EJB
+	private AchievementBO achievementBO;
 
 	public TeamEscapeEventResult handleTeamEscapeEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
 			TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
@@ -113,6 +120,16 @@ public class EventResultTeamEscapeBO {
 		teamEscapeEventResult.setInviteLifetimeInMilliseconds(0);
 		teamEscapeEventResult.setLobbyInviteId(0);
 		teamEscapeEventResult.setPersonaId(activePersonaId);
+
+		achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
+			put("persona", personaDAO.findById(activePersonaId));
+			put("event", eventDataEntity.getEvent());
+			put("eventData", eventDataEntity);
+			put("eventContext", new AchievementEventContext(
+					EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
+					teamEscapeArbitrationPacket,
+					eventSessionEntity));
+		}});
 
 		return teamEscapeEventResult;
 	}

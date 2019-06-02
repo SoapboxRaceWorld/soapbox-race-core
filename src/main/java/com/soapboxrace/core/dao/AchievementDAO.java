@@ -17,6 +17,11 @@ public class AchievementDAO extends BaseDAO<AchievementEntity> {
         this.entityManager = entityManager;
     }
 
+    public List<AchievementEntity> findAll() {
+        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findAll", AchievementEntity.class);
+        return query.getResultList();
+    }
+
     public AchievementEntity findByName(String name) {
         TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findByName", AchievementEntity.class);
         query.setParameter("name", name);

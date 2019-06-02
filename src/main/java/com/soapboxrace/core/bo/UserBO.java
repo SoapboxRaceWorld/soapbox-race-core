@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import com.soapboxrace.core.dao.InviteTicketDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ServerInfoDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.InviteTicketEntity;
@@ -37,6 +38,9 @@ public class UserBO {
 
 	@EJB
 	private ParameterBO parameterBO;
+
+	@EJB
+	private PersonaDAO personaDAO;
 
 	public void createXmppUser(UserInfo userInfo) {
 		String securityToken = userInfo.getUser().getSecurityToken();
@@ -99,13 +103,18 @@ public class UserBO {
 		return loginStatusVO;
 	}
 
-	public UserInfo secureLoginPersona(Long userId, Long personaId) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setPersonas(new ArrayOfProfileData());
-		com.soapboxrace.jaxb.http.User user = new com.soapboxrace.jaxb.http.User();
-		user.setUserId(userId);
-		userInfo.setUser(user);
-		return userInfo;
+	public void secureLoginPersona(Long userId, Long personaId) {
+		PersonaEntity personaEntity = personaDAO.findById(personaId);
+
+		if (personaEntity != null && personaEntity.getUser().getId().equals(userId)) {
+			if (personaEntity.getFirstLogin() == null) {
+				personaEntity.setFirstLogin(LocalDateTime.now());
+			}
+
+			personaEntity.setLastLogin(LocalDateTime.now());
+
+			personaDAO.update(personaEntity);
+		}
 	}
 
 	public UserInfo getUserById(Long userId) {

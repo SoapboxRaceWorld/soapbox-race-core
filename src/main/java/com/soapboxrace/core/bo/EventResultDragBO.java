@@ -3,10 +3,12 @@ package com.soapboxrace.core.bo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
+import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
@@ -17,6 +19,8 @@ import com.soapboxrace.jaxb.http.DragEventResult;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.xmpp.XMPP_DragEntrantResultType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeDragEntrantResult;
+
+import java.util.HashMap;
 
 @Stateless
 public class EventResultDragBO {
@@ -38,6 +42,9 @@ public class EventResultDragBO {
 
 	@EJB
 	private CarDamageBO carDamageBO;
+
+	@EJB
+	private AchievementBO achievementBO;
 
 	public DragEventResult handleDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
 		Long eventSessionId = eventSessionEntity.getId();
@@ -103,6 +110,16 @@ public class EventResultDragBO {
 		dragEventResult.setInviteLifetimeInMilliseconds(0);
 		dragEventResult.setLobbyInviteId(0);
 		dragEventResult.setPersonaId(activePersonaId);
+
+		achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
+			put("persona", personaDAO.findById(activePersonaId));
+			put("event", eventDataEntity.getEvent());
+			put("eventData", eventDataEntity);
+			put("eventContext", new AchievementEventContext(
+					EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
+					dragArbitrationPacket,
+					eventSessionEntity));
+		}});
 		
 		return dragEventResult;
 	}

@@ -9,6 +9,7 @@ import java.util.List;
         @NamedQuery(name = "AchievementEntity.findByName", query = "SELECT a FROM AchievementEntity a WHERE a.name = :name"),
         @NamedQuery(name = "AchievementEntity.findAllByCategory", query = "SELECT a FROM AchievementEntity a WHERE a.category = :category"),
         @NamedQuery(name = "AchievementEntity.findAllVisible", query = "SELECT a FROM AchievementEntity a WHERE a.visible = true"),
+        @NamedQuery(name = "AchievementEntity.findAll", query = "SELECT a fROM AchievementEntity a")
 })
 public class AchievementEntity {
 
@@ -43,6 +44,13 @@ public class AchievementEntity {
 
     @OneToMany(targetEntity = AchievementRankEntity.class, mappedBy = "achievementEntity", cascade = CascadeType.DETACH, orphanRemoval = true)
     private List<AchievementRankEntity> ranks;
+
+    @OneToOne(targetEntity = BadgeDefinitionEntity.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "badge_definition_id", referencedColumnName = "ID")
+    private BadgeDefinitionEntity badgeDefinitionEntity;
+
+    @Column(name = "should_overwrite_progress", columnDefinition = "BIT(1) DEFAULT 0")
+    private Boolean shouldOverwriteProgress;
 
     public Long getId() {
         return id;
@@ -122,5 +130,21 @@ public class AchievementEntity {
 
     public void setRanks(List<AchievementRankEntity> ranks) {
         this.ranks = ranks;
+    }
+
+    public BadgeDefinitionEntity getBadgeDefinitionEntity() {
+        return badgeDefinitionEntity;
+    }
+
+    public void setBadgeDefinitionEntity(BadgeDefinitionEntity badgeDefinitionEntity) {
+        this.badgeDefinitionEntity = badgeDefinitionEntity;
+    }
+
+    public Boolean getShouldOverwriteProgress() {
+        return shouldOverwriteProgress;
+    }
+
+    public void setShouldOverwriteProgress(Boolean shouldOverwriteProgress) {
+        this.shouldOverwriteProgress = shouldOverwriteProgress;
     }
 }

@@ -2,11 +2,13 @@ package com.soapboxrace.core.bo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.bo.util.AchievementCommerceContext;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
@@ -50,6 +52,12 @@ public class BasketBO
     
     @EJB
     private TreasureHuntDAO treasureHuntDAO;
+
+    @EJB
+    private CarClassesDAO carClassesDAO;
+
+    @EJB
+    private AchievementBO achievementBO;
 
     public ProductEntity findProduct(String productId) {
         return productDao.findByProductId(productId);
@@ -147,6 +155,18 @@ public class BasketBO
         }
 
         CarSlotEntity carSlotEntity = addCar(productId, personaEntity);
+        CarClassesEntity carClassesEntity = carClassesDAO.findById(carSlotEntity.getOwnedCar().getCustomCar().getName());
+
+        if (carClassesEntity != null) {
+            AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity, AchievementCommerceContext.CommerceType.CAR_PURCHASE);
+            achievementBO.updateAchievements(personaEntity.getPersonaId(), "COMMERCE", new HashMap<String, Object>(){{
+                put("persona", personaEntity);
+                put("carSlot", carSlotEntity);
+                put("commerceCtx", commerceContext);
+            }});
+        } else {
+            System.out.println("WARN: No car class entry found for " + carSlotEntity.getOwnedCar().getCustomCar().getName());
+        }
 
         if (parameterBO.getBoolParam("ENABLE_ECONOMY"))
         {

@@ -3,10 +3,12 @@ package com.soapboxrace.core.bo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
+import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
@@ -19,6 +21,8 @@ import com.soapboxrace.jaxb.http.RouteEventResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_RouteEntrantResultType;
 
+import java.util.HashMap;
+
 @Stateless
 public class EventResultRouteBO {
 
@@ -27,6 +31,9 @@ public class EventResultRouteBO {
 
 	@EJB
 	private EventDataDAO eventDataDao;
+
+	@EJB
+	private PersonaDAO personaDAO;
 	
 	@EJB
 	private OpenFireSoapBoxCli openFireSoapBoxCli;
@@ -36,7 +43,10 @@ public class EventResultRouteBO {
 
 	@EJB
 	private CarDamageBO carDamageBO;
-	
+
+	@EJB
+	private AchievementBO achievementBO;
+
 	public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
 		Long eventSessionId = eventSessionEntity.getId();
 		eventSessionEntity.setEnded(System.currentTimeMillis());
@@ -83,6 +93,16 @@ public class EventResultRouteBO {
 		routeEventResult.setLobbyInviteId(0);
 		routeEventResult.setPersonaId(activePersonaId);
 		sendXmppPacket(eventSessionId, activePersonaId, routeArbitrationPacket);
+
+		achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
+			put("persona", personaDAO.findById(activePersonaId));
+			put("event", eventDataEntity.getEvent());
+			put("eventData", eventDataEntity);
+			put("eventContext", new AchievementEventContext(
+					EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
+					routeArbitrationPacket,
+					eventSessionEntity));
+		}});
 
 		return routeEventResult;
 	}

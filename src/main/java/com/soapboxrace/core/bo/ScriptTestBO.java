@@ -1,15 +1,18 @@
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.bo.util.AchievementCommerceContext;
+import com.soapboxrace.core.bo.util.AchievementEventContext;
+import com.soapboxrace.core.bo.util.AchievementProgressionContext;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
+import com.soapboxrace.core.jpa.CarClassesEntity;
+import com.soapboxrace.core.jpa.EventMode;
+import com.soapboxrace.jaxb.http.AchievementsPacket;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.util.HashMap;
 
 @Startup
@@ -47,7 +50,8 @@ public class ScriptTestBO {
 
     @PostConstruct
     public void test() {
-        achievementBO.updateAchievements(100L, "EVENT", new HashMap<String, Object>() {
+        AchievementsPacket achievementsPacket = achievementBO.loadAll(100L);
+        HashMap<String, Object> properties = new HashMap<String, Object>() {
             {
                 put("event", eventDAO.findById(83));
                 put("persona", personaDAO.findById(100L));
@@ -55,8 +59,13 @@ public class ScriptTestBO {
                     setRank(1);
                     setSumOfJumpsDurationInMilliseconds(220);
                 }});
+                put("evCtx", new AchievementEventContext(EventMode.CIRCUIT, null, null));
+                put("commerceCtx", new AchievementCommerceContext(new CarClassesEntity(), AchievementCommerceContext.CommerceType.CAR_PURCHASE));
+                put("progression", new AchievementProgressionContext(1000, 500, 42, true, true));
             }
-        });
+        };
+        achievementBO.updateAchievements(100L, "EVENT", properties);
+        achievementBO.updateAchievements(100L, "COMMERCE", properties);
 //        NashornScriptEngine nashornScriptEngine = (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn");
 //        try {
 //            Object val = nashornScriptEngine.eval("1 + 1");
