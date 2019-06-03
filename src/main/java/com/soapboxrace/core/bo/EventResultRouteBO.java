@@ -98,6 +98,7 @@ public class EventResultRouteBO {
 			put("persona", personaDAO.findById(activePersonaId));
 			put("event", eventDataEntity.getEvent());
 			put("eventData", eventDataEntity);
+			put("eventSession", eventSessionEntity);
 			put("eventContext", new AchievementEventContext(
 					EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
 					routeArbitrationPacket,

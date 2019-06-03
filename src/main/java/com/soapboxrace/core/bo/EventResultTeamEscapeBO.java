@@ -121,15 +121,18 @@ public class EventResultTeamEscapeBO {
 		teamEscapeEventResult.setLobbyInviteId(0);
 		teamEscapeEventResult.setPersonaId(activePersonaId);
 
-		achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
-			put("persona", personaDAO.findById(activePersonaId));
-			put("event", eventDataEntity.getEvent());
-			put("eventData", eventDataEntity);
-			put("eventContext", new AchievementEventContext(
-					EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
-					teamEscapeArbitrationPacket,
-					eventSessionEntity));
-		}});
+		if (teamEscapeArbitrationPacket.getBustedCount() == 0) {
+			achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
+				put("persona", personaDAO.findById(activePersonaId));
+				put("event", eventDataEntity.getEvent());
+				put("eventData", eventDataEntity);
+				put("eventSession", eventSessionEntity);
+				put("eventContext", new AchievementEventContext(
+						EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
+						teamEscapeArbitrationPacket,
+						eventSessionEntity));
+			}});
+		}
 
 		return teamEscapeEventResult;
 	}

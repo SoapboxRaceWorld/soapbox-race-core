@@ -64,8 +64,8 @@ public class ScriptTestBO {
                 put("progression", new AchievementProgressionContext(1000, 500, 42, true, true));
             }
         };
-        achievementBO.updateAchievements(100L, "EVENT", properties);
-        achievementBO.updateAchievements(100L, "COMMERCE", properties);
+//        achievementBO.updateAchievements(100L, "EVENT", properties);
+//        achievementBO.updateAchievements(100L, "COMMERCE", properties);
 //        NashornScriptEngine nashornScriptEngine = (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn");
 //        try {
 //            Object val = nashornScriptEngine.eval("1 + 1");

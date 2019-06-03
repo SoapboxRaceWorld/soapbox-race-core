@@ -173,7 +173,7 @@ public class AchievementBO {
         System.out.println("updates done in " + (endTime - startTime) + "ms");
 
         achievementsAwarded.setPersonaId(personaId);
-        achievementsAwarded.setScore(1337);
+        achievementsAwarded.setScore(0);
 
         XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded = new XMPP_ResponseTypeAchievementsAwarded();
         responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
@@ -205,13 +205,13 @@ public class AchievementBO {
             } else if (rawVal instanceof Long) {
                 cleanVal = (Long) rawVal;
             } else if (rawVal instanceof Float) {
-                if (Float.isNaN((Float)rawVal)) {
+                if (Float.isNaN((Float) rawVal)) {
                     throw new RuntimeException("Float return value is NaN! Script: " + achievementEntity.getUpdateValue());
                 }
 
                 cleanVal = (long) Math.round((Float) rawVal);
             } else if (rawVal instanceof Double) {
-                if (Double.isNaN((Double)rawVal)) {
+                if (Double.isNaN((Double) rawVal)) {
                     throw new RuntimeException("Double return value is NaN! Script: " + achievementEntity.getUpdateValue());
                 }
 
@@ -253,7 +253,9 @@ public class AchievementBO {
                         currentRank.setState("RewardWaiting");
                         currentRank.setAchievedOn(LocalDateTime.now());
                         personaAchievementRankDAO.update(currentRank);
-                        current.setRarity(((personaAchievementDAO.countPersonasWithRank(achievementEntity.getId(), threshold) + 1.0f) / personaDAO.countPersonas()));
+                        Long numPersonasWithRank = personaAchievementDAO.countPersonasWithRank(current.getId());
+                        float countPersonas = personaDAO.countPersonas();
+                        current.setRarity((numPersonasWithRank / countPersonas));
 
                         AchievementAwarded achievementAwarded = new AchievementAwarded();
                         achievementAwarded.setAchievedOn(currentRank.getAchievedOn().format(DateTimeFormatter.ofPattern("yyyyy-MM-dd'T'hh:mm:ss")));

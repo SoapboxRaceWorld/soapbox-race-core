@@ -112,21 +112,28 @@ public class Personas {
 			commerceResultTrans.setStatus(basketBO.repairCar(productId, personaEntity));
         } else if ("SRV-THREVIVE".equals(productId)) {
             commerceResultTrans.setStatus(basketBO.reviveTreasureHunt(productId, personaEntity));
-		} else if ("SRV-AMP-INSURANCE".equals(productId)) {
-			commerceResultTrans.setStatus(basketBO.buyInsurance(productId, personaEntity));
-        } else if ("SRV-AMP-CASH".equals(productId)) {
-            commerceResultTrans.setStatus(basketBO.buyCashAmplifier(productId, personaEntity));
-        } else if ("SRV-AMP-REP".equals(productId)) {
-            commerceResultTrans.setStatus(basketBO.buyRepAmplifier(productId, personaEntity));
+//		} else if ("SRV-AMP-INSURANCE".equals(productId)) {
+//			commerceResultTrans.setStatus(basketBO.buyInsurance(productId, personaEntity));
+//        } else if ("SRV-AMP-CASH".equals(productId)) {
+//            commerceResultTrans.setStatus(basketBO.buyCashAmplifier(productId, personaEntity));
+//        } else if ("SRV-AMP-REP".equals(productId)) {
+//            commerceResultTrans.setStatus(basketBO.buyRepAmplifier(productId, personaEntity));
 		} else {
 			ProductEntity productEntity = basketBO.findProduct(productId);
 
-			if (productEntity != null && productEntity.getProductType().equalsIgnoreCase("PRESETCAR")) {
-				OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
-				commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
-				arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
+			if (productEntity != null) {
+				switch (productEntity.getProductType()) {
+					case "PRESETCAR":
+						OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
+						commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
+						arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 
-				commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken));
+						commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken));
+						break;
+					case "AMPLIFIER":
+						commerceResultTrans.setStatus(basketBO.buyAmplifier(personaEntity, productId, productEntity.getEntitlementTag()));
+						break;
+				}
 			}
 		}
 

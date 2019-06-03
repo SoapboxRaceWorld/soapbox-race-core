@@ -60,6 +60,7 @@ public class EventEntity {
 	private float rank8CashMultiplier;
 	private float minTopSpeedTrigger;
 	private long legitTime;
+	private float trackLength;
 
 	public int getId() {
 		return id;
@@ -381,4 +382,11 @@ public class EventEntity {
 		this.carClassHash = carClassHash;
 	}
 
+	public float getTrackLength() {
+		return trackLength;
+	}
+
+	public void setTrackLength(float trackLength) {
+		this.trackLength = trackLength;
+	}
 }

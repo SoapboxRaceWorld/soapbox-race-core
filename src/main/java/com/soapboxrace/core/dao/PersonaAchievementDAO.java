@@ -2,6 +2,7 @@ package com.soapboxrace.core.dao;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.PersonaAchievementEntity;
+import com.soapboxrace.core.jpa.PersonaAchievementRankEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -36,14 +37,17 @@ public class PersonaAchievementDAO extends BaseDAO<PersonaAchievementEntity> {
         return results.isEmpty() ? null : results.get(0);
     }
 
-    public Long countPersonasWithRank(Long achievementId, Long threshold) {
-        CriteriaBuilder qb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> cq = qb.createQuery(Long.class);
-        cq.select(qb.count(cq.from(PersonaAchievementEntity.class)));
-        Root<PersonaAchievementEntity> personaAchievementEntityRoot = cq.from(PersonaAchievementEntity.class);
-        cq.where(qb.equal(personaAchievementEntityRoot.get("achievementEntity").get("id"), achievementId));
-        cq.where(qb.greaterThanOrEqualTo(personaAchievementEntityRoot.get("currentValue"), threshold));
-        return entityManager.createQuery(cq).getSingleResult();
+    public Long countPersonasWithRank(Long achievementRankId) {
+        return this.entityManager.createNamedQuery("PersonaAchievementRankEntity.countPersonasWithRank", Long.class)
+                .setParameter("achievementRankId", achievementRankId)
+                .getSingleResult();
+//        CriteriaBuilder qb = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Long> cq = qb.createQuery(Long.class);
+//        cq.select(qb.count(cq.from(PersonaAchievementRankEntity.class)));
+//        Root<PersonaAchievementRankEntity> personaAchievementEntityRoot = cq.from(PersonaAchievementRankEntity.class);
+//        cq.where(qb.equal(personaAchievementEntityRoot.get("achievementRankEntity").get("id"), achievementRankId));
+//        cq.where(qb.isNotNull(personaAchievementEntityRoot.get("achievedOn")));
+//        return entityManager.createQuery(cq).getSingleResult();
 //        TypedQuery<Long> query = this.entityManager.createNamedQuery("PersonaAchievementEntity.countPersonasWithRank", Long.class);
 //        query.setParameter("achievementId", achievementId);
 //        query.setParameter("threshold", threshold);

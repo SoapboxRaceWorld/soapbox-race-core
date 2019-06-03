@@ -6,10 +6,12 @@ import javax.ejb.Stateless;
 import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
+import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
@@ -36,6 +38,12 @@ public class EventResultPursuitBO {
 
 	@EJB
 	private AchievementBO achievementBO;
+
+	@EJB
+	private OwnedCarDAO ownedCarDAO;
+
+	@EJB
+	private PersonaBO personaBO;
 
 	public PursuitEventResult handlePursuitEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
 											   Boolean isBusted) {
@@ -71,20 +79,27 @@ public class EventResultPursuitBO {
 		pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
 		pursuitEventResult.setEventSessionId(eventSessionId);
 		pursuitEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
-		pursuitEventResult.setHeat(1);
+		pursuitEventResult.setHeat(isBusted ? 1 : pursuitArbitrationPacket.getHeat());
 		pursuitEventResult.setInviteLifetimeInMilliseconds(0);
 		pursuitEventResult.setLobbyInviteId(0);
 		pursuitEventResult.setPersonaId(activePersonaId);
 
-		achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
-			put("persona", personaDAO.findById(activePersonaId));
-			put("event", eventDataEntity.getEvent());
-			put("eventData", eventDataEntity);
-			put("eventContext", new AchievementEventContext(
-					EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
-					pursuitArbitrationPacket,
-					eventSessionEntity));
-		}});
+		if (!isBusted) {
+			achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
+				put("persona", personaDAO.findById(activePersonaId));
+				put("event", eventDataEntity.getEvent());
+				put("eventData", eventDataEntity);
+				put("eventSession", eventSessionEntity);
+				put("eventContext", new AchievementEventContext(
+						EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
+						pursuitArbitrationPacket,
+						eventSessionEntity));
+			}});
+		}
+
+		OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(activePersonaId).getOwnedCar();
+		ownedCarEntity.setHeat(isBusted ? 1 : pursuitArbitrationPacket.getHeat());
+		ownedCarDAO.update(ownedCarEntity);
 
 		return pursuitEventResult;
 	}

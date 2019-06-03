@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "PERSONA_ACHIEVEMENT_RANK")
 @NamedQueries({
-        @NamedQuery(name = "PersonaAchievementRankEntity.findByPersonaIdAndAchievementRankId", query = "SELECT r FROM PersonaAchievementRankEntity r WHERE r.achievementRankEntity.id = :achievementRankId AND r.personaAchievementEntity.personaEntity.personaId = :personaId")
+        @NamedQuery(name = "PersonaAchievementRankEntity.findByPersonaIdAndAchievementRankId", query = "SELECT r FROM PersonaAchievementRankEntity r WHERE r.achievementRankEntity.id = :achievementRankId AND r.personaAchievementEntity.personaEntity.personaId = :personaId"),
+        @NamedQuery(name = "PersonaAchievementRankEntity.countPersonasWithRank", query = "SELECT count(*) FROM PersonaAchievementRankEntity r WHERE r.achievementRankEntity.id = :achievementRankId AND r.achievedOn IS NOT NULL")
 })
 public class PersonaAchievementRankEntity {
 
