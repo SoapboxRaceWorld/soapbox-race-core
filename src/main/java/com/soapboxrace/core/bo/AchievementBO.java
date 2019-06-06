@@ -25,6 +25,9 @@ import java.util.OptionalInt;
 public class AchievementBO {
 
     @EJB
+    private AchievementRewardBO achievementRewardBO;
+
+    @EJB
     private PersonaAchievementDAO personaAchievementDAO;
 
     @EJB
@@ -43,6 +46,25 @@ public class AchievementBO {
     private OpenFireSoapBoxCli openFireSoapBoxCli;
 
     private final ThreadLocal<NashornScriptEngine> scriptEngine = ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
+
+    public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
+        PersonaAchievementRankEntity personaAchievementRankEntity = personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, achievementRankId);
+
+        if (personaAchievementRankEntity == null) {
+            throw new IllegalArgumentException(personaId + " does not have " + achievementRankId);
+        }
+
+        if (!"RewardWaiting".equals(personaAchievementRankEntity.getState())) {
+            throw new IllegalArgumentException(personaId + " has no reward for " + achievementRankId);
+        }
+
+        AchievementRewards achievementRewards = achievementRewardBO.redeemRewards(personaId, achievementRankId);
+
+        personaAchievementRankEntity.setState("Completed");
+        personaAchievementRankDAO.update(personaAchievementRankEntity);
+
+        return achievementRewards;
+    }
 
     public AchievementsPacket loadAll(Long personaId) {
         AchievementsPacket achievementsPacket = new AchievementsPacket();

@@ -7,7 +7,10 @@ import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.CarClassesEntity;
 import com.soapboxrace.core.jpa.EventMode;
+import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.jaxb.http.AchievementRewards;
 import com.soapboxrace.jaxb.http.AchievementsPacket;
+import com.soapboxrace.jaxb.http.ArbitrationPacket;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -43,6 +46,9 @@ public class ScriptTestBO {
     private AchievementBO achievementBO;
 
     @EJB
+    private AchievementRewardBO achievementRewardBO;
+
+    @EJB
     private EventDAO eventDAO;
 
     @EJB
@@ -59,12 +65,15 @@ public class ScriptTestBO {
                     setRank(1);
                     setSumOfJumpsDurationInMilliseconds(220);
                 }});
-                put("evCtx", new AchievementEventContext(EventMode.CIRCUIT, null, null));
+                put("eventContext", new AchievementEventContext(EventMode.CIRCUIT, new ArbitrationPacket(), new EventSessionEntity()));
                 put("commerceCtx", new AchievementCommerceContext(new CarClassesEntity(), AchievementCommerceContext.CommerceType.CAR_PURCHASE));
                 put("progression", new AchievementProgressionContext(1000, 500, 42, true, true));
             }
         };
-//        achievementBO.updateAchievements(100L, "EVENT", properties);
+
+        AchievementRewards achievementRewards = achievementRewardBO.redeemRewards(100L,3L);
+
+        achievementBO.updateAchievements(100L, "EVENTE", properties);
 //        achievementBO.updateAchievements(100L, "COMMERCE", properties);
 //        NashornScriptEngine nashornScriptEngine = (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn");
 //        try {

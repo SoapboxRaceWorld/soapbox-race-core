@@ -21,7 +21,10 @@ import java.util.List;
 						+ "obj.isDropable = true AND " //
 						+ "obj.productType = :productType"), //
 		@NamedQuery(name = "ProductEntity.findByProductId", query = "SELECT obj FROM ProductEntity obj WHERE obj.productId = :productId"), //
-		@NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = :hash") //
+		@NamedQuery(name = "ProductEntity.findByEntitlementTag", query = "SELECT obj FROM ProductEntity obj WHERE obj.entitlementTag = :entitlementTag"), //
+		@NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = :hash"), //
+		@NamedQuery(name = "ProductEntity.findBySubTypeAndRarity", query = "SELECT obj FROM ProductEntity obj WHERE obj.subType = :subType AND obj.rarity = :rarity AND obj.isDropable = true"),
+		@NamedQuery(name = "ProductEntity.findByProdTypeAndRarity", query = "SELECT obj FROM ProductEntity obj WHERE obj.productType = :prodType AND obj.rarity = :rarity AND obj.isDropable = true"),
 })
 public class ProductEntity {
 
@@ -63,6 +66,7 @@ public class ProductEntity {
 	private String entitlementTag;
 	private String subType;
 	private String brand;
+	private Integer rarity;
 
 	@OneToMany(mappedBy = "parentProduct", targetEntity = ProductEntity.class, fetch = FetchType.EAGER)
 	private List<ProductEntity> bundleItems;
@@ -337,5 +341,13 @@ public class ProductEntity {
 
 	public void setBrand(String brand) {
 		this.brand = brand;
+	}
+
+	public Integer getRarity() {
+		return rarity;
+	}
+
+	public void setRarity(Integer rarity) {
+		this.rarity = rarity;
 	}
 }

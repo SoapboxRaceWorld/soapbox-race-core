@@ -47,10 +47,33 @@ public class ProductDAO extends BaseDAO<ProductEntity>
         return query.getResultList();
     }
 
+    public List<ProductEntity> findBySubTypeAndRarity(String subType, Integer rarity) {
+        return entityManager.createNamedQuery("ProductEntity.findBySubTypeAndRarity", ProductEntity.class)
+                .setParameter("rarity", rarity)
+                .setParameter("subType", subType)
+                .getResultList();
+    }
+
+    public List<ProductEntity> findByProdTypeAndRarity(String prodType, Integer rarity) {
+        return entityManager.createNamedQuery("ProductEntity.findByProdTypeAndRarity", ProductEntity.class)
+                .setParameter("rarity", rarity)
+                .setParameter("prodType", prodType)
+                .getResultList();
+    }
+
     public ProductEntity findByProductId(String productId)
     {
         TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByProductId", ProductEntity.class);
         query.setParameter("productId", productId);
+
+        List<ProductEntity> resultList = query.getResultList();
+        return !resultList.isEmpty() ? resultList.get(0) : null;
+    }
+
+    public ProductEntity findByEntitlementTag(String entitlementTag)
+    {
+        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByEntitlementTag", ProductEntity.class);
+        query.setParameter("entitlementTag", entitlementTag);
 
         List<ProductEntity> resultList = query.getResultList();
         return !resultList.isEmpty() ? resultList.get(0) : null;

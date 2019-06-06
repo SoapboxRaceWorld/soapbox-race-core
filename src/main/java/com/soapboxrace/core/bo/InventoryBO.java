@@ -37,7 +37,6 @@ public class InventoryBO {
 
             if (virtualItemEntity != null) {
                 System.out.println("productHash: " + productEntity.getHash());
-                System.out.println("virtualItemId: " + virtualItemEntity.getId());
                 System.out.println("virtualItemName: " + virtualItemEntity.getItemName());
 
                 InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();

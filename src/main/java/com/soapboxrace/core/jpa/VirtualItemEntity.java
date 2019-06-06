@@ -3,18 +3,29 @@ package com.soapboxrace.core.jpa;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "VIRTUAL_ITEM")
+@Table(name = "VIRTUALITEM")
 @NamedQueries({
         @NamedQuery(name = "VirtualItemEntity.findByHash", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.hash = :hash"),
         @NamedQuery(name = "VirtualItemEntity.findByItemName", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.itemName = :itemName"),
+        @NamedQuery(name = "VirtualItemEntity.findByItemType", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.type = :itemType"),
+        @NamedQuery(name = "VirtualItemEntity.findByItemSubType", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.subType = :itemSubType"),
 })
 public class VirtualItemEntity {
+    @Column(name = "longdescription")
+    private String longDescription;
+
+    @Column(name = "shortdescription")
+    private String shortDescription;
+
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "itemName")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String itemName;
 
     @Column
-    private String type;
+    private String title;
 
     @Column
     private Integer hash;
@@ -23,30 +34,22 @@ public class VirtualItemEntity {
     private String icon;
 
     @Column
-    private String itemName;
-
-    @Column
-    private String longDescription;
-
-    @Column
-    private String shortDescription;
-
-    @Column
     private String subType;
-
-    @Column
-    private String title;
 
     @Column
     private String brand;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "resellprice")
+    private Integer resellPrice;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "tier")
+    private Integer tier;
+
+    @Column(name = "warnondelete")
+    private Boolean warnOnDelete;
+
+    @Column(name = "rarity")
+    private Integer rarity;
 
     public String getType() {
         return type;
@@ -118,5 +121,37 @@ public class VirtualItemEntity {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public Integer getResellPrice() {
+        return resellPrice;
+    }
+
+    public void setResellPrice(Integer resellPrice) {
+        this.resellPrice = resellPrice;
+    }
+
+    public Integer getTier() {
+        return tier;
+    }
+
+    public void setTier(Integer tier) {
+        this.tier = tier;
+    }
+
+    public Boolean getWarnOnDelete() {
+        return warnOnDelete;
+    }
+
+    public void setWarnOnDelete(Boolean warnOnDelete) {
+        this.warnOnDelete = warnOnDelete;
+    }
+
+    public Integer getRarity() {
+        return rarity;
+    }
+
+    public void setRarity(Integer rarity) {
+        this.rarity = rarity;
     }
 }

@@ -7,6 +7,7 @@ import javax.ws.rs.core.MediaType;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.AchievementBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.jaxb.http.AchievementRewards;
 import com.soapboxrace.jaxb.http.AchievementsPacket;
 
 @Path("/achievements")
@@ -31,5 +32,13 @@ public class Achievements
         }
 
         return new AchievementsPacket();
+    }
+
+    @GET
+    @Secured
+    @Path("/redeemreward")
+    @Produces(MediaType.APPLICATION_XML)
+    public AchievementRewards redeemreward(@HeaderParam("securityToken") String securityToken, @QueryParam("achievementRankId") Long achievementRankId) {
+        return achievementBO.redeemReward(tokenSessionBO.getActivePersonaId(securityToken), achievementRankId);
     }
 }
