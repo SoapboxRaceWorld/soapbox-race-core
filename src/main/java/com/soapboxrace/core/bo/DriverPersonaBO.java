@@ -38,6 +38,9 @@ public class DriverPersonaBO {
 
 	@EJB
 	private InventoryItemDAO inventoryItemDAO;
+
+	@EJB
+	private PersonaBadgeDAO personaBadgeDAO;
 	
 	@EJB
 	private ParameterBO parameterBO;
@@ -50,6 +53,9 @@ public class DriverPersonaBO {
 
 	@EJB
 	private PresenceManager presenceManager;
+
+	@EJB
+	private PersonaAchievementRankDAO personaAchievementRankDAO;
 
 	public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
 		UserEntity userEntity = userDao.findById(userId);
@@ -97,7 +103,7 @@ public class DriverPersonaBO {
 		PersonaEntity personaEntity = personaDao.findById(personaId);
 		ProfileData profileData = castPersonaEntity(personaEntity);
 		
-		ArrayOfBadgePacket arrayOfBadgePacket = new ArrayOfBadgePacket();
+		ArrayOfBadgePacket arrayOfBadgePacket = this.getBadges(personaId);
 
 		profileData.setBadges(arrayOfBadgePacket);
 		profileData.setMotto(personaEntity.getMotto());
@@ -109,6 +115,26 @@ public class DriverPersonaBO {
 		return profileData;
 	}
 
+	private ArrayOfBadgePacket getBadges(Long personaId) {
+		ArrayOfBadgePacket arrayOfBadgePacket = new ArrayOfBadgePacket();
+
+		for (PersonaBadgeEntity personaBadgeEntity : personaBadgeDAO.findAllBadgesForPersona(personaId)) {
+			PersonaAchievementRankEntity personaAchievementRankEntity = personaAchievementRankDAO.findHighestCompletedRankOfAchievementByPersona(
+					personaId, personaBadgeEntity.getBadgeDefinitionEntity().getAchievementEntity().getId());
+			if (personaAchievementRankEntity != null) {
+				BadgePacket badgePacket = new BadgePacket();
+				badgePacket.setAchievementRankId(personaAchievementRankEntity.getAchievementRankEntity().getId().intValue());
+				badgePacket.setBadgeDefinitionId(personaBadgeEntity.getBadgeDefinitionEntity().getId().intValue());
+				badgePacket.setIsRare(personaAchievementRankEntity.getAchievementRankEntity().getRarity() < 0.5f);
+				badgePacket.setRarity(personaAchievementRankEntity.getAchievementRankEntity().getRarity());
+				badgePacket.setSlotId(personaBadgeEntity.getSlot().shortValue());
+				arrayOfBadgePacket.getBadgePacket().add(badgePacket);
+			}
+		}
+
+		return arrayOfBadgePacket;
+	}
+
 	public ArrayOfPersonaBase getPersonaBaseFromList(List<Long> personaIdList) {
 		ArrayOfPersonaBase arrayOfPersonaBase = new ArrayOfPersonaBase();
 		for (Long personaId : personaIdList) {
@@ -117,7 +143,7 @@ public class DriverPersonaBO {
 				return arrayOfPersonaBase;
 			}
 			PersonaBase personaBase = new PersonaBase();
-            ArrayOfBadgePacket arrayOfBadgePacket = new ArrayOfBadgePacket();
+            ArrayOfBadgePacket arrayOfBadgePacket = getBadges(personaId);
 
             personaBase.setBadges(arrayOfBadgePacket);
 			personaBase.setIconIndex(personaEntity.getIconIndex());

@@ -29,7 +29,7 @@ public class BadgeDefinitionEntity {
     @Column
     private String name;
 
-    @ManyToOne
+    @OneToOne(targetEntity = AchievementEntity.class, mappedBy = "badgeDefinitionEntity")
     private AchievementEntity achievementEntity;
 
     public Long getId() {

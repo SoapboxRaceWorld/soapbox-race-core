@@ -27,4 +27,14 @@ public class PersonaAchievementRankDAO extends BaseDAO<PersonaAchievementRankEnt
 
         return results.isEmpty() ? null : results.get(0);
     }
+
+    public PersonaAchievementRankEntity findHighestCompletedRankOfAchievementByPersona(Long personaId, Long achievementId) {
+        TypedQuery<PersonaAchievementRankEntity> query = this.entityManager.createNamedQuery("PersonaAchievementRankEntity.findHighestCompletedRankOfAchievementByPersona", PersonaAchievementRankEntity.class);
+        query.setParameter("personaId", personaId);
+        query.setParameter("achievementId", achievementId);
+
+        List<PersonaAchievementRankEntity> results = query.getResultList();
+
+        return results.isEmpty() ? null : results.get(0);
+    }
 }

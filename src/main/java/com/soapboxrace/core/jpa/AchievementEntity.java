@@ -45,8 +45,8 @@ public class AchievementEntity {
     @OneToMany(targetEntity = AchievementRankEntity.class, mappedBy = "achievementEntity", cascade = CascadeType.DETACH, orphanRemoval = true)
     private List<AchievementRankEntity> ranks;
 
-    @OneToOne(targetEntity = BadgeDefinitionEntity.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "badge_definition_id", referencedColumnName = "ID")
+    @OneToOne(targetEntity = BadgeDefinitionEntity.class, optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "badge_definition_id", referencedColumnName = "ID", nullable = false)
     private BadgeDefinitionEntity badgeDefinitionEntity;
 
     @Column(name = "should_overwrite_progress", columnDefinition = "BIT(1) DEFAULT 0")

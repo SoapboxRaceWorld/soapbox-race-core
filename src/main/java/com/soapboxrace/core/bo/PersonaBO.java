@@ -3,6 +3,8 @@ package com.soapboxrace.core.bo;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
+import com.soapboxrace.jaxb.http.BadgeBundle;
+import com.soapboxrace.jaxb.http.BadgeInput;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 
 import javax.ejb.EJB;
@@ -26,6 +28,39 @@ public class PersonaBO {
 
 	@EJB
 	private ParameterBO parameterBO;
+
+	@EJB
+	private PersonaBadgeDAO personaBadgeDAO;
+
+	@EJB
+	private BadgeDefinitionDAO badgeDefinitionDAO;
+
+	public void updateBadges(Long personaId, BadgeBundle badgeBundle) {
+		PersonaEntity personaEntity = personaDAO.findById(personaId);
+
+		for (BadgeInput badgeInput : badgeBundle.getBadgeInputs()) {
+			if (badgeInput.getSlotId() > 3) {
+				throw new RuntimeException("Invalid SlotId: " + badgeInput.getSlotId());
+			}
+
+			BadgeDefinitionEntity badgeDefinitionEntity = badgeDefinitionDAO.find((long) badgeInput.getBadgeDefinitionId());
+			if (badgeDefinitionEntity == null) {
+				throw new RuntimeException("Invalid BadgeDefinitionId: " + badgeInput.getBadgeDefinitionId());
+			}
+
+			PersonaBadgeEntity personaBadgeEntity = personaBadgeDAO.findBadgeInSlotForPersona(personaId, (int) badgeInput.getSlotId());
+			if (personaBadgeEntity == null) {
+				personaBadgeEntity = new PersonaBadgeEntity();
+				personaBadgeEntity.setBadgeDefinitionEntity(badgeDefinitionEntity);
+				personaBadgeEntity.setPersonaEntity(personaEntity);
+				personaBadgeEntity.setSlot((int) badgeInput.getSlotId());
+				personaBadgeDAO.insert(personaBadgeEntity);
+			} else {
+				personaBadgeEntity.setBadgeDefinitionEntity(badgeDefinitionEntity);
+				personaBadgeDAO.update(personaBadgeEntity);
+			}
+		}
+	}
 	
 	public void changeDefaultCar(Long personaId, Long defaultCarId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);

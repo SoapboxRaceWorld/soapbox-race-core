@@ -7,7 +7,13 @@ import java.time.LocalDateTime;
 @Table(name = "PERSONA_ACHIEVEMENT_RANK")
 @NamedQueries({
         @NamedQuery(name = "PersonaAchievementRankEntity.findByPersonaIdAndAchievementRankId", query = "SELECT r FROM PersonaAchievementRankEntity r WHERE r.achievementRankEntity.id = :achievementRankId AND r.personaAchievementEntity.personaEntity.personaId = :personaId"),
-        @NamedQuery(name = "PersonaAchievementRankEntity.countPersonasWithRank", query = "SELECT count(*) FROM PersonaAchievementRankEntity r WHERE r.achievementRankEntity.id = :achievementRankId AND r.achievedOn IS NOT NULL")
+        @NamedQuery(name = "PersonaAchievementRankEntity.countPersonasWithRank", query = "SELECT count(*) FROM PersonaAchievementRankEntity r WHERE r.achievementRankEntity.id = :achievementRankId AND r.achievedOn IS NOT NULL"),
+        @NamedQuery(name = "PersonaAchievementRankEntity.findHighestCompletedRankOfAchievementByPersona",
+                query = "SELECT obj FROM PersonaAchievementRankEntity obj " +
+                        "WHERE obj.personaAchievementEntity.personaEntity.id = :personaId " +
+                        "AND obj.personaAchievementEntity.achievementEntity.id = :achievementId " +
+                        "AND (obj.state = 'Completed' OR obj.state = 'RewardWaiting') " +
+                        "ORDER BY obj.achievementRankEntity.rank")
 })
 public class PersonaAchievementRankEntity {
 
