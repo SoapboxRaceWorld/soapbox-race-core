@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ACHIEVEMENT_REWARD")
 @NamedQueries({
-        @NamedQuery(name = "AchievementRewardEntity.findByAchievementRankId", query = "SELECT obj FROM AchievementRewardEntity obj WHERE obj.achievementRankEntity.id = :achievementRankId")
+        @NamedQuery(name = "AchievementRewardEntity.findByDescription", query = "SELECT obj FROM AchievementRewardEntity obj WHERE obj.internalRewardDescription = :description")
 })
 public class AchievementRewardEntity {
 
@@ -14,15 +14,14 @@ public class AchievementRewardEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false, cascade = CascadeType.DETACH, targetEntity = AchievementRankEntity.class)
-    @JoinColumn(name = "achievement_rank_id", referencedColumnName = "ID")
-    private AchievementRankEntity achievementRankEntity;
-
     @Column(columnDefinition = "TEXT", nullable = false)
     private String rewardScript;
 
     @Column(name = "reward_description")
     private String rewardDescription;
+
+    @Column(name = "internal_reward_description")
+    private String internalRewardDescription;
 
     public Long getId() {
         return id;
@@ -30,14 +29,6 @@ public class AchievementRewardEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public AchievementRankEntity getAchievementRankEntity() {
-        return achievementRankEntity;
-    }
-
-    public void setAchievementRankEntity(AchievementRankEntity achievementRankEntity) {
-        this.achievementRankEntity = achievementRankEntity;
     }
 
     public String getRewardScript() {
@@ -54,5 +45,13 @@ public class AchievementRewardEntity {
 
     public void setRewardDescription(String rewardDescription) {
         this.rewardDescription = rewardDescription;
+    }
+
+    public String getInternalRewardDescription() {
+        return internalRewardDescription;
+    }
+
+    public void setInternalRewardDescription(String internalRewardDescription) {
+        this.internalRewardDescription = internalRewardDescription;
     }
 }

@@ -64,6 +64,48 @@ public class InventoryBO {
         return null;
     }
 
+    public InventoryItemEntity addFromCatalogOrUpdateUsage(ProductEntity productEntity, PersonaEntity personaEntity) {
+        InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
+
+        if (inventoryEntity != null) {
+            VirtualItemEntity virtualItemEntity = virtualItemDAO.findByHash(productEntity.getHash());
+
+            if (virtualItemEntity != null) {
+                InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaEntity.getPersonaId(), productEntity.getHash());
+
+                if (inventoryItemEntity == null) {
+                    System.out.println("productHash: " + productEntity.getHash());
+                    System.out.println("virtualItemName: " + virtualItemEntity.getItemName());
+
+                    inventoryItemEntity = new InventoryItemEntity();
+                    inventoryItemEntity.setInventoryEntity(inventoryEntity);
+                    inventoryItemEntity.setEntitlementTag(virtualItemEntity.getItemName());
+
+                    if (productEntity.getDurationMinute() > 0) {
+                        inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+                    }
+
+                    inventoryItemEntity.setHash(virtualItemEntity.getHash());
+                    inventoryItemEntity.setProductId("DO NOT USE ME");
+                    inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
+                    inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
+                    inventoryItemEntity.setStatus("ACTIVE");
+                    inventoryItemEntity.setVirtualItemType(virtualItemEntity.getType());
+
+                    updateInventoryCapacities(inventoryEntity, inventoryItemEntity, true);
+                    inventoryItemDAO.insert(inventoryItemEntity);
+                } else {
+                    inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() + productEntity.getUseCount());
+                    inventoryItemDAO.update(inventoryItemEntity);
+                }
+
+                return inventoryItemEntity;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Add the product with the given ID to the inventory of the persona with the given ID.
      *

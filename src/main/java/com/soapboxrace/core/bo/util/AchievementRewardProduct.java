@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class AchievementRewardProduct extends AchievementRewardBase {
-    private final ProductEntity productEntity;
+    protected final ProductEntity productEntity;
 
     public AchievementRewardProduct(ProductEntity productEntity) {
         this.productEntity = productEntity;

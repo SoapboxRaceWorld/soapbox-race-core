@@ -23,6 +23,9 @@ public class PersonaBO {
 
 	@EJB
 	private OwnedCarDAO ownedCarDAO;
+
+	@EJB
+	private ParameterBO parameterBO;
 	
 	public void changeDefaultCar(Long personaId, Long defaultCarId) {
 		PersonaEntity personaEntity = personaDAO.findById(personaId);

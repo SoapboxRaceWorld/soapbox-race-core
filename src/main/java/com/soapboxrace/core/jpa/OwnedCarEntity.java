@@ -1,5 +1,6 @@
 package com.soapboxrace.core.jpa;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -27,7 +28,7 @@ public class OwnedCarEntity {
 
 	private int durability;
 	private float heat;
-	private Date expirationDate;
+	private LocalDateTime expirationDate;
 	private String ownershipType = "CustomizedCar";
 
 	@OneToOne(mappedBy = "ownedCar", targetEntity = CustomCarEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -65,11 +66,11 @@ public class OwnedCarEntity {
 		this.heat = heat;
 	}
 
-	public Date getExpirationDate() {
+	public LocalDateTime getExpirationDate() {
 		return expirationDate;
 	}
 
-	public void setExpirationDate(Date expirationDate) {
+	public void setExpirationDate(LocalDateTime expirationDate) {
 		this.expirationDate = expirationDate;
 	}
 

@@ -71,9 +71,9 @@ public class ScriptTestBO {
             }
         };
 
-        AchievementRewards achievementRewards = achievementRewardBO.redeemRewards(100L,3L);
+//        AchievementRewards achievementRewards = achievementRewardBO.redeemRewards(100L,3L);
 
-        achievementBO.updateAchievements(100L, "EVENTE", properties);
+//        achievementBO.updateAchievements(100L, "EVENTE", properties);
 //        achievementBO.updateAchievements(100L, "COMMERCE", properties);
 //        NashornScriptEngine nashornScriptEngine = (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn");
 //        try {

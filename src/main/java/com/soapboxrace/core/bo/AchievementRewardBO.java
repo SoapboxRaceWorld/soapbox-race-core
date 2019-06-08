@@ -103,6 +103,16 @@ public class AchievementRewardBO {
             return new AchievementRewardCash(cashAmount);
         }
 
+        public AchievementRewardQuantityProduct rewardQuantityProduct(String entitlementTag, Integer quantity) {
+            ProductEntity byEntitlementTag = productDAO.findByEntitlementTag(entitlementTag);
+
+            if (byEntitlementTag == null) {
+                throw new IllegalArgumentException("Invalid entitlementTag: " + entitlementTag);
+            }
+
+            return new AchievementRewardQuantityProduct(byEntitlementTag, quantity);
+        }
+
         public AchievementRewardMulti multipleRewards(AchievementRewardBase[] rewards) {
             return new AchievementRewardMulti(Arrays.asList(rewards));
         }
@@ -131,6 +141,12 @@ public class AchievementRewardBO {
     @EJB
     private ProductDAO productDAO;
 
+    @EJB
+    private InventoryBO inventoryBO;
+
+    @EJB
+    private BasketBO basketBO;
+
     private final ThreadLocal<NashornScriptEngine> scriptEngine = ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
 
     private Random random = new SecureRandom();
@@ -152,14 +168,14 @@ public class AchievementRewardBO {
         achievementRewards.setPurchasedCars(new ArrayOfOwnedCarTrans());
         achievementRewards.setWallets(new ArrayOfWalletTrans());
 
-        AchievementRewardEntity achievementRewardEntity = achievementRewardDAO.findByAchievementRankId(achievementRankId);
+        AchievementRewardEntity achievementRewardEntity = achievementRewardDAO.findByDescription(achievementRankEntity.getRewardDescription());
 
         if (achievementRewardEntity.getRewardScript() != null) {
             Bindings bindings = scriptEngine.get().createBindings();
             bindings.put("generator", new RewardGenerator());
             try {
                 AchievementRewardBase achievementRewardBase = (AchievementRewardBase) scriptEngine.get().eval(achievementRewardEntity.getRewardScript(), bindings);
-                handleReward(achievementRewardBase, achievementRewards, personaEntity);
+                handleReward(achievementRewardBase, achievementRewards, achievementRankEntity, personaEntity);
             } catch (ScriptException e) {
                 e.printStackTrace();
             }
@@ -173,7 +189,7 @@ public class AchievementRewardBO {
         return achievementRewards;
     }
 
-    private void handleReward(AchievementRewardBase achievementRewardBase, AchievementRewards achievementRewards, PersonaEntity personaEntity) {
+    private void handleReward(AchievementRewardBase achievementRewardBase, AchievementRewards achievementRewards, AchievementRankEntity achievementRankEntity, PersonaEntity personaEntity) {
         if (achievementRewardBase instanceof AchievementRewardCash) {
             AchievementRewardCash achievementRewardCash = (AchievementRewardCash) achievementRewardBase;
 
@@ -187,16 +203,30 @@ public class AchievementRewardBO {
             personaDAO.update(personaEntity);
         } else if (achievementRewardBase instanceof AchievementRewardMulti) {
             AchievementRewardMulti achievementRewardMulti = (AchievementRewardMulti) achievementRewardBase;
-            achievementRewardMulti.getAchievementRewardList().forEach(r -> handleReward(r, achievementRewards, personaEntity));
+            achievementRewardMulti.getAchievementRewardList().forEach(r -> handleReward(r, achievementRewards, achievementRankEntity, personaEntity));
         } else {
             List<ProductEntity> productEntities = new ArrayList<>(achievementRewardBase.getProducts());
             for (ProductEntity productEntity : productEntities) {
-                achievementRewards.getCommerceItems().getCommerceItemTrans().add(productToCommerceItem(productEntity));
+                achievementRewards.getCommerceItems().getCommerceItemTrans().add(productToCommerceItem(productEntity, achievementRankEntity));
+
+                switch (productEntity.getProductType().toLowerCase()) {
+                    case "presetcar":
+                        basketBO.addCar(productEntity.getProductId(), personaEntity);
+                        break;
+                    case "performancepart":
+                    case "skillmodpart":
+                    case "visualpart":
+                        inventoryBO.addFromCatalog(productEntity, personaEntity);
+                        break;
+                    case "powerup":
+                        inventoryBO.addFromCatalogOrUpdateUsage(productEntity, personaEntity);
+                        break;
+                }
             }
         }
     }
 
-    private CommerceItemTrans productToCommerceItem(ProductEntity productEntity) {
+    private CommerceItemTrans productToCommerceItem(ProductEntity productEntity, AchievementRankEntity achievementRankEntity) {
         CommerceItemTrans commerceItemTrans = new CommerceItemTrans();
         commerceItemTrans.setHash(productEntity.getHash());
         commerceItemTrans.setTitle(productEntity.getProductTitle());

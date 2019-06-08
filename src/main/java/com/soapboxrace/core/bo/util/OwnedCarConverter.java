@@ -1,6 +1,8 @@
 package com.soapboxrace.core.bo.util;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.soapboxrace.core.jpa.CustomCarEntity;
@@ -31,6 +33,8 @@ public class OwnedCarConverter {
 		ownedCarTrans.setDurability(ownedCarEntity.getDurability());
 		ownedCarTrans.setHeat(ownedCarEntity.getHeat());
 		ownedCarTrans.setOwnershipType(ownedCarEntity.getOwnershipType());
+		if (ownedCarEntity.getExpirationDate() != null)
+			ownedCarTrans.setExpirationDate(TimeConverter.generateGregorianCalendar(GregorianCalendar.from(ownedCarEntity.getExpirationDate().atZone(ZoneId.systemDefault()))));
 
 		CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
 		CustomCarTrans customCarTrans = new CustomCarTrans();

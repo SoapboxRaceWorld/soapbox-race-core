@@ -15,9 +15,9 @@ public class AchievementRewardDAO extends BaseDAO<AchievementRewardEntity> {
         this.entityManager = entityManager;
     }
 
-    public AchievementRewardEntity findByAchievementRankId(Long achievementRankId) {
-        return this.entityManager.createNamedQuery("AchievementRewardEntity.findByAchievementRankId", AchievementRewardEntity.class)
-                .setParameter("achievementRankId", achievementRankId)
+    public AchievementRewardEntity findByDescription(String description) {
+        return this.entityManager.createNamedQuery("AchievementRewardEntity.findByDescription", AchievementRewardEntity.class)
+                .setParameter("description", description)
                 .getSingleResult();
     }
 }

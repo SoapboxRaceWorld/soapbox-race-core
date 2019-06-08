@@ -2,6 +2,8 @@ package com.soapboxrace.core.bo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.util.AchievementCommerceContext;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
+import com.soapboxrace.core.bo.util.TimeConverter;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
@@ -65,12 +68,23 @@ public class BasketBO
 
     private OwnedCarTrans getCar(String productId)
     {
+        ProductEntity productEntity = findProduct(productId);
+        if (productEntity == null) {
+            throw new IllegalArgumentException(String.format("No product definition for %s", productId));
+        }
+
         BasketDefinitionEntity basketDefinitonEntity = basketDefinitionsDAO.findById(productId);
         if (basketDefinitonEntity == null) {
             throw new IllegalArgumentException(String.format("No basket definition for %s", productId));
         }
         String ownedCarTrans = basketDefinitonEntity.getOwnedCarTrans();
-        return UnmarshalXML.unMarshal(ownedCarTrans, OwnedCarTrans.class);
+        OwnedCarTrans ownedCarTrans1 = UnmarshalXML.unMarshal(ownedCarTrans, OwnedCarTrans.class);
+
+        if (productEntity.getDurationMinute() != 0) {
+            ownedCarTrans1.setOwnershipType("RentalCar");
+        }
+
+        return ownedCarTrans1;
     }
 
     public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity)
@@ -208,8 +222,6 @@ public class BasketBO
     }
     
     public CommerceResultStatus reviveTreasureHunt(String productId, PersonaEntity personaEntity) {
-        ProductEntity productEntity = productDao.findByProductId(productId);
-
         if (!performPersonaTransaction(personaEntity, productId)) {
             return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
         }
@@ -220,9 +232,6 @@ public class BasketBO
         treasureHuntEntity.setThDate(LocalDate.now());
 
         treasureHuntDAO.update(treasureHuntEntity);
-        
-        personaEntity.setBoost(personaEntity.getBoost() - productEntity.getPrice());
-        personaDao.update(personaEntity);
         
         return CommerceResultStatus.SUCCESS;
     }
@@ -257,9 +266,6 @@ public class BasketBO
 
         inventoryItemDao.insert(inventoryItemEntity);
 
-        personaEntity.setBoost(personaEntity.getBoost() - productEntity.getPrice());
-        personaDao.update(personaEntity);
-
         return CommerceResultStatus.SUCCESS;
     }
     
@@ -269,17 +275,24 @@ public class BasketBO
         OwnedCarTrans ownedCarTrans = getCar(productId);
         ownedCarTrans.setId(0L);
         ownedCarTrans.getCustomCar().setId(0);
+
         CarSlotEntity carSlotEntity = new CarSlotEntity();
         carSlotEntity.setPersona(personaEntity);
 
         OwnedCarEntity ownedCarEntity = new OwnedCarEntity();
         ownedCarEntity.setCarSlot(carSlotEntity);
+
         CustomCarEntity customCarEntity = new CustomCarEntity();
         customCarEntity.setOwnedCar(ownedCarEntity);
         ownedCarEntity.setCustomCar(customCarEntity);
         carSlotEntity.setOwnedCar(ownedCarEntity);
         OwnedCarConverter.trans2Entity(ownedCarTrans, ownedCarEntity);
         OwnedCarConverter.details2NewEntity(ownedCarTrans, ownedCarEntity);
+
+        if (productEntity.getDurationMinute() != 0) {
+            ownedCarEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+            ownedCarEntity.setOwnershipType("RentalCar");
+        }
 
         carSlotDAO.insert(carSlotEntity);
 
