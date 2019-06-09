@@ -12,10 +12,7 @@ public class AchievementRewardQuantityProduct extends AchievementRewardProduct {
         this.useCount = useCount;
     }
 
-    @Override
-    public List<ProductEntity> getProducts() {
-        productEntity.setUseCount(useCount);
-        productEntity.setProductTitle(productEntity.getProductTitle() + " x" + useCount);
-        return super.getProducts();
+    public Integer getUseCount() {
+        return useCount;
     }
 }

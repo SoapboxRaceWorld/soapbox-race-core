@@ -61,6 +61,8 @@ public class VinylProductEntity {
 	private int minLevel;
 	private boolean premium;
 
+	private String entitlementTag;
+
 	public Long getId() {
 		return id;
 	}
@@ -261,4 +263,11 @@ public class VinylProductEntity {
 		this.premium = premium;
 	}
 
+	public String getEntitlementTag() {
+		return entitlementTag;
+	}
+
+	public void setEntitlementTag(String entitlementTag) {
+		this.entitlementTag = entitlementTag;
+	}
 }

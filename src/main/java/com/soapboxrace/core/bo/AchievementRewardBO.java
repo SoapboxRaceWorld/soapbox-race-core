@@ -206,8 +206,14 @@ public class AchievementRewardBO {
             achievementRewardMulti.getAchievementRewardList().forEach(r -> handleReward(r, achievementRewards, achievementRankEntity, personaEntity));
         } else {
             List<ProductEntity> productEntities = new ArrayList<>(achievementRewardBase.getProducts());
+            Integer useCount = -1;
+
+            if (achievementRewardBase instanceof AchievementRewardQuantityProduct) {
+                useCount = ((AchievementRewardQuantityProduct) achievementRewardBase).getUseCount();
+            }
+
             for (ProductEntity productEntity : productEntities) {
-                achievementRewards.getCommerceItems().getCommerceItemTrans().add(productToCommerceItem(productEntity, achievementRankEntity));
+                achievementRewards.getCommerceItems().getCommerceItemTrans().add(productToCommerceItem(productEntity, achievementRankEntity, useCount));
 
                 switch (productEntity.getProductType().toLowerCase()) {
                     case "presetcar":
@@ -216,20 +222,25 @@ public class AchievementRewardBO {
                     case "performancepart":
                     case "skillmodpart":
                     case "visualpart":
-                        inventoryBO.addFromCatalog(productEntity, personaEntity);
-                        break;
+//                        inventoryBO.addFromCatalog(productEntity, personaEntity, useCount);
+//                        break;
                     case "powerup":
-                        inventoryBO.addFromCatalogOrUpdateUsage(productEntity, personaEntity);
+                        inventoryBO.addFromCatalogOrUpdateUsage(productEntity, personaEntity, useCount);
                         break;
                 }
             }
         }
     }
 
-    private CommerceItemTrans productToCommerceItem(ProductEntity productEntity, AchievementRankEntity achievementRankEntity) {
+    private CommerceItemTrans productToCommerceItem(ProductEntity productEntity, AchievementRankEntity achievementRankEntity, Integer useCount) {
         CommerceItemTrans commerceItemTrans = new CommerceItemTrans();
         commerceItemTrans.setHash(productEntity.getHash());
         commerceItemTrans.setTitle(productEntity.getProductTitle());
+
+        if (useCount != -1) {
+            commerceItemTrans.setTitle(commerceItemTrans.getTitle() + " x" + useCount);
+        }
+
         return commerceItemTrans;
     }
 }

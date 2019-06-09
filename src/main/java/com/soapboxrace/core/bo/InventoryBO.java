@@ -30,6 +30,10 @@ public class InventoryBO {
     private VirtualItemDAO virtualItemDAO;
 
     public InventoryItemEntity addFromCatalog(ProductEntity productEntity, PersonaEntity personaEntity) {
+        return addFromCatalog(productEntity, personaEntity, -1);
+    }
+
+    public InventoryItemEntity addFromCatalog(ProductEntity productEntity, PersonaEntity personaEntity, Integer useCountOverride) {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
 
         if (inventoryEntity != null) {
@@ -49,7 +53,7 @@ public class InventoryBO {
 
                 inventoryItemEntity.setHash(virtualItemEntity.getHash());
                 inventoryItemEntity.setProductId("DO NOT USE ME");
-                inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
+                inventoryItemEntity.setRemainingUseCount(useCountOverride == -1 ? productEntity.getUseCount() : useCountOverride);
                 inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
                 inventoryItemEntity.setStatus("ACTIVE");
                 inventoryItemEntity.setVirtualItemType(virtualItemEntity.getType());
@@ -65,6 +69,10 @@ public class InventoryBO {
     }
 
     public InventoryItemEntity addFromCatalogOrUpdateUsage(ProductEntity productEntity, PersonaEntity personaEntity) {
+        return addFromCatalogOrUpdateUsage(productEntity, personaEntity, -1);
+    }
+
+    public InventoryItemEntity addFromCatalogOrUpdateUsage(ProductEntity productEntity, PersonaEntity personaEntity, Integer useCountOverride) {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
 
         if (inventoryEntity != null) {
@@ -73,6 +81,7 @@ public class InventoryBO {
             if (virtualItemEntity != null) {
                 InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaEntity.getPersonaId(), productEntity.getHash());
 
+                int useCount = useCountOverride == -1 ? productEntity.getUseCount() : useCountOverride;
                 if (inventoryItemEntity == null) {
                     System.out.println("productHash: " + productEntity.getHash());
                     System.out.println("virtualItemName: " + virtualItemEntity.getItemName());
@@ -87,7 +96,7 @@ public class InventoryBO {
 
                     inventoryItemEntity.setHash(virtualItemEntity.getHash());
                     inventoryItemEntity.setProductId("DO NOT USE ME");
-                    inventoryItemEntity.setRemainingUseCount(productEntity.getUseCount());
+                    inventoryItemEntity.setRemainingUseCount(useCount);
                     inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
                     inventoryItemEntity.setStatus("ACTIVE");
                     inventoryItemEntity.setVirtualItemType(virtualItemEntity.getType());
@@ -95,7 +104,7 @@ public class InventoryBO {
                     updateInventoryCapacities(inventoryEntity, inventoryItemEntity, true);
                     inventoryItemDAO.insert(inventoryItemEntity);
                 } else {
-                    inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() + productEntity.getUseCount());
+                    inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() + useCount);
                     inventoryItemDAO.update(inventoryItemEntity);
                 }
 
@@ -233,6 +242,11 @@ public class InventoryBO {
         if (inventoryItemEntity != null && inventoryItemEntity.getRemainingUseCount() > 0) {
             inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() - 1);
             inventoryItemDAO.update(inventoryItemEntity);
+
+            if (inventoryItemEntity.getRemainingUseCount() == 0 && !inventoryItemEntity.getVirtualItemType().equalsIgnoreCase("powerup")) {
+                inventoryItemDAO.delete(inventoryItemEntity);
+                updateInventoryCapacities(inventoryDAO.findByPersonaId(activePersonaId), inventoryItemEntity, false);
+            }
         }
     }
 

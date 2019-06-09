@@ -37,19 +37,19 @@ public class CustomCarEntity {
 	@JoinColumn(name = "ownedCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_CUSTOMCAR_OWNEDCAR"))
 	private OwnedCarEntity ownedCar;
 
-	@OneToMany(mappedBy = "customCar", targetEntity = PaintEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customCar", targetEntity = PaintEntity.class, fetch = FetchType.LAZY, orphanRemoval = true, cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	private List<PaintEntity> paints;
 
-	@OneToMany(mappedBy = "customCar", targetEntity = PerformancePartEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customCar", targetEntity = PerformancePartEntity.class, fetch = FetchType.LAZY, orphanRemoval = true, cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	private List<PerformancePartEntity> performanceParts;
 
-	@OneToMany(mappedBy = "customCar", targetEntity = SkillModPartEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customCar", targetEntity = SkillModPartEntity.class, fetch = FetchType.LAZY, orphanRemoval = true, cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	private List<SkillModPartEntity> skillModParts;
 
-	@OneToMany(mappedBy = "customCar", targetEntity = VinylEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customCar", targetEntity = VinylEntity.class, fetch = FetchType.LAZY, orphanRemoval = true, cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	private List<VinylEntity> vinyls;
 
-	@OneToMany(mappedBy = "customCar", targetEntity = VisualPartEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customCar", targetEntity = VisualPartEntity.class, fetch = FetchType.LAZY, orphanRemoval = true, cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	private List<VisualPartEntity> visualParts;
 
 	public Long getId() {

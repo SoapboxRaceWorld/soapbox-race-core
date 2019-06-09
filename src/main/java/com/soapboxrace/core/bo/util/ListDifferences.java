@@ -51,9 +51,6 @@ public class ListDifferences<T> {
     }
 
     private static <T> List<T> clone(Collection<T> collection) {
-        ArrayList<T> list = new ArrayList<>();
-        list.addAll(collection);
-
-        return list;
+        return new ArrayList<>(collection);
     }
 }
