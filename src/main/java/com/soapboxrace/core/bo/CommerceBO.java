@@ -123,10 +123,11 @@ public class CommerceBO {
         int removeBoost = 0;
 
         for (Map.Entry<Integer, Object> addedItem : addedItems.entrySet()) {
+            System.out.println(addedItem.getKey());
+
             if (addedItem.getValue() instanceof CustomVinylTrans) {
                 VinylProductEntity vinylProductEntity = vinylProductDAO.findByHash(addedItem.getKey());
                 System.out.println(vinylProductEntity);
-                System.out.println(addedItem.getKey());
 
                 if (vinylProductEntity != null) {
                     if (vinylProductEntity.getCurrency().equals("CASH"))
@@ -134,6 +135,7 @@ public class CommerceBO {
                     else
                         removeBoost += (int) vinylProductEntity.getPrice();
                 } else {
+                    System.out.println("VINYLPRODUCT not found " + addedItem.getKey());
                     commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
                     return commerceSessionResultTrans;
                 }
@@ -142,9 +144,8 @@ public class CommerceBO {
 
                 if (productEntity != null) {
                     System.out.println(productEntity);
-                    System.out.println(addedItem.getKey());
 
-                    if (basketItems.stream().anyMatch(p -> p.getProductId().equals(productEntity.getProductId()))) {
+                    if (basketItems.stream().anyMatch(p -> p.getProductId().equalsIgnoreCase(productEntity.getProductId()))) {
                         if (productEntity.getCurrency().equals("CASH"))
                             removeCash += (int) productEntity.getPrice();
                         else
@@ -155,11 +156,13 @@ public class CommerceBO {
                         if (inventoryItemEntity != null) {
                             inventoryBO.decrementUsage(personaId, addedItem.getKey());
                         } else {
+                            System.out.println("INVENTORY ITEM not found " + addedItem.getKey());
                             commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
                             return commerceSessionResultTrans;
                         }
                     }
                 } else {
+                    System.out.println("PRODUCT not found " + addedItem.getKey());
                     commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
                     return commerceSessionResultTrans;
                 }
@@ -209,6 +212,8 @@ public class CommerceBO {
         OwnedCarConverter.skillModParts2NewEntity(commerceCustomCar, customCar);
         OwnedCarConverter.performanceParts2NewEntity(commerceCustomCar, customCar);
         OwnedCarConverter.visuallParts2NewEntity(commerceCustomCar, customCar);
+
+        calcNewCarClass(customCar);
 
         customCarDAO.update(customCar);
 
