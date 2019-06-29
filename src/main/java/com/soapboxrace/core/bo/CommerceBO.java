@@ -68,6 +68,9 @@ public class CommerceBO {
     @EJB
     private VirtualItemDAO virtualItemDAO;
 
+    @EJB
+    private AchievementBO achievementBO;
+
     public OwnedCarTrans responseCar(CommerceSessionTrans commerceSessionTrans) {
         OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
         ownedCarTrans.setCustomCar(commerceSessionTrans.getUpdatedCar().getCustomCar());
@@ -110,12 +113,6 @@ public class CommerceBO {
         vinylDifferences.getAdded().forEach(p -> addedItems.put(p.getHash(), p));
         vinylDifferences.getRemoved().forEach(p -> removedItems.put(p.getHash(), p));
 
-        System.out.println(paintDifferences);
-        System.out.println(performancePartDifferences);
-        System.out.println(skillModPartDifferences);
-        System.out.println(visualPartDifferences);
-        System.out.println(vinylDifferences);
-
         CommerceSessionResultTrans commerceSessionResultTrans = new CommerceSessionResultTrans();
         AtomicInteger addCash = new AtomicInteger();
         int removeCash = 0;
@@ -127,24 +124,17 @@ public class CommerceBO {
 
             if (addedItem.getValue() instanceof CustomVinylTrans) {
                 VinylProductEntity vinylProductEntity = vinylProductDAO.findByHash(addedItem.getKey());
-                System.out.println(vinylProductEntity);
 
                 if (vinylProductEntity != null) {
                     if (vinylProductEntity.getCurrency().equals("CASH"))
                         removeCash += (int) vinylProductEntity.getPrice();
                     else
                         removeBoost += (int) vinylProductEntity.getPrice();
-                } else {
-                    System.out.println("VINYLPRODUCT not found " + addedItem.getKey());
-                    commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
-                    return commerceSessionResultTrans;
                 }
             } else {
                 ProductEntity productEntity = productDAO.findByHash(addedItem.getKey());
 
                 if (productEntity != null) {
-                    System.out.println(productEntity);
-
                     if (basketItems.stream().anyMatch(p -> p.getProductId().equalsIgnoreCase(productEntity.getProductId()))) {
                         if (productEntity.getCurrency().equals("CASH"))
                             removeCash += (int) productEntity.getPrice();
@@ -155,16 +145,8 @@ public class CommerceBO {
 
                         if (inventoryItemEntity != null) {
                             inventoryBO.decrementUsage(personaId, addedItem.getKey());
-                        } else {
-                            System.out.println("INVENTORY ITEM not found " + addedItem.getKey());
-                            commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
-                            return commerceSessionResultTrans;
                         }
                     }
-                } else {
-                    System.out.println("PRODUCT not found " + addedItem.getKey());
-                    commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
-                    return commerceSessionResultTrans;
                 }
             }
         }
@@ -196,9 +178,6 @@ public class CommerceBO {
 
         int finalCash = ((int) personaEntity.getCash()) - removeCash + addCash.get();
         int finalBoost = ((int) personaEntity.getBoost()) - removeBoost + addBoost;
-
-        System.out.println(removeCash + " " + addCash + " " + finalCash);
-        System.out.println(removeBoost + " " + addBoost + " " + finalBoost);
 
         if (finalCash < 0 || finalBoost < 0) {
             commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
@@ -238,6 +217,11 @@ public class CommerceBO {
         arrayOfWalletTrans.getWalletTrans().add(boostWallet);
 
         commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
+
+//        achievementBO.updateAchievements(personaEntity.getPersonaId(), "COMMERCE", new HashMap<String, Object>(){{
+//            put("persona", personaEntity);
+//
+//        }});
 
         return commerceSessionResultTrans;
     }
