@@ -29,39 +29,28 @@ public class ScriptTestBO {
 
     @PostConstruct
     public void test() {
-        AchievementsPacket achievementsPacket = achievementBO.loadAll(100L);
-        HashMap<String, Object> properties = new HashMap<String, Object>() {
-            {
-                put("event", eventDAO.findById(83));
-                put("persona", personaDAO.findById(100L));
-                put("eventResult", new TestEventResultStructure() {{
-                    setRank(1);
-                    setSumOfJumpsDurationInMilliseconds(220);
-                }});
-                put("eventContext", new AchievementEventContext(EventMode.CIRCUIT, new ArbitrationPacket() {{
-                    setRank(1);
-                }}, new EventSessionEntity() {{
-                    setLobby(new LobbyEntity());
-                    setEvent(new EventEntity());
-                }}));
-                put("commerceCtx", new AchievementCommerceContext(new CarClassesEntity(), AchievementCommerceContext.CommerceType.CAR_PURCHASE));
-                put("progression", new AchievementProgressionContext(1000, 500, 42, true, true));
-            }
-        };
-
-//        AchievementRewards achievementRewards = itemRewardBO.redeemRewards(100L,3L);
-
-        achievementBO.updateAchievements(100L, "EVENT", properties);
-        achievementBO.updateAchievements(100L, "COMMERCE", properties);
-//        NashornScriptEngine nashornScriptEngine = (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn");
-//        try {
-//            Object val = nashornScriptEngine.eval("1 + 1");
+//        AchievementsPacket achievementsPacket = achievementBO.loadAll(100L);
+//        HashMap<String, Object> properties = new HashMap<String, Object>() {
+//            {
+//                put("event", eventDAO.findById(83));
+//                put("persona", personaDAO.findById(100L));
+//                put("eventResult", new TestEventResultStructure() {{
+//                    setRank(1);
+//                    setSumOfJumpsDurationInMilliseconds(220);
+//                }});
+//                put("eventContext", new AchievementEventContext(EventMode.CIRCUIT, new ArbitrationPacket() {{
+//                    setRank(1);
+//                }}, new EventSessionEntity() {{
+//                    setLobby(new LobbyEntity());
+//                    setEvent(new EventEntity());
+//                }}));
+//                put("commerceCtx", new AchievementCommerceContext(new CarClassesEntity(), AchievementCommerceContext.CommerceType.CAR_PURCHASE));
+//                put("progression", new AchievementProgressionContext(1000, 500, 42, true, true));
+//            }
+//        };
 //
-//            nashornScriptEngine.getFactory();
-//        }
-//        catch (ScriptException e) {
-//            e.printStackTrace();
-//        }
+//        achievementBO.updateAchievements(100L, "EVENT", properties);
+//        achievementBO.updateAchievements(100L, "COMMERCE", properties);
     }
 
     public class TestEventResultStructure {
