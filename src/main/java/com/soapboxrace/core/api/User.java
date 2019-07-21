@@ -6,6 +6,8 @@ import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.dao.FriendDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.exception.EngineException;
+import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.FriendEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
@@ -76,27 +78,15 @@ public class User {
             // Ideally this will never happen. Then again, plenty of weird stuff has happened.
             tokenBO.deleteByUserId(userId);
 
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(
-                    "<EngineExceptionTrans xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\">" +
-                            "<ErrorCode>-1613</ErrorCode>" +
-                            "<InnerException>" +
-                            "<ErrorCode>-1613</ErrorCode>" +
-                            "</InnerException>" +
-                            "</EngineExceptionTrans>").build();
+            throw new EngineException(EngineExceptionCode.BannedEntitlements);
         }
 
         int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
         int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
 
         if (maxOnlinePlayers != -1) {
-            if (numberOfUsersOnlineNow >= maxOnlinePlayers && !userEntity.isPremium()) {
-                return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(
-                        "<EngineExceptionTrans xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\">" +
-                                "<ErrorCode>-521</ErrorCode>" +
-                                "<InnerException>" +
-                                "<ErrorCode>-521</ErrorCode>" +
-                                "</InnerException>" +
-                                "</EngineExceptionTrans>").build();
+            if (numberOfUsersOnlineNow >= maxOnlinePlayers) {
+                throw new EngineException(EngineExceptionCode.MaximumUsersLoggedInHardCapReached);
             }
         }
 

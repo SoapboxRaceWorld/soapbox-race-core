@@ -124,8 +124,6 @@ public class CommerceBO {
         int removeBoost = 0;
 
         for (Map.Entry<Integer, Object> addedItem : addedItems.entrySet()) {
-            System.out.println(addedItem.getKey());
-
             if (addedItem.getValue() instanceof CustomVinylTrans) {
                 VinylProductEntity vinylProductEntity = vinylProductDAO.findByHash(addedItem.getKey());
 

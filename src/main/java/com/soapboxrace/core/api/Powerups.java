@@ -36,7 +36,6 @@ public class Powerups {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 
         if (!inventoryBO.hasItem(activePersonaId, powerupHash)) {
-            System.out.println(String.format("Persona %d doesn't have powerup %d", activePersonaId, powerupHash));
             return "";
         }
 

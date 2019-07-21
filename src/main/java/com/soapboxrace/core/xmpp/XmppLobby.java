@@ -25,7 +25,7 @@ public class XmppLobby {
             Thread.sleep(1000);
             openFireSoapBoxCli.send(responseType, personaId);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -36,7 +36,7 @@ public class XmppLobby {
             Thread.sleep(1000);
             openFireSoapBoxCli.send(responseType, personaId);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

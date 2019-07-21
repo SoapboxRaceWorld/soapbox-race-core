@@ -38,17 +38,13 @@ public class RemoveFriend {
         PersonaEntity friend = personaDAO.findById(friendPersonaId);
 
         if (active == null || friend == null) {
-            System.err.println("Hit a bad spot in removefriend!");
             return "";
         }
 
         FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(active.getUser().getId(), friend.getPersonaId());
         FriendEntity friendEntity2 = friendDAO.findBySenderAndRecipient(friend.getUser().getId(), active.getPersonaId());
-//        FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(friend.getPersonaId(), active.getUser().getId());
-//        FriendEntity friendEntity2 = friendDAO.findBySenderAndRecipient(active.getPersonaId(), friend.getUser().getId());
 
         if (friendEntity == null || friendEntity2 == null) {
-            System.err.println("Hit the other bad spot in removefriend! Something's up...");
             return "";
         }
 
@@ -73,10 +69,6 @@ public class RemoveFriend {
             activeToFriend.setPersonaBase(xmppPersonaBase);
 
             openFireSoapBoxCli.send(activeToFriend, friend.getPersonaId());
-
-//            xmppPersonaBase.setPresence(0);
-//            activeToFriend.setPersonaBase(xmppPersonaBase);
-//            openFireSoapBoxCli.send(activeToFriend, friend.getPersonaId());
         }
 
         return "";

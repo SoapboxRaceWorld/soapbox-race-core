@@ -173,8 +173,6 @@ public class BasketBO {
                     put("carSlot", carSlotEntity);
                     put("commerceCtx", commerceContext);
                 }});
-            } else {
-                System.out.println("WARN: No car class entry found for " + carSlotEntity.getOwnedCar().getCustomCar().getName());
             }
 
             personaDao.update(personaEntity);

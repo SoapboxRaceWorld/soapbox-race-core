@@ -50,9 +50,6 @@ public class InventoryBO {
             VirtualItemEntity virtualItemEntity = virtualItemDAO.findByHash(productEntity.getHash());
 
             if (virtualItemEntity != null) {
-                System.out.println("productHash: " + productEntity.getHash());
-                System.out.println("virtualItemName: " + virtualItemEntity.getItemName());
-
                 InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
                 inventoryItemEntity.setInventoryEntity(inventoryEntity);
                 inventoryItemEntity.setEntitlementTag(virtualItemEntity.getItemName());
@@ -93,9 +90,6 @@ public class InventoryBO {
 
                 int useCount = useCountOverride == -1 ? productEntity.getUseCount() : useCountOverride;
                 if (inventoryItemEntity == null) {
-                    System.out.println("productHash: " + productEntity.getHash());
-                    System.out.println("virtualItemName: " + virtualItemEntity.getItemName());
-
                     inventoryItemEntity = new InventoryItemEntity();
                     inventoryItemEntity.setInventoryEntity(inventoryEntity);
                     inventoryItemEntity.setEntitlementTag(virtualItemEntity.getItemName());

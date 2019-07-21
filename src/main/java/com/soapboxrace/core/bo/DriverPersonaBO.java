@@ -204,11 +204,8 @@ public class DriverPersonaBO {
     public void updateCash(PersonaEntity personaEntity, Double newCash) {
         if (personaEntity != null) {
             double fixedCash = Math.max(0, Math.min(parameterBO.getMaxCash(personaEntity.getUser()), newCash));
-
-            System.out.println(newCash);
-            System.out.println(fixedCash);
-
             personaEntity.setCash(fixedCash);
+            personaDao.update(personaEntity);
         }
     }
 

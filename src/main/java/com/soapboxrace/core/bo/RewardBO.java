@@ -151,7 +151,6 @@ public class RewardBO {
             // LB_CASH actually accepts a formatting argument!
             luckyDrawItem.setDescription("LB_CASH," + rewardCash.getCash());
         } else {
-            System.out.println("unknown rewardbase: " + rewardBase);
             return null;
         }
 

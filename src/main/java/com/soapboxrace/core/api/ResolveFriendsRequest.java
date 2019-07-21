@@ -46,21 +46,16 @@ public class ResolveFriendsRequest {
         PersonaEntity sender = personaDAO.findById(friendPersonaId);
 
         if (sender == null || recipient == null) {
-            System.err.println("Hit a bad spot!");
             return "";
         }
-
-        System.out.println("Recipient: " + recipient.getName() + " - Sender: " + sender.getName() + " - Resolution: " + resolution);
 
         FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(recipient.getUser().getId(), sender.getPersonaId());
 
         if (friendEntity == null) {
-            System.err.println("Invalid friend request!");
             return "";
         }
 
         if (friendEntity.getStatus() == 1) {
-            System.err.println("Already resolved friend request!");
             return "";
         }
 

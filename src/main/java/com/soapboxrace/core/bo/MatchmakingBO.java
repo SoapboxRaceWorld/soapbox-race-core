@@ -18,10 +18,8 @@ public class MatchmakingBO {
     }
 
     public Long get(Integer carClass) {
-        System.out.println("get: " + carClass);
         for (Map.Entry<Long, Integer> entry : queue.entrySet()) {
             if (entry.getValue().equals(carClass)) {
-                System.out.println("found one!");
                 return entry.getKey();
             }
         }

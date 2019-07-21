@@ -52,8 +52,6 @@ public class Personas {
                 .lines().collect(Collectors.joining("\n"));
         CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(xml, CommerceSessionTrans.class);
 
-        System.out.println(xml);
-
         return commerceBO.doCommerce(commerceSessionTrans, personaId);
     }
 
