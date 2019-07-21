@@ -222,6 +222,8 @@ public class AchievementBO {
             return;
         }
 
+        PersonaEntity personaEntity = personaDAO.findById(personaId);
+
 //        bindings.put("personaAchievement", personaAchievementEntity);
 
         // Determine the value to add to the achievement progress.
@@ -299,6 +301,8 @@ public class AchievementBO {
                         achievementAwarded.setPoints(current.getPoints());
 
                         achievementsAwarded.getAchievements().add(achievementAwarded);
+
+                        personaEntity.setScore(personaEntity.getScore()+current.getPoints());
                     } else if (previous != null && previousRank.getState().equals("InProgress")) {
                         currentRank.setState("Locked");
                         personaAchievementRankDAO.update(currentRank);
@@ -321,6 +325,8 @@ public class AchievementBO {
         } catch (ScriptException ex) {
             ex.printStackTrace();
         }
+
+        personaDAO.update(personaEntity);
     }
 
     private PersonaAchievementRankEntity createPersonaAchievementRank(PersonaAchievementEntity personaAchievementEntity, AchievementRankEntity achievementRankEntity) {
