@@ -1,63 +1,54 @@
 package com.soapboxrace.core.jpa;
 
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "VISUALPART")
-@NamedQueries({ @NamedQuery(name = "VisualPartEntity.deleteByCustomCar", //
-		query = "DELETE FROM VisualPartEntity obj WHERE obj.customCar = :customCar") //
+@NamedQueries({@NamedQuery(name = "VisualPartEntity.deleteByCustomCar", //
+        query = "DELETE FROM VisualPartEntity obj WHERE obj.customCar = :customCar") //
 })
 public class VisualPartEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private int partHash;
-	private int slotHash;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private int partHash;
+    private int slotHash;
 
-	@ManyToOne
-	@JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_VISUALPART_CUSTOMCAR"))
-	private CustomCarEntity customCar;
+    @ManyToOne
+    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_VISUALPART_CUSTOMCAR"))
+    private CustomCarEntity customCar;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public int getPartHash() {
-		return partHash;
-	}
+    public int getPartHash() {
+        return partHash;
+    }
 
-	public void setPartHash(int partHash) {
-		this.partHash = partHash;
-	}
+    public void setPartHash(int partHash) {
+        this.partHash = partHash;
+    }
 
-	public int getSlotHash() {
-		return slotHash;
-	}
+    public int getSlotHash() {
+        return slotHash;
+    }
 
-	public void setSlotHash(int slotHash) {
-		this.slotHash = slotHash;
-	}
+    public void setSlotHash(int slotHash) {
+        this.slotHash = slotHash;
+    }
 
-	public CustomCarEntity getCustomCar() {
-		return customCar;
-	}
+    public CustomCarEntity getCustomCar() {
+        return customCar;
+    }
 
-	public void setCustomCar(CustomCarEntity customCar) {
-		this.customCar = customCar;
-	}
+    public void setCustomCar(CustomCarEntity customCar) {
+        this.customCar = customCar;
+    }
 
 }

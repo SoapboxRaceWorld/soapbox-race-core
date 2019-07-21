@@ -1,86 +1,83 @@
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "PERSONA_ACHIEVEMENT")
 @NamedQueries({
-        @NamedQuery(name = "PersonaAchievementEntity.findAllForPersona", 
-                query = "SELECT obj FROM PersonaAchievementEntity obj WHERE obj.persona.id = :id"),
-        @NamedQuery(name = "PersonaAchievementEntity.findAllForAchievement", 
-                query = "SELECT obj FROM PersonaAchievementEntity obj WHERE obj.achievement.id = :id"),
-        @NamedQuery(name = "PersonaAchievementEntity.getForPersonaAchievement",
-                query = "SELECT obj FROM PersonaAchievementEntity obj WHERE obj.persona.id = :personaId AND obj.achievement.id = :achId"), 
-        @NamedQuery(name = "PersonaAchievementEntity.deleteByPersona", query = "DELETE FROM PersonaAchievementEntity obj WHERE obj.persona.id = :personaId")
+        @NamedQuery(name = "PersonaAchievementEntity.findAllByPersonaId", query = "SELECT p FROM PersonaAchievementEntity p WHERE p.personaEntity.personaId = :personaId"),
+        @NamedQuery(name = "PersonaAchievementEntity.findByPersonaIdAndAchievementId", query = "SELECT p FROM PersonaAchievementEntity p WHERE p.personaEntity.personaId = :personaId AND p.achievementEntity.id = :achievementId"),
 })
-public class PersonaAchievementEntity
-{
+public class PersonaAchievementEntity {
+
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @JoinColumn(name = "personaId", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private PersonaEntity persona;
+    @ManyToOne(targetEntity = PersonaEntity.class, cascade = CascadeType.DETACH, optional = false)
+    @JoinColumn(name = "persona_id", referencedColumnName = "ID", nullable = false)
+    private PersonaEntity personaEntity;
 
-    @JoinColumn(name = "achievementId", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private AchievementDefinitionEntity achievement;
+    @ManyToOne(targetEntity = AchievementEntity.class, cascade = CascadeType.DETACH, optional = false)
+    @JoinColumn(name = "achievement_id", referencedColumnName = "ID", nullable = false)
+    private AchievementEntity achievementEntity;
 
-    @Column(name = "currentValue")
-    private Long currentValue;
-
-    @Column(name = "canProgress")
+    @Column(name = "can_progress")
     private boolean canProgress;
 
-    public Long getId()
-    {
+    @Column(name = "current_value")
+    private Long currentValue;
+
+    @OneToMany(mappedBy = "personaAchievementEntity", targetEntity = PersonaAchievementRankEntity.class, cascade = CascadeType.DETACH, orphanRemoval = true)
+    private List<PersonaAchievementRankEntity> ranks;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public PersonaEntity getPersona()
-    {
-        return persona;
+    public PersonaEntity getPersonaEntity() {
+        return personaEntity;
     }
 
-    public void setPersona(PersonaEntity persona)
-    {
-        this.persona = persona;
+    public void setPersonaEntity(PersonaEntity personaEntity) {
+        this.personaEntity = personaEntity;
     }
 
-    public AchievementDefinitionEntity getAchievement()
-    {
-        return achievement;
+    public AchievementEntity getAchievementEntity() {
+        return achievementEntity;
     }
 
-    public void setAchievement(AchievementDefinitionEntity achievement)
-    {
-        this.achievement = achievement;
+    public void setAchievementEntity(AchievementEntity achievementEntity) {
+        this.achievementEntity = achievementEntity;
     }
 
-    public Long getCurrentValue()
-    {
-        return currentValue;
-    }
-
-    public void setCurrentValue(Long currentValue)
-    {
-        this.currentValue = currentValue;
-    }
-
-    public boolean isCanProgress()
-    {
+    public boolean isCanProgress() {
         return canProgress;
     }
 
-    public void setCanProgress(boolean canProgress)
-    {
+    public void setCanProgress(boolean canProgress) {
         this.canProgress = canProgress;
+    }
+
+    public Long getCurrentValue() {
+        return currentValue;
+    }
+
+    public void setCurrentValue(Long currentValue) {
+        this.currentValue = currentValue;
+    }
+
+    public List<PersonaAchievementRankEntity> getRanks() {
+        return ranks;
+    }
+
+    public void setRanks(List<PersonaAchievementRankEntity> ranks) {
+        this.ranks = ranks;
     }
 }

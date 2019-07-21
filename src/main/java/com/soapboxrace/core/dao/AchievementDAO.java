@@ -1,7 +1,7 @@
 package com.soapboxrace.core.dao;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
-import com.soapboxrace.core.jpa.AchievementDefinitionEntity;
+import com.soapboxrace.core.jpa.AchievementEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -10,53 +10,32 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class AchievementDAO extends BaseDAO<AchievementDefinitionEntity>
-{
+public class AchievementDAO extends BaseDAO<AchievementEntity> {
+
     @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager)
-    {
+    protected void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public AchievementDefinitionEntity findById(Long id)
-    {
-        return entityManager.find(AchievementDefinitionEntity.class, id);
+    public List<AchievementEntity> findAll() {
+        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findAll", AchievementEntity.class);
+        return query.getResultList();
     }
 
-    public AchievementDefinitionEntity findByBadgeId(Long badgeId)
-    {
-        TypedQuery<AchievementDefinitionEntity> query = entityManager.createQuery(
-                "SELECT obj FROM AchievementDefinitionEntity obj WHERE obj.badgeDefinition.id = :badgeId",
-                AchievementDefinitionEntity.class
-        );
-
-        query.setParameter("badgeId", badgeId);
-
-        List<AchievementDefinitionEntity> results = query.getResultList();
-
-        return results.isEmpty() ? null : results.get(0);
-    }
-
-
-    public AchievementDefinitionEntity findByName(String name)
-    {
-        TypedQuery<AchievementDefinitionEntity> query = entityManager.createQuery(
-                "SELECT obj FROM AchievementDefinitionEntity obj WHERE obj.friendlyIdentifier = :name",
-                AchievementDefinitionEntity.class
-        );
-
+    public AchievementEntity findByName(String name) {
+        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findByName", AchievementEntity.class);
         query.setParameter("name", name);
-
-        List<AchievementDefinitionEntity> results = query.getResultList();
-        
-        return results.isEmpty() ? null : results.get(0);
+        return query.getSingleResult();
     }
 
-    public List<AchievementDefinitionEntity> getAll()
-    {
-        return entityManager.createQuery(
-                "SELECT obj FROM AchievementDefinitionEntity obj",
-                AchievementDefinitionEntity.class
-        ).getResultList();
+    public List<AchievementEntity> findAllByCategory(String category) {
+        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findAllByCategory", AchievementEntity.class);
+        query.setParameter("category", category);
+        return query.getResultList();
+    }
+
+    public List<AchievementEntity> findAllVisible(String category) {
+        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findAllVisible", AchievementEntity.class);
+        return query.getResultList();
     }
 }

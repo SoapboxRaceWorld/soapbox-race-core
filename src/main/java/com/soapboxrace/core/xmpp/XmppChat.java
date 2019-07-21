@@ -1,9 +1,7 @@
 package com.soapboxrace.core.xmpp;
 
-public class XmppChat
-{
-    public static String createSystemMessage(String message)
-    {
+public class XmppChat {
+    public static String createSystemMessage(String message) {
         return String.format("<response status='1' ticket='0'>\n" +
                 "<ChatBroadcast>\n" +
                 "<ChatBlob>\n" +

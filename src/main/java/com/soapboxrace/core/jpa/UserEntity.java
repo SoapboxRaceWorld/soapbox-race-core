@@ -1,160 +1,149 @@
 package com.soapboxrace.core.jpa;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "USER")
 @NamedQueries({ //
-		@NamedQuery(name = "UserEntity.findAll", query = "SELECT obj FROM UserEntity obj"),
-		@NamedQuery(name = "UserEntity.findByEmail", query = "SELECT obj FROM UserEntity obj WHERE obj.email = :email"), //
-		@NamedQuery(name = "UserEntity.findByIpAddress", query = "SELECT obj FROM UserEntity obj WHERE obj.ipAddress = :ipAddress") //
+        @NamedQuery(name = "UserEntity.findAll", query = "SELECT obj FROM UserEntity obj"),
+        @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT obj FROM UserEntity obj WHERE obj.email = :email"), //
+        @NamedQuery(name = "UserEntity.findByIpAddress", query = "SELECT obj FROM UserEntity obj WHERE obj.ipAddress = :ipAddress") //
 })
 public class UserEntity {
 
-	@Id
-	@Column(name = "ID", nullable = false)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "EMAIL", length = 255)
-	private String email;
+    @Column(name = "EMAIL", length = 255)
+    private String email;
 
-	@Column(name = "PASSWORD", length = 50)
-	private String password;
+    @Column(name = "PASSWORD", length = 50)
+    private String password;
 
-	@Column(name = "HWID")
-	private String hwid;
+    @Column(name = "HWID")
+    private String hwid;
 
-	private String gameHardwareHash;
+    private String gameHardwareHash;
 
-	@Column(name = "IP_ADDRESS")
-	private String ipAddress;
+    @Column(name = "IP_ADDRESS")
+    private String ipAddress;
 
-	@OneToMany(mappedBy = "user", targetEntity = PersonaEntity.class)
-	private List<PersonaEntity> listOfProfile;
+    @OneToMany(mappedBy = "user", targetEntity = PersonaEntity.class)
+    private List<PersonaEntity> listOfProfile;
 
-	@Column(name = "premium")
-	private boolean premium;
+    @Column(name = "premium")
+    private boolean premium;
 
-	@Column(name = "isAdmin")
-	private boolean isAdmin;
+    @Column(name = "isAdmin")
+    private boolean isAdmin;
 
-	@Column(name = "isLocked")
-	private boolean isLocked;
+    @Column(name = "isLocked")
+    private boolean isLocked;
 
-	@Column(name = "created")
-	private LocalDateTime created;
+    @Column(name = "created")
+    private LocalDateTime created;
 
-	@Column(name = "lastLogin")
-	private LocalDateTime lastLogin;
+    @Column(name = "lastLogin")
+    private LocalDateTime lastLogin;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return this.id;
+    }
 
-	public Long getId() {
-		return this.id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getEmail() {
+        return this.email;
+    }
 
-	public String getEmail() {
-		return this.email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getPassword() {
+        return this.password;
+    }
 
-	public String getPassword() {
-		return this.password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public List<PersonaEntity> getListOfProfile() {
-		return listOfProfile;
-	}
+    public List<PersonaEntity> getListOfProfile() {
+        return listOfProfile;
+    }
 
-	public String getHwid() {
-		return hwid;
-	}
+    public String getHwid() {
+        return hwid;
+    }
 
-	public void setHwid(String hwid) {
-		this.hwid = hwid;
-	}
+    public void setHwid(String hwid) {
+        this.hwid = hwid;
+    }
 
-	public String getIpAddress() {
-		return ipAddress;
-	}
+    public String getIpAddress() {
+        return ipAddress;
+    }
 
-	public void setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
-	}
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
 
-	public boolean isPremium() {
-		return premium;
-	}
+    public boolean isPremium() {
+        return premium;
+    }
 
-	public void setPremium(boolean premium) {
-		this.premium = premium;
-	}
+    public void setPremium(boolean premium) {
+        this.premium = premium;
+    }
 
-	public boolean ownsPersona(Long id) {
-		return this.listOfProfile.stream().anyMatch(p -> p.getPersonaId().equals(id));
-	}
+    public boolean ownsPersona(Long id) {
+        return this.listOfProfile.stream().anyMatch(p -> p.getPersonaId().equals(id));
+    }
 
-	public boolean isAdmin() {
-		return isAdmin;
-	}
+    public boolean isAdmin() {
+        return isAdmin;
+    }
 
-	public void setAdmin(boolean admin) {
-		isAdmin = admin;
-	}
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 
-	public boolean isLocked()
-	{
-		return isLocked;
-	}
+    public boolean isLocked() {
+        return isLocked;
+    }
 
-	public void setLocked(boolean locked)
-	{
-		isLocked = locked;
-	}
+    public void setLocked(boolean locked) {
+        isLocked = locked;
+    }
 
-	public LocalDateTime getLastLogin() {
-		return lastLogin;
-	}
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
 
-	public void setLastLogin(LocalDateTime lastLogin) {
-		this.lastLogin = lastLogin;
-	}
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
 
-	public LocalDateTime getCreated() {
-		return created;
-	}
+    public LocalDateTime getCreated() {
+        return created;
+    }
 
-	public void setCreated(LocalDateTime created) {
-		this.created = created;
-	}
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
 
-	public String getGameHardwareHash() {
-		return gameHardwareHash;
-	}
+    public String getGameHardwareHash() {
+        return gameHardwareHash;
+    }
 
-	public void setGameHardwareHash(String gameHardwareHash) {
-		this.gameHardwareHash = gameHardwareHash;
-	}
+    public void setGameHardwareHash(String gameHardwareHash) {
+        this.gameHardwareHash = gameHardwareHash;
+    }
 
 }

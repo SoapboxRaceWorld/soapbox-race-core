@@ -1,135 +1,114 @@
 package com.soapboxrace.core.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import com.soapboxrace.jaxb.http.AchievementRankPacket;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "ACHIEVEMENT_RANK")
 public class AchievementRankEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
-	private Long id;
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@JoinColumn(name = "achievementId", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_ACHRANK_ACHDEF"))
-	@ManyToOne
-	private AchievementDefinitionEntity achievementDefinition;
+    @ManyToOne(targetEntity = AchievementEntity.class, cascade = CascadeType.DETACH)
+    @JoinColumn(
+            name = "achievement_id",
+            referencedColumnName = "ID",
+            nullable = false
+    )
+    private AchievementEntity achievementEntity;
 
-	@Column(name = "isRare")
-	private boolean isRare;
+    @Column
+    private Integer points;
 
-	@Column(name = "points")
-	private short points;
+    @Column
+    private Integer rank;
 
-	@Column(name = "rank")
-	private short rank;
+    @Column
+    private Float rarity;
 
-	@Column(name = "rewardDescription")
-	private String rewardDescription;
+    @Column(name = "reward_description")
+    private String rewardDescription;
 
-	@Column(name = "rewardType")
-	private String rewardType;
+    @Column(name = "reward_type")
+    private String rewardType;
 
-	@Column(name = "rewardVisualStyle")
-	private String rewardVisualStyle;
+    @Column(name = "reward_visual_style")
+    private String rewardVisualStyle;
 
-	@Column(name = "thresholdValue")
-	private Long thresholdValue;
+    @Column(name = "threshold_value")
+    private Integer thresholdValue;
 
-	public AchievementRankPacket toBasePacket() {
-		AchievementRankPacket packet = new AchievementRankPacket();
-		packet.setAchievementRankId(id.intValue());
-		packet.setIsRare(isRare);
-		packet.setRarity(0.0f);
-		packet.setRank(rank);
-		packet.setThresholdValue(thresholdValue);
-		packet.setRewardDescription(rewardDescription);
-		packet.setRewardType(rewardType);
-		packet.setRewardVisualStyle(rewardVisualStyle);
-		packet.setPoints(points);
+    public Long getId() {
+        return id;
+    }
 
-		return packet;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public AchievementEntity getAchievementEntity() {
+        return achievementEntity;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setAchievementEntity(AchievementEntity achievementEntity) {
+        this.achievementEntity = achievementEntity;
+    }
 
-	public AchievementDefinitionEntity getAchievementDefinition() {
-		return achievementDefinition;
-	}
+    public Integer getPoints() {
+        return points;
+    }
 
-	public void setAchievementDefinition(AchievementDefinitionEntity achievementDefinition) {
-		this.achievementDefinition = achievementDefinition;
-	}
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
 
-	public boolean isRare() {
-		return isRare;
-	}
+    public Integer getRank() {
+        return rank;
+    }
 
-	public void setRare(boolean rare) {
-		isRare = rare;
-	}
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
 
-	public short getPoints() {
-		return points;
-	}
+    public Float getRarity() {
+        return rarity;
+    }
 
-	public void setPoints(short points) {
-		this.points = points;
-	}
+    public void setRarity(Float rarity) {
+        this.rarity = rarity;
+    }
 
-	public short getRank() {
-		return rank;
-	}
+    public String getRewardDescription() {
+        return rewardDescription;
+    }
 
-	public void setRank(short rank) {
-		this.rank = rank;
-	}
+    public void setRewardDescription(String rewardDescription) {
+        this.rewardDescription = rewardDescription;
+    }
 
-	public String getRewardDescription() {
-		return rewardDescription;
-	}
+    public String getRewardType() {
+        return rewardType;
+    }
 
-	public void setRewardDescription(String rewardDescription) {
-		this.rewardDescription = rewardDescription;
-	}
+    public void setRewardType(String rewardType) {
+        this.rewardType = rewardType;
+    }
 
-	public String getRewardType() {
-		return rewardType;
-	}
+    public String getRewardVisualStyle() {
+        return rewardVisualStyle;
+    }
 
-	public void setRewardType(String rewardType) {
-		this.rewardType = rewardType;
-	}
+    public void setRewardVisualStyle(String rewardVisualStyle) {
+        this.rewardVisualStyle = rewardVisualStyle;
+    }
 
-	public String getRewardVisualStyle() {
-		return rewardVisualStyle;
-	}
+    public Integer getThresholdValue() {
+        return thresholdValue;
+    }
 
-	public void setRewardVisualStyle(String rewardVisualStyle) {
-		this.rewardVisualStyle = rewardVisualStyle;
-	}
-
-	public Long getThresholdValue() {
-		return thresholdValue;
-	}
-
-	public void setThresholdValue(Long thresholdValue) {
-		this.thresholdValue = thresholdValue;
-	}
+    public void setThresholdValue(Integer thresholdValue) {
+        this.thresholdValue = thresholdValue;
+    }
 }

@@ -9,22 +9,18 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Stateless
-public class ChatAnnouncementDAO extends BaseDAO<ChatAnnouncementEntity>
-{
+public class ChatAnnouncementDAO extends BaseDAO<ChatAnnouncementEntity> {
     @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager)
-    {
+    protected void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public List<ChatAnnouncementEntity> findAll()
-    {
+    public List<ChatAnnouncementEntity> findAll() {
         return entityManager.createNamedQuery("ChatAnnouncementEntity.findAll", ChatAnnouncementEntity.class)
                 .getResultList();
     }
 
-    public ChatAnnouncementEntity findById(int id)
-    {
+    public ChatAnnouncementEntity findById(int id) {
         return entityManager.find(ChatAnnouncementEntity.class, id);
     }
 }

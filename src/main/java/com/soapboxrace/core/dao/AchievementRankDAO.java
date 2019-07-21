@@ -8,16 +8,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
-public class AchievementRankDAO extends BaseDAO<AchievementRankEntity>
-{
+public class AchievementRankDAO extends BaseDAO<AchievementRankEntity> {
+
     @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager)
-    {
+    protected void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public AchievementRankEntity findById(Long id)
-    {
-        return entityManager.find(AchievementRankEntity.class, id);
+    public AchievementRankEntity findById(Long id) {
+        return this.entityManager.find(AchievementRankEntity.class, id);
     }
 }

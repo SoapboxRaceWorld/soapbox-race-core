@@ -1,33 +1,32 @@
 package com.soapboxrace.core.dao;
 
-import java.util.List;
+import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.jpa.LevelRepEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import com.soapboxrace.core.dao.util.BaseDAO;
-import com.soapboxrace.core.jpa.LevelRepEntity;
+import java.util.List;
 
 @Stateless
 public class LevelRepDAO extends BaseDAO<LevelRepEntity> {
 
-	@PersistenceContext
-	protected void setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-	}
+    @PersistenceContext
+    protected void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
-	public LevelRepEntity findByLevel(Long level) {
-		TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findByLevel", LevelRepEntity.class);
-		query.setParameter("level", level);
-		
-		List<LevelRepEntity> resultList = query.getResultList();
-		return !resultList.isEmpty() ? resultList.get(0) : null;
-	}
+    public LevelRepEntity findByLevel(Long level) {
+        TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findByLevel", LevelRepEntity.class);
+        query.setParameter("level", level);
 
-	public List<LevelRepEntity> findAll() {
-		TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findAll", LevelRepEntity.class);
-		return query.getResultList();
-	}
+        List<LevelRepEntity> resultList = query.getResultList();
+        return !resultList.isEmpty() ? resultList.get(0) : null;
+    }
+
+    public List<LevelRepEntity> findAll() {
+        TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findAll", LevelRepEntity.class);
+        return query.getResultList();
+    }
 }

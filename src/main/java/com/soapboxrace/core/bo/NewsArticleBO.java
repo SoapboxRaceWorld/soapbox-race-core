@@ -13,11 +13,11 @@ import java.util.List;
 public class NewsArticleBO {
     @EJB
     private NewsArticleDAO newsArticleDAO;
-    
+
     public ArrayOfNewsArticleTrans getNewsArticles(Long personaId) {
         ArrayOfNewsArticleTrans arrayOfNewsArticleTrans = new ArrayOfNewsArticleTrans();
         List<NewsArticleEntity> newsArticles = newsArticleDAO.findAllByPersona(personaId);
-        
+
         for (NewsArticleEntity newsArticleEntity : newsArticles) {
             NewsArticleTrans newsArticleTrans = new NewsArticleTrans();
             newsArticleTrans.setNewsId(newsArticleEntity.getId());
@@ -30,10 +30,10 @@ public class NewsArticleBO {
             newsArticleTrans.setLongTextHALId(newsArticleEntity.getLongHALId());
             newsArticleTrans.setFilters(newsArticleEntity.getFilters().getFilterMask());
             newsArticleTrans.setIconType(newsArticleEntity.getIconType());
-            
+
             arrayOfNewsArticleTrans.getNewsArticleTrans().add(newsArticleTrans);
         }
-        
+
         return arrayOfNewsArticleTrans;
     }
 }

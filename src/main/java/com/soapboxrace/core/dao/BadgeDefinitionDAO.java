@@ -6,27 +6,23 @@ import com.soapboxrace.core.jpa.BadgeDefinitionEntity;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class BadgeDefinitionDAO extends BaseDAO<BadgeDefinitionEntity>
-{
+public class BadgeDefinitionDAO extends BaseDAO<BadgeDefinitionEntity> {
+
     @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager)
-    {
+    protected void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public BadgeDefinitionEntity findById(Long id)
-    {
-        return entityManager.find(BadgeDefinitionEntity.class, id);
+    public BadgeDefinitionEntity find(Long id) {
+        return this.entityManager.find(BadgeDefinitionEntity.class, id);
     }
-    
-    public List<BadgeDefinitionEntity> getAll()
-    {
-        return entityManager.createQuery(
-                "SELECT obj FROM BadgeDefinitionEntity obj",
-                BadgeDefinitionEntity.class
-        ).getResultList();
+
+    public List<BadgeDefinitionEntity> findAll() {
+        TypedQuery<BadgeDefinitionEntity> query = this.entityManager.createNamedQuery("BadgeDefinitionEntity.findAll", BadgeDefinitionEntity.class);
+        return query.getResultList();
     }
 }

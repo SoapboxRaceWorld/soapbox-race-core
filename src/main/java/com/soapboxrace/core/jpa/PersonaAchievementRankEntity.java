@@ -1,43 +1,42 @@
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "PERSONA_ACHIEVEMENT_RANK")
 @NamedQueries({
-        @NamedQuery(name = "PersonaAchievementRankEntity.findAllForPersonaAchievement",
-                query = "SELECT obj FROM PersonaAchievementRankEntity obj WHERE obj.persona.id = :personaId AND obj.achievement.id = :achievementId"),
-        @NamedQuery(name = "PersonaAchievementRankEntity.findAllForRank",
-                query = "SELECT obj FROM PersonaAchievementRankEntity obj WHERE obj.rank.id = :rankId"),
-        @NamedQuery(name = "PersonaAchievementRankEntity.findByPersonaAchievement",
-                query = "SELECT obj FROM PersonaAchievementRankEntity obj WHERE obj.persona.id = :personaId AND obj.achievement.id = :achievementId AND obj.rank.id = :rankId"),
-        @NamedQuery(name = "PersonaAchievementRankEntity.deleteByPersona", query = "DELETE FROM PersonaAchievementRankEntity obj WHERE obj.persona.id = :personaId")
+        @NamedQuery(name = "PersonaAchievementRankEntity.findAllByPersonaId", query = "SELECT p FROM PersonaAchievementRankEntity p WHERE p.personaAchievementEntity.personaEntity.id = :personaId"),
+        @NamedQuery(name = "PersonaAchievementRankEntity.findByPersonaIdAndAchievementRankId", query = "SELECT r FROM PersonaAchievementRankEntity r WHERE r.achievementRankEntity.id = :achievementRankId AND r.personaAchievementEntity.personaEntity.personaId = :personaId"),
+        @NamedQuery(name = "PersonaAchievementRankEntity.countPersonasWithRank", query = "SELECT count(*) FROM PersonaAchievementRankEntity r WHERE r.achievementRankEntity.id = :achievementRankId AND r.achievedOn IS NOT NULL"),
+        @NamedQuery(name = "PersonaAchievementRankEntity.findHighestCompletedRankOfAchievementByPersona",
+                query = "SELECT obj FROM PersonaAchievementRankEntity obj " +
+                        "WHERE obj.personaAchievementEntity.personaEntity.id = :personaId " +
+                        "AND obj.personaAchievementEntity.achievementEntity.id = :achievementId " +
+                        "AND (obj.state = 'Completed' OR obj.state = 'RewardWaiting') " +
+                        "ORDER BY obj.achievementRankEntity.rank")
 })
-public class PersonaAchievementRankEntity
-{
+public class PersonaAchievementRankEntity {
+
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @JoinColumn(name = "personaId", referencedColumnName = "id")
-    @ManyToOne
-    private PersonaEntity persona;
+    @ManyToOne(targetEntity = PersonaAchievementEntity.class, optional = false, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "persona_achievement_id", referencedColumnName = "ID", nullable = false)
+    private PersonaAchievementEntity personaAchievementEntity;
 
-    @JoinColumn(name = "achievementId", referencedColumnName = "id")
-    @ManyToOne
-    private AchievementDefinitionEntity achievement;
+    @ManyToOne(targetEntity = AchievementRankEntity.class, optional = false, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "achievement_rank_id", referencedColumnName = "ID", nullable = false)
+    private AchievementRankEntity achievementRankEntity;
 
-    @JoinColumn(name = "rankId", referencedColumnName = "id")
-    @ManyToOne
-    private AchievementRankEntity rank;
-
-    @Column(name = "state")
+    @Column(columnDefinition = "ENUM('Locked', 'InProgress', 'Completed', 'RewardWaiting')")
     private String state;
 
-    @Column(name = "achievedOn")
-    private String achievedOn;
-    
+    @Column(name = "achieved_on")
+    private LocalDateTime achievedOn;
+
     public Long getId() {
         return id;
     }
@@ -46,59 +45,35 @@ public class PersonaAchievementRankEntity
         this.id = id;
     }
 
-    public PersonaEntity getPersona()
-    {
-        return persona;
+    public PersonaAchievementEntity getPersonaAchievementEntity() {
+        return personaAchievementEntity;
     }
 
-    public void setPersona(PersonaEntity persona)
-    {
-        this.persona = persona;
+    public void setPersonaAchievementEntity(PersonaAchievementEntity personaAchievementEntity) {
+        this.personaAchievementEntity = personaAchievementEntity;
     }
 
-    public AchievementDefinitionEntity getAchievement()
-    {
-        return achievement;
+    public AchievementRankEntity getAchievementRankEntity() {
+        return achievementRankEntity;
     }
 
-    public void setAchievement(AchievementDefinitionEntity achievement)
-    {
-        this.achievement = achievement;
+    public void setAchievementRankEntity(AchievementRankEntity achievementRankEntity) {
+        this.achievementRankEntity = achievementRankEntity;
     }
 
-    public AchievementRankEntity getRank()
-    {
-        return rank;
-    }
-
-    public void setRank(AchievementRankEntity rank)
-    {
-        this.rank = rank;
-    }
-
-    public String getState()
-    {
+    public String getState() {
         return state;
     }
 
-    public void setState(String state)
-    {
+    public void setState(String state) {
         this.state = state;
     }
 
-    public String getAchievedOn()
-    {
+    public LocalDateTime getAchievedOn() {
         return achievedOn;
     }
 
-    public void setAchievedOn(String achievedOn)
-    {
+    public void setAchievedOn(LocalDateTime achievedOn) {
         this.achievedOn = achievedOn;
-    }
-
-    @Override
-    public String toString()
-    {
-        return String.format("PARE(personaId=%d,state=%s,achievedOn=%s,achievementId=%s)", persona.getPersonaId(), state, achievedOn, achievement.getId());
     }
 }

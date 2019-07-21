@@ -1,15 +1,17 @@
 package com.soapboxrace.core.bo;
 
-import java.util.*;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 import com.soapboxrace.core.bo.util.ListDifferences;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.*;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Stateless
 public class CommerceBO {
@@ -65,13 +67,13 @@ public class CommerceBO {
     private OwnedCarDAO ownedCarDAO;
 
     @EJB
-    private AchievementsBO achievementsBO;
-
-    @EJB
-    private AchievementDAO achievementDAO;
-
-    @EJB
     private VirtualItemDAO virtualItemDAO;
+
+    @EJB
+    private AchievementBO achievementBO;
+
+    @EJB
+    private DriverPersonaBO driverPersonaBO;
 
     public OwnedCarTrans responseCar(CommerceSessionTrans commerceSessionTrans) {
         OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
@@ -84,486 +86,147 @@ public class CommerceBO {
     }
 
     public CommerceSessionResultTrans doCommerce(CommerceSessionTrans commerceSessionTrans, Long personaId) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
-        CommerceSessionResultTrans commerceSessionResultTrans = new CommerceSessionResultTrans();
-        CustomCarTrans commerceCustomCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
-
         List<BasketItemTrans> basketItems = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
-        List<ProductEntity> productsFromBasket = new ArrayList<>();
-        List<VinylProductEntity> vinylProducts = new ArrayList<>();
-        String basketProductType = null;
-
-        int deductCash = 0;
-        int addCash = 0;
-        int deductBoost = 0;
-        int addBoost = 0;
-
+        PersonaEntity personaEntity = personaDAO.findById(personaId);
         OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId).getOwnedCar();
-        CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
-        OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
+        OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
         CustomCarTrans customCarTrans = ownedCarTrans.getCustomCar();
+        CustomCarTrans commerceCustomCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
+        ListDifferences<CustomPaintTrans> paintDifferences = ListDifferences.getDifferences(
+                customCarTrans.getPaints().getCustomPaintTrans(), commerceCustomCar.getPaints().getCustomPaintTrans());
+        ListDifferences<CustomVinylTrans> vinylDifferences = ListDifferences.getDifferences(
+                customCarTrans.getVinyls().getCustomVinylTrans(), commerceCustomCar.getVinyls().getCustomVinylTrans());
+        ListDifferences<PerformancePartTrans> performancePartDifferences = ListDifferences.getDifferences(
+                customCarTrans.getPerformanceParts().getPerformancePartTrans(), commerceCustomCar.getPerformanceParts().getPerformancePartTrans());
+        ListDifferences<VisualPartTrans> visualPartDifferences = ListDifferences.getDifferences(
+                customCarTrans.getVisualParts().getVisualPartTrans(), commerceCustomCar.getVisualParts().getVisualPartTrans());
+        ListDifferences<SkillModPartTrans> skillModPartDifferences = ListDifferences.getDifferences(
+                customCarTrans.getSkillModParts().getSkillModPartTrans(), commerceCustomCar.getSkillModParts().getSkillModPartTrans());
 
-        for (BasketItemTrans basketItemTrans : basketItems) {
-            ProductEntity findById = productDAO.findByProductId(basketItemTrans.getProductId());
+        Map<Integer, Object> addedItems = new HashMap<>();
+        Map<Integer, Object> removedItems = new HashMap<>();
 
-            if (findById == null) {
-                VinylProductEntity vinylProductEntity = vinylProductDAO.findByProductId(basketItemTrans.getProductId());
+        paintDifferences.getAdded().forEach(p -> addedItems.put(p.getGroup(), p));
+        paintDifferences.getRemoved().forEach(p -> removedItems.put(p.getGroup(), p));
+        performancePartDifferences.getAdded().forEach(p -> addedItems.put(p.getPerformancePartAttribHash(), p));
+        performancePartDifferences.getRemoved().forEach(p -> removedItems.put(p.getPerformancePartAttribHash(), p));
+        skillModPartDifferences.getAdded().forEach(p -> addedItems.put(p.getSkillModPartAttribHash(), p));
+        skillModPartDifferences.getRemoved().forEach(p -> removedItems.put(p.getSkillModPartAttribHash(), p));
+        visualPartDifferences.getAdded().forEach(p -> addedItems.put(p.getPartHash(), p));
+        visualPartDifferences.getRemoved().forEach(p -> removedItems.put(p.getPartHash(), p));
+        vinylDifferences.getAdded().forEach(p -> addedItems.put(p.getHash(), p));
+        vinylDifferences.getRemoved().forEach(p -> removedItems.put(p.getHash(), p));
 
-                if (vinylProductEntity == null) {
-                    continue;
-                } else {
-                    vinylProducts.add(vinylProductEntity);
-                    continue;
+        CommerceSessionResultTrans commerceSessionResultTrans = new CommerceSessionResultTrans();
+        AtomicInteger addCash = new AtomicInteger();
+        int removeCash = 0;
+        int addBoost = 0;
+        int removeBoost = 0;
+
+        for (Map.Entry<Integer, Object> addedItem : addedItems.entrySet()) {
+            System.out.println(addedItem.getKey());
+
+            if (addedItem.getValue() instanceof CustomVinylTrans) {
+                VinylProductEntity vinylProductEntity = vinylProductDAO.findByHash(addedItem.getKey());
+
+                if (vinylProductEntity != null) {
+                    if (vinylProductEntity.getCurrency().equals("CASH"))
+                        removeCash += (int) vinylProductEntity.getPrice();
+                    else
+                        removeBoost += (int) vinylProductEntity.getPrice();
                 }
-            }
+            } else {
+                ProductEntity productEntity = productDAO.findByHash(addedItem.getKey());
 
-            if (basketProductType != null && !basketProductType.equals(findById.getProductType())) {
-                continue;
-            }
-
-            basketProductType = findById.getProductType();
-            productsFromBasket.add(findById);
-
-            System.out.println("[Commerce] Item in basket -> product: " + findById.getProductTitle() + " (" + findById.getProductId() + ", " + findById.getProductType() + ")");
-        }
-
-        if (!ownedCarEntity.getId().equals(commerceSessionTrans.getUpdatedCar().getId())) {
-            System.out.println("car IDs don't match: " + ownedCarEntity.getId() + " vs " + commerceSessionTrans.getUpdatedCar().getId());
-            commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
-            commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
-            commerceSessionResultTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
-            commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(ownedCarEntity));
-            return commerceSessionResultTrans;
-        }
-
-        Map<Object, ProductEntity> addedFromCatalog = new HashMap<>();
-        Map<Object, VinylProductEntity> addedVinylsFromCatalog = new HashMap<>();
-        Map<Object, InventoryItemEntity> addedFromInventory = new HashMap<>();
-        List<ProductEntity> removedProducts = new ArrayList<>();
-        List<VinylProductEntity> removedVinylProducts = new ArrayList<>();
-
-        Map<Object, Integer> addedHashes = new HashMap<>();
-        List<Integer> removedHashes = new ArrayList<>();
-
-        ListDifferences<PerformancePartTrans> performancePartDiff = ListDifferences.getDifferences(customCarTrans.getPerformanceParts().getPerformancePartTrans(), commerceCustomCar.getPerformanceParts().getPerformancePartTrans());
-        ListDifferences<SkillModPartTrans> skillModPartDiff = ListDifferences.getDifferences(customCarTrans.getSkillModParts().getSkillModPartTrans(), commerceCustomCar.getSkillModParts().getSkillModPartTrans());
-        ListDifferences<VisualPartTrans> visualPartDiff = ListDifferences.getDifferences(customCarTrans.getVisualParts().getVisualPartTrans(), commerceCustomCar.getVisualParts().getVisualPartTrans());
-        ListDifferences<CustomVinylTrans> vinylDiff = ListDifferences.getDifferences(customCarTrans.getVinyls().getCustomVinylTrans(), commerceCustomCar.getVinyls().getCustomVinylTrans());
-        ListDifferences<CustomPaintTrans> paintDiff = ListDifferences.getDifferences(customCarTrans.getPaints().getCustomPaintTrans(), commerceCustomCar.getPaints().getCustomPaintTrans());
-
-        if (performancePartDiff.hasDifferences()) {
-            for (PerformancePartTrans addedPart : performancePartDiff.getAdded()) {
-                System.out.println("[Commerce] Added performance part: " + addedPart.getPerformancePartAttribHash());
-                addedHashes.put(addedPart, addedPart.getPerformancePartAttribHash());
-            }
-
-            for (PerformancePartTrans removedPart : performancePartDiff.getRemoved()) {
-                System.out.println("[Commerce] Removed performance part: " + removedPart.getPerformancePartAttribHash());
-                removedHashes.add(removedPart.getPerformancePartAttribHash());
-            }
-        }
-
-        if (skillModPartDiff.hasDifferences()) {
-            for (SkillModPartTrans addedPart : skillModPartDiff.getAdded()) {
-                System.out.println("[Commerce] Added skill mod part: " + addedPart.getSkillModPartAttribHash());
-                addedHashes.put(addedPart, addedPart.getSkillModPartAttribHash());
-            }
-
-            for (SkillModPartTrans removedPart : skillModPartDiff.getRemoved()) {
-                System.out.println("[Commerce] Removed skill mod part: " + removedPart.getSkillModPartAttribHash());
-                removedHashes.add(removedPart.getSkillModPartAttribHash());
-            }
-        }
-
-        if (visualPartDiff.hasDifferences()) {
-            for (VisualPartTrans addedPart : visualPartDiff.getAdded()) {
-                System.out.println("[Commerce] Added visual part: " + addedPart.getPartHash());
-                addedHashes.put(addedPart, addedPart.getPartHash());
-            }
-
-            for (VisualPartTrans removedPart : visualPartDiff.getRemoved()) {
-                System.out.println("[Commerce] Removed visual part: " + removedPart.getPartHash());
-                removedHashes.add(removedPart.getPartHash());
-            }
-        }
-
-        if (vinylDiff.hasDifferences()) {
-            for (CustomVinylTrans addedVinyl : vinylDiff.getAdded()) {
-                System.out.println("[Commerce] Added vinyl: " + addedVinyl.getHash());
-                addedHashes.put(addedVinyl, addedVinyl.getHash());
-            }
-
-            for (CustomVinylTrans removedVinyl : vinylDiff.getRemoved()) {
-                System.out.println("[Commerce] Removed vinyl: " + removedVinyl.getHash());
-                removedHashes.add(removedVinyl.getHash());
-            }
-        }
-
-        if (paintDiff.hasDifferences()) {
-            for (CustomPaintTrans addedPaint : paintDiff.getAdded()) {
-                System.out.println("[Commerce] Added paint: " + addedPaint.getGroup());
-                addedHashes.put(addedPaint, addedPaint.getGroup());
-            }
-
-            for (CustomPaintTrans removedPaint : paintDiff.getRemoved()) {
-                System.out.println("[Commerce] Removed paint: " + removedPaint.getGroup());
-                removedHashes.add(removedPaint.getGroup());
-            }
-        }
-
-        for (Map.Entry<Object, Integer> addedItem : addedHashes.entrySet()) {
-            System.out.println("addedItem: " + addedItem.getValue());
-
-            VinylProductEntity vinylProductEntity = vinylProductDAO.findByHash(addedItem.getValue());
-
-            if (vinylProductEntity == null) {
-                Optional<ProductEntity> basketProduct = productsFromBasket.stream().filter(p -> p.getHash().equals(addedItem.getKey())).findFirst();
-
-                if (basketProduct.isPresent()) {
-                    System.out.println("[Commerce] Part is in basket");
-                    ProductEntity productEntity = basketProduct.get();
-
-                    addedFromCatalog.put(addedItem.getKey(), productEntity);
-
-                    switch (productEntity.getCurrency()) {
-                        case "CASH":
-                            deductCash += productEntity.getPrice();
-                            break;
-                        case "_NS":
-                            deductBoost += productEntity.getPrice();
-                            break;
-                        default:
-                            System.out.println("I don't know what you did... but it's not good");
-                    }
-                } else {
-                    System.out.println("[Commerce] Not in basket, check inventory");
-                    InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaId, addedItem.getValue());
-
-                    if (inventoryItemEntity != null) {
-                        addedFromInventory.put(addedItem.getKey(), inventoryItemEntity);
+                if (productEntity != null) {
+                    if (basketItems.stream().anyMatch(p -> p.getProductId().equalsIgnoreCase(productEntity.getProductId()))) {
+                        if (productEntity.getCurrency().equals("CASH"))
+                            removeCash += (int) productEntity.getPrice();
+                        else
+                            removeBoost += (int) productEntity.getPrice();
                     } else {
-                        System.out.println("[Commerce] Not in inventory, go to catalog");
-                        ProductEntity productEntity = productDAO.findByHash(addedItem.getValue());
+                        InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaId, addedItem.getKey());
 
-                        if (productEntity == null) {
-                            System.out.println("[Commerce] Not in catalog, let's just skip it");
-                        } else {
-                            addedFromCatalog.put(addedItem.getKey(), productEntity);
-
-                            switch (productEntity.getCurrency()) {
-                                case "CASH":
-                                    deductCash += productEntity.getPrice();
-                                    break;
-                                case "_NS":
-                                    deductBoost += productEntity.getPrice();
-                                    break;
-                                default:
-                                    System.out.println("I don't know what you did... but it's not good");
-                            }
-                        }
-                    }
-                }
-            } else {
-                addedVinylsFromCatalog.put(addedItem.getKey(), vinylProductEntity);
-
-                switch (vinylProductEntity.getCurrency()) {
-                    case "CASH":
-                        deductCash += vinylProductEntity.getPrice();
-                        break;
-                    case "_NS":
-                        deductBoost += vinylProductEntity.getPrice();
-                        break;
-                    default:
-                        System.out.println("I don't know what you did... but it's not good");
-                }
-            }
-        }
-
-        for (Integer removedHash : removedHashes) {
-            System.out.println("removedHash: " + removedHash);
-
-            ProductEntity productEntity = productDAO.findByHash(removedHash);
-            VinylProductEntity vinylProductEntity;
-
-            if (productEntity == null) {
-                vinylProductEntity = vinylProductDAO.findByHash(removedHash);
-
-                if (vinylProductEntity == null) {
-                    System.out.println("[Commerce] Vinyl doesn't exist, let's skip this");
-                } else {
-                    removedVinylProducts.add(vinylProductEntity);
-                }
-            } else {
-                switch (productEntity.getProductType()) {
-                    case "PERFORMANCEPART":
-                    case "SKILLMODPART":
-                    case "VISUALPART":
-                        switch (productEntity.getCurrency()) {
-                            case "CASH":
-                                addCash += calcProductSellPrice(productEntity);
-                                break;
-                            case "_NS":
-                                addBoost += calcProductSellPrice(productEntity);
-                                break;
-                        }
-
-                        break;
-                    default:
-                        System.out.println("[Commerce] Can't return currency for " + productEntity.getProductType());
-                }
-
-                removedProducts.add(productEntity);
-            }
-        }
-
-        // sell entitlements
-        if (commerceSessionTrans.getEntitlementsToSell() != null
-                && commerceSessionTrans.getEntitlementsToSell().getItems() != null
-                && !commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans().isEmpty()) {
-            for (EntitlementItemTrans entitlementItemTrans : commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans()) {
-                for (int i = 0; i < entitlementItemTrans.getQuantity(); i++) {
-                    InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId, entitlementItemTrans.getEntitlementId());
-
-                    if (inventoryItemEntity != null) {
-                        ProductEntity productEntity = productDAO.findByHash(inventoryItemEntity.getHash());
-
-                        if (productEntity != null) {
-                            switch (productEntity.getCurrency()) {
-                                case "CASH":
-                                    addCash += calcProductSellPrice(productEntity);
-                                    break;
-                                case "_NS":
-                                    addBoost += calcProductSellPrice(productEntity);
-                                    break;
-                            }
+                        if (inventoryItemEntity != null) {
+                            inventoryBO.decrementUsage(personaId, addedItem.getKey());
                         }
                     }
                 }
             }
         }
 
-        System.out.println("[Commerce] Addition values: boost = " + addBoost + " cash = " + addCash);
-        System.out.println("[Commerce] Deduction values: boost = " + deductBoost + " cash = " + deductCash);
+        for (Map.Entry<Integer, Object> removedItem : removedItems.entrySet()) {
+            if (!(removedItem.getValue() instanceof CustomVinylTrans)) {
+                ProductEntity productEntity = productDAO.findByHash(removedItem.getKey());
 
-        int finalCash = (int) (personaEntity.getCash() - deductCash + addCash);
-        int finalBoost = (int) (personaEntity.getBoost() - deductBoost + addBoost);
+                if (productEntity != null) {
+                    if (productEntity.getCurrency().equals("CASH"))
+                        addCash.addAndGet((int) productEntity.getResalePrice());
+                    else
+                        addBoost += (int) productEntity.getResalePrice();
+                }
+            }
+        }
 
-        System.out.println("[Commerce] finalCash = " + finalCash + ", finalBoost = " + finalBoost);
+        if (commerceSessionTrans.getEntitlementsToSell().getItems() != null) {
+            commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans().forEach(e -> {
+                InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId, e.getEntitlementId());
 
-        if (deductCash > finalCash) {
+                if (inventoryItemEntity != null && inventoryItemEntity.getRemainingUseCount() >= e.getQuantity()) {
+                    inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() - e.getQuantity());
+                    inventoryItemDAO.update(inventoryItemEntity);
+                    addCash.addAndGet(inventoryItemEntity.getResellPrice());
+                }
+            });
+        }
+
+        double finalCash = personaEntity.getCash() - removeCash + addCash.get();
+        double finalBoost = personaEntity.getBoost() - removeBoost + addBoost;
+
+        if (finalCash < 0 || finalBoost < 0) {
             commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
-            commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
-            commerceSessionResultTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
-            commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(ownedCarEntity));
+            commerceSessionResultTrans.setUpdatedCar(personaBO.getDefaultCar(personaId));
             return commerceSessionResultTrans;
         }
 
-        if (deductBoost > finalBoost) {
-            commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
-            commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
-            commerceSessionResultTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
-            commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(ownedCarEntity));
-            return commerceSessionResultTrans;
-        }
+        CustomCarEntity customCar = ownedCarEntity.getCustomCar();
+        OwnedCarConverter.paints2NewEntity(commerceCustomCar, customCar);
+        OwnedCarConverter.vinyls2NewEntity(commerceCustomCar, customCar);
+        OwnedCarConverter.skillModParts2NewEntity(commerceCustomCar, customCar);
+        OwnedCarConverter.performanceParts2NewEntity(commerceCustomCar, customCar);
+        OwnedCarConverter.visuallParts2NewEntity(commerceCustomCar, customCar);
 
-        // remove removed things
-        for (ProductEntity productEntity : removedProducts) {
-            switch (productEntity.getProductType()) {
-                case "PERFORMANCEPART":
-                    Iterator<PerformancePartEntity> performancePartEntityIterator = customCarEntity.getPerformanceParts().iterator();
+        calcNewCarClass(customCar);
 
-                    while (performancePartEntityIterator.hasNext()) {
-                        PerformancePartEntity performancePartEntity = performancePartEntityIterator.next();
+        customCarDAO.update(customCar);
 
-                        if (performancePartEntity.getPerformancePartAttribHash() == productEntity.getHash()) {
-                            System.out.println("[Commerce] Remove performance part: " + productEntity.getHash());
-                            performancePartDAO.delete(performancePartEntity);
-                            performancePartEntityIterator.remove();
-                            break;
-                        }
-                    }
-
-                    break;
-                case "SKILLMODPART":
-                    Iterator<SkillModPartEntity> skillModPartEntityIterator = customCarEntity.getSkillModParts().iterator();
-
-                    while (skillModPartEntityIterator.hasNext()) {
-                        SkillModPartEntity skillModPartEntity = skillModPartEntityIterator.next();
-
-                        if (skillModPartEntity.getSkillModPartAttribHash() == productEntity.getHash()) {
-                            System.out.println("[Commerce] Remove skill mod part: " + productEntity.getHash());
-                            skillModPartDAO.delete(skillModPartEntity);
-                            skillModPartEntityIterator.remove();
-                            break;
-                        }
-                    }
-
-                    break;
-                case "VISUALPART":
-                    Iterator<VisualPartEntity> visualPartEntityIterator = customCarEntity.getVisualParts().iterator();
-
-                    while (visualPartEntityIterator.hasNext()) {
-                        VisualPartEntity visualPartEntity = visualPartEntityIterator.next();
-
-                        if (visualPartEntity.getPartHash() == productEntity.getHash()) {
-                            System.out.println("[Commerce] Remove visual part: " + productEntity.getHash());
-                            visualPartDAO.delete(visualPartEntity);
-                            visualPartEntityIterator.remove();
-                            break;
-                        }
-                    }
-
-                    break;
-                case "PAINT_BODY":
-                case "PAINT_WHEEL":
-                    Iterator<PaintEntity> paintEntityIterator = customCarEntity.getPaints().iterator();
-
-                    while (paintEntityIterator.hasNext()) {
-                        PaintEntity paintEntity = paintEntityIterator.next();
-
-                        if (paintEntity.getGroup() == productEntity.getHash()) {
-                            System.out.println("[Commerce] Remove paint: " + productEntity.getHash());
-                            paintDAO.delete(paintEntity);
-                            paintEntityIterator.remove();
-                            break;
-                        }
-                    }
-
-                    break;
-            }
-        }
-
-        for (VinylProductEntity vinylProductEntity : removedVinylProducts) {
-            Iterator<VinylEntity> vinylEntityIterator = customCarEntity.getVinyls().iterator();
-
-            while (vinylEntityIterator.hasNext()) {
-                VinylEntity vinylEntity = vinylEntityIterator.next();
-
-                if (vinylEntity.getHash() == vinylProductEntity.getHash()) {
-                    System.out.println("[Commerce] Remove vinyl: " + vinylEntity.getHash());
-                    vinylDAO.delete(vinylEntity);
-                    vinylEntityIterator.remove();
-                    break;
-                }
-            }
-        }
-
-        customCarDAO.update(customCarEntity);
-
-        for (Map.Entry<Object, ProductEntity> addedProduct : addedFromCatalog.entrySet()) {
-            ProductEntity productEntity = addedProduct.getValue();
-            Object customizationObject = addedProduct.getKey();
-
-            switch (productEntity.getProductType()) {
-                case "PERFORMANCEPART":
-                    addPerformancePart(customCarEntity, customizationObject, productEntity.getHash());
-                    achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_PERFORMANCEPART"), 1L);
-                    break;
-                case "SKILLMODPART":
-                    addSkillPart(customCarEntity, customizationObject, productEntity.getHash());
-                    VirtualItemEntity skillVirtualItem = virtualItemDAO.findByHash(productEntity.getHash());
-
-                    if (skillVirtualItem != null
-                            && skillVirtualItem.getType().equalsIgnoreCase("skillmodpart")
-                            && (skillVirtualItem.getItemName().contains("_03_")
-                                || skillVirtualItem.getItemName().contains("_04_")
-                                || skillVirtualItem.getItemName().contains("_05_"))) {
-                        switch (skillVirtualItem.getSubType()) {
-                            case "skillmod_race":
-                                achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_RACE_SKILLS"), 1L);
-                                break;
-                            case "skillmod_explore":
-                                achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_EXPLORE_SKILLS"), 1L);
-                                break;
-                            case "skillmod_pursuit":
-                                achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_PURSUIT_SKILLS"), 1L);
-                                break;
-                        }
-                    }
-
-                    break;
-                case "VISUALPART":
-                    addVisualPart(customCarEntity, customizationObject, productEntity.getHash());
-                    achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_AFTERMARKETPART"), 1L);
-                    break;
-                case "PAINT_BODY":
-                case "PAINT_WHEEL":
-                    addPaint(customCarEntity, customizationObject, productEntity.getHash());
-                    achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_PAINTS"), 1L);
-                    break;
-                default:
-                    System.out.println("[Commerce] I don't know how to handle this: " + productEntity.getProductType());
-            }
-        }
-
-        for (Map.Entry<Object, InventoryItemEntity> addedInventoryItem : addedFromInventory.entrySet()) {
-            InventoryItemEntity inventoryItemEntity = addedInventoryItem.getValue();
-            Object customizationObject = addedInventoryItem.getKey();
-            switch (inventoryItemEntity.getVirtualItemType().toUpperCase()) {
-                case "PERFORMANCEPART":
-                    addPerformancePart(customCarEntity, customizationObject, inventoryItemEntity.getHash());
-                    break;
-                case "SKILLMODPART":
-                    addSkillPart(customCarEntity, customizationObject, inventoryItemEntity.getHash());
-                    break;
-                case "VISUALPART":
-                    addVisualPart(customCarEntity, customizationObject, inventoryItemEntity.getHash());
-                    break;
-            }
-
-            inventoryBO.deletePart(personaId, inventoryItemEntity.getHash());
-        }
-
-        // sell entitlements
-        if (commerceSessionTrans.getEntitlementsToSell() != null
-                && commerceSessionTrans.getEntitlementsToSell().getItems() != null
-                && !commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans().isEmpty()) {
-            for (EntitlementItemTrans entitlementItemTrans : commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans()) {
-                for (int i = 0; i < entitlementItemTrans.getQuantity(); i++) {
-                    InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId, entitlementItemTrans.getEntitlementId());
-
-                    if (inventoryItemEntity != null) {
-                        inventoryBO.deletePart(personaId, entitlementItemTrans.getEntitlementId());
-                    }
-                }
-            }
-        }
-
-        for (Map.Entry<Object, VinylProductEntity> addedVinylProduct : addedVinylsFromCatalog.entrySet()) {
-            VinylProductEntity productEntity = addedVinylProduct.getValue();
-            Object customizationObject = addedVinylProduct.getKey();
-
-            addVinyl(customCarEntity, customizationObject, productEntity.getHash());
-            achievementsBO.update(personaEntity, achievementDAO.findByName("achievement_ACH_INSTALL_VINYLS"), 1L);
-        }
-
-        personaEntity.setCash(finalCash);
         personaEntity.setBoost(finalBoost);
+//        personaEntity.setCash(finalCash);
+        driverPersonaBO.updateCash(personaId, finalCash);
         personaDAO.update(personaEntity);
 
-        calcNewCarClass(customCarEntity);
-        customCarDAO.update(customCarEntity);
-        ownedCarEntity.setCustomCar(customCarEntity);
-        ownedCarDAO.update(ownedCarEntity);
-
-        commerceSessionResultTrans.setStatus(CommerceResultStatus.SUCCESS);
+        commerceSessionResultTrans.setUpdatedCar(personaBO.getDefaultCar(personaId));
         commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());
+        commerceSessionResultTrans.setStatus(CommerceResultStatus.SUCCESS);
         commerceSessionResultTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
-        commerceSessionResultTrans.setUpdatedCar(OwnedCarConverter.entity2Trans(ownedCarEntity));
-
-        WalletTrans cashWallet = new WalletTrans();
-        cashWallet.setBalance(personaEntity.getCash());
-        cashWallet.setCurrency("CASH");
-
-        WalletTrans boostWallet = new WalletTrans();
-        boostWallet.setBalance(personaEntity.getBoost());
-        boostWallet.setCurrency("BOOST");
 
         ArrayOfWalletTrans arrayOfWalletTrans = new ArrayOfWalletTrans();
+        WalletTrans cashWallet = new WalletTrans();
+        cashWallet.setCurrency("CASH");
+        cashWallet.setBalance(personaEntity.getCash());
         arrayOfWalletTrans.getWalletTrans().add(cashWallet);
+
+        WalletTrans boostWallet = new WalletTrans();
+        boostWallet.setCurrency("BOOST");
+        boostWallet.setBalance(personaEntity.getBoost());
         arrayOfWalletTrans.getWalletTrans().add(boostWallet);
 
         commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
+
+//        achievementBO.updateAchievements(personaEntity.getPersonaId(), "COMMERCE", new HashMap<String, Object>(){{
+//            put("persona", personaEntity);
+//
+//        }});
 
         return commerceSessionResultTrans;
     }

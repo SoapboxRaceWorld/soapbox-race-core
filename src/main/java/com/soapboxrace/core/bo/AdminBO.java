@@ -13,169 +13,154 @@ import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppChat;
 
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import java.time.LocalDateTime;
 
 @Stateless
 public class AdminBO {
-	@EJB
-	private TokenSessionBO tokenSessionBo;
+    @EJB
+    private TokenSessionBO tokenSessionBo;
 
-	@EJB
-	private PersonaDAO personaDao;
+    @EJB
+    private PersonaDAO personaDao;
 
-	@EJB
-	private UserDAO userDao;
+    @EJB
+    private UserDAO userDao;
 
-	@EJB
-	private BanDAO banDAO;
+    @EJB
+    private BanDAO banDAO;
 
-	@EJB
-	private HardwareInfoDAO hardwareInfoDAO;
+    @EJB
+    private HardwareInfoDAO hardwareInfoDAO;
 
-	@EJB
-	private OpenFireSoapBoxCli openFireSoapBoxCli;
-	
-	public void sendCommand(Long personaId, Long abuserPersonaId, String command)
-	{
-		CommandInfo commandInfo = CommandInfo.parse(command);
-		PersonaEntity personaEntity = personaDao.findById(abuserPersonaId);
+    @EJB
+    private OpenFireSoapBoxCli openFireSoapBoxCli;
 
-		if (personaEntity == null)
-			return;
+    public void sendCommand(Long personaId, Long abuserPersonaId, String command) {
+        CommandInfo commandInfo = CommandInfo.parse(command);
+        PersonaEntity personaEntity = personaDao.findById(abuserPersonaId);
 
-		switch (commandInfo.action)
-		{
-			case BAN:
-				if (banDAO.findByUser(personaEntity.getUser()) != null) {
-					openFireSoapBoxCli.send(XmppChat.createSystemMessage("User is already banned!"), personaId);
-					break;
-				}
-				
-				sendBan(personaEntity, personaDao.findById(personaId), commandInfo.timeEnd, commandInfo.reason);
-				openFireSoapBoxCli.send(XmppChat.createSystemMessage("Banned user!"), personaId);
-				break;
-			case KICK:
-				sendKick(personaEntity.getUser().getId(), personaEntity.getPersonaId());
-				openFireSoapBoxCli.send(XmppChat.createSystemMessage("Kicked user!"), personaId);
-				break;
-			case UNBAN:
-				BanEntity existingBan;
-				if ((existingBan = banDAO.findByUser(personaEntity.getUser())) == null) {
-					openFireSoapBoxCli.send(XmppChat.createSystemMessage("User is not banned!"), personaId);
-					break;
-				}
-				
-				banDAO.delete(existingBan);
-				openFireSoapBoxCli.send(XmppChat.createSystemMessage("Unbanned user!"), personaId);
-				
-				break;
-			default:
-				break;
-		}
-	}
+        if (personaEntity == null)
+            return;
 
-	private void sendBan(PersonaEntity personaEntity, PersonaEntity bannedBy, LocalDateTime endsOn, String reason)
-	{
-		UserEntity userEntity = personaEntity.getUser();
-		BanEntity banEntity = new BanEntity();
-		banEntity.setUserEntity(userEntity);
-		banEntity.setEndsAt(endsOn);
-		banEntity.setStarted(LocalDateTime.now());
-		banEntity.setReason(reason);
-		banEntity.setBannedBy(bannedBy);
-		banEntity.setWillEnd(endsOn != null);
-		banDAO.insert(banEntity);
-		userDao.update(userEntity);
-		sendKick(userEntity.getId(), personaEntity.getPersonaId());
+        switch (commandInfo.action) {
+            case BAN:
+                if (banDAO.findByUser(personaEntity.getUser()) != null) {
+                    openFireSoapBoxCli.send(XmppChat.createSystemMessage("User is already banned!"), personaId);
+                    break;
+                }
 
-		HardwareInfoEntity hardwareInfoEntity = hardwareInfoDAO.findByUserId(userEntity.getId());
-		
-		if (hardwareInfoEntity != null) {
-			hardwareInfoEntity.setBanned(true);
-			hardwareInfoDAO.update(hardwareInfoEntity);
-		}
-	}
+                sendBan(personaEntity, personaDao.findById(personaId), commandInfo.timeEnd, commandInfo.reason);
+                openFireSoapBoxCli.send(XmppChat.createSystemMessage("Banned user!"), personaId);
+                break;
+            case KICK:
+                sendKick(personaEntity.getUser().getId(), personaEntity.getPersonaId());
+                openFireSoapBoxCli.send(XmppChat.createSystemMessage("Kicked user!"), personaId);
+                break;
+            case UNBAN:
+                BanEntity existingBan;
+                if ((existingBan = banDAO.findByUser(personaEntity.getUser())) == null) {
+                    openFireSoapBoxCli.send(XmppChat.createSystemMessage("User is not banned!"), personaId);
+                    break;
+                }
 
-	private void sendKick(Long userId, Long personaId)
-	{
-		openFireSoapBoxCli.send("<NewsArticleTrans><ExpiryTime><", personaId);
-		tokenSessionBo.deleteByUserId(userId);
-	}
+                banDAO.delete(existingBan);
+                openFireSoapBoxCli.send(XmppChat.createSystemMessage("Unbanned user!"), personaId);
 
-	private static class CommandInfo
-	{
-		public CommandInfo.CmdAction action;
-		public String reason;
-		public LocalDateTime timeEnd;
+                break;
+            default:
+                break;
+        }
+    }
 
-		public enum CmdAction
-		{
-			KICK,
-			BAN,
-			ALERT,
-			UNBAN,
-			UNKNOWN
-		}
+    private void sendBan(PersonaEntity personaEntity, PersonaEntity bannedBy, LocalDateTime endsOn, String reason) {
+        UserEntity userEntity = personaEntity.getUser();
+        BanEntity banEntity = new BanEntity();
+        banEntity.setUserEntity(userEntity);
+        banEntity.setEndsAt(endsOn);
+        banEntity.setStarted(LocalDateTime.now());
+        banEntity.setReason(reason);
+        banEntity.setBannedBy(bannedBy);
+        banEntity.setWillEnd(endsOn != null);
+        banDAO.insert(banEntity);
+        userDao.update(userEntity);
+        sendKick(userEntity.getId(), personaEntity.getPersonaId());
 
-		public static CommandInfo parse(String cmd)
-		{
-			cmd = cmd.replaceFirst("/", "");
+        HardwareInfoEntity hardwareInfoEntity = hardwareInfoDAO.findByUserId(userEntity.getId());
 
-			String[] split = cmd.split(" ");
-			CommandInfo.CmdAction action;
-			CommandInfo info = new CommandInfo();
+        if (hardwareInfoEntity != null) {
+            hardwareInfoEntity.setBanned(true);
+            hardwareInfoDAO.update(hardwareInfoEntity);
+        }
+    }
 
-			switch (split[0].toLowerCase().trim())
-			{
-				case "ban":
-					action = CmdAction.BAN;
-					break;
-				case "kick":
-					action = CmdAction.KICK;
-					break;
-				case "unban":
-					action = CmdAction.UNBAN;
-					break;
-				default:
-					action = CmdAction.UNKNOWN;
-					break;
-			}
+    private void sendKick(Long userId, Long personaId) {
+        openFireSoapBoxCli.send("<NewsArticleTrans><ExpiryTime><", personaId);
+        tokenSessionBo.deleteByUserId(userId);
+    }
 
-			info.action = action;
+    private static class CommandInfo {
+        public CommandInfo.CmdAction action;
+        public String reason;
+        public LocalDateTime timeEnd;
 
-			switch (action)
-			{
-				case BAN:
-				{
-					LocalDateTime endTime;
-					String reason = null;
+        public static CommandInfo parse(String cmd) {
+            cmd = cmd.replaceFirst("/", "");
 
-					if (split.length >= 2)
-					{
-						long givenTime = MiscUtils.lengthToMiliseconds(split[1]);
-						if (givenTime != 0)
-						{
-							endTime = LocalDateTime.now().plusSeconds(givenTime / 1000);
-							info.timeEnd = endTime;
+            String[] split = cmd.split(" ");
+            CommandInfo.CmdAction action;
+            CommandInfo info = new CommandInfo();
 
-							if (split.length > 2)
-							{
-								reason = MiscUtils.argsToString(split, 2, split.length);
-							}
-						} else
-						{
-							reason = MiscUtils.argsToString(split, 1, split.length);
-						}
-					}
+            switch (split[0].toLowerCase().trim()) {
+                case "ban":
+                    action = CmdAction.BAN;
+                    break;
+                case "kick":
+                    action = CmdAction.KICK;
+                    break;
+                case "unban":
+                    action = CmdAction.UNBAN;
+                    break;
+                default:
+                    action = CmdAction.UNKNOWN;
+                    break;
+            }
 
-					info.reason = reason;
-					break;
-				}
-			}
+            info.action = action;
 
-			return info;
-		}
-	}
+            switch (action) {
+                case BAN: {
+                    LocalDateTime endTime;
+                    String reason = null;
+
+                    if (split.length >= 2) {
+                        long givenTime = MiscUtils.lengthToMiliseconds(split[1]);
+                        if (givenTime != 0) {
+                            endTime = LocalDateTime.now().plusSeconds(givenTime / 1000);
+                            info.timeEnd = endTime;
+
+                            if (split.length > 2) {
+                                reason = MiscUtils.argsToString(split, 2, split.length);
+                            }
+                        } else {
+                            reason = MiscUtils.argsToString(split, 1, split.length);
+                        }
+                    }
+
+                    info.reason = reason;
+                    break;
+                }
+            }
+
+            return info;
+        }
+
+        public enum CmdAction {
+            KICK,
+            BAN,
+            ALERT,
+            UNBAN,
+            UNKNOWN
+        }
+    }
 }

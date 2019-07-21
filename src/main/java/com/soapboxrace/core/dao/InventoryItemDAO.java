@@ -2,6 +2,7 @@ package com.soapboxrace.core.dao;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,6 +15,11 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
     @PersistenceContext
     protected void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
+    }
+
+    public List<InventoryItemEntity> findAllWithExpirationDate() {
+        return entityManager.createNamedQuery("InventoryItemEntity.findAllWithExpirationDate", InventoryItemEntity.class)
+                .getResultList();
     }
 
     public List<InventoryItemEntity> findAllByInventoryId(Long inventoryId) {
@@ -70,7 +76,11 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
         return null;
     }
 
-    public void deleteByPersona(Long personaId) {
+    public void deleteByPersona(PersonaEntity personaEntity) {
+        List<InventoryItemEntity> items = this.findAllByPersonaId(personaEntity.getPersonaId());
 
+        for (InventoryItemEntity inventoryItemEntity : items) {
+            delete(inventoryItemEntity);
+        }
     }
 }

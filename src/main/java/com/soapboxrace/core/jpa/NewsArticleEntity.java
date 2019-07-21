@@ -19,22 +19,21 @@ import javax.persistence.*;
         @NamedQuery(name = "NewsArticleEntity.deleteAllByReferencedPersona",
                 query = "DELETE FROM NewsArticleEntity obj WHERE obj.referencedPersona IS NOT NULL AND obj.referencedPersona.id = :id"),
 })
-public class NewsArticleEntity
-{
+public class NewsArticleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(length = 1000)
     private String parameters;
-    
+
     @Column
     @Convert(converter = NewsArticleFilterConverter.class)
     private NewsArticleFilters filters;
-    
+
     @Column
     private int iconType;
-    
+
     @ManyToOne(targetEntity = PersonaEntity.class)
     @JoinColumn(name = "persona_id", referencedColumnName = "id")
     private PersonaEntity persona;
@@ -42,130 +41,108 @@ public class NewsArticleEntity
     @ManyToOne(targetEntity = PersonaEntity.class)
     @JoinColumn(name = "referenced_persona_id", referencedColumnName = "id")
     private PersonaEntity referencedPersona;
-    
+
     @Column
     private int sticky;
-    
+
     @Column
     private long timestamp;
-    
+
     @Column
     @Convert(converter = NewsArticleTypeConverter.class)
     private NewsArticleType type;
-    
+
     @Column
     private String shortHALId;
 
     @Column
     private String longHALId;
-    
-    public Long getId()
-    {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getParameters()
-    {
+    public String getParameters() {
         return parameters;
     }
 
-    public void setParameters(String parameters)
-    {
+    public void setParameters(String parameters) {
         this.parameters = parameters;
     }
 
-    public NewsArticleFilters getFilters()
-    {
+    public NewsArticleFilters getFilters() {
         return filters;
     }
 
-    public void setFilters(NewsArticleFilters filters)
-    {
+    public void setFilters(NewsArticleFilters filters) {
         this.filters = filters;
     }
 
-    public int getIconType()
-    {
+    public int getIconType() {
         return iconType;
     }
 
-    public void setIconType(int iconType)
-    {
+    public void setIconType(int iconType) {
         this.iconType = iconType;
     }
 
-    public PersonaEntity getPersona()
-    {
+    public PersonaEntity getPersona() {
         return persona;
     }
 
-    public void setPersona(PersonaEntity persona)
-    {
+    public void setPersona(PersonaEntity persona) {
         this.persona = persona;
     }
 
-    public PersonaEntity getReferencedPersona()
-    {
+    public PersonaEntity getReferencedPersona() {
         return referencedPersona;
     }
 
-    public void setReferencedPersona(PersonaEntity referencedPersona)
-    {
+    public void setReferencedPersona(PersonaEntity referencedPersona) {
         this.referencedPersona = referencedPersona;
     }
 
-    public int getSticky()
-    {
+    public int getSticky() {
         return sticky;
     }
 
-    public void setSticky(int sticky)
-    {
+    public void setSticky(int sticky) {
         this.sticky = sticky;
     }
 
-    public long getTimestamp()
-    {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp)
-    {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
-    public NewsArticleType getType()
-    {
+    public NewsArticleType getType() {
         return type;
     }
 
-    public void setType(NewsArticleType type)
-    {
+    public void setType(NewsArticleType type) {
         this.type = type;
     }
 
-    public String getLongHALId()
-    {
+    public String getLongHALId() {
         return longHALId;
     }
 
-    public void setLongHALId(String longHALId)
-    {
+    public void setLongHALId(String longHALId) {
         this.longHALId = longHALId;
     }
 
-    public String getShortHALId()
-    {
+    public String getShortHALId() {
         return shortHALId;
     }
 
-    public void setShortHALId(String shortHALId)
-    {
+    public void setShortHALId(String shortHALId) {
         this.shortHALId = shortHALId;
     }
 }

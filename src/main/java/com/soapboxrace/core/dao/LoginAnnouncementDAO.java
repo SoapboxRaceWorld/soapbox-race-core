@@ -1,14 +1,13 @@
 package com.soapboxrace.core.dao;
 
-import java.util.List;
+import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.jpa.LoginAnnouncementEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
-import com.soapboxrace.core.dao.util.BaseDAO;
-import com.soapboxrace.core.jpa.LoginAnnouncementEntity;
+import java.util.List;
 
 @Stateless
 public class LoginAnnouncementDAO extends BaseDAO<LoginAnnouncementEntity> {

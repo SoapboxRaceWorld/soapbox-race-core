@@ -1,7 +1,6 @@
 package com.soapboxrace.core.jpa.util;
 
-public enum NewsArticleType
-{
+public enum NewsArticleType {
     NullNews(0),
     FriendRequestReceived(1),
     FriendLeveledUp(2),
@@ -25,16 +24,14 @@ public enum NewsArticleType
     StreakMilestone(21),
     CarClassChanged(22),
     ReferralBoostGiftAwarded(23);
-    
+
     private final int typeId;
 
-    NewsArticleType(int typeId)
-    {
+    NewsArticleType(int typeId) {
         this.typeId = typeId;
     }
 
-    public int getTypeId()
-    {
+    public int getTypeId() {
         return typeId;
     }
 }

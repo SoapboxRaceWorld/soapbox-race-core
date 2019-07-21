@@ -12,11 +12,11 @@ public class ChatAnnouncementEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
     private Integer announcementInterval;
-    
+
     private String announcementMessage;
-    
+
     private String channelMask;
 
     public int getId() {
@@ -27,33 +27,27 @@ public class ChatAnnouncementEntity {
         this.id = id;
     }
 
-    public Integer getAnnouncementInterval()
-    {
+    public Integer getAnnouncementInterval() {
         return announcementInterval;
     }
 
-    public void setAnnouncementInterval(Integer announcementInterval)
-    {
+    public void setAnnouncementInterval(Integer announcementInterval) {
         this.announcementInterval = announcementInterval;
     }
 
-    public String getAnnouncementMessage()
-    {
+    public String getAnnouncementMessage() {
         return announcementMessage;
     }
 
-    public void setAnnouncementMessage(String announcementMessage)
-    {
+    public void setAnnouncementMessage(String announcementMessage) {
         this.announcementMessage = announcementMessage;
     }
 
-    public String getChannelMask()
-    {
+    public String getChannelMask() {
         return channelMask;
     }
 
-    public void setChannelMask(String channelMask)
-    {
+    public void setChannelMask(String channelMask) {
         this.channelMask = channelMask;
     }
 }

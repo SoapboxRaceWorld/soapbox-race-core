@@ -18,8 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 @Path("/removefriend")
-public class RemoveFriend
-{
+public class RemoveFriend {
     @EJB
     private FriendDAO friendDAO;
 
@@ -28,19 +27,17 @@ public class RemoveFriend
 
     @EJB
     private TokenSessionBO tokenSessionBO;
-    
+
     @EJB
     private OpenFireSoapBoxCli openFireSoapBoxCli;
 
     @GET
     @Secured
-    public String removefriend(@QueryParam("friendPersonaId") Long friendPersonaId, @HeaderParam("securityToken") String securityToken)
-    {
+    public String removefriend(@QueryParam("friendPersonaId") Long friendPersonaId, @HeaderParam("securityToken") String securityToken) {
         PersonaEntity active = personaDAO.findById(tokenSessionBO.getActivePersonaId(securityToken));
         PersonaEntity friend = personaDAO.findById(friendPersonaId);
 
-        if (active == null || friend == null)
-        {
+        if (active == null || friend == null) {
             System.err.println("Hit a bad spot in removefriend!");
             return "";
         }
@@ -49,12 +46,12 @@ public class RemoveFriend
         FriendEntity friendEntity2 = friendDAO.findBySenderAndRecipient(friend.getUser().getId(), active.getPersonaId());
 //        FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(friend.getPersonaId(), active.getUser().getId());
 //        FriendEntity friendEntity2 = friendDAO.findBySenderAndRecipient(active.getPersonaId(), friend.getUser().getId());
-        
+
         if (friendEntity == null || friendEntity2 == null) {
             System.err.println("Hit the other bad spot in removefriend! Something's up...");
             return "";
         }
-        
+
         friendDAO.delete(friendEntity);
         friendDAO.delete(friendEntity2);
 
@@ -76,7 +73,7 @@ public class RemoveFriend
             activeToFriend.setPersonaBase(xmppPersonaBase);
 
             openFireSoapBoxCli.send(activeToFriend, friend.getPersonaId());
-            
+
 //            xmppPersonaBase.setPresence(0);
 //            activeToFriend.setPersonaBase(xmppPersonaBase);
 //            openFireSoapBoxCli.send(activeToFriend, friend.getPersonaId());

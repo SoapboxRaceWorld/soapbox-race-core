@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 @Table(name = "INVENTORY_ITEM")
 @NamedQueries({
         @NamedQuery(
+                name = "InventoryItemEntity.findAllWithExpirationDate",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.expirationDate IS NOT NULL"),
+        @NamedQuery(
                 name = "InventoryItemEntity.findAllByInventoryId",
                 query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = :inventoryId"),
         @NamedQuery(

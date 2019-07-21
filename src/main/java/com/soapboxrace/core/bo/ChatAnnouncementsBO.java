@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Stateless
-public class ChatAnnouncementsBO
-{
+public class ChatAnnouncementsBO {
     @EJB
     private ChatAnnouncementDAO chatAnnouncementDAO;
 
@@ -27,14 +26,13 @@ public class ChatAnnouncementsBO
 
     private Long ticks = 0L;
 
-    @Schedule(minute = "*", hour = "*", second = "*/5", persistent = false)
-    public void sendMessages()
-    {
-        ticks += 5;
+    @Schedule(minute = "*", hour = "*", second = "*", persistent = false)
+    public void sendMessages() {
+//        ticks += 5;
+        ticks++;
 
-        for (ChatAnnouncementEntity announcementEntity : chatAnnouncementDAO.findAll())
-        {
-            if (announcementEntity.getAnnouncementInterval() % 5 != 0) continue;
+        for (ChatAnnouncementEntity announcementEntity : chatAnnouncementDAO.findAll()) {
+//            if (announcementEntity.getAnnouncementInterval() % 5 != 0) continue;
 
             List<MUCRoomEntity> channels = restApiCli.getAllRooms()
                     .stream()
@@ -43,14 +41,11 @@ public class ChatAnnouncementsBO
 
             String message = XmppChat.createSystemMessage(announcementEntity.getAnnouncementMessage());
 
-            if (ticks % announcementEntity.getAnnouncementInterval() == 0)
-            {
-                for (MUCRoomEntity channel : channels)
-                {
+            if (ticks % announcementEntity.getAnnouncementInterval() == 0) {
+                for (MUCRoomEntity channel : channels) {
                     List<Long> members = restApiCli.getAllOccupantsInRoom(channel.getRoomName());
 
-                    for (Long member : members)
-                    {
+                    for (Long member : members) {
                         openFireSoapBoxCli.send(message, member);
                     }
                 }

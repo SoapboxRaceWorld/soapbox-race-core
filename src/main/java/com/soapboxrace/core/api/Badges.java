@@ -13,23 +13,23 @@ import javax.ws.rs.Path;
 import java.io.InputStream;
 
 @Path("/badges")
-public class Badges
-{
-    @EJB
-    private PersonaBO personaBO;
-    
+public class Badges {
+
     @EJB
     private TokenSessionBO tokenSessionBO;
-    
+
+    @EJB
+    private PersonaBO personaBO;
+
+    @Path("/set")
     @PUT
     @Secured
-    @Path("/set")
-    public String set(@HeaderParam("securityToken") String securityToken, InputStream is)
-    {
-        BadgeBundle badgeBundle = UnmarshalXML.unMarshal(is, BadgeBundle.class);
-        
-        personaBO.updateBadges(tokenSessionBO.getActivePersonaId(securityToken), badgeBundle);
-        
+    public String set(InputStream inputStream, @HeaderParam("securityToken") String securityToken) {
+        Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+
+        if (activePersonaId != 0L)
+            personaBO.updateBadges(activePersonaId, UnmarshalXML.unMarshal(inputStream, BadgeBundle.class));
+
         return "";
     }
 }
