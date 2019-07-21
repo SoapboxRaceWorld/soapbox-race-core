@@ -208,7 +208,6 @@ public class AchievementBO {
         }
 
         achievementsAwarded.setPersonaId(personaId);
-        achievementsAwarded.setScore(0);
 
         XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded = new XMPP_ResponseTypeAchievementsAwarded();
         responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
@@ -326,6 +325,7 @@ public class AchievementBO {
             ex.printStackTrace();
         }
 
+        achievementsAwarded.setScore(personaEntity.getScore());
         personaDAO.update(personaEntity);
     }
 
