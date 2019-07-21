@@ -6,22 +6,18 @@ import java.util.Map;
 import java.util.Optional;
 
 @Singleton
-public class MatchmakingBO
-{
+public class MatchmakingBO {
     private final Map<Long, Integer> queue;
 
-    public MatchmakingBO()
-    {
+    public MatchmakingBO() {
         queue = new HashMap<>();
     }
 
-    public void addToQueue(Long personaId, Integer carClass)
-    {
+    public void addToQueue(Long personaId, Integer carClass) {
         queue.put(personaId, carClass);
     }
 
-    public Long get(Integer carClass)
-    {
+    public Long get(Integer carClass) {
         System.out.println("get: " + carClass);
         for (Map.Entry<Long, Integer> entry : queue.entrySet()) {
             if (entry.getValue().equals(carClass)) {
@@ -29,7 +25,7 @@ public class MatchmakingBO
                 return entry.getKey();
             }
         }
-        
+
         if (queue.isEmpty()) {
             return null;
         }
@@ -39,8 +35,7 @@ public class MatchmakingBO
         return firstEntry.orElse(null);
     }
 
-    public void removeFromQueue(Long personaId)
-    {
+    public void removeFromQueue(Long personaId) {
         queue.remove(personaId);
     }
 }

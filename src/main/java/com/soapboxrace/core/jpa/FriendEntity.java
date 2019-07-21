@@ -8,8 +8,7 @@ import javax.persistence.*;
         @NamedQuery(name = "FriendEntity.findByUser", query = "SELECT obj FROM FriendEntity obj WHERE obj.user.id = :id"), //
         @NamedQuery(name = "FriendEntity.findBySenderAndRecipient", query = "SELECT obj FROM FriendEntity obj WHERE obj.user.id = :recipientUserId AND obj.personaId = :senderId"), //
 })
-public class FriendEntity
-{
+public class FriendEntity {
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,47 +20,39 @@ public class FriendEntity
 
     @Column
     private Long personaId;
-    
+
     @Column
     private int status; // 0=pending,1=accepted
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getPersonaId()
-    {
+    public Long getPersonaId() {
         return personaId;
     }
 
-    public void setPersonaId(Long personaId)
-    {
+    public void setPersonaId(Long personaId) {
         this.personaId = personaId;
     }
 
-    public int getStatus()
-    {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(int status)
-    {
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public UserEntity getUser()
-    {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user)
-    {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 }

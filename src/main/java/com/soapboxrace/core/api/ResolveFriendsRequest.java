@@ -10,12 +10,8 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
-import com.soapboxrace.jaxb.http.FriendPersona;
-import com.soapboxrace.jaxb.http.FriendResult;
 import com.soapboxrace.jaxb.http.PersonaBase;
 import com.soapboxrace.jaxb.util.MarshalXML;
-import com.soapboxrace.jaxb.xmpp.XMPP_FriendPersonaType;
-import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeFriendPersona;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePersonaBase;
 
 import javax.ejb.EJB;
@@ -23,8 +19,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("/resolvefriendsrequest")
-public class ResolveFriendsRequest
-{
+public class ResolveFriendsRequest {
     @EJB
     private TokenSessionBO sessionBO;
 
@@ -46,13 +41,11 @@ public class ResolveFriendsRequest
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_XML)
-    public String resolveFriendsRequest(@HeaderParam("securityToken") String securityToken, @QueryParam("friendPersonaId") Long friendPersonaId, @QueryParam("resolution") int resolution)
-    {
+    public String resolveFriendsRequest(@HeaderParam("securityToken") String securityToken, @QueryParam("friendPersonaId") Long friendPersonaId, @QueryParam("resolution") int resolution) {
         PersonaEntity recipient = personaDAO.findById(sessionBO.getActivePersonaId(securityToken));
         PersonaEntity sender = personaDAO.findById(friendPersonaId);
 
-        if (sender == null || recipient == null)
-        {
+        if (sender == null || recipient == null) {
             System.err.println("Hit a bad spot!");
             return "";
         }
@@ -61,20 +54,17 @@ public class ResolveFriendsRequest
 
         FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(recipient.getUser().getId(), sender.getPersonaId());
 
-        if (friendEntity == null)
-        {
+        if (friendEntity == null) {
             System.err.println("Invalid friend request!");
             return "";
         }
 
-        if (friendEntity.getStatus() == 1)
-        {
+        if (friendEntity.getStatus() == 1) {
             System.err.println("Already resolved friend request!");
             return "";
         }
 
-        if (resolution == 1)
-        {
+        if (resolution == 1) {
             PersonaBase personaBase = new PersonaBase();
 
             personaBase.setBadges(new ArrayOfBadgePacket());
@@ -118,8 +108,7 @@ public class ResolveFriendsRequest
             friendDAO.update(friendEntity);
 
             return MarshalXML.marshal(personaBase);
-        } else
-        {
+        } else {
             friendDAO.delete(friendEntity);
 
             return "";

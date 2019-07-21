@@ -3,18 +3,8 @@ package com.soapboxrace.core.bo.util;
 import com.soapboxrace.core.jpa.ProductEntity;
 
 public class CommerceSessionItem {
-    public enum ItemType {
-        INVENTORY, BASKET
-    }
-
-    public enum ItemStatus {
-        ADDED, REMOVED
-    }
-
     private final ProductEntity productEntity;
-
     private final ItemType itemType;
-
     private final ItemStatus itemStatus;
 
     public CommerceSessionItem(ProductEntity productEntity, ItemType itemType, ItemStatus itemStatus) {
@@ -33,5 +23,13 @@ public class CommerceSessionItem {
 
     public ItemStatus getItemStatus() {
         return itemStatus;
+    }
+
+    public enum ItemType {
+        INVENTORY, BASKET
+    }
+
+    public enum ItemStatus {
+        ADDED, REMOVED
     }
 }

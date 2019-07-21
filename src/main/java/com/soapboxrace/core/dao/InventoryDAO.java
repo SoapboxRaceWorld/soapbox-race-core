@@ -2,6 +2,7 @@ package com.soapboxrace.core.dao;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.InventoryEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -30,12 +31,12 @@ public class InventoryDAO extends BaseDAO<InventoryEntity> {
     }
 
     /**
-     * Delete the inventory associated with the given persona ID.
+     * Delete the inventory associated with the given persona.
      *
-     * @param personaId The ID of the persona whose inventory should be deleted.
+     * @param personaEntity The persona whose inventory should be deleted.
      */
-    public void deleteByPersona(Long personaId) {
-        InventoryEntity inventoryEntity = findByPersonaId(personaId);
+    public void deleteByPersona(PersonaEntity personaEntity) {
+        InventoryEntity inventoryEntity = findByPersonaId(personaEntity.getPersonaId());
 
         if (inventoryEntity != null) {
             this.delete(inventoryEntity);

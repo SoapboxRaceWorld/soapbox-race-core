@@ -1,8 +1,5 @@
 package com.soapboxrace.core.bo;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
@@ -12,133 +9,130 @@ import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
-import com.soapboxrace.jaxb.http.ArbitrationPacket;
-import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
-import com.soapboxrace.jaxb.http.ExitPath;
-import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
-import com.soapboxrace.jaxb.http.RouteEntrantResult;
-import com.soapboxrace.jaxb.http.RouteEventResult;
+import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_RouteEntrantResultType;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.HashMap;
 
 @Stateless
 public class EventResultRouteBO {
 
-	@EJB
-	private EventSessionDAO eventSessionDao;
+    @EJB
+    private EventSessionDAO eventSessionDao;
 
-	@EJB
-	private EventDataDAO eventDataDao;
+    @EJB
+    private EventDataDAO eventDataDao;
 
-	@EJB
-	private PersonaDAO personaDAO;
-	
-	@EJB
-	private OpenFireSoapBoxCli openFireSoapBoxCli;
+    @EJB
+    private PersonaDAO personaDAO;
 
-	@EJB
-	private RewardRouteBO rewardRouteBO;
+    @EJB
+    private OpenFireSoapBoxCli openFireSoapBoxCli;
 
-	@EJB
-	private CarDamageBO carDamageBO;
+    @EJB
+    private RewardRouteBO rewardRouteBO;
 
-	@EJB
-	private AchievementBO achievementBO;
+    @EJB
+    private CarDamageBO carDamageBO;
 
-	public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
-		Long eventSessionId = eventSessionEntity.getId();
-		eventSessionEntity.setEnded(System.currentTimeMillis());
+    @EJB
+    private AchievementBO achievementBO;
 
-		eventSessionDao.update(eventSessionEntity);
+    public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
+        Long eventSessionId = eventSessionEntity.getId();
+        eventSessionEntity.setEnded(System.currentTimeMillis());
 
-		EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
-		updateEventDataEntity(eventDataEntity, routeArbitrationPacket);
+        eventSessionDao.update(eventSessionEntity);
 
-		// RouteArbitrationPacket
-		eventDataEntity.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
-		eventDataEntity.setFractionCompleted(routeArbitrationPacket.getFractionCompleted());
-		eventDataEntity.setLongestJumpDurationInMilliseconds(routeArbitrationPacket.getLongestJumpDurationInMilliseconds());
-		eventDataEntity.setNumberOfCollisions(routeArbitrationPacket.getNumberOfCollisions());
-		eventDataEntity.setPerfectStart(routeArbitrationPacket.getPerfectStart());
-		eventDataEntity.setSumOfJumpsDurationInMilliseconds(routeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
-		eventDataEntity.setTopSpeed(routeArbitrationPacket.getTopSpeed());
+        EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
+        updateEventDataEntity(eventDataEntity, routeArbitrationPacket);
 
-		eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
-		eventDataEntity.setPersonaId(activePersonaId);
-		eventDataDao.update(eventDataEntity);
+        // RouteArbitrationPacket
+        eventDataEntity.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
+        eventDataEntity.setFractionCompleted(routeArbitrationPacket.getFractionCompleted());
+        eventDataEntity.setLongestJumpDurationInMilliseconds(routeArbitrationPacket.getLongestJumpDurationInMilliseconds());
+        eventDataEntity.setNumberOfCollisions(routeArbitrationPacket.getNumberOfCollisions());
+        eventDataEntity.setPerfectStart(routeArbitrationPacket.getPerfectStart());
+        eventDataEntity.setSumOfJumpsDurationInMilliseconds(routeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
+        eventDataEntity.setTopSpeed(routeArbitrationPacket.getTopSpeed());
 
-		ArrayOfRouteEntrantResult arrayOfRouteEntrantResult = new ArrayOfRouteEntrantResult();
-		for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
-			RouteEntrantResult routeEntrantResult = new RouteEntrantResult();
-			routeEntrantResult.setBestLapDurationInMilliseconds(racer.getBestLapDurationInMilliseconds());
-			routeEntrantResult.setEventDurationInMilliseconds(racer.getEventDurationInMilliseconds());
-			routeEntrantResult.setEventSessionId(eventSessionId);
-			routeEntrantResult.setFinishReason(racer.getFinishReason());
-			routeEntrantResult.setPersonaId(racer.getPersonaId());
-			routeEntrantResult.setRanking(racer.getRank());
-			routeEntrantResult.setTopSpeed(racer.getTopSpeed());
-			arrayOfRouteEntrantResult.getRouteEntrantResult().add(routeEntrantResult);
-		}
+        eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
+        eventDataEntity.setPersonaId(activePersonaId);
+        eventDataDao.update(eventDataEntity);
 
-		RouteEventResult routeEventResult = new RouteEventResult();
-		routeEventResult.setAccolades(rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket, eventSessionEntity));
-		routeEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, routeArbitrationPacket, routeArbitrationPacket.getNumberOfCollisions()));
-		routeEventResult.setEntrants(arrayOfRouteEntrantResult);
-		routeEventResult.setEventId(eventDataEntity.getEvent().getId());
-		routeEventResult.setEventSessionId(eventSessionId);
-		routeEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM : ExitPath.EXIT_TO_LOBBY);
-		routeEventResult.setInviteLifetimeInMilliseconds(0);
-		routeEventResult.setLobbyInviteId(0);
-		routeEventResult.setPersonaId(activePersonaId);
-		sendXmppPacket(eventSessionId, activePersonaId, routeArbitrationPacket);
+        ArrayOfRouteEntrantResult arrayOfRouteEntrantResult = new ArrayOfRouteEntrantResult();
+        for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
+            RouteEntrantResult routeEntrantResult = new RouteEntrantResult();
+            routeEntrantResult.setBestLapDurationInMilliseconds(racer.getBestLapDurationInMilliseconds());
+            routeEntrantResult.setEventDurationInMilliseconds(racer.getEventDurationInMilliseconds());
+            routeEntrantResult.setEventSessionId(eventSessionId);
+            routeEntrantResult.setFinishReason(racer.getFinishReason());
+            routeEntrantResult.setPersonaId(racer.getPersonaId());
+            routeEntrantResult.setRanking(racer.getRank());
+            routeEntrantResult.setTopSpeed(racer.getTopSpeed());
+            arrayOfRouteEntrantResult.getRouteEntrantResult().add(routeEntrantResult);
+        }
 
-		achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
-			put("persona", personaDAO.findById(activePersonaId));
-			put("event", eventDataEntity.getEvent());
-			put("eventData", eventDataEntity);
-			put("eventSession", eventSessionEntity);
-			put("eventContext", new AchievementEventContext(
-					EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
-					routeArbitrationPacket,
-					eventSessionEntity));
-		}});
+        RouteEventResult routeEventResult = new RouteEventResult();
+        routeEventResult.setAccolades(rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket, eventSessionEntity));
+        routeEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, routeArbitrationPacket, routeArbitrationPacket.getNumberOfCollisions()));
+        routeEventResult.setEntrants(arrayOfRouteEntrantResult);
+        routeEventResult.setEventId(eventDataEntity.getEvent().getId());
+        routeEventResult.setEventSessionId(eventSessionId);
+        routeEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM : ExitPath.EXIT_TO_LOBBY);
+        routeEventResult.setInviteLifetimeInMilliseconds(0);
+        routeEventResult.setLobbyInviteId(0);
+        routeEventResult.setPersonaId(activePersonaId);
+        sendXmppPacket(eventSessionId, activePersonaId, routeArbitrationPacket);
 
-		return routeEventResult;
-	}
+        achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
+            put("persona", personaDAO.findById(activePersonaId));
+            put("event", eventDataEntity.getEvent());
+            put("eventData", eventDataEntity);
+            put("eventSession", eventSessionEntity);
+            put("eventContext", new AchievementEventContext(
+                    EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
+                    routeArbitrationPacket,
+                    eventSessionEntity));
+        }});
 
-	private void updateEventDataEntity(EventDataEntity eventDataEntity, ArbitrationPacket arbitrationPacket) {
-		eventDataEntity.setAlternateEventDurationInMilliseconds(arbitrationPacket.getAlternateEventDurationInMilliseconds());
-		eventDataEntity.setCarId(arbitrationPacket.getCarId());
-		eventDataEntity.setEventDurationInMilliseconds(arbitrationPacket.getEventDurationInMilliseconds());
-		eventDataEntity.setFinishReason(arbitrationPacket.getFinishReason());
-		eventDataEntity.setHacksDetected(arbitrationPacket.getHacksDetected());
-		eventDataEntity.setRank(arbitrationPacket.getRank());
-	}
+        return routeEventResult;
+    }
 
-	private void sendXmppPacket(Long eventSessionId, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
-		XMPP_RouteEntrantResultType xmppRouteResult = new XMPP_RouteEntrantResultType();
-		xmppRouteResult.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
-		xmppRouteResult.setEventDurationInMilliseconds(routeArbitrationPacket.getEventDurationInMilliseconds());
-		xmppRouteResult.setEventSessionId(eventSessionId);
-		xmppRouteResult.setFinishReason(routeArbitrationPacket.getFinishReason());
-		xmppRouteResult.setPersonaId(activePersonaId);
-		xmppRouteResult.setRanking(routeArbitrationPacket.getRank());
-		xmppRouteResult.setTopSpeed(routeArbitrationPacket.getTopSpeed());
+    private void updateEventDataEntity(EventDataEntity eventDataEntity, ArbitrationPacket arbitrationPacket) {
+        eventDataEntity.setAlternateEventDurationInMilliseconds(arbitrationPacket.getAlternateEventDurationInMilliseconds());
+        eventDataEntity.setCarId(arbitrationPacket.getCarId());
+        eventDataEntity.setEventDurationInMilliseconds(arbitrationPacket.getEventDurationInMilliseconds());
+        eventDataEntity.setFinishReason(arbitrationPacket.getFinishReason());
+        eventDataEntity.setHacksDetected(arbitrationPacket.getHacksDetected());
+        eventDataEntity.setRank(arbitrationPacket.getRank());
+    }
 
-		XMPP_ResponseTypeRouteEntrantResult routeEntrantResultResponse = new XMPP_ResponseTypeRouteEntrantResult();
-		routeEntrantResultResponse.setRouteEntrantResult(xmppRouteResult);
+    private void sendXmppPacket(Long eventSessionId, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
+        XMPP_RouteEntrantResultType xmppRouteResult = new XMPP_RouteEntrantResultType();
+        xmppRouteResult.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
+        xmppRouteResult.setEventDurationInMilliseconds(routeArbitrationPacket.getEventDurationInMilliseconds());
+        xmppRouteResult.setEventSessionId(eventSessionId);
+        xmppRouteResult.setFinishReason(routeArbitrationPacket.getFinishReason());
+        xmppRouteResult.setPersonaId(activePersonaId);
+        xmppRouteResult.setRanking(routeArbitrationPacket.getRank());
+        xmppRouteResult.setTopSpeed(routeArbitrationPacket.getTopSpeed());
 
-		for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
-			if (!racer.getPersonaId().equals(activePersonaId)) {
-				XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId(), openFireSoapBoxCli);
-				xmppEvent.sendRaceEnd(routeEntrantResultResponse);
-				if (routeArbitrationPacket.getRank() == 1) {
-					xmppEvent.sendEventTimingOut(eventSessionId);
-				}
-			}
-		}
-	}
+        XMPP_ResponseTypeRouteEntrantResult routeEntrantResultResponse = new XMPP_ResponseTypeRouteEntrantResult();
+        routeEntrantResultResponse.setRouteEntrantResult(xmppRouteResult);
+
+        for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
+            if (!racer.getPersonaId().equals(activePersonaId)) {
+                XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId(), openFireSoapBoxCli);
+                xmppEvent.sendRaceEnd(routeEntrantResultResponse);
+                if (routeArbitrationPacket.getRank() == 1) {
+                    xmppEvent.sendEventTimingOut(eventSessionId);
+                }
+            }
+        }
+    }
 
 }

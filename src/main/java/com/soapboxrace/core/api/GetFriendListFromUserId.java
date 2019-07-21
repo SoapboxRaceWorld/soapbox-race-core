@@ -1,9 +1,5 @@
 package com.soapboxrace.core.api;
 
-import javax.ejb.EJB;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.PresenceManager;
 import com.soapboxrace.core.dao.FriendDAO;
@@ -11,16 +7,20 @@ import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.FriendEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
-import com.soapboxrace.jaxb.annotation.XsiSchemaLocation;
 import com.soapboxrace.jaxb.http.ArrayOfFriendPersona;
 import com.soapboxrace.jaxb.http.FriendPersona;
 import com.soapboxrace.jaxb.http.PersonaFriendsList;
 
+import javax.ejb.EJB;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/getfriendlistfromuserid")
-public class GetFriendListFromUserId
-{
+public class GetFriendListFromUserId {
     @EJB
     private FriendDAO friendDAO;
 
@@ -36,13 +36,11 @@ public class GetFriendListFromUserId
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_XML)
-    public PersonaFriendsList getFriendListFromUserId(@QueryParam("userId") Long userId)
-    {
+    public PersonaFriendsList getFriendListFromUserId(@QueryParam("userId") Long userId) {
         ArrayOfFriendPersona arrayOfFriendPersona = new ArrayOfFriendPersona();
         List<FriendEntity> friendList = friendDAO.findByUserId(userId);
 
-        for (FriendEntity friendEntity : friendList)
-        {
+        for (FriendEntity friendEntity : friendList) {
             PersonaEntity personaEntity = personaDAO.findById(friendEntity.getPersonaId());
 
             if (personaEntity == null) continue;
@@ -54,11 +52,9 @@ public class GetFriendListFromUserId
             friendPersona.setOriginalName(personaEntity.getName());
             friendPersona.setPersonaId(personaEntity.getPersonaId());
 
-            if (friendEntity.getStatus() == 1)
-            {
+            if (friendEntity.getStatus() == 1) {
                 friendPersona.setPresence(presenceManager.getPresence(personaEntity.getPersonaId()));
-            } else
-            {
+            } else {
                 friendPersona.setPresence(3);
             }
 

@@ -1,18 +1,17 @@
 package com.soapboxrace.core.api;
 
-import javax.ejb.EJB;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.AchievementBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.jaxb.http.AchievementRewards;
 import com.soapboxrace.jaxb.http.AchievementsPacket;
 
+import javax.ejb.EJB;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+
 @Path("/achievements")
-public class Achievements
-{
+public class Achievements {
     @EJB
     private TokenSessionBO tokenSessionBO;
 
@@ -23,8 +22,7 @@ public class Achievements
     @Secured
     @Path("/loadall")
     @Produces(MediaType.APPLICATION_XML)
-    public AchievementsPacket loadall(@HeaderParam("securityToken") String securityToken)
-    {
+    public AchievementsPacket loadall(@HeaderParam("securityToken") String securityToken) {
         Long personaId = tokenSessionBO.getActivePersonaId(securityToken);
 
         if (personaId != 0L) {

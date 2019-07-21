@@ -1,54 +1,45 @@
 package com.soapboxrace.core.jpa;
 
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "PERFORMANCEPART")
-@NamedQueries({ @NamedQuery(name = "PerformancePartEntity.deleteByCustomCar", //
-		query = "DELETE FROM PerformancePartEntity obj WHERE obj.customCar = :customCar") //
+@NamedQueries({@NamedQuery(name = "PerformancePartEntity.deleteByCustomCar", //
+        query = "DELETE FROM PerformancePartEntity obj WHERE obj.customCar = :customCar") //
 })
 public class PerformancePartEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private int performancePartAttribHash;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private int performancePartAttribHash;
 
-	@ManyToOne
-	@JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PERFPART_CUSTOMCAR"))
-	private CustomCarEntity customCar;
+    @ManyToOne
+    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PERFPART_CUSTOMCAR"))
+    private CustomCarEntity customCar;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public int getPerformancePartAttribHash() {
-		return performancePartAttribHash;
-	}
+    public int getPerformancePartAttribHash() {
+        return performancePartAttribHash;
+    }
 
-	public void setPerformancePartAttribHash(int performancePartAttribHash) {
-		this.performancePartAttribHash = performancePartAttribHash;
-	}
+    public void setPerformancePartAttribHash(int performancePartAttribHash) {
+        this.performancePartAttribHash = performancePartAttribHash;
+    }
 
-	public CustomCarEntity getCustomCar() {
-		return customCar;
-	}
+    public CustomCarEntity getCustomCar() {
+        return customCar;
+    }
 
-	public void setCustomCar(CustomCarEntity customCar) {
-		this.customCar = customCar;
-	}
+    public void setCustomCar(CustomCarEntity customCar) {
+        this.customCar = customCar;
+    }
 
 }

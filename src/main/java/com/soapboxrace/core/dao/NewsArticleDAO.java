@@ -16,11 +16,11 @@ public class NewsArticleDAO extends BaseDAO<NewsArticleEntity> {
     protected void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-    
+
     public NewsArticleEntity findById(Long id) {
         return this.entityManager.find(NewsArticleEntity.class, id);
     }
-    
+
     public List<NewsArticleEntity> findAllByPersona(Long personaId) {
         TypedQuery<NewsArticleEntity> query = entityManager.createNamedQuery("NewsArticleEntity.findAllByPersona", NewsArticleEntity.class);
 

@@ -14,119 +14,119 @@ import java.util.List;
 @Stateless
 public class PersonaBO {
 
-	@EJB
-	private PersonaDAO personaDAO;
+    @EJB
+    private PersonaDAO personaDAO;
 
-	@EJB
-	private CarSlotDAO carSlotDAO;
+    @EJB
+    private CarSlotDAO carSlotDAO;
 
-	@EJB
-	private LevelRepDAO levelRepDAO;
+    @EJB
+    private LevelRepDAO levelRepDAO;
 
-	@EJB
-	private OwnedCarDAO ownedCarDAO;
+    @EJB
+    private OwnedCarDAO ownedCarDAO;
 
-	@EJB
-	private ParameterBO parameterBO;
+    @EJB
+    private ParameterBO parameterBO;
 
-	@EJB
-	private PersonaBadgeDAO personaBadgeDAO;
+    @EJB
+    private PersonaBadgeDAO personaBadgeDAO;
 
-	@EJB
-	private BadgeDefinitionDAO badgeDefinitionDAO;
+    @EJB
+    private BadgeDefinitionDAO badgeDefinitionDAO;
 
-	public void updateBadges(Long personaId, BadgeBundle badgeBundle) {
-		PersonaEntity personaEntity = personaDAO.findById(personaId);
+    public void updateBadges(Long personaId, BadgeBundle badgeBundle) {
+        PersonaEntity personaEntity = personaDAO.findById(personaId);
 
-		for (BadgeInput badgeInput : badgeBundle.getBadgeInputs()) {
-			if (badgeInput.getSlotId() > 3) {
-				throw new RuntimeException("Invalid SlotId: " + badgeInput.getSlotId());
-			}
+        for (BadgeInput badgeInput : badgeBundle.getBadgeInputs()) {
+            if (badgeInput.getSlotId() > 3) {
+                throw new RuntimeException("Invalid SlotId: " + badgeInput.getSlotId());
+            }
 
-			BadgeDefinitionEntity badgeDefinitionEntity = badgeDefinitionDAO.find((long) badgeInput.getBadgeDefinitionId());
-			if (badgeDefinitionEntity == null) {
-				throw new RuntimeException("Invalid BadgeDefinitionId: " + badgeInput.getBadgeDefinitionId());
-			}
+            BadgeDefinitionEntity badgeDefinitionEntity = badgeDefinitionDAO.find((long) badgeInput.getBadgeDefinitionId());
+            if (badgeDefinitionEntity == null) {
+                throw new RuntimeException("Invalid BadgeDefinitionId: " + badgeInput.getBadgeDefinitionId());
+            }
 
-			PersonaBadgeEntity personaBadgeEntity = personaBadgeDAO.findBadgeInSlotForPersona(personaId, (int) badgeInput.getSlotId());
-			if (personaBadgeEntity == null) {
-				personaBadgeEntity = new PersonaBadgeEntity();
-				personaBadgeEntity.setBadgeDefinitionEntity(badgeDefinitionEntity);
-				personaBadgeEntity.setPersonaEntity(personaEntity);
-				personaBadgeEntity.setSlot((int) badgeInput.getSlotId());
-				personaBadgeDAO.insert(personaBadgeEntity);
-			} else {
-				personaBadgeEntity.setBadgeDefinitionEntity(badgeDefinitionEntity);
-				personaBadgeDAO.update(personaBadgeEntity);
-			}
-		}
-	}
-	
-	public void changeDefaultCar(Long personaId, Long defaultCarId) {
-		PersonaEntity personaEntity = personaDAO.findById(personaId);
-		List<CarSlotEntity> carSlotList = carSlotDAO.findByPersonaId(personaId);
-		int i = 0;
-		for (CarSlotEntity carSlotEntity : carSlotList) {
-			if (carSlotEntity.getOwnedCar().getId().equals(defaultCarId)) {
-				break;
-			}
-			i++;
-		}
-		personaEntity.setCurCarIndex(i);
-		personaDAO.update(personaEntity);
-	}
+            PersonaBadgeEntity personaBadgeEntity = personaBadgeDAO.findBadgeInSlotForPersona(personaId, (int) badgeInput.getSlotId());
+            if (personaBadgeEntity == null) {
+                personaBadgeEntity = new PersonaBadgeEntity();
+                personaBadgeEntity.setBadgeDefinitionEntity(badgeDefinitionEntity);
+                personaBadgeEntity.setPersonaEntity(personaEntity);
+                personaBadgeEntity.setSlot((int) badgeInput.getSlotId());
+                personaBadgeDAO.insert(personaBadgeEntity);
+            } else {
+                personaBadgeEntity.setBadgeDefinitionEntity(badgeDefinitionEntity);
+                personaBadgeDAO.update(personaBadgeEntity);
+            }
+        }
+    }
 
-	public PersonaEntity getPersonaById(Long personaId) {
-		return personaDAO.findById(personaId);
-	}
+    public void changeDefaultCar(Long personaId, Long defaultCarId) {
+        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        List<CarSlotEntity> carSlotList = carSlotDAO.findByPersonaId(personaId);
+        int i = 0;
+        for (CarSlotEntity carSlotEntity : carSlotList) {
+            if (carSlotEntity.getOwnedCar().getId().equals(defaultCarId)) {
+                break;
+            }
+            i++;
+        }
+        personaEntity.setCurCarIndex(i);
+        personaDAO.update(personaEntity);
+    }
 
-	public CarSlotEntity getDefaultCarEntity(Long personaId) {
-		PersonaEntity personaEntity = personaDAO.findById(personaId);
-		List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
-		Integer curCarIndex = personaEntity.getCurCarIndex();
-		if (!carSlotList.isEmpty()) {
-			if (curCarIndex >= carSlotList.size()) {
-				curCarIndex = carSlotList.size() - 1;
-				CarSlotEntity ownedCarEntity = carSlotList.get(curCarIndex);
-				changeDefaultCar(personaId, ownedCarEntity.getId());
-			}
-			CarSlotEntity carSlotEntity = carSlotList.get(curCarIndex);
-			CustomCarEntity customCar = carSlotEntity.getOwnedCar().getCustomCar();
-			customCar.getPaints().size();
-			customCar.getPerformanceParts().size();
-			customCar.getSkillModParts().size();
-			customCar.getVisualParts().size();
-			customCar.getVinyls().size();
-			return carSlotEntity;
-		}
-		return null;
-	}
+    public PersonaEntity getPersonaById(Long personaId) {
+        return personaDAO.findById(personaId);
+    }
 
-	public OwnedCarTrans getDefaultCar(Long personaId) {
-		CarSlotEntity carSlotEntity = getDefaultCarEntity(personaId);
-		if (carSlotEntity == null) {
-			return new OwnedCarTrans();
-		}
-		return OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
-	}
+    public CarSlotEntity getDefaultCarEntity(Long personaId) {
+        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
+        Integer curCarIndex = personaEntity.getCurCarIndex();
+        if (!carSlotList.isEmpty()) {
+            if (curCarIndex >= carSlotList.size()) {
+                curCarIndex = carSlotList.size() - 1;
+                CarSlotEntity ownedCarEntity = carSlotList.get(curCarIndex);
+                changeDefaultCar(personaId, ownedCarEntity.getId());
+            }
+            CarSlotEntity carSlotEntity = carSlotList.get(curCarIndex);
+            CustomCarEntity customCar = carSlotEntity.getOwnedCar().getCustomCar();
+            customCar.getPaints().size();
+            customCar.getPerformanceParts().size();
+            customCar.getSkillModParts().size();
+            customCar.getVisualParts().size();
+            customCar.getVinyls().size();
+            return carSlotEntity;
+        }
+        return null;
+    }
 
-	public List<CarSlotEntity> getPersonasCar(Long personaId) {
-		return carSlotDAO.findByPersonaId(personaId);
-	}
+    public OwnedCarTrans getDefaultCar(Long personaId) {
+        CarSlotEntity carSlotEntity = getDefaultCarEntity(personaId);
+        if (carSlotEntity == null) {
+            return new OwnedCarTrans();
+        }
+        return OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
+    }
 
-	public LevelRepEntity getLevelInfoByLevel(Long level) {
-		return levelRepDAO.findByLevel(level);
-	}
+    public List<CarSlotEntity> getPersonasCar(Long personaId) {
+        return carSlotDAO.findByPersonaId(personaId);
+    }
 
-	public OwnedCarEntity getCarByOwnedCarId(Long ownedCarId) {
-		OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(ownedCarId);
-		CustomCarEntity customCar = ownedCarEntity.getCustomCar();
-		customCar.getPaints().size();
-		customCar.getPerformanceParts().size();
-		customCar.getSkillModParts().size();
-		customCar.getVisualParts().size();
-		customCar.getVinyls().size();
-		return ownedCarEntity;
-	}
+    public LevelRepEntity getLevelInfoByLevel(Long level) {
+        return levelRepDAO.findByLevel(level);
+    }
+
+    public OwnedCarEntity getCarByOwnedCarId(Long ownedCarId) {
+        OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(ownedCarId);
+        CustomCarEntity customCar = ownedCarEntity.getCustomCar();
+        customCar.getPaints().size();
+        customCar.getPerformanceParts().size();
+        customCar.getSkillModParts().size();
+        customCar.getVisualParts().size();
+        customCar.getVinyls().size();
+        return ownedCarEntity;
+    }
 
 }

@@ -1,94 +1,84 @@
 package com.soapboxrace.core.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "PAINT")
-@NamedQueries({ @NamedQuery(name = "PaintEntity.deleteByCustomCar", //
-		query = "DELETE FROM PaintEntity obj WHERE obj.customCar = :customCar") //
+@NamedQueries({@NamedQuery(name = "PaintEntity.deleteByCustomCar", //
+        query = "DELETE FROM PaintEntity obj WHERE obj.customCar = :customCar") //
 })
 public class PaintEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PAINT_CUSTOMCAR"))
-	private CustomCarEntity customCar;
+    @ManyToOne
+    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PAINT_CUSTOMCAR"))
+    private CustomCarEntity customCar;
 
-	@Column(name = "paintGroup")
-	private int group;
-	private int hue;
-	private int sat;
-	private int slot;
-	@Column(name = "paintVar")
-	private int var;
+    @Column(name = "paintGroup")
+    private int group;
+    private int hue;
+    private int sat;
+    private int slot;
+    @Column(name = "paintVar")
+    private int var;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public CustomCarEntity getCustomCar() {
-		return customCar;
-	}
+    public CustomCarEntity getCustomCar() {
+        return customCar;
+    }
 
-	public void setCustomCar(CustomCarEntity customCar) {
-		this.customCar = customCar;
-	}
+    public void setCustomCar(CustomCarEntity customCar) {
+        this.customCar = customCar;
+    }
 
-	public int getGroup() {
-		return group;
-	}
+    public int getGroup() {
+        return group;
+    }
 
-	public void setGroup(int group) {
-		this.group = group;
-	}
+    public void setGroup(int group) {
+        this.group = group;
+    }
 
-	public int getHue() {
-		return hue;
-	}
+    public int getHue() {
+        return hue;
+    }
 
-	public void setHue(int hue) {
-		this.hue = hue;
-	}
+    public void setHue(int hue) {
+        this.hue = hue;
+    }
 
-	public int getSat() {
-		return sat;
-	}
+    public int getSat() {
+        return sat;
+    }
 
-	public void setSat(int sat) {
-		this.sat = sat;
-	}
+    public void setSat(int sat) {
+        this.sat = sat;
+    }
 
-	public int getSlot() {
-		return slot;
-	}
+    public int getSlot() {
+        return slot;
+    }
 
-	public void setSlot(int slot) {
-		this.slot = slot;
-	}
+    public void setSlot(int slot) {
+        this.slot = slot;
+    }
 
-	public int getVar() {
-		return var;
-	}
+    public int getVar() {
+        return var;
+    }
 
-	public void setVar(int var) {
-		this.var = var;
-	}
+    public void setVar(int var) {
+        this.var = var;
+    }
 
 }

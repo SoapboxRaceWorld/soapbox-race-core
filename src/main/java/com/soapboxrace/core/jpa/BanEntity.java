@@ -1,102 +1,95 @@
 package com.soapboxrace.core.jpa;
 
-import java.time.LocalDateTime;
+import com.soapboxrace.core.jpa.convert.LocalDateTimeConverter;
 
 import javax.persistence.*;
-
-import com.soapboxrace.core.jpa.convert.LocalDateTimeConverter;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "BAN")
 @NamedQueries({ //
-		@NamedQuery(name = "BanEntity.findAll", query = "SELECT obj FROM BanEntity obj") })
+        @NamedQuery(name = "BanEntity.findAll", query = "SELECT obj FROM BanEntity obj")})
 public class BanEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private Long id;
 
-	@OneToOne(targetEntity = UserEntity.class)
-	@JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BAN_USER"))
-	private UserEntity userEntity;
-	
-	@ManyToOne(targetEntity = PersonaEntity.class)
-	@JoinColumn(name = "banned_by_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BANNED_BY"))
-	private PersonaEntity bannedBy;
+    @OneToOne(targetEntity = UserEntity.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BAN_USER"))
+    private UserEntity userEntity;
 
-	@Column
-	private String reason;
+    @ManyToOne(targetEntity = PersonaEntity.class)
+    @JoinColumn(name = "banned_by_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BANNED_BY"))
+    private PersonaEntity bannedBy;
 
-	@Column
-	@Convert(converter = LocalDateTimeConverter.class)
-	private LocalDateTime started;
-	
-	@Column
-	@Convert(converter = LocalDateTimeConverter.class)
-	private LocalDateTime endsAt;
-	
-	@Column
-	private boolean willEnd;
+    @Column
+    private String reason;
 
-	public Long getId() {
-		return id;
-	}
+    @Column
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime started;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime endsAt;
 
-	public UserEntity getUserEntity() {
-		return userEntity;
-	}
+    @Column
+    private boolean willEnd;
 
-	public void setUserEntity(UserEntity userEntity) {
-		this.userEntity = userEntity;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public PersonaEntity getBannedBy()
-	{
-		return bannedBy;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setBannedBy(PersonaEntity bannedBy)
-	{
-		this.bannedBy = bannedBy;
-	}
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
 
-	public LocalDateTime getEndsAt() {
-		return endsAt;
-	}
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
 
-	public void setEndsAt(LocalDateTime endsAt) {
-		this.endsAt = endsAt;
-	}
+    public PersonaEntity getBannedBy() {
+        return bannedBy;
+    }
 
-	public String getReason() {
-		return reason;
-	}
+    public void setBannedBy(PersonaEntity bannedBy) {
+        this.bannedBy = bannedBy;
+    }
 
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
+    public LocalDateTime getEndsAt() {
+        return endsAt;
+    }
 
-	public boolean isWillEnd()
-	{
-		return willEnd;
-	}
+    public void setEndsAt(LocalDateTime endsAt) {
+        this.endsAt = endsAt;
+    }
 
-	public void setWillEnd(boolean willEnd)
-	{
-		this.willEnd = willEnd;
-	}
+    public String getReason() {
+        return reason;
+    }
 
-	public LocalDateTime getStarted()
-	{
-		return started;
-	}
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
-	public void setStarted(LocalDateTime started)
-	{
-		this.started = started;
-	}
+    public boolean isWillEnd() {
+        return willEnd;
+    }
+
+    public void setWillEnd(boolean willEnd) {
+        this.willEnd = willEnd;
+    }
+
+    public LocalDateTime getStarted() {
+        return started;
+    }
+
+    public void setStarted(LocalDateTime started) {
+        this.started = started;
+    }
 }

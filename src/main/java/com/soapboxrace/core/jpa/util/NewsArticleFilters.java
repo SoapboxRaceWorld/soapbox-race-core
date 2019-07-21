@@ -1,7 +1,6 @@
 package com.soapboxrace.core.jpa.util;
 
-public enum NewsArticleFilters
-{
+public enum NewsArticleFilters {
     None(0),
     Me(1),
     Friends(2),
@@ -12,13 +11,11 @@ public enum NewsArticleFilters
 
     private final int filterMask;
 
-    NewsArticleFilters(int filterMask)
-    {
+    NewsArticleFilters(int filterMask) {
         this.filterMask = filterMask;
     }
 
-    public int getFilterMask()
-    {
+    public int getFilterMask() {
         return filterMask;
     }
 }

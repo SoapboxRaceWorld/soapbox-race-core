@@ -4,12 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommerceSession {
-    public enum SessionType {
-        PAINT, SKILL_MODS, PERFORMANCE, VINYLS, AFTERMARKET, UNKNOWN
-    }
-
     private final SessionType sessionType;
-
     private final List<CommerceSessionItem> items;
 
     public CommerceSession(SessionType sessionType) {
@@ -23,5 +18,9 @@ public class CommerceSession {
 
     public SessionType getSessionType() {
         return sessionType;
+    }
+
+    public enum SessionType {
+        PAINT, SKILL_MODS, PERFORMANCE, VINYLS, AFTERMARKET, UNKNOWN
     }
 }

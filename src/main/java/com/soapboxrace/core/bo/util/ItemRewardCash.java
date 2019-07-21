@@ -1,12 +1,13 @@
 package com.soapboxrace.core.bo.util;
 
 import com.soapboxrace.core.jpa.ProductEntity;
+
 import java.util.List;
 
-public class AchievementRewardCash extends AchievementRewardBase {
+public class ItemRewardCash extends ItemRewardBase {
     private final int cash;
 
-    public AchievementRewardCash(int cash) {
+    public ItemRewardCash(int cash) {
         this.cash = cash;
     }
 

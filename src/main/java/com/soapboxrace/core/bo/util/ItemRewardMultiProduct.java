@@ -5,10 +5,10 @@ import com.soapboxrace.core.jpa.ProductEntity;
 import java.util.Collections;
 import java.util.List;
 
-public class AchievementRewardMultiProduct extends AchievementRewardBase {
+public class ItemRewardMultiProduct extends ItemRewardBase {
     private final List<ProductEntity> productEntities;
 
-    public AchievementRewardMultiProduct(List<ProductEntity> productEntities) {
+    public ItemRewardMultiProduct(List<ProductEntity> productEntities) {
         this.productEntities = productEntities;
     }
 

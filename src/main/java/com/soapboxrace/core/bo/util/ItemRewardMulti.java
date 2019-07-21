@@ -5,14 +5,14 @@ import com.soapboxrace.core.jpa.ProductEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AchievementRewardMulti extends AchievementRewardBase {
-    private final List<AchievementRewardBase> achievementRewardList;
+public class ItemRewardMulti extends ItemRewardBase {
+    private final List<ItemRewardBase> achievementRewardList;
 
-    public AchievementRewardMulti(List<AchievementRewardBase> achievementRewardList) {
+    public ItemRewardMulti(List<ItemRewardBase> achievementRewardList) {
         this.achievementRewardList = achievementRewardList;
     }
 
-    public List<AchievementRewardBase> getAchievementRewardList() {
+    public List<ItemRewardBase> getAchievementRewardList() {
         return achievementRewardList;
     }
 

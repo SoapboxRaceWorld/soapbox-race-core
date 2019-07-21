@@ -1,25 +1,25 @@
 package com.soapboxrace.core.xmpp;
 
-import java.net.Socket;
-
 import com.soapboxrace.core.bo.ParameterBO;
 
+import java.net.Socket;
+
 public interface IOpenFireTalk {
-	void init();
+    void init();
 
-	String read();
+    String read();
 
-	void write(String msg);
+    void write(String msg);
 
-	void send(String msg, String to, ParameterBO parameterBO);
+    void send(String msg, String to, ParameterBO parameterBO);
 
-	void send(String msg, Long personaId, ParameterBO parameterBO);
+    void send(String msg, Long personaId, ParameterBO parameterBO);
 
-	void handleMessage(String msg);
+    void handleMessage(String msg);
 
-	Socket getSocket();
+    Socket getSocket();
 
-	void setSocket(Socket socket);
+    void setSocket(Socket socket);
 
-	void startReader();
+    void startReader();
 }

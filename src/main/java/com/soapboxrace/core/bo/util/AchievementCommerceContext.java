@@ -3,14 +3,8 @@ package com.soapboxrace.core.bo.util;
 import com.soapboxrace.core.jpa.CarClassesEntity;
 
 public class AchievementCommerceContext {
-    public enum CommerceType {
-        CAR_PURCHASE, GENERIC_COMMERCE
-    }
-
     private final CarClassesEntity carClassesEntity;
-
     private final CommerceType commerceType;
-
     private final int commerceTypeVal;
 
     public AchievementCommerceContext(CarClassesEntity carClassesEntity, CommerceType commerceType) {
@@ -29,5 +23,9 @@ public class AchievementCommerceContext {
 
     public int getCommerceTypeVal() {
         return commerceTypeVal;
+    }
+
+    public enum CommerceType {
+        CAR_PURCHASE, GENERIC_COMMERCE
     }
 }

@@ -11,6 +11,7 @@ import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeAchievementsAwarded;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
 
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.script.Bindings;
 import javax.script.ScriptEngineManager;
@@ -24,28 +25,35 @@ import java.util.OptionalInt;
 @Stateless
 public class AchievementBO {
 
+    private final ThreadLocal<NashornScriptEngine> scriptEngine = ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
     @EJB
-    private AchievementRewardBO achievementRewardBO;
-
+    private ItemRewardBO itemRewardBO;
     @EJB
     private PersonaAchievementDAO personaAchievementDAO;
-
     @EJB
     private PersonaAchievementRankDAO personaAchievementRankDAO;
-
     @EJB
     private AchievementDAO achievementDAO;
-
+    @EJB
+    private AchievementRankDAO achievementRankDAO;
+    @EJB
+    private AchievementRewardDAO achievementRewardDAO;
     @EJB
     private BadgeDefinitionDAO badgeDefinitionDAO;
-
     @EJB
     private PersonaDAO personaDAO;
-
     @EJB
     private OpenFireSoapBoxCli openFireSoapBoxCli;
 
-    private final ThreadLocal<NashornScriptEngine> scriptEngine = ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
+    @Schedule(minute = "*/30", hour = "*")
+    public void updateRankRarities() {
+        for (AchievementEntity achievementEntity : achievementDAO.findAll()) {
+            for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
+                achievementRankEntity.setRarity(((float) personaAchievementRankDAO.countPersonasWithRank(achievementRankEntity.getId())) / personaDAO.countPersonas());
+                achievementRankDAO.update(achievementRankEntity);
+            }
+        }
+    }
 
     public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
         PersonaAchievementRankEntity personaAchievementRankEntity = personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, achievementRankId);
@@ -58,7 +66,23 @@ public class AchievementBO {
             throw new IllegalArgumentException(personaId + " has no reward for " + achievementRankId);
         }
 
-        AchievementRewards achievementRewards = achievementRewardBO.redeemRewards(personaId, achievementRankId);
+        AchievementRewards achievementRewards = new AchievementRewards();
+        achievementRewards.setAchievementRankId(achievementRankId);
+        achievementRewards.setVisualStyle(personaAchievementRankEntity.getAchievementRankEntity().getRewardVisualStyle());
+        achievementRewards.setStatus(CommerceResultStatus.SUCCESS);
+        achievementRewards.setCommerceItems(
+                itemRewardBO.getRewards(
+                        personaId,
+                        achievementRewardDAO.findByDescription(personaAchievementRankEntity.getAchievementRankEntity().getRewardDescription())
+                                .getRewardScript()));
+        achievementRewards.setInventoryItems(new ArrayOfInventoryItemTrans());
+        achievementRewards.setPurchasedCars(new ArrayOfOwnedCarTrans());
+        achievementRewards.setWallets(new ArrayOfWalletTrans());
+
+        achievementRewards.getWallets().getWalletTrans().add(new WalletTrans() {{
+            setBalance(personaDAO.findById(personaId).getCash());
+            setCurrency("CASH");
+        }});
 
         personaAchievementRankEntity.setState("Completed");
         personaAchievementRankDAO.update(personaAchievementRankEntity);
@@ -151,13 +175,10 @@ public class AchievementBO {
         achievementsAwarded.setBadges(new ArrayList<>());
         achievementsAwarded.setProgressed(new ArrayList<>());
 
-        long startTime = System.currentTimeMillis();
-
         for (AchievementEntity achievementEntity : achievementDAO.findAllByCategory(achievementCategory)) {
             if (!achievementEntity.getAutoUpdate()) continue;
 
             if (achievementEntity.getUpdateTrigger() == null || achievementEntity.getUpdateTrigger().trim().isEmpty()) {
-                System.out.println("WARNING: " + achievementEntity.getName() + " has no update trigger");
                 continue;
             }
 
@@ -179,20 +200,12 @@ public class AchievementBO {
             try {
                 Boolean shouldUpdate = (Boolean) scriptEngine.get().eval(achievementEntity.getUpdateTrigger(), bindings);
                 if (shouldUpdate) {
-                    System.out.println("DEBUG: update " + achievementEntity.getName() + " for " + personaId);
                     updateAchievement(personaId, achievementEntity, bindings, achievementsAwarded, personaAchievementEntity);
-                } else {
-                    System.out.println("condition failed");
-                    System.out.println(achievementEntity.getUpdateTrigger());
                 }
             } catch (ScriptException ex) {
                 ex.printStackTrace();
             }
         }
-
-        long endTime = System.currentTimeMillis();
-
-        System.out.println("updates done in " + (endTime - startTime) + "ms");
 
         achievementsAwarded.setPersonaId(personaId);
         achievementsAwarded.setScore(0);
@@ -216,7 +229,6 @@ public class AchievementBO {
             Long cleanVal = 0L;
 
             if (achievementEntity.getUpdateValue() == null || achievementEntity.getUpdateValue().trim().isEmpty()) {
-                System.out.println("WARNING: " + achievementEntity.getName() + " has no update value");
                 return;
             }
 
@@ -275,9 +287,6 @@ public class AchievementBO {
                         currentRank.setState("RewardWaiting");
                         currentRank.setAchievedOn(LocalDateTime.now());
                         personaAchievementRankDAO.update(currentRank);
-                        Long numPersonasWithRank = personaAchievementDAO.countPersonasWithRank(current.getId());
-                        float countPersonas = personaDAO.countPersonas();
-                        current.setRarity((numPersonasWithRank / countPersonas));
 
                         AchievementAwarded achievementAwarded = new AchievementAwarded();
                         achievementAwarded.setAchievedOn(currentRank.getAchievedOn().format(DateTimeFormatter.ofPattern("yyyyy-MM-dd'T'hh:mm:ss")));

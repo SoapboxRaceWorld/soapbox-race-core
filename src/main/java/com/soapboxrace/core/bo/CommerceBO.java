@@ -1,16 +1,17 @@
 package com.soapboxrace.core.bo;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 import com.soapboxrace.core.bo.util.ListDifferences;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.*;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Stateless
 public class CommerceBO {
@@ -70,6 +71,9 @@ public class CommerceBO {
 
     @EJB
     private AchievementBO achievementBO;
+
+    @EJB
+    private DriverPersonaBO driverPersonaBO;
 
     public OwnedCarTrans responseCar(CommerceSessionTrans commerceSessionTrans) {
         OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
@@ -176,8 +180,8 @@ public class CommerceBO {
             });
         }
 
-        int finalCash = ((int) personaEntity.getCash()) - removeCash + addCash.get();
-        int finalBoost = ((int) personaEntity.getBoost()) - removeBoost + addBoost;
+        double finalCash = personaEntity.getCash() - removeCash + addCash.get();
+        double finalBoost = personaEntity.getBoost() - removeBoost + addBoost;
 
         if (finalCash < 0 || finalBoost < 0) {
             commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
@@ -197,7 +201,8 @@ public class CommerceBO {
         customCarDAO.update(customCar);
 
         personaEntity.setBoost(finalBoost);
-        personaEntity.setCash(finalCash);
+//        personaEntity.setCash(finalCash);
+        driverPersonaBO.updateCash(personaId, finalCash);
         personaDAO.update(personaEntity);
 
         commerceSessionResultTrans.setUpdatedCar(personaBO.getDefaultCar(personaId));

@@ -1,27 +1,22 @@
 package com.soapboxrace.core.bo;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 import com.soapboxrace.core.bo.util.AchievementCommerceContext;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
-import com.soapboxrace.core.bo.util.TimeConverter;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+
 @Stateless
-public class BasketBO
-{
+public class BasketBO {
 
     @EJB
     private PersonaBO personaBo;
@@ -52,7 +47,7 @@ public class BasketBO
 
     @EJB
     private InventoryItemDAO inventoryItemDao;
-    
+
     @EJB
     private TreasureHuntDAO treasureHuntDAO;
 
@@ -62,12 +57,14 @@ public class BasketBO
     @EJB
     private AchievementBO achievementBO;
 
+    @EJB
+    private DriverPersonaBO driverPersonaBO;
+
     public ProductEntity findProduct(String productId) {
         return productDao.findByProductId(productId);
     }
 
-    private OwnedCarTrans getCar(String productId)
-    {
+    private OwnedCarTrans getCar(String productId) {
         ProductEntity productEntity = findProduct(productId);
         if (productEntity == null) {
             throw new IllegalArgumentException(String.format("No product definition for %s", productId));
@@ -87,27 +84,18 @@ public class BasketBO
         return ownedCarTrans1;
     }
 
-    public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity)
-    {
+    public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity) {
         CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
         int price = (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCarEntity.getOwnedCar().getDurability()));
-//        if (personaEntity.getCash() < price) {
-//            return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
-//        }
-//        if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-//            personaEntity.setCash(personaEntity.getCash() - price);
-//        }
 
-        if (!this.performPersonaTransaction(personaEntity, productId, price)) {
-            return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+        if (this.performPersonaTransaction(personaEntity, productId, price)) {
+            personaDao.update(personaEntity);
+            defaultCarEntity.getOwnedCar().setDurability(100);
+            carSlotDAO.update(defaultCarEntity);
+            return CommerceResultStatus.SUCCESS;
         }
 
-        personaDao.update(personaEntity);
-
-        defaultCarEntity.getOwnedCar().setDurability(100);
-
-        carSlotDAO.update(defaultCarEntity);
-        return CommerceResultStatus.SUCCESS;
+        return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
     }
 
     private boolean performPersonaTransaction(PersonaEntity personaEntity, String productId) {
@@ -124,8 +112,7 @@ public class BasketBO
             case "CASH":
                 if (personaEntity.getCash() >= effectivePrice) {
                     if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-                        personaEntity.setCash(personaEntity.getCash() - effectivePrice);
-                        personaDao.update(personaEntity);
+                        driverPersonaBO.updateCash(personaEntity.getPersonaId(), personaEntity.getCash() - effectivePrice);
                     }
                     return true;
                 }
@@ -142,8 +129,7 @@ public class BasketBO
         return false;
     }
 
-    public CommerceResultStatus buyPowerups(String productId, PersonaEntity personaEntity)
-    {
+    public CommerceResultStatus buyPowerups(String productId, PersonaEntity personaEntity) {
         if (!parameterBO.getBoolParam("ENABLE_ECONOMY")) {
             return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
         }
@@ -154,61 +140,59 @@ public class BasketBO
             return CommerceResultStatus.FAIL_INVALID_BASKET;
         }
 
-        if (!performPersonaTransaction(personaEntity, productId)) {
-            return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
-        }
+        if (performPersonaTransaction(personaEntity, productId)) {
+            InventoryItemEntity item = null;
 
-        InventoryItemEntity item = null;
-
-        for (InventoryItemEntity i : inventoryEntity.getInventoryItems()) {
-            if (i.getHash().equals(powerupProduct.getHash())) {
-                item = i;
-                break;
+            for (InventoryItemEntity i : inventoryEntity.getInventoryItems()) {
+                if (i.getHash().equals(powerupProduct.getHash())) {
+                    item = i;
+                    break;
+                }
             }
+
+            if (item == null) {
+                return CommerceResultStatus.FAIL_INVALID_BASKET;
+            }
+
+            int newUsageCount = item.getRemainingUseCount() + 15;
+            item.setRemainingUseCount(newUsageCount);
+            inventoryItemDao.update(item);
+
+            return CommerceResultStatus.SUCCESS;
         }
 
-        if (item == null) {
-            return CommerceResultStatus.FAIL_INVALID_BASKET;
-        }
-
-        int newUsageCount = item.getRemainingUseCount() + 15;
-        item.setRemainingUseCount(newUsageCount);
-        inventoryItemDao.update(item);
-
-        return CommerceResultStatus.SUCCESS;
+        return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
     }
 
-    public CommerceResultStatus buyCar(String productId, PersonaEntity personaEntity, String securityToken)
-    {
-        if (getPersonaCarCount(personaEntity.getPersonaId()) >= parameterBO.getCarLimit(securityToken))
-        {
+    public CommerceResultStatus buyCar(String productId, PersonaEntity personaEntity, String securityToken) {
+        if (getPersonaCarCount(personaEntity.getPersonaId()) >= parameterBO.getCarLimit(securityToken)) {
             return CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS;
         }
 
-        if (!this.performPersonaTransaction(personaEntity, productId)) {
-            return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+        if (performPersonaTransaction(personaEntity, productId)) {
+            CarSlotEntity carSlotEntity = addCar(productId, personaEntity);
+            CarClassesEntity carClassesEntity = carClassesDAO.findById(carSlotEntity.getOwnedCar().getCustomCar().getName());
+
+            if (carClassesEntity != null) {
+                AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity, AchievementCommerceContext.CommerceType.CAR_PURCHASE);
+                achievementBO.updateAchievements(personaEntity.getPersonaId(), "COMMERCE", new HashMap<String, Object>() {{
+                    put("persona", personaEntity);
+                    put("carSlot", carSlotEntity);
+                    put("commerceCtx", commerceContext);
+                }});
+            } else {
+                System.out.println("WARN: No car class entry found for " + carSlotEntity.getOwnedCar().getCustomCar().getName());
+            }
+
+            personaDao.update(personaEntity);
+
+            personaBo.changeDefaultCar(personaEntity.getPersonaId(), carSlotEntity.getOwnedCar().getId());
+            return CommerceResultStatus.SUCCESS;
         }
 
-        CarSlotEntity carSlotEntity = addCar(productId, personaEntity);
-        CarClassesEntity carClassesEntity = carClassesDAO.findById(carSlotEntity.getOwnedCar().getCustomCar().getName());
-
-        if (carClassesEntity != null) {
-            AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity, AchievementCommerceContext.CommerceType.CAR_PURCHASE);
-            achievementBO.updateAchievements(personaEntity.getPersonaId(), "COMMERCE", new HashMap<String, Object>(){{
-                put("persona", personaEntity);
-                put("carSlot", carSlotEntity);
-                put("commerceCtx", commerceContext);
-            }});
-        } else {
-            System.out.println("WARN: No car class entry found for " + carSlotEntity.getOwnedCar().getCustomCar().getName());
-        }
-
-        personaDao.update(personaEntity);
-
-        personaBo.changeDefaultCar(personaEntity.getPersonaId(), carSlotEntity.getOwnedCar().getId());
-        return CommerceResultStatus.SUCCESS;
+        return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
     }
-    
+
     public CommerceResultStatus buyInsurance(String productId, PersonaEntity personaEntity) {
         return buyAmplifier(personaEntity, productId, "INSURANCE_AMPLIFIER");
     }
@@ -220,20 +204,20 @@ public class BasketBO
     public CommerceResultStatus buyRepAmplifier(String productId, PersonaEntity personaEntity) {
         return buyAmplifier(personaEntity, productId, "REP_AMPLIFIER_2X");
     }
-    
-    public CommerceResultStatus reviveTreasureHunt(String productId, PersonaEntity personaEntity) {
-        if (!performPersonaTransaction(personaEntity, productId)) {
-            return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
-        }
-        
-        TreasureHuntEntity treasureHuntEntity = treasureHuntDAO.findById(personaEntity.getPersonaId());
-        treasureHuntEntity.setIsStreakBroken(false);
-        treasureHuntEntity.setStreak(treasureHuntEntity.getStreak() + 1);
-        treasureHuntEntity.setThDate(LocalDate.now());
 
-        treasureHuntDAO.update(treasureHuntEntity);
-        
-        return CommerceResultStatus.SUCCESS;
+    public CommerceResultStatus reviveTreasureHunt(String productId, PersonaEntity personaEntity) {
+        if (performPersonaTransaction(personaEntity, productId)) {
+            TreasureHuntEntity treasureHuntEntity = treasureHuntDAO.findById(personaEntity.getPersonaId());
+            treasureHuntEntity.setIsStreakBroken(false);
+            treasureHuntEntity.setStreak(treasureHuntEntity.getStreak() + 1);
+            treasureHuntEntity.setThDate(LocalDate.now());
+
+            treasureHuntDAO.update(treasureHuntEntity);
+
+            return CommerceResultStatus.SUCCESS;
+        }
+
+        return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
     }
 
     public CommerceResultStatus buyAmplifier(PersonaEntity personaEntity, String productId, String entitlementTag) {
@@ -247,30 +231,28 @@ public class BasketBO
             return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;
         }
 
-        if (!performPersonaTransaction(personaEntity, productId)) {
-            return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+        if (performPersonaTransaction(personaEntity, productId)) {
+            InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
+            inventoryItemEntity.setInventoryEntity(inventoryEntity);
+            inventoryItemEntity.setRemainingUseCount(0);
+            inventoryItemEntity.setEntitlementTag(entitlementTag);
+            if (productEntity.getDurationMinute() != 0) {
+                inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+            }
+            inventoryItemEntity.setStatus("ACTIVE");
+            inventoryItemEntity.setVirtualItemType("amplifier");
+            inventoryItemEntity.setProductId("DO NOT USE ME");
+            inventoryItemEntity.setHash(productEntity.getHash());
+
+            inventoryItemDao.insert(inventoryItemEntity);
+
+            return CommerceResultStatus.SUCCESS;
         }
 
-        InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-        inventoryItemEntity.setInventoryEntity(inventoryEntity);
-        inventoryItemEntity.setRemainingUseCount(0);
-        inventoryItemEntity.setEntitlementTag(entitlementTag);
-//        inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusDays(10));
-        if (productEntity.getDurationMinute() != 0) {
-            inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
-        }
-        inventoryItemEntity.setStatus("ACTIVE");
-        inventoryItemEntity.setVirtualItemType("amplifier");
-        inventoryItemEntity.setProductId("DO NOT USE ME");
-        inventoryItemEntity.setHash(productEntity.getHash());
-
-        inventoryItemDao.insert(inventoryItemEntity);
-
-        return CommerceResultStatus.SUCCESS;
+        return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
     }
-    
-    public CarSlotEntity addCar(String productId, PersonaEntity personaEntity)
-    {
+
+    public CarSlotEntity addCar(String productId, PersonaEntity personaEntity) {
         ProductEntity productEntity = productDao.findByProductId(productId);
         OwnedCarTrans ownedCarTrans = getCar(productId);
         ownedCarTrans.setId(0L);
@@ -298,14 +280,12 @@ public class BasketBO
 
         return carSlotEntity;
     }
-    
-    public int getPersonaCarCount(Long personaId)
-    {
+
+    public int getPersonaCarCount(Long personaId) {
         return getPersonasCar(personaId).size();
     }
 
-    public List<CarSlotEntity> getPersonasCar(Long personaId)
-    {
+    public List<CarSlotEntity> getPersonasCar(Long personaId) {
         List<CarSlotEntity> findByPersonaId = carSlotDAO.findByPersonaId(personaId);
         for (CarSlotEntity carSlotEntity : findByPersonaId) {
             CustomCarEntity customCar = carSlotEntity.getOwnedCar().getCustomCar();
@@ -318,8 +298,7 @@ public class BasketBO
         return findByPersonaId;
     }
 
-    public boolean sellCar(String securityToken, Long personaId, Long serialNumber)
-    {
+    public boolean sellCar(String securityToken, Long personaId, Long serialNumber) {
         this.tokenSessionBO.verifyPersona(securityToken, personaId);
 
         OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(serialNumber);
@@ -337,13 +316,8 @@ public class BasketBO
 
         PersonaEntity personaEntity = personaDao.findById(personaId);
 
-        final int maxCash = parameterBO.getMaxCash(securityToken);
-        if (personaEntity.getCash() < maxCash) {
-            int cashTotal = (int) (personaEntity.getCash() + ownedCarEntity.getCustomCar().getResalePrice());
-            if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-                personaEntity.setCash(Math.max(0, Math.min(maxCash, cashTotal)));
-            }
-        }
+        double cashTotal = personaEntity.getCash() + ownedCarEntity.getCustomCar().getResalePrice();
+        driverPersonaBO.updateCash(personaId, cashTotal);
 
         CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaId);
 

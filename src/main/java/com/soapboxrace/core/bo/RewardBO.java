@@ -1,24 +1,17 @@
 package com.soapboxrace.core.bo;
 
-import java.util.HashMap;
-import java.util.List;
+import com.soapboxrace.core.bo.util.*;
+import com.soapboxrace.core.dao.InventoryItemDAO;
+import com.soapboxrace.core.dao.LevelRepDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.ProductDAO;
+import com.soapboxrace.core.jpa.*;
+import com.soapboxrace.jaxb.http.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-
-import com.soapboxrace.core.bo.util.AchievementProgressionContext;
-import com.soapboxrace.core.bo.util.RewardVO;
-import com.soapboxrace.core.dao.*;
-import com.soapboxrace.core.jpa.*;
-import com.soapboxrace.jaxb.http.Accolades;
-import com.soapboxrace.jaxb.http.ArbitrationPacket;
-import com.soapboxrace.jaxb.http.ArrayOfLuckyDrawItem;
-import com.soapboxrace.jaxb.http.EnumRewardCategory;
-import com.soapboxrace.jaxb.http.EnumRewardType;
-import com.soapboxrace.jaxb.http.LuckyDrawInfo;
-import com.soapboxrace.jaxb.http.LuckyDrawItem;
-import com.soapboxrace.jaxb.http.Reward;
-import com.soapboxrace.jaxb.http.RewardPart;
+import java.util.HashMap;
+import java.util.List;
 
 @Stateless
 public class RewardBO {
@@ -50,6 +43,12 @@ public class RewardBO {
     @EJB
     private AchievementBO achievementBO;
 
+    @EJB
+    private ItemRewardBO itemRewardBO;
+
+    @EJB
+    private DriverPersonaBO driverPersonaBO;
+
     public Reward getFinalReward(Integer rep, Integer cash) {
         Reward finalReward = new Reward();
         finalReward.setRep(rep);
@@ -61,19 +60,105 @@ public class RewardBO {
         return (long) (personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
     }
 
-    public LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, PersonaEntity personaEntity) {
+    public LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, PersonaEntity personaEntity, EventEntity eventEntity) {
         LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
         if (!parameterBO.getBoolParam("ENABLE_DROP_ITEM")) {
             return luckyDrawInfo;
         }
         ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-        arrayOfLuckyDrawItem.getLuckyDrawItem().add(getItemFromProduct(personaEntity));
+        LuckyDrawItem itemFromProduct = getItemFromProduct(personaEntity, eventEntity, rank);
+        if (itemFromProduct == null) {
+            return luckyDrawInfo;
+        }
+        arrayOfLuckyDrawItem.getLuckyDrawItem().add(itemFromProduct);
         luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
         luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
         return luckyDrawInfo;
     }
 
-    public LuckyDrawItem getItemFromProduct(PersonaEntity personaEntity) {
+    public LuckyDrawItem getItemFromProduct(PersonaEntity personaEntity, EventEntity eventEntity, Integer rank) {
+        if (eventEntity == null) {
+            return getItemFromProduct(personaEntity);
+        }
+
+        RewardTableEntity rewardTableEntity;
+
+        switch (rank) {
+            case 1:
+                rewardTableEntity = eventEntity.getRewardTableRank1();
+                break;
+            case 2:
+                rewardTableEntity = eventEntity.getRewardTableRank2();
+                break;
+            case 3:
+                rewardTableEntity = eventEntity.getRewardTableRank3();
+                break;
+            case 4:
+                rewardTableEntity = eventEntity.getRewardTableRank4();
+                break;
+            case 5:
+                rewardTableEntity = eventEntity.getRewardTableRank5();
+                break;
+            case 6:
+                rewardTableEntity = eventEntity.getRewardTableRank6();
+                break;
+            case 7:
+                rewardTableEntity = eventEntity.getRewardTableRank7();
+                break;
+            case 8:
+                rewardTableEntity = eventEntity.getRewardTableRank8();
+                break;
+            default:
+                // At this point, we have bigger problems
+                rewardTableEntity = null;
+                break;
+        }
+
+        if (rewardTableEntity == null) {
+            return null;
+        }
+
+        LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
+        ItemRewardBase rewardBase = itemRewardBO.getGenerator().randomTableItem(rewardTableEntity.getId());
+
+        if (rewardBase instanceof ItemRewardProduct) {
+            ItemRewardProduct rewardProduct = (ItemRewardProduct) rewardBase;
+            ProductEntity productEntity = rewardProduct.getProducts().get(0);
+            luckyDrawItem = dropBO.copyProduct2LuckyDraw(productEntity);
+
+            boolean inventoryFull = inventoryBO.isInventoryFull(productEntity, personaEntity);
+            if (inventoryFull) {
+                luckyDrawItem.setWasSold(true);
+                if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+                    float resalePrice = productEntity.getResalePrice();
+                    double cash = personaEntity.getCash();
+                    driverPersonaBO.updateCash(personaEntity.getPersonaId(), cash + resalePrice);
+                }
+            } else {
+                inventoryBO.addFromCatalog(productEntity, personaEntity);
+            }
+        } else if (rewardBase instanceof ItemRewardCash) {
+            ItemRewardCash rewardCash = (ItemRewardCash) rewardBase;
+            luckyDrawItem.setWasSold(false);
+            luckyDrawItem.setResellPrice(0.0f);
+            luckyDrawItem.setRemainingUseCount(rewardCash.getCash());
+            luckyDrawItem.setHash(-429893590);
+            luckyDrawItem.setIcon("128_cash");
+            luckyDrawItem.setVirtualItem("TOKEN_REWARD");
+            luckyDrawItem.setVirtualItemType("REWARD");
+            luckyDrawItem.setWasSold(false);
+            // GM_CATALOG_00000190 is not the correct label to use. EA's server seemed to think it had formatting arguments.
+            // LB_CASH actually accepts a formatting argument!
+            luckyDrawItem.setDescription("LB_CASH," + rewardCash.getCash());
+        } else {
+            System.out.println("unknown rewardbase: " + rewardBase);
+            return null;
+        }
+
+        return luckyDrawItem;
+    }
+
+    private LuckyDrawItem getItemFromProduct(PersonaEntity personaEntity) {
         ProductEntity productEntity = dropBO.getRandomProductItem();
         LuckyDrawItem luckyDrawItem = dropBO.copyProduct2LuckyDraw(productEntity);
         boolean inventoryFull = inventoryBO.isInventoryFull(productEntity, personaEntity);
@@ -96,16 +181,10 @@ public class RewardBO {
     }
 
     public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity, boolean isInEvent) {
-
-        int maxLevel;
-        if (personaEntity.getUser().isPremium()) {
-            maxLevel = parameterBO.getIntParam("MAX_LEVEL_PREMIUM");
-        } else {
-            maxLevel = parameterBO.getIntParam("MAX_LEVEL_FREE");
-        }
+        int maxLevel = parameterBO.getMaxLevel(personaEntity.getUser());
         if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
-            int cashMax = (int) personaEntity.getCash() + cash;
-            personaEntity.setCash(cashMax > parameterBO.getIntParam("MAX_CASH", 9999999) ? parameterBO.getIntParam("MAX_CASH", 9999999) : cashMax < 1 ? 1 : cashMax);
+            double newCash = personaEntity.getCash() + cash;
+            driverPersonaBO.updateCash(personaEntity.getPersonaId(), newCash);
         }
 
         boolean hasLevelChanged = false;
@@ -138,8 +217,8 @@ public class RewardBO {
         AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp, personaEntity.getLevel(), hasLevelChanged, isInEvent);
 
         achievementBO.updateAchievements(personaEntity.getPersonaId(), "PROGRESSION", new HashMap<String, Object>() {{
-			put("persona", personaEntity);
-			put("progression", progressionContext);
+            put("persona", personaEntity);
+            put("progression", progressionContext);
         }});
     }
 
@@ -186,11 +265,11 @@ public class RewardBO {
         rewardVO.add(0, finalCash.intValue(), EnumRewardCategory.SKILL_MOD, EnumRewardType.TOKEN_AMPLIFIER);
     }
 
-    public Accolades getAccolades(PersonaEntity personaEntity, ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
+    public Accolades getAccolades(PersonaEntity personaEntity, EventEntity eventEntity, ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
         Accolades accolades = new Accolades();
         accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
-        accolades.setLuckyDrawInfo(getLuckyDrawInfo(arbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity));
+        accolades.setLuckyDrawInfo(getLuckyDrawInfo(arbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity, eventEntity));
         accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
         return accolades;

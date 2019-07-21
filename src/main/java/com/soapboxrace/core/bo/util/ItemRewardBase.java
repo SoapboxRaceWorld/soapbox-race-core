@@ -4,6 +4,6 @@ import com.soapboxrace.core.jpa.ProductEntity;
 
 import java.util.List;
 
-public abstract class AchievementRewardBase {
+public abstract class ItemRewardBase {
     public abstract List<ProductEntity> getProducts();
 }

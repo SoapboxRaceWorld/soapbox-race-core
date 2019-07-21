@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Stateless
-public class CarBO
-{
+public class CarBO {
     private final Map<String, String> carBrandMap = new HashMap<>();
 
     {
@@ -163,8 +162,7 @@ public class CarBO
         carBrandMap.put("ZONDA", "PAGANI");
     }
 
-    public String getBrand(String carId)
-    {
+    public String getBrand(String carId) {
         return carBrandMap.getOrDefault(carId, "UNLOCALIZED STRING");
     }
 }

@@ -15,6 +15,24 @@ public class ListDifferences<T> {
         this.removed = removed;
     }
 
+    public static <T> ListDifferences<T> getDifferences(Collection<T> first, Collection<T> second) {
+        List<T> clonedFirst = clone(first);
+        List<T> clonedSecond = clone(second);
+
+        List<T> alreadyThere = clone(clonedSecond);
+        alreadyThere.retainAll(clonedFirst);
+        List<T> added = clone(clonedSecond);
+        added.removeAll(alreadyThere);
+        List<T> removed = clone(clonedFirst);
+        removed.removeAll(alreadyThere);
+
+        return new ListDifferences<>(alreadyThere, added, removed);
+    }
+
+    private static <T> List<T> clone(Collection<T> collection) {
+        return new ArrayList<>(collection);
+    }
+
     public Collection<T> getAdded() {
         return added;
     }
@@ -34,23 +52,5 @@ public class ListDifferences<T> {
     @Override
     public String toString() {
         return String.format("ListDifferences{added=%s/kept=%s/removed=%s}", this.getAdded(), this.getKept(), this.getRemoved());
-    }
-
-    public static <T> ListDifferences<T> getDifferences(Collection<T> first, Collection<T> second) {
-        List<T> clonedFirst = clone(first);
-        List<T> clonedSecond = clone(second);
-
-        List<T> alreadyThere = clone(clonedSecond);
-        alreadyThere.retainAll(clonedFirst);
-        List<T> added = clone(clonedSecond);
-        added.removeAll(alreadyThere);
-        List<T> removed = clone(clonedFirst);
-        removed.removeAll(alreadyThere);
-
-        return new ListDifferences<>(alreadyThere, added, removed);
-    }
-
-    private static <T> List<T> clone(Collection<T> collection) {
-        return new ArrayList<>(collection);
     }
 }
