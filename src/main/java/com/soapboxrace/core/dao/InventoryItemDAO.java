@@ -17,6 +17,11 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
         this.entityManager = entityManager;
     }
 
+    public List<InventoryItemEntity> findAllWithExpirationDate() {
+        return entityManager.createNamedQuery("InventoryItemEntity.findAllWithExpirationDate", InventoryItemEntity.class)
+                .getResultList();
+    }
+
     public List<InventoryItemEntity> findAllByInventoryId(Long inventoryId) {
         return entityManager.createNamedQuery("InventoryItemEntity.findAllByInventoryId", InventoryItemEntity.class)
                 .setParameter("inventoryId", inventoryId)

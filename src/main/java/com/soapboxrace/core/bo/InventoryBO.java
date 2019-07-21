@@ -7,6 +7,7 @@ import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
 
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +29,15 @@ public class InventoryBO {
 
     @EJB
     private VirtualItemDAO virtualItemDAO;
+
+    @Schedule(minute = "*", hour = "*")
+    public void removeExpiredItems() {
+        for (InventoryItemEntity inventoryItemEntity : inventoryItemDAO.findAllWithExpirationDate()) {
+            if (inventoryItemEntity.getExpirationDate().isBefore(LocalDateTime.now())) {
+                inventoryItemDAO.delete(inventoryItemEntity);
+            }
+        }
+    }
 
     public InventoryItemEntity addFromCatalog(ProductEntity productEntity, PersonaEntity personaEntity) {
         return addFromCatalog(productEntity, personaEntity, -1);
