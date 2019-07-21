@@ -132,7 +132,7 @@ public class RewardBO {
                 if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
                     float resalePrice = productEntity.getResalePrice();
                     double cash = personaEntity.getCash();
-                    driverPersonaBO.updateCash(personaEntity.getPersonaId(), cash + resalePrice);
+                    driverPersonaBO.updateCash(personaEntity, cash + resalePrice);
                 }
             } else {
                 inventoryBO.addFromCatalog(productEntity, personaEntity);
@@ -167,8 +167,9 @@ public class RewardBO {
             if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
                 float resalePrice = productEntity.getResalePrice();
                 double cash = personaEntity.getCash();
-                personaEntity.setCash(cash + resalePrice);
-                personaDao.update(personaEntity);
+                driverPersonaBO.updateCash(personaEntity, cash + resalePrice);
+//                personaEntity.setCash(cash + resalePrice);
+//                personaDao.update(personaEntity);
             }
         } else {
             inventoryBO.addFromCatalog(productEntity, personaEntity);
@@ -184,7 +185,7 @@ public class RewardBO {
         int maxLevel = parameterBO.getMaxLevel(personaEntity.getUser());
         if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
             double newCash = personaEntity.getCash() + cash;
-            driverPersonaBO.updateCash(personaEntity.getPersonaId(), newCash);
+            driverPersonaBO.updateCash(personaEntity, newCash);
         }
 
         boolean hasLevelChanged = false;

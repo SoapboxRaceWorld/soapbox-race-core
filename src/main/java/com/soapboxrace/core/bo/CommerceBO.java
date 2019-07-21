@@ -201,9 +201,7 @@ public class CommerceBO {
         customCarDAO.update(customCar);
 
         personaEntity.setBoost(finalBoost);
-//        personaEntity.setCash(finalCash);
-        driverPersonaBO.updateCash(personaId, finalCash);
-        personaDAO.update(personaEntity);
+        driverPersonaBO.updateCash(personaEntity, finalCash);
 
         commerceSessionResultTrans.setUpdatedCar(personaBO.getDefaultCar(personaId));
         commerceSessionResultTrans.setInvalidBasket(new InvalidBasketTrans());

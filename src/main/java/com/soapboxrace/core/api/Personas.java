@@ -88,12 +88,6 @@ public class Personas {
             commerceResultTrans.setStatus(basketBO.repairCar(productId, personaEntity));
         } else if ("SRV-THREVIVE".equals(productId)) {
             commerceResultTrans.setStatus(basketBO.reviveTreasureHunt(productId, personaEntity));
-//		} else if ("SRV-AMP-INSURANCE".equals(productId)) {
-//			commerceResultTrans.setStatus(basketBO.buyInsurance(productId, personaEntity));
-//        } else if ("SRV-AMP-CASH".equals(productId)) {
-//            commerceResultTrans.setStatus(basketBO.buyCashAmplifier(productId, personaEntity));
-//        } else if ("SRV-AMP-REP".equals(productId)) {
-//            commerceResultTrans.setStatus(basketBO.buyRepAmplifier(productId, personaEntity));
         } else {
             ProductEntity productEntity = basketBO.findProduct(productId);
 

@@ -86,8 +86,7 @@ public class ItemRewardBO {
                 setHash(-429893590);
             }});
 
-            // TODO: cash limit
-            driverPersonaBO.updateCash(personaEntity.getPersonaId(), personaEntity.getCash() + achievementRewardCash.getCash());
+            driverPersonaBO.updateCash(personaEntity, personaEntity.getCash() + achievementRewardCash.getCash());
         } else if (itemRewardBase instanceof ItemRewardMulti) {
             ItemRewardMulti achievementRewardMulti = (ItemRewardMulti) itemRewardBase;
             achievementRewardMulti.getAchievementRewardList().forEach(r -> handleReward(r, arrayOfCommerceItemTrans, personaEntity));

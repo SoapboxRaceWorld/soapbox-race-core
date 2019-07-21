@@ -201,12 +201,14 @@ public class DriverPersonaBO {
         personaDao.update(personaEntity);
     }
 
-    public void updateCash(Long personaId, Double newCash) {
-        PersonaEntity personaEntity = personaDao.findById(personaId);
-
+    public void updateCash(PersonaEntity personaEntity, Double newCash) {
         if (personaEntity != null) {
-            personaEntity.setCash(Math.max(0, Math.min(parameterBO.getMaxCash(personaEntity.getUser()), newCash)));
-            personaDao.update(personaEntity);
+            double fixedCash = Math.max(0, Math.min(parameterBO.getMaxCash(personaEntity.getUser()), newCash));
+
+            System.out.println(newCash);
+            System.out.println(fixedCash);
+
+            personaEntity.setCash(fixedCash);
         }
     }
 
