@@ -115,7 +115,7 @@ public class RewardBO {
         }
 
         if (rewardTableEntity == null) {
-            return null;
+            return getItemFromProduct(personaEntity);
         }
 
         LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
