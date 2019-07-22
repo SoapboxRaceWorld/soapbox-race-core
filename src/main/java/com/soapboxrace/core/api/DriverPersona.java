@@ -1,20 +1,19 @@
 package com.soapboxrace.core.api;
 
-import com.soapboxrace.core.api.util.ConcurrentUtil;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.DriverPersonaBO;
-import com.soapboxrace.core.bo.PresenceManager;
+import com.soapboxrace.core.bo.PresenceBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.bo.UserBO;
 import com.soapboxrace.core.dao.FriendDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.FriendEntity;
+import com.soapboxrace.core.exception.EngineException;
+import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
-import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePersonaBase;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -23,7 +22,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
-import java.util.List;
 import java.util.regex.Pattern;
 
 @Path("/DriverPersona")
@@ -40,7 +38,7 @@ public class DriverPersona {
     private TokenSessionBO tokenSessionBo;
 
     @EJB
-    private PresenceManager presenceManager;
+    private PresenceBO presenceBO;
 
     @EJB
     private FriendDAO friendDAO;
@@ -87,17 +85,18 @@ public class DriverPersona {
     @Secured
     @Path("/CreatePersona")
     @Produces(MediaType.APPLICATION_XML)
-    public Response createPersona(@HeaderParam("userId") Long userId, @HeaderParam("securityToken") String securityToken, @QueryParam("name") String name,
+    public ProfileData createPersona(@HeaderParam("userId") Long userId,
+                                  @HeaderParam("securityToken") String securityToken,
+                           @QueryParam("name") String name,
                                   @QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan, @QueryParam("clanIcon") String clanIcon) {
         if (!NAME_PATTERN.matcher(name).matches()) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Invalid name. Can only contain A-Z, 0-9, and can be between 3 and 15 characters.")
-                    .build();
+            throw new EngineException(EngineExceptionCode.DisplayNameNotAllowed);
         }
 
         ArrayOfString nameReserveResult = bo.reserveName(name);
 
         if (!nameReserveResult.getString().isEmpty()) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).entity("Player with this name already exists!").build();
+            throw new EngineException(EngineExceptionCode.DisplayNameDuplicate);
         }
 
         PersonaEntity personaEntity = new PersonaEntity();
@@ -106,12 +105,13 @@ public class DriverPersona {
         ProfileData persona = bo.createPersona(userId, personaEntity);
 
         if (persona == null) {
-            return Response.status(Response.Status.FORBIDDEN).entity("Can't have more than 3 personas").build();
+            throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached);
+//            return Response.status(Response.Status.FORBIDDEN).entity("Can't have more than 3 personas").build();
         }
 
         long personaId = persona.getPersonaId();
         userBo.createXmppUser(personaId, securityToken.substring(0, 16));
-        return Response.ok(persona).build();
+        return persona;
     }
 
     @POST
@@ -142,30 +142,7 @@ public class DriverPersona {
             return "";
 
         PersonaEntity personaEntity = personaDAO.findById(tokenSessionBo.getActivePersonaId(securityToken));
-        presenceManager.setPresence(personaEntity.getPersonaId(), presence);
-
-        ConcurrentUtil.EXECUTOR_SERVICE.submit(() -> {
-            List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
-
-            for (FriendEntity friend : friends) {
-                XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
-                PersonaBase xmppPersonaBase = new PersonaBase();
-
-                xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
-                xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
-                xmppPersonaBase.setLevel(personaEntity.getLevel());
-                xmppPersonaBase.setMotto(personaEntity.getMotto());
-                xmppPersonaBase.setName(personaEntity.getName());
-                xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
-                xmppPersonaBase.setPresence(presence);
-                xmppPersonaBase.setScore(personaEntity.getScore());
-                xmppPersonaBase.setUserId(personaEntity.getUser().getId());
-
-                personaPacket.setPersonaBase(xmppPersonaBase);
-
-                openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
-            }
-        });
+        presenceBO.updatePresence(personaEntity.getPersonaId(), presence);
 
         return "";
     }

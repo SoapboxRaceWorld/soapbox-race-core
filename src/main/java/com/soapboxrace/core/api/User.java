@@ -55,7 +55,7 @@ public class User {
     private ParameterBO parameterBO;
 
     @EJB
-    private PresenceManager presenceManager;
+    private PresenceBO presenceBO;
 
     @EJB
     private FriendDAO friendDAO;
@@ -120,30 +120,7 @@ public class User {
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
         tokenBO.setActivePersonaId(securityToken, 0L, true);
 
-        presenceManager.removePresence(activePersonaId);
-
-        ConcurrentUtil.EXECUTOR_SERVICE.submit(() -> {
-            List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
-
-            for (FriendEntity friend : friends) {
-                XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
-                PersonaBase xmppPersonaBase = new PersonaBase();
-
-                xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
-                xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
-                xmppPersonaBase.setLevel(personaEntity.getLevel());
-                xmppPersonaBase.setMotto(personaEntity.getMotto());
-                xmppPersonaBase.setName(personaEntity.getName());
-                xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
-                xmppPersonaBase.setPresence(0);
-                xmppPersonaBase.setScore(personaEntity.getScore());
-                xmppPersonaBase.setUserId(personaEntity.getUser().getId());
-
-                personaPacket.setPersonaBase(xmppPersonaBase);
-
-                openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
-            }
-        });
+        presenceBO.removePresence(activePersonaId);
 
         return "";
     }
@@ -161,30 +138,7 @@ public class User {
 
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
         tokenBO.setActivePersonaId(securityToken, 0L, true);
-        presenceManager.removePresence(activePersonaId);
-
-        ConcurrentUtil.EXECUTOR_SERVICE.submit(() -> {
-            List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
-
-            for (FriendEntity friend : friends) {
-                XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
-                PersonaBase xmppPersonaBase = new PersonaBase();
-
-                xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
-                xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
-                xmppPersonaBase.setLevel(personaEntity.getLevel());
-                xmppPersonaBase.setMotto(personaEntity.getMotto());
-                xmppPersonaBase.setName(personaEntity.getName());
-                xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
-                xmppPersonaBase.setPresence(0);
-                xmppPersonaBase.setScore(personaEntity.getScore());
-                xmppPersonaBase.setUserId(personaEntity.getUser().getId());
-
-                personaPacket.setPersonaBase(xmppPersonaBase);
-
-                openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
-            }
-        });
+        presenceBO.removePresence(activePersonaId);
 
         return "";
     }

@@ -120,7 +120,7 @@ public class UserBO {
         UserEntity userEntity = userDao.findById(userId);
         UserInfo userInfo = new UserInfo();
         ArrayOfProfileData arrayOfProfileData = new ArrayOfProfileData();
-        List<PersonaEntity> listOfProfile = userEntity.getListOfProfile();
+        List<PersonaEntity> listOfProfile = userEntity.getPersonas();
         for (PersonaEntity personaEntity : listOfProfile) {
             // switch to apache beanutils copy
             ProfileData profileData = new ProfileData();

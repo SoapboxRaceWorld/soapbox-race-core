@@ -33,7 +33,7 @@ public class UserEntity {
     private String ipAddress;
 
     @OneToMany(mappedBy = "user", targetEntity = PersonaEntity.class)
-    private List<PersonaEntity> listOfProfile;
+    private List<PersonaEntity> personas;
 
     @Column(name = "premium")
     private boolean premium;
@@ -74,8 +74,8 @@ public class UserEntity {
         this.password = password;
     }
 
-    public List<PersonaEntity> getListOfProfile() {
-        return listOfProfile;
+    public List<PersonaEntity> getPersonas() {
+        return personas;
     }
 
     public String getHwid() {
@@ -103,7 +103,7 @@ public class UserEntity {
     }
 
     public boolean ownsPersona(Long id) {
-        return this.listOfProfile.stream().anyMatch(p -> p.getPersonaId().equals(id));
+        return this.personas.stream().anyMatch(p -> p.getPersonaId().equals(id));
     }
 
     public boolean isAdmin() {

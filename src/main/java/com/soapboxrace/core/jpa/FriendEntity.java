@@ -6,7 +6,8 @@ import javax.persistence.*;
 @Table(name = "FRIEND")
 @NamedQueries({ //
         @NamedQuery(name = "FriendEntity.findByUser", query = "SELECT obj FROM FriendEntity obj WHERE obj.user.id = :id"), //
-        @NamedQuery(name = "FriendEntity.findBySenderAndRecipient", query = "SELECT obj FROM FriendEntity obj WHERE obj.user.id = :recipientUserId AND obj.personaId = :senderId"), //
+        @NamedQuery(name = "FriendEntity.findBySenderAndRecipient", query = "SELECT obj FROM FriendEntity obj WHERE " +
+                "obj.user.id = :recipientUserId AND obj.fromUser.id = :senderId"), //
 })
 public class FriendEntity {
     @Id
@@ -18,8 +19,12 @@ public class FriendEntity {
     @JoinColumn(name = "userId")
     private UserEntity user;
 
+    @ManyToOne
+    @JoinColumn(name = "fromUserId")
+    private UserEntity fromUser;
+
     @Column
-    private Long personaId;
+    private Long fromPersonaId;
 
     @Column
     private int status; // 0=pending,1=accepted
@@ -32,12 +37,12 @@ public class FriendEntity {
         this.id = id;
     }
 
-    public Long getPersonaId() {
-        return personaId;
+    public Long getFromPersonaId() {
+        return fromPersonaId;
     }
 
-    public void setPersonaId(Long personaId) {
-        this.personaId = personaId;
+    public void setFromPersonaId(Long personaId) {
+        this.fromPersonaId = personaId;
     }
 
     public int getStatus() {
@@ -54,5 +59,13 @@ public class FriendEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public UserEntity getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(UserEntity fromUser) {
+        this.fromUser = fromUser;
     }
 }

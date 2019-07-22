@@ -41,8 +41,8 @@ public class RemoveFriend {
             return "";
         }
 
-        FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(active.getUser().getId(), friend.getPersonaId());
-        FriendEntity friendEntity2 = friendDAO.findBySenderAndRecipient(friend.getUser().getId(), active.getPersonaId());
+        FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(friend.getUser().getId(), active.getUser().getId());
+        FriendEntity friendEntity2 = friendDAO.findBySenderAndRecipient(active.getUser().getId(), friend.getUser().getId());
 
         if (friendEntity == null || friendEntity2 == null) {
             return "";

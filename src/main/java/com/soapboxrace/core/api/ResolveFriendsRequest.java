@@ -1,22 +1,23 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.PresenceManager;
+import com.soapboxrace.core.bo.PresenceBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.dao.FriendDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.exception.EngineException;
+import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.jpa.FriendEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
 import com.soapboxrace.jaxb.http.PersonaBase;
-import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePersonaBase;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/resolvefriendsrequest")
 public class ResolveFriendsRequest {
@@ -30,33 +31,35 @@ public class ResolveFriendsRequest {
     private OpenFireSoapBoxCli openFireSoapBoxCli;
 
     @EJB
-    private OpenFireRestApiCli openFireRestApiCli;
-
-    @EJB
     private FriendDAO friendDAO;
 
     @EJB
-    private PresenceManager presenceManager;
+    private PresenceBO presenceBO;
 
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_XML)
-    public String resolveFriendsRequest(@HeaderParam("securityToken") String securityToken, @QueryParam("friendPersonaId") Long friendPersonaId, @QueryParam("resolution") int resolution) {
+    public Response resolveFriendsRequest(@HeaderParam("securityToken") String securityToken,
+                                          @QueryParam("friendPersonaId") Long friendPersonaId, @QueryParam("resolution") int resolution) {
         PersonaEntity recipient = personaDAO.findById(sessionBO.getActivePersonaId(securityToken));
         PersonaEntity sender = personaDAO.findById(friendPersonaId);
 
-        if (sender == null || recipient == null) {
-            return "";
+        if (recipient == null) {
+            throw new EngineException(EngineExceptionCode.FailedReadSession);
         }
 
-        FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(recipient.getUser().getId(), sender.getPersonaId());
+        if (sender == null) {
+            throw new EngineException(EngineExceptionCode.PersonaNotFound);
+        }
+
+        FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(sender.getUser().getId(), recipient.getUser().getId());
 
         if (friendEntity == null) {
-            return "";
+            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable);
         }
 
         if (friendEntity.getStatus() == 1) {
-            return "";
+            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable);
         }
 
         if (resolution == 1) {
@@ -68,7 +71,7 @@ public class ResolveFriendsRequest {
             personaBase.setMotto(sender.getMotto());
             personaBase.setName(sender.getName());
             personaBase.setPersonaId(sender.getPersonaId());
-            personaBase.setPresence(presenceManager.getPresence(sender.getPersonaId()));
+            personaBase.setPresence(presenceBO.getPresence(sender.getPersonaId()));
             personaBase.setScore(sender.getScore());
             personaBase.setUserId(sender.getUser().getId());
 
@@ -95,18 +98,19 @@ public class ResolveFriendsRequest {
             FriendEntity otherFriendEntity = new FriendEntity();
             otherFriendEntity.setStatus(1);
             otherFriendEntity.setUser(sender.getUser());
-            otherFriendEntity.setPersonaId(recipient.getPersonaId());
+            otherFriendEntity.setFromUser(recipient.getUser());
+            otherFriendEntity.setFromPersonaId(recipient.getPersonaId());
 
             friendDAO.insert(otherFriendEntity);
 
             friendEntity.setStatus(1);
             friendDAO.update(friendEntity);
 
-            return MarshalXML.marshal(personaBase);
+            return Response.ok(personaBase).build();
         } else {
             friendDAO.delete(friendEntity);
 
-            return "";
+            return Response.ok().build();
         }
     }
 }

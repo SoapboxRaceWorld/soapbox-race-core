@@ -52,7 +52,7 @@ public class DriverPersonaBO {
     private OpenFireRestApiCli restApiCli;
 
     @EJB
-    private PresenceManager presenceManager;
+    private PresenceBO presenceBO;
 
     @EJB
     private PersonaAchievementRankDAO personaAchievementRankDAO;
@@ -63,7 +63,7 @@ public class DriverPersonaBO {
     public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
         UserEntity userEntity = userDao.findById(userId);
 
-        if (userEntity.getListOfProfile().size() >= 3) {
+        if (userEntity.getPersonas().size() >= 3) {
             return null;
         }
 
@@ -145,21 +145,25 @@ public class DriverPersonaBO {
             if (personaEntity == null) {
                 return arrayOfPersonaBase;
             }
-            PersonaBase personaBase = new PersonaBase();
-            ArrayOfBadgePacket arrayOfBadgePacket = getBadges(personaId);
-
-            personaBase.setBadges(arrayOfBadgePacket);
-            personaBase.setIconIndex(personaEntity.getIconIndex());
-            personaBase.setLevel(personaEntity.getLevel());
-            personaBase.setMotto(personaEntity.getMotto());
-            personaBase.setName(personaEntity.getName());
-            personaBase.setPresence(presenceManager.getPresence(personaEntity.getPersonaId()));
-            personaBase.setPersonaId(personaEntity.getPersonaId());
-            personaBase.setScore(personaEntity.getScore());
-            personaBase.setUserId(personaEntity.getUser().getId());
-            arrayOfPersonaBase.getPersonaBase().add(personaBase);
+            arrayOfPersonaBase.getPersonaBase().add(getPersonaBase(personaEntity));
         }
         return arrayOfPersonaBase;
+    }
+
+    public PersonaBase getPersonaBase(PersonaEntity personaEntity) {
+        PersonaBase personaBase = new PersonaBase();
+        ArrayOfBadgePacket arrayOfBadgePacket = getBadges(personaEntity.getPersonaId());
+
+        personaBase.setBadges(arrayOfBadgePacket);
+        personaBase.setIconIndex(personaEntity.getIconIndex());
+        personaBase.setLevel(personaEntity.getLevel());
+        personaBase.setMotto(personaEntity.getMotto());
+        personaBase.setName(personaEntity.getName());
+        personaBase.setPresence(presenceBO.getPresence(personaEntity.getPersonaId()));
+        personaBase.setPersonaId(personaEntity.getPersonaId());
+        personaBase.setScore(personaEntity.getScore());
+        personaBase.setUserId(personaEntity.getUser().getId());
+        return personaBase;
     }
 
     public void deletePersona(Long personaId) {
@@ -184,7 +188,7 @@ public class DriverPersonaBO {
         if (personaEntity != null) {
             PersonaPresence personaPresence = new PersonaPresence();
             personaPresence.setPersonaId(personaEntity.getPersonaId());
-            personaPresence.setPresence(presenceManager.getPresence(personaEntity.getPersonaId()));
+            personaPresence.setPresence(presenceBO.getPresence(personaEntity.getPersonaId()));
             personaPresence.setUserId(personaEntity.getUser().getId());
             return personaPresence;
         }

@@ -37,28 +37,32 @@ public class MarshallerInterceptor implements MessageBodyWriter<Object> {
     @SuppressWarnings("unchecked")
     public void writeTo(Object object, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(object.getClass());
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-            if (annotations != null) {
-                for (Annotation annotation : annotations) {
-                    if (annotation instanceof XsiSchemaLocation) {
-                        XsiSchemaLocation schemaAnnotation = (XsiSchemaLocation) annotation;
-                        String schemaLocation = schemaAnnotation.schemaLocation();
-                        jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
+        if (object == null) {
+            entityStream.write("".getBytes());
+        } else {
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(object.getClass());
+                Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+                jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+                if (annotations != null) {
+                    for (Annotation annotation : annotations) {
+                        if (annotation instanceof XsiSchemaLocation) {
+                            XsiSchemaLocation schemaAnnotation = (XsiSchemaLocation) annotation;
+                            String schemaLocation = schemaAnnotation.schemaLocation();
+                            jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocation);
+                        }
                     }
                 }
+                XmlType xmlTypeAnnotation = object.getClass().getAnnotation(XmlType.class);
+                QName qname = new QName("", xmlTypeAnnotation.name());
+                StringWriter stringWriter = new StringWriter();
+                JAXBElement<Object> jaxbElement = new JAXBElement<Object>(qname, (Class<Object>) object.getClass(), null, object);
+                jaxbMarshaller.marshal(jaxbElement, stringWriter);
+                entityStream.write(stringWriter.toString().getBytes());
+            } catch (Exception e) {
+                throw new WebApplicationException(e);
             }
-            XmlType xmlTypeAnnotation = object.getClass().getAnnotation(XmlType.class);
-            QName qname = new QName("", xmlTypeAnnotation.name());
-            StringWriter stringWriter = new StringWriter();
-            JAXBElement<Object> jaxbElement = new JAXBElement<Object>(qname, (Class<Object>) object.getClass(), null, object);
-            jaxbMarshaller.marshal(jaxbElement, stringWriter);
-            entityStream.write(stringWriter.toString().getBytes());
-        } catch (Exception e) {
-            throw new WebApplicationException(e);
         }
     }
 
