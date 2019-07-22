@@ -4,6 +4,8 @@ import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.InventoryBO;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.exception.EngineException;
+import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.xmpp.XMPP_PowerupActivatedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePowerupActivated;
@@ -11,6 +13,7 @@ import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePowerupActivated;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/powerups")
 public class Powerups {
@@ -31,12 +34,13 @@ public class Powerups {
     @Secured
     @Path("/activated/{powerupHash}")
     @Produces(MediaType.APPLICATION_XML)
-    public String activated(@HeaderParam("securityToken") String securityToken, @PathParam(value = "powerupHash") Integer powerupHash,
-                            @QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers, @QueryParam("eventSessionId") Long eventSessionId) {
+    public Response activated(@HeaderParam("securityToken") String securityToken,
+                              @PathParam(value = "powerupHash") Integer powerupHash,
+                              @QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers, @QueryParam("eventSessionId") Long eventSessionId) {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 
         if (!inventoryBO.hasItem(activePersonaId, powerupHash)) {
-            return "";
+            throw new EngineException(EngineExceptionCode.InventoryItemDoesntExist);
         }
 
         XMPP_ResponseTypePowerupActivated powerupActivatedResponse = new XMPP_ResponseTypePowerupActivated();
@@ -56,6 +60,6 @@ public class Powerups {
             inventoryBO.decrementUsage(activePersonaId, powerupHash);
         }
 
-        return "";
+        return Response.ok().build();
     }
 }

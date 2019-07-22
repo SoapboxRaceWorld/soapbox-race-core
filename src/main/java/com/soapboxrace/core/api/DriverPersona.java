@@ -77,8 +77,8 @@ public class DriverPersona {
     @Secured
     @Path("/UnreserveName")
     @Produces(MediaType.APPLICATION_XML)
-    public String UnreserveName(@QueryParam("name") String name) {
-        return "";
+    public Response UnreserveName(@QueryParam("name") String name) {
+        return Response.ok().build();
     }
 
     @POST
@@ -106,7 +106,6 @@ public class DriverPersona {
 
         if (persona == null) {
             throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached);
-//            return Response.status(Response.Status.FORBIDDEN).entity("Can't have more than 3 personas").build();
         }
 
         long personaId = persona.getPersonaId();
@@ -137,26 +136,26 @@ public class DriverPersona {
     @Secured
     @Path("/UpdatePersonaPresence")
     @Produces(MediaType.APPLICATION_XML)
-    public String updatePersonaPresence(@HeaderParam("securityToken") String securityToken, @QueryParam("presence") int presence) {
+    public Response updatePersonaPresence(@HeaderParam("securityToken") String securityToken,
+                                   @QueryParam("presence") int presence) {
         if (tokenSessionBo.getActivePersonaId(securityToken) == 0L)
-            return "";
-
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
         PersonaEntity personaEntity = personaDAO.findById(tokenSessionBo.getActivePersonaId(securityToken));
         presenceBO.updatePresence(personaEntity.getPersonaId(), presence);
 
-        return "";
+        return Response.ok().build();
     }
 
     @GET
     @Secured
     @Path("/GetPersonaPresenceByName")
     @Produces(MediaType.APPLICATION_XML)
-    public String getPersonaPresenceByName(@QueryParam("displayName") String displayName) {
+    public PersonaPresence getPersonaPresenceByName(@QueryParam("displayName") String displayName) {
         PersonaPresence personaPresenceByName = bo.getPersonaPresenceByName(displayName);
         if (personaPresenceByName.getPersonaId() == 0) {
-            return "";
+            throw new EngineException(EngineExceptionCode.PersonaNotFound);
         }
-        return MarshalXML.marshal(personaPresenceByName);
+        return personaPresenceByName;
     }
 
     @POST

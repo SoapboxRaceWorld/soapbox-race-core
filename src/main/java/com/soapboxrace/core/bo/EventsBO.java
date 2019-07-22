@@ -63,16 +63,16 @@ public class EventsBO {
         return treasureHuntEventSession;
     }
 
-    public String notifyCoinCollected(Long activePersonaId, Integer coins) {
+    public Accolades notifyCoinCollected(Long activePersonaId, Integer coins) {
         TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
         if (treasureHuntEntity != null) {
             treasureHuntEntity.setCoinsCollected(coins);
             treasureHuntDao.update(treasureHuntEntity);
         }
-        return coins == 32767 ? accolades(activePersonaId, false) : "";
+        return coins == 32767 ? accolades(activePersonaId, false) : null;
     }
 
-    public String accolades(Long activePersonaId, Boolean isBroken) {
+    public Accolades accolades(Long activePersonaId, Boolean isBroken) {
         TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
 
         if (isBroken) {
@@ -85,7 +85,7 @@ public class EventsBO {
         treasureHuntEntity.setThDate(LocalDate.now());
         treasureHuntDao.update(treasureHuntEntity);
 
-        return MarshalXML.marshal(getTreasureHuntAccolades(activePersonaId, treasureHuntEntity));
+        return getTreasureHuntAccolades(activePersonaId, treasureHuntEntity);
     }
 
     private TreasureHuntEventSession createNewTreasureHunt(TreasureHuntEntity treasureHuntEntity, Boolean isBroken) {

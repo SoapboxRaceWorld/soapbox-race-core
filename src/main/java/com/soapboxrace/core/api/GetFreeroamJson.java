@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -17,13 +18,13 @@ public class GetFreeroamJson {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getServerInformation() {
+    public Response getServerInformation() {
         try {
             String strParam = parameterBO.getStrParam("FREEROAM_JSON_PATH");
-            return new String(Files.readAllBytes(Paths.get(strParam)));
+            return Response.ok().entity(Files.readAllBytes(Paths.get(strParam))).build();
         } catch (Exception e) {
             System.err.println("freeroam json file not found");
         }
-        return "";
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 }

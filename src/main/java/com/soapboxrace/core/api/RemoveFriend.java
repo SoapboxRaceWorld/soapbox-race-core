@@ -4,6 +4,8 @@ import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.dao.FriendDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.exception.EngineException;
+import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.jpa.FriendEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
@@ -16,6 +18,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 
 @Path("/removefriend")
 public class RemoveFriend {
@@ -33,19 +36,24 @@ public class RemoveFriend {
 
     @GET
     @Secured
-    public String removefriend(@QueryParam("friendPersonaId") Long friendPersonaId, @HeaderParam("securityToken") String securityToken) {
+    public Response removefriend(@QueryParam("friendPersonaId") Long friendPersonaId,
+                                 @HeaderParam("securityToken") String securityToken) {
         PersonaEntity active = personaDAO.findById(tokenSessionBO.getActivePersonaId(securityToken));
         PersonaEntity friend = personaDAO.findById(friendPersonaId);
 
-        if (active == null || friend == null) {
-            return "";
+        if (active == null) {
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
+        }
+
+        if (friend == null) {
+            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid);
         }
 
         FriendEntity friendEntity = friendDAO.findBySenderAndRecipient(friend.getUser().getId(), active.getUser().getId());
         FriendEntity friendEntity2 = friendDAO.findBySenderAndRecipient(active.getUser().getId(), friend.getUser().getId());
 
         if (friendEntity == null || friendEntity2 == null) {
-            return "";
+            throw new EngineException(EngineExceptionCode.FriendDoesNotExist);
         }
 
         friendDAO.delete(friendEntity);
@@ -71,6 +79,6 @@ public class RemoveFriend {
             openFireSoapBoxCli.send(activeToFriend, friend.getPersonaId());
         }
 
-        return "";
+        return Response.ok().build();
     }
 }

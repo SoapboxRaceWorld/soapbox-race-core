@@ -103,44 +103,42 @@ public class User {
     @Secured
     @Path("SecureLoginPersona")
     @Produces(MediaType.APPLICATION_XML)
-    public String secureLoginPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
+    public Response secureLoginPersona(@HeaderParam("securityToken") String securityToken,
+                                  @HeaderParam("userId") Long userId,
                                      @QueryParam("personaId") Long personaId) {
         tokenBO.setActivePersonaId(securityToken, personaId, false);
         userBO.secureLoginPersona(userId, personaId);
-        return "";
+        return Response.ok().build();
     }
 
     @POST
     @Secured
     @Path("SecureLogoutPersona")
     @Produces(MediaType.APPLICATION_XML)
-    public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
+    public Response secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
                                       @QueryParam("personaId") Long personaId) {
         long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
         tokenBO.setActivePersonaId(securityToken, 0L, true);
-
         presenceBO.removePresence(activePersonaId);
 
-        return "";
+        return Response.ok().build();
     }
 
     @POST
     @Secured
     @Path("SecureLogout")
     @Produces(MediaType.APPLICATION_XML)
-    public String secureLogout(@HeaderParam("securityToken") String securityToken) {
+    public Response secureLogout(@HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 
         if (Objects.isNull(activePersonaId) || activePersonaId == 0L) {
-            return "";
+            throw new EngineException(EngineExceptionCode.FailedUpdateSession);
         }
 
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
         tokenBO.setActivePersonaId(securityToken, 0L, true);
         presenceBO.removePresence(activePersonaId);
 
-        return "";
+        return Response.ok().build();
     }
 
     @GET
