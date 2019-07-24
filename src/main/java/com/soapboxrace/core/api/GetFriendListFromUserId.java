@@ -1,7 +1,7 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.FriendsBO;
+import com.soapboxrace.core.bo.SocialRelationshipBO;
 import com.soapboxrace.jaxb.http.PersonaFriendsList;
 
 import javax.ejb.EJB;
@@ -15,12 +15,12 @@ import javax.ws.rs.core.MediaType;
 public class GetFriendListFromUserId {
 
     @EJB
-    private FriendsBO friendsBO;
+    private SocialRelationshipBO socialRelationshipBO;
 
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_XML)
     public PersonaFriendsList getFriendsList(@HeaderParam("userId") Long userId) {
-        return friendsBO.getFriendsList(userId);
+        return socialRelationshipBO.getFriendsList(userId);
     }
 }

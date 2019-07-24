@@ -5,14 +5,13 @@ import com.soapboxrace.core.bo.DriverPersonaBO;
 import com.soapboxrace.core.bo.PresenceBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.bo.UserBO;
-import com.soapboxrace.core.dao.FriendDAO;
+import com.soapboxrace.core.dao.SocialRelationshipDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.exception.EngineException;
 import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.http.*;
-import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 import javax.ejb.EJB;
@@ -41,7 +40,7 @@ public class DriverPersona {
     private PresenceBO presenceBO;
 
     @EJB
-    private FriendDAO friendDAO;
+    private SocialRelationshipDAO socialRelationshipDAO;
 
     @EJB
     private PersonaDAO personaDAO;
@@ -137,7 +136,7 @@ public class DriverPersona {
     @Path("/UpdatePersonaPresence")
     @Produces(MediaType.APPLICATION_XML)
     public Response updatePersonaPresence(@HeaderParam("securityToken") String securityToken,
-                                   @QueryParam("presence") int presence) {
+                                   @QueryParam("presence") Long presence) {
         if (tokenSessionBo.getActivePersonaId(securityToken) == 0L)
             throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
         PersonaEntity personaEntity = personaDAO.findById(tokenSessionBo.getActivePersonaId(securityToken));

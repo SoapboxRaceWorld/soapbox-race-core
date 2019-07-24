@@ -1,23 +1,17 @@
 package com.soapboxrace.core.api;
 
-import com.soapboxrace.core.api.util.ConcurrentUtil;
 import com.soapboxrace.core.api.util.LauncherChecks;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
-import com.soapboxrace.core.dao.FriendDAO;
+import com.soapboxrace.core.dao.SocialRelationshipDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.exception.EngineException;
 import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.jpa.BanEntity;
-import com.soapboxrace.core.jpa.FriendEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
-import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
-import com.soapboxrace.jaxb.http.PersonaBase;
 import com.soapboxrace.jaxb.http.UserInfo;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
-import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePersonaBase;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +21,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.List;
 import java.util.Objects;
 
 @Path("User")
@@ -58,7 +51,7 @@ public class User {
     private PresenceBO presenceBO;
 
     @EJB
-    private FriendDAO friendDAO;
+    private SocialRelationshipDAO socialRelationshipDAO;
 
     @EJB
     private PersonaDAO personaDAO;

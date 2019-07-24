@@ -61,7 +61,7 @@ public class PersonaBase {
     @XmlElement(name = "PersonaId")
     protected long personaId;
     @XmlElement(name = "Presence")
-    protected int presence;
+    protected Long presence;
     @XmlElement(name = "Score")
     protected int score;
     @XmlElement(name = "UserId")
@@ -191,7 +191,7 @@ public class PersonaBase {
      * Gets the value of the presence property.
      * 
      */
-    public int getPresence() {
+    public Long getPresence() {
         return presence;
     }
 
@@ -199,7 +199,7 @@ public class PersonaBase {
      * Sets the value of the presence property.
      * 
      */
-    public void setPresence(int value) {
+    public void setPresence(Long value) {
         this.presence = value;
     }
 

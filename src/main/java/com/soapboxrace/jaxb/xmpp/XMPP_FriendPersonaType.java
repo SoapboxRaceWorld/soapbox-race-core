@@ -24,7 +24,7 @@ public class XMPP_FriendPersonaType {
     protected String name;
     protected String originalName;
     protected long personaId;
-    protected int presence;
+    protected Long presence;
     protected int socialNetwork;
     protected long userId;
 
@@ -68,11 +68,11 @@ public class XMPP_FriendPersonaType {
         this.personaId = value;
     }
 
-    public int getPresence() {
+    public Long getPresence() {
         return presence;
     }
 
-    public void setPresence(int value) {
+    public void setPresence(Long value) {
         this.presence = value;
     }
 

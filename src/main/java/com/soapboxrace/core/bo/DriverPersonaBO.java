@@ -194,7 +194,7 @@ public class DriverPersonaBO {
         }
         PersonaPresence personaPresence = new PersonaPresence();
         personaPresence.setPersonaId(0);
-        personaPresence.setPresence(0);
+        personaPresence.setPresence(0L);
         personaPresence.setUserId(0);
         return personaPresence;
     }

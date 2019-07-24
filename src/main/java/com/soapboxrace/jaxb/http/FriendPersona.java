@@ -50,7 +50,7 @@ public class FriendPersona {
     protected String name;
     protected String originalName;
     protected long personaId;
-    protected int presence;
+    protected Long presence;
     protected int socialNetwork;
     protected long userId;
 
@@ -154,7 +154,7 @@ public class FriendPersona {
      * Gets the value of the presence property.
      * 
      */
-    public int getPresence() {
+    public Long getPresence() {
         return presence;
     }
 
@@ -162,7 +162,7 @@ public class FriendPersona {
      * Sets the value of the presence property.
      * 
      */
-    public void setPresence(int value) {
+    public void setPresence(Long value) {
         this.presence = value;
     }
 
