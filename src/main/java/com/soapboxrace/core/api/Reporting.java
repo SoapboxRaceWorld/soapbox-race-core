@@ -31,52 +31,52 @@ public class Reporting {
     @Secured
     @Path("/SendHardwareInfo")
     @Produces(MediaType.APPLICATION_XML)
-    public Response sendHardwareInfo(InputStream is, @HeaderParam("securityToken") String securityToken) {
+    public String sendHardwareInfo(InputStream is, @HeaderParam("securityToken") String securityToken) {
         HardwareInfo hardwareInfo = UnmarshalXML.unMarshal(is, HardwareInfo.class);
         HardwareInfoEntity hardwareInfoEntity = hardwareInfoBO.save(hardwareInfo);
         UserEntity user = tokenBO.getUser(securityToken);
         user.setGameHardwareHash(hardwareInfoEntity.getHardwareHash());
         userDAO.update(user);
-        return Response.ok().build();
+        return "";
     }
 
     @POST
     @Secured
     @Path("/SendUserSettings")
     @Produces(MediaType.APPLICATION_XML)
-    public Response sendUserSettings() {
-        return Response.ok().build();
+    public String sendUserSettings() {
+        return "";
     }
 
     @GET
     @Secured
     @Path("/SendMultiplayerConnect")
     @Produces(MediaType.APPLICATION_XML)
-    public Response sendMultiplayerConnect() {
-        return Response.ok().build();
+    public String sendMultiplayerConnect() {
+        return "";
     }
 
     @GET
     @Secured
     @Path("/SendClientPingTime")
     @Produces(MediaType.APPLICATION_XML)
-    public Response sendClientPingTime() {
-        return Response.ok().build();
+    public String sendClientPingTime() {
+        return "";
     }
 
     @GET
     @Secured
     @Path("/LoginAnnouncementClicked")
     @Produces(MediaType.APPLICATION_XML)
-    public Response loginAnnouncementClicked() {
-        return Response.ok().build();
+    public String loginAnnouncementClicked() {
+        return "";
     }
 
     @PUT
     @Path("{path:.*}")
     @Produces(MediaType.APPLICATION_XML)
-    public Response genericEmptyPut(@PathParam("path") String path) {
+    public String genericEmptyPut(@PathParam("path") String path) {
         System.out.println("empty PUT!!!");
-        return Response.ok().build();
+        return "";
     }
 }
