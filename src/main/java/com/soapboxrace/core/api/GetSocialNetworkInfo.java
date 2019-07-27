@@ -15,7 +15,9 @@ public class GetSocialNetworkInfo {
     @Secured
     @Produces(MediaType.APPLICATION_XML)
     public SocialNetworkInfo getSocialNetworkInfo() {
-        return new SocialNetworkInfo();
+        SocialNetworkInfo socialNetworkInfo = new SocialNetworkInfo();
+        socialNetworkInfo.setFacebookName("test");
+        return socialNetworkInfo;
     }
 
 }

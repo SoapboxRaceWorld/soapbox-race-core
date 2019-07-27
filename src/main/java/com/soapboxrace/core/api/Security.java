@@ -5,6 +5,7 @@ import com.soapboxrace.jaxb.http.FraudConfig;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/security")
 public class Security {
@@ -26,7 +27,7 @@ public class Security {
     @Secured
     @Path("/generateWebToken")
     @Produces(MediaType.APPLICATION_XML)
-    public String generateWebToken() {
-        return "";
+    public Response generateWebToken() {
+        return Response.ok().build();
     }
 }

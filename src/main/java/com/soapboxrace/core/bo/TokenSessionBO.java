@@ -4,6 +4,8 @@ import com.soapboxrace.core.api.util.GeoIp2;
 import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.dao.UserDAO;
+import com.soapboxrace.core.exception.EngineException;
+import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.core.jpa.UserEntity;
@@ -76,11 +78,11 @@ public class TokenSessionBO {
     public boolean verifyPersona(String securityToken, Long personaId) {
         TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
         if (tokenSession == null) {
-            throw new NotAuthorizedException("Invalid session...");
+            throw new EngineException(EngineExceptionCode.NoSuchSessionInSessionStore);
         }
 
         if (!tokenSession.getUserEntity().ownsPersona(personaId)) {
-            throw new NotAuthorizedException("Persona is not owned by user");
+            throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser);
         }
         return true;
     }
@@ -166,7 +168,7 @@ public class TokenSessionBO {
 
         if (!isLogout) {
             if (!tokenSessionEntity.getUserEntity().ownsPersona(personaId)) {
-                throw new NotAuthorizedException("Persona not owned by user");
+                throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser);
             }
         }
 

@@ -11,6 +11,7 @@ import com.soapboxrace.jaxb.http.SessionInfo;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/matchmaking")
 public class MatchMaking {
@@ -34,43 +35,43 @@ public class MatchMaking {
     @Secured
     @Path("/joinqueueracenow")
     @Produces(MediaType.APPLICATION_XML)
-    public String joinQueueRaceNow(@HeaderParam("securityToken") String securityToken) {
+    public Response joinQueueRaceNow(@HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
         lobbyBO.joinFastLobby(activePersonaId, defaultCar.getCustomCar().getCarClassHash());
-        return "";
+        return Response.ok().build();
     }
 
     @PUT
     @Secured
     @Path("/joinqueueevent/{eventId}")
     @Produces(MediaType.APPLICATION_XML)
-    public String joinQueueEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
+    public Response joinQueueEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         lobbyBO.joinQueueEvent(activePersonaId, eventId);
-        return "";
+        return Response.ok().build();
     }
 
     @PUT
     @Secured
     @Path("/leavequeue")
     @Produces(MediaType.APPLICATION_XML)
-    public String leaveQueue(@HeaderParam("securityToken") String securityToken) {
+    public Response leaveQueue(@HeaderParam("securityToken") String securityToken) {
         matchmakingBO.removeFromQueue(tokenSessionBO.getActivePersonaId(securityToken));
-        return "";
+        return Response.ok().build();
     }
 
     @PUT
     @Secured
     @Path("/leavelobby")
     @Produces(MediaType.APPLICATION_XML)
-    public String leavelobby(@HeaderParam("securityToken") String securityToken) {
+    public Response leavelobby(@HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         Long activeLobbyId = tokenSessionBO.getActiveLobbyId(securityToken);
         if (activeLobbyId != null && !activeLobbyId.equals(0L)) {
             lobbyBO.deleteLobbyEntrant(activePersonaId, activeLobbyId);
         }
-        return "";
+        return Response.ok().build();
     }
 
     @GET
@@ -96,11 +97,11 @@ public class MatchMaking {
     @Secured
     @Path("/makeprivatelobby/{eventId}")
     @Produces(MediaType.APPLICATION_XML)
-    public String makePrivateLobby(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
+    public Response makePrivateLobby(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
         lobbyBO.createPrivateLobby(activePersonaId, eventId);
-        return "";
+        return Response.ok().build();
     }
 
     @PUT
@@ -117,8 +118,9 @@ public class MatchMaking {
     @Secured
     @Path("/declineinvite")
     @Produces(MediaType.APPLICATION_XML)
-    public String declineInvite(@HeaderParam("securityToken") String securityToken, @QueryParam("lobbyInviteId") Long lobbyInviteId) {
-        return "";
+    public Response declineInvite(@HeaderParam("securityToken") String securityToken,
+                                  @QueryParam("lobbyInviteId") Long lobbyInviteId) {
+        return Response.ok().build();
     }
 
 }

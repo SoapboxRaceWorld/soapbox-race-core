@@ -14,6 +14,7 @@ import com.soapboxrace.jaxb.util.UnmarshalXML;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -180,24 +181,25 @@ public class Personas {
     @Secured
     @Path("/inventory/sell/{entitlementTag}")
     @Produces(MediaType.APPLICATION_XML)
-    public String sellInventoryItem(@HeaderParam("securityToken") String securityToken, @PathParam("entitlementTag") String entitlementTag) {
+    public Response sellInventoryItem(@HeaderParam("securityToken") String securityToken,
+                               @PathParam("entitlementTag") String entitlementTag) {
         long personaId = sessionBO.getActivePersonaId(securityToken);
         inventoryBO.deletePart(personaId, entitlementTag);
-        return "";
+        return Response.ok().build();
     }
 
     @POST
     @Secured
     @Path("/{personaId}/cars")
     @Produces(MediaType.APPLICATION_XML)
-    public String carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber,
+    public Response carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber,
                            @HeaderParam("securityToken") String securityToken) {
         sessionBO.verifyPersona(securityToken, personaId);
         if (basketBO.sellCar(securityToken, personaId, serialNumber)) {
             OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
-            return MarshalXML.marshal(ownedCarTrans);
+            return Response.ok().entity(ownedCarTrans).build();
         }
-        return "";
+        return Response.ok().build();
     }
 
     @GET
@@ -246,11 +248,11 @@ public class Personas {
     @Secured
     @Path("/{personaId}/defaultcar/{carId}")
     @Produces(MediaType.APPLICATION_XML)
-    public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId,
-                             @HeaderParam("securityToken") String securityToken) {
+    public Response defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId,
+                               @HeaderParam("securityToken") String securityToken) {
         sessionBO.verifyPersona(securityToken, personaId);
         personaBO.changeDefaultCar(personaId, carId);
-        return "";
+        return Response.ok().build();
     }
 
 }

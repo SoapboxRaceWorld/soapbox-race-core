@@ -1,26 +1,25 @@
 
 package com.soapboxrace.jaxb.http;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
- * <p>Java class for ArrayOfCarClass complex type.
+ * <p>Java class for ArrayOfBasicBlockPlayerInfo complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ArrayOfCarClass">
+ * &lt;complexType name="ArrayOfBasicBlockPlayerInfo">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="CarClass" type="{}CarClass" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="BasicBlockPlayerInfo" type="{}BasicBlockPlayerInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,12 +30,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArrayOfCarClass", propOrder = {
-    "carClass"
+        "basicBlockPlayerInfo"
 })
-public class ArrayOfCarClass {
+public class ArrayOfBasicBlockPlayerInfo {
 
-    @XmlElement(name = "CarClass", nillable = true)
-    protected List<CarClass> carClass;
+    @XmlElement(name = "BasicBlockPlayerInfo", nillable = true)
+    protected List<BasicBlockPlayerInfo> basicBlockPlayerInfo;
 
     /**
      * Gets the value of the basicBlockPlayerInfo property.
@@ -56,15 +55,15 @@ public class ArrayOfCarClass {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link CarClass }
+     * {@link BasicBlockPlayerInfo }
      * 
      * 
      */
-    public List<CarClass> getCarClass() {
-        if (carClass == null) {
-            carClass = new ArrayList<CarClass>();
+    public List<BasicBlockPlayerInfo> getBasicBlockPlayerInfo() {
+        if (basicBlockPlayerInfo == null) {
+            basicBlockPlayerInfo = new ArrayList<BasicBlockPlayerInfo>();
         }
-        return this.carClass;
+        return this.basicBlockPlayerInfo;
     }
 
 }

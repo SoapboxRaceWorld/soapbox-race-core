@@ -8,6 +8,7 @@ import com.soapboxrace.jaxb.http.*;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/events")
@@ -99,25 +100,26 @@ public class Events {
     @Secured
     @Path("/notifycoincollected")
     @Produces(MediaType.APPLICATION_XML)
-    public String notifyCoinCollected(@HeaderParam("securityToken") String securityToken, @QueryParam("coins") Integer coins) {
+    public Response notifyCoinCollected(@HeaderParam("securityToken") String securityToken,
+                                 @QueryParam("coins") Integer coins) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-        return eventsBO.notifyCoinCollected(activePersonaId, coins);
+        return Response.ok().entity(eventsBO.notifyCoinCollected(activePersonaId, coins)).build();
     }
 
     @GET
     @Secured
     @Path("/accolades")
     @Produces(MediaType.APPLICATION_XML)
-    public String accolades(@HeaderParam("securityToken") String securityToken) {
+    public Response accolades(@HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-        return eventsBO.accolades(activePersonaId, true);
+        return Response.ok().entity(eventsBO.accolades(activePersonaId, true)).build();
     }
 
     @GET
     @Secured
     @Path("/instancedaccolades")
     @Produces(MediaType.APPLICATION_XML)
-    public String instancedAccolades(@QueryParam("eventSessionId") Long eventSessionId) {
-        return "";
+    public Response instancedAccolades(@QueryParam("eventSessionId") Long eventSessionId) {
+        return Response.ok().build();
     }
 }

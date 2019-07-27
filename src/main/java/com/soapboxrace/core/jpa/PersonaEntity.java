@@ -21,6 +21,7 @@ public class PersonaEntity {
     private int iconIndex;
     private int level;
     private String motto;
+    @Column(unique = true)
     private String name;
     private float percentToLevel;
     private double rating;

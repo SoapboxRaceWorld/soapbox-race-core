@@ -8,6 +8,7 @@ import com.soapboxrace.core.bo.TokenSessionBO;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/Social")
 public class Social {
@@ -25,14 +26,14 @@ public class Social {
     @Secured
     @Path("/petition")
     @Produces(MediaType.APPLICATION_XML)
-    public String petition(@HeaderParam("securityToken") String securityToken, @QueryParam("personaId") Long personaId,
-                           @QueryParam("abuserPersonaId") Long abuserPersonaId, @QueryParam("petitionType") Integer petitionType,
-                           @QueryParam("description") String description, @QueryParam("customCarID") Integer customCarID, @QueryParam("chatMinutes") Integer chatMinutes) {
+    public Response petition(@HeaderParam("securityToken") String securityToken, @QueryParam("personaId") Long personaId,
+                             @QueryParam("abuserPersonaId") Long abuserPersonaId, @QueryParam("petitionType") Integer petitionType,
+                             @QueryParam("description") String description, @QueryParam("customCarID") Integer customCarID, @QueryParam("chatMinutes") Integer chatMinutes) {
         if (tokenSessionBo.isAdmin(securityToken) && description.startsWith("/")) {
             adminBo.sendCommand(tokenSessionBo.getActivePersonaId(securityToken), abuserPersonaId, description);
         } else {
             bo.sendReport(personaId, abuserPersonaId, petitionType, description, customCarID, chatMinutes, 0L);
         }
-        return "";
+        return Response.ok().build();
     }
 }

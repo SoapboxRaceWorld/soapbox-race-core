@@ -2,6 +2,7 @@ package com.soapboxrace.core.api;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("/")
 public class Generic {
@@ -9,25 +10,25 @@ public class Generic {
     @GET
     @Path("{path:.*}")
     @Produces(MediaType.APPLICATION_XML)
-    public String genericEmptyGet(@PathParam("path") String path) {
+    public Response genericEmptyGet(@PathParam("path") String path) {
         System.out.println("empty GET!!!");
-        return "";
+        return Response.ok().build();
     }
 
     @POST
     @Path("{path:.*}")
     @Produces(MediaType.APPLICATION_XML)
-    public String genericEmptyPost(@PathParam("path") String path) {
+    public Response genericEmptyPost(@PathParam("path") String path) {
         System.out.println("empty POST!!!");
-        return "";
+        return Response.ok().build();
     }
 
     @PUT
     @Path("{path:.*}")
     @Produces(MediaType.APPLICATION_XML)
-    public String genericEmptyPut(@PathParam("path") String path) {
+    public Response genericEmptyPut(@PathParam("path") String path) {
         System.out.println("empty PUT!!!");
-        return "";
+        return Response.ok().build();
     }
 
 }

@@ -3,31 +3,33 @@ package com.soapboxrace.core.api;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.SocialRelationshipBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.SocialRelationshipDAO;
 import com.soapboxrace.core.exception.EngineException;
 import com.soapboxrace.core.exception.EngineExceptionCode;
-import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
+import com.soapboxrace.jaxb.http.*;
+import com.soapboxrace.jaxb.util.MarshalXML;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/addfriendrequest")
-public class AddFriendRequest {
-    @EJB
-    private TokenSessionBO tokenSessionBO;
+@Path("/blockplayer")
+public class BlockPlayer {
 
     @EJB
     private SocialRelationshipBO socialRelationshipBO;
 
+    @EJB
+    private TokenSessionBO tokenSessionBO;
+
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_XML)
-    public Response addFriendRequest(@HeaderParam("securityToken") String securityToken,
-                                     @QueryParam("displayName") String displayName) {
+    public Response blockPlayer(@HeaderParam("securityToken") String securityToken,
+                                @HeaderParam("userId") Long userId,
+                                @QueryParam("otherPersonaId") Long otherPersonaId) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-        return Response.ok().entity(socialRelationshipBO.addFriend(activePersonaId, displayName)).build();
+
+        return Response.ok().entity(socialRelationshipBO.blockPlayer(userId, activePersonaId, otherPersonaId)).build();
     }
 }

@@ -1,16 +1,12 @@
 package com.soapboxrace.jaxb.http;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import com.soapboxrace.jaxb.http.FriendPersona;
+import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FriendResult", propOrder = { "persona", "result" })
 @XmlRootElement(name = "FriendResult")
 public class FriendResult {
+
     protected FriendPersona persona;
     protected int result;
 
@@ -28,5 +24,9 @@ public class FriendResult {
 
     public void setResult(int result) {
         this.result = result;
+    }
+
+    public void setResult(FriendResultStatus status) {
+        this.result = status.getValue();
     }
 }

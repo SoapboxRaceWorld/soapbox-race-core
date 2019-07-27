@@ -1,23 +1,17 @@
 package com.soapboxrace.core.api;
 
-import com.soapboxrace.core.api.util.ConcurrentUtil;
 import com.soapboxrace.core.api.util.LauncherChecks;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
-import com.soapboxrace.core.dao.FriendDAO;
+import com.soapboxrace.core.dao.SocialRelationshipDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.exception.EngineException;
 import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.jpa.BanEntity;
-import com.soapboxrace.core.jpa.FriendEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
-import com.soapboxrace.jaxb.http.ArrayOfBadgePacket;
-import com.soapboxrace.jaxb.http.PersonaBase;
 import com.soapboxrace.jaxb.http.UserInfo;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
-import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePersonaBase;
 
 import javax.ejb.EJB;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +21,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.List;
 import java.util.Objects;
 
 @Path("User")
@@ -55,10 +48,10 @@ public class User {
     private ParameterBO parameterBO;
 
     @EJB
-    private PresenceManager presenceManager;
+    private PresenceBO presenceBO;
 
     @EJB
-    private FriendDAO friendDAO;
+    private SocialRelationshipDAO socialRelationshipDAO;
 
     @EJB
     private PersonaDAO personaDAO;
@@ -103,90 +96,42 @@ public class User {
     @Secured
     @Path("SecureLoginPersona")
     @Produces(MediaType.APPLICATION_XML)
-    public String secureLoginPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
+    public Response secureLoginPersona(@HeaderParam("securityToken") String securityToken,
+                                  @HeaderParam("userId") Long userId,
                                      @QueryParam("personaId") Long personaId) {
         tokenBO.setActivePersonaId(securityToken, personaId, false);
         userBO.secureLoginPersona(userId, personaId);
-        return "";
+        return Response.ok().build();
     }
 
     @POST
     @Secured
     @Path("SecureLogoutPersona")
     @Produces(MediaType.APPLICATION_XML)
-    public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
+    public Response secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
                                       @QueryParam("personaId") Long personaId) {
         long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
         tokenBO.setActivePersonaId(securityToken, 0L, true);
+        presenceBO.removePresence(activePersonaId);
 
-        presenceManager.removePresence(activePersonaId);
-
-        ConcurrentUtil.EXECUTOR_SERVICE.submit(() -> {
-            List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
-
-            for (FriendEntity friend : friends) {
-                XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
-                PersonaBase xmppPersonaBase = new PersonaBase();
-
-                xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
-                xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
-                xmppPersonaBase.setLevel(personaEntity.getLevel());
-                xmppPersonaBase.setMotto(personaEntity.getMotto());
-                xmppPersonaBase.setName(personaEntity.getName());
-                xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
-                xmppPersonaBase.setPresence(0);
-                xmppPersonaBase.setScore(personaEntity.getScore());
-                xmppPersonaBase.setUserId(personaEntity.getUser().getId());
-
-                personaPacket.setPersonaBase(xmppPersonaBase);
-
-                openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
-            }
-        });
-
-        return "";
+        return Response.ok().build();
     }
 
     @POST
     @Secured
     @Path("SecureLogout")
     @Produces(MediaType.APPLICATION_XML)
-    public String secureLogout(@HeaderParam("securityToken") String securityToken) {
+    public Response secureLogout(@HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 
         if (Objects.isNull(activePersonaId) || activePersonaId == 0L) {
-            return "";
+            throw new EngineException(EngineExceptionCode.FailedUpdateSession);
         }
 
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
         tokenBO.setActivePersonaId(securityToken, 0L, true);
-        presenceManager.removePresence(activePersonaId);
+        presenceBO.removePresence(activePersonaId);
 
-        ConcurrentUtil.EXECUTOR_SERVICE.submit(() -> {
-            List<FriendEntity> friends = friendDAO.findByUserId(personaEntity.getUser().getId());
-
-            for (FriendEntity friend : friends) {
-                XMPP_ResponseTypePersonaBase personaPacket = new XMPP_ResponseTypePersonaBase();
-                PersonaBase xmppPersonaBase = new PersonaBase();
-
-                xmppPersonaBase.setBadges(new ArrayOfBadgePacket());
-                xmppPersonaBase.setIconIndex(personaEntity.getIconIndex());
-                xmppPersonaBase.setLevel(personaEntity.getLevel());
-                xmppPersonaBase.setMotto(personaEntity.getMotto());
-                xmppPersonaBase.setName(personaEntity.getName());
-                xmppPersonaBase.setPersonaId(personaEntity.getPersonaId());
-                xmppPersonaBase.setPresence(0);
-                xmppPersonaBase.setScore(personaEntity.getScore());
-                xmppPersonaBase.setUserId(personaEntity.getUser().getId());
-
-                personaPacket.setPersonaBase(xmppPersonaBase);
-
-                openFireSoapBoxCli.send(personaPacket, friend.getPersonaId());
-            }
-        });
-
-        return "";
+        return Response.ok().build();
     }
 
     @GET
