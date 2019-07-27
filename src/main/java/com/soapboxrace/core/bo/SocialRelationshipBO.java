@@ -308,7 +308,22 @@ public class SocialRelationshipBO {
     }
 
     public PersonaBase unblockPlayer(Long userId, Long otherPersonaId) {
-        return null;
+        PersonaEntity otherPersonaEntity = personaDAO.findById(otherPersonaId);
+
+        if (otherPersonaEntity == null) {
+            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid);
+        }
+
+        SocialRelationshipEntity localSide = socialRelationshipDAO.findByLocalAndRemoteUser(userId,
+                otherPersonaEntity.getUser().getId());
+
+        if (localSide != null && localSide.getStatus() == 2L) {
+            socialRelationshipDAO.delete(localSide);
+        } else {
+            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable);
+        }
+
+        return driverPersonaBO.getPersonaBase(otherPersonaEntity);
     }
 
     private void createNewRelationship(PersonaEntity localPersona, PersonaEntity remotePersona, long status) {
