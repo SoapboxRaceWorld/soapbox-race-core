@@ -99,9 +99,7 @@ public class SocialRelationshipBO {
 
         for (SocialRelationshipEntity socialRelationshipEntity :
                 this.socialRelationshipDAO.findByRemoteUserIdAndStatus(personaEntity.getUser().getId(), 2L)) {
-            for (PersonaEntity remotePersonaEntity : socialRelationshipEntity.getUser().getPersonas()) {
-                arrayOfLong.getLong().add(remotePersonaEntity.getPersonaId());
-            }
+            arrayOfLong.getLong().add(socialRelationshipEntity.getUser().getId());
         }
 
         return arrayOfLong;
