@@ -63,7 +63,8 @@ public class User {
     @Secured
     @Path("GetPermanentSession")
     @Produces(MediaType.APPLICATION_XML)
-    public Response getPermanentSession(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId) {
+    public Response getPermanentSession(@HeaderParam("securityToken") String securityToken,
+                                 @HeaderParam("userId") Long userId) {
         UserEntity userEntity = tokenBO.getUser(securityToken);
         BanEntity ban = authenticationBO.checkUserBan(userEntity);
 
@@ -96,32 +97,32 @@ public class User {
     @Secured
     @Path("SecureLoginPersona")
     @Produces(MediaType.APPLICATION_XML)
-    public Response secureLoginPersona(@HeaderParam("securityToken") String securityToken,
+    public String secureLoginPersona(@HeaderParam("securityToken") String securityToken,
                                   @HeaderParam("userId") Long userId,
                                      @QueryParam("personaId") Long personaId) {
         tokenBO.setActivePersonaId(securityToken, personaId, false);
         userBO.secureLoginPersona(userId, personaId);
-        return Response.ok().build();
+        return "";
     }
 
     @POST
     @Secured
     @Path("SecureLogoutPersona")
     @Produces(MediaType.APPLICATION_XML)
-    public Response secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
+    public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
                                       @QueryParam("personaId") Long personaId) {
         long activePersonaId = tokenBO.getActivePersonaId(securityToken);
         tokenBO.setActivePersonaId(securityToken, 0L, true);
         presenceBO.removePresence(activePersonaId);
 
-        return Response.ok().build();
+        return "";
     }
 
     @POST
     @Secured
     @Path("SecureLogout")
     @Produces(MediaType.APPLICATION_XML)
-    public Response secureLogout(@HeaderParam("securityToken") String securityToken) {
+    public String secureLogout(@HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 
         if (Objects.isNull(activePersonaId) || activePersonaId == 0L) {
@@ -131,7 +132,7 @@ public class User {
         tokenBO.setActivePersonaId(securityToken, 0L, true);
         presenceBO.removePresence(activePersonaId);
 
-        return Response.ok().build();
+        return "";
     }
 
     @GET
@@ -150,7 +151,8 @@ public class User {
     @Path("createUser")
     @Produces(MediaType.APPLICATION_XML)
     @LauncherChecks
-    public Response createUser(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam("inviteTicket") String inviteTicket) {
+    public Response createUser(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam(
+            "inviteTicket") String inviteTicket) {
         LoginStatusVO loginStatusVO = userBO.createUserWithTicket(email, password, sr.getRemoteAddr(), inviteTicket);
         if (loginStatusVO != null && loginStatusVO.isLoginOk()) {
             loginStatusVO = tokenBO.login(email, password, sr);

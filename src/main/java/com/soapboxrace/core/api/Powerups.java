@@ -34,7 +34,7 @@ public class Powerups {
     @Secured
     @Path("/activated/{powerupHash}")
     @Produces(MediaType.APPLICATION_XML)
-    public Response activated(@HeaderParam("securityToken") String securityToken,
+    public String activated(@HeaderParam("securityToken") String securityToken,
                               @PathParam(value = "powerupHash") Integer powerupHash,
                               @QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers, @QueryParam("eventSessionId") Long eventSessionId) {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
@@ -60,6 +60,6 @@ public class Powerups {
             inventoryBO.decrementUsage(activePersonaId, powerupHash);
         }
 
-        return Response.ok().build();
+        return "";
     }
 }

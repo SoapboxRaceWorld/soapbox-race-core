@@ -76,8 +76,8 @@ public class DriverPersona {
     @Secured
     @Path("/UnreserveName")
     @Produces(MediaType.APPLICATION_XML)
-    public Response UnreserveName(@QueryParam("name") String name) {
-        return Response.ok().build();
+    public String UnreserveName(@QueryParam("name") String name) {
+        return "";
     }
 
     @POST
@@ -135,14 +135,14 @@ public class DriverPersona {
     @Secured
     @Path("/UpdatePersonaPresence")
     @Produces(MediaType.APPLICATION_XML)
-    public Response updatePersonaPresence(@HeaderParam("securityToken") String securityToken,
+    public String updatePersonaPresence(@HeaderParam("securityToken") String securityToken,
                                    @QueryParam("presence") Long presence) {
         if (tokenSessionBo.getActivePersonaId(securityToken) == 0L)
             throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
         PersonaEntity personaEntity = personaDAO.findById(tokenSessionBo.getActivePersonaId(securityToken));
         presenceBO.updatePresence(personaEntity.getPersonaId(), presence);
 
-        return Response.ok().build();
+        return "";
     }
 
     @GET

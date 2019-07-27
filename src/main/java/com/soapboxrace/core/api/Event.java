@@ -8,6 +8,7 @@ import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.jaxb.http.*;
+import com.soapboxrace.jaxb.util.MarshalXML;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 import javax.ejb.EJB;
@@ -32,26 +33,26 @@ public class Event {
     @Secured
     @Path("/abort")
     @Produces(MediaType.APPLICATION_XML)
-    public Response abort(@QueryParam("eventSessionId") Long eventSessionId) {
-        return Response.ok().build();
+    public String abort(@QueryParam("eventSessionId") Long eventSessionId) {
+        return "";
     }
 
     @PUT
     @Secured
     @Path("/launched")
     @Produces(MediaType.APPLICATION_XML)
-    public Response launched(@HeaderParam("securityToken") String securityToken,
+    public String launched(@HeaderParam("securityToken") String securityToken,
                       @QueryParam("eventSessionId") Long eventSessionId) {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
         eventBO.createEventDataSession(activePersonaId, eventSessionId);
-        return Response.ok().build();
+        return "";
     }
 
     @POST
     @Secured
     @Path("/arbitration")
     @Produces(MediaType.APPLICATION_XML)
-    public Response arbitration(InputStream arbitrationXml, @HeaderParam("securityToken") String securityToken,
+    public String arbitration(InputStream arbitrationXml, @HeaderParam("securityToken") String securityToken,
                               @QueryParam("eventSessionId") Long eventSessionId) {
         EventSessionEntity eventSessionEntity = eventBO.findEventSessionById(eventSessionId);
         EventEntity event = eventSessionEntity.getEvent();
@@ -88,22 +89,22 @@ public class Event {
         }
 
         if (eventResult == null) {
-            return Response.ok().build();
+            return "";
         }
 
-        return Response.ok().entity(eventResult).build();
+        return MarshalXML.marshal(eventResult);
     }
 
     @POST
     @Secured
     @Path("/bust")
     @Produces(MediaType.APPLICATION_XML)
-    public Response bust(InputStream bustXml, @HeaderParam("securityToken") String securityToken, @QueryParam(
+    public String bust(InputStream bustXml, @HeaderParam("securityToken") String securityToken, @QueryParam(
             "eventSessionId") Long eventSessionId) {
         EventSessionEntity eventSessionEntity = eventBO.findEventSessionById(eventSessionId);
         PursuitArbitrationPacket pursuitArbitrationPacket = UnmarshalXML.unMarshal(bustXml, PursuitArbitrationPacket.class);
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-        return Response.ok().entity(eventResultBO.handlePursitEnd(eventSessionEntity, activePersonaId,
-                pursuitArbitrationPacket, true)).build();
+        return MarshalXML.marshal(eventResultBO.handlePursitEnd(eventSessionEntity, activePersonaId,
+                pursuitArbitrationPacket, true));
     }
 }

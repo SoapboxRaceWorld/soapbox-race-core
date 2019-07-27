@@ -35,43 +35,43 @@ public class MatchMaking {
     @Secured
     @Path("/joinqueueracenow")
     @Produces(MediaType.APPLICATION_XML)
-    public Response joinQueueRaceNow(@HeaderParam("securityToken") String securityToken) {
+    public String joinQueueRaceNow(@HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
         lobbyBO.joinFastLobby(activePersonaId, defaultCar.getCustomCar().getCarClassHash());
-        return Response.ok().build();
+        return "";
     }
 
     @PUT
     @Secured
     @Path("/joinqueueevent/{eventId}")
     @Produces(MediaType.APPLICATION_XML)
-    public Response joinQueueEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
+    public String joinQueueEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         lobbyBO.joinQueueEvent(activePersonaId, eventId);
-        return Response.ok().build();
+        return "";
     }
 
     @PUT
     @Secured
     @Path("/leavequeue")
     @Produces(MediaType.APPLICATION_XML)
-    public Response leaveQueue(@HeaderParam("securityToken") String securityToken) {
+    public String leaveQueue(@HeaderParam("securityToken") String securityToken) {
         matchmakingBO.removeFromQueue(tokenSessionBO.getActivePersonaId(securityToken));
-        return Response.ok().build();
+        return "";
     }
 
     @PUT
     @Secured
     @Path("/leavelobby")
     @Produces(MediaType.APPLICATION_XML)
-    public Response leavelobby(@HeaderParam("securityToken") String securityToken) {
+    public String leavelobby(@HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         Long activeLobbyId = tokenSessionBO.getActiveLobbyId(securityToken);
         if (activeLobbyId != null && !activeLobbyId.equals(0L)) {
             lobbyBO.deleteLobbyEntrant(activePersonaId, activeLobbyId);
         }
-        return Response.ok().build();
+        return "";
     }
 
     @GET
@@ -97,11 +97,11 @@ public class MatchMaking {
     @Secured
     @Path("/makeprivatelobby/{eventId}")
     @Produces(MediaType.APPLICATION_XML)
-    public Response makePrivateLobby(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
+    public String makePrivateLobby(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
         lobbyBO.createPrivateLobby(activePersonaId, eventId);
-        return Response.ok().build();
+        return "";
     }
 
     @PUT
@@ -118,9 +118,9 @@ public class MatchMaking {
     @Secured
     @Path("/declineinvite")
     @Produces(MediaType.APPLICATION_XML)
-    public Response declineInvite(@HeaderParam("securityToken") String securityToken,
+    public String declineInvite(@HeaderParam("securityToken") String securityToken,
                                   @QueryParam("lobbyInviteId") Long lobbyInviteId) {
-        return Response.ok().build();
+        return "";
     }
 
 }

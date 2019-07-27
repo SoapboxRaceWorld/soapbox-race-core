@@ -27,7 +27,7 @@ public class Security {
     @Secured
     @Path("/generateWebToken")
     @Produces(MediaType.APPLICATION_XML)
-    public Response generateWebToken() {
-        return Response.ok().build();
+    public String generateWebToken() {
+        return "";
     }
 }

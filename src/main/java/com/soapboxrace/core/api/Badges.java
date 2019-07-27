@@ -27,7 +27,7 @@ public class Badges {
     @Path("/set")
     @PUT
     @Secured
-    public Response set(InputStream inputStream, @HeaderParam("securityToken") String securityToken) {
+    public String set(InputStream inputStream, @HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
 
         if (activePersonaId == 0L) {
@@ -36,6 +36,6 @@ public class Badges {
 
         personaBO.updateBadges(activePersonaId, UnmarshalXML.unMarshal(inputStream, BadgeBundle.class));
 
-        return Response.ok().build();
+        return "";
     }
 }

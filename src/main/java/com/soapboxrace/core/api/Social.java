@@ -26,7 +26,7 @@ public class Social {
     @Secured
     @Path("/petition")
     @Produces(MediaType.APPLICATION_XML)
-    public Response petition(@HeaderParam("securityToken") String securityToken, @QueryParam("personaId") Long personaId,
+    public String petition(@HeaderParam("securityToken") String securityToken, @QueryParam("personaId") Long personaId,
                              @QueryParam("abuserPersonaId") Long abuserPersonaId, @QueryParam("petitionType") Integer petitionType,
                              @QueryParam("description") String description, @QueryParam("customCarID") Integer customCarID, @QueryParam("chatMinutes") Integer chatMinutes) {
         if (tokenSessionBo.isAdmin(securityToken) && description.startsWith("/")) {
@@ -34,6 +34,6 @@ public class Social {
         } else {
             bo.sendReport(personaId, abuserPersonaId, petitionType, description, customCarID, chatMinutes, 0L);
         }
-        return Response.ok().build();
+        return "";
     }
 }

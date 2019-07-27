@@ -181,25 +181,25 @@ public class Personas {
     @Secured
     @Path("/inventory/sell/{entitlementTag}")
     @Produces(MediaType.APPLICATION_XML)
-    public Response sellInventoryItem(@HeaderParam("securityToken") String securityToken,
+    public String sellInventoryItem(@HeaderParam("securityToken") String securityToken,
                                @PathParam("entitlementTag") String entitlementTag) {
         long personaId = sessionBO.getActivePersonaId(securityToken);
         inventoryBO.deletePart(personaId, entitlementTag);
-        return Response.ok().build();
+        return "";
     }
 
     @POST
     @Secured
     @Path("/{personaId}/cars")
     @Produces(MediaType.APPLICATION_XML)
-    public Response carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber,
+    public String carsPost(@PathParam(value = "personaId") Long personaId, @QueryParam("serialNumber") Long serialNumber,
                            @HeaderParam("securityToken") String securityToken) {
         sessionBO.verifyPersona(securityToken, personaId);
         if (basketBO.sellCar(securityToken, personaId, serialNumber)) {
             OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
-            return Response.ok().entity(ownedCarTrans).build();
+            return MarshalXML.marshal(ownedCarTrans);
         }
-        return Response.ok().build();
+        return "";
     }
 
     @GET
@@ -248,11 +248,11 @@ public class Personas {
     @Secured
     @Path("/{personaId}/defaultcar/{carId}")
     @Produces(MediaType.APPLICATION_XML)
-    public Response defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId,
+    public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId,
                                @HeaderParam("securityToken") String securityToken) {
         sessionBO.verifyPersona(securityToken, personaId);
         personaBO.changeDefaultCar(personaId, carId);
-        return Response.ok().build();
+        return "";
     }
 
 }
