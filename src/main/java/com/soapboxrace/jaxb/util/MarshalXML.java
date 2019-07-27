@@ -13,6 +13,10 @@ public class MarshalXML {
 
 	@SuppressWarnings("unchecked")
 	public static String marshal(Object obj) {
+		if (obj == null) {
+			return "";
+		}
+
 		StringWriter stringWriter = new StringWriter();
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
