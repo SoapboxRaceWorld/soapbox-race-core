@@ -106,6 +106,7 @@ public class SocialRelationshipBO {
     }
 
     public FriendResult addFriend(Long activePersonaId, String displayName) {
+        // activePersonaEntity is the SENDER, targetPersonaEntity is the RECIPIENT.
         PersonaEntity activePersonaEntity = personaDAO.findById(activePersonaId);
         PersonaEntity targetPersonaEntity = personaDAO.findByName(displayName);
         FriendResult friendResult = new FriendResult();
@@ -135,7 +136,7 @@ public class SocialRelationshipBO {
                     this.socialRelationshipDAO.findByLocalAndRemoteUser(activePersonaEntity.getUser().getId(),
                             targetPersonaEntity.getUser().getId());
 
-            if (socialRelationshipEntity != null) {
+            if (socialRelationshipEntity != null && socialRelationshipEntity.getStatus() != 3L) {
                 // Here, we're assuming that the players are, in fact, already friends.
                 // Of course, this should be the case for any ordinary player, who probably
                 // isn't messing around with the game.
@@ -164,12 +165,9 @@ public class SocialRelationshipBO {
             }
         }
         // Create remote relationship
-        SocialRelationshipEntity remoteSocialRelationshipEntity = new SocialRelationshipEntity();
-        remoteSocialRelationshipEntity.setRemoteUser(activePersonaEntity.getUser());
-        remoteSocialRelationshipEntity.setUser(targetPersonaEntity.getUser());
-        remoteSocialRelationshipEntity.setStatus(0L);
-        remoteSocialRelationshipEntity.setRemotePersonaId(activePersonaId);
-        socialRelationshipDAO.insert(remoteSocialRelationshipEntity);
+        createNewRelationship(targetPersonaEntity, activePersonaEntity, 0L);
+        // Create local relationship
+        createNewRelationship(activePersonaEntity, targetPersonaEntity, 3L);
 
         sendFriendPersonaPacket(activePersonaEntity, targetPersonaEntity.getPersonaId());
 
@@ -203,19 +201,27 @@ public class SocialRelationshipBO {
         SocialRelationshipEntity socialRelationshipEntity =
                 socialRelationshipDAO.findByLocalAndRemoteUser(activePersonaEntity.getUser().getId(),
                         friendPersonaEntity.getUser().getId());
+        SocialRelationshipEntity pendingSocialRelationshipEntity =
+                socialRelationshipDAO.findByLocalAndRemoteUser(friendPersonaEntity.getUser().getId(),
+                        activePersonaEntity.getUser().getId());
 
-        if (socialRelationshipEntity == null) {
+        if (socialRelationshipEntity == null || pendingSocialRelationshipEntity == null) {
             throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable);
         }
 
         switch (resolution) {
             case 0: // reject
                 socialRelationshipDAO.delete(socialRelationshipEntity);
+                socialRelationshipDAO.delete(pendingSocialRelationshipEntity);
                 this.sendPresencePacket(activePersonaEntity, 0L, friendPersonaId);
                 return null;
             case 1: // accept
-                this.createNewRelationship(friendPersonaEntity, activePersonaEntity, 1L);
                 this.sendPresencePacket(activePersonaEntity, presenceBO.getPresence(activePersonaId), friendPersonaId);
+                pendingSocialRelationshipEntity.setStatus(1L);
+                socialRelationshipEntity.setStatus(1L);
+
+                socialRelationshipDAO.update(pendingSocialRelationshipEntity);
+                socialRelationshipDAO.update(socialRelationshipEntity);
 
                 return driverPersonaBO.getPersonaBase(friendPersonaEntity);
             default:
@@ -246,31 +252,27 @@ public class SocialRelationshipBO {
         SocialRelationshipEntity remoteSide =
                 socialRelationshipDAO.findByLocalAndRemoteUser(friendPersonaEntity.getUser().getId(),
                         activePersonaEntity.getUser().getId());
-        if (remoteSide == null) {
+        if (remoteSide == null || activeSide == null) {
             // for lack of a better exception code, we just use the "not resolvable" error... they're all the same
             // to the game.
             throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable);
         }
 
-        if (activeSide == null) {
-            // nothing on this side, there might be a friend request
-            if (remoteSide.getStatus() == 0) {
-                socialRelationshipDAO.delete(remoteSide);
-            } else {
-                throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable);
-            }
-        } else if (activeSide.getStatus() == 1 && remoteSide.getStatus() == 1) {
-            socialRelationshipDAO.delete(activeSide);
-            socialRelationshipDAO.delete(remoteSide);
-        } else {
+        if (remoteSide.getStatus() == 2L || activeSide.getStatus() == 2L) {
+            // something like this shouldn't ever happen, but... better to be safe than sorry
             throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable);
         }
+
+        socialRelationshipDAO.delete(activeSide);
+        socialRelationshipDAO.delete(remoteSide);
 
         return driverPersonaBO.getPersonaBase(activePersonaEntity);
     }
 
     public PersonaBase blockPlayer(Long userId, Long activePersonaId, Long otherPersonaId) {
-        if (activePersonaId == 0L) {
+        PersonaEntity activePersonaEntity = personaDAO.findById(activePersonaId);
+
+        if (activePersonaEntity == null) {
             throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
         }
 
@@ -286,20 +288,16 @@ public class SocialRelationshipBO {
                 socialRelationshipDAO.findByLocalAndRemoteUser(otherPersonaEntity.getUser().getId(),
                         userId);
 
-        if (localSide != null) {
-            if (localSide.getStatus() == 2) {
-                throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable);
-            }
-
+        if (localSide == null) {
+            createNewRelationship(activePersonaEntity, otherPersonaEntity, 2L);
+        } else {
             localSide.setStatus(2L);
             socialRelationshipDAO.update(localSide);
         }
 
         if (remoteSide != null) {
-            if (remoteSide.getStatus() != 2L) {
-                sendPresencePacket(personaDAO.findById(activePersonaId), 0L, otherPersonaId);
-                socialRelationshipDAO.delete(remoteSide);
-            }
+            socialRelationshipDAO.delete(remoteSide);
+            sendPresencePacket(activePersonaEntity, 0L, otherPersonaId);
         }
 
         return driverPersonaBO.getPersonaBase(otherPersonaEntity);
@@ -324,13 +322,15 @@ public class SocialRelationshipBO {
         return driverPersonaBO.getPersonaBase(otherPersonaEntity);
     }
 
-    private void createNewRelationship(PersonaEntity localPersona, PersonaEntity remotePersona, long status) {
+    private SocialRelationshipEntity createNewRelationship(PersonaEntity localPersona, PersonaEntity remotePersona, long status) {
         SocialRelationshipEntity socialRelationshipEntity = new SocialRelationshipEntity();
         socialRelationshipEntity.setRemotePersonaId(remotePersona.getPersonaId());
         socialRelationshipEntity.setStatus(status);
         socialRelationshipEntity.setUser(localPersona.getUser());
         socialRelationshipEntity.setRemoteUser(remotePersona.getUser());
         socialRelationshipDAO.insert(socialRelationshipEntity);
+
+        return socialRelationshipEntity;
     }
 
     private void addBlockedUserToList(ArrayOfBasicBlockPlayerInfo arrayOfBasicBlockPlayerInfo,

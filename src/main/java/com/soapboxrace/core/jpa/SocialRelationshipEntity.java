@@ -33,7 +33,8 @@ public class SocialRelationshipEntity {
     private Long remotePersonaId;
 
     @Column
-    private Long status; // 0: pending friend request; 1: accepted friend; 2: blocked user
+    private Long status; // 0: pending friend request; 1: accepted friend; 2: blocked user, 3: pending friend request
+    // (not accepted by target)
 
     public int getId() {
         return id;
