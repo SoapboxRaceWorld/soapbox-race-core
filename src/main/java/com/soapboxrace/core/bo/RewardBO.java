@@ -119,7 +119,7 @@ public class RewardBO {
         }
 
         LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
-        ItemRewardBase rewardBase = itemRewardBO.getGenerator().randomTableItem(rewardTableEntity.getId());
+        ItemRewardBase rewardBase = itemRewardBO.getGenerator().weightedRandomTableItem(rewardTableEntity.getId());
 
         if (rewardBase instanceof ItemRewardProduct) {
             ItemRewardProduct rewardProduct = (ItemRewardProduct) rewardBase;
@@ -167,8 +167,6 @@ public class RewardBO {
                 float resalePrice = productEntity.getResalePrice();
                 double cash = personaEntity.getCash();
                 driverPersonaBO.updateCash(personaEntity, cash + resalePrice);
-//                personaEntity.setCash(cash + resalePrice);
-//                personaDao.update(personaEntity);
             }
         } else {
             inventoryBO.addFromCatalog(productEntity, personaEntity);
@@ -238,9 +236,9 @@ public class RewardBO {
             float baseCash = rewardVO.getBaseCash();
             float topSpeedCashMultiplier = eventEntity.getTopSpeedCashMultiplier();
             float topSpeedRepMultiplier = eventEntity.getTopSpeedRepMultiplier();
-            Float highSpeedRep = baseRep * topSpeedRepMultiplier;
-            Float highSpeedCash = baseCash * topSpeedCashMultiplier;
-            rewardVO.add(highSpeedRep.intValue(), highSpeedCash.intValue(), EnumRewardCategory.BONUS, EnumRewardType.NONE);
+            float highSpeedRep = baseRep * topSpeedRepMultiplier;
+            float highSpeedCash = baseCash * topSpeedCashMultiplier;
+            rewardVO.add((int) highSpeedRep, (int) highSpeedCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
         }
     }
 
@@ -261,8 +259,8 @@ public class RewardBO {
         }
         float finalSkillMultiplier = Math.min(maxSkillMultiplier, skillMultiplier) / 100;
         float cash = rewardVO.getCash();
-        Float finalCash = cash * finalSkillMultiplier;
-        rewardVO.add(0, finalCash.intValue(), EnumRewardCategory.SKILL_MOD, EnumRewardType.TOKEN_AMPLIFIER);
+        float finalCash = cash * finalSkillMultiplier;
+        rewardVO.add(0, (int) finalCash, EnumRewardCategory.SKILL_MOD, EnumRewardType.TOKEN_AMPLIFIER);
     }
 
     public Accolades getAccolades(PersonaEntity personaEntity, EventEntity eventEntity, ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
@@ -280,10 +278,10 @@ public class RewardBO {
         float cash = rewardVO.getCash();
         float finalRepRewardMultiplier = eventEntity.getFinalRepRewardMultiplier();
         float finalCashRewardMultiplier = eventEntity.getFinalCashRewardMultiplier();
-        Float finalRep = rep * finalRepRewardMultiplier;
-        Float finalCash = cash * finalCashRewardMultiplier;
-        rewardVO.add(finalRep.intValue(), 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
-        rewardVO.add(0, finalCash.intValue(), EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
+        float finalRep = rep * finalRepRewardMultiplier;
+        float finalCash = cash * finalCashRewardMultiplier;
+        rewardVO.add((int) finalRep, 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
+        rewardVO.add(0, (int) finalCash, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
     }
 
     public void setPerfectStartReward(EventEntity eventEntity, int perfectStart, RewardVO rewardVO) {
@@ -292,9 +290,9 @@ public class RewardBO {
             float baseCash = rewardVO.getBaseCash();
             float perfectStartCashMultiplier = eventEntity.getPerfectStartCashMultiplier();
             float perfectStartRepMultiplier = eventEntity.getPerfectStartRepMultiplier();
-            Float perfectStartRep = baseRep * perfectStartRepMultiplier;
-            Float perfectStartCash = baseCash * perfectStartCashMultiplier;
-            rewardVO.add(perfectStartRep.intValue(), perfectStartCash.intValue(), EnumRewardCategory.BONUS, EnumRewardType.NONE);
+            float perfectStartRep = baseRep * perfectStartRepMultiplier;
+            float perfectStartCash = baseCash * perfectStartCashMultiplier;
+            rewardVO.add((int) perfectStartRep, (int) perfectStartCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
         }
     }
 
@@ -312,23 +310,22 @@ public class RewardBO {
     }
 
     public Float getPlayerLevelConst(int playerLevel, float levelCashRewardMultiplier) {
-        Float level = (float) playerLevel;
-        return levelCashRewardMultiplier * level.floatValue();
+        return levelCashRewardMultiplier * playerLevel;
     }
 
     public Float getTimeConst(Long legitTime, Long routeTime) {
-        Float timeConst = legitTime.floatValue() / routeTime.floatValue();
+        float timeConst = legitTime.floatValue() / routeTime.floatValue();
         return Math.min(timeConst, 1f);
     }
 
     public int getBaseReward(float baseReward, float playerLevelConst, float timeConst) {
-        Float baseRewardResult = baseReward * playerLevelConst * timeConst;
-        return baseRewardResult.intValue();
+        float baseRewardResult = baseReward * playerLevelConst * timeConst;
+        return (int) baseRewardResult;
     }
 
     public void setBaseReward(PersonaEntity personaEntity, EventEntity eventEntity, ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
-        Float baseRep = (float) eventEntity.getBaseRepReward();
-        Float baseCash = (float) eventEntity.getBaseCashReward();
+        float baseRep = (float) eventEntity.getBaseRepReward();
+        float baseCash = (float) eventEntity.getBaseCashReward();
         Float playerLevelRepConst = getPlayerLevelConst(personaEntity.getLevel(), eventEntity.getLevelRepRewardMultiplier());
         Float playerLevelCashConst = getPlayerLevelConst(personaEntity.getLevel(), eventEntity.getLevelCashRewardMultiplier());
         Float timeConst = getTimeConst(eventEntity.getLegitTime(), arbitrationPacket.getEventDurationInMilliseconds());
@@ -377,18 +374,18 @@ public class RewardBO {
         }
         float baseRep = rewardVO.getBaseRep();
         float baseCash = rewardVO.getBaseCash();
-        Float rankRepResult = baseRep * rankRepMultiplier;
-        Float cashRepRestul = baseCash * rankCashMultiplier;
-        rewardVO.add(rankRepResult.intValue(), cashRepRestul.intValue(), EnumRewardCategory.BONUS, EnumRewardType.NONE);
+        int rankRepResult = (int)(baseRep * rankRepMultiplier);
+        int cashRepResult = (int)(baseCash * rankCashMultiplier);
+        rewardVO.add(rankRepResult, cashRepResult, EnumRewardCategory.BONUS, EnumRewardType.NONE);
     }
 
     public RewardVO getRewardVO(PersonaEntity personaEntity) {
         Boolean enableEconomy = parameterBO.getBoolParam("ENABLE_ECONOMY");
         Boolean enableReputation = parameterBO.getBoolParam("ENABLE_REPUTATION");
-        if (personaEntity.getLevel() >= 60) {
+        if (personaEntity.getLevel() >= parameterBO.getMaxLevel(personaEntity.getUser())) {
             enableReputation = false;
         }
-        if (personaEntity.getBoost() > 9999999) {
+        if (personaEntity.getCash() >= parameterBO.getMaxCash(personaEntity.getUser())) {
             enableEconomy = false;
         }
         return new RewardVO(enableEconomy, enableReputation);
@@ -404,8 +401,8 @@ public class RewardBO {
         float cashMultiplier = parameterBO.getFloatParam(cashMultiplierStr);
         float baseRep = rewardVO.getBaseRep();
         float baseCash = rewardVO.getBaseCash();
-        Float repReward = baseRep * rewardValue * rewardMultiplier;
-        Float cashReward = baseCash * rewardValue * cashMultiplier;
-        rewardVO.add(repReward.intValue(), cashReward.intValue(), EnumRewardCategory.PURSUIT, enumRewardType);
+        int repReward = (int)(baseRep * rewardValue * rewardMultiplier);
+        int cashReward = (int)(baseCash * rewardValue * cashMultiplier);
+        rewardVO.add(repReward, cashReward, EnumRewardCategory.PURSUIT, enumRewardType);
     }
 }

@@ -37,6 +37,8 @@ public class TokenSessionEntity {
 
     private String clientHostIp;
 
+    private String webToken;
+
     public String getSecurityToken() {
         return securityToken;
     }
@@ -101,4 +103,11 @@ public class TokenSessionEntity {
         this.clientHostIp = clientHostIp;
     }
 
+    public String getWebToken() {
+        return webToken;
+    }
+
+    public void setWebToken(String webToken) {
+        this.webToken = webToken;
+    }
 }

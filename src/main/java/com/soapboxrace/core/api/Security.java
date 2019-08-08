@@ -1,14 +1,20 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.jaxb.http.FraudConfig;
 
+import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/security")
 public class Security {
+
+    @EJB
+    private TokenSessionBO tokenSessionBO;
+
     @GET
     @Secured
     @Path("/fraudConfig")
@@ -27,7 +33,8 @@ public class Security {
     @Secured
     @Path("/generateWebToken")
     @Produces(MediaType.APPLICATION_XML)
-    public String generateWebToken() {
-        return "";
+    public String generateWebToken(@HeaderParam("userId") Long userId,
+                                   @HeaderParam("securityToken") String securityToken) {
+        return "<string>" + tokenSessionBO.generateWebToken(userId, securityToken) + "</string>";
     }
 }

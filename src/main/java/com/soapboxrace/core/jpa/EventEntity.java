@@ -24,7 +24,9 @@ public class EventEntity {
     private int minCarClassRating;
     private int maxCarClassRating;
     private int maxPlayers;
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 1", nullable = false)
     private boolean isEnabled;
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isLocked;
     private String name;
     private int baseRepReward;

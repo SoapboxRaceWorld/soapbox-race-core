@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Base64;
 import java.util.Date;
 
 @Stateless
@@ -73,6 +74,19 @@ public class TokenSessionBO {
         tokenSessionEntity.setActivePersonaId(0L);
         tokenDAO.insert(tokenSessionEntity);
         return randomUUID;
+    }
+
+    public String generateWebToken(Long userId, String securityToken) {
+        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+
+        if (tokenSessionEntity == null) {
+            throw new EngineException(EngineExceptionCode.NoSuchSessionInSessionStore);
+        }
+
+        tokenSessionEntity.setWebToken(UUIDGen.getRandomUUID());
+        tokenDAO.update(tokenSessionEntity);
+
+        return tokenSessionEntity.getWebToken();
     }
 
     public boolean verifyPersona(String securityToken, Long personaId) {

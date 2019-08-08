@@ -16,10 +16,7 @@ import javax.script.Bindings;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -319,15 +316,18 @@ public class ItemRewardBO {
             }
         }
 
-        public ItemRewardBase weightedRandomTableItem(String tableId) {
-            RewardTableEntity rewardTableEntity = rewardTableDAO.findByName(tableId);
+        public ItemRewardBase weightedRandomTableItem(Long tableId) {
+            RewardTableEntity rewardTableEntity = rewardTableDAO.findByID(tableId);
+            Objects.requireNonNull(rewardTableEntity);
+
             List<RewardTableItemEntity> items = rewardTableEntity.getItems();
 
             if (items.isEmpty()) {
                 throw new IllegalArgumentException("No items to choose from!");
             }
 
-            double weightSum = Math.ceil(items.stream().mapToDouble(RewardTableItemEntity::getDropWeight).sum());
+            double weightSum =
+                    Math.ceil(items.stream().mapToDouble(i -> i.getDropWeight() == null ? (1.0 / items.size()) : i.getDropWeight()).sum());
             int randomIndex = -1;
             double random = Math.random() * weightSum;
 
@@ -349,6 +349,14 @@ public class ItemRewardBO {
             } catch (ScriptException e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        public ItemRewardBase weightedRandomTableItem(String tableId) {
+            RewardTableEntity rewardTableEntity = rewardTableDAO.findByName(tableId);
+
+            Objects.requireNonNull(rewardTableEntity);
+
+            return weightedRandomTableItem(rewardTableEntity.getId());
         }
     }
 }

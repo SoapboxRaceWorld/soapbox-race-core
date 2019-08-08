@@ -19,7 +19,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.util.regex.Pattern;
 
@@ -28,7 +27,7 @@ public class DriverPersona {
     private final Pattern NAME_PATTERN = Pattern.compile("^[A-Z0-9]{3,15}$");
 
     @EJB
-    private DriverPersonaBO bo;
+    private DriverPersonaBO driverPersonaBO;
 
     @EJB
     private UserBO userBo;
@@ -39,21 +38,12 @@ public class DriverPersona {
     @EJB
     private PresenceBO presenceBO;
 
-    @EJB
-    private SocialRelationshipDAO socialRelationshipDAO;
-
-    @EJB
-    private PersonaDAO personaDAO;
-
-    @EJB
-    private OpenFireSoapBoxCli openFireSoapBoxCli;
-
     @GET
     @Secured
     @Path("/GetExpLevelPointsMap")
     @Produces(MediaType.APPLICATION_XML)
     public ArrayOfInt getExpLevelPointsMap() {
-        return bo.getExpLevelPointsMap();
+        return driverPersonaBO.getExpLevelPointsMap();
     }
 
     @GET
@@ -61,7 +51,7 @@ public class DriverPersona {
     @Path("/GetPersonaInfo")
     @Produces(MediaType.APPLICATION_XML)
     public ProfileData getPersonaInfo(@QueryParam("personaId") Long personaId) {
-        return bo.getPersonaInfo(personaId);
+        return driverPersonaBO.getPersonaInfo(personaId);
     }
 
     @POST
@@ -69,7 +59,7 @@ public class DriverPersona {
     @Path("/ReserveName")
     @Produces(MediaType.APPLICATION_XML)
     public ArrayOfString reserveName(@QueryParam("name") String name) {
-        return bo.reserveName(name);
+        return driverPersonaBO.reserveName(name);
     }
 
     @POST
@@ -92,7 +82,7 @@ public class DriverPersona {
             throw new EngineException(EngineExceptionCode.DisplayNameNotAllowed);
         }
 
-        ArrayOfString nameReserveResult = bo.reserveName(name);
+        ArrayOfString nameReserveResult = driverPersonaBO.reserveName(name);
 
         if (!nameReserveResult.getString().isEmpty()) {
             throw new EngineException(EngineExceptionCode.DisplayNameDuplicate);
@@ -101,7 +91,7 @@ public class DriverPersona {
         PersonaEntity personaEntity = new PersonaEntity();
         personaEntity.setName(name);
         personaEntity.setIconIndex(iconIndex);
-        ProfileData persona = bo.createPersona(userId, personaEntity);
+        ProfileData persona = driverPersonaBO.createPersona(userId, personaEntity);
 
         if (persona == null) {
             throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached);
@@ -118,7 +108,7 @@ public class DriverPersona {
     @Produces(MediaType.APPLICATION_XML)
     public String deletePersona(@QueryParam("personaId") Long personaId, @HeaderParam("securityToken") String securityToken) {
         tokenSessionBo.verifyPersona(securityToken, personaId);
-        bo.deletePersona(personaId);
+        driverPersonaBO.deletePersona(personaId);
         return "<long>0</long>";
     }
 
@@ -128,7 +118,7 @@ public class DriverPersona {
     public ArrayOfPersonaBase getPersonaBaseFromList(InputStream is) {
         PersonaIdArray personaIdArray = UnmarshalXML.unMarshal(is, PersonaIdArray.class);
         ArrayOfLong personaIds = personaIdArray.getPersonaIds();
-        return bo.getPersonaBaseFromList(personaIds.getLong());
+        return driverPersonaBO.getPersonaBaseFromList(personaIds.getLong());
     }
 
     @POST
@@ -139,8 +129,7 @@ public class DriverPersona {
                                    @QueryParam("presence") Long presence) {
         if (tokenSessionBo.getActivePersonaId(securityToken) == 0L)
             throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
-        PersonaEntity personaEntity = personaDAO.findById(tokenSessionBo.getActivePersonaId(securityToken));
-        presenceBO.updatePresence(personaEntity.getPersonaId(), presence);
+        presenceBO.updatePresence(tokenSessionBo.getActivePersonaId(securityToken), presence);
 
         return "";
     }
@@ -150,7 +139,7 @@ public class DriverPersona {
     @Path("/GetPersonaPresenceByName")
     @Produces(MediaType.APPLICATION_XML)
     public PersonaPresence getPersonaPresenceByName(@QueryParam("displayName") String displayName) {
-        PersonaPresence personaPresenceByName = bo.getPersonaPresenceByName(displayName);
+        PersonaPresence personaPresenceByName = driverPersonaBO.getPersonaPresenceByName(displayName);
         if (personaPresenceByName.getPersonaId() == 0) {
             throw new EngineException(EngineExceptionCode.PersonaNotFound);
         }
@@ -165,7 +154,7 @@ public class DriverPersona {
         PersonaMotto personaMotto = UnmarshalXML.unMarshal(statusXml, PersonaMotto.class);
         tokenSessionBo.verifyPersona(securityToken, personaMotto.getPersonaId());
 
-        bo.updateStatusMessage(personaMotto.getMessage(), personaMotto.getPersonaId());
+        driverPersonaBO.updateStatusMessage(personaMotto.getMessage(), personaMotto.getPersonaId());
         return personaMotto;
     }
 }

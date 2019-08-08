@@ -47,9 +47,13 @@ public class AchievementBO {
 
     @Schedule(minute = "*/30", hour = "*")
     public void updateRankRarities() {
+        Long countPersonas = personaDAO.countPersonas();
+
+        if (countPersonas == 0L) return;
+
         for (AchievementEntity achievementEntity : achievementDAO.findAll()) {
             for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
-                achievementRankEntity.setRarity(((float) personaAchievementRankDAO.countPersonasWithRank(achievementRankEntity.getId())) / personaDAO.countPersonas());
+                achievementRankEntity.setRarity(((float) personaAchievementRankDAO.countPersonasWithRank(achievementRankEntity.getId())) / countPersonas);
                 achievementRankDAO.update(achievementRankEntity);
             }
         }
@@ -223,6 +227,8 @@ public class AchievementBO {
 
         PersonaEntity personaEntity = personaDAO.findById(personaId);
 
+        Integer newScore = personaEntity.getScore();
+
 //        bindings.put("personaAchievement", personaAchievementEntity);
 
         // Determine the value to add to the achievement progress.
@@ -252,6 +258,7 @@ public class AchievementBO {
 
                 cleanVal = Math.round((Double) rawVal);
             }
+
 
             OptionalInt maxVal = achievementEntity.getRanks().stream()
                     .mapToInt(AchievementRankEntity::getThresholdValue)
@@ -301,7 +308,7 @@ public class AchievementBO {
 
                         achievementsAwarded.getAchievements().add(achievementAwarded);
 
-                        personaEntity.setScore(personaEntity.getScore()+current.getPoints());
+                        newScore += current.getPoints();
                     } else if (previous != null && previousRank.getState().equals("InProgress")) {
                         currentRank.setState("Locked");
                         personaAchievementRankDAO.update(currentRank);
@@ -325,7 +332,8 @@ public class AchievementBO {
             ex.printStackTrace();
         }
 
-        achievementsAwarded.setScore(personaEntity.getScore());
+        achievementsAwarded.setScore(newScore);
+        personaEntity.setScore(newScore);
         personaDAO.update(personaEntity);
     }
 
