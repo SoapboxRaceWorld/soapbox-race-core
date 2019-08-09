@@ -247,10 +247,10 @@ public class ItemRewardBO {
             List<ProductEntity> productEntities = productDAO.findDropsByType(type);
 
             if (productEntities.isEmpty()) {
-                throw new IllegalArgumentException("No products to choose from! " + type);
+                throw new IllegalArgumentException("No products to choose from of type " + type);
             }
 
-            double weightSum = Math.ceil(productEntities.stream().mapToDouble(ProductEntity::getDropWeight).sum());
+            double weightSum = Math.ceil(productEntities.stream().mapToDouble(p -> this.getDropWeight(p, productEntities)).sum());
 
             int randomIndex = -1;
             double random = Math.random() * weightSum;
@@ -271,6 +271,22 @@ public class ItemRewardBO {
             return new ItemRewardProduct(productEntities.get(randomIndex));
         }
 
+        private double getDropWeight(ProductEntity p, List<ProductEntity> productEntities) {
+            if (p.getDropWeight() == null) {
+                return 1.0d / productEntities.size();
+            }
+
+            return p.getDropWeight();
+        }
+
+        private double getDropWeight(RewardTableItemEntity i, List<RewardTableItemEntity> items) {
+            if (i.getDropWeight() == null) {
+                return 1.0d / items.size();
+            }
+
+            return i.getDropWeight();
+        }
+
         public ItemRewardMulti getCardPack(String cardPackId) {
             List<ItemRewardBase> items = new ArrayList<>();
             CardPackEntity cardPackEntity = cardPackDAO.findByEntitlementTag(cardPackId);
@@ -279,7 +295,7 @@ public class ItemRewardBO {
                 try {
                     items.add(scriptToItem(cardPackItemEntity.getScript()));
                 } catch (ScriptException e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException("Error while generating card pack " + cardPackId, e);
                 }
             }
 
@@ -287,17 +303,10 @@ public class ItemRewardBO {
         }
 
         public ItemRewardBase randomTableItem(String tableId) {
-            RewardTableEntity rewardTableEntity = rewardTableDAO.findByName(tableId);
-            List<RewardTableItemEntity> items = rewardTableEntity.getItems();
-
-            if (items.isEmpty()) {
-                throw new IllegalArgumentException("No items to choose from!");
-            }
-
             try {
-                return scriptToItem(items.get(random.nextInt(items.size())).getScript());
-            } catch (ScriptException e) {
-                throw new RuntimeException(e);
+                return randomTableItem(rewardTableDAO.findByName(tableId).getId());
+            } catch (Exception e) {
+                throw new RuntimeException("Error while doing weighted random for " + tableId, e);
             }
         }
 
@@ -327,7 +336,7 @@ public class ItemRewardBO {
             }
 
             double weightSum =
-                    Math.ceil(items.stream().mapToDouble(i -> i.getDropWeight() == null ? (1.0 / items.size()) : i.getDropWeight()).sum());
+                    Math.ceil(items.stream().mapToDouble(i -> this.getDropWeight(i, items)).sum());
             int randomIndex = -1;
             double random = Math.random() * weightSum;
 
@@ -356,7 +365,11 @@ public class ItemRewardBO {
 
             Objects.requireNonNull(rewardTableEntity);
 
-            return weightedRandomTableItem(rewardTableEntity.getId());
+            try {
+                return weightedRandomTableItem(rewardTableEntity.getId());
+            } catch (Exception e) {
+                throw new RuntimeException("Error while doing weighted random for " + tableId, e);
+            }
         }
     }
 }

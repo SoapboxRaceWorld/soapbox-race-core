@@ -72,6 +72,8 @@ public class EventResultPursuitBO {
         eventDataEntity.setTopSpeed(pursuitArbitrationPacket.getTopSpeed());
         eventDataDao.update(eventDataEntity);
 
+        pursuitArbitrationPacket.setRank(1); // there's only ever 1 player, and the game sets rank to 0... idk why
+
         PursuitEventResult pursuitEventResult = new PursuitEventResult();
         pursuitEventResult.setAccolades(rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket, eventSessionEntity, isBusted));
         pursuitEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, pursuitArbitrationPacket, 0));
