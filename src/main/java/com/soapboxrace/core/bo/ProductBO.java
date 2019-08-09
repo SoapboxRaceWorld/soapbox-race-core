@@ -19,7 +19,7 @@ import java.util.List;
 public class ProductBO {
 
     @EJB
-    private ProductDAO ProductDAO;
+    private ProductDAO productDAO;
 
     @EJB
     private CategoryDAO categoryDao;
@@ -38,7 +38,35 @@ public class ProductBO {
             premium = personaEntity.getUser().isPremium();
             level = personaEntity.getLevel();
         }
-        return ProductDAO.findByLevelEnabled(categoryName, productType, level, true, premium);
+        return productDAO.findByLevelEnabled(categoryName, productType, level, true, premium);
+    }
+
+    public ProductEntity getRandomDrop(String productType) {
+        List<ProductEntity> productEntities = productDAO.findDropsByType(productType);
+
+        if (productEntities.isEmpty()) {
+            throw new RuntimeException("No droppable products of type '" + productType + "' to work with!");
+        }
+
+        double weightSum = Math.ceil(productEntities.stream().mapToDouble(p -> getDropWeight(p, productEntities)).sum());
+
+        int randomIndex = -1;
+        double random = Math.random() * weightSum;
+
+        for (int i = 0; i < productEntities.size(); i++) {
+            random -= productEntities.get(i).getDropWeight();
+
+            if (random <= 0.0d) {
+                randomIndex = i;
+                break;
+            }
+        }
+
+        if (randomIndex == -1) {
+            throw new RuntimeException("Random selection failed for products of type " + productType + " (weightSum=" + weightSum + ")");
+        }
+
+        return productEntities.get(randomIndex);
     }
 
     public List<CategoryEntity> categories() {
@@ -74,5 +102,11 @@ public class ProductBO {
         return arrayOfProductTrans;
     }
 
+    private double getDropWeight(ProductEntity p, List<ProductEntity> productEntities) {
+        if (p.getDropWeight() == null) {
+            return 1.0d / productEntities.size();
+        }
 
+        return p.getDropWeight();
+    }
 }

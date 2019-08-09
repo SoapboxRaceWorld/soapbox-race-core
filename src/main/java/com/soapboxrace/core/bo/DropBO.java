@@ -1,6 +1,5 @@
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.LuckyDrawItem;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -12,25 +11,13 @@ import java.util.Random;
 @Stateless
 public class DropBO {
     @EJB
-    private PersonaDAO personaDao;
-
-    @EJB
-    private InventoryDAO inventoryDao;
-
-    @EJB
-    private InventoryItemDAO inventoryItemDao;
-
-    @EJB
-    private LevelRepDAO levelRepDao;
-
-    @EJB
-    private ProductDAO productDao;
+    private ProductBO productBO;
 
     public ProductEntity getRandomProductItem() {
         String[] productTypeArr = {"PERFORMANCEPART", "POWERUP", "SKILLMODPART", "VISUALPART"};
         Random random = new Random();
         int number = random.nextInt(productTypeArr.length);
-        return productDao.getRandomDrop(productTypeArr[number]);
+        return productBO.getRandomDrop(productTypeArr[number]);
     }
 
     public LuckyDrawItem copyProduct2LuckyDraw(ProductEntity productEntity) {
