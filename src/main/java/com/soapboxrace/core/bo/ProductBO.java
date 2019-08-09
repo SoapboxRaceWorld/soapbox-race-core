@@ -54,7 +54,7 @@ public class ProductBO {
         double random = Math.random() * weightSum;
 
         for (int i = 0; i < productEntities.size(); i++) {
-            random -= productEntities.get(i).getDropWeight();
+            random -= getDropWeight(productEntities.get(i), productEntities);
 
             if (random <= 0.0d) {
                 randomIndex = i;

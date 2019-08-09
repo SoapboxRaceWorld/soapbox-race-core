@@ -268,7 +268,7 @@ public class ItemRewardBO {
             double random = Math.random() * weightSum;
 
             for (int i = 0; i < productEntities.size(); i++) {
-                random -= productEntities.get(i).getDropWeight();
+                random -= this.getDropWeight(productEntities.get(i), productEntities);
 
                 if (random <= 0.0d) {
                     randomIndex = i;
@@ -353,7 +353,7 @@ public class ItemRewardBO {
             double random = Math.random() * weightSum;
 
             for (int i = 0; i < items.size(); i++) {
-                random -= items.get(i).getDropWeight();
+                random -= this.getDropWeight(items.get(i), items);
 
                 if (random <= 0.0d) {
                     randomIndex = i;
