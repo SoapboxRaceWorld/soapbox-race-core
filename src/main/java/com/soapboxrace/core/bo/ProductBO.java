@@ -48,7 +48,7 @@ public class ProductBO {
             throw new RuntimeException("No droppable products of type '" + productType + "' to work with!");
         }
 
-        double weightSum = Math.ceil(productEntities.stream().mapToDouble(p -> getDropWeight(p, productEntities)).sum());
+        double weightSum = productEntities.stream().mapToDouble(p -> getDropWeight(p, productEntities)).sum();
 
         int randomIndex = -1;
         double random = Math.random() * weightSum;

@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 
 @Stateless
 public class ItemRewardBO {
-    private final ThreadLocal<NashornScriptEngine> scriptEngine = ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
+    private final ThreadLocal<NashornScriptEngine> scriptEngine =
+            ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
     @EJB
     private PersonaDAO personaDAO;
 
@@ -74,7 +75,8 @@ public class ItemRewardBO {
         return (ItemRewardBase) scriptEngine.get().eval(rewardScript, bindings);
     }
 
-    private void handleReward(ItemRewardBase itemRewardBase, ArrayOfCommerceItemTrans arrayOfCommerceItemTrans, PersonaEntity personaEntity) {
+    private void handleReward(ItemRewardBase itemRewardBase, ArrayOfCommerceItemTrans arrayOfCommerceItemTrans,
+                              PersonaEntity personaEntity) {
         if (itemRewardBase instanceof ItemRewardCash) {
             ItemRewardCash achievementRewardCash = (ItemRewardCash) itemRewardBase;
 
@@ -86,7 +88,8 @@ public class ItemRewardBO {
             driverPersonaBO.updateCash(personaEntity, personaEntity.getCash() + achievementRewardCash.getCash());
         } else if (itemRewardBase instanceof ItemRewardMulti) {
             ItemRewardMulti achievementRewardMulti = (ItemRewardMulti) itemRewardBase;
-            achievementRewardMulti.getAchievementRewardList().forEach(r -> handleReward(r, arrayOfCommerceItemTrans, personaEntity));
+            achievementRewardMulti.getAchievementRewardList().forEach(r -> handleReward(r, arrayOfCommerceItemTrans,
+                    personaEntity));
         } else {
             List<ProductEntity> productEntities = new ArrayList<>(itemRewardBase.getProducts());
             Integer useCount = -1;
@@ -262,7 +265,7 @@ public class ItemRewardBO {
                 throw new IllegalArgumentException("No products to choose from of type " + type);
             }
 
-            double weightSum = Math.ceil(productEntities.stream().mapToDouble(p -> this.getDropWeight(p, productEntities)).sum());
+            double weightSum = productEntities.stream().mapToDouble(p -> this.getDropWeight(p, productEntities)).sum();
 
             int randomIndex = -1;
             double random = Math.random() * weightSum;
@@ -348,7 +351,7 @@ public class ItemRewardBO {
             }
 
             double weightSum =
-                    Math.ceil(items.stream().mapToDouble(i -> this.getDropWeight(i, items)).sum());
+                    items.stream().mapToDouble(i -> this.getDropWeight(i, items)).sum();
             int randomIndex = -1;
             double random = Math.random() * weightSum;
 
