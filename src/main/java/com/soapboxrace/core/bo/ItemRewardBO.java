@@ -230,17 +230,29 @@ public class ItemRewardBO {
         // special item finders
         public ItemRewardProduct findRandomRatedItem(String type, Integer rating) {
             List<ProductEntity> productEntities = productDAO.findBySubTypeAndRarity(type, rating);
-            return randomDrop(productEntities.stream().map(ProductEntity::getEntitlementTag).collect(Collectors.toList()));
+            try {
+                return randomDrop(productEntities.stream().map(ProductEntity::getEntitlementTag).collect(Collectors.toList()));
+            } catch (Exception e) {
+                throw new RuntimeException("findRandomRatedItem() failed for: " + type + ", " + rating, e);
+            }
         }
 
         public ItemRewardProduct findRandomRatedItemByProdType(String type, Integer rating) {
             List<ProductEntity> productEntities = productDAO.findByProdTypeAndRarity(type, rating);
-            return randomDrop(productEntities.stream().map(ProductEntity::getEntitlementTag).collect(Collectors.toList()));
+            try {
+                return randomDrop(productEntities.stream().map(ProductEntity::getEntitlementTag).collect(Collectors.toList()));
+            } catch (Exception e) {
+                throw new RuntimeException("findRandomRatedItemByProdType() failed for: " + type + ", " + rating, e);
+            }
         }
 
         public ItemRewardProduct findRandomItemByProdType(String type) {
             List<ProductEntity> productEntities = productDAO.findDropsByType(type);
-            return randomDrop(productEntities.stream().map(ProductEntity::getEntitlementTag).collect(Collectors.toList()));
+            try {
+                return randomDrop(productEntities.stream().map(ProductEntity::getEntitlementTag).collect(Collectors.toList()));
+            } catch (Exception e) {
+                throw new RuntimeException("findRandomItemByProdType() failed for: " + type + " (products: " + productEntities.size() + ")");
+            }
         }
 
         public ItemRewardProduct findWeightedRandomItemByProdType(String type) {
