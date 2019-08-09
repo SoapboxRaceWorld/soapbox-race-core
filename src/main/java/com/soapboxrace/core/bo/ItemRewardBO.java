@@ -265,7 +265,7 @@ public class ItemRewardBO {
             }
 
             if (randomIndex == -1) {
-                throw new RuntimeException("Random selection failed.");
+                throw new RuntimeException("Random selection failed for type " + type);
             }
 
             return new ItemRewardProduct(productEntities.get(randomIndex));
@@ -315,7 +315,7 @@ public class ItemRewardBO {
             List<RewardTableItemEntity> items = rewardTableEntity.getItems();
 
             if (items.isEmpty()) {
-                throw new IllegalArgumentException("No items to choose from!");
+                throw new IllegalArgumentException("No items to choose from in table " + tableId);
             }
 
             try {
@@ -332,7 +332,7 @@ public class ItemRewardBO {
             List<RewardTableItemEntity> items = rewardTableEntity.getItems();
 
             if (items.isEmpty()) {
-                throw new IllegalArgumentException("No items to choose from!");
+                throw new IllegalArgumentException("No items to choose from in table " + tableId);
             }
 
             double weightSum =
@@ -350,7 +350,7 @@ public class ItemRewardBO {
             }
 
             if (randomIndex == -1) {
-                throw new RuntimeException("Random selection failed.");
+                throw new RuntimeException("Random selection failed for table " + tableId + ".");
             }
 
             try {
