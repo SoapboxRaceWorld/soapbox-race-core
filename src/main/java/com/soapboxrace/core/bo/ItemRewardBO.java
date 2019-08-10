@@ -232,7 +232,7 @@ public class ItemRewardBO {
 
         // special item finders
         public ItemRewardProduct findRandomRatedItem(String type, Integer rating) {
-            List<ProductEntity> productEntities = productDAO.findBySubTypeAndRarity(type, rating);
+            List<ProductEntity> productEntities = productDAO.findDropsBySubTypeAndRarity(type, rating);
             try {
                 return randomDrop(productEntities.stream().map(ProductEntity::getEntitlementTag).collect(Collectors.toList()));
             } catch (Exception e) {
@@ -241,7 +241,7 @@ public class ItemRewardBO {
         }
 
         public ItemRewardProduct findRandomRatedItemByProdType(String type, Integer rating) {
-            List<ProductEntity> productEntities = productDAO.findByProdTypeAndRarity(type, rating);
+            List<ProductEntity> productEntities = productDAO.findDropsByProdTypeAndRarity(type, rating);
             try {
                 return randomDrop(productEntities.stream().map(ProductEntity::getEntitlementTag).collect(Collectors.toList()));
             } catch (Exception e) {
@@ -265,7 +265,9 @@ public class ItemRewardBO {
                 throw new IllegalArgumentException("No products to choose from of type " + type);
             }
 
-            double weightSum = productEntities.stream().mapToDouble(p -> this.getDropWeight(p, productEntities)).sum();
+            double weightSum =
+                    productEntities.stream().mapToDouble(p -> this.getDropWeight(p
+                            , productEntities)).sum();
 
             int randomIndex = -1;
             double random = Math.random() * weightSum;
@@ -351,7 +353,8 @@ public class ItemRewardBO {
             }
 
             double weightSum =
-                    items.stream().mapToDouble(i -> this.getDropWeight(i, items)).sum();
+                    items.stream().mapToDouble(i -> this.getDropWeight(i,
+                            items)).sum();
             int randomIndex = -1;
             double random = Math.random() * weightSum;
 

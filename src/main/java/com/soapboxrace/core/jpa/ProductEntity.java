@@ -24,9 +24,13 @@ import java.util.List;
         @NamedQuery(name = "ProductEntity.findByEntitlementTag", query = "SELECT obj FROM ProductEntity obj WHERE obj.entitlementTag = :entitlementTag"), //
         @NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = :hash"), //
         @NamedQuery(name = "ProductEntity.findByType", query = "SELECT obj FROM ProductEntity obj WHERE obj.productType = :type"), //
-        @NamedQuery(name = "ProductEntity.findDropsByType", query = "SELECT obj FROM ProductEntity obj WHERE obj.productType = :type AND obj.isDropable = true AND obj.enabled = true"), //
-        @NamedQuery(name = "ProductEntity.findBySubTypeAndRarity", query = "SELECT obj FROM ProductEntity obj WHERE obj.subType = :subType AND obj.rarity = :rarity AND obj.isDropable = true"),
-        @NamedQuery(name = "ProductEntity.findByProdTypeAndRarity", query = "SELECT obj FROM ProductEntity obj WHERE obj.productType = :prodType AND obj.rarity = :rarity AND obj.isDropable = true"),
+        @NamedQuery(name = "ProductEntity.findDropsByType", query = "SELECT obj FROM ProductEntity obj WHERE obj" +
+                ".productType = :type AND obj.isDropable = true AND obj.enabled = true AND obj.dropWeight IS NOT NULL" +
+                " AND obj.dropWeight > 0.0"), //
+        @NamedQuery(name = "ProductEntity.findDropsBySubTypeAndRarity", query = "SELECT obj FROM ProductEntity obj " +
+                "WHERE obj.subType = :subType AND obj.rarity = :rarity AND obj.isDropable = true AND obj.dropWeight > 0.0"),
+        @NamedQuery(name = "ProductEntity.findDropsByProdTypeAndRarity", query = "SELECT obj FROM ProductEntity obj " +
+                "WHERE obj.productType = :prodType AND obj.rarity = :rarity AND obj.isDropable = true AND obj.dropWeight > 0.0"),
 })
 public class ProductEntity {
 

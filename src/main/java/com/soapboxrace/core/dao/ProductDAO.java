@@ -41,20 +41,6 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
         return query.getResultList();
     }
 
-    public List<ProductEntity> findBySubTypeAndRarity(String subType, Integer rarity) {
-        return entityManager.createNamedQuery("ProductEntity.findBySubTypeAndRarity", ProductEntity.class)
-                .setParameter("rarity", rarity)
-                .setParameter("subType", subType)
-                .getResultList();
-    }
-
-    public List<ProductEntity> findByProdTypeAndRarity(String prodType, Integer rarity) {
-        return entityManager.createNamedQuery("ProductEntity.findByProdTypeAndRarity", ProductEntity.class)
-                .setParameter("rarity", rarity)
-                .setParameter("prodType", prodType)
-                .getResultList();
-    }
-
     public ProductEntity findByProductId(String productId) {
         TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByProductId", ProductEntity.class);
         query.setParameter("productId", productId);
@@ -91,5 +77,19 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
         query.setParameter("type", type);
 
         return query.getResultList();
+    }
+
+    public List<ProductEntity> findDropsBySubTypeAndRarity(String subType, Integer rarity) {
+        return entityManager.createNamedQuery("ProductEntity.findDropsBySubTypeAndRarity", ProductEntity.class)
+                .setParameter("rarity", rarity)
+                .setParameter("subType", subType)
+                .getResultList();
+    }
+
+    public List<ProductEntity> findDropsByProdTypeAndRarity(String prodType, Integer rarity) {
+        return entityManager.createNamedQuery("ProductEntity.findDropsByProdTypeAndRarity", ProductEntity.class)
+                .setParameter("rarity", rarity)
+                .setParameter("prodType", prodType)
+                .getResultList();
     }
 }
