@@ -3,10 +3,14 @@ package com.soapboxrace.core.bo;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import java.util.List;
 
 @Singleton
+@Startup
 public class PresenceBO {
     @EJB
     private RedisBO redisBO;
@@ -16,6 +20,16 @@ public class PresenceBO {
     @PostConstruct
     public void init() {
         this.pubSubConnection = this.redisBO.createPubSub();
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        System.out.println("PresenceBO shutdown");
+
+        List<String> keys = this.redisBO.getConnection().sync().keys("game_presence.*");
+        this.redisBO.getConnection().sync().del(keys.toArray(new String[0]));
+
+        this.pubSubConnection.close();
     }
 
     public void updatePresence(Long personaId, Long presence) {
