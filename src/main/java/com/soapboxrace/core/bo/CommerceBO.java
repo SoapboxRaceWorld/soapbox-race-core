@@ -132,6 +132,9 @@ public class CommerceBO {
                         removeCash += (int) vinylProductEntity.getPrice();
                     else
                         removeBoost += (int) vinylProductEntity.getPrice();
+                } else {
+                    commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
+                    return commerceSessionResultTrans;
                 }
             } else {
                 ProductEntity productEntity = productDAO.findByHash(addedItem.getKey());
@@ -147,8 +150,14 @@ public class CommerceBO {
 
                         if (inventoryItemEntity != null) {
                             inventoryBO.decrementUsage(personaId, addedItem.getKey());
+                        } else {
+                            commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
+                            return commerceSessionResultTrans;
                         }
                     }
+                } else {
+                    commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
+                    return commerceSessionResultTrans;
                 }
             }
         }

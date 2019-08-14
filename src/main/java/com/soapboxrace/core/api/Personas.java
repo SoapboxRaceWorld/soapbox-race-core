@@ -50,7 +50,8 @@ public class Personas {
                                                @PathParam(value = "personaId") Long personaId) {
         sessionBO.verifyPersona(securityToken, personaId);
         String xml = new BufferedReader(new InputStreamReader(commerceXml))
-                .lines().collect(Collectors.joining("\n"));
+                .lines().collect(Collectors.joining(""));
+        System.out.println(xml);
         CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(xml, CommerceSessionTrans.class);
 
         return commerceBO.doCommerce(commerceSessionTrans, personaId);
@@ -93,11 +94,7 @@ public class Personas {
             if (productEntity != null) {
                 switch (productEntity.getProductType()) {
                     case "PRESETCAR":
-                        OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
-                        commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
-                        arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
-
-                        commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken));
+                        commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken, commerceResultTrans));
                         break;
                     case "AMPLIFIER":
                         commerceResultTrans.setStatus(basketBO.buyAmplifier(personaEntity, productId, productEntity.getEntitlementTag()));

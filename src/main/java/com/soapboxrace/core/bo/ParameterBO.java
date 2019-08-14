@@ -19,11 +19,12 @@ public class ParameterBO {
     private TokenSessionDAO tokenDAO;
 
     private String getParameter(String name) {
-        try {
-            ParameterEntity findById = parameterDao.findById(name);
+        ParameterEntity findById = parameterDao.findById(name);
+
+        if (findById != null) {
             return findById.getValue();
-        } catch (Exception e) {
         }
+
         return null;
     }
 

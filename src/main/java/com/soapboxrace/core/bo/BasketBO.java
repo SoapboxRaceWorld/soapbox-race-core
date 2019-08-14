@@ -4,7 +4,9 @@ import com.soapboxrace.core.bo.util.AchievementCommerceContext;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
+import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
+import com.soapboxrace.jaxb.http.CommerceResultTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
@@ -157,7 +159,8 @@ public class BasketBO {
         return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
     }
 
-    public CommerceResultStatus buyCar(String productId, PersonaEntity personaEntity, String securityToken) {
+    public CommerceResultStatus buyCar(String productId, PersonaEntity personaEntity, String securityToken,
+                                       CommerceResultTrans commerceResultTrans) {
         if (getPersonaCarCount(personaEntity.getPersonaId()) >= parameterBO.getCarLimit(securityToken)) {
             return CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS;
         }
@@ -178,6 +181,12 @@ public class BasketBO {
             personaDao.update(personaEntity);
 
             personaBo.changeDefaultCar(personaEntity.getPersonaId(), carSlotEntity.getOwnedCar().getId());
+
+            ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
+            OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
+            commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
+            arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
+
             return CommerceResultStatus.SUCCESS;
         }
 
