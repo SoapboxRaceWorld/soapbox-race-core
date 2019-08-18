@@ -24,7 +24,6 @@ import java.util.OptionalInt;
 
 @Stateless
 public class AchievementBO {
-
     private final ThreadLocal<NashornScriptEngine> scriptEngine = ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
     @EJB
     private ItemRewardBO itemRewardBO;

@@ -13,14 +13,6 @@ public class EngineExceptionHandler implements ExceptionMapper<EngineException> 
     public Response toResponse(EngineException exception) {
         EngineExceptionTrans engineExceptionTrans = new EngineExceptionTrans();
 
-        /* <EngineExceptionTrans xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\">" +
-                            "<ErrorCode>-1613</ErrorCode>" +
-                            "<InnerException>" +
-                            "<ErrorCode>-1613</ErrorCode>" +
-                            "</InnerException>" +
-                            "</EngineExceptionTrans> */
-
-
         engineExceptionTrans.setErrorCode(exception.getCode().getErrorCode());
         String stackTrace = ExceptionUtils.getStackTrace(exception);
         engineExceptionTrans.setStackTrace(stackTrace);

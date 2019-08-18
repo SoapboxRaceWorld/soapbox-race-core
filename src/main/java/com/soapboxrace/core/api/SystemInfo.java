@@ -1,5 +1,6 @@
 package com.soapboxrace.core.api;
 
+import com.soapboxrace.core.api.util.BuildInfo;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.ParameterBO;
 
@@ -22,11 +23,11 @@ public class SystemInfo {
     @Produces(MediaType.APPLICATION_XML)
     public com.soapboxrace.jaxb.http.SystemInfo systemInfo() {
         com.soapboxrace.jaxb.http.SystemInfo systemInfo = new com.soapboxrace.jaxb.http.SystemInfo();
-        systemInfo.setBranch("production");
-        systemInfo.setChangeList("620384");
-        systemInfo.setClientVersion("1337");
+        systemInfo.setBranch(BuildInfo.getBranch());
+        systemInfo.setChangeList(BuildInfo.getLongCommitID());
+        systemInfo.setClientVersion("1614b");
         systemInfo.setClientVersionCheck(true);
-        systemInfo.setDeployed("08/20/2013 11:24:40");
+        systemInfo.setDeployed(BuildInfo.getTime());
         systemInfo.setEntitlementsToDownload(true);
         systemInfo.setForcePermanentSession(true);
         systemInfo.setJidPrepender("sbrw");
@@ -45,7 +46,7 @@ public class SystemInfo {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        systemInfo.setVersion("1614b");
+        systemInfo.setVersion(BuildInfo.getCommitID());
         return systemInfo;
     }
 }
