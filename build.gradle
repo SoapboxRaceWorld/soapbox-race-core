@@ -71,4 +71,11 @@ task generatePropInfo {
     }
 }
 
+task explodedWar(type: Sync) {
+    into "${war.archivePath.parentFile.getAbsolutePath()}/exploded/${war.archivePath.name}"
+    with war
+}
+
+war.finalizedBy(explodedWar)
+
 sourceSets.main.output.dir genOutputDir, builtBy: generatePropInfo
