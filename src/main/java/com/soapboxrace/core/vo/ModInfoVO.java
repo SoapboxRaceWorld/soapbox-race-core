@@ -2,16 +2,16 @@ package com.soapboxrace.core.vo;
 
 public class ModInfoVO {
 
-    private String indexPath;
+    private String basePath;
 
     private String serverID;
 
-    public String getIndexPath() {
-        return indexPath;
+    public String getBasePath() {
+        return basePath;
     }
 
-    public void setIndexPath(String indexPath) {
-        this.indexPath = indexPath;
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
     }
 
     public String getServerID() {

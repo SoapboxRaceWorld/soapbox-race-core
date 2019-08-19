@@ -18,7 +18,7 @@ public class ModdingBO {
 
         ModInfoVO modInfoVO = new ModInfoVO();
         modInfoVO.setServerID(parameterBO.getStrParam("MODDING_SERVER_ID"));
-        modInfoVO.setIndexPath(parameterBO.getStrParam("MODDING_INDEX_PATH"));
+        modInfoVO.setBasePath(parameterBO.getStrParam("MODDING_BASE_PATH"));
 
         return modInfoVO;
     }
