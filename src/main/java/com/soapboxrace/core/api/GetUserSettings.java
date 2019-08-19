@@ -2,6 +2,7 @@ package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.GetServerInformationBO;
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.SceneryBO;
 import com.soapboxrace.core.jpa.ServerInfoEntity;
 import com.soapboxrace.jaxb.http.ArrayOfLong;
@@ -25,10 +26,14 @@ public class GetUserSettings {
     @EJB
     private SceneryBO sceneryBO;
 
+    @EJB
+    private ParameterBO parameterBO;
+
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_XML)
-    public UserSettings getUserSettingsGet(@HeaderParam("userId") Long userId) {
+    public UserSettings getUserSettingsGet(@HeaderParam("userId") Long userId,
+                                           @HeaderParam("securityToken") String securityToken) {
         ServerInfoEntity serverInformation = serverInformationBO.getServerInformation();
         List<String> activatedSceneryGroups = serverInformation.getActivatedHolidaySceneryGroups();
         List<String> disactivatedSceneryGroups = serverInformation.getDisactivatedHolidaySceneryGroups();
@@ -58,7 +63,7 @@ public class GetUserSettings {
                         .collect(Collectors.toList()));
         userSettings.setDisactivatedHolidaySceneryGroups(arrayOfString2);
         userSettings.setFirstTimeLogin(false);
-        userSettings.setMaxLevel(60);
+        userSettings.setMaxLevel(parameterBO.getMaxLevel(securityToken));
         userSettings.setStarterPackApplied(false);
         userSettings.setUserId(userId);
         return userSettings;
