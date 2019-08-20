@@ -18,7 +18,7 @@ public class TreasureHuntConfigEntity {
     @Column(name = "streak")
     private Integer streak;
 
-    @ManyToOne(targetEntity = RewardTableEntity.class, optional = false)
+    @ManyToOne(targetEntity = RewardTableEntity.class, optional = true)
     @JoinColumn(referencedColumnName = "ID", name = "reward_table_id")
     private RewardTableEntity rewardTableEntity;
 
