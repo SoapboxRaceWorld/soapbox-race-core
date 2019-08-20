@@ -16,8 +16,11 @@ import java.util.List;
                 query = "SELECT obj FROM LobbyEntity obj " //
                         + "WHERE obj.startedTime between :dateTime1 and :dateTime2 " //
                         + "and (obj.event.carClassHash = 607077938 or obj.event.carClassHash = :carClassHash )"),
-        @NamedQuery(name = "LobbyEntity.findByEventStarted", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event = :event AND obj.startedTime between :dateTime1 AND :dateTime2 AND obj.isPrivate = false"), //
-        @NamedQuery(name = "LobbyEntity.findByEventAndPersona", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event = :event AND obj.startedTime between :dateTime1 AND :dateTime2 AND obj.isPrivate = true AND obj.personaId = :personaId") //
+        @NamedQuery(name = "LobbyEntity.findByEventStarted", query = "SELECT obj FROM LobbyEntity obj WHERE obj.event" +
+                " = :event AND obj.startedTime between :dateTime1 AND :dateTime2 AND obj.isPrivate = false"), //
+        @NamedQuery(name = "LobbyEntity.findByEventAndPersona", query = "SELECT obj FROM LobbyEntity obj WHERE obj" +
+                ".event = :event AND obj.startedTime between :dateTime1 AND :dateTime2 AND obj.isPrivate = true AND " +
+                "obj.personaId = :personaId") //
 })
 public class LobbyEntity {
 
@@ -30,7 +33,8 @@ public class LobbyEntity {
     @JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBY_EVENT"))
     private EventEntity event;
 
-    @OneToMany(mappedBy = "lobby", targetEntity = LobbyEntrantEntity.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "lobby", targetEntity = LobbyEntrantEntity.class, cascade = CascadeType.MERGE, fetch =
+            FetchType.EAGER)
     private List<LobbyEntrantEntity> entrants = new ArrayList<>();
 
     private LocalDateTime startedTime;

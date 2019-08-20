@@ -23,8 +23,10 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
         return entityManager.find(ProductEntity.class, id);
     }
 
-    public List<ProductEntity> findByLevelEnabled(String categoryName, String productType, int minLevel, boolean enabled, boolean premium) {
-        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByLevelEnabled", ProductEntity.class);
+    public List<ProductEntity> findByLevelEnabled(String categoryName, String productType, int minLevel,
+                                                  boolean enabled, boolean premium) {
+        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByLevelEnabled",
+                ProductEntity.class);
         query.setParameter("categoryName", categoryName);
         query.setParameter("productType", productType);
         query.setParameter("enabled", enabled);
@@ -34,7 +36,8 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
     }
 
     public List<ProductEntity> findForEndRace(String categoryName, String productType, int level) {
-        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findForEndRace", ProductEntity.class);
+        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findForEndRace",
+                ProductEntity.class);
         query.setParameter("categoryName", categoryName);
         query.setParameter("productType", productType);
         query.setParameter("level", level);
@@ -42,7 +45,8 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
     }
 
     public ProductEntity findByProductId(String productId) {
-        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByProductId", ProductEntity.class);
+        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByProductId",
+                ProductEntity.class);
         query.setParameter("productId", productId);
 
         List<ProductEntity> resultList = query.getResultList();
@@ -50,7 +54,8 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
     }
 
     public ProductEntity findByEntitlementTag(String entitlementTag) {
-        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByEntitlementTag", ProductEntity.class);
+        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByEntitlementTag",
+                ProductEntity.class);
         query.setParameter("entitlementTag", entitlementTag);
 
         List<ProductEntity> resultList = query.getResultList();
@@ -58,7 +63,8 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
     }
 
     public ProductEntity findByHash(Integer hash) {
-        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByHash", ProductEntity.class);
+        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByHash",
+                ProductEntity.class);
         query.setParameter("hash", hash);
 
         List<ProductEntity> resultList = query.getResultList();
@@ -66,14 +72,16 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
     }
 
     public List<ProductEntity> findByType(String type) {
-        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByType", ProductEntity.class);
+        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByType",
+                ProductEntity.class);
         query.setParameter("type", type);
 
         return query.getResultList();
     }
 
     public List<ProductEntity> findDropsByType(String type) {
-        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findDropsByType", ProductEntity.class);
+        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findDropsByType",
+                ProductEntity.class);
         query.setParameter("type", type);
 
         return query.getResultList();

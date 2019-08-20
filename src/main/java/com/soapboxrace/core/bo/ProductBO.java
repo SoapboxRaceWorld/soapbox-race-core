@@ -82,7 +82,8 @@ public class ProductBO {
             level = personaEntity.getLevel();
         }
         ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
-        List<VinylProductEntity> vinylProductEntity = vinylProductDao.findByCategoryLevelEnabled(categoryEntity, level, true, premium);
+        List<VinylProductEntity> vinylProductEntity = vinylProductDao.findByCategoryLevelEnabled(categoryEntity,
+                level, true, premium);
         for (VinylProductEntity entity : vinylProductEntity) {
             ProductTrans productTrans = new ProductTrans();
             productTrans.setCurrency(entity.getCurrency());

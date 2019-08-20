@@ -13,7 +13,6 @@ import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePowerupActivated;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 @Path("/powerups")
 public class Powerups {
@@ -35,8 +34,9 @@ public class Powerups {
     @Path("/activated/{powerupHash}")
     @Produces(MediaType.APPLICATION_XML)
     public String activated(@HeaderParam("securityToken") String securityToken,
-                              @PathParam(value = "powerupHash") Integer powerupHash,
-                              @QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers, @QueryParam("eventSessionId") Long eventSessionId) {
+                            @PathParam(value = "powerupHash") Integer powerupHash,
+                            @QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers,
+                            @QueryParam("eventSessionId") Long eventSessionId) {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 
         if (!inventoryBO.hasItem(activePersonaId, powerupHash)) {

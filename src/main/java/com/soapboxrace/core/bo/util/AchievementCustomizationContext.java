@@ -11,7 +11,11 @@ public class AchievementCustomizationContext {
     private final List<SkillModPartTrans> skillModPartsAdded;
     private final List<CustomVinylTrans> vinylsAdded;
 
-    public AchievementCustomizationContext(List<CustomPaintTrans> paintsAdded, List<PerformancePartTrans> performancePartsAdded, List<VisualPartTrans> visualPartsAdded, List<SkillModPartTrans> skillModPartsAdded, List<CustomVinylTrans> vinylsAdded) {
+    public AchievementCustomizationContext(List<CustomPaintTrans> paintsAdded,
+                                           List<PerformancePartTrans> performancePartsAdded,
+                                           List<VisualPartTrans> visualPartsAdded,
+                                           List<SkillModPartTrans> skillModPartsAdded,
+                                           List<CustomVinylTrans> vinylsAdded) {
         this.paintsAdded = paintsAdded;
         this.performancePartsAdded = performancePartsAdded;
         this.visualPartsAdded = visualPartsAdded;

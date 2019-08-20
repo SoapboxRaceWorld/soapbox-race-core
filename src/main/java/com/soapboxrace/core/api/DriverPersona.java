@@ -5,12 +5,9 @@ import com.soapboxrace.core.bo.DriverPersonaBO;
 import com.soapboxrace.core.bo.PresenceBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.bo.UserBO;
-import com.soapboxrace.core.dao.SocialRelationshipDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.exception.EngineException;
 import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
@@ -75,9 +72,10 @@ public class DriverPersona {
     @Path("/CreatePersona")
     @Produces(MediaType.APPLICATION_XML)
     public ProfileData createPersona(@HeaderParam("userId") Long userId,
-                                  @HeaderParam("securityToken") String securityToken,
-                           @QueryParam("name") String name,
-                                  @QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan, @QueryParam("clanIcon") String clanIcon) {
+                                     @HeaderParam("securityToken") String securityToken,
+                                     @QueryParam("name") String name,
+                                     @QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan,
+                                     @QueryParam("clanIcon") String clanIcon) {
         if (!NAME_PATTERN.matcher(name).matches()) {
             throw new EngineException(EngineExceptionCode.DisplayNameNotAllowed);
         }
@@ -106,7 +104,8 @@ public class DriverPersona {
     @Secured
     @Path("/DeletePersona")
     @Produces(MediaType.APPLICATION_XML)
-    public String deletePersona(@QueryParam("personaId") Long personaId, @HeaderParam("securityToken") String securityToken) {
+    public String deletePersona(@QueryParam("personaId") Long personaId,
+                                @HeaderParam("securityToken") String securityToken) {
         tokenSessionBo.verifyPersona(securityToken, personaId);
         driverPersonaBO.deletePersona(personaId);
         return "<long>0</long>";
@@ -126,7 +125,7 @@ public class DriverPersona {
     @Path("/UpdatePersonaPresence")
     @Produces(MediaType.APPLICATION_XML)
     public String updatePersonaPresence(@HeaderParam("securityToken") String securityToken,
-                                   @QueryParam("presence") Long presence) {
+                                        @QueryParam("presence") Long presence) {
         if (tokenSessionBo.getActivePersonaId(securityToken) == 0L)
             throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
         presenceBO.updatePresence(tokenSessionBo.getActivePersonaId(securityToken), presence);
@@ -150,7 +149,8 @@ public class DriverPersona {
     @Secured
     @Path("/UpdateStatusMessage")
     @Produces(MediaType.APPLICATION_XML)
-    public PersonaMotto updateStatusMessage(InputStream statusXml, @HeaderParam("securityToken") String securityToken, @Context Request request) {
+    public PersonaMotto updateStatusMessage(InputStream statusXml, @HeaderParam("securityToken") String securityToken
+            , @Context Request request) {
         PersonaMotto personaMotto = UnmarshalXML.unMarshal(statusXml, PersonaMotto.class);
         tokenSessionBo.verifyPersona(securityToken, personaMotto.getPersonaId());
 

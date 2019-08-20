@@ -25,7 +25,8 @@ public class OnlineUsersDAO extends BaseDAO<OnlineUsersEntity> {
     public OnlineUsersEntity findByTime(Date time) {
         Long timeLong = time.getTime() / 1000L;
 
-        TypedQuery<OnlineUsersEntity> query = entityManager.createNamedQuery("OnlineUsersEntity.findByTime", OnlineUsersEntity.class);
+        TypedQuery<OnlineUsersEntity> query = entityManager.createNamedQuery("OnlineUsersEntity.findByTime",
+                OnlineUsersEntity.class);
         query.setParameter("time", timeLong.intValue());
 
         List<OnlineUsersEntity> resultList = query.getResultList();

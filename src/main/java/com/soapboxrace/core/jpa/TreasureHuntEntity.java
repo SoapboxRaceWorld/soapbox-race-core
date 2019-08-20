@@ -6,7 +6,8 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "TREASURE_HUNT")
 @NamedQueries({ //
-        @NamedQuery(name = "TreasureHuntEntity.deleteByPersona", query = "DELETE FROM TreasureHuntEntity obj WHERE obj.personaId = :personaId") //
+        @NamedQuery(name = "TreasureHuntEntity.deleteByPersona", query = "DELETE FROM TreasureHuntEntity obj WHERE " +
+                "obj.personaId = :personaId") //
 })
 public class TreasureHuntEntity {
 

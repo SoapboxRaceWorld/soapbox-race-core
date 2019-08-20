@@ -18,7 +18,8 @@ public class CarSlotEntity {
     @JoinColumn(name = "PersonaId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_CARSLOT_PERSONA"))
     private PersonaEntity persona;
 
-    @OneToOne(mappedBy = "carSlot", targetEntity = OwnedCarEntity.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "carSlot", targetEntity = OwnedCarEntity.class, cascade = CascadeType.ALL, fetch =
+            FetchType.LAZY)
     private OwnedCarEntity ownedCar;
 
     public Long getId() {

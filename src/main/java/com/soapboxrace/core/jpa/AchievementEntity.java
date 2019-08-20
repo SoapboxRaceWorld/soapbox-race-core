@@ -6,9 +6,12 @@ import java.util.List;
 @Entity
 @Table(name = "ACHIEVEMENT")
 @NamedQueries({
-        @NamedQuery(name = "AchievementEntity.findByName", query = "SELECT a FROM AchievementEntity a WHERE a.name = :name"),
-        @NamedQuery(name = "AchievementEntity.findAllByCategory", query = "SELECT a FROM AchievementEntity a WHERE a.category = :category"),
-        @NamedQuery(name = "AchievementEntity.findAllVisible", query = "SELECT a FROM AchievementEntity a WHERE a.visible = true"),
+        @NamedQuery(name = "AchievementEntity.findByName", query = "SELECT a FROM AchievementEntity a WHERE a.name = " +
+                ":name"),
+        @NamedQuery(name = "AchievementEntity.findAllByCategory", query = "SELECT a FROM AchievementEntity a WHERE a" +
+                ".category = :category"),
+        @NamedQuery(name = "AchievementEntity.findAllVisible", query = "SELECT a FROM AchievementEntity a WHERE a" +
+                ".visible = true"),
         @NamedQuery(name = "AchievementEntity.findAll", query = "SELECT a fROM AchievementEntity a")
 })
 public class AchievementEntity {
@@ -24,7 +27,8 @@ public class AchievementEntity {
     @Column(name = "progress_text")
     private String progressText;
 
-    @Column(name = "stat_conversion", columnDefinition = "ENUM('None', 'FromMetersToDistance', 'FromMillisecondsToMinutes')")
+    @Column(name = "stat_conversion", columnDefinition = "ENUM('None', 'FromMetersToDistance', " +
+            "'FromMillisecondsToMinutes')")
     private String statConversion;
 
     @Column(name = "category")
@@ -42,7 +46,8 @@ public class AchievementEntity {
     @Column(name = "update_value", columnDefinition = "TEXT")
     private String updateValue;
 
-    @OneToMany(targetEntity = AchievementRankEntity.class, mappedBy = "achievementEntity", cascade = CascadeType.DETACH, orphanRemoval = true)
+    @OneToMany(targetEntity = AchievementRankEntity.class, mappedBy = "achievementEntity", cascade =
+            CascadeType.DETACH, orphanRemoval = true)
     private List<AchievementRankEntity> ranks;
 
     @OneToOne(targetEntity = BadgeDefinitionEntity.class, optional = false, fetch = FetchType.LAZY)

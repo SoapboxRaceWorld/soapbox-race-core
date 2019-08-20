@@ -19,7 +19,8 @@ public class PromoCodeDAO extends BaseDAO<PromoCodeEntity> {
     }
 
     public PromoCodeEntity findByUser(UserEntity userEntity) {
-        TypedQuery<PromoCodeEntity> query = entityManager.createNamedQuery("PromoCodeEntity.findByUser", PromoCodeEntity.class);
+        TypedQuery<PromoCodeEntity> query = entityManager.createNamedQuery("PromoCodeEntity.findByUser",
+                PromoCodeEntity.class);
         query.setParameter("user", userEntity);
 
         List<PromoCodeEntity> resultList = query.getResultList();
@@ -27,7 +28,8 @@ public class PromoCodeDAO extends BaseDAO<PromoCodeEntity> {
     }
 
     public PromoCodeEntity findByCode(String promoCode) {
-        TypedQuery<PromoCodeEntity> query = entityManager.createNamedQuery("PromoCodeEntity.findByCode", PromoCodeEntity.class);
+        TypedQuery<PromoCodeEntity> query = entityManager.createNamedQuery("PromoCodeEntity.findByCode",
+                PromoCodeEntity.class);
         query.setParameter("promoCode", promoCode);
 
         List<PromoCodeEntity> resultList = query.getResultList();

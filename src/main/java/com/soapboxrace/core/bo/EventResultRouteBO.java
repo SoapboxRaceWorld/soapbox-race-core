@@ -41,7 +41,8 @@ public class EventResultRouteBO {
     @EJB
     private AchievementBO achievementBO;
 
-    public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
+    public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
+                                          RouteArbitrationPacket routeArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
@@ -77,12 +78,15 @@ public class EventResultRouteBO {
         }
 
         RouteEventResult routeEventResult = new RouteEventResult();
-        routeEventResult.setAccolades(rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket, eventSessionEntity));
-        routeEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, routeArbitrationPacket, routeArbitrationPacket.getNumberOfCollisions()));
+        routeEventResult.setAccolades(rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket,
+                eventSessionEntity));
+        routeEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, routeArbitrationPacket,
+                routeArbitrationPacket.getNumberOfCollisions()));
         routeEventResult.setEntrants(arrayOfRouteEntrantResult);
         routeEventResult.setEventId(eventDataEntity.getEvent().getId());
         routeEventResult.setEventSessionId(eventSessionId);
-        routeEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM : ExitPath.EXIT_TO_LOBBY);
+        routeEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM :
+                ExitPath.EXIT_TO_LOBBY);
         routeEventResult.setInviteLifetimeInMilliseconds(0);
         routeEventResult.setLobbyInviteId(0);
         routeEventResult.setPersonaId(activePersonaId);
@@ -111,7 +115,8 @@ public class EventResultRouteBO {
         eventDataEntity.setRank(arbitrationPacket.getRank());
     }
 
-    private void sendXmppPacket(Long eventSessionId, Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket) {
+    private void sendXmppPacket(Long eventSessionId, Long activePersonaId,
+                                RouteArbitrationPacket routeArbitrationPacket) {
         XMPP_RouteEntrantResultType xmppRouteResult = new XMPP_RouteEntrantResultType();
         xmppRouteResult.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
         xmppRouteResult.setEventDurationInMilliseconds(routeArbitrationPacket.getEventDurationInMilliseconds());

@@ -21,7 +21,8 @@ public class RewardDragBO extends RewardBO {
     @EJB
     private LegitRaceBO legitRaceBO;
 
-    public Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket, EventSessionEntity eventSessionEntity) {
+    public Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket,
+                                      EventSessionEntity eventSessionEntity) {
         if (!legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity)) {
             return new Accolades();
         }

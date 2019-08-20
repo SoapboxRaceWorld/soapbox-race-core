@@ -5,8 +5,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "PERSONA_BADGE")
 @NamedQueries({
-        @NamedQuery(name = "PersonaBadgeEntity.findAllBadgesForPersona", query = "SELECT obj FROM PersonaBadgeEntity obj WHERE obj.personaEntity.personaId = :personaId"),
-        @NamedQuery(name = "PersonaBadgeEntity.findBadgeInSlotForPersona", query = "SELECT obj FROM PersonaBadgeEntity obj WHERE obj.personaEntity.personaId = :personaId AND obj.slot = :slot")
+        @NamedQuery(name = "PersonaBadgeEntity.findAllBadgesForPersona", query = "SELECT obj FROM PersonaBadgeEntity " +
+                "obj WHERE obj.personaEntity.personaId = :personaId"),
+        @NamedQuery(name = "PersonaBadgeEntity.findBadgeInSlotForPersona", query = "SELECT obj FROM " +
+                "PersonaBadgeEntity obj WHERE obj.personaEntity.personaId = :personaId AND obj.slot = :slot")
 })
 public class PersonaBadgeEntity {
 

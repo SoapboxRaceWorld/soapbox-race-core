@@ -17,7 +17,8 @@ public class VirtualItemDAO extends BaseDAO<VirtualItemEntity> {
     }
 
     public VirtualItemEntity findByHash(Integer hash) {
-        TypedQuery<VirtualItemEntity> query = this.entityManager.createNamedQuery("VirtualItemEntity.findByHash", VirtualItemEntity.class);
+        TypedQuery<VirtualItemEntity> query = this.entityManager.createNamedQuery("VirtualItemEntity.findByHash",
+                VirtualItemEntity.class);
         query.setParameter("hash", hash);
         List<VirtualItemEntity> results = query.getResultList();
 
@@ -25,7 +26,8 @@ public class VirtualItemDAO extends BaseDAO<VirtualItemEntity> {
     }
 
     public VirtualItemEntity findByItemName(String itemName) {
-        TypedQuery<VirtualItemEntity> query = this.entityManager.createNamedQuery("VirtualItemEntity.findByItemName", VirtualItemEntity.class);
+        TypedQuery<VirtualItemEntity> query = this.entityManager.createNamedQuery("VirtualItemEntity.findByItemName",
+                VirtualItemEntity.class);
         query.setParameter("itemName", itemName);
         List<VirtualItemEntity> results = query.getResultList();
 

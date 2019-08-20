@@ -6,7 +6,8 @@ import javax.persistence.*;
 @Table(name = "serveritems_skillmod_part")
 @NamedQueries({
         @NamedQuery(name = "ServerItemSkillModEntity.findByQualityAndCategory",
-                query = "SELECT obj FROM ServerItemSkillModEntity obj WHERE obj.skillModPartQuality = :quality AND obj.skillModCategory = :category")
+                query = "SELECT obj FROM ServerItemSkillModEntity obj WHERE obj.skillModPartQuality = :quality AND " +
+                        "obj.skillModCategory = :category")
 })
 public class ServerItemSkillModEntity {
 

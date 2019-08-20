@@ -25,7 +25,8 @@ public class Crypto {
     @Secured
     @Path("/relaycryptoticket/{personaId}")
     @Produces(MediaType.APPLICATION_XML)
-    public UdpRelayCryptoTicket relayCryptoTicket(@HeaderParam("securityToken") String securityToken, @PathParam("personaId") Long personaId) {
+    public UdpRelayCryptoTicket relayCryptoTicket(@HeaderParam("securityToken") String securityToken, @PathParam(
+            "personaId") Long personaId) {
         byte[] randomUUIDBytes = UUIDGen.getRandomUUIDBytes();
         String ticketIV = Base64.getEncoder().encodeToString(randomUUIDBytes);
         udpClient.sendRaceUdpKey(randomUUIDBytes);

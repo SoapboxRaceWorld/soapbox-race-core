@@ -16,7 +16,8 @@ public class SkillModPartEntity {
     private int skillModPartAttribHash;
 
     @ManyToOne
-    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_SKILLPART_CUSTOMCAR"))
+    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
+            "FK_SKILLPART_CUSTOMCAR"))
     private CustomCarEntity customCar;
 
     public Long getId() {

@@ -56,9 +56,11 @@ public class RecoveryPasswordBO {
     }
 
     private String createRecoveryPassword(UserEntity userEntity) {
-        List<RecoveryPasswordEntity> listRecoveryPasswordEntity = recoveryPasswordDao.findAllOpenByUserId(userEntity.getId());
+        List<RecoveryPasswordEntity> listRecoveryPasswordEntity =
+                recoveryPasswordDao.findAllOpenByUserId(userEntity.getId());
         if (!listRecoveryPasswordEntity.isEmpty()) {
-            return "ERROR: Recovery password link already sent, please check your spam mail box or try again in 1 hour.";
+            return "ERROR: Recovery password link already sent, please check your spam mail box or try again in 1 " +
+                    "hour.";
         }
 
         String randomKey = createSecretKey(userEntity.getId());
@@ -88,7 +90,8 @@ public class RecoveryPasswordBO {
             message.setSubject("Recovery Password Email");
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("Dear user,\n\n");
-            stringBuilder.append("Someone requested to recover forgotten password in our soapbox race world server.\n\n");
+            stringBuilder.append("Someone requested to recover forgotten password in our soapbox race world server" +
+                    ".\n\n");
             stringBuilder.append("If wasn't you, just ignore this email.\n\n");
             stringBuilder.append("You can click this link to reset your password:\n\n");
             stringBuilder.append(parameterBO.getStrParam("SERVER_ADDRESS"));

@@ -27,7 +27,8 @@ public class TestReward {
     @POST
     @Path("/pursuit/{personaId}/{eventId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public RewardVO pursuit(PursuitArbitrationPacket pursuitArbitrationPacket, @PathParam(value = "personaId") Long personaId,
+    public RewardVO pursuit(PursuitArbitrationPacket pursuitArbitrationPacket,
+                            @PathParam(value = "personaId") Long personaId,
                             @PathParam(value = "eventId") Integer eventId) {
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
         RewardVO rewardVO = pursuitBO.getRewardVO(personaEntity);

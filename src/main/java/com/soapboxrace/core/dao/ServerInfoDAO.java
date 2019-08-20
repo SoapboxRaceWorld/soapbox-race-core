@@ -19,7 +19,8 @@ public class ServerInfoDAO extends BaseDAO<ServerInfoEntity> {
     }
 
     public ServerInfoEntity findInfo() {
-        TypedQuery<ServerInfoEntity> query = entityManager.createNamedQuery("ServerInfoEntity.findAll", ServerInfoEntity.class);
+        TypedQuery<ServerInfoEntity> query = entityManager.createNamedQuery("ServerInfoEntity.findAll",
+                ServerInfoEntity.class);
 
         List<ServerInfoEntity> resultList = query.getResultList();
         ServerInfoEntity serverInfoEntity = !resultList.isEmpty() ? resultList.get(0) : null;

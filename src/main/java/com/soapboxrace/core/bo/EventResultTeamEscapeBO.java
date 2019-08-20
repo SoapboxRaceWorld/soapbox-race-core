@@ -54,7 +54,8 @@ public class EventResultTeamEscapeBO {
         xmppTeamEscapeResult.setFinishReason(teamEscapeArbitrationPacket.getFinishReason());
         xmppTeamEscapeResult.setPersonaId(activePersonaId);
 
-        XMPP_ResponseTypeTeamEscapeEntrantResult teamEscapeEntrantResultResponse = new XMPP_ResponseTypeTeamEscapeEntrantResult();
+        XMPP_ResponseTypeTeamEscapeEntrantResult teamEscapeEntrantResultResponse =
+                new XMPP_ResponseTypeTeamEscapeEntrantResult();
         teamEscapeEntrantResultResponse.setTeamEscapeEntrantResult(xmppTeamEscapeResult);
 
         EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
@@ -105,9 +106,11 @@ public class EventResultTeamEscapeBO {
         }
 
         TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
-        teamEscapeEventResult.setAccolades(rewardTeamEscapeBO.getTeamEscapeAccolades(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity));
+        teamEscapeEventResult.setAccolades(rewardTeamEscapeBO.getTeamEscapeAccolades(activePersonaId,
+                teamEscapeArbitrationPacket, eventSessionEntity));
         teamEscapeEventResult
-                .setDurability(carDamageBO.updateDamageCar(activePersonaId, teamEscapeArbitrationPacket, teamEscapeArbitrationPacket.getNumberOfCollisions()));
+                .setDurability(carDamageBO.updateDamageCar(activePersonaId, teamEscapeArbitrationPacket,
+                        teamEscapeArbitrationPacket.getNumberOfCollisions()));
         teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
         teamEscapeEventResult.setEventId(eventDataEntity.getEvent().getId());
         teamEscapeEventResult.setEventSessionId(eventSessionId);

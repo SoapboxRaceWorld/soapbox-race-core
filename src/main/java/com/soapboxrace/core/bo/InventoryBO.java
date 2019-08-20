@@ -43,7 +43,8 @@ public class InventoryBO {
         return addFromCatalog(productEntity, personaEntity, -1);
     }
 
-    public InventoryItemEntity addFromCatalog(ProductEntity productEntity, PersonaEntity personaEntity, Integer useCountOverride) {
+    public InventoryItemEntity addFromCatalog(ProductEntity productEntity, PersonaEntity personaEntity,
+                                              Integer useCountOverride) {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
 
         if (inventoryEntity != null) {
@@ -60,7 +61,8 @@ public class InventoryBO {
 
                 inventoryItemEntity.setHash(virtualItemEntity.getHash());
                 inventoryItemEntity.setProductId("DO NOT USE ME");
-                inventoryItemEntity.setRemainingUseCount(useCountOverride == -1 ? productEntity.getUseCount() : useCountOverride);
+                inventoryItemEntity.setRemainingUseCount(useCountOverride == -1 ? productEntity.getUseCount() :
+                        useCountOverride);
                 inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
                 inventoryItemEntity.setStatus("ACTIVE");
                 inventoryItemEntity.setVirtualItemType(virtualItemEntity.getType());
@@ -79,14 +81,16 @@ public class InventoryBO {
         return addFromCatalogOrUpdateUsage(productEntity, personaEntity, -1);
     }
 
-    public InventoryItemEntity addFromCatalogOrUpdateUsage(ProductEntity productEntity, PersonaEntity personaEntity, Integer useCountOverride) {
+    public InventoryItemEntity addFromCatalogOrUpdateUsage(ProductEntity productEntity, PersonaEntity personaEntity,
+                                                           Integer useCountOverride) {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
 
         if (inventoryEntity != null) {
             VirtualItemEntity virtualItemEntity = virtualItemDAO.findByHash(productEntity.getHash());
 
             if (virtualItemEntity != null) {
-                InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaEntity.getPersonaId(), productEntity.getHash());
+                InventoryItemEntity inventoryItemEntity =
+                        inventoryItemDAO.findByPersonaIdAndHash(personaEntity.getPersonaId(), productEntity.getHash());
 
                 int useCount = useCountOverride == -1 ? productEntity.getUseCount() : useCountOverride;
                 if (inventoryItemEntity == null) {
@@ -170,7 +174,8 @@ public class InventoryBO {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
 
         if (inventoryEntity != null) {
-            InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId, entitlementTag);
+            InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId,
+                    entitlementTag);
 
             if (inventoryItemEntity != null) {
                 inventoryEntity.getInventoryItems().remove(inventoryItemEntity);
@@ -280,7 +285,8 @@ public class InventoryBO {
                 inventoryEntity.setSkillModPartsUsedSlotCount(inventoryEntity.getSkillModPartsUsedSlotCount() + (added ? 1 : -1));
                 break;
             case "visualpart":
-                inventoryEntity.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount() + (added ? 1 : -1));
+                inventoryEntity.setVisualPartsUsedSlotCount(inventoryEntity.getVisualPartsUsedSlotCount() + (added ?
+                        1 : -1));
                 break;
         }
 

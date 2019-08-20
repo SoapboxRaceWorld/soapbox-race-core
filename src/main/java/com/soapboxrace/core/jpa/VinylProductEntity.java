@@ -44,7 +44,8 @@ public class VinylProductEntity {
     private String webLocation;
 
     @ManyToOne
-    @JoinColumn(name = "parentCategoryId", referencedColumnName = "idcategory", foreignKey = @ForeignKey(name = "FK_VINYLPRODUCT_CATEGORY"))
+    @JoinColumn(name = "parentCategoryId", referencedColumnName = "idcategory", foreignKey = @ForeignKey(name =
+            "FK_VINYLPRODUCT_CATEGORY"))
     private CategoryEntity category;
 
     private String categoryName;

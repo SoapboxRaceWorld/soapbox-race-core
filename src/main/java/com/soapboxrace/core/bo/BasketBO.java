@@ -88,7 +88,8 @@ public class BasketBO {
 
     public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity) {
         CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
-        int price = (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCarEntity.getOwnedCar().getDurability()));
+        int price =
+                (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCarEntity.getOwnedCar().getDurability()));
 
         if (this.performPersonaTransaction(personaEntity, productId, price)) {
             personaDao.update(personaEntity);
@@ -143,7 +144,8 @@ public class BasketBO {
         }
 
         if (performPersonaTransaction(personaEntity, productId)) {
-            InventoryItemEntity item = inventoryItemDao.findByPersonaIdAndHash(personaEntity.getPersonaId(), powerupProduct.getHash());
+            InventoryItemEntity item = inventoryItemDao.findByPersonaIdAndHash(personaEntity.getPersonaId(),
+                    powerupProduct.getHash());
 
             if (item == null) {
                 return CommerceResultStatus.FAIL_INVALID_BASKET;
@@ -167,11 +169,14 @@ public class BasketBO {
 
         if (performPersonaTransaction(personaEntity, productId)) {
             CarSlotEntity carSlotEntity = addCar(productId, personaEntity);
-            CarClassesEntity carClassesEntity = carClassesDAO.findById(carSlotEntity.getOwnedCar().getCustomCar().getName());
+            CarClassesEntity carClassesEntity =
+                    carClassesDAO.findById(carSlotEntity.getOwnedCar().getCustomCar().getName());
 
             if (carClassesEntity != null) {
-                AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity, AchievementCommerceContext.CommerceType.CAR_PURCHASE);
-                achievementBO.updateAchievements(personaEntity.getPersonaId(), "COMMERCE", new HashMap<String, Object>() {{
+                AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity,
+                        AchievementCommerceContext.CommerceType.CAR_PURCHASE);
+                achievementBO.updateAchievements(personaEntity.getPersonaId(), "COMMERCE", new HashMap<String,
+                        Object>() {{
                     put("persona", personaEntity);
                     put("carSlot", carSlotEntity);
                     put("commerceCtx", commerceContext);
@@ -225,7 +230,8 @@ public class BasketBO {
 
         InventoryEntity inventoryEntity = inventoryDao.findByPersonaId(personaEntity.getPersonaId());
 
-        List<InventoryItemEntity> existing = inventoryItemDao.findAllByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(), productId);
+        List<InventoryItemEntity> existing =
+                inventoryItemDao.findAllByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(), productId);
 
         if (!existing.isEmpty()) {
             return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;

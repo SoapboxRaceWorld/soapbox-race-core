@@ -11,7 +11,6 @@ import com.soapboxrace.jaxb.http.SessionInfo;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 @Path("/matchmaking")
 public class MatchMaking {
@@ -46,7 +45,8 @@ public class MatchMaking {
     @Secured
     @Path("/joinqueueevent/{eventId}")
     @Produces(MediaType.APPLICATION_XML)
-    public String joinQueueEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
+    public String joinQueueEvent(@HeaderParam("securityToken") String securityToken,
+                                 @PathParam("eventId") int eventId) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         lobbyBO.joinQueueEvent(activePersonaId, eventId);
         return "";
@@ -78,7 +78,8 @@ public class MatchMaking {
     @Secured
     @Path("/launchevent/{eventId}")
     @Produces(MediaType.APPLICATION_XML)
-    public SessionInfo launchEvent(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
+    public SessionInfo launchEvent(@HeaderParam("securityToken") String securityToken,
+                                   @PathParam("eventId") int eventId) {
         SessionInfo sessionInfo = new SessionInfo();
         SecurityChallenge securityChallenge = new SecurityChallenge();
         securityChallenge.setChallengeId("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -97,7 +98,8 @@ public class MatchMaking {
     @Secured
     @Path("/makeprivatelobby/{eventId}")
     @Produces(MediaType.APPLICATION_XML)
-    public String makePrivateLobby(@HeaderParam("securityToken") String securityToken, @PathParam("eventId") int eventId) {
+    public String makePrivateLobby(@HeaderParam("securityToken") String securityToken,
+                                   @PathParam("eventId") int eventId) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
         lobbyBO.createPrivateLobby(activePersonaId, eventId);
@@ -108,7 +110,8 @@ public class MatchMaking {
     @Secured
     @Path("/acceptinvite")
     @Produces(MediaType.APPLICATION_XML)
-    public LobbyInfo acceptInvite(@HeaderParam("securityToken") String securityToken, @QueryParam("lobbyInviteId") Long lobbyInviteId) {
+    public LobbyInfo acceptInvite(@HeaderParam("securityToken") String securityToken,
+                                  @QueryParam("lobbyInviteId") Long lobbyInviteId) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         tokenSessionBO.setActiveLobbyId(securityToken, lobbyInviteId);
         return lobbyBO.acceptinvite(activePersonaId, lobbyInviteId);
@@ -119,7 +122,7 @@ public class MatchMaking {
     @Path("/declineinvite")
     @Produces(MediaType.APPLICATION_XML)
     public String declineInvite(@HeaderParam("securityToken") String securityToken,
-                                  @QueryParam("lobbyInviteId") Long lobbyInviteId) {
+                                @QueryParam("lobbyInviteId") Long lobbyInviteId) {
         return "";
     }
 

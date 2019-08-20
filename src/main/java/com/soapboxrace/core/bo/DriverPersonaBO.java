@@ -123,7 +123,8 @@ public class DriverPersonaBO {
         ArrayOfBadgePacket arrayOfBadgePacket = new ArrayOfBadgePacket();
 
         for (PersonaBadgeEntity personaBadgeEntity : personaBadgeDAO.findAllBadgesForPersona(personaId)) {
-            PersonaAchievementRankEntity personaAchievementRankEntity = personaAchievementRankDAO.findHighestCompletedRankOfAchievementByPersona(
+            PersonaAchievementRankEntity personaAchievementRankEntity =
+                    personaAchievementRankDAO.findHighestCompletedRankOfAchievementByPersona(
                     personaId, personaBadgeEntity.getBadgeDefinitionEntity().getAchievementEntity().getId());
             if (personaAchievementRankEntity != null) {
                 BadgePacket badgePacket = new BadgePacket();

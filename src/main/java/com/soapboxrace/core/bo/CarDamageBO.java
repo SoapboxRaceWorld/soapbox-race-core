@@ -31,7 +31,8 @@ public class CarDamageBO {
             return 100;
         }
 
-        InventoryItemEntity insurance = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId, "INSURANCE_AMPLIFIER");
+        InventoryItemEntity insurance = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId,
+                "INSURANCE_AMPLIFIER");
 
         if (insurance != null) {
             return 100;

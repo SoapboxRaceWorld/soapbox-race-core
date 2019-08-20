@@ -36,7 +36,8 @@ public class Achievements {
     @Secured
     @Path("/redeemreward")
     @Produces(MediaType.APPLICATION_XML)
-    public AchievementRewards redeemreward(@HeaderParam("securityToken") String securityToken, @QueryParam("achievementRankId") Long achievementRankId) {
+    public AchievementRewards redeemreward(@HeaderParam("securityToken") String securityToken, @QueryParam(
+            "achievementRankId") Long achievementRankId) {
         return achievementBO.redeemReward(tokenSessionBO.getActivePersonaId(securityToken), achievementRankId);
     }
 }

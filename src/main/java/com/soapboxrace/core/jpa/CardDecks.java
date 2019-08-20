@@ -9,7 +9,7 @@ public enum CardDecks {
 
     private final String cardDeckType;
 
-    private CardDecks(String cardDeckType) {
+    CardDecks(String cardDeckType) {
         this.cardDeckType = cardDeckType;
     }
 

@@ -7,7 +7,8 @@ import java.util.List;
 @Entity
 @Table(name = "INVENTORY")
 @NamedQueries({
-        @NamedQuery(name = "InventoryEntity.findByPersonaId", query = "SELECT obj FROM InventoryEntity obj WHERE obj.personaEntity.id = :personaId")
+        @NamedQuery(name = "InventoryEntity.findByPersonaId", query = "SELECT obj FROM InventoryEntity obj WHERE obj" +
+                ".personaEntity.id = :personaId")
 })
 public class InventoryEntity {
 

@@ -1,19 +1,12 @@
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.bo.util.AchievementCommerceContext;
-import com.soapboxrace.core.bo.util.AchievementEventContext;
-import com.soapboxrace.core.bo.util.AchievementProgressionContext;
 import com.soapboxrace.core.dao.EventDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.*;
-import com.soapboxrace.jaxb.http.AchievementsPacket;
-import com.soapboxrace.jaxb.http.ArbitrationPacket;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import java.util.HashMap;
 
 @Startup
 @Singleton
@@ -44,7 +37,8 @@ public class ScriptTestBO {
 //                    setLobby(new LobbyEntity());
 //                    setEvent(new EventEntity());
 //                }}));
-//                put("commerceCtx", new AchievementCommerceContext(new CarClassesEntity(), AchievementCommerceContext.CommerceType.CAR_PURCHASE));
+//                put("commerceCtx", new AchievementCommerceContext(new CarClassesEntity(),
+//                AchievementCommerceContext.CommerceType.CAR_PURCHASE));
 //                put("progression", new AchievementProgressionContext(1000, 500, 42, true, true));
 //            }
 //        };

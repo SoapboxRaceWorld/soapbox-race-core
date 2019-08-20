@@ -15,7 +15,8 @@ public class PerformancePartEntity {
     private int performancePartAttribHash;
 
     @ManyToOne
-    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PERFPART_CUSTOMCAR"))
+    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
+            "FK_PERFPART_CUSTOMCAR"))
     private CustomCarEntity customCar;
 
     public Long getId() {

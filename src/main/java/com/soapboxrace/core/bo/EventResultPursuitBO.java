@@ -44,7 +44,8 @@ public class EventResultPursuitBO {
     @EJB
     private PersonaBO personaBO;
 
-    public PursuitEventResult handlePursuitEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
+    public PursuitEventResult handlePursuitEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
+                                               PursuitArbitrationPacket pursuitArbitrationPacket,
                                                Boolean isBusted) {
         Long eventSessionId = eventSessionEntity.getId();
         eventSessionEntity.setEnded(System.currentTimeMillis());
@@ -75,7 +76,8 @@ public class EventResultPursuitBO {
         pursuitArbitrationPacket.setRank(1); // there's only ever 1 player, and the game sets rank to 0... idk why
 
         PursuitEventResult pursuitEventResult = new PursuitEventResult();
-        pursuitEventResult.setAccolades(rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket, eventSessionEntity, isBusted));
+        pursuitEventResult.setAccolades(rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket
+                , eventSessionEntity, isBusted));
         pursuitEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, pursuitArbitrationPacket, 0));
         pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
         pursuitEventResult.setEventSessionId(eventSessionId);

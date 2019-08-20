@@ -23,7 +23,7 @@ public class SocketClient {
 
             try {
                 tries++;
-                System.out.println("Attempting to connect to OpenFire XMPP Host. Attempt #" + String.valueOf(tries));
+                System.out.println("Attempting to connect to OpenFire XMPP Host. Attempt #" + tries);
                 socket = new Socket(srvAddress, port);
                 out = new PrintWriter(this.socket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

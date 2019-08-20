@@ -7,7 +7,6 @@ import com.soapboxrace.jaxb.http.FraudConfig;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 @Path("/security")
 public class Security {

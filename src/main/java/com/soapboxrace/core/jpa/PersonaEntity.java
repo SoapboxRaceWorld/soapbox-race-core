@@ -7,7 +7,8 @@ import java.time.temporal.ChronoUnit;
 @Entity
 @Table(name = "PERSONA")
 @NamedQueries({ //
-        @NamedQuery(name = "PersonaEntity.findByName", query = "SELECT obj FROM PersonaEntity obj WHERE obj.name = :name"), //
+        @NamedQuery(name = "PersonaEntity.findByName", query = "SELECT obj FROM PersonaEntity obj WHERE obj.name = " +
+                ":name"), //
         @NamedQuery(name = "PersonaEntity.countPersonas", query = "SELECT count(*) FROM PersonaEntity")
 })
 public class PersonaEntity {

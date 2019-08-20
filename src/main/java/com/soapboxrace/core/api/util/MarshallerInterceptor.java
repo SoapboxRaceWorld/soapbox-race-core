@@ -35,7 +35,8 @@ public class MarshallerInterceptor implements MessageBodyWriter<Object> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void writeTo(Object object, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders,
+    public void writeTo(Object object, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType
+            , MultivaluedMap<String, Object> httpHeaders,
                         OutputStream entityStream) throws IOException, WebApplicationException {
         if (object == null) {
             entityStream.write("".getBytes());
@@ -57,7 +58,8 @@ public class MarshallerInterceptor implements MessageBodyWriter<Object> {
                 XmlType xmlTypeAnnotation = object.getClass().getAnnotation(XmlType.class);
                 QName qname = new QName("", xmlTypeAnnotation.name());
                 StringWriter stringWriter = new StringWriter();
-                JAXBElement<Object> jaxbElement = new JAXBElement<Object>(qname, (Class<Object>) object.getClass(), null, object);
+                JAXBElement<Object> jaxbElement = new JAXBElement<Object>(qname, (Class<Object>) object.getClass(),
+                        null, object);
                 jaxbMarshaller.marshal(jaxbElement, stringWriter);
                 entityStream.write(stringWriter.toString().getBytes());
             } catch (Exception e) {

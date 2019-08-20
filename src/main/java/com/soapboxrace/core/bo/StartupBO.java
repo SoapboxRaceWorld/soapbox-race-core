@@ -15,8 +15,10 @@ public class StartupBO {
 
         String template = "StartupBO: Server running on code version %s (%s) - branch %s";
 
-        System.out.println(String.format(template, BuildInfo.getCommitID(), BuildInfo.getLongCommitID(), BuildInfo.getBranch()));
+        System.out.println(String.format(template, BuildInfo.getCommitID(), BuildInfo.getLongCommitID(),
+                BuildInfo.getBranch()));
 
-//        System.out.println("StartupBO: Server running on code version " + BuildInfo.getCommitID() + " (" + BuildInfo.getLongCommitID() + ")");
+//        System.out.println("StartupBO: Server running on code version " + BuildInfo.getCommitID() + " (" +
+//        BuildInfo.getLongCommitID() + ")");
     }
 }

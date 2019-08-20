@@ -14,7 +14,8 @@ public class VinylEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_VINYL_CUSTOMCAR"))
+    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
+            "FK_VINYL_CUSTOMCAR"))
     private CustomCarEntity customCar;
 
     private int hash;

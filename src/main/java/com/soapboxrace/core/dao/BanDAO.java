@@ -20,7 +20,8 @@ public class BanDAO extends BaseDAO<BanEntity> {
     }
 
     public BanEntity findByUser(UserEntity userEntity) {
-        TypedQuery<BanEntity> query = entityManager.createQuery("SELECT obj FROM BanEntity obj WHERE obj.userEntity = :user AND (obj.willEnd = false OR obj.endsAt > :now)", BanEntity.class);
+        TypedQuery<BanEntity> query = entityManager.createQuery("SELECT obj FROM BanEntity obj WHERE obj.userEntity =" +
+                " :user AND (obj.willEnd = false OR obj.endsAt > :now)", BanEntity.class);
         query.setParameter("user", userEntity);
         query.setParameter("now", LocalDateTime.now());
 

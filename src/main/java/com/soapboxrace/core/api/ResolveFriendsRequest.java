@@ -22,7 +22,7 @@ public class ResolveFriendsRequest {
     @Produces(MediaType.APPLICATION_XML)
     public Response resolveFriendsRequest(@HeaderParam("securityToken") String securityToken,
                                           @QueryParam("friendPersonaId") Long friendPersonaId, @QueryParam(
-                                                  "resolution") int resolution) {
+            "resolution") int resolution) {
         Long activePersonaId = sessionBO.getActivePersonaId(securityToken);
 
         return Response.ok(this.socialRelationshipBO.resolveFriendsRequest(activePersonaId, friendPersonaId,

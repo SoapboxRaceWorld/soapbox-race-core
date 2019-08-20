@@ -18,7 +18,8 @@ public class HardwareInfoDAO extends BaseDAO<HardwareInfoEntity> {
     }
 
     public HardwareInfoEntity findByHardwareHash(String hardwareHash) {
-        TypedQuery<HardwareInfoEntity> query = entityManager.createNamedQuery("HardwareInfoEntity.findByHardwareHash", HardwareInfoEntity.class);
+        TypedQuery<HardwareInfoEntity> query = entityManager.createNamedQuery("HardwareInfoEntity.findByHardwareHash"
+                , HardwareInfoEntity.class);
         query.setParameter("hardwareHash", hardwareHash);
         List<HardwareInfoEntity> resultList = query.getResultList();
         if (resultList == null || resultList.isEmpty()) {
@@ -28,7 +29,8 @@ public class HardwareInfoDAO extends BaseDAO<HardwareInfoEntity> {
     }
 
     public HardwareInfoEntity findByUserId(Long userId) {
-        TypedQuery<HardwareInfoEntity> query = entityManager.createNamedQuery("HardwareInfoEntity.findByUserId", HardwareInfoEntity.class);
+        TypedQuery<HardwareInfoEntity> query = entityManager.createNamedQuery("HardwareInfoEntity.findByUserId",
+                HardwareInfoEntity.class);
         query.setParameter("userId", userId);
         List<HardwareInfoEntity> resultList = query.getResultList();
         if (resultList == null || resultList.isEmpty()) {

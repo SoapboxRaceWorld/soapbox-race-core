@@ -22,7 +22,8 @@ public class TokenSessionDAO extends BaseDAO<TokenSessionEntity> {
     }
 
     public TokenSessionEntity findByUserId(Long userId) {
-        TypedQuery<TokenSessionEntity> query = entityManager.createNamedQuery("TokenSessionEntity.findByUserId", TokenSessionEntity.class);
+        TypedQuery<TokenSessionEntity> query = entityManager.createNamedQuery("TokenSessionEntity.findByUserId",
+                TokenSessionEntity.class);
         query.setParameter("userId", userId);
         return query.getSingleResult();
     }

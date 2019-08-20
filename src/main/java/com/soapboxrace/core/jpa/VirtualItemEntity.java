@@ -5,10 +5,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "VIRTUALITEM")
 @NamedQueries({
-        @NamedQuery(name = "VirtualItemEntity.findByHash", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.hash = :hash"),
-        @NamedQuery(name = "VirtualItemEntity.findByItemName", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.itemName = :itemName"),
-        @NamedQuery(name = "VirtualItemEntity.findByItemType", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.type = :itemType"),
-        @NamedQuery(name = "VirtualItemEntity.findByItemSubType", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj.subType = :itemSubType"),
+        @NamedQuery(name = "VirtualItemEntity.findByHash", query = "SELECT obj FROM VirtualItemEntity obj WHERE obj" +
+                ".hash = :hash"),
+        @NamedQuery(name = "VirtualItemEntity.findByItemName", query = "SELECT obj FROM VirtualItemEntity obj WHERE " +
+                "obj.itemName = :itemName"),
+        @NamedQuery(name = "VirtualItemEntity.findByItemType", query = "SELECT obj FROM VirtualItemEntity obj WHERE " +
+                "obj.type = :itemType"),
+        @NamedQuery(name = "VirtualItemEntity.findByItemSubType", query = "SELECT obj FROM VirtualItemEntity obj " +
+                "WHERE obj.subType = :itemSubType"),
 })
 public class VirtualItemEntity {
     @Column(name = "longdescription")

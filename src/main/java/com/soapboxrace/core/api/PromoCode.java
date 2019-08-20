@@ -32,7 +32,8 @@ public class PromoCode {
     @POST
     @Path("/usePromoCode")
     @Produces(MediaType.TEXT_HTML)
-    public String usePromoCode(@FormParam("promoCode") String promoCode, @FormParam("email") String email, @FormParam("password") String password) {
+    public String usePromoCode(@FormParam("promoCode") String promoCode, @FormParam("email") String email,
+                               @FormParam("password") String password) {
         if (promoCode.isEmpty() || email.isEmpty() || password.isEmpty()) {
             return "empty fields";
         }

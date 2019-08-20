@@ -9,7 +9,6 @@ import com.soapboxrace.jaxb.util.MarshalXML;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/events")
@@ -102,7 +101,7 @@ public class Events {
     @Path("/notifycoincollected")
     @Produces(MediaType.APPLICATION_XML)
     public String notifyCoinCollected(@HeaderParam("securityToken") String securityToken,
-                                 @QueryParam("coins") Integer coins) {
+                                      @QueryParam("coins") Integer coins) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         return MarshalXML.marshal(eventsBO.notifyCoinCollected(activePersonaId, coins));
     }

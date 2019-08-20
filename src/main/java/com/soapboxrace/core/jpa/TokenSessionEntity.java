@@ -6,8 +6,10 @@ import java.util.Date;
 @Entity
 @Table(name = "TOKEN_SESSION")
 @NamedQueries({ //
-        @NamedQuery(name = "TokenSessionEntity.findByUserId", query = "SELECT obj FROM TokenSessionEntity obj WHERE obj.userEntity.id = :userId"), //
-        @NamedQuery(name = "TokenSessionEntity.deleteByUserId", query = "DELETE FROM TokenSessionEntity obj WHERE obj.userEntity.id = :userId"), //
+        @NamedQuery(name = "TokenSessionEntity.findByUserId", query = "SELECT obj FROM TokenSessionEntity obj WHERE " +
+                "obj.userEntity.id = :userId"), //
+        @NamedQuery(name = "TokenSessionEntity.deleteByUserId", query = "DELETE FROM TokenSessionEntity obj WHERE obj" +
+                ".userEntity.id = :userId"), //
         @NamedQuery(name = "TokenSessionEntity.updateRelayCrytoTicket", //
                 query = "UPDATE TokenSessionEntity obj " //
                         + "SET obj.relayCryptoTicket = :relayCryptoTicket WHERE obj.activePersonaId = :personaId"), //

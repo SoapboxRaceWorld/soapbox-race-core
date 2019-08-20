@@ -5,7 +5,7 @@ public enum EventMode {
     SPRINT(9), CIRCUIT(4), DRAG(19), PURSUIT_SP(12), PURSUIT_MP(24), MEETINGPLACE(22);
     private final int eventModeId;
 
-    private EventMode(int eventModeId) {
+    EventMode(int eventModeId) {
         this.eventModeId = eventModeId;
     }
 

@@ -7,8 +7,10 @@ import javax.persistence.*;
 // InviteTicketEntity.findByTicket
 @NamedQueries({ //
         @NamedQuery(name = "InviteTicketEntity.findAll", query = "SELECT obj FROM InviteTicketEntity obj"),
-        @NamedQuery(name = "InviteTicketEntity.findByTicket", query = "SELECT obj FROM InviteTicketEntity obj WHERE obj.ticket = :ticket"), //
-        @NamedQuery(name = "InviteTicketEntity.findByDiscordName", query = "SELECT obj FROM InviteTicketEntity obj WHERE obj.discordName = :discordName")})
+        @NamedQuery(name = "InviteTicketEntity.findByTicket", query = "SELECT obj FROM InviteTicketEntity obj WHERE " +
+                "obj.ticket = :ticket"), //
+        @NamedQuery(name = "InviteTicketEntity.findByDiscordName", query = "SELECT obj FROM InviteTicketEntity obj " +
+                "WHERE obj.discordName = :discordName")})
 public class InviteTicketEntity {
 
     @Id

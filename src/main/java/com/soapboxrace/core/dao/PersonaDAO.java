@@ -24,7 +24,8 @@ public class PersonaDAO extends BaseDAO<PersonaEntity> {
     }
 
     public PersonaEntity findByName(String name) {
-        TypedQuery<PersonaEntity> query = entityManager.createNamedQuery("PersonaEntity.findByName", PersonaEntity.class);
+        TypedQuery<PersonaEntity> query = entityManager.createNamedQuery("PersonaEntity.findByName",
+                PersonaEntity.class);
         query.setParameter("name", name);
 
         List<PersonaEntity> resultList = query.getResultList();

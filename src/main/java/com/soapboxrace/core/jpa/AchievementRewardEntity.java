@@ -5,7 +5,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ACHIEVEMENT_REWARD")
 @NamedQueries({
-        @NamedQuery(name = "AchievementRewardEntity.findByDescription", query = "SELECT obj FROM AchievementRewardEntity obj WHERE obj.internalRewardDescription = :description")
+        @NamedQuery(name = "AchievementRewardEntity.findByDescription", query = "SELECT obj FROM " +
+                "AchievementRewardEntity obj WHERE obj.internalRewardDescription = :description")
 })
 public class AchievementRewardEntity {
 

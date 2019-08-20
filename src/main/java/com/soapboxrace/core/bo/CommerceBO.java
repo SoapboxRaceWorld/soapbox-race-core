@@ -97,11 +97,14 @@ public class CommerceBO {
         ListDifferences<CustomVinylTrans> vinylDifferences = ListDifferences.getDifferences(
                 customCarTrans.getVinyls().getCustomVinylTrans(), commerceCustomCar.getVinyls().getCustomVinylTrans());
         ListDifferences<PerformancePartTrans> performancePartDifferences = ListDifferences.getDifferences(
-                customCarTrans.getPerformanceParts().getPerformancePartTrans(), commerceCustomCar.getPerformanceParts().getPerformancePartTrans());
+                customCarTrans.getPerformanceParts().getPerformancePartTrans(),
+                commerceCustomCar.getPerformanceParts().getPerformancePartTrans());
         ListDifferences<VisualPartTrans> visualPartDifferences = ListDifferences.getDifferences(
-                customCarTrans.getVisualParts().getVisualPartTrans(), commerceCustomCar.getVisualParts().getVisualPartTrans());
+                customCarTrans.getVisualParts().getVisualPartTrans(),
+                commerceCustomCar.getVisualParts().getVisualPartTrans());
         ListDifferences<SkillModPartTrans> skillModPartDifferences = ListDifferences.getDifferences(
-                customCarTrans.getSkillModParts().getSkillModPartTrans(), commerceCustomCar.getSkillModParts().getSkillModPartTrans());
+                customCarTrans.getSkillModParts().getSkillModPartTrans(),
+                commerceCustomCar.getSkillModParts().getSkillModPartTrans());
 
         Map<Integer, Object> addedItems = new HashMap<>();
         Map<Integer, Object> removedItems = new HashMap<>();
@@ -146,7 +149,8 @@ public class CommerceBO {
                         else
                             removeBoost += (int) productEntity.getPrice();
                     } else {
-                        InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaId, addedItem.getKey());
+                        InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaId,
+                                addedItem.getKey());
 
                         if (inventoryItemEntity != null) {
                             inventoryBO.decrementUsage(personaId, addedItem.getKey());
@@ -177,7 +181,8 @@ public class CommerceBO {
 
         if (commerceSessionTrans.getEntitlementsToSell().getItems() != null) {
             commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans().forEach(e -> {
-                InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId, e.getEntitlementId());
+                InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId
+                        , e.getEntitlementId());
 
                 if (inventoryItemEntity != null && inventoryItemEntity.getRemainingUseCount() >= e.getQuantity()) {
                     inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() - e.getQuantity());
@@ -341,7 +346,8 @@ public class CommerceBO {
         Float finalTopSpeed1 = carClassesEntity.getTsVar1().floatValue() * th;
         Float finalTopSpeed2 = carClassesEntity.getTsVar2().floatValue() * ta;
         Float finalTopSpeed3 = carClassesEntity.getTsVar3().floatValue() * tt;
-        Float finalTopSpeed = (finalConstant * carClassesEntity.getTsStock().floatValue()) + finalTopSpeed1 + finalTopSpeed2
+        Float finalTopSpeed =
+                (finalConstant * carClassesEntity.getTsStock().floatValue()) + finalTopSpeed1 + finalTopSpeed2
                 + finalTopSpeed3;
 
         Float finalAccel1 = carClassesEntity.getAcVar1().floatValue() * th;
@@ -353,7 +359,8 @@ public class CommerceBO {
         Float finalHandling1 = carClassesEntity.getHaVar1().floatValue() * th;
         Float finalHandling2 = carClassesEntity.getHaVar2().floatValue() * ta;
         Float finalHandling3 = carClassesEntity.getHaVar3().floatValue() * tt;
-        Float finalHandling = (finalConstant * carClassesEntity.getHaStock().floatValue()) + finalHandling1 + finalHandling2
+        Float finalHandling =
+                (finalConstant * carClassesEntity.getHaStock().floatValue()) + finalHandling1 + finalHandling2
                 + finalHandling3;
 
         Float finalClass = (finalTopSpeed.intValue() + finalAccel.intValue() + finalHandling.intValue()) / 3f;

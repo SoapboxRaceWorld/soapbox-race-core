@@ -24,7 +24,8 @@ public class Handshake implements IHandshake {
 
         SocketClient socketClient = new SocketClient(xmppIp, xmppPort);
         socketClient.send("<?xml version='1.0' ?><stream:stream to='" + xmppIp
-                + "' xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams' version='1.0' xml:lang='en'>");
+                + "' xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams' version='1.0' " +
+                "xml:lang='en'>");
         String receive = socketClient.receive();
         while (!receive.contains("</stream:features>")) {
             receive = socketClient.receive();
@@ -34,8 +35,10 @@ public class Handshake implements IHandshake {
         openFireTalk = new StandardOpenFireTalk(socketClient.getSocket());
         TlsWrapper.wrapXmppTalk(openFireTalk);
         openFireTalk.write("<?xml version='1.0' ?><stream:stream to='" + xmppIp
-                + "' xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams' version='1.0' xml:lang='en'>");
-        openFireTalk.write("<iq id='EA-Chat-1' type='get'><query xmlns='jabber:iq:auth'><username>sbrw.engine.engine</username></query></iq>");
+                + "' xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/streams' version='1.0' " +
+                "xml:lang='en'>");
+        openFireTalk.write("<iq id='EA-Chat-1' type='get'><query xmlns='jabber:iq:auth'><username>sbrw.engine" +
+                ".engine</username></query></iq>");
         openFireTalk.read();
 
         String resource = "EA_Chat";
@@ -48,9 +51,11 @@ public class Handshake implements IHandshake {
             }
         }
 
-        openFireTalk.write("<iq xml:lang='en' id='EA-Chat-2' type='set'><query xmlns='jabber:iq:auth'><username>sbrw.engine.engine</username><password>"
+        openFireTalk.write("<iq xml:lang='en' id='EA-Chat-2' type='set'><query xmlns='jabber:iq:auth'><username>sbrw" +
+                ".engine.engine</username><password>"
                 + parameterBO.getStrParam("OPENFIRE_TOKEN") + "</password><resource>" + resource
-                + "</resource><clientlock xmlns='http://www.jabber.com/schemas/clientlocking.xsd' id='900'>57b8914527daff651df93557aef0387e5aa60fae</clientlock></query></iq>");
+                + "</resource><clientlock xmlns='http://www.jabber.com/schemas/clientlocking.xsd' " +
+                "id='900'>57b8914527daff651df93557aef0387e5aa60fae</clientlock></query></iq>");
         openFireTalk.read();
         openFireTalk.write("<presence><show>chat</show><status>Online</status><priority>0</priority></presence>");
         openFireTalk.write(" ");

@@ -17,13 +17,15 @@ public class PersonaBadgeDAO extends BaseDAO<PersonaBadgeEntity> {
     }
 
     public List<PersonaBadgeEntity> findAllBadgesForPersona(Long personaId) {
-        return this.entityManager.createNamedQuery("PersonaBadgeEntity.findAllBadgesForPersona", PersonaBadgeEntity.class)
+        return this.entityManager.createNamedQuery("PersonaBadgeEntity.findAllBadgesForPersona",
+                PersonaBadgeEntity.class)
                 .setParameter("personaId", personaId)
                 .getResultList();
     }
 
     public PersonaBadgeEntity findBadgeInSlotForPersona(Long personaId, Integer slot) {
-        TypedQuery<PersonaBadgeEntity> query = this.entityManager.createNamedQuery("PersonaBadgeEntity.findBadgeInSlotForPersona", PersonaBadgeEntity.class)
+        TypedQuery<PersonaBadgeEntity> query = this.entityManager.createNamedQuery("PersonaBadgeEntity" +
+                ".findBadgeInSlotForPersona", PersonaBadgeEntity.class)
                 .setParameter("personaId", personaId)
                 .setParameter("slot", slot);
         List<PersonaBadgeEntity> results = query.getResultList();

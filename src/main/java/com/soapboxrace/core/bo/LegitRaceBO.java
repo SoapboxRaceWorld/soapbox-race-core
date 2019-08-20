@@ -15,7 +15,8 @@ public class LegitRaceBO {
     @EJB
     private SocialBO socialBo;
 
-    public boolean isLegit(Long activePersonaId, ArbitrationPacket arbitrationPacket, EventSessionEntity sessionEntity) {
+    public boolean isLegit(Long activePersonaId, ArbitrationPacket arbitrationPacket,
+                           EventSessionEntity sessionEntity) {
         int minimumTime = 0;
 
         if (arbitrationPacket instanceof PursuitArbitrationPacket)
@@ -31,7 +32,8 @@ public class LegitRaceBO {
         boolean legit = timeDiff > minimumTime + 1;
 
         if (!legit) {
-            socialBo.sendReport(0L, activePersonaId, 3, String.format("Abnormal event time: %d", timeDiff), (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
+            socialBo.sendReport(0L, activePersonaId, 3, String.format("Abnormal event time: %d", timeDiff),
+                    (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
         }
         if (arbitrationPacket.getHacksDetected() > 0) {
             socialBo.sendReport(0L, activePersonaId, 3, "hacksDetected > 0", (int) arbitrationPacket.getCarId(), 0,

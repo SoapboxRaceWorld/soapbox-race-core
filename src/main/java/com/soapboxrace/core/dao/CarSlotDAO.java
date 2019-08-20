@@ -27,7 +27,8 @@ public class CarSlotDAO extends BaseDAO<CarSlotEntity> {
         PersonaEntity personaEntity = new PersonaEntity();
         personaEntity.setPersonaId(personaId);
 
-        TypedQuery<CarSlotEntity> query = entityManager.createNamedQuery("CarSlotEntity.findByPersonaId", CarSlotEntity.class);
+        TypedQuery<CarSlotEntity> query = entityManager.createNamedQuery("CarSlotEntity.findByPersonaId",
+                CarSlotEntity.class);
         query.setParameter("persona", personaEntity);
         return query.getResultList();
     }

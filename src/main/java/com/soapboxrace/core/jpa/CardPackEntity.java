@@ -6,7 +6,8 @@ import java.util.List;
 @Entity
 @Table(name = "CARD_PACK")
 @NamedQueries({
-        @NamedQuery(name = "CardPackEntity.findByEntitlementTag", query = "SELECT obj FROM CardPackEntity obj WHERE obj.entitlementTag = :entitlementTag")
+        @NamedQuery(name = "CardPackEntity.findByEntitlementTag", query = "SELECT obj FROM CardPackEntity obj WHERE " +
+                "obj.entitlementTag = :entitlementTag")
 })
 public class CardPackEntity {
 

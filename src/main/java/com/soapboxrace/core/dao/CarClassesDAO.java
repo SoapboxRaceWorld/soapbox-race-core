@@ -21,7 +21,8 @@ public class CarClassesDAO extends BaseDAO<CarClassesEntity> {
     }
 
     public CarClassesEntity findByProductId(String productId) {
-        TypedQuery<CarClassesEntity> query = entityManager.createQuery("SELECT obj FROM CarClassesEntity obj WHERE obj.productId = :productId", CarClassesEntity.class);
+        TypedQuery<CarClassesEntity> query = entityManager.createQuery("SELECT obj FROM CarClassesEntity obj WHERE " +
+                "obj.productId = :productId", CarClassesEntity.class);
         query.setParameter("productId", productId);
         try {
             return query.getSingleResult();
@@ -32,7 +33,8 @@ public class CarClassesDAO extends BaseDAO<CarClassesEntity> {
     }
 
     public CarClassesEntity findByHash(int hash) {
-        TypedQuery<CarClassesEntity> query = entityManager.createQuery("SELECT obj FROM CarClassesEntity obj WHERE obj.hash = :hash", CarClassesEntity.class);
+        TypedQuery<CarClassesEntity> query = entityManager.createQuery("SELECT obj FROM CarClassesEntity obj WHERE " +
+                "obj.hash = :hash", CarClassesEntity.class);
         query.setParameter("hash", hash);
         try {
             return query.getSingleResult();

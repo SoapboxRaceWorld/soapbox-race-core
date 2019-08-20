@@ -23,7 +23,8 @@ public class VinylProductDAO extends BaseDAO<VinylProductEntity> {
     }
 
     public VinylProductEntity findByHash(Integer hash) {
-        TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByHash", VinylProductEntity.class);
+        TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByHash",
+                VinylProductEntity.class);
         query.setParameter("hash", hash);
 
         List<VinylProductEntity> resultList = query.getResultList();
@@ -31,15 +32,18 @@ public class VinylProductDAO extends BaseDAO<VinylProductEntity> {
     }
 
     public VinylProductEntity findByProductId(String productId) {
-        TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByProductId", VinylProductEntity.class);
+        TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByProductId",
+                VinylProductEntity.class);
         query.setParameter("productId", productId);
 
         List<VinylProductEntity> resultList = query.getResultList();
         return !resultList.isEmpty() ? resultList.get(0) : null;
     }
 
-    public List<VinylProductEntity> findByCategoryLevelEnabled(CategoryEntity category, int minLevel, Boolean enabled, Boolean premium) {
-        TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByCategoryLevelEnabled", VinylProductEntity.class);
+    public List<VinylProductEntity> findByCategoryLevelEnabled(CategoryEntity category, int minLevel, Boolean enabled
+            , Boolean premium) {
+        TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity" +
+                ".findByCategoryLevelEnabled", VinylProductEntity.class);
         query.setParameter("category", category);
         query.setParameter("enabled", enabled);
         query.setParameter("minLevel", minLevel);

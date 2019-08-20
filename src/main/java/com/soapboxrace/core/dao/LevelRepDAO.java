@@ -18,7 +18,8 @@ public class LevelRepDAO extends BaseDAO<LevelRepEntity> {
     }
 
     public LevelRepEntity findByLevel(Long level) {
-        TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findByLevel", LevelRepEntity.class);
+        TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findByLevel",
+                LevelRepEntity.class);
         query.setParameter("level", level);
 
         List<LevelRepEntity> resultList = query.getResultList();
@@ -26,7 +27,8 @@ public class LevelRepDAO extends BaseDAO<LevelRepEntity> {
     }
 
     public List<LevelRepEntity> findAll() {
-        TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findAll", LevelRepEntity.class);
+        TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findAll",
+                LevelRepEntity.class);
         return query.getResultList();
     }
 }

@@ -22,7 +22,8 @@ public class InviteTicketDAO extends BaseDAO<InviteTicketEntity> {
     }
 
     public InviteTicketEntity findByTicket(String ticket) {
-        TypedQuery<InviteTicketEntity> query = entityManager.createNamedQuery("InviteTicketEntity.findByTicket", InviteTicketEntity.class);
+        TypedQuery<InviteTicketEntity> query = entityManager.createNamedQuery("InviteTicketEntity.findByTicket",
+                InviteTicketEntity.class);
         query.setParameter("ticket", ticket);
 
         List<InviteTicketEntity> resultList = query.getResultList();
@@ -30,7 +31,8 @@ public class InviteTicketDAO extends BaseDAO<InviteTicketEntity> {
     }
 
     public InviteTicketEntity findByDiscordName(String discordName) {
-        TypedQuery<InviteTicketEntity> query = entityManager.createNamedQuery("InviteTicketEntity.findByDiscordName", InviteTicketEntity.class);
+        TypedQuery<InviteTicketEntity> query = entityManager.createNamedQuery("InviteTicketEntity.findByDiscordName",
+                InviteTicketEntity.class);
         query.setParameter("discordName", discordName);
         List<InviteTicketEntity> resultList = query.getResultList();
         InviteTicketEntity inviteTicketEntity = null;

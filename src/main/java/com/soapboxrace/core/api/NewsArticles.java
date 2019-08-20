@@ -23,7 +23,8 @@ public class NewsArticles {
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_XML)
-    public ArrayOfNewsArticleTrans newsArticles(@HeaderParam("userID") Long userID, @HeaderParam("securityToken") String securityToken) {
+    public ArrayOfNewsArticleTrans newsArticles(@HeaderParam("userID") Long userID,
+                                                @HeaderParam("securityToken") String securityToken) {
         return newsArticleBO.getNewsArticles(tokenSessionBO.getActivePersonaId(securityToken));
     }
 }

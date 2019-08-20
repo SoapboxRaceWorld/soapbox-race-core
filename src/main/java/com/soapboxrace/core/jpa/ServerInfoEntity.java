@@ -9,7 +9,8 @@ import java.util.List;
 @Table(name = "SERVER_INFO")
 @NamedQueries({ //
         @NamedQuery(name = "ServerInfoEntity.findAll", query = "SELECT obj FROM ServerInfoEntity obj"), //
-        @NamedQuery(name = "ServerInfoEntity.updateNumberOfRegistered", query = "UPDATE ServerInfoEntity obj SET obj.numberOfRegistered=obj.numberOfRegistered+1") //
+        @NamedQuery(name = "ServerInfoEntity.updateNumberOfRegistered", query = "UPDATE ServerInfoEntity obj SET obj" +
+                ".numberOfRegistered=obj.numberOfRegistered+1") //
 })
 public class ServerInfoEntity {
     @Column(length = 1000)

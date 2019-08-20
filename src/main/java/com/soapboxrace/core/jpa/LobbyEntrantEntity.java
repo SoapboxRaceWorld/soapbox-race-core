@@ -6,7 +6,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "LOBBY_ENTRANT")
 @NamedQueries({ //
-        @NamedQuery(name = "LobbyEntrantEntity.deleteByPersona", query = "DELETE FROM LobbyEntrantEntity obj WHERE obj.persona = :persona") //
+        @NamedQuery(name = "LobbyEntrantEntity.deleteByPersona", query = "DELETE FROM LobbyEntrantEntity obj WHERE " +
+                "obj.persona = :persona") //
 })
 public class LobbyEntrantEntity implements Comparable<LobbyEntrantEntity> {
 
@@ -16,7 +17,8 @@ public class LobbyEntrantEntity implements Comparable<LobbyEntrantEntity> {
 
     @ManyToOne
     @XmlTransient
-    @JoinColumn(name = "PERSONAID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBYENTRANT_PERSONA"))
+    @JoinColumn(name = "PERSONAID", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
+            "FK_LOBBYENTRANT_PERSONA"))
     private PersonaEntity persona;
 
     @ManyToOne

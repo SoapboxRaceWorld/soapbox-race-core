@@ -7,7 +7,8 @@ import java.util.List;
 @Table(name = "REWARD_TABLE")
 @NamedQueries({
         @NamedQuery(name = "RewardTableEntity.findAll", query = "SELECT obj FROM RewardTableEntity obj"),
-        @NamedQuery(name = "RewardTableEntity.findByName", query = "SELECT obj FROM RewardTableEntity obj WHERE obj.name = :name")
+        @NamedQuery(name = "RewardTableEntity.findByName", query = "SELECT obj FROM RewardTableEntity obj WHERE obj" +
+                ".name = :name")
 })
 public class RewardTableEntity {
 

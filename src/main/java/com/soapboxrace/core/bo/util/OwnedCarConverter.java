@@ -157,7 +157,8 @@ public class OwnedCarConverter {
 
     public static void performanceParts2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
         ArrayList<PerformancePartEntity> performancePartEntityList = new ArrayList<>();
-        List<PerformancePartTrans> performancePartTransList = customCarTrans.getPerformanceParts().getPerformancePartTrans();
+        List<PerformancePartTrans> performancePartTransList =
+                customCarTrans.getPerformanceParts().getPerformancePartTrans();
         for (PerformancePartTrans performancePartTransTmp : performancePartTransList) {
             PerformancePartEntity performancePartEntity = new PerformancePartEntity();
             performancePartEntity.setCustomCar(customCarEntity);

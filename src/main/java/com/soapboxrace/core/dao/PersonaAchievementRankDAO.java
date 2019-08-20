@@ -19,13 +19,15 @@ public class PersonaAchievementRankDAO extends BaseDAO<PersonaAchievementRankEnt
     }
 
     public List<PersonaAchievementRankEntity> findAllByPersonaId(Long personaId) {
-        TypedQuery<PersonaAchievementRankEntity> query = this.entityManager.createNamedQuery("PersonaAchievementRankEntity.findAllByPersonaId", PersonaAchievementRankEntity.class);
+        TypedQuery<PersonaAchievementRankEntity> query = this.entityManager.createNamedQuery(
+                "PersonaAchievementRankEntity.findAllByPersonaId", PersonaAchievementRankEntity.class);
         query.setParameter("personaId", personaId);
         return query.getResultList();
     }
 
     public PersonaAchievementRankEntity findByPersonaIdAndAchievementRankId(Long personaId, Long achievementRankId) {
-        TypedQuery<PersonaAchievementRankEntity> query = this.entityManager.createNamedQuery("PersonaAchievementRankEntity.findByPersonaIdAndAchievementRankId", PersonaAchievementRankEntity.class);
+        TypedQuery<PersonaAchievementRankEntity> query = this.entityManager.createNamedQuery(
+                "PersonaAchievementRankEntity.findByPersonaIdAndAchievementRankId", PersonaAchievementRankEntity.class);
         query.setParameter("personaId", personaId);
         query.setParameter("achievementRankId", achievementRankId);
 
@@ -34,8 +36,11 @@ public class PersonaAchievementRankDAO extends BaseDAO<PersonaAchievementRankEnt
         return results.isEmpty() ? null : results.get(0);
     }
 
-    public PersonaAchievementRankEntity findHighestCompletedRankOfAchievementByPersona(Long personaId, Long achievementId) {
-        TypedQuery<PersonaAchievementRankEntity> query = this.entityManager.createNamedQuery("PersonaAchievementRankEntity.findHighestCompletedRankOfAchievementByPersona", PersonaAchievementRankEntity.class);
+    public PersonaAchievementRankEntity findHighestCompletedRankOfAchievementByPersona(Long personaId,
+                                                                                       Long achievementId) {
+        TypedQuery<PersonaAchievementRankEntity> query = this.entityManager.createNamedQuery(
+                "PersonaAchievementRankEntity.findHighestCompletedRankOfAchievementByPersona",
+                PersonaAchievementRankEntity.class);
         query.setParameter("personaId", personaId);
         query.setParameter("achievementId", achievementId);
 
@@ -51,7 +56,8 @@ public class PersonaAchievementRankDAO extends BaseDAO<PersonaAchievementRankEnt
     }
 
     public void deleteByPersona(PersonaEntity personaEntity) {
-        List<PersonaAchievementRankEntity> personaAchievementRankEntities = findAllByPersonaId(personaEntity.getPersonaId());
+        List<PersonaAchievementRankEntity> personaAchievementRankEntities =
+                findAllByPersonaId(personaEntity.getPersonaId());
 
         for (PersonaAchievementRankEntity personaAchievementRankEntity : personaAchievementRankEntities) {
             delete(personaAchievementRankEntity);

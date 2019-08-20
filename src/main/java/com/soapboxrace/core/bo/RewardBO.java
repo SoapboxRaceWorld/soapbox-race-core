@@ -60,13 +60,31 @@ public class RewardBO {
         return (long) (personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
     }
 
-    public LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, PersonaEntity personaEntity, EventEntity eventEntity) {
+    public LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, PersonaEntity personaEntity,
+                                          EventEntity eventEntity) {
         LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
         if (!parameterBO.getBoolParam("ENABLE_DROP_ITEM")) {
             return luckyDrawInfo;
         }
         ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
         LuckyDrawItem itemFromProduct = getItemFromProduct(personaEntity, eventEntity, rank);
+        if (itemFromProduct == null) {
+            return luckyDrawInfo;
+        }
+        arrayOfLuckyDrawItem.getLuckyDrawItem().add(itemFromProduct);
+        luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
+        luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
+        return luckyDrawInfo;
+    }
+
+    public LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, PersonaEntity personaEntity,
+                                          TreasureHuntConfigEntity treasureHuntConfigEntity) {
+        LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
+        if (!parameterBO.getBoolParam("ENABLE_DROP_ITEM")) {
+            return luckyDrawInfo;
+        }
+        ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
+        LuckyDrawItem itemFromProduct = getItemFromProduct(personaEntity, treasureHuntConfigEntity, rank);
         if (itemFromProduct == null) {
             return luckyDrawInfo;
         }
@@ -118,6 +136,25 @@ public class RewardBO {
             return getItemFromProduct(personaEntity);
         }
 
+        return getLuckyDrawItem(personaEntity, rewardTableEntity);
+    }
+
+    public LuckyDrawItem getItemFromProduct(PersonaEntity personaEntity,
+                                            TreasureHuntConfigEntity treasureHuntConfigEntity, Integer rank) {
+        if (treasureHuntConfigEntity == null) {
+            return getItemFromProduct(personaEntity);
+        }
+
+        RewardTableEntity rewardTableEntity = treasureHuntConfigEntity.getRewardTableEntity();
+
+        if (rewardTableEntity == null) {
+            return getItemFromProduct(personaEntity);
+        }
+
+        return getLuckyDrawItem(personaEntity, rewardTableEntity);
+    }
+
+    private LuckyDrawItem getLuckyDrawItem(PersonaEntity personaEntity, RewardTableEntity rewardTableEntity) {
         LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
         ItemRewardBase rewardBase = itemRewardBO.getGenerator().weightedRandomTableItem(rewardTableEntity.getId());
 
@@ -147,9 +184,12 @@ public class RewardBO {
             luckyDrawItem.setVirtualItem("TOKEN_REWARD");
             luckyDrawItem.setVirtualItemType("REWARD");
             luckyDrawItem.setWasSold(false);
-            // GM_CATALOG_00000190 is not the correct label to use. EA's server seemed to think it had formatting arguments.
+            // GM_CATALOG_00000190 is not the correct label to use. EA's server seemed to think it had formatting
+            // arguments.
             // LB_CASH actually accepts a formatting argument!
             luckyDrawItem.setDescription("LB_CASH," + rewardCash.getCash());
+
+            driverPersonaBO.updateCash(personaEntity, personaEntity.getCash() + rewardCash.getCash());
         } else {
             return null;
         }
@@ -212,7 +252,8 @@ public class RewardBO {
         }
         personaDao.update(personaEntity);
 
-        AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp, personaEntity.getLevel(), hasLevelChanged, isInEvent);
+        AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp,
+                personaEntity.getLevel(), hasLevelChanged, isInEvent);
 
         achievementBO.updateAchievements(personaEntity.getPersonaId(), "PROGRESSION", new HashMap<String, Object>() {{
             put("persona", personaEntity);
@@ -242,7 +283,8 @@ public class RewardBO {
         }
     }
 
-    public void setSkillMultiplierReward(PersonaEntity personaEntity, RewardVO rewardVO, SkillModRewardType skillModRewardType) {
+    public void setSkillMultiplierReward(PersonaEntity personaEntity, RewardVO rewardVO,
+                                         SkillModRewardType skillModRewardType) {
         CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
         List<SkillModPartEntity> skillModParts = defaultCarEntity.getOwnedCar().getCustomCar().getSkillModParts();
         float skillMultiplier = 0f;
@@ -263,11 +305,26 @@ public class RewardBO {
         rewardVO.add(0, (int) finalCash, EnumRewardCategory.SKILL_MOD, EnumRewardType.TOKEN_AMPLIFIER);
     }
 
-    public Accolades getAccolades(PersonaEntity personaEntity, EventEntity eventEntity, ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
+    public Accolades getAccolades(PersonaEntity personaEntity, EventEntity eventEntity,
+                                  ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
         Accolades accolades = new Accolades();
         accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
-        accolades.setLuckyDrawInfo(getLuckyDrawInfo(arbitrationPacket.getRank(), personaEntity.getLevel(), personaEntity, eventEntity));
+        accolades.setLuckyDrawInfo(getLuckyDrawInfo(arbitrationPacket.getRank(), personaEntity.getLevel(),
+                personaEntity, eventEntity));
+        accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+        accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
+        return accolades;
+    }
+
+    public Accolades getAccolades(PersonaEntity personaEntity, TreasureHuntConfigEntity treasureHuntConfigEntity,
+                                  ArbitrationPacket arbitrationPacket,
+                                  RewardVO rewardVO) {
+        Accolades accolades = new Accolades();
+        accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
+        accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
+        accolades.setLuckyDrawInfo(getLuckyDrawInfo(arbitrationPacket.getRank(), personaEntity.getLevel(),
+                personaEntity, treasureHuntConfigEntity));
         accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
         return accolades;
@@ -297,8 +354,10 @@ public class RewardBO {
     }
 
     public void setAmplifierReward(PersonaEntity personaEntity, RewardVO rewardVO) {
-        InventoryItemEntity repAmp = inventoryItemDao.findByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(), "REP_AMPLIFIER_2X");
-        InventoryItemEntity cashAmp = inventoryItemDao.findByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(), "CASH_AMPLIFIER_2X");
+        InventoryItemEntity repAmp = inventoryItemDao.findByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(),
+                "REP_AMPLIFIER_2X");
+        InventoryItemEntity cashAmp = inventoryItemDao.findByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(),
+                "CASH_AMPLIFIER_2X");
 
         if (repAmp != null) {
             rewardVO.add(rewardVO.getRep(), 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
@@ -323,11 +382,14 @@ public class RewardBO {
         return (int) baseRewardResult;
     }
 
-    public void setBaseReward(PersonaEntity personaEntity, EventEntity eventEntity, ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
+    public void setBaseReward(PersonaEntity personaEntity, EventEntity eventEntity,
+                              ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
         float baseRep = (float) eventEntity.getBaseRepReward();
         float baseCash = (float) eventEntity.getBaseCashReward();
-        Float playerLevelRepConst = getPlayerLevelConst(personaEntity.getLevel(), eventEntity.getLevelRepRewardMultiplier());
-        Float playerLevelCashConst = getPlayerLevelConst(personaEntity.getLevel(), eventEntity.getLevelCashRewardMultiplier());
+        Float playerLevelRepConst = getPlayerLevelConst(personaEntity.getLevel(),
+                eventEntity.getLevelRepRewardMultiplier());
+        Float playerLevelCashConst = getPlayerLevelConst(personaEntity.getLevel(),
+                eventEntity.getLevelCashRewardMultiplier());
         Float timeConst = getTimeConst(eventEntity.getLegitTime(), arbitrationPacket.getEventDurationInMilliseconds());
         rewardVO.setBaseRep(getBaseReward(baseRep, playerLevelRepConst, timeConst));
         rewardVO.setBaseCash(getBaseReward(baseCash, playerLevelCashConst, timeConst));
@@ -374,8 +436,8 @@ public class RewardBO {
         }
         float baseRep = rewardVO.getBaseRep();
         float baseCash = rewardVO.getBaseCash();
-        int rankRepResult = (int)(baseRep * rankRepMultiplier);
-        int cashRepResult = (int)(baseCash * rankCashMultiplier);
+        int rankRepResult = (int) (baseRep * rankRepMultiplier);
+        int cashRepResult = (int) (baseCash * rankCashMultiplier);
         rewardVO.add(rankRepResult, cashRepResult, EnumRewardCategory.BONUS, EnumRewardType.NONE);
     }
 
@@ -401,8 +463,8 @@ public class RewardBO {
         float cashMultiplier = parameterBO.getFloatParam(cashMultiplierStr);
         float baseRep = rewardVO.getBaseRep();
         float baseCash = rewardVO.getBaseCash();
-        int repReward = (int)(baseRep * rewardValue * rewardMultiplier);
-        int cashReward = (int)(baseCash * rewardValue * cashMultiplier);
+        int repReward = (int) (baseRep * rewardValue * rewardMultiplier);
+        int cashReward = (int) (baseCash * rewardValue * cashMultiplier);
         rewardVO.add(repReward, cashReward, EnumRewardCategory.PURSUIT, enumRewardType);
     }
 }

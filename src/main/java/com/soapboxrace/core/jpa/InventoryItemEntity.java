@@ -14,16 +14,20 @@ import java.time.LocalDateTime;
                 query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = :inventoryId"),
         @NamedQuery(
                 name = "InventoryItemEntity.findAllByPersonaId",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = :personaId"),
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
+                        ":personaId"),
         @NamedQuery(
                 name = "InventoryItemEntity.findAllByInventoryIdAndType",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = :inventoryId AND obj.virtualItemType = :virtualItemType"),
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = :inventoryId AND obj" +
+                        ".virtualItemType = :virtualItemType"),
         @NamedQuery(
                 name = "InventoryItemEntity.findAllByPersonaIdAndTag",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = :personaId AND obj.entitlementTag = :entitlementTag"),
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
+                        ":personaId AND obj.entitlementTag = :entitlementTag"),
         @NamedQuery(
                 name = "InventoryItemEntity.findAllByPersonaIdAndHash",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = :personaId AND obj.hash = :hash")
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
+                        ":personaId AND obj.hash = :hash")
 })
 public class InventoryItemEntity {
 

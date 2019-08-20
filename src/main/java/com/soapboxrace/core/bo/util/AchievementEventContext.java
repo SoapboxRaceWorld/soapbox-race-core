@@ -13,7 +13,8 @@ public class AchievementEventContext {
 
     private final EventSessionEntity eventSessionEntity;
 
-    public AchievementEventContext(EventMode eventMode, ArbitrationPacket arbitrationPacket, EventSessionEntity eventSessionEntity) {
+    public AchievementEventContext(EventMode eventMode, ArbitrationPacket arbitrationPacket,
+                                   EventSessionEntity eventSessionEntity) {
         this.eventMode = eventMode;
         this.eventModeInt = eventMode.getEventModeId();
         this.arbitrationPacket = arbitrationPacket;

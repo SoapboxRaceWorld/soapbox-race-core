@@ -11,7 +11,8 @@ public class AchievementProgressionContext {
 
     private final boolean inEvent;
 
-    public AchievementProgressionContext(Integer cash, Integer rep, Integer level, boolean levelChanged, boolean inEvent) {
+    public AchievementProgressionContext(Integer cash, Integer rep, Integer level, boolean levelChanged,
+                                         boolean inEvent) {
         this.cash = cash;
         this.rep = rep;
         this.level = level;

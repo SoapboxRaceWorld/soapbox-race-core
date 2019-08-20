@@ -18,7 +18,8 @@ public class LoginAnnouncementBO {
     private ParameterBO parameterBO;
 
     public LoginAnnouncementsDefinition getLoginAnnouncements() {
-        ArrayOfLoginAnnouncementDefinition arrayOfLoginAnnouncementDefinition = new ArrayOfLoginAnnouncementDefinition();
+        ArrayOfLoginAnnouncementDefinition arrayOfLoginAnnouncementDefinition =
+                new ArrayOfLoginAnnouncementDefinition();
 
         List<LoginAnnouncementEntity> listOfLoginAnnoucement = loginAnnoucementDao.findAll();
         for (LoginAnnouncementEntity entity : listOfLoginAnnoucement) {

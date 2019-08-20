@@ -14,7 +14,8 @@ public class PaintEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PAINT_CUSTOMCAR"))
+    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
+            "FK_PAINT_CUSTOMCAR"))
     private CustomCarEntity customCar;
 
     @Column(name = "paintGroup")

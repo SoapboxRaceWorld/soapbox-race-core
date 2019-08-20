@@ -5,8 +5,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "HARDWARE_INFO")
 @NamedQueries({ //
-        @NamedQuery(name = "HardwareInfoEntity.findByHardwareHash", query = "SELECT obj FROM HardwareInfoEntity obj WHERE obj.hardwareHash = :hardwareHash"), //
-        @NamedQuery(name = "HardwareInfoEntity.findByUserId", query = "SELECT obj FROM HardwareInfoEntity obj WHERE obj.userId = :userId") //
+        @NamedQuery(name = "HardwareInfoEntity.findByHardwareHash", query = "SELECT obj FROM HardwareInfoEntity obj " +
+                "WHERE obj.hardwareHash = :hardwareHash"), //
+        @NamedQuery(name = "HardwareInfoEntity.findByUserId", query = "SELECT obj FROM HardwareInfoEntity obj WHERE " +
+                "obj.userId = :userId") //
 })
 public class HardwareInfoEntity {
 

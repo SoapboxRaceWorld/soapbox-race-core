@@ -21,7 +21,8 @@ public class RewardRouteBO extends RewardBO {
     @EJB
     private LegitRaceBO legitRaceBO;
 
-    public Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket, EventSessionEntity eventSessionEntity) {
+    public Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket,
+                                       EventSessionEntity eventSessionEntity) {
         if (!legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity)) {
             return new Accolades();
         }

@@ -18,7 +18,8 @@ public class RecoveryPassword {
     @POST
     @Path("/resetPassword")
     @Produces(MediaType.TEXT_HTML)
-    public String resetPassord(@FormParam("password") String password, @FormParam("passwordconf") String passwordconf, @FormParam("randomKey") String randomKey) {
+    public String resetPassord(@FormParam("password") String password, @FormParam("passwordconf") String passwordconf
+            , @FormParam("randomKey") String randomKey) {
         if (password == null || passwordconf == null || randomKey == null || password.isEmpty() || passwordconf.isEmpty() || randomKey.isEmpty()) {
             return "ERROR: empty values!";
         }

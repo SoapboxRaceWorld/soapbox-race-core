@@ -41,7 +41,8 @@ public class EventResultDragBO {
     @EJB
     private AchievementBO achievementBO;
 
-    public DragEventResult handleDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId, DragArbitrationPacket dragArbitrationPacket) {
+    public DragEventResult handleDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
+                                         DragArbitrationPacket dragArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
@@ -96,12 +97,15 @@ public class EventResultDragBO {
         }
 
         DragEventResult dragEventResult = new DragEventResult();
-        dragEventResult.setAccolades(rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket, eventSessionEntity));
-        dragEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, dragArbitrationPacket, dragArbitrationPacket.getNumberOfCollisions()));
+        dragEventResult.setAccolades(rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket,
+                eventSessionEntity));
+        dragEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, dragArbitrationPacket,
+                dragArbitrationPacket.getNumberOfCollisions()));
         dragEventResult.setEntrants(arrayOfDragEntrantResult);
         dragEventResult.setEventId(eventDataEntity.getEvent().getId());
         dragEventResult.setEventSessionId(eventSessionId);
-        dragEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM : ExitPath.EXIT_TO_LOBBY);
+        dragEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM :
+                ExitPath.EXIT_TO_LOBBY);
         dragEventResult.setInviteLifetimeInMilliseconds(0);
         dragEventResult.setLobbyInviteId(0);
         dragEventResult.setPersonaId(activePersonaId);

@@ -286,7 +286,8 @@ public class LobbyBO {
 
         private OpenFireSoapBoxCli openFireSoapBoxCli;
 
-        public LobbyCountDown(Long lobbyId, LobbyDAO lobbyDao, EventSessionDAO eventSessionDao, TokenSessionDAO tokenDAO, ParameterBO parameterBO,
+        public LobbyCountDown(Long lobbyId, LobbyDAO lobbyDao, EventSessionDAO eventSessionDao,
+                              TokenSessionDAO tokenDAO, ParameterBO parameterBO,
                               OpenFireSoapBoxCli openFireSoapBoxCli) {
             this.lobbyId = lobbyId;
             this.lobbyDao = lobbyDao;

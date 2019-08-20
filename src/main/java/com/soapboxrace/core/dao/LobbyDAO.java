@@ -31,7 +31,8 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
         LocalDateTime dateNow = LocalDateTime.now();
         LocalDateTime datePast = LocalDateTime.now().minusSeconds(35);
 
-        TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findAllOpenByCarClass", LobbyEntity.class);
+        TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findAllOpenByCarClass",
+                LobbyEntity.class);
         query.setParameter("dateTime1", datePast);
         query.setParameter("dateTime2", dateNow);
         query.setParameter("carClassHash", carClassHash);
@@ -64,7 +65,8 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
         EventEntity eventEntity = new EventEntity();
         eventEntity.setId(eventId);
 
-        TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findByEventStarted", LobbyEntity.class);
+        TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findByEventStarted",
+                LobbyEntity.class);
         query.setParameter("event", eventEntity);
         query.setParameter("dateTime1", datePast);
         query.setParameter("dateTime2", dateNow);
@@ -77,7 +79,8 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
         EventEntity eventEntity = new EventEntity();
         eventEntity.setId(eventId);
 
-        TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findByEventAndPersona", LobbyEntity.class);
+        TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findByEventAndPersona",
+                LobbyEntity.class);
         query.setParameter("event", eventEntity);
         query.setParameter("dateTime1", datePast);
         query.setParameter("dateTime2", dateNow);

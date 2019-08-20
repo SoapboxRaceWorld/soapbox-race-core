@@ -14,7 +14,6 @@ import com.soapboxrace.jaxb.util.UnmarshalXML;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.InputStream;
 
 @Path("/event")
@@ -42,7 +41,7 @@ public class Event {
     @Path("/launched")
     @Produces(MediaType.APPLICATION_XML)
     public String launched(@HeaderParam("securityToken") String securityToken,
-                      @QueryParam("eventSessionId") Long eventSessionId) {
+                           @QueryParam("eventSessionId") Long eventSessionId) {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
         eventBO.createEventDataSession(activePersonaId, eventSessionId);
         return "";
@@ -63,25 +62,27 @@ public class Event {
         switch (eventMode) {
             case CIRCUIT:
             case SPRINT:
-                RouteArbitrationPacket routeArbitrationPacket = UnmarshalXML.unMarshal(arbitrationXml, RouteArbitrationPacket.class);
+                RouteArbitrationPacket routeArbitrationPacket = UnmarshalXML.unMarshal(arbitrationXml,
+                        RouteArbitrationPacket.class);
                 eventResult = eventResultBO.handleRaceEnd(eventSessionEntity, activePersonaId,
                         routeArbitrationPacket);
                 break;
             case DRAG:
-                DragArbitrationPacket dragArbitrationPacket = UnmarshalXML.unMarshal(arbitrationXml, DragArbitrationPacket.class);
+                DragArbitrationPacket dragArbitrationPacket = UnmarshalXML.unMarshal(arbitrationXml,
+                        DragArbitrationPacket.class);
                 eventResult = eventResultBO.handleDragEnd(eventSessionEntity, activePersonaId, dragArbitrationPacket);
                 break;
             case PURSUIT_MP:
                 TeamEscapeArbitrationPacket teamEscapeArbitrationPacket = UnmarshalXML.unMarshal(arbitrationXml,
                         TeamEscapeArbitrationPacket.class);
                 eventResult = eventResultBO.handleTeamEscapeEnd(eventSessionEntity, activePersonaId,
-                    teamEscapeArbitrationPacket);
+                        teamEscapeArbitrationPacket);
                 break;
             case PURSUIT_SP:
                 PursuitArbitrationPacket pursuitArbitrationPacket = UnmarshalXML.unMarshal(arbitrationXml,
                         PursuitArbitrationPacket.class);
                 eventResult = eventResultBO.handlePursitEnd(eventSessionEntity, activePersonaId,
-                    pursuitArbitrationPacket, false);
+                        pursuitArbitrationPacket, false);
                 break;
             case MEETINGPLACE:
             default:
@@ -102,7 +103,8 @@ public class Event {
     public String bust(InputStream bustXml, @HeaderParam("securityToken") String securityToken, @QueryParam(
             "eventSessionId") Long eventSessionId) {
         EventSessionEntity eventSessionEntity = eventBO.findEventSessionById(eventSessionId);
-        PursuitArbitrationPacket pursuitArbitrationPacket = UnmarshalXML.unMarshal(bustXml, PursuitArbitrationPacket.class);
+        PursuitArbitrationPacket pursuitArbitrationPacket = UnmarshalXML.unMarshal(bustXml,
+                PursuitArbitrationPacket.class);
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
         return MarshalXML.marshal(eventResultBO.handlePursitEnd(eventSessionEntity, activePersonaId,
                 pursuitArbitrationPacket, true));

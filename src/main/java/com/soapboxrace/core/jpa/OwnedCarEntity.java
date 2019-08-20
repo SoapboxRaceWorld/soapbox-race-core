@@ -20,7 +20,8 @@ public class OwnedCarEntity {
     private LocalDateTime expirationDate;
     private String ownershipType = "CustomizedCar";
 
-    @OneToOne(mappedBy = "ownedCar", targetEntity = CustomCarEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "ownedCar", targetEntity = CustomCarEntity.class, fetch = FetchType.LAZY, cascade =
+            CascadeType.ALL)
     private CustomCarEntity customCar;
 
     public Long getId() {

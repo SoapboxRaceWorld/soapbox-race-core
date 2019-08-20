@@ -14,6 +14,7 @@ public class LocalDateTimeToStringConverter implements AttributeConverter<LocalD
 
     @Override
     public LocalDateTime convertToEntityAttribute(String timestamp) {
-        return (timestamp == null || timestamp.trim().isEmpty()) ? null : LocalDateTime.parse(timestamp, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+        return (timestamp == null || timestamp.trim().isEmpty()) ? null : LocalDateTime.parse(timestamp,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
     }
 }

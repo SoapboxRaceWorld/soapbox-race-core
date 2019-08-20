@@ -18,7 +18,8 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
     }
 
     public List<InventoryItemEntity> findAllWithExpirationDate() {
-        return entityManager.createNamedQuery("InventoryItemEntity.findAllWithExpirationDate", InventoryItemEntity.class)
+        return entityManager.createNamedQuery("InventoryItemEntity.findAllWithExpirationDate",
+                InventoryItemEntity.class)
                 .getResultList();
     }
 
@@ -35,7 +36,8 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
     }
 
     public List<InventoryItemEntity> findAllByInventoryAndType(Long inventoryId, String type) {
-        return entityManager.createNamedQuery("InventoryItemEntity.findAllByInventoryIdAndType", InventoryItemEntity.class)
+        return entityManager.createNamedQuery("InventoryItemEntity.findAllByInventoryIdAndType",
+                InventoryItemEntity.class)
                 .setParameter("inventoryId", inventoryId)
                 .setParameter("virtualItemType", type)
                 .getResultList();
@@ -49,7 +51,8 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
     }
 
     public InventoryItemEntity findByPersonaIdAndHash(Long personaId, Integer hash) {
-        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaIdAndHash", InventoryItemEntity.class);
+        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity" +
+                ".findAllByPersonaIdAndHash", InventoryItemEntity.class);
         query.setParameter("personaId", personaId);
         query.setParameter("hash", hash);
 
@@ -63,7 +66,8 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
     }
 
     public InventoryItemEntity findByPersonaIdAndEntitlementTag(Long personaId, String entitlementTag) {
-        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaIdAndTag", InventoryItemEntity.class);
+        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity" +
+                ".findAllByPersonaIdAndTag", InventoryItemEntity.class);
         query.setParameter("personaId", personaId);
         query.setParameter("entitlementTag", entitlementTag);
 

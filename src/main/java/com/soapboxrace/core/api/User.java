@@ -3,8 +3,8 @@ package com.soapboxrace.core.api;
 import com.soapboxrace.core.api.util.LauncherChecks;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
-import com.soapboxrace.core.dao.SocialRelationshipDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.SocialRelationshipDAO;
 import com.soapboxrace.core.exception.EngineException;
 import com.soapboxrace.core.exception.EngineExceptionCode;
 import com.soapboxrace.core.jpa.BanEntity;
@@ -64,7 +64,7 @@ public class User {
     @Path("GetPermanentSession")
     @Produces(MediaType.APPLICATION_XML)
     public Response getPermanentSession(@HeaderParam("securityToken") String securityToken,
-                                 @HeaderParam("userId") Long userId) {
+                                        @HeaderParam("userId") Long userId) {
         UserEntity userEntity = tokenBO.getUser(securityToken);
         BanEntity ban = authenticationBO.checkUserBan(userEntity);
 
@@ -98,7 +98,7 @@ public class User {
     @Path("SecureLoginPersona")
     @Produces(MediaType.APPLICATION_XML)
     public String secureLoginPersona(@HeaderParam("securityToken") String securityToken,
-                                  @HeaderParam("userId") Long userId,
+                                     @HeaderParam("userId") Long userId,
                                      @QueryParam("personaId") Long personaId) {
         tokenBO.setActivePersonaId(securityToken, personaId, false);
         userBO.secureLoginPersona(userId, personaId);
@@ -109,7 +109,8 @@ public class User {
     @Secured
     @Path("SecureLogoutPersona")
     @Produces(MediaType.APPLICATION_XML)
-    public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId,
+    public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken,
+                                      @HeaderParam("userId") Long userId,
                                       @QueryParam("personaId") Long personaId) {
         long activePersonaId = tokenBO.getActivePersonaId(securityToken);
         tokenBO.setActivePersonaId(securityToken, 0L, true);

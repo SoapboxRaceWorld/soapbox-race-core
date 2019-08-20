@@ -26,7 +26,8 @@ public class RewardTeamEscapeBO extends RewardBO {
     @EJB
     private LegitRaceBO legitRaceBO;
 
-    public Accolades getTeamEscapeAccolades(Long activePersonaId, TeamEscapeArbitrationPacket teamEscapeArbitrationPacket,
+    public Accolades getTeamEscapeAccolades(Long activePersonaId,
+                                            TeamEscapeArbitrationPacket teamEscapeArbitrationPacket,
                                             EventSessionEntity eventSessionEntity) {
         int finishReason = teamEscapeArbitrationPacket.getFinishReason();
         if (!legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity) && finishReason != 22) {
@@ -54,10 +55,13 @@ public class RewardTeamEscapeBO extends RewardBO {
         setPursitParamReward(teamEscapeArbitrationPacket.getCopsDisabled(), EnumRewardType.COP_CARS_DISABLED, rewardVO);
         setPursitParamReward(teamEscapeArbitrationPacket.getCopsRammed(), EnumRewardType.COP_CARS_RAMMED, rewardVO);
         setPursitParamReward(teamEscapeArbitrationPacket.getCostToState(), EnumRewardType.COST_TO_STATE, rewardVO);
-        setPursitParamReward(teamEscapeArbitrationPacket.getEventDurationInMilliseconds(), EnumRewardType.PURSUIT_LENGTH, rewardVO);
+        setPursitParamReward(teamEscapeArbitrationPacket.getEventDurationInMilliseconds(),
+                EnumRewardType.PURSUIT_LENGTH, rewardVO);
         setPursitParamReward(teamEscapeArbitrationPacket.getInfractions(), EnumRewardType.INFRACTIONS, rewardVO);
-        setPursitParamReward(teamEscapeArbitrationPacket.getRoadBlocksDodged(), EnumRewardType.ROADBLOCKS_DODGED, rewardVO);
-        setPursitParamReward(teamEscapeArbitrationPacket.getSpikeStripsDodged(), EnumRewardType.SPIKE_STRIPS_DODGED, rewardVO);
+        setPursitParamReward(teamEscapeArbitrationPacket.getRoadBlocksDodged(), EnumRewardType.ROADBLOCKS_DODGED,
+                rewardVO);
+        setPursitParamReward(teamEscapeArbitrationPacket.getSpikeStripsDodged(), EnumRewardType.SPIKE_STRIPS_DODGED,
+                rewardVO);
 
         setTopSpeedReward(eventEntity, teamEscapeArbitrationPacket.getTopSpeed(), rewardVO);
         setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.BOUNTY_HUNTER);

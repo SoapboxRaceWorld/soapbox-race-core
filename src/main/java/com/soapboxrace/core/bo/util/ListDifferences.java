@@ -51,6 +51,7 @@ public class ListDifferences<T> {
 
     @Override
     public String toString() {
-        return String.format("ListDifferences{added=%s/kept=%s/removed=%s}", this.getAdded(), this.getKept(), this.getRemoved());
+        return String.format("ListDifferences{added=%s/kept=%s/removed=%s}", this.getAdded(), this.getKept(),
+                this.getRemoved());
     }
 }

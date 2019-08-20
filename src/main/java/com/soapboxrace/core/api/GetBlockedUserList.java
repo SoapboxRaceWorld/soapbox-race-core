@@ -2,7 +2,6 @@ package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.SocialRelationshipBO;
-import com.soapboxrace.jaxb.http.ArrayOfLong;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;

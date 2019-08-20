@@ -24,7 +24,8 @@ import java.util.OptionalInt;
 
 @Stateless
 public class AchievementBO {
-    private final ThreadLocal<NashornScriptEngine> scriptEngine = ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
+    private final ThreadLocal<NashornScriptEngine> scriptEngine =
+            ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
     @EJB
     private ItemRewardBO itemRewardBO;
     @EJB
@@ -59,7 +60,8 @@ public class AchievementBO {
     }
 
     public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
-        PersonaAchievementRankEntity personaAchievementRankEntity = personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, achievementRankId);
+        PersonaAchievementRankEntity personaAchievementRankEntity =
+                personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, achievementRankId);
 
         if (personaAchievementRankEntity == null) {
             throw new IllegalArgumentException(personaId + " does not have " + achievementRankId);
@@ -109,7 +111,8 @@ public class AchievementBO {
             achievementDefinitionPacket.setProgressText(achievementEntity.getProgressText());
             achievementDefinitionPacket.setStatConversion(StatConversion.fromValue(achievementEntity.getStatConversion()));
 
-            PersonaAchievementEntity personaAchievementEntity = personaAchievementDAO.findByPersonaIdAndAchievementId(personaId, achievementEntity.getId());
+            PersonaAchievementEntity personaAchievementEntity =
+                    personaAchievementDAO.findByPersonaIdAndAchievementId(personaId, achievementEntity.getId());
 
             if (personaAchievementEntity != null) {
                 achievementDefinitionPacket.setCanProgress(personaAchievementEntity.isCanProgress());
@@ -132,7 +135,9 @@ public class AchievementBO {
                 rankPacket.setState(AchievementState.LOCKED);
                 rankPacket.setThresholdValue(achievementRankEntity.getThresholdValue());
 
-                PersonaAchievementRankEntity personaAchievementRankEntity = personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, achievementRankEntity.getId());
+                PersonaAchievementRankEntity personaAchievementRankEntity =
+                        personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId,
+                                achievementRankEntity.getId());
 
                 if (personaAchievementRankEntity != null) {
                     rankPacket.setState(AchievementState.fromValue(personaAchievementRankEntity.getState()));
@@ -201,9 +206,11 @@ public class AchievementBO {
             bindings.put("personaAchievement", personaAchievementEntity);
 
             try {
-                Boolean shouldUpdate = (Boolean) scriptEngine.get().eval(achievementEntity.getUpdateTrigger(), bindings);
+                Boolean shouldUpdate = (Boolean) scriptEngine.get().eval(achievementEntity.getUpdateTrigger(),
+                        bindings);
                 if (shouldUpdate) {
-                    updateAchievement(personaId, achievementEntity, bindings, achievementsAwarded, personaAchievementEntity);
+                    updateAchievement(personaId, achievementEntity, bindings, achievementsAwarded,
+                            personaAchievementEntity);
                 }
             } catch (ScriptException ex) {
                 ex.printStackTrace();
@@ -212,13 +219,16 @@ public class AchievementBO {
 
         achievementsAwarded.setPersonaId(personaId);
 
-        XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded = new XMPP_ResponseTypeAchievementsAwarded();
+        XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded =
+                new XMPP_ResponseTypeAchievementsAwarded();
         responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
 
         openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaId);
     }
 
-    private void updateAchievement(Long personaId, AchievementEntity achievementEntity, Bindings bindings, AchievementsAwarded achievementsAwarded, PersonaAchievementEntity personaAchievementEntity) {
+    private void updateAchievement(Long personaId, AchievementEntity achievementEntity, Bindings bindings,
+                                   AchievementsAwarded achievementsAwarded,
+                                   PersonaAchievementEntity personaAchievementEntity) {
         // If no progression can be made, there's nothing to do.
         if (!personaAchievementEntity.isCanProgress()) {
             return;
@@ -264,17 +274,20 @@ public class AchievementBO {
                     .max();
             if (maxVal.isPresent()) {
                 long newVal = Math.max(0, Math.min(maxVal.getAsInt(),
-                        achievementEntity.getShouldOverwriteProgress() ? cleanVal : (personaAchievementEntity.getCurrentValue() + cleanVal)));
+                        achievementEntity.getShouldOverwriteProgress() ? cleanVal :
+                                (personaAchievementEntity.getCurrentValue() + cleanVal)));
 
                 for (int i = 0; i < achievementEntity.getRanks().size(); i++) {
                     AchievementRankEntity previous = null;
                     AchievementRankEntity current = achievementEntity.getRanks().get(i);
                     PersonaAchievementRankEntity previousRank = null;
-                    PersonaAchievementRankEntity currentRank = personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, current.getId());
+                    PersonaAchievementRankEntity currentRank =
+                            personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, current.getId());
 
                     if (i > 0) {
                         previous = achievementEntity.getRanks().get(i - 1);
-                        previousRank = personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, previous.getId());
+                        previousRank = personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId,
+                                previous.getId());
 
                         if (previousRank == null) {
                             previousRank = createPersonaAchievementRank(personaAchievementEntity, previous);

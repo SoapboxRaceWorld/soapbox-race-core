@@ -43,12 +43,14 @@ public class PersonaBO {
                 throw new RuntimeException("Invalid SlotId: " + badgeInput.getSlotId());
             }
 
-            BadgeDefinitionEntity badgeDefinitionEntity = badgeDefinitionDAO.find((long) badgeInput.getBadgeDefinitionId());
+            BadgeDefinitionEntity badgeDefinitionEntity =
+                    badgeDefinitionDAO.find((long) badgeInput.getBadgeDefinitionId());
             if (badgeDefinitionEntity == null) {
                 throw new RuntimeException("Invalid BadgeDefinitionId: " + badgeInput.getBadgeDefinitionId());
             }
 
-            PersonaBadgeEntity personaBadgeEntity = personaBadgeDAO.findBadgeInSlotForPersona(personaId, (int) badgeInput.getSlotId());
+            PersonaBadgeEntity personaBadgeEntity = personaBadgeDAO.findBadgeInSlotForPersona(personaId,
+                    (int) badgeInput.getSlotId());
             if (personaBadgeEntity == null) {
                 personaBadgeEntity = new PersonaBadgeEntity();
                 personaBadgeEntity.setBadgeDefinitionEntity(badgeDefinitionEntity);

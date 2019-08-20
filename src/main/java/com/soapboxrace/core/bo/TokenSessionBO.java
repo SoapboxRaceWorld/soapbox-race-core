@@ -14,12 +14,10 @@ import com.soapboxrace.jaxb.login.LoginStatusVO;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.NotAuthorizedException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.Base64;
 import java.util.Date;
 
 @Stateless

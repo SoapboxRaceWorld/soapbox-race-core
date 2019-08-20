@@ -23,7 +23,8 @@ public class RecoveryPasswordDAO extends BaseDAO<RecoveryPasswordEntity> {
     }
 
     public RecoveryPasswordEntity findByUserId(Long userId) {
-        TypedQuery<RecoveryPasswordEntity> query = entityManager.createNamedQuery("RecoveryPasswordEntity.findByUserId", RecoveryPasswordEntity.class);
+        TypedQuery<RecoveryPasswordEntity> query = entityManager.createNamedQuery("RecoveryPasswordEntity" +
+                ".findByUserId", RecoveryPasswordEntity.class);
         query.setParameter("userId", userId);
 
         List<RecoveryPasswordEntity> resultList = query.getResultList();
@@ -31,14 +32,16 @@ public class RecoveryPasswordDAO extends BaseDAO<RecoveryPasswordEntity> {
     }
 
     public List<RecoveryPasswordEntity> findAllOpenByUserId(Long userId) {
-        TypedQuery<RecoveryPasswordEntity> query = entityManager.createNamedQuery("RecoveryPasswordEntity.findAllOpenByUserId", RecoveryPasswordEntity.class);
+        TypedQuery<RecoveryPasswordEntity> query = entityManager.createNamedQuery("RecoveryPasswordEntity" +
+                ".findAllOpenByUserId", RecoveryPasswordEntity.class);
         query.setParameter("userId", userId);
         query.setParameter("expirationDate", new Date());
         return query.getResultList();
     }
 
     public RecoveryPasswordEntity findByRandomKey(String randomKey) {
-        TypedQuery<RecoveryPasswordEntity> query = entityManager.createNamedQuery("RecoveryPasswordEntity.findByRandomKey", RecoveryPasswordEntity.class);
+        TypedQuery<RecoveryPasswordEntity> query = entityManager.createNamedQuery("RecoveryPasswordEntity" +
+                ".findByRandomKey", RecoveryPasswordEntity.class);
         query.setParameter("randomKey", randomKey);
 
         List<RecoveryPasswordEntity> resultList = query.getResultList();

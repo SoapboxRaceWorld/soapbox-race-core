@@ -22,7 +22,8 @@ public class NewsArticleDAO extends BaseDAO<NewsArticleEntity> {
     }
 
     public List<NewsArticleEntity> findAllByPersona(Long personaId) {
-        TypedQuery<NewsArticleEntity> query = entityManager.createNamedQuery("NewsArticleEntity.findAllByPersona", NewsArticleEntity.class);
+        TypedQuery<NewsArticleEntity> query = entityManager.createNamedQuery("NewsArticleEntity.findAllByPersona",
+                NewsArticleEntity.class);
 
         query.setParameter("id", personaId);
 
@@ -30,7 +31,8 @@ public class NewsArticleDAO extends BaseDAO<NewsArticleEntity> {
     }
 
     public List<NewsArticleEntity> findAllByReferencedPersona(Long personaId) {
-        TypedQuery<NewsArticleEntity> query = entityManager.createNamedQuery("NewsArticleEntity.findAllByReferencedPersona", NewsArticleEntity.class);
+        TypedQuery<NewsArticleEntity> query = entityManager.createNamedQuery("NewsArticleEntity" +
+                ".findAllByReferencedPersona", NewsArticleEntity.class);
 
         query.setParameter("id", personaId);
 

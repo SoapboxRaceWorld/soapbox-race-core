@@ -3,11 +3,6 @@ package com.soapboxrace.core.api;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.SocialRelationshipBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.SocialRelationshipDAO;
-import com.soapboxrace.core.exception.EngineException;
-import com.soapboxrace.core.exception.EngineExceptionCode;
-import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;

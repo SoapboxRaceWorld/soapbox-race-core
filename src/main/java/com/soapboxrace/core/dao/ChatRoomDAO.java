@@ -22,7 +22,8 @@ public class ChatRoomDAO extends BaseDAO<ChatRoomEntity> {
     }
 
     public List<ChatRoomEntity> findAll() {
-        TypedQuery<ChatRoomEntity> query = entityManager.createNamedQuery("ChatRoomEntity.findAll", ChatRoomEntity.class);
+        TypedQuery<ChatRoomEntity> query = entityManager.createNamedQuery("ChatRoomEntity.findAll",
+                ChatRoomEntity.class);
         return query.getResultList();
     }
 

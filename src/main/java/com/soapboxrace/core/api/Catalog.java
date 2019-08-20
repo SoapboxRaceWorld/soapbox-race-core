@@ -28,11 +28,13 @@ public class Catalog {
     @Secured
     @Path("/productsInCategory")
     @Produces(MediaType.APPLICATION_XML)
-    public ArrayOfProductTrans productsInCategory(@HeaderParam("securityToken") String securityToken, @QueryParam("categoryName") String categoryName,
+    public ArrayOfProductTrans productsInCategory(@HeaderParam("securityToken") String securityToken, @QueryParam(
+            "categoryName") String categoryName,
                                                   @QueryParam("clientProductType") String clientProductType) {
         ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-        List<ProductEntity> productsInCategory = productBO.productsInCategory(categoryName, clientProductType, activePersonaId);
+        List<ProductEntity> productsInCategory = productBO.productsInCategory(categoryName, clientProductType,
+                activePersonaId);
         for (ProductEntity productEntity : productsInCategory) {
             ProductTrans productTrans = new ProductTrans();
             productTrans.setBundleItems(new ArrayOfProductTrans());

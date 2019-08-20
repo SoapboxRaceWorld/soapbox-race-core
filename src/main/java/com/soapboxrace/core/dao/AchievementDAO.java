@@ -18,24 +18,28 @@ public class AchievementDAO extends BaseDAO<AchievementEntity> {
     }
 
     public List<AchievementEntity> findAll() {
-        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findAll", AchievementEntity.class);
+        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findAll",
+                AchievementEntity.class);
         return query.getResultList();
     }
 
     public AchievementEntity findByName(String name) {
-        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findByName", AchievementEntity.class);
+        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findByName",
+                AchievementEntity.class);
         query.setParameter("name", name);
         return query.getSingleResult();
     }
 
     public List<AchievementEntity> findAllByCategory(String category) {
-        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findAllByCategory", AchievementEntity.class);
+        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity" +
+                ".findAllByCategory", AchievementEntity.class);
         query.setParameter("category", category);
         return query.getResultList();
     }
 
     public List<AchievementEntity> findAllVisible(String category) {
-        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findAllVisible", AchievementEntity.class);
+        TypedQuery<AchievementEntity> query = this.entityManager.createNamedQuery("AchievementEntity.findAllVisible",
+                AchievementEntity.class);
         return query.getResultList();
     }
 }
