@@ -54,10 +54,18 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-ext.genOutputDir = file("$buildDir/generated-resources")
+def generatedResources = "$buildDir/generated-resources/main"
+sourceSets {
+    main {
+        //let's register an output folder on the main SourceSet:
+        output.dir(generatedResources, builtBy: 'generateMyResources')
+        //it is now a part of the 'main' classpath and will be a part of the jar
+    }
+}
 
-task generatePropInfo {
-    ext.outputFile = file("$genOutputDir/project-info.properties")
+//a task that generates the resources:
+task generateMyResources {
+    def outputFile = generatedResources + "/project-info.properties"
     outputs.file(outputFile)
     println("Generating project-info.properties")
     doLast {
@@ -77,5 +85,3 @@ task explodedWar(type: Sync) {
 }
 
 war.finalizedBy(explodedWar)
-
-sourceSets.main.output.dir genOutputDir, builtBy: generatePropInfo
