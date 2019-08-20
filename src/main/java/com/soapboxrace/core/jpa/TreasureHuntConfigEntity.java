@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "TREASURE_HUNT_CONFIG")
 @NamedQueries({
         @NamedQuery(name = "TreasureHuntConfigEntity.findConfigForStreak", query = "SELECT obj FROM " +
-                "TreasureHuntConfigEntity obj WHERE obj.streak >= :streak")
+                "TreasureHuntConfigEntity obj WHERE obj.streak <= :streak ORDER BY obj.streak DESC")
 })
 public class TreasureHuntConfigEntity {
 
@@ -18,7 +18,7 @@ public class TreasureHuntConfigEntity {
     @Column(name = "streak")
     private Integer streak;
 
-    @OneToOne(targetEntity = RewardTableEntity.class, optional = false)
+    @ManyToOne(targetEntity = RewardTableEntity.class, optional = false)
     @JoinColumn(referencedColumnName = "ID", name = "reward_table_id")
     private RewardTableEntity rewardTableEntity;
 
