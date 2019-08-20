@@ -9,6 +9,7 @@ import com.soapboxrace.jaxb.http.InventoryTrans;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -30,7 +31,7 @@ public class InventoryBO {
     @EJB
     private VirtualItemDAO virtualItemDAO;
 
-    @Schedule(minute = "*", hour = "*")
+    @Schedule(minute = "*/2", hour = "*")
     public void removeExpiredItems() {
         for (InventoryItemEntity inventoryItemEntity : inventoryItemDAO.findAllWithExpirationDate()) {
             if (inventoryItemEntity.getExpirationDate().isBefore(LocalDateTime.now())) {
@@ -39,11 +40,11 @@ public class InventoryBO {
         }
     }
 
-    public InventoryItemEntity addFromCatalog(ProductEntity productEntity, PersonaEntity personaEntity) {
+    public InventoryItemEntity addFromCatalog(ProductEntity productEntity, @NotNull PersonaEntity personaEntity) {
         return addFromCatalog(productEntity, personaEntity, -1);
     }
 
-    public InventoryItemEntity addFromCatalog(ProductEntity productEntity, PersonaEntity personaEntity,
+    public InventoryItemEntity addFromCatalog(ProductEntity productEntity, @NotNull PersonaEntity personaEntity,
                                               Integer useCountOverride) {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
 
@@ -51,30 +52,51 @@ public class InventoryBO {
             VirtualItemEntity virtualItemEntity = virtualItemDAO.findByHash(productEntity.getHash());
 
             if (virtualItemEntity != null) {
-                InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-                inventoryItemEntity.setInventoryEntity(inventoryEntity);
-                inventoryItemEntity.setEntitlementTag(virtualItemEntity.getItemName());
+                if ("AMPLIFIER".equalsIgnoreCase(productEntity.getProductType())) {
+                    InventoryItemEntity inventoryItemEntity =
+                            inventoryItemDAO.findByPersonaIdAndHash(personaEntity.getPersonaId(),
+                                    productEntity.getHash());
+                    if (inventoryItemEntity != null) {
+                        if (productEntity.getDurationMinute() > 0) {
+                            inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+                        }
 
-                if (productEntity.getDurationMinute() > 0) {
-                    inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+                        inventoryItemDAO.update(inventoryItemEntity);
+                        return inventoryItemEntity;
+                    } else {
+                        return addToInventory(productEntity, useCountOverride, inventoryEntity, virtualItemEntity);
+                    }
+                } else {
+                    return addToInventory(productEntity, useCountOverride, inventoryEntity, virtualItemEntity);
                 }
-
-                inventoryItemEntity.setHash(virtualItemEntity.getHash());
-                inventoryItemEntity.setProductId("DO NOT USE ME");
-                inventoryItemEntity.setRemainingUseCount(useCountOverride == -1 ? productEntity.getUseCount() :
-                        useCountOverride);
-                inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
-                inventoryItemEntity.setStatus("ACTIVE");
-                inventoryItemEntity.setVirtualItemType(virtualItemEntity.getType());
-
-                updateInventoryCapacities(inventoryEntity, inventoryItemEntity, true);
-                inventoryItemDAO.insert(inventoryItemEntity);
-
-                return inventoryItemEntity;
             }
         }
 
         return null;
+    }
+
+    private InventoryItemEntity addToInventory(ProductEntity productEntity, Integer useCountOverride,
+                                               InventoryEntity inventoryEntity, VirtualItemEntity virtualItemEntity) {
+        InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
+        inventoryItemEntity.setInventoryEntity(inventoryEntity);
+        inventoryItemEntity.setEntitlementTag(virtualItemEntity.getItemName());
+
+        if (productEntity.getDurationMinute() > 0) {
+            inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+        }
+
+        inventoryItemEntity.setHash(virtualItemEntity.getHash());
+        inventoryItemEntity.setProductId("DO NOT USE ME");
+        inventoryItemEntity.setRemainingUseCount(useCountOverride == -1 ? productEntity.getUseCount() :
+                useCountOverride);
+        inventoryItemEntity.setResellPrice((int) productEntity.getResalePrice());
+        inventoryItemEntity.setStatus("ACTIVE");
+        inventoryItemEntity.setVirtualItemType(virtualItemEntity.getType());
+
+        updateInventoryCapacities(inventoryEntity, inventoryItemEntity, true);
+        inventoryItemDAO.insert(inventoryItemEntity);
+
+        return inventoryItemEntity;
     }
 
     public InventoryItemEntity addFromCatalogOrUpdateUsage(ProductEntity productEntity, PersonaEntity personaEntity) {

@@ -51,6 +51,9 @@ public class BasketBO {
     private InventoryItemDAO inventoryItemDao;
 
     @EJB
+    private InventoryBO inventoryBO;
+
+    @EJB
     private TreasureHuntDAO treasureHuntDAO;
 
     @EJB
@@ -238,19 +241,20 @@ public class BasketBO {
         }
 
         if (performPersonaTransaction(personaEntity, productId)) {
-            InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
-            inventoryItemEntity.setInventoryEntity(inventoryEntity);
-            inventoryItemEntity.setRemainingUseCount(0);
-            inventoryItemEntity.setEntitlementTag(entitlementTag);
-            if (productEntity.getDurationMinute() != 0) {
-                inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
-            }
-            inventoryItemEntity.setStatus("ACTIVE");
-            inventoryItemEntity.setVirtualItemType("amplifier");
-            inventoryItemEntity.setProductId("DO NOT USE ME");
-            inventoryItemEntity.setHash(productEntity.getHash());
-
-            inventoryItemDao.insert(inventoryItemEntity);
+//            InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
+//            inventoryItemEntity.setInventoryEntity(inventoryEntity);
+//            inventoryItemEntity.setRemainingUseCount(0);
+//            inventoryItemEntity.setEntitlementTag(entitlementTag);
+//            if (productEntity.getDurationMinute() != 0) {
+//                inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+//            }
+//            inventoryItemEntity.setStatus("ACTIVE");
+//            inventoryItemEntity.setVirtualItemType("amplifier");
+//            inventoryItemEntity.setProductId("DO NOT USE ME");
+//            inventoryItemEntity.setHash(productEntity.getHash());
+//
+//            inventoryItemDao.insert(inventoryItemEntity);
+            inventoryBO.addFromCatalog(productEntity, personaEntity, 0);
 
             return CommerceResultStatus.SUCCESS;
         }
