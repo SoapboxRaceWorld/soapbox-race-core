@@ -2,7 +2,7 @@
   <img src="https://cdn.soapboxrace.world/images/sbrw-512.png" />
 </p>
 
-[![Discord](https://img.shields.io/discord/311140210018615310.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/TUsXvVp)
+![Discord](https://img.shields.io/discord/311140210018615310?label=Discord&logo=discord&style=flat-square)
 
 # SBRW Core
 
