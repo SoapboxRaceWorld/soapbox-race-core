@@ -254,7 +254,7 @@ public class BasketBO {
 //            inventoryItemEntity.setHash(productEntity.getHash());
 //
 //            inventoryItemDao.insert(inventoryItemEntity);
-            inventoryBO.addFromCatalog(productEntity, personaEntity, 0);
+            inventoryBO.addFromCatalog(productEntity, personaEntity);
 
             return CommerceResultStatus.SUCCESS;
         }

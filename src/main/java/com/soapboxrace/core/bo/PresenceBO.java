@@ -1,5 +1,6 @@
 package com.soapboxrace.core.bo;
 
+import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 
 import javax.annotation.PostConstruct;
@@ -16,10 +17,12 @@ public class PresenceBO {
     private RedisBO redisBO;
 
     private StatefulRedisPubSubConnection<String, String> pubSubConnection;
+    private StatefulRedisConnection<String, String> connection;
 
     @PostConstruct
     public void init() {
         this.pubSubConnection = this.redisBO.createPubSub();
+        this.connection = this.redisBO.getConnection();
     }
 
     @PreDestroy
@@ -27,8 +30,7 @@ public class PresenceBO {
         System.out.println("PresenceBO shutdown");
 
         List<String> keys = this.redisBO.getConnection().sync().keys("game_presence.*");
-        this.redisBO.getConnection().sync().del(keys.toArray(new String[0]));
-
+        this.connection.sync().del(keys.toArray(new String[0]));
         this.pubSubConnection.close();
     }
 
@@ -37,7 +39,7 @@ public class PresenceBO {
             Long currentPresence = this.getPresence(personaId);
 
             if (!currentPresence.equals(presence)) {
-                this.redisBO.getConnection().sync().set(getPresenceKey(personaId), presence.toString());
+                this.connection.sync().set(getPresenceKey(personaId), presence.toString());
                 this.pubSubConnection.sync().publish("game_presence_updates", personaId + "|" + presence);
             }
         }
@@ -46,12 +48,12 @@ public class PresenceBO {
     public void removePresence(Long personaId) {
         if (personaId != 0L) {
             updatePresence(personaId, 0L);
-            this.redisBO.getConnection().sync().del(getPresenceKey(personaId));
+            this.connection.sync().del(getPresenceKey(personaId));
         }
     }
 
     public Long getPresence(Long personaId) {
-        String value = this.redisBO.getConnection().sync().get(getPresenceKey(personaId));
+        String value = this.connection.sync().get(getPresenceKey(personaId));
 
         if (value == null || value.trim().isEmpty())
             return 0L;

@@ -26,6 +26,11 @@ public class EventDAO extends BaseDAO<EventEntity> {
         return query.getResultList();
     }
 
+    public List<EventEntity> findAllRotatable() {
+        TypedQuery<EventEntity> query = entityManager.createNamedQuery("EventEntity.findAllRotatable", EventEntity.class);
+        return query.getResultList();
+    }
+
     public List<EventEntity> findByLevel(int level) {
         TypedQuery<EventEntity> query = entityManager.createNamedQuery("EventEntity.findByLevel", EventEntity.class);
         query.setParameter("level", level);

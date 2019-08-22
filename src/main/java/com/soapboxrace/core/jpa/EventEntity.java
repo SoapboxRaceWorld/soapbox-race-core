@@ -7,7 +7,9 @@ import javax.persistence.*;
 @NamedQueries({ //
         @NamedQuery(name = "EventEntity.findAll", query = "SELECT obj FROM EventEntity obj"), //
         @NamedQuery(name = "EventEntity.findByLevel", query = "SELECT obj FROM EventEntity obj WHERE :level >= obj" +
-                ".minLevel AND isEnabled = true") //
+                ".minLevel AND isEnabled = true"), //
+        @NamedQuery(name = "EventEntity.findAllRotatable", query = "SELECT obj FROM EventEntity obj WHERE obj" +
+                ".isRotationEnabled=true")
 })
 public class EventEntity {
 
@@ -27,6 +29,8 @@ public class EventEntity {
     private boolean isEnabled;
     @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
     private boolean isLocked;
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
+    private boolean isRotationEnabled;
     private String name;
     private int baseRepReward;
     private float levelRepRewardMultiplier;
@@ -480,5 +484,13 @@ public class EventEntity {
 
     public void setRewardTableRank8(RewardTableEntity rewardTableRank8) {
         this.rewardTableRank8 = rewardTableRank8;
+    }
+
+    public boolean isRotationEnabled() {
+        return isRotationEnabled;
+    }
+
+    public void setRotationEnabled(boolean rotationEnabled) {
+        isRotationEnabled = rotationEnabled;
     }
 }
