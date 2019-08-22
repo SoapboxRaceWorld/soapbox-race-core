@@ -29,8 +29,9 @@ public class PresenceBO {
     public void shutdown() {
         System.out.println("PresenceBO shutdown");
 
-        List<String> keys = this.redisBO.getConnection().sync().keys("game_presence.*");
-        this.connection.sync().del(keys.toArray(new String[0]));
+        List<String> keys = this.connection.sync().keys("game_presence.*");
+        if (!keys.isEmpty())
+            this.connection.sync().del(keys.toArray(new String[0]));
         this.pubSubConnection.close();
     }
 
