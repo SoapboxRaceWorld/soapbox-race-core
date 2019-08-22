@@ -2,6 +2,8 @@
   <img src="https://cdn.soapboxrace.world/images/sbrw-512.png" />
 </p>
 
+[![Discord](https://img.shields.io/discord/311140210018615310.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/TUsXvVp)
+
 # SBRW Core
 
 ## About/Overview
@@ -13,4 +15,13 @@ The server is an application built to run on the [Wildfly](https://wildfly.org) 
 system. All code is Java 8; no later and no earlier.
 
 ## Installation
-Because installation is a bit of a lengthy process, please refer to
+Because installation is a bit of a lengthy process, please refer to the [Installation](https://github.com/SoapboxRaceWorld/soapbox-race-core/wiki/Installation) wiki page.
+
+## Contributing
+Want to make a contribution? It's easy - just follow these steps:
+1. Fork this repository if you haven't done so already
+2. Create a **new branch** with an appropriate name in relation to your changes
+3. Commit and push your changes (please try to avoid putting in irrelevant changes, focus on your idea)
+4. Make a pull request against this repository. Make sure to explain what you did, how you tested it, and if it is a
+breaking change.
+5. Sit back and wait for feedback on your pull request.
