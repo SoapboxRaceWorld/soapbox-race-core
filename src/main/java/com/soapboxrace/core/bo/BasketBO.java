@@ -90,6 +90,9 @@ public class BasketBO {
         ownedCarTrans1.setHeat(1.0f);
         ownedCarTrans1.setDurability(100);
 
+        if (ownedCarTrans1.getCustomCar() != null)
+            ownedCarTrans1.getCustomCar().setResalePrice(productEntity.getResalePrice());
+
         return ownedCarTrans1;
     }
 
@@ -250,7 +253,8 @@ public class BasketBO {
 //            inventoryItemEntity.setRemainingUseCount(0);
 //            inventoryItemEntity.setEntitlementTag(entitlementTag);
 //            if (productEntity.getDurationMinute() != 0) {
-//                inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity.getDurationMinute()));
+//                inventoryItemEntity.setExpirationDate(LocalDateTime.now().plusMinutes(productEntity
+//                .getDurationMinute()));
 //            }
 //            inventoryItemEntity.setStatus("ACTIVE");
 //            inventoryItemEntity.setVirtualItemType("amplifier");
