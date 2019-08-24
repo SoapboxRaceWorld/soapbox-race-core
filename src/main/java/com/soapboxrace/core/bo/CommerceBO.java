@@ -92,6 +92,26 @@ public class CommerceBO {
         OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
         CustomCarTrans customCarTrans = ownedCarTrans.getCustomCar();
         CustomCarTrans commerceCustomCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
+
+//        for (CustomVinylTrans cvt : commerceCustomCar.getVinyls().getCustomVinylTrans()) {
+//            if (cvt.getScaleX()==3277)
+//                cvt.setScaleX(0);
+//            if (cvt.getScaleY()==3277)
+//                cvt.setScaleY(0);
+//        }
+
+        ArrayOfCustomVinylTrans arrayOfCustomVinylTrans = new ArrayOfCustomVinylTrans();
+
+        for (CustomVinylTrans cvt : commerceCustomCar.getVinyls().getCustomVinylTrans()) {
+            if (cvt.getScaleX() == 3277)
+                cvt.setScaleX(0);
+            if (cvt.getScaleY() == 3277)
+                cvt.setScaleY(0);
+            arrayOfCustomVinylTrans.getCustomVinylTrans().add(cvt);
+        }
+
+        commerceCustomCar.setVinyls(arrayOfCustomVinylTrans);
+
         ListDifferences<CustomPaintTrans> paintDifferences = ListDifferences.getDifferences(
                 customCarTrans.getPaints().getCustomPaintTrans(), commerceCustomCar.getPaints().getCustomPaintTrans());
         ListDifferences<CustomVinylTrans> vinylDifferences = ListDifferences.getDifferences(
