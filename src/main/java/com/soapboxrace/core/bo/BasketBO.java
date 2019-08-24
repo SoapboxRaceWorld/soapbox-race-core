@@ -86,6 +86,10 @@ public class BasketBO {
             ownedCarTrans1.setOwnershipType("RentalCar");
         }
 
+        // do this automatically in case we get any weird data in our table
+        ownedCarTrans1.setHeat(1.0f);
+        ownedCarTrans1.setDurability(100);
+
         return ownedCarTrans1;
     }
 
