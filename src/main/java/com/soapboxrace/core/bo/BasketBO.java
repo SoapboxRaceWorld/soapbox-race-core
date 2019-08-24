@@ -65,6 +65,9 @@ public class BasketBO {
     @EJB
     private DriverPersonaBO driverPersonaBO;
 
+    @EJB
+    private PerformanceBO performanceBO;
+
     public ProductEntity findProduct(String productId) {
         return productDao.findByProductId(productId);
     }
@@ -295,6 +298,8 @@ public class BasketBO {
         }
 
         carSlotDAO.insert(carSlotEntity);
+
+        performanceBO.calcNewCarClass(carSlotEntity.getOwnedCar().getCustomCar());
 
         return carSlotEntity;
     }
