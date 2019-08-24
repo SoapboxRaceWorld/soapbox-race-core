@@ -22,9 +22,6 @@ public class CommerceBO {
     private InventoryBO inventoryBO;
 
     @EJB
-    private CarSlotDAO carSlotDAO;
-
-    @EJB
     private PersonaDAO personaDAO;
 
     @EJB
@@ -34,46 +31,19 @@ public class CommerceBO {
     private VinylProductDAO vinylProductDAO;
 
     @EJB
-    private InventoryDAO inventoryDAO;
-
-    @EJB
     private InventoryItemDAO inventoryItemDAO;
 
     @EJB
     private ParameterBO parameterBO;
 
     @EJB
-    private PaintDAO paintDAO;
-
-    @EJB
-    private PerformancePartDAO performancePartDAO;
-
-    @EJB
-    private SkillModPartDAO skillModPartDAO;
-
-    @EJB
-    private VinylDAO vinylDAO;
-
-    @EJB
-    private VisualPartDAO visualPartDAO;
-
-    @EJB
-    private CarClassesDAO carClassesDAO;
-
-    @EJB
     private CustomCarDAO customCarDAO;
 
     @EJB
-    private OwnedCarDAO ownedCarDAO;
-
-    @EJB
-    private VirtualItemDAO virtualItemDAO;
-
-    @EJB
-    private AchievementBO achievementBO;
-
-    @EJB
     private DriverPersonaBO driverPersonaBO;
+
+    @EJB
+    private PerformanceBO performanceBO;
 
     public OwnedCarTrans responseCar(CommerceSessionTrans commerceSessionTrans) {
         OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
@@ -221,7 +191,7 @@ public class CommerceBO {
         OwnedCarConverter.performanceParts2NewEntity(commerceCustomCar, customCar);
         OwnedCarConverter.visuallParts2NewEntity(commerceCustomCar, customCar);
 
-        calcNewCarClass(customCar);
+        performanceBO.calcNewCarClass(customCar);
 
         customCarDAO.update(customCar);
 
@@ -323,72 +293,6 @@ public class CommerceBO {
 
     private Integer calcProductSellPrice(ProductEntity productEntity) {
         return (int) productEntity.getResalePrice();
-    }
-
-    private void calcNewCarClass(CustomCarEntity customCarEntity) {
-        int physicsProfileHash = customCarEntity.getPhysicsProfileHash();
-        CarClassesEntity carClassesEntity = carClassesDAO.findByHash(physicsProfileHash);
-        if (carClassesEntity == null) {
-            return;
-        }
-        List<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
-        int topSpeed = 0;
-        int accel = 0;
-        int handling = 0;
-        for (PerformancePartEntity performancePartEntity : performanceParts) {
-            int perfHash = performancePartEntity.getPerformancePartAttribHash();
-            ProductEntity productEntity = productDAO.findByHash(perfHash);
-            topSpeed = productEntity.getTopSpeed() + topSpeed;
-            accel = productEntity.getAccel() + accel;
-            handling = productEntity.getHandling() + handling;
-        }
-        float tt = (float) (topSpeed * 0.01);
-        float ta = (float) (accel * 0.01);
-        float th = (float) (handling * 0.01);
-        float totalChanges = 1 / (((tt + ta + th) * 0.666666666666666f) + 1f);
-        tt = tt * totalChanges;
-        ta = ta * totalChanges;
-        th = th * totalChanges;
-        float finalConstant = 1 - tt - ta - th;
-
-        Float finalTopSpeed1 = carClassesEntity.getTsVar1().floatValue() * th;
-        Float finalTopSpeed2 = carClassesEntity.getTsVar2().floatValue() * ta;
-        Float finalTopSpeed3 = carClassesEntity.getTsVar3().floatValue() * tt;
-        Float finalTopSpeed =
-                (finalConstant * carClassesEntity.getTsStock().floatValue()) + finalTopSpeed1 + finalTopSpeed2
-                + finalTopSpeed3;
-
-        Float finalAccel1 = carClassesEntity.getAcVar1().floatValue() * th;
-        Float finalAccel2 = carClassesEntity.getAcVar2().floatValue() * ta;
-        Float finalAccel3 = carClassesEntity.getAcVar3().floatValue() * tt;
-        Float finalAccel = (finalConstant * carClassesEntity.getAcStock().floatValue()) + finalAccel1 + finalAccel2
-                + finalAccel3;
-
-        Float finalHandling1 = carClassesEntity.getHaVar1().floatValue() * th;
-        Float finalHandling2 = carClassesEntity.getHaVar2().floatValue() * ta;
-        Float finalHandling3 = carClassesEntity.getHaVar3().floatValue() * tt;
-        Float finalHandling =
-                (finalConstant * carClassesEntity.getHaStock().floatValue()) + finalHandling1 + finalHandling2
-                + finalHandling3;
-
-        Float finalClass = (finalTopSpeed.intValue() + finalAccel.intValue() + finalHandling.intValue()) / 3f;
-        int finalClassInt = finalClass.intValue();
-
-        // move to new method
-        int carclassHash = 872416321;
-        if (finalClassInt >= 250 && finalClassInt < 400) {
-            carclassHash = 415909161;
-        } else if (finalClassInt >= 400 && finalClassInt < 500) {
-            carclassHash = 1866825865;
-        } else if (finalClassInt >= 500 && finalClassInt < 600) {
-            carclassHash = -406473455;
-        } else if (finalClassInt >= 600 && finalClassInt < 750) {
-            carclassHash = -405837480;
-        } else if (finalClassInt >= 750) {
-            carclassHash = -2142411446;
-        }
-
-        customCarEntity.setCarClassHash(carclassHash);
     }
 
     private void disableItem(ProductEntity productEntity) {
