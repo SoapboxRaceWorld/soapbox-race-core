@@ -51,7 +51,6 @@ public class Personas {
         sessionBO.verifyPersona(securityToken, personaId);
         String xml = new BufferedReader(new InputStreamReader(commerceXml))
                 .lines().collect(Collectors.joining(""));
-        System.out.println(xml);
         CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(xml, CommerceSessionTrans.class);
 
         return commerceBO.doCommerce(commerceSessionTrans, personaId);

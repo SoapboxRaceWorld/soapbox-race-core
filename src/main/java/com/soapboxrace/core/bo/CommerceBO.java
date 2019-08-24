@@ -93,13 +93,6 @@ public class CommerceBO {
         CustomCarTrans customCarTrans = ownedCarTrans.getCustomCar();
         CustomCarTrans commerceCustomCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
 
-//        for (CustomVinylTrans cvt : commerceCustomCar.getVinyls().getCustomVinylTrans()) {
-//            if (cvt.getScaleX()==3277)
-//                cvt.setScaleX(0);
-//            if (cvt.getScaleY()==3277)
-//                cvt.setScaleY(0);
-//        }
-
         ArrayOfCustomVinylTrans arrayOfCustomVinylTrans = new ArrayOfCustomVinylTrans();
 
         for (CustomVinylTrans cvt : commerceCustomCar.getVinyls().getCustomVinylTrans()) {
@@ -252,11 +245,6 @@ public class CommerceBO {
         arrayOfWalletTrans.getWalletTrans().add(boostWallet);
 
         commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
-
-//        achievementBO.updateAchievements(personaEntity.getPersonaId(), "COMMERCE", new HashMap<String, Object>(){{
-//            put("persona", personaEntity);
-//
-//        }});
 
         return commerceSessionResultTrans;
     }
