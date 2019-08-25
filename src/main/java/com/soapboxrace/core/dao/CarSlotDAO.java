@@ -33,6 +33,22 @@ public class CarSlotDAO extends BaseDAO<CarSlotEntity> {
         return query.getResultList();
     }
 
+    public List<CarSlotEntity> findNonRentalsByPersonaId(Long personaId) {
+        PersonaEntity personaEntity = new PersonaEntity();
+        personaEntity.setPersonaId(personaId);
+
+        TypedQuery<CarSlotEntity> query = entityManager.createNamedQuery("CarSlotEntity.findNonRentalsByPersonaId",
+                CarSlotEntity.class);
+        query.setParameter("persona", personaEntity);
+        return query.getResultList();
+    }
+
+    public List<CarSlotEntity> findAllWithExpirationDate() {
+        TypedQuery<CarSlotEntity> query = entityManager.createNamedQuery("CarSlotEntity.findAllWithExpirationDate",
+                CarSlotEntity.class);
+        return query.getResultList();
+    }
+
     public void deleteByPersona(PersonaEntity personaEntity) {
         Query query = entityManager.createNamedQuery("CarSlotEntity.deleteByPersona");
         query.setParameter("persona", personaEntity);

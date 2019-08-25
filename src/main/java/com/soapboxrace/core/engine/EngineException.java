@@ -1,4 +1,4 @@
-package com.soapboxrace.core.exception;
+package com.soapboxrace.core.engine;
 
 public class EngineException extends RuntimeException {
     private final EngineExceptionCode code;

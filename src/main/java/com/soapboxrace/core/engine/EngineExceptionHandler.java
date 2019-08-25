@@ -1,4 +1,4 @@
-package com.soapboxrace.core.exception;
+package com.soapboxrace.core.engine;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 

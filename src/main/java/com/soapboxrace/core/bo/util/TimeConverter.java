@@ -12,7 +12,7 @@ public class TimeConverter {
         try {
             DATATYPE_FACTORY = DatatypeFactory.newInstance();
         } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

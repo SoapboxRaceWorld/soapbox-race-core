@@ -2,8 +2,8 @@ package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.SocialRelationshipDAO;
-import com.soapboxrace.core.exception.EngineException;
-import com.soapboxrace.core.exception.EngineExceptionCode;
+import com.soapboxrace.core.engine.EngineException;
+import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.SocialRelationshipEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;

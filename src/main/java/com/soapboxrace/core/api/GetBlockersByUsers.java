@@ -3,8 +3,8 @@ package com.soapboxrace.core.api;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.SocialRelationshipBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
-import com.soapboxrace.core.exception.EngineException;
-import com.soapboxrace.core.exception.EngineExceptionCode;
+import com.soapboxrace.core.engine.EngineException;
+import com.soapboxrace.core.engine.EngineExceptionCode;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
