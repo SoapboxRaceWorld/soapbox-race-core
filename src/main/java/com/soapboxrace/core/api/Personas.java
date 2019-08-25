@@ -97,8 +97,8 @@ public class Personas {
                                 commerceResultTrans));
                         break;
                     case "AMPLIFIER":
-                        commerceResultTrans.setStatus(basketBO.buyAmplifier(personaEntity, productId,
-                                productEntity.getEntitlementTag()));
+                        commerceResultTrans.setStatus(basketBO.buyAmplifier(personaEntity, productId
+                        ));
                         break;
                 }
             }

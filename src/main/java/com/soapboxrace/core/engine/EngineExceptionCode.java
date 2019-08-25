@@ -1,4 +1,4 @@
-package com.soapboxrace.core.exception;
+package com.soapboxrace.core.engine;
 
 public enum EngineExceptionCode {
     ArgumentNullOrEmpty(4),
