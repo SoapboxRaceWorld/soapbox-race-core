@@ -102,7 +102,6 @@ public class EventsBO {
             treasureHuntEntity.setStreak(treasureHuntEntity.getStreak() + 1);
         }
 
-        treasureHuntEntity.setCoinsCollected(0);
         treasureHuntEntity.setThDate(LocalDate.now().plusDays(1));
         treasureHuntDao.update(treasureHuntEntity);
 
@@ -113,7 +112,6 @@ public class EventsBO {
         treasureHuntEntity.setCoinsCollected(0);
         treasureHuntEntity.setIsStreakBroken(isBroken);
         treasureHuntEntity.setSeed(new Random().nextInt());
-        treasureHuntEntity.setThDate(LocalDate.now());
         treasureHuntDao.update(treasureHuntEntity);
 
         TreasureHuntEventSession treasureHuntEventSession = new TreasureHuntEventSession();
