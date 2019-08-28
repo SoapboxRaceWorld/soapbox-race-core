@@ -48,6 +48,10 @@ public class EventsBO {
 
         LocalDate thDate = treasureHuntEntity.getThDate();
         LocalDate nowDate = LocalDate.now();
+
+        System.out.println(thDate.compareTo(nowDate));
+        System.out.println(thDate.equals(nowDate));
+
         if (!thDate.equals(nowDate)) {
             int days = (int) ChronoUnit.DAYS.between(thDate, nowDate);
             if (days >= 2 || treasureHuntEntity.getCoinsCollected() != 32767) {
@@ -57,6 +61,10 @@ public class EventsBO {
             }
         }
 
+        return getTreasureHuntEventSession(treasureHuntEntity);
+    }
+
+    private TreasureHuntEventSession getTreasureHuntEventSession(TreasureHuntEntity treasureHuntEntity) {
         TreasureHuntEventSession treasureHuntEventSession = new TreasureHuntEventSession();
         treasureHuntEventSession.setCoinsCollected(treasureHuntEntity.getCoinsCollected());
         treasureHuntEventSession.setIsStreakBroken(treasureHuntEntity.getIsStreakBroken());
@@ -69,10 +77,7 @@ public class EventsBO {
     public Accolades notifyCoinCollected(Long activePersonaId, Integer coins) {
         TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
         if (treasureHuntEntity != null) {
-            LocalDate now = LocalDate.now();
-            LocalDate thDate = treasureHuntEntity.getThDate();
-
-            if (thDate.compareTo(now) > 0) {
+            if (treasureHuntEntity.getCoinsCollected()==32767) {
                 throw new EngineException("TH is not ready", EngineExceptionCode.SecurityKickedArbitration);
             }
 
@@ -102,7 +107,7 @@ public class EventsBO {
             treasureHuntEntity.setStreak(treasureHuntEntity.getStreak() + 1);
         }
 
-        treasureHuntEntity.setThDate(LocalDate.now().plusDays(1));
+        treasureHuntEntity.setThDate(LocalDate.now());
         treasureHuntDao.update(treasureHuntEntity);
 
         return getTreasureHuntAccolades(activePersonaId, treasureHuntEntity);
@@ -112,15 +117,10 @@ public class EventsBO {
         treasureHuntEntity.setCoinsCollected(0);
         treasureHuntEntity.setIsStreakBroken(isBroken);
         treasureHuntEntity.setSeed(new Random().nextInt());
+        treasureHuntEntity.setThDate(LocalDate.now());
         treasureHuntDao.update(treasureHuntEntity);
 
-        TreasureHuntEventSession treasureHuntEventSession = new TreasureHuntEventSession();
-        treasureHuntEventSession.setCoinsCollected(treasureHuntEntity.getCoinsCollected());
-        treasureHuntEventSession.setIsStreakBroken(treasureHuntEntity.getIsStreakBroken());
-        treasureHuntEventSession.setNumCoins(treasureHuntEntity.getNumCoins());
-        treasureHuntEventSession.setSeed(treasureHuntEntity.getSeed());
-        treasureHuntEventSession.setStreak(treasureHuntEntity.getStreak());
-        return treasureHuntEventSession;
+        return getTreasureHuntEventSession(treasureHuntEntity);
     }
 
     private Accolades getTreasureHuntAccolades(Long activePersonaId, TreasureHuntEntity treasureHuntEntity) {
