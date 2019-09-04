@@ -167,23 +167,37 @@ public class InventoryBO {
         }
     }
 
+    public void deletePart(Long personaId, Integer hash) {
+        deletePart(personaId, hash, -1);
+    }
+
     /**
      * Delete an inventory item and update the capacity information of its associated inventory.
      *
      * @param personaId The ID of the persona whose inventory contains the item to be deleted.
      * @param hash      The hash of the item to be deleted.
      */
-    public void deletePart(Long personaId, Integer hash) {
+    public void deletePart(Long personaId, Integer hash, Integer quantityToRemove) {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
 
         if (inventoryEntity != null) {
             InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaId, hash);
 
             if (inventoryItemEntity != null) {
+                if (quantityToRemove != -1 && quantityToRemove < inventoryItemEntity.getRemainingUseCount()) {
+                    inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() - quantityToRemove);
+                    inventoryItemDAO.update(inventoryItemEntity);
+                    return;
+                }
+
                 inventoryEntity.getInventoryItems().remove(inventoryItemEntity);
                 updateInventoryCapacities(inventoryEntity, inventoryItemEntity, false);
             }
         }
+    }
+
+    public void deletePart(Long personaId, String entitlementTag) {
+        deletePart(personaId, entitlementTag, -1);
     }
 
     /**
@@ -192,7 +206,7 @@ public class InventoryBO {
      * @param personaId      The ID of the persona whose inventory contains the item to be deleted.
      * @param entitlementTag The entitlement tag of the item to be deleted.
      */
-    public void deletePart(Long personaId, String entitlementTag) {
+    public void deletePart(Long personaId, String entitlementTag, Integer quantityToRemove) {
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
 
         if (inventoryEntity != null) {
@@ -200,6 +214,12 @@ public class InventoryBO {
                     entitlementTag);
 
             if (inventoryItemEntity != null) {
+                if (quantityToRemove != -1 && quantityToRemove < inventoryItemEntity.getRemainingUseCount()) {
+                    inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() - quantityToRemove);
+                    inventoryItemDAO.update(inventoryItemEntity);
+                    return;
+                }
+
                 inventoryEntity.getInventoryItems().remove(inventoryItemEntity);
                 updateInventoryCapacities(inventoryEntity, inventoryItemEntity, false);
             }

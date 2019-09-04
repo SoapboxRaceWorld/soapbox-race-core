@@ -167,9 +167,8 @@ public class CommerceBO {
                 InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId
                         , e.getEntitlementId());
 
-                if (inventoryItemEntity != null && inventoryItemEntity.getRemainingUseCount() >= e.getQuantity()) {
-                    inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() - e.getQuantity());
-                    inventoryItemDAO.update(inventoryItemEntity);
+                if (inventoryItemEntity != null) {
+                    inventoryBO.deletePart(personaId, inventoryItemEntity.getEntitlementTag(), e.getQuantity());
                     addCash.addAndGet(inventoryItemEntity.getResellPrice());
                 }
             });
