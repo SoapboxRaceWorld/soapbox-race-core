@@ -170,9 +170,8 @@ public class UserBO {
             }
         }
         UserEntity findByEmail = userDao.findByEmail(email);
-        UserEntity findByIpAddress = userDao.findByIpAddress(ip);
-        if (findByEmail != null || findByIpAddress != null) {
-            loginStatusVO.setDescription("Registration Error: Registration limit reached for email or IP!");
+        if (findByEmail != null) {
+            loginStatusVO.setDescription("Registration Error: Registration limit reached for email!");
             return loginStatusVO;
         }
         UserEntity userEntity = createUser(email, passwd, ip);
