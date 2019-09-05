@@ -16,6 +16,12 @@ public class SocialRelationshipDAO extends BaseDAO<SocialRelationshipEntity> {
         this.entityManager = entityManager;
     }
 
+    public void deleteAllByPersonaId(Long personaId) {
+        entityManager.createNamedQuery("SocialRelationshipEntity.deleteAllByPersonaId")
+                .setParameter("personaId", personaId)
+                .executeUpdate();
+    }
+
     public List<SocialRelationshipEntity> findByUserId(Long userId) {
         TypedQuery<SocialRelationshipEntity> query = entityManager.createNamedQuery(
                 "SocialRelationshipEntity.findByUser", SocialRelationshipEntity.class);
