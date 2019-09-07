@@ -60,6 +60,9 @@ public class DriverPersonaBO {
     @EJB
     private PersonaAchievementDAO personaAchievementDAO;
 
+    @EJB
+    private SocialRelationshipDAO socialRelationshipDAO;
+
     public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
         UserEntity userEntity = userDao.findById(userId);
 
@@ -181,6 +184,8 @@ public class DriverPersonaBO {
         inventoryDAO.deleteByPersona(personaEntity);
         personaAchievementRankDAO.deleteByPersona(personaEntity);
         personaAchievementDAO.deleteByPersona(personaEntity);
+        socialRelationshipDAO.deleteAllByPersonaId(personaId);
+        socialRelationshipDAO.deleteAllByPersonaId(personaId);
 
         personaDao.delete(personaEntity);
     }

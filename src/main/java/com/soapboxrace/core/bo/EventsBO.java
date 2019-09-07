@@ -4,6 +4,8 @@ import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.TreasureHuntConfigDAO;
 import com.soapboxrace.core.dao.TreasureHuntDAO;
+import com.soapboxrace.core.engine.EngineException;
+import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.SkillModRewardType;
 import com.soapboxrace.core.jpa.TreasureHuntConfigEntity;
@@ -46,6 +48,10 @@ public class EventsBO {
 
         LocalDate thDate = treasureHuntEntity.getThDate();
         LocalDate nowDate = LocalDate.now();
+
+        System.out.println(thDate.compareTo(nowDate));
+        System.out.println(thDate.equals(nowDate));
+
         if (!thDate.equals(nowDate)) {
             int days = (int) ChronoUnit.DAYS.between(thDate, nowDate);
             if (days >= 2 || treasureHuntEntity.getCoinsCollected() != 32767) {
@@ -55,6 +61,10 @@ public class EventsBO {
             }
         }
 
+        return getTreasureHuntEventSession(treasureHuntEntity);
+    }
+
+    private TreasureHuntEventSession getTreasureHuntEventSession(TreasureHuntEntity treasureHuntEntity) {
         TreasureHuntEventSession treasureHuntEventSession = new TreasureHuntEventSession();
         treasureHuntEventSession.setCoinsCollected(treasureHuntEntity.getCoinsCollected());
         treasureHuntEventSession.setIsStreakBroken(treasureHuntEntity.getIsStreakBroken());
@@ -67,10 +77,24 @@ public class EventsBO {
     public Accolades notifyCoinCollected(Long activePersonaId, Integer coins) {
         TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
         if (treasureHuntEntity != null) {
+            if (treasureHuntEntity.getCoinsCollected()==32767) {
+                throw new EngineException("TH is not ready", EngineExceptionCode.SecurityKickedArbitration);
+            }
+
+            int difference = coins - treasureHuntEntity.getCoinsCollected();
+
+            // coin difference should be exactly 1 (or 0)
+            if ((difference & (difference - 1)) != 0) {
+                throw new EngineException("Invalid coins", EngineExceptionCode.SecurityKickedArbitration);
+            }
+
             treasureHuntEntity.setCoinsCollected(coins);
             treasureHuntDao.update(treasureHuntEntity);
+
+            return coins == 32767 ? accolades(activePersonaId, false) : null;
         }
-        return coins == 32767 ? accolades(activePersonaId, false) : null;
+
+        return null;
     }
 
     public Accolades accolades(Long activePersonaId, Boolean isBroken) {
@@ -96,13 +120,7 @@ public class EventsBO {
         treasureHuntEntity.setThDate(LocalDate.now());
         treasureHuntDao.update(treasureHuntEntity);
 
-        TreasureHuntEventSession treasureHuntEventSession = new TreasureHuntEventSession();
-        treasureHuntEventSession.setCoinsCollected(treasureHuntEntity.getCoinsCollected());
-        treasureHuntEventSession.setIsStreakBroken(treasureHuntEntity.getIsStreakBroken());
-        treasureHuntEventSession.setNumCoins(treasureHuntEntity.getNumCoins());
-        treasureHuntEventSession.setSeed(treasureHuntEntity.getSeed());
-        treasureHuntEventSession.setStreak(treasureHuntEntity.getStreak());
-        return treasureHuntEventSession;
+        return getTreasureHuntEventSession(treasureHuntEntity);
     }
 
     private Accolades getTreasureHuntAccolades(Long activePersonaId, TreasureHuntEntity treasureHuntEntity) {

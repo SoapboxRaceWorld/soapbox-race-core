@@ -170,11 +170,12 @@ public class AchievementBO {
     /**
      * Update all appropriate achievements in the given category for the persona by the given ID
      *
-     * @param personaId           The ID of the persona whose achievement progress must be updated
+     * @param personaEntity       The {@link PersonaEntity} instance to be updated
      * @param achievementCategory The category of achievements to evaluate
      * @param properties          Relevant contextual information for achievements.
      */
-    public void updateAchievements(Long personaId, String achievementCategory, Map<String, Object> properties) {
+    public void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
+                                   Map<String, Object> properties) {
         final Bindings bindings = scriptEngine.get().createBindings();
         bindings.putAll(properties);
 
@@ -192,15 +193,16 @@ public class AchievementBO {
 
             // Locate persona-specific achievement data. Create it if it does not exist
             PersonaAchievementEntity personaAchievementEntity = personaAchievementDAO.findByPersonaIdAndAchievementId(
-                    personaId, achievementEntity.getId());
+                    personaEntity.getPersonaId(), achievementEntity.getId());
+            boolean insert = false;
 
             if (personaAchievementEntity == null) {
                 personaAchievementEntity = new PersonaAchievementEntity();
                 personaAchievementEntity.setCanProgress(true);
                 personaAchievementEntity.setCurrentValue(0L);
                 personaAchievementEntity.setAchievementEntity(achievementEntity);
-                personaAchievementEntity.setPersonaEntity(personaDAO.findById(personaId));
-                personaAchievementDAO.insert(personaAchievementEntity);
+                personaAchievementEntity.setPersonaEntity(personaEntity);
+                insert = true;
             }
 
             bindings.put("personaAchievement", personaAchievementEntity);
@@ -209,7 +211,9 @@ public class AchievementBO {
                 Boolean shouldUpdate = (Boolean) scriptEngine.get().eval(achievementEntity.getUpdateTrigger(),
                         bindings);
                 if (shouldUpdate) {
-                    updateAchievement(personaId, achievementEntity, bindings, achievementsAwarded,
+                    if (insert)
+                        personaAchievementDAO.insert(personaAchievementEntity);
+                    updateAchievement(personaEntity, achievementEntity, bindings, achievementsAwarded,
                             personaAchievementEntity);
                 }
             } catch (ScriptException ex) {
@@ -217,24 +221,23 @@ public class AchievementBO {
             }
         }
 
-        achievementsAwarded.setPersonaId(personaId);
+
+        achievementsAwarded.setPersonaId(personaEntity.getPersonaId());
 
         XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded =
                 new XMPP_ResponseTypeAchievementsAwarded();
         responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
 
-        openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaId);
+        openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
     }
 
-    private void updateAchievement(Long personaId, AchievementEntity achievementEntity, Bindings bindings,
+    private void updateAchievement(PersonaEntity personaEntity, AchievementEntity achievementEntity, Bindings bindings,
                                    AchievementsAwarded achievementsAwarded,
                                    PersonaAchievementEntity personaAchievementEntity) {
         // If no progression can be made, there's nothing to do.
         if (!personaAchievementEntity.isCanProgress()) {
             return;
         }
-
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
 
         Integer newScore = personaEntity.getScore();
 
@@ -282,12 +285,14 @@ public class AchievementBO {
                     AchievementRankEntity current = achievementEntity.getRanks().get(i);
                     PersonaAchievementRankEntity previousRank = null;
                     PersonaAchievementRankEntity currentRank =
-                            personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, current.getId());
+                            personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaEntity.getPersonaId(),
+                                    current.getId());
 
                     if (i > 0) {
                         previous = achievementEntity.getRanks().get(i - 1);
-                        previousRank = personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId,
-                                previous.getId());
+                        previousRank =
+                                personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaEntity.getPersonaId(),
+                                        previous.getId());
 
                         if (previousRank == null) {
                             previousRank = createPersonaAchievementRank(personaAchievementEntity, previous);
@@ -346,6 +351,7 @@ public class AchievementBO {
 
         achievementsAwarded.setScore(newScore);
         personaEntity.setScore(newScore);
+
         personaDAO.update(personaEntity);
     }
 

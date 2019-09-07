@@ -253,9 +253,9 @@ public class RewardBO {
         personaDao.update(personaEntity);
 
         AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp,
-                personaEntity.getLevel(), hasLevelChanged, isInEvent);
+                personaEntity.getLevel(), personaEntity.getScore(), hasLevelChanged, isInEvent);
 
-        achievementBO.updateAchievements(personaEntity.getPersonaId(), "PROGRESSION", new HashMap<String, Object>() {{
+        achievementBO.updateAchievements(personaEntity, "PROGRESSION", new HashMap<String, Object>() {{
             put("persona", personaEntity);
             put("progression", progressionContext);
         }});

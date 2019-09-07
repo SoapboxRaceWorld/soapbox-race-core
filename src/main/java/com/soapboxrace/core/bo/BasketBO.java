@@ -196,7 +196,7 @@ public class BasketBO {
                 if (carClassesEntity != null) {
                     AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity,
                             AchievementCommerceContext.CommerceType.CAR_PURCHASE);
-                    achievementBO.updateAchievements(personaEntity.getPersonaId(), "COMMERCE", new HashMap<String,
+                    achievementBO.updateAchievements(personaEntity, "COMMERCE", new HashMap<String,
                             Object>() {{
                         put("persona", personaEntity);
                         put("carSlot", carSlotEntity);
