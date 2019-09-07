@@ -5,10 +5,7 @@ import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.EventDataEntity;
-import com.soapboxrace.core.jpa.EventMode;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.OwnedCarEntity;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
@@ -88,8 +85,10 @@ public class EventResultPursuitBO {
         pursuitEventResult.setPersonaId(activePersonaId);
 
         if (!isBusted) {
-            achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
-                put("persona", personaDAO.findById(activePersonaId));
+            PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+
+            achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<String, Object>() {{
+                put("persona", personaEntity);
                 put("event", eventDataEntity.getEvent());
                 put("eventData", eventDataEntity);
                 put("eventSession", eventSessionEntity);

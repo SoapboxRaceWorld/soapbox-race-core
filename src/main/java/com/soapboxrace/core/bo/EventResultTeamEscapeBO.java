@@ -7,6 +7,7 @@ import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
 import com.soapboxrace.jaxb.http.*;
@@ -120,8 +121,10 @@ public class EventResultTeamEscapeBO {
         teamEscapeEventResult.setPersonaId(activePersonaId);
 
         if (teamEscapeArbitrationPacket.getBustedCount() == 0) {
-            achievementBO.updateAchievements(activePersonaId, "EVENT", new HashMap<String, Object>() {{
-                put("persona", personaDAO.findById(activePersonaId));
+            PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+
+            achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<String, Object>() {{
+                put("persona", personaEntity);
                 put("event", eventDataEntity.getEvent());
                 put("eventData", eventDataEntity);
                 put("eventSession", eventSessionEntity);
