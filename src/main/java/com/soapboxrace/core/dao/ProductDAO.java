@@ -7,7 +7,12 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -35,22 +40,12 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
         return query.getResultList();
     }
 
-    public List<ProductEntity> findForEndRace(String categoryName, String productType, int level) {
-        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findForEndRace",
-                ProductEntity.class);
-        query.setParameter("categoryName", categoryName);
-        query.setParameter("productType", productType);
-        query.setParameter("level", level);
-        return query.getResultList();
-    }
-
     public ProductEntity findByProductId(String productId) {
         TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByProductId",
                 ProductEntity.class);
         query.setParameter("productId", productId);
 
-        List<ProductEntity> resultList = query.getResultList();
-        return !resultList.isEmpty() ? resultList.get(0) : null;
+        return query.getSingleResult();
     }
 
     public ProductEntity findByEntitlementTag(String entitlementTag) {
@@ -58,8 +53,7 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
                 ProductEntity.class);
         query.setParameter("entitlementTag", entitlementTag);
 
-        List<ProductEntity> resultList = query.getResultList();
-        return !resultList.isEmpty() ? resultList.get(0) : null;
+        return query.getSingleResult();
     }
 
     public ProductEntity findByHash(Integer hash) {
@@ -67,16 +61,7 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
                 ProductEntity.class);
         query.setParameter("hash", hash);
 
-        List<ProductEntity> resultList = query.getResultList();
-        return !resultList.isEmpty() ? resultList.get(0) : null;
-    }
-
-    public List<ProductEntity> findByType(String type) {
-        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByType",
-                ProductEntity.class);
-        query.setParameter("type", type);
-
-        return query.getResultList();
+        return query.getSingleResult();
     }
 
     public List<ProductEntity> findDropsByType(String type) {
@@ -87,17 +72,30 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
         return query.getResultList();
     }
 
-    public List<ProductEntity> findDropsBySubTypeAndRarity(String subType, Integer rarity) {
-        return entityManager.createNamedQuery("ProductEntity.findDropsBySubTypeAndRarity", ProductEntity.class)
-                .setParameter("rarity", rarity)
-                .setParameter("subType", subType)
-                .getResultList();
-    }
+    public List<ProductEntity> findByTraits(String category, String type, String subType, Integer rating) {
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        CriteriaQuery<ProductEntity> cq = cb.createQuery(ProductEntity.class);
+        Root<ProductEntity> from = cq.from(ProductEntity.class);
+        List<Predicate> predicates = new ArrayList<>();
 
-    public List<ProductEntity> findDropsByProdTypeAndRarity(String prodType, Integer rarity) {
-        return entityManager.createNamedQuery("ProductEntity.findDropsByProdTypeAndRarity", ProductEntity.class)
-                .setParameter("rarity", rarity)
-                .setParameter("prodType", prodType)
-                .getResultList();
+        if (category != null) {
+            predicates.add(cb.equal(from.get("categoryName"), category));
+        }
+
+        if (type != null) {
+            predicates.add(cb.equal(from.get("productType"), type));
+        }
+
+        if (subType != null) {
+            predicates.add(cb.equal(from.get("subType"), subType));
+        }
+
+        if (rating != null) {
+            predicates.add(cb.equal(from.get("rarity"), rating));
+        }
+
+        cq = cq.where(predicates.toArray(new Predicate[0]));
+
+        return entityManager.createQuery(cq).getResultList();
     }
 }

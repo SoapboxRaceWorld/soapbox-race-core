@@ -156,7 +156,8 @@ public class RewardBO {
 
     private LuckyDrawItem getLuckyDrawItem(PersonaEntity personaEntity, RewardTableEntity rewardTableEntity) {
         LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
-        ItemRewardBase rewardBase = itemRewardBO.getGenerator().weightedRandomTableItem(rewardTableEntity.getId());
+        ItemRewardBase rewardBase = itemRewardBO.getGenerator().table().tableName(rewardTableEntity.getName()).build();
+//        ItemRewardBase rewardBase = itemRewardBO.getGenerator().weightedRandomTableItem(rewardTableEntity.getId());
 
         if (rewardBase instanceof ItemRewardProduct) {
             ItemRewardProduct rewardProduct = (ItemRewardProduct) rewardBase;
@@ -172,7 +173,14 @@ public class RewardBO {
                     driverPersonaBO.updateCash(personaEntity, cash + resalePrice);
                 }
             } else {
-                inventoryBO.addFromCatalog(productEntity, personaEntity);
+                Integer quantity = -1;
+
+                if (rewardBase instanceof ItemRewardQuantityProduct) {
+                    quantity = ((ItemRewardQuantityProduct) rewardBase).getUseCount();
+                }
+
+                luckyDrawItem.setRemainingUseCount(quantity == -1 ? productEntity.getUseCount() : quantity);
+                inventoryBO.addFromCatalog(productEntity, personaEntity, quantity);
             }
         } else if (rewardBase instanceof ItemRewardCash) {
             ItemRewardCash rewardCash = (ItemRewardCash) rewardBase;
