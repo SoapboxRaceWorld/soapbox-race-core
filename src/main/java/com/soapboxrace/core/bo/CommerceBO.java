@@ -34,9 +34,6 @@ public class CommerceBO {
     private InventoryItemDAO inventoryItemDAO;
 
     @EJB
-    private ParameterBO parameterBO;
-
-    @EJB
     private CustomCarDAO customCarDAO;
 
     @EJB
@@ -44,16 +41,6 @@ public class CommerceBO {
 
     @EJB
     private PerformanceBO performanceBO;
-
-    public OwnedCarTrans responseCar(CommerceSessionTrans commerceSessionTrans) {
-        OwnedCarTrans ownedCarTrans = new OwnedCarTrans();
-        ownedCarTrans.setCustomCar(commerceSessionTrans.getUpdatedCar().getCustomCar());
-        ownedCarTrans.setDurability(commerceSessionTrans.getUpdatedCar().getDurability());
-        ownedCarTrans.setHeat(commerceSessionTrans.getUpdatedCar().getHeat());
-        ownedCarTrans.setId(commerceSessionTrans.getUpdatedCar().getId());
-        ownedCarTrans.setOwnershipType(commerceSessionTrans.getUpdatedCar().getOwnershipType());
-        return ownedCarTrans;
-    }
 
     public CommerceSessionResultTrans doCommerce(CommerceSessionTrans commerceSessionTrans, Long personaId) {
         List<BasketItemTrans> basketItems = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
@@ -216,97 +203,5 @@ public class CommerceBO {
         commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
 
         return commerceSessionResultTrans;
-    }
-
-    private void addPaint(CustomCarEntity customCarEntity, Object customizationObject, Integer hash) {
-        if (customizationObject instanceof CustomPaintTrans) {
-            CustomPaintTrans customPaintTrans = (CustomPaintTrans) customizationObject;
-            PaintEntity paintEntity = new PaintEntity();
-            paintEntity.setCustomCar(customCarEntity);
-            paintEntity.setGroup(customPaintTrans.getGroup());
-            paintEntity.setHue(customPaintTrans.getHue());
-            paintEntity.setSat(customPaintTrans.getSat());
-            paintEntity.setSlot(customPaintTrans.getSlot());
-            paintEntity.setVar(customPaintTrans.getVar());
-            customCarEntity.getPaints().add(paintEntity);
-        }
-    }
-
-    private void addVinyl(CustomCarEntity customCarEntity, Object customizationObject, Integer hash) {
-        if (customizationObject instanceof CustomVinylTrans) {
-            CustomVinylTrans customVinylTrans = (CustomVinylTrans) customizationObject;
-            VinylEntity vinylEntity = new VinylEntity();
-            vinylEntity.setHash(customVinylTrans.getHash());
-            vinylEntity.setHue1(customVinylTrans.getHue1());
-            vinylEntity.setHue2(customVinylTrans.getHue2());
-            vinylEntity.setHue3(customVinylTrans.getHue3());
-            vinylEntity.setHue4(customVinylTrans.getHue4());
-            vinylEntity.setLayer(customVinylTrans.getLayer());
-            vinylEntity.setMir(customVinylTrans.isMir());
-            vinylEntity.setRot(customVinylTrans.getRot());
-            vinylEntity.setScalex(customVinylTrans.getScaleX());
-            vinylEntity.setScaley(customVinylTrans.getScaleY());
-            vinylEntity.setShear(customVinylTrans.getShear());
-            vinylEntity.setTranx(customVinylTrans.getTranX());
-            vinylEntity.setTrany(customVinylTrans.getTranY());
-            vinylEntity.setVar1(customVinylTrans.getVar1());
-            vinylEntity.setVar2(customVinylTrans.getVar2());
-            vinylEntity.setVar3(customVinylTrans.getVar3());
-            vinylEntity.setVar4(customVinylTrans.getVar4());
-            vinylEntity.setSat1(customVinylTrans.getSat1());
-            vinylEntity.setSat2(customVinylTrans.getSat2());
-            vinylEntity.setSat3(customVinylTrans.getSat3());
-            vinylEntity.setSat4(customVinylTrans.getSat4());
-            vinylEntity.setCustomCar(customCarEntity);
-            customCarEntity.getVinyls().add(vinylEntity);
-        }
-    }
-
-    private void addPerformancePart(CustomCarEntity customCarEntity, Object customizationObject, Integer hash) {
-        if (customizationObject instanceof PerformancePartTrans) {
-            PerformancePartEntity performancePartEntity = new PerformancePartEntity();
-            performancePartEntity.setPerformancePartAttribHash(hash);
-            performancePartEntity.setCustomCar(customCarEntity);
-            customCarEntity.getPerformanceParts().add(performancePartEntity);
-        }
-    }
-
-    private void addSkillPart(CustomCarEntity customCarEntity, Object customizationObject, Integer hash) {
-        if (customizationObject instanceof SkillModPartTrans) {
-            SkillModPartEntity skillModPartEntity = new SkillModPartEntity();
-            skillModPartEntity.setSkillModPartAttribHash(hash);
-            skillModPartEntity.setCustomCar(customCarEntity);
-            customCarEntity.getSkillModParts().add(skillModPartEntity);
-        }
-    }
-
-    private void addVisualPart(CustomCarEntity customCarEntity, Object customizationObject, Integer hash) {
-        if (customizationObject instanceof VisualPartTrans) {
-            VisualPartEntity visualPartEntity = new VisualPartEntity();
-            visualPartEntity.setPartHash(hash);
-            visualPartEntity.setSlotHash(((VisualPartTrans) customizationObject).getSlotHash());
-            visualPartEntity.setCustomCar(customCarEntity);
-            customCarEntity.getVisualParts().add(visualPartEntity);
-        }
-    }
-
-    private Integer calcProductSellPrice(ProductEntity productEntity) {
-        return (int) productEntity.getResalePrice();
-    }
-
-    private void disableItem(ProductEntity productEntity) {
-        Boolean disableItemAfterBuy = parameterBO.getBoolParam("DISABLE_ITEM_AFTER_BUY");
-        if (disableItemAfterBuy) {
-            productEntity.setEnabled(false);
-            productDAO.update(productEntity);
-        }
-    }
-
-    private void disableItem(VinylProductEntity vinylProductEntity) {
-        Boolean disableItemAfterBuy = parameterBO.getBoolParam("DISABLE_ITEM_AFTER_BUY");
-        if (disableItemAfterBuy) {
-            vinylProductEntity.setEnabled(false);
-            vinylProductDAO.update(vinylProductEntity);
-        }
     }
 }
