@@ -48,7 +48,7 @@ public class Personas {
     public CommerceSessionResultTrans commerce(InputStream commerceXml,
                                                @HeaderParam("securityToken") String securityToken,
                                                @PathParam(value = "personaId") Long personaId) {
-        sessionBO.verifyPersona(securityToken, personaId);
+        sessionBO.verifyPersonaOwnership(securityToken, personaId);
         String xml = new BufferedReader(new InputStreamReader(commerceXml))
                 .lines().collect(Collectors.joining(""));
         CommerceSessionTrans commerceSessionTrans = UnmarshalXML.unMarshal(xml, CommerceSessionTrans.class);
@@ -62,7 +62,7 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public CommerceResultTrans baskets(@HeaderParam("securityToken") String securityToken, InputStream basketXml,
                                        @PathParam(value = "personaId") Long personaId) {
-        sessionBO.verifyPersona(securityToken, personaId);
+        sessionBO.verifyPersonaOwnership(securityToken, personaId);
 
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
 
@@ -127,7 +127,7 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public CarSlotInfoTrans carslots(@PathParam(value = "personaId") Long personaId,
                                      @HeaderParam("securityToken") String securityToken) {
-        sessionBO.verifyPersona(securityToken, personaId);
+        sessionBO.verifyPersonaOwnership(securityToken, personaId);
 
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
         List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
@@ -194,7 +194,7 @@ public class Personas {
     public String carsPost(@PathParam(value = "personaId") Long personaId,
                            @QueryParam("serialNumber") Long serialNumber,
                            @HeaderParam("securityToken") String securityToken) {
-        sessionBO.verifyPersona(securityToken, personaId);
+        sessionBO.verifyPersonaOwnership(securityToken, personaId);
         if (basketBO.sellCar(securityToken, personaId, serialNumber)) {
             OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
             return MarshalXML.marshal(ownedCarTrans);
@@ -233,7 +233,7 @@ public class Personas {
     public String carsPut(@PathParam(value = "personaId") Long personaId,
                           @HeaderParam("securityToken") String securityToken, InputStream ownedCarXml) {
         // update car (skill and performance shop)
-        sessionBO.verifyPersona(securityToken, personaId);
+        sessionBO.verifyPersonaOwnership(securityToken, personaId);
         OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
         return MarshalXML.marshal(ownedCarTrans);
     }
@@ -252,7 +252,7 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId,
                              @HeaderParam("securityToken") String securityToken) {
-        sessionBO.verifyPersona(securityToken, personaId);
+        sessionBO.verifyPersonaOwnership(securityToken, personaId);
         personaBO.changeDefaultCar(personaId, carId);
         return "";
     }

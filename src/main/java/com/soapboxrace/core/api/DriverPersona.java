@@ -106,7 +106,7 @@ public class DriverPersona {
     @Produces(MediaType.APPLICATION_XML)
     public String deletePersona(@QueryParam("personaId") Long personaId,
                                 @HeaderParam("securityToken") String securityToken) {
-        tokenSessionBo.verifyPersona(securityToken, personaId);
+        tokenSessionBo.verifyPersonaOwnership(securityToken, personaId);
         driverPersonaBO.deletePersona(personaId);
         return "<long>0</long>";
     }
@@ -152,7 +152,7 @@ public class DriverPersona {
     public PersonaMotto updateStatusMessage(InputStream statusXml, @HeaderParam("securityToken") String securityToken
             , @Context Request request) {
         PersonaMotto personaMotto = UnmarshalXML.unMarshal(statusXml, PersonaMotto.class);
-        tokenSessionBo.verifyPersona(securityToken, personaMotto.getPersonaId());
+        tokenSessionBo.verifyPersonaOwnership(securityToken, personaMotto.getPersonaId());
 
         driverPersonaBO.updateStatusMessage(personaMotto.getMessage(), personaMotto.getPersonaId());
         return personaMotto;
