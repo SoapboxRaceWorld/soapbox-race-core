@@ -52,13 +52,6 @@ public class TokenSessionBO {
         return true;
     }
 
-    public void updateToken(String securityToken) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
-        Date expirationDate = getMinutes(3);
-        tokenSessionEntity.setExpirationDate(expirationDate);
-        tokenDAO.update(tokenSessionEntity);
-    }
-
     public String createToken(Long userId, String clientHostName) {
         TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
         Date expirationDate = getMinutes(15);
@@ -74,20 +67,7 @@ public class TokenSessionBO {
         return randomUUID;
     }
 
-    public String generateWebToken(Long userId, String securityToken) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
-
-        if (tokenSessionEntity == null) {
-            throw new EngineException(EngineExceptionCode.NoSuchSessionInSessionStore);
-        }
-
-        tokenSessionEntity.setWebToken(UUIDGen.getRandomUUID());
-        tokenDAO.update(tokenSessionEntity);
-
-        return tokenSessionEntity.getWebToken();
-    }
-
-    public boolean verifyPersona(String securityToken, Long personaId) {
+    public void verifyPersonaOwnership(String securityToken, Long personaId) {
         TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
         if (tokenSession == null) {
             throw new EngineException(EngineExceptionCode.NoSuchSessionInSessionStore);
@@ -96,7 +76,6 @@ public class TokenSessionBO {
         if (!tokenSession.getUserEntity().ownsPersona(personaId)) {
             throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser);
         }
-        return true;
     }
 
     public void deleteByUserId(Long userId) {
@@ -106,11 +85,10 @@ public class TokenSessionBO {
     private Date getMinutes(int minutes) {
         long time = new Date().getTime();
         time = time + (minutes * 60000);
-        Date date = new Date(time);
-        return date;
+        return new Date(time);
     }
 
-    public LoginStatusVO checkGeoIp(String ip) {
+    private LoginStatusVO checkGeoIp(String ip) {
         LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
         String allowedCountries = serverInfoBO.getServerInformation().getAllowedCountries();
         if (allowedCountries != null && !allowedCountries.isEmpty()) {
@@ -202,10 +180,6 @@ public class TokenSessionBO {
         TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
         tokenSessionEntity.setActiveLobbyId(lobbyId);
         tokenDAO.update(tokenSessionEntity);
-    }
-
-    public boolean isPremium(String securityToken) {
-        return tokenDAO.findById(securityToken).isPremium();
     }
 
     public boolean isAdmin(String securityToken) {
