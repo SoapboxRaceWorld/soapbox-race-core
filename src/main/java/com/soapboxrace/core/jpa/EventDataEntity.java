@@ -54,6 +54,7 @@ public class EventDataEntity {
     private long eventDurationInMilliseconds;
     private int finishReason;
     private long hacksDetected;
+    @Column(name = "`rank`")
     private int rank;
 
     public Long getId() {
