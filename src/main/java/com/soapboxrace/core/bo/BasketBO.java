@@ -338,7 +338,7 @@ public class BasketBO {
     }
 
     public boolean sellCar(String securityToken, Long personaId, Long serialNumber) {
-        this.tokenSessionBO.verifyPersona(securityToken, personaId);
+        this.tokenSessionBO.verifyPersonaOwnership(securityToken, personaId);
 
         OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(serialNumber);
         if (ownedCarEntity == null) {

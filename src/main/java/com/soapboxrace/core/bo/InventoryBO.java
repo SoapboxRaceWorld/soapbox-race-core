@@ -31,7 +31,7 @@ public class InventoryBO {
     @EJB
     private VirtualItemDAO virtualItemDAO;
 
-    @Schedule(minute = "*/2", hour = "*")
+    @Schedule(minute = "*/2", hour = "*", persistent = false)
     public void removeExpiredItems() {
         for (InventoryItemEntity inventoryItemEntity : inventoryItemDAO.findAllWithExpirationDate()) {
             if (inventoryItemEntity.getExpirationDate().isBefore(LocalDateTime.now())) {

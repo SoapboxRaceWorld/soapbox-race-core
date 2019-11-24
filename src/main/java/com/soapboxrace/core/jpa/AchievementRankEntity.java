@@ -22,7 +22,7 @@ public class AchievementRankEntity {
     @Column
     private Integer points;
 
-    @Column
+    @Column(name = "`rank`")
     private Integer rank;
 
     @Column

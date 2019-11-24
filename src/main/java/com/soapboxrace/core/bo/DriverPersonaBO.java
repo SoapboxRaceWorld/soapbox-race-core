@@ -49,9 +49,6 @@ public class DriverPersonaBO {
     private InventoryBO inventoryBO;
 
     @EJB
-    private OpenFireRestApiCli restApiCli;
-
-    @EJB
     private PresenceBO presenceBO;
 
     @EJB
