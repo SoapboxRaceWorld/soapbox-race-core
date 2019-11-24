@@ -1,7 +1,6 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.*;
-import com.soapboxrace.core.dao.CardPackDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.dao.RewardTableDAO;
@@ -20,7 +19,6 @@ import javax.ejb.Stateless;
 import javax.script.Bindings;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.security.SecureRandom;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -31,9 +29,6 @@ public class ItemRewardBO {
             ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
     @EJB
     private PersonaDAO personaDAO;
-
-    @EJB
-    private CardPackDAO cardPackDAO;
 
     @EJB
     private ProductDAO productDAO;
@@ -49,7 +44,6 @@ public class ItemRewardBO {
 
     @EJB
     private BasketBO basketBO;
-    private Random random = new SecureRandom();
 
     public ArrayOfCommerceItemTrans getRewards(Long personaId, String rewardScript) {
         PersonaEntity personaEntity = personaDAO.findById(personaId);

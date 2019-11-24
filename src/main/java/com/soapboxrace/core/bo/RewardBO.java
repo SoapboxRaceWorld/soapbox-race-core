@@ -60,7 +60,7 @@ public class RewardBO {
         return (long) (personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
     }
 
-    public LuckyDrawInfo getLuckyDrawInfo(Integer rank, Integer level, PersonaEntity personaEntity,
+    public LuckyDrawInfo getLuckyDrawInfo(Integer rank, PersonaEntity personaEntity,
                                           EventEntity eventEntity) {
         LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
         if (!parameterBO.getBoolParam("ENABLE_DROP_ITEM")) {
@@ -156,8 +156,8 @@ public class RewardBO {
 
     private LuckyDrawItem getLuckyDrawItem(PersonaEntity personaEntity, RewardTableEntity rewardTableEntity) {
         LuckyDrawItem luckyDrawItem = new LuckyDrawItem();
-        ItemRewardBase rewardBase = itemRewardBO.getGenerator().table().tableName(rewardTableEntity.getName()).build();
-//        ItemRewardBase rewardBase = itemRewardBO.getGenerator().weightedRandomTableItem(rewardTableEntity.getId());
+        ItemRewardBase rewardBase =
+                itemRewardBO.getGenerator().table().tableName(rewardTableEntity.getName()).weighted(true).build();
 
         if (rewardBase instanceof ItemRewardProduct) {
             ItemRewardProduct rewardProduct = (ItemRewardProduct) rewardBase;
@@ -318,7 +318,7 @@ public class RewardBO {
         Accolades accolades = new Accolades();
         accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
-        accolades.setLuckyDrawInfo(getLuckyDrawInfo(arbitrationPacket.getRank(), personaEntity.getLevel(),
+        accolades.setLuckyDrawInfo(getLuckyDrawInfo(arbitrationPacket.getRank(),
                 personaEntity, eventEntity));
         accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
