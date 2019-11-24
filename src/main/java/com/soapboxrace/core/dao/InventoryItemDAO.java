@@ -87,11 +87,4 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
             delete(inventoryItemEntity);
         }
     }
-
-    @Override
-    public void insert(InventoryItemEntity entity) {
-        super.insert(entity);
-
-        System.out.println("InventoryItemDAO insert() called");
-    }
 }

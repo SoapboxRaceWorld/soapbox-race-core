@@ -159,36 +159,36 @@ public class EventsBO {
         if (!treasureHuntEntity.getIsStreakBroken()) {
             rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, false);
         }
-        Accolades accolades = rewardBO.getAccolades(personaEntity, treasureHuntConfigEntity, arbitrationPacket,
+        //        accolades.setLuckyDrawInfo(getLuckyDrawInfo(treasureHuntEntity, treasureHuntConfigEntity));
+
+        return rewardBO.getAccolades(personaEntity, treasureHuntConfigEntity, arbitrationPacket,
                 rewardVO);
-        accolades.setLuckyDrawInfo(getLuckyDrawInfo(treasureHuntEntity, treasureHuntConfigEntity));
-
-        return accolades;
     }
 
-    private LuckyDrawInfo getLuckyDrawInfo(TreasureHuntEntity treasureHuntEntity,
-                                           TreasureHuntConfigEntity treasureHuntConfigEntity) {
-        ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-        arrayOfLuckyDrawItem.getLuckyDrawItem().add(rewardBO.getItemFromProduct(personaDao.findById(treasureHuntEntity.getPersonaId()), treasureHuntConfigEntity, 0));
-
-        ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();
-        LuckyDrawBox luckyDrawBox = new LuckyDrawBox();
-        luckyDrawBox.setIsValid(true);
-        luckyDrawBox.setLocalizationString("LD_CARD_SILVER");
-        luckyDrawBox.setLuckyDrawSetCategoryId(1);
-        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
-        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
-        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
-        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
-        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
-
-        LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
-        luckyDrawInfo.setBoxes(arrayOfLuckyDrawBox);
-        luckyDrawInfo.setCurrentStreak(treasureHuntEntity.getStreak() > 1 ? (treasureHuntEntity.getStreak() - 1) : 1);
-        luckyDrawInfo.setIsStreakBroken(treasureHuntEntity.getIsStreakBroken());
-        luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
-        luckyDrawInfo.setNumBoxAnimations(180);
-        return luckyDrawInfo;
-    }
+//    private LuckyDrawInfo getLuckyDrawInfo(TreasureHuntEntity treasureHuntEntity,
+//                                           TreasureHuntConfigEntity treasureHuntConfigEntity) {
+//        ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
+//        arrayOfLuckyDrawItem.getLuckyDrawItem().add(rewardBO.getItemFromProduct(personaDao.findById
+//        (treasureHuntEntity.getPersonaId()), treasureHuntConfigEntity, 0));
+//
+//        ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();
+//        LuckyDrawBox luckyDrawBox = new LuckyDrawBox();
+//        luckyDrawBox.setIsValid(true);
+//        luckyDrawBox.setLocalizationString("LD_CARD_SILVER");
+//        luckyDrawBox.setLuckyDrawSetCategoryId(1);
+//        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
+//        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
+//        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
+//        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
+//        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
+//
+//        LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
+//        luckyDrawInfo.setBoxes(arrayOfLuckyDrawBox);
+//        luckyDrawInfo.setCurrentStreak(treasureHuntEntity.getStreak() > 1 ? (treasureHuntEntity.getStreak() - 1) : 1);
+//        luckyDrawInfo.setIsStreakBroken(treasureHuntEntity.getIsStreakBroken());
+//        luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
+//        luckyDrawInfo.setNumBoxAnimations(180);
+//        return luckyDrawInfo;
+//    }
 
 }
