@@ -304,9 +304,10 @@ public class ItemRewardBO {
                     this.rating
             );
 
+            String debugFormat = String.format("C=%s PT=%s ST=%s R=%d",
+                    this.category, this.productType, this.subType, this.rating);
             if (productEntities.isEmpty()) {
-                throw new RuntimeException("No products to choose from! " + String.format("PT=%s ST=%s R=%d",
-                        this.productType, this.subType, this.rating));
+                throw new RuntimeException("No products to choose from! " + debugFormat);
             }
 
             if (this.isWeighted) {
@@ -326,8 +327,7 @@ public class ItemRewardBO {
                 }
 
                 if (randomIndex == -1) {
-                    throw new RuntimeException("Weighted random failed! " + String.format("PT=%s ST=%s R=%d",
-                            this.productType, this.subType, this.rating));
+                    throw new RuntimeException("Weighted random failed! " + debugFormat);
                 }
 
                 return new ItemRewardQuantityProduct(productEntities.get(randomIndex), quantity);
