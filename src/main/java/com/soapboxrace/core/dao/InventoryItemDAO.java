@@ -17,29 +17,9 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
         this.entityManager = entityManager;
     }
 
-    public List<InventoryItemEntity> findAllWithExpirationDate() {
-        return entityManager.createNamedQuery("InventoryItemEntity.findAllWithExpirationDate",
-                InventoryItemEntity.class)
-                .getResultList();
-    }
-
-    public List<InventoryItemEntity> findAllByInventoryId(Long inventoryId) {
-        return entityManager.createNamedQuery("InventoryItemEntity.findAllByInventoryId", InventoryItemEntity.class)
-                .setParameter("inventoryId", inventoryId)
-                .getResultList();
-    }
-
     public List<InventoryItemEntity> findAllByPersonaId(Long personaId) {
         return entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaId", InventoryItemEntity.class)
                 .setParameter("personaId", personaId)
-                .getResultList();
-    }
-
-    public List<InventoryItemEntity> findAllByInventoryAndType(Long inventoryId, String type) {
-        return entityManager.createNamedQuery("InventoryItemEntity.findAllByInventoryIdAndType",
-                InventoryItemEntity.class)
-                .setParameter("inventoryId", inventoryId)
-                .setParameter("virtualItemType", type)
                 .getResultList();
     }
 
@@ -70,6 +50,37 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
                 ".findAllByPersonaIdAndTag", InventoryItemEntity.class);
         query.setParameter("personaId", personaId);
         query.setParameter("entitlementTag", entitlementTag);
+
+        List<InventoryItemEntity> results = query.getResultList();
+
+        if (!results.isEmpty()) {
+            return results.get(0);
+        }
+
+        return null;
+    }
+
+    public InventoryItemEntity findByInventoryIdAndEntitlementTag(Long inventoryId, String entitlementTag) {
+        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity" +
+                ".findAllByInventoryAndTag", InventoryItemEntity.class);
+        query.setParameter("inventoryId", inventoryId);
+        query.setParameter("entitlementTag", entitlementTag);
+
+        List<InventoryItemEntity> results = query.getResultList();
+
+        if (!results.isEmpty()) {
+            return results.get(0);
+        }
+
+        return null;
+    }
+
+    public InventoryItemEntity findByInventoryIdAndHash(Long inventoryId, Integer hash) {
+        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity" +
+                        ".findAllByInventoryAndHash",
+                InventoryItemEntity.class);
+        query.setParameter("inventoryId", inventoryId);
+        query.setParameter("hash", hash);
 
         List<InventoryItemEntity> results = query.getResultList();
 

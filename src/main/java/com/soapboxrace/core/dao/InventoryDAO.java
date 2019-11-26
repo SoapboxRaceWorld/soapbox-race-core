@@ -23,7 +23,6 @@ public class InventoryDAO extends BaseDAO<InventoryEntity> {
         query.setParameter("personaId", personaId);
 
         List<InventoryEntity> results = query.getResultList();
-
         if (!results.isEmpty()) {
             return results.get(0);
         }

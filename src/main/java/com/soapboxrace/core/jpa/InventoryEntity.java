@@ -7,7 +7,8 @@ import java.util.List;
 @Entity
 @Table(name = "INVENTORY")
 @NamedQueries({
-        @NamedQuery(name = "InventoryEntity.findByPersonaId", query = "SELECT obj FROM InventoryEntity obj WHERE obj" +
+        @NamedQuery(name = "InventoryEntity.findByPersonaId", query = "SELECT obj FROM InventoryEntity obj WHERE " +
+                "obj" +
                 ".personaEntity.id = :personaId")
 })
 public class InventoryEntity {
@@ -20,7 +21,8 @@ public class InventoryEntity {
     @JoinColumn(name = "personaId", foreignKey = @ForeignKey(name = "FK_INVENTORY_PERSONA"))
     private PersonaEntity personaEntity;
 
-    @OneToMany(mappedBy = "inventoryEntity", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "inventoryEntity", orphanRemoval = true, cascade = CascadeType.PERSIST, fetch =
+            FetchType.EAGER)
     private List<InventoryItemEntity> inventoryItems = new ArrayList<>();
 
     @Column

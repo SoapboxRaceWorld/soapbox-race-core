@@ -45,7 +45,13 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
                 ProductEntity.class);
         query.setParameter("productId", productId);
 
-        return query.getSingleResult();
+        List<ProductEntity> results = query.getResultList();
+
+        if (results.size() == 1)
+            return results.get(0);
+        throw new IllegalArgumentException(productId);
+
+//        return query.getSingleResult();
     }
 
     public ProductEntity findByEntitlementTag(String entitlementTag) {

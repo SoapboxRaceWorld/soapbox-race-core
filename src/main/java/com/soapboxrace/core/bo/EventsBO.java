@@ -159,16 +159,16 @@ public class EventsBO {
         if (!treasureHuntEntity.getIsStreakBroken()) {
             rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, false);
         }
-        //        accolades.setLuckyDrawInfo(getLuckyDrawInfo(treasureHuntEntity, treasureHuntConfigEntity));
+        //        accolades.setLuckyDrawInfo(getEventLuckyDraw(treasureHuntEntity, treasureHuntConfigEntity));
 
         return rewardBO.getAccolades(personaEntity, treasureHuntConfigEntity, arbitrationPacket,
                 rewardVO);
     }
 
-//    private LuckyDrawInfo getLuckyDrawInfo(TreasureHuntEntity treasureHuntEntity,
+//    private LuckyDrawInfo getEventLuckyDraw(TreasureHuntEntity treasureHuntEntity,
 //                                           TreasureHuntConfigEntity treasureHuntConfigEntity) {
 //        ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-//        arrayOfLuckyDrawItem.getLuckyDrawItem().add(rewardBO.getItemFromProduct(personaDao.findById
+//        arrayOfLuckyDrawItem.getLuckyDrawItem().add(rewardBO.getEventRewardItem(personaDao.findById
 //        (treasureHuntEntity.getPersonaId()), treasureHuntConfigEntity, 0));
 //
 //        ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();

@@ -36,7 +36,7 @@ public class RewardPursuitBO extends RewardBO {
         setPursuitRewards(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
 
         Random random = new Random();
-        pursuitArbitrationPacket.setRank(random.nextInt(4));
+        pursuitArbitrationPacket.setRank(random.nextInt(4 - 1) + 1);
         applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
         return getAccolades(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
     }

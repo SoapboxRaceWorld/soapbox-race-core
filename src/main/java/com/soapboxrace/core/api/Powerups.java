@@ -4,8 +4,6 @@ import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.InventoryBO;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.TokenSessionBO;
-import com.soapboxrace.core.engine.EngineException;
-import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.xmpp.XMPP_PowerupActivatedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePowerupActivated;
@@ -38,11 +36,9 @@ public class Powerups {
                             @QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers,
                             @QueryParam("eventSessionId") Long eventSessionId) {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-
-        if (!inventoryBO.hasItem(activePersonaId, powerupHash)) {
-            throw new EngineException(EngineExceptionCode.InventoryItemDoesntExist);
+        if (parameterBO.getBoolParam("ENABLE_POWERUP_DECREASE")) {
+            inventoryBO.decreaseItemCount(inventoryBO.getInventory(activePersonaId), powerupHash);
         }
-
         XMPP_ResponseTypePowerupActivated powerupActivatedResponse = new XMPP_ResponseTypePowerupActivated();
         XMPP_PowerupActivatedType powerupActivated = new XMPP_PowerupActivatedType();
         powerupActivated.setId(Long.valueOf(powerupHash));
@@ -56,9 +52,6 @@ public class Powerups {
             }
         }
 
-        if (parameterBO.getBoolParam("ENABLE_POWERUP_DECREASE")) {
-            inventoryBO.decrementUsage(activePersonaId, powerupHash);
-        }
 
         return "";
     }

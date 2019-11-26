@@ -120,4 +120,8 @@ public class ParameterBO {
         return Float.valueOf(parameterFromDB);
     }
 
+    public Float getFloatParam(String parameter, Float defaultValue) {
+        String parameterFromDB = getParameter(parameter);
+        return parameterFromDB == null || parameterFromDB.isEmpty() ? defaultValue : Float.valueOf(parameterFromDB);
+    }
 }

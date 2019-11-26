@@ -116,8 +116,12 @@ public class ItemRewardBO {
                     case "performancepart":
                     case "skillmodpart":
                     case "visualpart":
+                        inventoryBO.addInventoryItem(inventoryBO.getInventory(personaEntity.getPersonaId()),
+                                productEntity.getProductId(), useCount);
+                        break;
                     case "powerup":
-                        inventoryBO.addFromCatalogOrUpdateUsage(productEntity, personaEntity, useCount);
+                        inventoryBO.addStackedInventoryItem(inventoryBO.getInventory(personaEntity.getPersonaId()),
+                                productEntity.getProductId(), useCount);
                         break;
                 }
             }

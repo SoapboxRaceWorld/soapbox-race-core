@@ -173,7 +173,7 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public InventoryTrans inventoryObjects(@HeaderParam("securityToken") String securityToken) {
         long personaId = sessionBO.getActivePersonaId(securityToken);
-        return inventoryBO.getInventory(personaId);
+        return inventoryBO.getClientInventory(inventoryBO.getInventory(personaId));
     }
 
     @GET
@@ -183,7 +183,7 @@ public class Personas {
     public String sellInventoryItem(@HeaderParam("securityToken") String securityToken,
                                     @PathParam("entitlementTag") String entitlementTag) {
         long personaId = sessionBO.getActivePersonaId(securityToken);
-        inventoryBO.deletePart(personaId, entitlementTag);
+        inventoryBO.removeItem(inventoryBO.getInventory(personaId), entitlementTag);
         return "";
     }
 
