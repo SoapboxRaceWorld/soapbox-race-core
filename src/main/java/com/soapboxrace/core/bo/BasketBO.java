@@ -183,7 +183,8 @@ public class BasketBO {
             return CommerceResultStatus.FAIL_LOCKED_PRODUCT_NOT_ACCESSIBLE_TO_THIS_USER;
 
         List<InventoryItemEntity> existing =
-                inventoryItemDao.findAllByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(), productId);
+                inventoryItemDao.findAllByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(),
+                        productEntity.getEntitlementTag());
 
         if (!existing.isEmpty()) {
             return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;
