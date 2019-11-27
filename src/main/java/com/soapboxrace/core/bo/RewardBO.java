@@ -1,10 +1,7 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.*;
-import com.soapboxrace.core.dao.InventoryItemDAO;
-import com.soapboxrace.core.dao.LevelRepDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.ProductDAO;
+import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.*;
 
@@ -48,6 +45,9 @@ public class RewardBO {
 
     @EJB
     private DriverPersonaBO driverPersonaBO;
+
+    @EJB
+    private AmplifierDAO amplifierDAO;
 
     public Float getPlayerLevelConst(int playerLevel, float levelCashRewardMultiplier) {
         return levelCashRewardMultiplier * playerLevel;
@@ -215,18 +215,9 @@ public class RewardBO {
     }
 
     public void setAmplifierReward(PersonaEntity personaEntity, RewardVO rewardVO) {
-        // TODO: refactor this to allow custom amplifiers to exist
-        InventoryItemEntity repAmp = inventoryItemDao.findByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(),
-                "REP_AMPLIFIER_2X");
-        InventoryItemEntity cashAmp = inventoryItemDao.findByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(),
-                "CASH_AMPLIFIER_2X");
-
-        if (repAmp != null) {
-            rewardVO.add(rewardVO.getRep(), 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
-        }
-
-        if (cashAmp != null) {
-            rewardVO.add(0, rewardVO.getCash(), EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
+        for (InventoryItemEntity inventoryItemEntity :
+                inventoryItemDao.findAllByPersonaIdAndType(personaEntity.getPersonaId(), "AMPLIFIER")) {
+            processAmplifier(inventoryItemEntity, rewardVO);
         }
     }
 
@@ -289,6 +280,24 @@ public class RewardBO {
         int repReward = (int) (baseRep * rewardValue * rewardMultiplier);
         int cashReward = (int) (baseCash * rewardValue * cashMultiplier);
         rewardVO.add(repReward, cashReward, EnumRewardCategory.PURSUIT, enumRewardType);
+    }
+
+    private void processAmplifier(InventoryItemEntity inventoryItemEntity, RewardVO rewardVO) {
+        AmplifierEntity amplifierEntity =
+                amplifierDAO.findAmplifierByHash(inventoryItemEntity.getProductEntity().getHash());
+        switch (amplifierEntity.getAmpType()) {
+            case "CASH":
+                rewardVO.add(0, (int) ((rewardVO.getCash() * amplifierEntity.getCashMultiplier()) - rewardVO.getCash()),
+                        EnumRewardCategory.AMPLIFIER,
+                        EnumRewardType.TOKEN_AMPLIFIER);
+                break;
+            case "REP":
+                rewardVO.add((int) ((rewardVO.getRep() * amplifierEntity.getRepMultiplier()) - rewardVO.getRep()), 0,
+                        EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
+                break;
+            default:
+                break;
+        }
     }
 
     private LuckyDrawInfo getTreasureHuntLuckyDraw(Integer rank, PersonaEntity personaEntity,

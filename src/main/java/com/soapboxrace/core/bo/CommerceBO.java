@@ -42,6 +42,9 @@ public class CommerceBO {
     @EJB
     private PerformanceBO performanceBO;
 
+    @EJB
+    private InventoryDAO inventoryDAO;
+
     public CommerceSessionResultTrans doCommerce(CommerceSessionTrans commerceSessionTrans, Long personaId) {
         List<BasketItemTrans> basketItems = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
         PersonaEntity personaEntity = personaDAO.findById(personaId);
@@ -164,6 +167,8 @@ public class CommerceBO {
             });
         }
 
+//        inventoryDAO.update(inventoryEntity);
+
         double finalCash = personaEntity.getCash() - removeCash + addCash.get();
         double finalBoost = personaEntity.getBoost() - removeBoost + addBoost;
 
@@ -183,7 +188,6 @@ public class CommerceBO {
         performanceBO.calcNewCarClass(customCar);
 
         customCarDAO.update(customCar);
-
         personaEntity.setBoost(finalBoost);
         driverPersonaBO.updateCash(personaEntity, finalCash);
 

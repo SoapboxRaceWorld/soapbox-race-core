@@ -19,6 +19,10 @@ import java.time.LocalDateTime;
                 query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
                         ":personaId AND obj.productEntity.hash = :hash"),
         @NamedQuery(
+                name = "InventoryItemEntity.findAllByPersonaIdAndType",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
+                        ":personaId AND obj.productEntity.productType = :productType"),
+        @NamedQuery(
                 name = "InventoryItemEntity.findAllByInventoryAndTag",
                 query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = " +
                         ":inventoryId AND obj.productEntity.entitlementTag = :entitlementTag"),
@@ -26,6 +30,10 @@ import java.time.LocalDateTime;
                 name = "InventoryItemEntity.findAllByInventoryAndHash",
                 query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = " +
                         ":inventoryId AND obj.productEntity.hash = :hash"),
+        @NamedQuery(
+                name = "InventoryItemEntity.findAllByInventoryAndType",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = " +
+                        ":inventoryId AND obj.productEntity.productType = :productType"),
 })
 public class InventoryItemEntity {
 
@@ -33,7 +41,7 @@ public class InventoryItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(targetEntity = InventoryEntity.class, optional = false, cascade = CascadeType.PERSIST)
+    @ManyToOne(targetEntity = InventoryEntity.class, optional = false)
     private InventoryEntity inventoryEntity;
 
     @Column

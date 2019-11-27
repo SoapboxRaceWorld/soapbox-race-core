@@ -273,6 +273,7 @@ public class InventoryBO {
         if (existingItem.getRemainingUseCount() <= 0) {
             // the <= should just be a == but you never know what could happen
             inventoryEntity.getInventoryItems().remove(existingItem);
+            updateInventorySlots(inventoryEntity, existingItem.getProductEntity(), false);
             inventoryDAO.update(inventoryEntity);
         }
     }
@@ -331,10 +332,9 @@ public class InventoryBO {
                     EngineExceptionCode.EntitlementNoSuchGroup);
 
         if (quantity == -1 || quantity == inventoryItemEntity.getRemainingUseCount()) {
-            inventoryEntity.getInventoryItems().remove(inventoryItemEntity);
             updateInventorySlots(inventoryEntity, inventoryItemEntity.getProductEntity(), false);
-
-            inventoryDAO.update(inventoryEntity);
+            inventoryEntity.getInventoryItems().remove(inventoryItemEntity);
+            inventoryItemDAO.delete(inventoryItemEntity);
         } else {
             if (quantity < 1)
                 throw new EngineException("An invalid removal operation was requested. Cannot remove " + quantity +

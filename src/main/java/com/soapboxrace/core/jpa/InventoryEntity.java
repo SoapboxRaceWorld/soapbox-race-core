@@ -21,7 +21,7 @@ public class InventoryEntity {
     @JoinColumn(name = "personaId", foreignKey = @ForeignKey(name = "FK_INVENTORY_PERSONA"))
     private PersonaEntity personaEntity;
 
-    @OneToMany(mappedBy = "inventoryEntity", orphanRemoval = true, cascade = CascadeType.PERSIST, fetch =
+    @OneToMany(mappedBy = "inventoryEntity", fetch =
             FetchType.EAGER)
     private List<InventoryItemEntity> inventoryItems = new ArrayList<>();
 

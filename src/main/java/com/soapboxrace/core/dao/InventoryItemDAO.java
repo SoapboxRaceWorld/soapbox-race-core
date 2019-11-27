@@ -30,6 +30,14 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
                 .getResultList();
     }
 
+    public List<InventoryItemEntity> findAllByPersonaIdAndType(Long personaId, String productType) {
+        return entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaIdAndType",
+                InventoryItemEntity.class)
+                .setParameter("personaId", personaId)
+                .setParameter("productType", productType)
+                .getResultList();
+    }
+
     public InventoryItemEntity findByPersonaIdAndHash(Long personaId, Integer hash) {
         TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity" +
                 ".findAllByPersonaIdAndHash", InventoryItemEntity.class);
