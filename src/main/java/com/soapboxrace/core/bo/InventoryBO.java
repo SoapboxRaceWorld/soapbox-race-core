@@ -278,8 +278,9 @@ public class InventoryBO {
 
         if (existingItem.getRemainingUseCount() <= 0) {
             // the <= should just be a == but you never know what could happen
-            inventoryEntity.getInventoryItems().remove(existingItem);
             updateInventorySlots(inventoryEntity, existingItem.getProductEntity(), false);
+            inventoryEntity.getInventoryItems().remove(existingItem);
+            inventoryItemDAO.delete(existingItem);
             inventoryDAO.update(inventoryEntity);
         }
     }
@@ -341,6 +342,7 @@ public class InventoryBO {
             updateInventorySlots(inventoryEntity, inventoryItemEntity.getProductEntity(), false);
             inventoryEntity.getInventoryItems().remove(inventoryItemEntity);
             inventoryItemDAO.delete(inventoryItemEntity);
+            inventoryDAO.update(inventoryEntity);
         } else {
             if (quantity < 1)
                 throw new EngineException("An invalid removal operation was requested. Cannot remove " + quantity +
