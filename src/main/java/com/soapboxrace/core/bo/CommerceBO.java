@@ -42,9 +42,6 @@ public class CommerceBO {
     @EJB
     private PerformanceBO performanceBO;
 
-    @EJB
-    private InventoryDAO inventoryDAO;
-
     public CommerceSessionResultTrans doCommerce(CommerceSessionTrans commerceSessionTrans, Long personaId) {
         List<BasketItemTrans> basketItems = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
         PersonaEntity personaEntity = personaDAO.findById(personaId);
@@ -125,15 +122,6 @@ public class CommerceBO {
                             removeBoost += (int) productEntity.getPrice();
                     } else {
                         inventoryBO.decreaseItemCount(inventoryEntity, productEntity.getEntitlementTag());
-//                        InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaId,
-//                                addedItem.getKey());
-//
-//                        if (inventoryItemEntity != null) {
-//                            inventoryBO.decrementUsage(personaId, addedItem.getKey());
-//                        } else {
-//                            commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
-//                            return commerceSessionResultTrans;
-//                        }
                     }
                 } else {
                     commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
@@ -166,8 +154,6 @@ public class CommerceBO {
                 }
             });
         }
-
-//        inventoryDAO.update(inventoryEntity);
 
         double finalCash = personaEntity.getCash() - removeCash + addCash.get();
         double finalBoost = personaEntity.getBoost() - removeBoost + addBoost;
