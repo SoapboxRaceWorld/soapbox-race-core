@@ -57,21 +57,21 @@ public class ItemRewardBO {
         ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
 
         if (rewardScript != null) {
-            try {
-                handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, personaEntity);
-            } catch (ScriptException e) {
-                throw new RuntimeException(e);
-            }
+            handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, personaEntity);
         }
 
         return arrayOfCommerceItemTrans;
     }
 
-    private ItemRewardBase scriptToItem(String rewardScript) throws ScriptException {
+    private ItemRewardBase scriptToItem(String rewardScript) {
         Bindings bindings = scriptEngine.get().createBindings();
         bindings.put("generator", getGenerator());
 
-        return scriptToItem(rewardScript, bindings);
+        try {
+            return scriptToItem(rewardScript, bindings);
+        } catch (ScriptException e) {
+            throw new RuntimeException("Failed to execute script: " + rewardScript, e);
+        }
     }
 
     public RewardGenerator getGenerator() {
@@ -226,7 +226,7 @@ public class ItemRewardBO {
             for (CardPackItemEntity cardPackItemEntity : cardPackEntity.getItems()) {
                 try {
                     items.add(scriptToItem(cardPackItemEntity.getScript()));
-                } catch (ScriptException e) {
+                } catch (Exception e) {
                     throw new RuntimeException("Error while generating card pack " + packId, e);
                 }
             }
@@ -487,14 +487,14 @@ public class ItemRewardBO {
 
                 try {
                     return scriptToItem(items.get(randomIndex).getScript());
-                } catch (ScriptException e) {
+                } catch (Exception e) {
                     throw new EngineException(e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
                 }
             }
 
             try {
                 return scriptToItem(items.get(new Random().nextInt(items.size())).getScript());
-            } catch (ScriptException e) {
+            } catch (Exception e) {
                 throw new EngineException(e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
             }
         }
