@@ -7,15 +7,13 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.*;
+import com.soapboxrace.core.dao.CardPackDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.dao.RewardTableDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.ProductEntity;
-import com.soapboxrace.core.jpa.RewardTableEntity;
-import com.soapboxrace.core.jpa.RewardTableItemEntity;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
 import com.soapboxrace.jaxb.http.CommerceItemTrans;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
@@ -51,6 +49,9 @@ public class ItemRewardBO {
     @EJB
     private BasketBO basketBO;
 
+    @EJB
+    private CardPackDAO cardPackDAO;
+
     public ArrayOfCommerceItemTrans getRewards(Long personaId, String rewardScript) {
         PersonaEntity personaEntity = personaDAO.findById(personaId);
         ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
@@ -83,7 +84,7 @@ public class ItemRewardBO {
         if (obj instanceof ItemRewardBase) {
             return (ItemRewardBase) obj;
         } else if (obj instanceof RewardBuilder) {
-            return ((RewardBuilder) obj).build();
+            return ((RewardBuilder<?>) obj).build();
         }
 
         throw new RuntimeException("Invalid script return: " + obj.getClass().getName());
@@ -185,6 +186,92 @@ public class ItemRewardBO {
         public TableSelectionBuilder table() {
             return new TableSelectionBuilder();
         }
+
+        //region Compatibility
+
+        public ItemRewardCash cashReward(int amount) {
+            return cash().amount(amount).build();
+        }
+
+        public ItemRewardProduct findRandomRatedItem(String subType, Integer quality) {
+            return product().subType(subType).rating(quality).build();
+        }
+
+        public ItemRewardProduct findRandomRatedItemByProdType(String prodType, Integer quality) {
+            return product().type(prodType).rating(quality).build();
+        }
+
+        public ItemRewardProduct findRandomItemByProdType(String prodType) {
+            return product().type(prodType).weighted(false).build();
+        }
+
+        public ItemRewardProduct findWeightedRandomItemByProdType(String prodType) {
+            return product().type(prodType).weighted(true).build();
+        }
+
+        public ItemRewardProduct generateSingleItem(String entitlementTag) {
+            ProductEntity byEntitlementTag = productDAO.findByEntitlementTag(entitlementTag);
+
+            if (byEntitlementTag == null) {
+                throw new IllegalArgumentException("Invalid entitlementTag: " + entitlementTag);
+            }
+
+            return new ItemRewardProduct(byEntitlementTag);
+        }
+
+        public ItemRewardMulti getCardPack(String packId) {
+            List<ItemRewardBase> items = new ArrayList<>();
+            CardPackEntity cardPackEntity = cardPackDAO.findByEntitlementTag(packId);
+
+            for (CardPackItemEntity cardPackItemEntity : cardPackEntity.getItems()) {
+                try {
+                    items.add(scriptToItem(cardPackItemEntity.getScript()));
+                } catch (ScriptException e) {
+                    throw new RuntimeException("Error while generating card pack " + packId, e);
+                }
+            }
+
+            return new ItemRewardMulti(items);
+        }
+
+        public ItemRewardMulti multiItems(String[] entitlementTags) {
+            List<ItemRewardBase> productEntities = new ArrayList<>();
+
+            for (String entitlementTag : entitlementTags) {
+                productEntities.add(generateSingleItem(entitlementTag));
+            }
+
+            return new ItemRewardMulti(productEntities);
+        }
+
+        public ItemRewardMulti multipleRewards(ItemRewardBase[] rewards) {
+            return new ItemRewardMulti(Arrays.asList(rewards));
+        }
+
+        public ItemRewardBase randomDrop(List<String> entitlementTags) {
+            return random().withBuilders(entitlementTags.stream().map(s -> product().entitlementTag(s)).collect(Collectors.toList())).build();
+        }
+
+        public ItemRewardBase randomSelection(List<ItemRewardBase> rewards) {
+            if (rewards.isEmpty()) {
+                throw new IllegalArgumentException("No rewards to choose from!");
+            }
+
+            return rewards.get(new Random().nextInt(rewards.size()));
+        }
+
+        public ItemRewardBase randomTableItem(String tableId) {
+            return table().tableName(tableId).weighted(false).build();
+        }
+
+        public ItemRewardQuantityProduct rewardQuantityProduct(String entitlementTag, Integer quantity) {
+            return product().entitlementTag(entitlementTag).quantity(quantity).weighted(false).build();
+        }
+
+        public ItemRewardBase weightedRandomTableItem(String tableName) {
+            return table().tableName(tableName).weighted(true).build();
+        }
+        //endregion
     }
 
     /**
@@ -223,9 +310,9 @@ public class ItemRewardBO {
             return this;
         }
 
-        public RandomSelectionBuilder withBuilders(List<RewardBuilder> choices) {
+        public RandomSelectionBuilder withBuilders(List<RewardBuilder<?>> choices) {
             this.choices =
-                    choices.stream().map((Function<RewardBuilder, ItemRewardBase>) RewardBuilder::build).collect(Collectors.toList());
+                    choices.stream().map((Function<RewardBuilder<?>, ItemRewardBase>) RewardBuilder::build).collect(Collectors.toList());
             return this;
         }
 
