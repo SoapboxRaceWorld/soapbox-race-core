@@ -163,7 +163,7 @@ public class RewardBO {
             ProductEntity productEntity = productDAO.findByHash(skillModPartEntity.getSkillModPartAttribHash());
             if (productEntity != null && productEntity.getProductTitle().equals(skillModRewardType.toString())) {
                 float skillValue = productEntity.getSkillValue();
-                skillMultiplier = skillMultiplier + skillValue;
+                skillMultiplier += skillValue;
             }
         }
         float finalSkillMultiplier = Math.min(maxSkillMultiplier, skillMultiplier) / 100;

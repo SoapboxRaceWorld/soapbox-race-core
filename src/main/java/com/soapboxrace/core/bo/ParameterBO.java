@@ -98,6 +98,11 @@ public class ParameterBO {
 
     public Integer getIntParam(String parameter) {
         String parameterFromDB = getParameter(parameter);
+
+        if (parameterFromDB == null) {
+            throw new RuntimeException("Cannot find integer parameter: " + parameter);
+        }
+
         return Integer.valueOf(parameterFromDB);
     }
 
@@ -123,6 +128,11 @@ public class ParameterBO {
 
     public Float getFloatParam(String parameter) {
         String parameterFromDB = getParameter(parameter);
+
+        if (parameterFromDB == null) {
+            throw new RuntimeException("Cannot find float parameter: " + parameter);
+        }
+
         return Float.valueOf(parameterFromDB);
     }
 
