@@ -51,11 +51,13 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
                 ProductEntity.class);
         query.setParameter("productId", productId);
 
-        try {
-            return query.getSingleResult();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to find product with ID " + productId, e);
+        List<ProductEntity> results = query.getResultList();
+
+        if (results.isEmpty()) {
+            throw new RuntimeException("Could not find product with ID: " + productId);
         }
+
+        return results.get(0);
         //        return query.getSingleResult();
     }
 
@@ -64,11 +66,13 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
                 ProductEntity.class);
         query.setParameter("entitlementTag", entitlementTag);
 
-        try {
-            return query.getSingleResult();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to find product with tag " + entitlementTag, e);
+        List<ProductEntity> results = query.getResultList();
+
+        if (results.isEmpty()) {
+            throw new RuntimeException("Could not find product with tag: " + entitlementTag);
         }
+
+        return results.get(0);
     }
 
     public ProductEntity findByHash(Integer hash) {
@@ -76,11 +80,13 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
                 ProductEntity.class);
         query.setParameter("hash", hash);
 
-        try {
-            return query.getSingleResult();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to find product with hash " + hash, e);
+        List<ProductEntity> results = query.getResultList();
+
+        if (results.isEmpty()) {
+            throw new RuntimeException("Could not find product with hash: " + hash);
         }
+
+        return results.get(0);
     }
 
     public List<ProductEntity> findDropsByType(String type) {
