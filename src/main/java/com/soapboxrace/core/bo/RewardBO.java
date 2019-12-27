@@ -184,14 +184,15 @@ public class RewardBO {
         return accolades;
     }
 
-    public Accolades getAccolades(PersonaEntity personaEntity, TreasureHuntConfigEntity treasureHuntConfigEntity,
+    public Accolades getAccolades(PersonaEntity personaEntity, TreasureHuntEntity treasureHuntEntity,
+                                  TreasureHuntConfigEntity treasureHuntConfigEntity,
                                   ArbitrationPacket arbitrationPacket,
                                   RewardVO rewardVO) {
         Accolades accolades = new Accolades();
         accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
         accolades.setLuckyDrawInfo(getTreasureHuntLuckyDraw(arbitrationPacket.getRank(),
-                personaEntity, treasureHuntConfigEntity));
+                personaEntity, treasureHuntEntity, treasureHuntConfigEntity));
         accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
         return accolades;
@@ -307,19 +308,27 @@ public class RewardBO {
     }
 
     private LuckyDrawInfo getTreasureHuntLuckyDraw(Integer rank, PersonaEntity personaEntity,
-                                                   TreasureHuntConfigEntity treasureHuntConfigEntity) {
-        LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
-        if (!parameterBO.getBoolParam("ENABLE_DROP_ITEM")) {
-            return luckyDrawInfo;
-        }
+                                                   TreasureHuntEntity treasureHuntEntity, TreasureHuntConfigEntity treasureHuntConfigEntity) {
         ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-        LuckyDrawItem itemFromProduct = getTreasureHuntRewardItem(personaEntity, treasureHuntConfigEntity, rank);
-        if (itemFromProduct == null) {
-            return luckyDrawInfo;
-        }
-        arrayOfLuckyDrawItem.getLuckyDrawItem().add(itemFromProduct);
-        luckyDrawInfo.setCardDeck(CardDecks.forRank(rank));
+        arrayOfLuckyDrawItem.getLuckyDrawItem().add(getTreasureHuntRewardItem(personaEntity, treasureHuntConfigEntity, rank));
+
+        ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();
+        LuckyDrawBox luckyDrawBox = new LuckyDrawBox();
+        luckyDrawBox.setIsValid(true);
+        luckyDrawBox.setLocalizationString("LD_CARD_SILVER");
+        luckyDrawBox.setLuckyDrawSetCategoryId(1);
+        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
+        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
+        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
+        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
+        arrayOfLuckyDrawBox.getLuckyDrawBox().add(luckyDrawBox);
+
+        LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
+        luckyDrawInfo.setBoxes(arrayOfLuckyDrawBox);
+        luckyDrawInfo.setCurrentStreak(treasureHuntEntity.getStreak() > 1 ? (treasureHuntEntity.getStreak() - 1) : 1);
+        luckyDrawInfo.setIsStreakBroken(treasureHuntEntity.getIsStreakBroken());
         luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
+        luckyDrawInfo.setNumBoxAnimations(180);
         return luckyDrawInfo;
     }
 
