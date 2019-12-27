@@ -167,8 +167,18 @@ public class EventsBO {
         }
         //        accolades.setLuckyDrawInfo(getEventLuckyDraw(treasureHuntEntity, treasureHuntConfigEntity));
 
-        return rewardBO.getAccolades(personaEntity, treasureHuntConfigEntity, arbitrationPacket,
+        Accolades accolades = rewardBO.getAccolades(personaEntity, treasureHuntConfigEntity, arbitrationPacket,
                 rewardVO);
+        LuckyDrawInfo luckyDrawInfo = accolades.getLuckyDrawInfo();
+        luckyDrawInfo.setIsStreakBroken(treasureHuntEntity.getIsStreakBroken());
+        luckyDrawInfo.setNumBoxAnimations(180);
+        if (treasureHuntEntity.getStreak() > 1) {
+            luckyDrawInfo.setCurrentStreak(treasureHuntEntity.getStreak() - 1);
+        } else {
+            luckyDrawInfo.setCurrentStreak(1);
+        }
+
+        return accolades;
     }
 
 //    private LuckyDrawInfo getEventLuckyDraw(TreasureHuntEntity treasureHuntEntity,
