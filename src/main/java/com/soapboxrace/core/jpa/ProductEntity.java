@@ -30,11 +30,11 @@ import java.util.List;
                         + "obj.isDropable = true AND " //
                         + "obj.productType = :productType"), //
         @NamedQuery(name = "ProductEntity.findByProductId", query = "SELECT obj FROM ProductEntity obj WHERE obj" +
-                ".productId = :productId AND obj.enabled=true"), //
+                ".productId = :productId"), //
         @NamedQuery(name = "ProductEntity.findByEntitlementTag", query = "SELECT obj FROM ProductEntity obj WHERE obj" +
-                ".entitlementTag = :entitlementTag AND obj.enabled=true"), //
+                ".entitlementTag = :entitlementTag"), //
         @NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = " +
-                ":hash AND obj.enabled=true"), //
+                ":hash"), //
         @NamedQuery(name = "ProductEntity.findByType", query = "SELECT obj FROM ProductEntity obj WHERE obj" +
                 ".productType = :type AND obj.enabled=true"), //
         @NamedQuery(name = "ProductEntity.findDropsByType", query = "SELECT obj FROM ProductEntity obj WHERE obj" +
