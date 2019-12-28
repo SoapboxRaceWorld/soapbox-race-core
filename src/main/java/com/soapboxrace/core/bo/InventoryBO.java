@@ -210,6 +210,7 @@ public class InventoryBO {
         // finish up
         updateInventorySlots(inventoryEntity, productEntity, true);
         inventoryItemDAO.insert(inventoryItemEntity);
+        inventoryEntity.getInventoryItems().add(inventoryItemEntity);
         return inventoryItemEntity;
     }
 
@@ -298,9 +299,8 @@ public class InventoryBO {
         inventoryEntity.setSkillModPartsCapacity(parameterBO.getIntParam("STARTING_INVENTORY_SKILL_SLOTS", 100));
         inventoryEntity.setVisualPartsCapacity(parameterBO.getIntParam("STARTING_INVENTORY_VISUAL_SLOTS", 100));
 
-        addDefaultInventoryItems(inventoryEntity);
-
         inventoryDAO.insert(inventoryEntity);
+        addDefaultInventoryItems(inventoryEntity);
 
         return inventoryEntity;
     }
