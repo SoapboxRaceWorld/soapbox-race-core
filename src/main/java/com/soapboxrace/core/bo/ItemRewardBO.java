@@ -53,14 +53,18 @@ public class ItemRewardBO {
     private CardPackDAO cardPackDAO;
 
     public ArrayOfCommerceItemTrans getRewards(Long personaId, String rewardScript) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
-        ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
+        try {
+            PersonaEntity personaEntity = personaDAO.findById(personaId);
+            ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
 
-        if (rewardScript != null) {
-            handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, personaEntity);
+            if (rewardScript != null) {
+                handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, personaEntity);
+            }
+
+            return arrayOfCommerceItemTrans;
+        } catch (Exception e) {
+            throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
         }
-
-        return arrayOfCommerceItemTrans;
     }
 
     private ItemRewardBase scriptToItem(String rewardScript) {
@@ -70,7 +74,7 @@ public class ItemRewardBO {
         try {
             return scriptToItem(rewardScript, bindings);
         } catch (ScriptException e) {
-            throw new RuntimeException("Failed to execute script: " + rewardScript, e);
+            throw new EngineException("Failed to execute script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
         }
     }
 
@@ -227,7 +231,7 @@ public class ItemRewardBO {
                 try {
                     items.add(scriptToItem(cardPackItemEntity.getScript()));
                 } catch (Exception e) {
-                    throw new RuntimeException("Error while generating card pack " + packId, e);
+                    throw new RuntimeException("Error while generating card pack " + packId + " - could not execute script " + cardPackItemEntity.getScript(), e);
                 }
             }
 
@@ -485,17 +489,20 @@ public class ItemRewardBO {
                             EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
                 }
 
+                RewardTableItemEntity rewardTableItemEntity = items.get(randomIndex);
                 try {
-                    return scriptToItem(items.get(randomIndex).getScript());
+                    return scriptToItem(rewardTableItemEntity.getScript());
                 } catch (Exception e) {
-                    throw new EngineException(e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                    throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
                 }
             }
 
+            RewardTableItemEntity rewardTableItemEntity = items.get(new Random().nextInt(items.size()));
+
             try {
-                return scriptToItem(items.get(new Random().nextInt(items.size())).getScript());
+                return scriptToItem(rewardTableItemEntity.getScript());
             } catch (Exception e) {
-                throw new EngineException(e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
             }
         }
     }
