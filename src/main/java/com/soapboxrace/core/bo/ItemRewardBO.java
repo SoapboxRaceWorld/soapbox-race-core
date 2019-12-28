@@ -25,6 +25,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -405,15 +406,17 @@ public class ItemRewardBO {
                 throw new RuntimeException("No products to choose from! " + debugFormat);
             }
 
+            int numProducts = productEntities.size();
+
             if (this.isWeighted) {
                 double weightSum =
-                        productEntities.stream().mapToDouble(p -> OptionalDouble.of(p.getDropWeight()).orElse(1.0d / productEntities.size())).sum();
+                        productEntities.stream().mapToDouble(getDropWeight(numProducts)).sum();
 
                 int randomIndex = -1;
                 double random = Math.random() * weightSum;
 
                 for (int i = 0; i < productEntities.size(); i++) {
-                    random -= OptionalDouble.of(productEntities.get(i).getDropWeight()).orElse(1.0d / productEntities.size());
+                    random -= getDropWeight(numProducts).applyAsDouble(productEntities.get(i));
 
                     if (random <= 0.0d) {
                         randomIndex = i;
@@ -431,6 +434,15 @@ public class ItemRewardBO {
             return new ItemRewardQuantityProduct(
                     productEntities.get(new Random().nextInt(productEntities.size())),
                     quantity);
+        }
+
+        private ToDoubleFunction<ProductEntity> getDropWeight(int numProducts) {
+            return p -> {
+                Double dropWeight = p.getDropWeight();
+                if (dropWeight == null)
+                    return 1.0d / numProducts;
+                return dropWeight;
+            };
         }
     }
 
@@ -468,15 +480,17 @@ public class ItemRewardBO {
                         EngineExceptionCode.LuckyDrawContextNotFoundOrEmpty);
             }
 
+            int numItems = items.size();
+
             if (this.weighted) {
                 double weightSum =
-                        items.stream().mapToDouble(p -> OptionalDouble.of(p.getDropWeight()).orElse(1.0d / items.size())).sum();
+                        items.stream().mapToDouble(getDropWeight(numItems)).sum();
 
                 int randomIndex = -1;
                 double random = Math.random() * weightSum;
 
                 for (int i = 0; i < items.size(); i++) {
-                    random -= OptionalDouble.of(items.get(i).getDropWeight()).orElse(1.0d / items.size());
+                    random -= getDropWeight(numItems).applyAsDouble(items.get(i));
 
                     if (random <= 0.0d) {
                         randomIndex = i;
@@ -504,6 +518,15 @@ public class ItemRewardBO {
             } catch (Exception e) {
                 throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
             }
+        }
+
+        private ToDoubleFunction<RewardTableItemEntity> getDropWeight(int numItems) {
+            return item -> {
+                Double dropWeight = item.getDropWeight();
+                if (dropWeight == null)
+                    return 1.0d / numItems;
+                return dropWeight;
+            };
         }
     }
 
