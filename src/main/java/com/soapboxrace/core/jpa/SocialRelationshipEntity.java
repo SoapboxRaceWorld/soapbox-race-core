@@ -14,7 +14,7 @@ import javax.persistence.*;
         @NamedQuery(name = "SocialRelationshipEntity.findByUser", query = "SELECT obj FROM SocialRelationshipEntity " +
                 "obj WHERE obj.user.id = :id"), //
         @NamedQuery(name = "SocialRelationshipEntity.deleteAllByPersonaId", query = "DELETE FROM " +
-                "SocialRelationshipEntity obj WHERE obj.remotePersonaId = :personaId "),
+                "SocialRelationshipEntity obj WHERE obj.remotePersonaId = :personaId"),
         @NamedQuery(name = "SocialRelationshipEntity.findByUserAndStatus", query = "SELECT obj FROM " +
                 "SocialRelationshipEntity obj WHERE obj.user.id = :id AND obj.status=:status"), //
         @NamedQuery(name = "SocialRelationshipEntity.findByRemoteUserAndStatus", query = "SELECT obj FROM " +

@@ -22,6 +22,12 @@ public class PersonaBadgeDAO extends BaseDAO<PersonaBadgeEntity> {
         this.entityManager = entityManager;
     }
 
+    public void deleteAllBadgesForPersona(Long personaId) {
+        this.entityManager.createNamedQuery("PersonaBadgeEntity.deleteAllBadgesForPersona")
+                .setParameter("personaId", personaId)
+                .executeUpdate();
+    }
+
     public List<PersonaBadgeEntity> findAllBadgesForPersona(Long personaId) {
         return this.entityManager.createNamedQuery("PersonaBadgeEntity.findAllBadgesForPersona",
                 PersonaBadgeEntity.class)

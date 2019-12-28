@@ -15,10 +15,10 @@ import com.soapboxrace.core.jpa.SkillModRewardType;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
+import org.apache.commons.lang3.RandomUtils;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.Random;
 
 @Stateless
 public class RewardTeamEscapeBO extends RewardBO {
@@ -74,8 +74,7 @@ public class RewardTeamEscapeBO extends RewardBO {
         setMultiplierReward(eventEntity, rewardVO);
         setAmplifierReward(personaEntity, rewardVO);
 
-        Random random = new Random();
-        teamEscapeArbitrationPacket.setRank(random.nextInt(4));
+        teamEscapeArbitrationPacket.setRank(RandomUtils.nextInt(1, 5));
         applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
         return getAccolades(personaEntity, eventEntity, teamEscapeArbitrationPacket, rewardVO);
     }

@@ -8,7 +8,6 @@ package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
-import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.jaxb.http.*;
 
 import javax.ejb.EJB;
@@ -187,7 +186,7 @@ public class DriverPersonaBO {
         inventoryDAO.deleteByPersona(personaEntity);
         personaAchievementRankDAO.deleteByPersona(personaEntity);
         personaAchievementDAO.deleteByPersona(personaEntity);
-        socialRelationshipDAO.deleteAllByPersonaId(personaId);
+        personaBadgeDAO.deleteAllBadgesForPersona(personaId);
         socialRelationshipDAO.deleteAllByPersonaId(personaId);
 
         personaDao.delete(personaEntity);
