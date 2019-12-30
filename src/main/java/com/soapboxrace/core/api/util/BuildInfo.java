@@ -6,9 +6,12 @@
 
 package com.soapboxrace.core.api.util;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
-import java.util.Properties;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class BuildInfo {
     private static boolean loadedInfo = false;
@@ -19,20 +22,39 @@ public class BuildInfo {
 
     public static void load() {
         if (!loadedInfo) {
-            String data = ResourceUtils.getResourceFileAsString("project-info.properties");
-            Properties properties = new Properties();
-            try {
-                properties.load(new StringReader(data));
+            String gitPropertiesJson = readGitProperties();
+            System.out.println(gitPropertiesJson);
+            GitStateInfo gitStateInfo = new Gson().fromJson(gitPropertiesJson, GitStateInfo.class);
+            branch = gitStateInfo.branch;
+            commitID = gitStateInfo.commitIdAbbreviated;
+            longCommitID = gitStateInfo.commitId;
+            time = gitStateInfo.commitTime;
 
-                branch = properties.getProperty("branch");
-                commitID = properties.getProperty("commitID");
-                longCommitID = properties.getProperty("longCommitID");
-                time = properties.getProperty("time");
-                loadedInfo = true;
-            } catch (IOException e) {
-                e.printStackTrace();
+            loadedInfo = true;
+        }
+    }
+
+
+    private static String readGitProperties() {
+        ClassLoader classLoader = BuildInfo.class.getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("git.properties");
+        try {
+            return readFromInputStream(inputStream);
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot read git.properties", e);
+        }
+    }
+
+    private static String readFromInputStream(InputStream inputStream)
+            throws IOException {
+        StringBuilder resultStringBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append("\n");
             }
         }
+        return resultStringBuilder.toString();
     }
 
     public static String getBranch() {

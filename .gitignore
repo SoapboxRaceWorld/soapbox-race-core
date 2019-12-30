@@ -9,6 +9,7 @@ out/
 /.classpath
 /.settings
 /gradle/
+/target/
 /src/main/resources/Engine.svc
 /db
 /build
@@ -18,3 +19,5 @@ sql-old/
 wildfly/
 /sql/mysql/full-script.sql
 /GeoLite2-Country.mmdb
+project-*.yml
+!project-defaults.yml
