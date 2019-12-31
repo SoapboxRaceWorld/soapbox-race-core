@@ -25,14 +25,16 @@ thorntail:
       port: 465
   undertow:
     filter-configuration:
-      custom-filters:
-        gzip:
-          class-name: com.soapboxrace.core.filter.GzipHandler
-          module: world.soapboxrace.server
+      response-headers:
+      # reserved for future use
+      gzips:
+        gzipFilter:
+        # nothing to configure
     servers:
       default-server:
         hosts:
           default-host:
             filter-refs:
-              gzip:
+              gzipFilter:
                 priority: 1
+                predicate: "exists['%{o,Content-Type}'] and regex[pattern='(?:application/javascript|text/css|text/html|text/xml|application/json|application/xml)(;.*)?', value=%{o,Content-Type}, full-match=true]"
