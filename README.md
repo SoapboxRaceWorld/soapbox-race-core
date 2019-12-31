@@ -12,7 +12,7 @@ World**. Currently, most of the original game functionality is implemented, but 
 
 ## Technical details
 The server is an application built to run on the [Wildfly](https://wildfly.org) platform, through [Thorntail](https://thorntail.io). Maven is used as the build
-system. All code is written for Java 9.
+system. All code is written for Java 8.
 
 ## Installation
 Installation documentation is WIP.
