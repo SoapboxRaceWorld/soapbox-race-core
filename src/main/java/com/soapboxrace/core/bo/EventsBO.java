@@ -83,7 +83,7 @@ public class EventsBO {
     public Accolades notifyCoinCollected(Long activePersonaId, Integer coins) {
         TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
         if (treasureHuntEntity != null) {
-            if (treasureHuntEntity.getCoinsCollected()==32767) {
+            if (treasureHuntEntity.getCoinsCollected() == 32767) {
                 throw new EngineException("TH is not ready", EngineExceptionCode.SecurityKickedArbitration);
             }
 

@@ -84,9 +84,9 @@ public class RewardBO {
 
     public RewardVO getRewardVO(PersonaEntity personaEntity) {
         boolean enableEconomy =
-                parameterBO.getBoolParam("ENABLE_ECONOMY") && personaEntity.getLevel() < parameterBO.getMaxLevel(personaEntity.getUser());
+                parameterBO.getBoolParam("ENABLE_ECONOMY") && personaEntity.getCash() < parameterBO.getMaxCash(personaEntity.getUser());
         boolean enableReputation =
-                parameterBO.getBoolParam("ENABLE_REPUTATION") && personaEntity.getCash() < parameterBO.getMaxCash(personaEntity.getUser());
+                parameterBO.getBoolParam("ENABLE_REPUTATION") && personaEntity.getLevel() < parameterBO.getMaxLevel(personaEntity.getUser());
         return new RewardVO(enableEconomy, enableReputation);
     }
 
