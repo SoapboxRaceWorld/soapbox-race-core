@@ -1,3 +1,9 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.*;
@@ -7,27 +13,33 @@ import java.time.LocalDateTime;
 @Table(name = "INVENTORY_ITEM")
 @NamedQueries({
         @NamedQuery(
-                name = "InventoryItemEntity.findAllWithExpirationDate",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.expirationDate IS NOT NULL"),
-        @NamedQuery(
-                name = "InventoryItemEntity.findAllByInventoryId",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = :inventoryId"),
-        @NamedQuery(
                 name = "InventoryItemEntity.findAllByPersonaId",
                 query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
                         ":personaId"),
         @NamedQuery(
-                name = "InventoryItemEntity.findAllByInventoryIdAndType",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = :inventoryId AND obj" +
-                        ".virtualItemType = :virtualItemType"),
-        @NamedQuery(
                 name = "InventoryItemEntity.findAllByPersonaIdAndTag",
                 query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
-                        ":personaId AND obj.entitlementTag = :entitlementTag"),
+                        ":personaId AND obj.productEntity.entitlementTag = :entitlementTag"),
         @NamedQuery(
                 name = "InventoryItemEntity.findAllByPersonaIdAndHash",
                 query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
-                        ":personaId AND obj.hash = :hash")
+                        ":personaId AND obj.productEntity.hash = :hash"),
+        @NamedQuery(
+                name = "InventoryItemEntity.findAllByPersonaIdAndType",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
+                        ":personaId AND obj.productEntity.productType = :productType"),
+        @NamedQuery(
+                name = "InventoryItemEntity.findAllByInventoryAndTag",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = " +
+                        ":inventoryId AND obj.productEntity.entitlementTag = :entitlementTag"),
+        @NamedQuery(
+                name = "InventoryItemEntity.findAllByInventoryAndHash",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = " +
+                        ":inventoryId AND obj.productEntity.hash = :hash"),
+        @NamedQuery(
+                name = "InventoryItemEntity.findAllByInventoryAndType",
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = " +
+                        ":inventoryId AND obj.productEntity.productType = :productType"),
 })
 public class InventoryItemEntity {
 
@@ -38,17 +50,12 @@ public class InventoryItemEntity {
     @ManyToOne(targetEntity = InventoryEntity.class, optional = false)
     private InventoryEntity inventoryEntity;
 
-    @Column(nullable = false)
-    private String entitlementTag;
-
     @Column
     private LocalDateTime expirationDate;
 
-    @Column(nullable = false)
-    private Integer hash; // bStringHash(entitlementTag.toUpperCase())
-
-    @Column(nullable = false)
-    private String productId;
+    @ManyToOne(targetEntity = ProductEntity.class, cascade = CascadeType.PERSIST, optional = false)
+    @JoinColumn(name = "productId", referencedColumnName = "productId")
+    private ProductEntity productEntity;
 
     @Column
     private int remainingUseCount;
@@ -58,9 +65,6 @@ public class InventoryItemEntity {
 
     @Column(nullable = false)
     private String status;
-
-    @Column(nullable = false)
-    private String virtualItemType;
 
     public Long getId() {
         return id;
@@ -78,14 +82,6 @@ public class InventoryItemEntity {
         this.inventoryEntity = inventoryEntity;
     }
 
-    public String getEntitlementTag() {
-        return entitlementTag;
-    }
-
-    public void setEntitlementTag(String entitlementTag) {
-        this.entitlementTag = entitlementTag;
-    }
-
     public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
@@ -94,20 +90,12 @@ public class InventoryItemEntity {
         this.expirationDate = expirationDate;
     }
 
-    public Integer getHash() {
-        return hash;
+    public ProductEntity getProductEntity() {
+        return productEntity;
     }
 
-    public void setHash(Integer hash) {
-        this.hash = hash;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
     }
 
     public int getRemainingUseCount() {
@@ -132,13 +120,5 @@ public class InventoryItemEntity {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getVirtualItemType() {
-        return virtualItemType;
-    }
-
-    public void setVirtualItemType(String virtualItemType) {
-        this.virtualItemType = virtualItemType;
     }
 }

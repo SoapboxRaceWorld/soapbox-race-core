@@ -1,3 +1,9 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.dao;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
@@ -17,29 +23,9 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
         this.entityManager = entityManager;
     }
 
-    public List<InventoryItemEntity> findAllWithExpirationDate() {
-        return entityManager.createNamedQuery("InventoryItemEntity.findAllWithExpirationDate",
-                InventoryItemEntity.class)
-                .getResultList();
-    }
-
-    public List<InventoryItemEntity> findAllByInventoryId(Long inventoryId) {
-        return entityManager.createNamedQuery("InventoryItemEntity.findAllByInventoryId", InventoryItemEntity.class)
-                .setParameter("inventoryId", inventoryId)
-                .getResultList();
-    }
-
     public List<InventoryItemEntity> findAllByPersonaId(Long personaId) {
         return entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaId", InventoryItemEntity.class)
                 .setParameter("personaId", personaId)
-                .getResultList();
-    }
-
-    public List<InventoryItemEntity> findAllByInventoryAndType(Long inventoryId, String type) {
-        return entityManager.createNamedQuery("InventoryItemEntity.findAllByInventoryIdAndType",
-                InventoryItemEntity.class)
-                .setParameter("inventoryId", inventoryId)
-                .setParameter("virtualItemType", type)
                 .getResultList();
     }
 
@@ -47,6 +33,14 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
         return entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaIdAndTag", InventoryItemEntity.class)
                 .setParameter("personaId", personaId)
                 .setParameter("entitlementTag", entitlementTag)
+                .getResultList();
+    }
+
+    public List<InventoryItemEntity> findAllByPersonaIdAndType(Long personaId, String productType) {
+        return entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaIdAndType",
+                InventoryItemEntity.class)
+                .setParameter("personaId", personaId)
+                .setParameter("productType", productType)
                 .getResultList();
     }
 
@@ -80,18 +74,42 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
         return null;
     }
 
+    public InventoryItemEntity findByInventoryIdAndEntitlementTag(Long inventoryId, String entitlementTag) {
+        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity" +
+                ".findAllByInventoryAndTag", InventoryItemEntity.class);
+        query.setParameter("inventoryId", inventoryId);
+        query.setParameter("entitlementTag", entitlementTag);
+
+        List<InventoryItemEntity> results = query.getResultList();
+
+        if (!results.isEmpty()) {
+            return results.get(0);
+        }
+
+        return null;
+    }
+
+    public InventoryItemEntity findByInventoryIdAndHash(Long inventoryId, Integer hash) {
+        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity" +
+                        ".findAllByInventoryAndHash",
+                InventoryItemEntity.class);
+        query.setParameter("inventoryId", inventoryId);
+        query.setParameter("hash", hash);
+
+        List<InventoryItemEntity> results = query.getResultList();
+
+        if (!results.isEmpty()) {
+            return results.get(0);
+        }
+
+        return null;
+    }
+
     public void deleteByPersona(PersonaEntity personaEntity) {
         List<InventoryItemEntity> items = this.findAllByPersonaId(personaEntity.getPersonaId());
 
         for (InventoryItemEntity inventoryItemEntity : items) {
             delete(inventoryItemEntity);
         }
-    }
-
-    @Override
-    public void insert(InventoryItemEntity entity) {
-        super.insert(entity);
-
-        System.out.println("InventoryItemDAO insert() called");
     }
 }

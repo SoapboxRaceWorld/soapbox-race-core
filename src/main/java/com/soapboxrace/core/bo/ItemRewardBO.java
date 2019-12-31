@@ -1,15 +1,19 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.*;
+import com.soapboxrace.core.dao.CardPackDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.dao.RewardTableDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.ProductEntity;
-import com.soapboxrace.core.jpa.RewardTableEntity;
-import com.soapboxrace.core.jpa.RewardTableItemEntity;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
 import com.soapboxrace.jaxb.http.CommerceItemTrans;
 import jdk.nashorn.api.scripting.NashornScriptEngine;
@@ -21,6 +25,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -45,26 +50,33 @@ public class ItemRewardBO {
     @EJB
     private BasketBO basketBO;
 
+    @EJB
+    private CardPackDAO cardPackDAO;
+
     public ArrayOfCommerceItemTrans getRewards(Long personaId, String rewardScript) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
-        ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
+        try {
+            PersonaEntity personaEntity = personaDAO.findById(personaId);
+            ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
 
-        if (rewardScript != null) {
-            try {
+            if (rewardScript != null) {
                 handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, personaEntity);
-            } catch (ScriptException e) {
-                throw new RuntimeException(e);
             }
-        }
 
-        return arrayOfCommerceItemTrans;
+            return arrayOfCommerceItemTrans;
+        } catch (Exception e) {
+            throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+        }
     }
 
-    private ItemRewardBase scriptToItem(String rewardScript) throws ScriptException {
+    private ItemRewardBase scriptToItem(String rewardScript) {
         Bindings bindings = scriptEngine.get().createBindings();
         bindings.put("generator", getGenerator());
 
-        return scriptToItem(rewardScript, bindings);
+        try {
+            return scriptToItem(rewardScript, bindings);
+        } catch (ScriptException e) {
+            throw new EngineException("Failed to execute script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+        }
     }
 
     public RewardGenerator getGenerator() {
@@ -77,7 +89,7 @@ public class ItemRewardBO {
         if (obj instanceof ItemRewardBase) {
             return (ItemRewardBase) obj;
         } else if (obj instanceof RewardBuilder) {
-            return ((RewardBuilder) obj).build();
+            return ((RewardBuilder<?>) obj).build();
         }
 
         throw new RuntimeException("Invalid script return: " + obj.getClass().getName());
@@ -116,8 +128,12 @@ public class ItemRewardBO {
                     case "performancepart":
                     case "skillmodpart":
                     case "visualpart":
+                        inventoryBO.addInventoryItem(inventoryBO.getInventory(personaEntity.getPersonaId()),
+                                productEntity.getProductId(), useCount);
+                        break;
                     case "powerup":
-                        inventoryBO.addFromCatalogOrUpdateUsage(productEntity, personaEntity, useCount);
+                        inventoryBO.addStackedInventoryItem(inventoryBO.getInventory(personaEntity.getPersonaId()),
+                                productEntity.getProductId(), useCount);
                         break;
                 }
             }
@@ -175,6 +191,92 @@ public class ItemRewardBO {
         public TableSelectionBuilder table() {
             return new TableSelectionBuilder();
         }
+
+        //region Compatibility
+
+        public ItemRewardCash cashReward(int amount) {
+            return cash().amount(amount).build();
+        }
+
+        public ItemRewardProduct findRandomRatedItem(String subType, Integer quality) {
+            return product().subType(subType).rating(quality).build();
+        }
+
+        public ItemRewardProduct findRandomRatedItemByProdType(String prodType, Integer quality) {
+            return product().type(prodType).rating(quality).build();
+        }
+
+        public ItemRewardProduct findRandomItemByProdType(String prodType) {
+            return product().type(prodType).weighted(false).build();
+        }
+
+        public ItemRewardProduct findWeightedRandomItemByProdType(String prodType) {
+            return product().type(prodType).weighted(true).build();
+        }
+
+        public ItemRewardProduct generateSingleItem(String entitlementTag) {
+            ProductEntity byEntitlementTag = productDAO.findByEntitlementTag(entitlementTag);
+
+            if (byEntitlementTag == null) {
+                throw new IllegalArgumentException("Invalid entitlementTag: " + entitlementTag);
+            }
+
+            return new ItemRewardProduct(byEntitlementTag);
+        }
+
+        public ItemRewardMulti getCardPack(String packId) {
+            List<ItemRewardBase> items = new ArrayList<>();
+            CardPackEntity cardPackEntity = cardPackDAO.findByEntitlementTag(packId);
+
+            for (CardPackItemEntity cardPackItemEntity : cardPackEntity.getItems()) {
+                try {
+                    items.add(scriptToItem(cardPackItemEntity.getScript()));
+                } catch (Exception e) {
+                    throw new RuntimeException("Error while generating card pack " + packId + " - could not execute script " + cardPackItemEntity.getScript(), e);
+                }
+            }
+
+            return new ItemRewardMulti(items);
+        }
+
+        public ItemRewardMulti multiItems(String[] entitlementTags) {
+            List<ItemRewardBase> productEntities = new ArrayList<>();
+
+            for (String entitlementTag : entitlementTags) {
+                productEntities.add(generateSingleItem(entitlementTag));
+            }
+
+            return new ItemRewardMulti(productEntities);
+        }
+
+        public ItemRewardMulti multipleRewards(ItemRewardBase[] rewards) {
+            return new ItemRewardMulti(Arrays.asList(rewards));
+        }
+
+        public ItemRewardBase randomDrop(List<String> entitlementTags) {
+            return random().withBuilders(entitlementTags.stream().map(s -> product().entitlementTag(s)).collect(Collectors.toList())).build();
+        }
+
+        public ItemRewardBase randomSelection(List<ItemRewardBase> rewards) {
+            if (rewards.isEmpty()) {
+                throw new IllegalArgumentException("No rewards to choose from!");
+            }
+
+            return rewards.get(new Random().nextInt(rewards.size()));
+        }
+
+        public ItemRewardBase randomTableItem(String tableId) {
+            return table().tableName(tableId).weighted(false).build();
+        }
+
+        public ItemRewardQuantityProduct rewardQuantityProduct(String entitlementTag, Integer quantity) {
+            return product().entitlementTag(entitlementTag).quantity(quantity).weighted(false).build();
+        }
+
+        public ItemRewardBase weightedRandomTableItem(String tableName) {
+            return table().tableName(tableName).weighted(true).build();
+        }
+        //endregion
     }
 
     /**
@@ -213,9 +315,9 @@ public class ItemRewardBO {
             return this;
         }
 
-        public RandomSelectionBuilder withBuilders(List<RewardBuilder> choices) {
+        public RandomSelectionBuilder withBuilders(List<RewardBuilder<?>> choices) {
             this.choices =
-                    choices.stream().map((Function<RewardBuilder, ItemRewardBase>) RewardBuilder::build).collect(Collectors.toList());
+                    choices.stream().map((Function<RewardBuilder<?>, ItemRewardBase>) RewardBuilder::build).collect(Collectors.toList());
             return this;
         }
 
@@ -304,15 +406,17 @@ public class ItemRewardBO {
                 throw new RuntimeException("No products to choose from! " + debugFormat);
             }
 
+            int numProducts = productEntities.size();
+
             if (this.isWeighted) {
                 double weightSum =
-                        productEntities.stream().mapToDouble(p -> OptionalDouble.of(p.getDropWeight()).orElse(1.0d / productEntities.size())).sum();
+                        productEntities.stream().mapToDouble(getDropWeight(numProducts)).sum();
 
                 int randomIndex = -1;
                 double random = Math.random() * weightSum;
 
                 for (int i = 0; i < productEntities.size(); i++) {
-                    random -= OptionalDouble.of(productEntities.get(i).getDropWeight()).orElse(1.0d / productEntities.size());
+                    random -= getDropWeight(numProducts).applyAsDouble(productEntities.get(i));
 
                     if (random <= 0.0d) {
                         randomIndex = i;
@@ -330,6 +434,15 @@ public class ItemRewardBO {
             return new ItemRewardQuantityProduct(
                     productEntities.get(new Random().nextInt(productEntities.size())),
                     quantity);
+        }
+
+        private ToDoubleFunction<ProductEntity> getDropWeight(int numProducts) {
+            return p -> {
+                Double dropWeight = p.getDropWeight();
+                if (dropWeight == null)
+                    return 1.0d / numProducts;
+                return dropWeight;
+            };
         }
     }
 
@@ -367,15 +480,17 @@ public class ItemRewardBO {
                         EngineExceptionCode.LuckyDrawContextNotFoundOrEmpty);
             }
 
+            int numItems = items.size();
+
             if (this.weighted) {
                 double weightSum =
-                        items.stream().mapToDouble(p -> OptionalDouble.of(p.getDropWeight()).orElse(1.0d / items.size())).sum();
+                        items.stream().mapToDouble(getDropWeight(numItems)).sum();
 
                 int randomIndex = -1;
                 double random = Math.random() * weightSum;
 
                 for (int i = 0; i < items.size(); i++) {
-                    random -= OptionalDouble.of(items.get(i).getDropWeight()).orElse(1.0d / items.size());
+                    random -= getDropWeight(numItems).applyAsDouble(items.get(i));
 
                     if (random <= 0.0d) {
                         randomIndex = i;
@@ -388,18 +503,30 @@ public class ItemRewardBO {
                             EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
                 }
 
+                RewardTableItemEntity rewardTableItemEntity = items.get(randomIndex);
                 try {
-                    return scriptToItem(items.get(randomIndex).getScript());
-                } catch (ScriptException e) {
-                    throw new EngineException(e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                    return scriptToItem(rewardTableItemEntity.getScript());
+                } catch (Exception e) {
+                    throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
                 }
             }
 
+            RewardTableItemEntity rewardTableItemEntity = items.get(new Random().nextInt(items.size()));
+
             try {
-                return scriptToItem(items.get(new Random().nextInt(items.size())).getScript());
-            } catch (ScriptException e) {
-                throw new EngineException(e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                return scriptToItem(rewardTableItemEntity.getScript());
+            } catch (Exception e) {
+                throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
             }
+        }
+
+        private ToDoubleFunction<RewardTableItemEntity> getDropWeight(int numItems) {
+            return item -> {
+                Double dropWeight = item.getDropWeight();
+                if (dropWeight == null)
+                    return 1.0d / numItems;
+                return dropWeight;
+            };
         }
     }
 

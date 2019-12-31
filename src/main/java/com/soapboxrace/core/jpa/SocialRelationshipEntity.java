@@ -1,3 +1,9 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.*;
@@ -8,7 +14,7 @@ import javax.persistence.*;
         @NamedQuery(name = "SocialRelationshipEntity.findByUser", query = "SELECT obj FROM SocialRelationshipEntity " +
                 "obj WHERE obj.user.id = :id"), //
         @NamedQuery(name = "SocialRelationshipEntity.deleteAllByPersonaId", query = "DELETE FROM " +
-                "SocialRelationshipEntity obj WHERE obj.remotePersonaId = :personaId "),
+                "SocialRelationshipEntity obj WHERE obj.remotePersonaId = :personaId"),
         @NamedQuery(name = "SocialRelationshipEntity.findByUserAndStatus", query = "SELECT obj FROM " +
                 "SocialRelationshipEntity obj WHERE obj.user.id = :id AND obj.status=:status"), //
         @NamedQuery(name = "SocialRelationshipEntity.findByRemoteUserAndStatus", query = "SELECT obj FROM " +

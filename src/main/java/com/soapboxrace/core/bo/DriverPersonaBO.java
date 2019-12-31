@@ -1,8 +1,13 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.jpa.*;
-import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.jaxb.http.*;
 
 import javax.ejb.EJB;
@@ -181,7 +186,7 @@ public class DriverPersonaBO {
         inventoryDAO.deleteByPersona(personaEntity);
         personaAchievementRankDAO.deleteByPersona(personaEntity);
         personaAchievementDAO.deleteByPersona(personaEntity);
-        socialRelationshipDAO.deleteAllByPersonaId(personaId);
+        personaBadgeDAO.deleteAllBadgesForPersona(personaId);
         socialRelationshipDAO.deleteAllByPersonaId(personaId);
 
         personaDao.delete(personaEntity);

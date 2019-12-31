@@ -1,3 +1,9 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.ParameterDAO;
@@ -92,6 +98,11 @@ public class ParameterBO {
 
     public Integer getIntParam(String parameter) {
         String parameterFromDB = getParameter(parameter);
+
+        if (parameterFromDB == null) {
+            throw new RuntimeException("Cannot find integer parameter: " + parameter);
+        }
+
         return Integer.valueOf(parameterFromDB);
     }
 
@@ -117,7 +128,16 @@ public class ParameterBO {
 
     public Float getFloatParam(String parameter) {
         String parameterFromDB = getParameter(parameter);
+
+        if (parameterFromDB == null) {
+            throw new RuntimeException("Cannot find float parameter: " + parameter);
+        }
+
         return Float.valueOf(parameterFromDB);
     }
 
+    public Float getFloatParam(String parameter, Float defaultValue) {
+        String parameterFromDB = getParameter(parameter);
+        return parameterFromDB == null || parameterFromDB.isEmpty() ? defaultValue : Float.valueOf(parameterFromDB);
+    }
 }

@@ -1,3 +1,9 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.RewardVO;
@@ -36,7 +42,7 @@ public class RewardPursuitBO extends RewardBO {
         setPursuitRewards(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
 
         Random random = new Random();
-        pursuitArbitrationPacket.setRank(random.nextInt(4));
+        pursuitArbitrationPacket.setRank(random.nextInt(4 - 1) + 1);
         applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
         return getAccolades(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
     }

@@ -1,3 +1,9 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.dao;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
@@ -45,7 +51,14 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
                 ProductEntity.class);
         query.setParameter("productId", productId);
 
-        return query.getSingleResult();
+        List<ProductEntity> results = query.getResultList();
+
+        if (results.isEmpty()) {
+            throw new RuntimeException("Could not find product with ID: " + productId);
+        }
+
+        return results.get(0);
+        //        return query.getSingleResult();
     }
 
     public ProductEntity findByEntitlementTag(String entitlementTag) {
@@ -53,7 +66,13 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
                 ProductEntity.class);
         query.setParameter("entitlementTag", entitlementTag);
 
-        return query.getSingleResult();
+        List<ProductEntity> results = query.getResultList();
+
+        if (results.isEmpty()) {
+            throw new RuntimeException("Could not find product with tag: " + entitlementTag);
+        }
+
+        return results.get(0);
     }
 
     public ProductEntity findByHash(Integer hash) {
@@ -61,7 +80,13 @@ public class ProductDAO extends BaseDAO<ProductEntity> {
                 ProductEntity.class);
         query.setParameter("hash", hash);
 
-        return query.getSingleResult();
+        List<ProductEntity> results = query.getResultList();
+
+        if (results.isEmpty()) {
+            throw new RuntimeException("Could not find product with hash: " + hash);
+        }
+
+        return results.get(0);
     }
 
     public List<ProductEntity> findDropsByType(String type) {

@@ -1,3 +1,9 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.ListDifferences;
@@ -96,6 +102,8 @@ public class CommerceBO {
         int addBoost = 0;
         int removeBoost = 0;
 
+        InventoryEntity inventoryEntity = inventoryBO.getInventory(personaId);
+
         for (Map.Entry<Integer, Object> addedItem : addedItems.entrySet()) {
             if (addedItem.getValue() instanceof CustomVinylTrans) {
                 VinylProductEntity vinylProductEntity = vinylProductDAO.findByHash(addedItem.getKey());
@@ -119,15 +127,7 @@ public class CommerceBO {
                         else
                             removeBoost += (int) productEntity.getPrice();
                     } else {
-                        InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndHash(personaId,
-                                addedItem.getKey());
-
-                        if (inventoryItemEntity != null) {
-                            inventoryBO.decrementUsage(personaId, addedItem.getKey());
-                        } else {
-                            commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
-                            return commerceSessionResultTrans;
-                        }
+                        inventoryBO.decreaseItemCount(inventoryEntity, productEntity.getEntitlementTag());
                     }
                 } else {
                     commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
@@ -155,7 +155,7 @@ public class CommerceBO {
                         , e.getEntitlementId());
 
                 if (inventoryItemEntity != null) {
-                    inventoryBO.deletePart(personaId, inventoryItemEntity.getEntitlementTag(), e.getQuantity());
+                    inventoryBO.removeItem(inventoryEntity, e.getEntitlementId(), e.getQuantity());
                     addCash.addAndGet(inventoryItemEntity.getResellPrice());
                 }
             });
@@ -180,7 +180,6 @@ public class CommerceBO {
         performanceBO.calcNewCarClass(customCar);
 
         customCarDAO.update(customCar);
-
         personaEntity.setBoost(finalBoost);
         driverPersonaBO.updateCash(personaEntity, finalCash);
 

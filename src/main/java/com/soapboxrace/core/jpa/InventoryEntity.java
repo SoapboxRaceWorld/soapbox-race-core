@@ -1,3 +1,9 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.*;
@@ -7,7 +13,8 @@ import java.util.List;
 @Entity
 @Table(name = "INVENTORY")
 @NamedQueries({
-        @NamedQuery(name = "InventoryEntity.findByPersonaId", query = "SELECT obj FROM InventoryEntity obj WHERE obj" +
+        @NamedQuery(name = "InventoryEntity.findByPersonaId", query = "SELECT obj FROM InventoryEntity obj WHERE " +
+                "obj" +
                 ".personaEntity.id = :personaId")
 })
 public class InventoryEntity {
@@ -20,7 +27,8 @@ public class InventoryEntity {
     @JoinColumn(name = "personaId", foreignKey = @ForeignKey(name = "FK_INVENTORY_PERSONA"))
     private PersonaEntity personaEntity;
 
-    @OneToMany(mappedBy = "inventoryEntity", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "inventoryEntity", fetch =
+            FetchType.EAGER)
     private List<InventoryItemEntity> inventoryItems = new ArrayList<>();
 
     @Column

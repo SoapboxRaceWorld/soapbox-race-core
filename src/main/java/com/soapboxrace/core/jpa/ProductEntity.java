@@ -1,10 +1,19 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2019.
+ */
+
 package com.soapboxrace.core.jpa;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "PRODUCT")
+@Table(name = "PRODUCT", indexes = {
+        @Index(name = "prod_id_index", columnList = "productId")
+})
 @NamedQueries({ //
         @NamedQuery(name = "ProductEntity.findByLevelEnabled", //
                 query = "SELECT obj FROM ProductEntity obj WHERE " //
@@ -27,18 +36,20 @@ import java.util.List;
         @NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = " +
                 ":hash"), //
         @NamedQuery(name = "ProductEntity.findByType", query = "SELECT obj FROM ProductEntity obj WHERE obj" +
-                ".productType = :type"), //
+                ".productType = :type AND obj.enabled=true"), //
         @NamedQuery(name = "ProductEntity.findDropsByType", query = "SELECT obj FROM ProductEntity obj WHERE obj" +
                 ".productType = :type AND obj.isDropable = true AND obj.enabled = true AND obj.dropWeight IS NOT NULL" +
                 " AND obj.dropWeight > 0.0"), //
         @NamedQuery(name = "ProductEntity.findDropsBySubTypeAndRarity", query = "SELECT obj FROM ProductEntity obj " +
-                "WHERE obj.subType = :subType AND obj.rarity = :rarity AND obj.isDropable = true AND obj.dropWeight >" +
+                "WHERE obj.subType = :subType AND obj.enabled=true AND obj.rarity = :rarity AND obj.isDropable = true" +
+                " AND obj.dropWeight >" +
                 " 0.0"),
         @NamedQuery(name = "ProductEntity.findDropsByProdTypeAndRarity", query = "SELECT obj FROM ProductEntity obj " +
-                "WHERE obj.productType = :prodType AND obj.rarity = :rarity AND obj.isDropable = true AND obj" +
+                "WHERE obj.productType = :prodType AND obj.enabled=true AND obj.rarity = :rarity AND obj.isDropable =" +
+                " true AND obj" +
                 ".dropWeight > 0.0"),
 })
-public class ProductEntity {
+public class ProductEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,18 +59,22 @@ public class ProductEntity {
     @JoinColumn(name = "parentProductId", referencedColumnName = "id")
     private ProductEntity parentProduct;
     private String categoryId;
+    @Column(nullable = false)
     private String currency;
     private String description;
     private int durationMinute;
     private Integer hash;
+    @Column(nullable = false)
     private String icon;
     private int level;
     private String longDescription;
     private float price;
     private float resalePrice;
     private int priority;
+    @Column(nullable = false)
     private String productId;
     private String productTitle;
+    @Column(nullable = false)
     private String productType;
     private String secondaryIcon;
     private int useCount;
@@ -75,6 +90,7 @@ public class ProductEntity {
     private Integer accel = 0;
     private Integer handling = 0;
     private Float skillValue;
+    @Column(nullable = false)
     private String entitlementTag;
     private String subType;
     private String brand;
