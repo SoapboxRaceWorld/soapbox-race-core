@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://cdn.soapboxrace.world/images/sbrw-512.png" />
+  <img src="https://cdn.soapboxrace.world/assets/sbrw-512.png" />
 </p>
 
 [![Discord](https://img.shields.io/discord/311140210018615310.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/TUsXvVp)
@@ -11,12 +11,11 @@ The **soapbox-race-core** project is focused on developing a game server compati
 World**. Currently, most of the original game functionality is implemented, but development is still ongoing.
 
 ## Technical details
-The server is an application built to run on the [Wildfly](https://wildfly.org) platform. Gradle is used as the build
-system. All code is Java 8; no later and no earlier.
+The server is an application built to run on the [Wildfly](https://wildfly.org) platform, through [Thorntail](https://thorntail.io). Maven is used as the build
+system. All code is written for Java 9.
 
 ## Installation
-Because installation is a bit of a lengthy process, please refer to the [Installation](https://github.com/SoapboxRaceWorld/soapbox-race-core/wiki/Installation) wiki page.
-
+Installation documentation is WIP.
 ## Contributing
 Want to make a contribution? It's easy - just follow these steps:
 1. Fork this repository if you haven't done so already
