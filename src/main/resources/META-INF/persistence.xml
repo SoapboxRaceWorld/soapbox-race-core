@@ -2,15 +2,14 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="soapboxrace-pu" transaction-type="JTA">
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>jboss/datasources/SoapBoxDS</jta-data-source>
     <properties>
-      <property name="hibernate.hbm2ddl.auto" value="update" />
-      <property name="hibernate.cache.use_second_level_cache" value="false" />
-      <property name="hibernate.cache.use_query_cache" value="false" />
-      <property name="hibernate.format_sql" value="true" />
-      <property name="hibernate.use_sql_comments" value="false" />
-      <property name="hibernate.show_sql" value="false" />
+        <property name="hibernate.hbm2ddl.auto" value="update"/>
+        <property name="hibernate.cache.use_second_level_cache" value="true"/>
+        <property name="hibernate.cache.use_query_cache" value="true"/>
+        <property name="hibernate.format_sql" value="false"/>
+        <property name="hibernate.use_sql_comments" value="false"/>
+        <property name="hibernate.show_sql" value="false"/>
     </properties>
   </persistence-unit>
 </persistence>

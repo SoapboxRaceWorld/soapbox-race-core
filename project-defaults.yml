@@ -1,0 +1,40 @@
+thorntail:
+  datasources:
+    data-sources:
+      SoapBoxDS:
+        driver-name: mysql
+        connection-url: jdbc:mysql://localhost:3306/SOAPBOX
+        user-name: soapbox
+        password: secret
+        valid-connection-checker-class-name: org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker
+        validate-on-match: true
+        background-validation: false
+        exception-sorter-class-name: org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter
+        max-pool-size: 64
+        min-pool-size: 8
+        share-prepared-statements: true
+  mail:
+    mail-sessions:
+      Gmail:
+        smtp-server:
+          username: serveremailhere@gmail.com
+          password: secret
+          ssl: true
+    smtp:
+      host: smtp.gmail.com
+      port: 465
+  undertow:
+    filter-configuration:
+      response-headers:
+      # reserved for future use
+      gzips:
+        gzipFilter:
+        # nothing to configure
+    servers:
+      default-server:
+        hosts:
+          default-host:
+            filter-refs:
+              gzipFilter:
+                priority: 1
+                predicate: "exists['%{o,Content-Type}'] and regex[pattern='(?:application/javascript|text/css|text/html|text/xml|application/json|application/xml)(;.*)?', value=%{o,Content-Type}, full-match=true]"

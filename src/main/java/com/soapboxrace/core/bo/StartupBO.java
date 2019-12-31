@@ -23,8 +23,5 @@ public class StartupBO {
 
         System.out.println(String.format(template, BuildInfo.getCommitID(), BuildInfo.getLongCommitID(),
                 BuildInfo.getBranch()));
-
-//        System.out.println("StartupBO: Server running on code version " + BuildInfo.getCommitID() + " (" +
-//        BuildInfo.getLongCommitID() + ")");
     }
 }
