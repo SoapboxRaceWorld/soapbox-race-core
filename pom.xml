@@ -57,11 +57,10 @@
                         </goals>
                     </execution>
                 </executions>
-
                 <configuration>
                     <properties>
-                        <thorntail.project.stage>dev</thorntail.project.stage>
-                        <!--                        <thorntail.debug.port>5005</thorntail.debug.port>-->
+                        <!--suppress UnresolvedMavenProperty -->
+                        <thorntail.project.stage>${nfs.core.stage}</thorntail.project.stage>
                     </properties>
                 </configuration>
             </plugin>
