@@ -101,7 +101,8 @@ public class RecoveryPasswordBO {
             stringBuilder.append("If wasn't you, just ignore this email.\n\n");
             stringBuilder.append("You can click this link to reset your password:\n\n");
             stringBuilder.append(parameterBO.getStrParam("SERVER_ADDRESS"));
-            stringBuilder.append("/soapbox-race-core/password.jsp?randomKey=");
+            stringBuilder.append(parameterBO.getStrParam("SERVER_PASSWORD_RESET_PATH", "/soapbox-race-core/password.jsp"));
+            stringBuilder.append("?randomKey=");
             stringBuilder.append(randomKey);
             stringBuilder.append("\n\nThanks for playing!\n\n");
             stringBuilder.append("\n\nSBRW Team.\n");
