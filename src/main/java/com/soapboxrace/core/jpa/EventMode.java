@@ -6,6 +6,9 @@
 
 package com.soapboxrace.core.jpa;
 
+import com.soapboxrace.core.engine.EngineException;
+import com.soapboxrace.core.engine.EngineExceptionCode;
+
 public enum EventMode {
 
     SPRINT(9), CIRCUIT(4), DRAG(19), PURSUIT_SP(12), PURSUIT_MP(24), MEETINGPLACE(22);
@@ -21,7 +24,7 @@ public enum EventMode {
                 return type;
             }
         }
-        return null;
+        throw new EngineException("Invalid eventModeId: " + id, EngineExceptionCode.UnspecifiedError);
     }
 
     public int getEventModeId() {
