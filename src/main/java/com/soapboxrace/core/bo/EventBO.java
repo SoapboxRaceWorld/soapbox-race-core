@@ -6,14 +6,10 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.EventDAO;
-import com.soapboxrace.core.dao.EventDataDAO;
-import com.soapboxrace.core.dao.EventSessionDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.EventDataEntity;
-import com.soapboxrace.core.jpa.EventEntity;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.engine.EngineException;
+import com.soapboxrace.core.engine.EngineExceptionCode;
+import com.soapboxrace.core.jpa.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -34,6 +30,12 @@ public class EventBO {
     @EJB
     private PersonaDAO personaDao;
 
+    @EJB
+    private TokenSessionDAO tokenSessionDao;
+
+    @EJB
+    private PersonaBO personaBO;
+
     public List<EventEntity> availableAtLevel(Long personaId) {
         PersonaEntity personaEntity = personaDao.findById(personaId);
         return eventDao.findByLevel(personaEntity.getLevel());
@@ -48,11 +50,36 @@ public class EventBO {
         eventDataDao.insert(eventDataEntity);
     }
 
-    public EventSessionEntity createEventSession(int eventId) {
+    public EventSessionEntity createEventSession(String securityToken, int eventId) {
         EventEntity eventEntity = eventDao.findById(eventId);
         if (eventEntity == null) {
             return null;
         }
+
+        TokenSessionEntity tokenSessionEntity = tokenSessionDao.findById(securityToken);
+
+        if (tokenSessionEntity == null) {
+            return null;
+        }
+
+        Long activePersonaId = tokenSessionEntity.getActivePersonaId();
+
+        if (activePersonaId.equals(0L)) {
+            return null;
+        }
+
+        CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(activePersonaId);
+        OwnedCarEntity ownedCarEntity = defaultCarEntity.getOwnedCar();
+        CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
+
+        // only check restriction on non-open events
+        if (eventEntity.getCarClassHash() != 607077938) {
+            if (customCarEntity.getCarClassHash() != eventEntity.getCarClassHash()) {
+                // The client UI does not allow you to join events outside your current car's class
+                throw new EngineException(EngineExceptionCode.CarDataInvalid);
+            }
+        }
+
         EventSessionEntity eventSessionEntity = new EventSessionEntity();
         eventSessionEntity.setEvent(eventEntity);
         eventSessionEntity.setStarted(System.currentTimeMillis());
