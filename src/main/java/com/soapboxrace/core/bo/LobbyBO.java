@@ -7,6 +7,8 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.engine.EngineException;
+import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
@@ -27,6 +29,9 @@ import java.util.Objects;
 public class LobbyBO {
     @EJB
     private MatchmakingBO matchmakingBO;
+
+    @EJB
+    private PersonaBO personaBO;
 
     @EJB
     private EventDAO eventDao;
@@ -69,6 +74,19 @@ public class LobbyBO {
     public void joinQueueEvent(Long personaId, int eventId) {
         PersonaEntity personaEntity = personaDao.findById(personaId);
         EventEntity eventEntity = eventDao.findById(eventId);
+
+        CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
+        OwnedCarEntity ownedCarEntity = defaultCarEntity.getOwnedCar();
+        CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
+
+        // only check restriction on non-open events
+        if (eventEntity.getCarClassHash() != 607077938) {
+            if (customCarEntity.getCarClassHash() != eventEntity.getCarClassHash()) {
+                // The client UI does not allow you to join events outside your current car's class
+                throw new EngineException(EngineExceptionCode.CarDataInvalid);
+            }
+        }
+
         List<LobbyEntity> lobbys = lobbyDao.findByEventStarted(eventId);
         if (lobbys.size() == 0) {
             createLobby(personaEntity, eventId, eventEntity.getCarClassHash(), false);
