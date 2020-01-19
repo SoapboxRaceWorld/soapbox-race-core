@@ -64,7 +64,7 @@ public class LobbyBO {
         List<LobbyEntity> lobbys = lobbyDao.findAllOpen(carClassHash);
 
         if (lobbys.isEmpty()) {
-            matchmakingBO.addToQueue(personaId, carClassHash);
+            matchmakingBO.addPlayerToQueue(personaId, carClassHash);
         } else {
             PersonaEntity personaEntity = personaDao.findById(personaId);
             joinLobby(personaEntity, lobbys);
@@ -145,9 +145,9 @@ public class LobbyBO {
             for (int i = 1; i <= lobbyEntity.getEvent().getMaxPlayers() - 1; i++) {
                 if (lobbyEntity.getEntrants().size() >= lobbyEntity.getEvent().getMaxPlayers()) break;
 
-                Long queuePersona = matchmakingBO.get(carClassHash);
+                Long queuePersona = matchmakingBO.getPlayerFromQueue(carClassHash);
 
-                if (queuePersona != null) {
+                if (!queuePersona.equals(-1L)) {
                     if (lobbyEntity.getEntrants().size() < lobbyEntity.getEvent().getMaxPlayers()) {
                         XmppLobby xmppLobby = new XmppLobby(queuePersona, openFireSoapBoxCli);
                         xmppLobby.sendLobbyInvite(lobbyInviteType);
@@ -224,7 +224,7 @@ public class LobbyBO {
             return new LobbyInfo();
         }
 
-        matchmakingBO.removeFromQueue(personaId);
+        matchmakingBO.removePlayerFromQueue(personaId);
 
         sendJoinMsg(personaId, entrants);
         boolean personaInside = false;
