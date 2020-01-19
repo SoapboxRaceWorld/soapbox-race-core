@@ -21,6 +21,7 @@ import com.soapboxrace.jaxb.http.InventoryItemTrans;
 import com.soapboxrace.jaxb.http.InventoryTrans;
 
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +50,11 @@ public class InventoryBO {
     @EJB
     private ParameterBO parameterBO;
     //endregion
+
+    @Schedule(minute = "*", hour = "*")
+    public void scheduledDeleteExpiredItems() {
+        inventoryItemDAO.deleteAllExpiredItems();
+    }
 
     //region Exposed methods (API)
 

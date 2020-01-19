@@ -186,12 +186,11 @@ public class RewardBO {
 
     public Accolades getAccolades(PersonaEntity personaEntity, TreasureHuntEntity treasureHuntEntity,
                                   TreasureHuntConfigEntity treasureHuntConfigEntity,
-                                  ArbitrationPacket arbitrationPacket,
                                   RewardVO rewardVO) {
         Accolades accolades = new Accolades();
         accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
-        accolades.setLuckyDrawInfo(getTreasureHuntLuckyDraw(arbitrationPacket.getRank(),
+        accolades.setLuckyDrawInfo(getTreasureHuntLuckyDraw(
                 personaEntity, treasureHuntEntity, treasureHuntConfigEntity));
         accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
@@ -307,10 +306,10 @@ public class RewardBO {
         }
     }
 
-    private LuckyDrawInfo getTreasureHuntLuckyDraw(Integer rank, PersonaEntity personaEntity,
+    private LuckyDrawInfo getTreasureHuntLuckyDraw(PersonaEntity personaEntity,
                                                    TreasureHuntEntity treasureHuntEntity, TreasureHuntConfigEntity treasureHuntConfigEntity) {
         ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-        arrayOfLuckyDrawItem.getLuckyDrawItem().add(getTreasureHuntRewardItem(personaEntity, treasureHuntConfigEntity, rank));
+        arrayOfLuckyDrawItem.getLuckyDrawItem().add(getTreasureHuntRewardItem(personaEntity, treasureHuntConfigEntity));
 
         ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();
         LuckyDrawBox luckyDrawBox = new LuckyDrawBox();
@@ -404,7 +403,7 @@ public class RewardBO {
     }
 
     private LuckyDrawItem getTreasureHuntRewardItem(PersonaEntity personaEntity,
-                                                    TreasureHuntConfigEntity treasureHuntConfigEntity, Integer rank) {
+                                                    TreasureHuntConfigEntity treasureHuntConfigEntity) {
         if (treasureHuntConfigEntity == null) {
             return getRandomRewardItem(personaEntity);
         }
