@@ -106,16 +106,9 @@ public class BasketBO {
         }
 
         if (performPersonaTransaction(personaEntity, productId)) {
-            InventoryItemEntity item = inventoryItemDao.findByPersonaIdAndHash(personaEntity.getPersonaId(),
-                    powerupProduct.getHash());
-
-            if (item == null) {
-                return CommerceResultStatus.FAIL_INVALID_BASKET;
-            }
-
-            int newUsageCount = item.getRemainingUseCount() + powerupProduct.getUseCount();
-            item.setRemainingUseCount(newUsageCount);
-            inventoryItemDao.update(item);
+            InventoryEntity inventoryEntity = inventoryDao.findByPersonaId(personaEntity.getPersonaId());
+            inventoryBO.addStackedInventoryItem(inventoryEntity, productId, powerupProduct.getUseCount());
+            inventoryDao.update(inventoryEntity);
 
             return CommerceResultStatus.SUCCESS;
         }
