@@ -67,11 +67,6 @@ public class MatchmakingBO {
     public Long getPlayerFromQueue(Integer carClass) {
         // Are we looking for a player for an OPEN event?
         ScanIterator<KeyValue<String, String>> iterator = ScanIterator.hscan(this.redisConnection.sync(), "matchmaking_queue");
-
-        if (!iterator.hasNext()) {
-            return -1L;
-        }
-
         long personaId = -1L;
 
         while (iterator.hasNext()) {
