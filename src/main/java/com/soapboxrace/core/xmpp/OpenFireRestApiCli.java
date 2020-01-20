@@ -145,6 +145,11 @@ public class OpenFireRestApiCli {
         return roomEntities.getMucRooms();
     }
 
+    public void sendChatAnnouncement(String message) {
+        Builder builder = getBuilder("messages/game");
+        builder.post(Entity.entity(message, MediaType.TEXT_PLAIN_TYPE));
+    }
+
     private MUCRoomEntity createGeneralChatRoom(String language, Integer number) {
         String name = "channel." + language + "__" + number;
         Builder builder = getBuilder("chatrooms");
