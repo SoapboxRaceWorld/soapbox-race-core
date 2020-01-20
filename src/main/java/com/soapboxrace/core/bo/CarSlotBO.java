@@ -25,7 +25,6 @@ public class CarSlotBO {
 
     @Schedule(minute = "*", hour = "*", persistent = false)
     public void scheduledRemoval() {
-        System.out.println("hi");
         for (CarSlotEntity carSlotEntity : carSlotDAO.findAllWithExpirationDate()) {
             System.out.println(carSlotEntity);
             if (carSlotEntity.getOwnedCar().getExpirationDate().isBefore(LocalDateTime.now())) {
