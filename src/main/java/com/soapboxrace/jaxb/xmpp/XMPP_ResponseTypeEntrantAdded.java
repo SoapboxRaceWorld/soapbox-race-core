@@ -1,22 +1,17 @@
 /*
  * This file is part of the Soapbox Race World core source code.
  * If you use any of this code for third-party purposes, please provide attribution.
- * Copyright (c) 2019.
+ * Copyright (c) 2020.
  */
 
 package com.soapboxrace.jaxb.xmpp;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import com.soapboxrace.jaxb.http.LobbyEntrantAdded;
 
+import javax.xml.bind.annotation.*;
+
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "XMPP_ResponseTypeEntrantAdded", propOrder = { "lobbyInvite" })
+@XmlType(name = "XMPP_ResponseTypeEntrantAdded", propOrder = {"lobbyInvite"})
 @XmlRootElement(name = "response")
 public class XMPP_ResponseTypeEntrantAdded {
 	@XmlElement(name = "LobbyEntrantAdded", required = true)

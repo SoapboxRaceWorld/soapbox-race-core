@@ -1,6 +1,17 @@
+/*
+ * This file is part of the Soapbox Race World core source code.
+ * If you use any of this code for third-party purposes, please provide attribution.
+ * Copyright (c) 2020.
+ */
+
 package com.soapboxrace.core.api.util;
 
-import java.io.IOException;
+import com.soapboxrace.core.bo.AuthenticationBO;
+import com.soapboxrace.core.bo.ParameterBO;
+import com.soapboxrace.core.dao.UserDAO;
+import com.soapboxrace.core.jpa.UserEntity;
+import com.soapboxrace.jaxb.login.LoginStatusVO;
+import org.json.JSONObject;
 
 import javax.annotation.Priority;
 import javax.ejb.EJB;
@@ -11,15 +22,7 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-
-import com.soapboxrace.core.bo.AuthenticationBO;
-import com.soapboxrace.core.bo.ParameterBO;
-import com.soapboxrace.jaxb.login.LoginStatusVO;
-
-import com.soapboxrace.core.dao.UserDAO;
-import com.soapboxrace.core.jpa.UserEntity;
-
-import org.json.*;
+import java.io.IOException;
 
 @LauncherChecks
 @Provider
@@ -39,16 +42,16 @@ public class LaunchFilter implements ContainerRequestFilter {
 	private UserDAO userDao;
 
 	public static int compareVersions(String v1, String v2) {
-	    String[] components1 = v1.split("\\.");
-	    String[] components2 = v2.split("\\.");
-	    int length = Math.min(components1.length, components2.length);
-	    for(int i = 0; i < length; i++) {
-	        int result = new Integer(components1[i]).compareTo(Integer.parseInt(components2[i]));
-	        if(result != 0) {
-	            return result;
-	        }
-	    }
-	    return Integer.compare(components1.length, components2.length);
+		String[] components1 = v1.split("\\.");
+		String[] components2 = v2.split("\\.");
+		int length = Math.min(components1.length, components2.length);
+		for(int i = 0; i < length; i++) {
+			int result = new Integer(components1[i]).compareTo(Integer.parseInt(components2[i]));
+			if(result != 0) {
+				return result;
+			}
+		}
+		return Integer.compare(components1.length, components2.length);
 	}
 
 	@Override
@@ -90,7 +93,7 @@ public class LaunchFilter implements ContainerRequestFilter {
 					if( compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("sbrw")) == -1 ) {
 						lock_access = true;
 					}
-				} else if(get_launcher.equals("ELECTRON")) { 
+				} else if(get_launcher.equals("ELECTRON")) {
 					ua_split = get_useragent.split("\\/");
 
 					if( compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("electron")) == -1 ) {
@@ -102,15 +105,14 @@ public class LaunchFilter implements ContainerRequestFilter {
 
 				if(lock_access) {
 					LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-					loginStatusVO.setDescription("You're using the wrong launcher, please update to the latest one:\n\n" + 
-						"    SBRW Launcher: https://worldunited.gg/download\n" +
-						"    Electron Launcher: https://launcher.sparkserver.eu/");
+					loginStatusVO.setDescription("You're using the wrong launcher, please update to the latest one:\n\n" +
+							"    SBRW Launcher: https://worldunited.gg/download\n" +
+							"    Electron Launcher: https://launcher.sparkserver.eu/");
 
 					requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
 				}
 			}
 		}
-
 
 
 		if (parameterBO.getBoolParam("ENABLE_METONATOR_LAUNCHER_PROTECTION")) {
