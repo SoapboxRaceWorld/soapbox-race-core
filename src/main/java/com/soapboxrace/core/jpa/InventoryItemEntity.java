@@ -40,6 +40,9 @@ import java.time.LocalDateTime;
                 name = "InventoryItemEntity.findAllByInventoryAndType",
                 query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.id = " +
                         ":inventoryId AND obj.productEntity.productType = :productType"),
+        @NamedQuery(
+                name = "InventoryItemEntity.deleteAllExpiredItems",
+                query = "DELETE FROM InventoryItemEntity obj WHERE obj.expirationDate IS NOT NULL and obj.expirationDate < current_timestamp")
 })
 public class InventoryItemEntity {
 

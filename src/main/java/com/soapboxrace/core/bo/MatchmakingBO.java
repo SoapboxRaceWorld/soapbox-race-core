@@ -6,40 +6,78 @@
 
 package com.soapboxrace.core.bo;
 
+import io.lettuce.core.KeyValue;
+import io.lettuce.core.ScanIterator;
+import io.lettuce.core.api.StatefulRedisConnection;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.ejb.Startup;
 
+/**
+ * Responsible for managing the multiplayer matchmaking system.
+ * This deals with 2 classes of events: restricted and open.
+ * When asked for a persona for a given car class, the matchmaker
+ * will check if that class is open or restricted. Open events will receive
+ * players of any class, while restricted events will only receive players of
+ * the required class.
+ *
+ * @author heyitsleo
+ */
 @Singleton
+@Startup
 public class MatchmakingBO {
-    private final Map<Long, Integer> queue;
 
-    public MatchmakingBO() {
-        queue = new HashMap<>();
+    @EJB
+    private RedisBO redisBO;
+
+    private StatefulRedisConnection<String, String> redisConnection;
+
+    @PostConstruct
+    public void initialize() {
+        this.redisConnection = this.redisBO.getConnection();
     }
 
-    public void addToQueue(Long personaId, Integer carClass) {
-        queue.put(personaId, carClass);
+    /**
+     * Adds the given persona ID to the queue under the given car class.
+     *
+     * @param personaId The ID of the persona to add to the queue.
+     * @param carClass  The class of the persona's current car.
+     */
+    public void addPlayerToQueue(Long personaId, Integer carClass) {
+        this.redisConnection.sync().hset("matchmaking_queue", personaId.toString(), carClass.toString());
     }
 
-    public Long get(Integer carClass) {
-        for (Map.Entry<Long, Integer> entry : queue.entrySet()) {
-            if (entry.getValue().equals(carClass)) {
-                return entry.getKey();
+    /**
+     * Removes the given persona ID from the queue.
+     *
+     * @param personaId The ID of the persona to remove from the queue.
+     */
+    public void removePlayerFromQueue(Long personaId) {
+        this.redisConnection.sync().hdel("matchmaking_queue", personaId.toString());
+    }
+
+    /**
+     * Gets the ID of a persona from the queue, as long as that persona is listed under the given car class.
+     *
+     * @param carClass The car class hash to find a persona in.
+     * @return The ID of the persona, or {@literal -1} if no persona was found.
+     */
+    public Long getPlayerFromQueue(Integer carClass) {
+        // Are we looking for a player for an OPEN event?
+        ScanIterator<KeyValue<String, String>> iterator = ScanIterator.hscan(this.redisConnection.sync(), "matchmaking_queue");
+        long personaId = -1L;
+
+        while (iterator.hasNext()) {
+            KeyValue<String, String> keyValue = iterator.next();
+
+            if (carClass == 607077938 || Integer.parseInt(keyValue.getValue()) == carClass) {
+                personaId = Long.parseLong(keyValue.getKey());
+                break;
             }
         }
 
-        if (queue.isEmpty()) {
-            return null;
-        }
-
-        final Optional<Long> firstEntry = queue.entrySet().stream().findFirst().map(Map.Entry::getKey);
-
-        return firstEntry.orElse(null);
-    }
-
-    public void removeFromQueue(Long personaId) {
-        queue.remove(personaId);
+        return personaId;
     }
 }

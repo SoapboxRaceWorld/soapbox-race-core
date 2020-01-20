@@ -10,6 +10,8 @@ import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.engine.EngineException;
+import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
@@ -67,6 +69,11 @@ public class EventResultDragBO {
         dragEntrantResultResponse.setDragEntrantResult(xmppDragResult);
 
         EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
+
+        if (eventDataEntity.getFinishReason() != 0) {
+            throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration);
+        }
+
         eventDataEntity.setAlternateEventDurationInMilliseconds(dragArbitrationPacket.getAlternateEventDurationInMilliseconds());
         eventDataEntity.setCarId(dragArbitrationPacket.getCarId());
         eventDataEntity.setEventDurationInMilliseconds(dragArbitrationPacket.getEventDurationInMilliseconds());

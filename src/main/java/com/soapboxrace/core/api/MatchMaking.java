@@ -63,7 +63,7 @@ public class MatchMaking {
     @Path("/leavequeue")
     @Produces(MediaType.APPLICATION_XML)
     public String leaveQueue(@HeaderParam("securityToken") String securityToken) {
-        matchmakingBO.removeFromQueue(tokenSessionBO.getActivePersonaId(securityToken));
+        matchmakingBO.removePlayerFromQueue(tokenSessionBO.getActivePersonaId(securityToken));
         return "";
     }
 
@@ -94,7 +94,7 @@ public class MatchMaking {
         securityChallenge.setRightSize(50);
         sessionInfo.setChallenge(securityChallenge);
         sessionInfo.setEventId(eventId);
-        EventSessionEntity createEventSession = eventBO.createEventSession(eventId);
+        EventSessionEntity createEventSession = eventBO.createEventSession(securityToken, eventId);
         sessionInfo.setSessionId(createEventSession.getId());
         tokenSessionBO.setActiveLobbyId(securityToken, 0L);
         return sessionInfo;

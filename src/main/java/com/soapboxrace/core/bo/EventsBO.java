@@ -166,7 +166,7 @@ public class EventsBO {
             rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, false);
         }
 
-        return rewardBO.getAccolades(personaEntity, treasureHuntEntity, treasureHuntConfigEntity, arbitrationPacket,
+        return rewardBO.getAccolades(personaEntity, treasureHuntEntity, treasureHuntConfigEntity,
                 rewardVO);
     }
 }

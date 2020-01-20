@@ -112,4 +112,8 @@ public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
             delete(inventoryItemEntity);
         }
     }
+
+    public void deleteAllExpiredItems() {
+        entityManager.createNamedQuery("InventoryItemEntity.deleteAllExpiredItems").executeUpdate();
+    }
 }
