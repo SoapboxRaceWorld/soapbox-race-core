@@ -6,3 +6,4 @@ build
 
 project-*.yml
 !project-defaults.yml
+/.thorntail-runner-cache/

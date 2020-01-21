@@ -35,7 +35,7 @@ import java.util.List;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ArrayOfCarClass", propOrder = {
+@XmlType(name = "ArrayOfBasicBlockPlayerInfo", propOrder = {
         "basicBlockPlayerInfo"
 })
 public class ArrayOfBasicBlockPlayerInfo {
