@@ -163,6 +163,11 @@
             <artifactId>hibernate</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.thorntail</groupId>
+            <artifactId>thorntail-runner</artifactId>
+            <version>2.6.0.Final</version>
+        </dependency>
+        <dependency>
             <groupId>org.igniterealtime</groupId>
             <artifactId>rest-api-client</artifactId>
             <version>1.1.5</version>
