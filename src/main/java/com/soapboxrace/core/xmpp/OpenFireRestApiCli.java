@@ -157,6 +157,8 @@ public class OpenFireRestApiCli {
         mucRoomEntity.setRoomName(name);
         mucRoomEntity.setNaturalName(name);
         mucRoomEntity.setDescription(name);
+        mucRoomEntity.setMaxUsers(0);
+        mucRoomEntity.setPersistent(true);
 
         builder.post(Entity.entity(mucRoomEntity, MediaType.APPLICATION_XML));
 
