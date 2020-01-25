@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "CARSLOT")
 @NamedQueries({
         @NamedQuery(name = "CarSlotEntity.findByPersonaId", //
-            query = "SELECT obj FROM CarSlotEntity obj WHERE obj.persona = :persona ORDER by obj.id"), //
+                query = "SELECT obj FROM CarSlotEntity obj WHERE obj.persona = :persona ORDER by obj.id"), //
         @NamedQuery(name = "CarSlotEntity.findNonRentalsByPersonaId", //
                 query = "SELECT obj FROM CarSlotEntity obj JOIN FETCH obj.ownedCar AS oc WHERE obj.persona = :persona" +
                         " AND oc.expirationDate IS NULL" +
@@ -20,10 +20,9 @@ import javax.persistence.*;
                         "obj.id"), //
         @NamedQuery(name = "CarSlotEntity.deleteByPersona", //
                 query = "DELETE FROM CarSlotEntity obj WHERE obj.persona = :persona"), //
-        @NamedQuery(name = "CarSlotEntity.findAllWithExpirationDate", //
-                query = "SELECT obj FROM CarSlotEntity obj JOIN FETCH obj.ownedCar AS oc WHERE oc" +
-                        ".expirationDate IS NOT " +
-                        "NULL")
+        @NamedQuery(name = "CarSlotEntity.findAllExpired", //
+                query = "SELECT obj FROM CarSlotEntity obj JOIN FETCH obj.ownedCar AS oc WHERE " +
+                        "oc.expirationDate IS NOT NULL AND oc.expirationDate <= CURRENT_TIMESTAMP ")
 })
 public class CarSlotEntity {
     @Id
