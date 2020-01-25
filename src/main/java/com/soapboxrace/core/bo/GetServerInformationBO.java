@@ -33,11 +33,6 @@ public class GetServerInformationBO {
         }
         serverInfoEntity.setServerVersion("0.0.8");
 
-        int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
-        if (maxOnlinePlayers != 0) {
-//			serverInfoEntity.setMaxUsersAllowed(maxOnlinePlayers);
-        }
-
         return serverInfoEntity;
     }
 
