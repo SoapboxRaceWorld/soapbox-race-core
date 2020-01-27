@@ -49,8 +49,8 @@ public class CarSlotDAO extends BaseDAO<CarSlotEntity> {
         return query.getResultList();
     }
 
-    public List<CarSlotEntity> findAllWithExpirationDate() {
-        TypedQuery<CarSlotEntity> query = entityManager.createNamedQuery("CarSlotEntity.findAllWithExpirationDate",
+    public List<CarSlotEntity> findAllExpired() {
+        TypedQuery<CarSlotEntity> query = entityManager.createNamedQuery("CarSlotEntity.findAllExpired",
                 CarSlotEntity.class);
         return query.getResultList();
     }

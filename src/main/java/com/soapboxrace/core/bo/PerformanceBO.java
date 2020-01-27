@@ -15,7 +15,7 @@ import com.soapboxrace.core.jpa.ProductEntity;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.List;
+import java.util.Set;
 
 @Stateless
 public class PerformanceBO {
@@ -32,7 +32,7 @@ public class PerformanceBO {
         if (carClassesEntity == null) {
             return;
         }
-        List<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
+        Set<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
         int topSpeed = 0;
         int accel = 0;
         int handling = 0;

@@ -31,11 +31,7 @@ public class Achievements {
     public AchievementsPacket loadall(@HeaderParam("securityToken") String securityToken) {
         Long personaId = tokenSessionBO.getActivePersonaId(securityToken);
 
-        if (personaId != 0L) {
-            return achievementBO.loadAll(personaId);
-        }
-
-        return new AchievementsPacket();
+        return achievementBO.loadAll(personaId);
     }
 
     @GET
