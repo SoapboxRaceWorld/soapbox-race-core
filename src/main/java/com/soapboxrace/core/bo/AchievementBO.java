@@ -7,6 +7,8 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.engine.EngineException;
+import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.http.*;
@@ -102,6 +104,10 @@ public class AchievementBO {
     }
 
     public AchievementsPacket loadAll(Long personaId) {
+        if (personaId.equals(0L)) {
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
+        }
+
         AchievementsPacket achievementsPacket = new AchievementsPacket();
         achievementsPacket.setPersonaId(personaId);
         achievementsPacket.setBadges(new ArrayOfBadgeDefinitionPacket());
