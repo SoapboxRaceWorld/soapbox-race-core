@@ -39,29 +39,48 @@ public abstract class BaseOpenFireTalk implements IOpenFireTalk {
 
     @Override
     public String read() {
-        String msg = null;
-        char[] buffer = new char[8192];
-        int charsRead;
+//        String msg = null;
+//        char[] buffer = new char[8192];
+//        int charsRead;
+//        try {
+//            if ((charsRead = reader.read(buffer)) != -1) {
+//                msg = new String(buffer).substring(0, charsRead);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("S->C [" + msg + "]");
+//        if (msg != null && !msg.isEmpty()) {
+//            this.handleMessage(msg);
+//        }
+//        return msg;
+
         try {
+            char[] buffer = new char[8192];
+            int charsRead;
+
             if ((charsRead = reader.read(buffer)) != -1) {
-                msg = new String(buffer).substring(0, charsRead);
+                String message = new String(buffer).substring(0, charsRead);
+
+                if (charsRead > 0) {
+                    handleMessage(message);
+                }
+
+                return message;
+            } else {
+                throw new RuntimeException("EOF on XMPP stream");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            throw new RuntimeException("Failed to read from XMPP stream", exception);
         }
-        System.out.println("S->C [" + msg + "]");
-        if (msg != null && !msg.isEmpty()) {
-            this.handleMessage(msg);
-        }
-        return msg;
     }
 
     public void write(String msg) {
         try {
-            char[] cbuf = new char[msg.length()];
-            msg.getChars(0, msg.length(), cbuf, 0);
-            System.out.println("C->S [" + msg + "]");
-            writer.write(cbuf);
+//            char[] cbuf = new char[msg.length()];
+//            msg.getChars(0, msg.length(), cbuf, 0);
+//            System.out.println("C->S [" + msg + "]");
+            writer.write(msg.toCharArray());
             writer.flush();
         } catch (Exception e) {
             e.printStackTrace();
