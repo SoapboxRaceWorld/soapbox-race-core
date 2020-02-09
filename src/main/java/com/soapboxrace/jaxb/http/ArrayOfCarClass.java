@@ -44,26 +44,24 @@ public class ArrayOfCarClass {
     protected List<CarClass> carClass;
 
     /**
-     * Gets the value of the basicBlockPlayerInfo property.
-     * 
+     * Gets the value of the carClass property.
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the basicBlockPlayerInfo property.
-     * 
+     * This is why there is not a <CODE>set</CODE> method for the carClass property.
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getBasicBlockPlayerInfo().add(newItem);
+     *    getCarClass().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link CarClass }
-     * 
-     * 
      */
     public List<CarClass> getCarClass() {
         if (carClass == null) {
