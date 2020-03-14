@@ -7,6 +7,7 @@
 package com.soapboxrace.core.bo;
 
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisException;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
@@ -35,7 +36,12 @@ public class RedisBO {
 
         this.redisURI = RedisURI.builder().withHost(redisHost).withPort(redisPort).withPassword(redisPassword).build();
         this.redisClient = RedisClient.create();
-        this.connection = this.redisClient.connect(redisURI);
+
+        try {
+            this.connection = this.redisClient.connect(redisURI);
+        } catch (RedisException exception) {
+            throw new RuntimeException("Failed to connect to Redis server on " + redisHost + ":" + redisPort, exception);
+        }
     }
 
     public StatefulRedisPubSubConnection<String, String> createPubSub() {

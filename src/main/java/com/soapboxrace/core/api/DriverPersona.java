@@ -144,11 +144,7 @@ public class DriverPersona {
     @Path("/GetPersonaPresenceByName")
     @Produces(MediaType.APPLICATION_XML)
     public PersonaPresence getPersonaPresenceByName(@QueryParam("displayName") String displayName) {
-        PersonaPresence personaPresenceByName = driverPersonaBO.getPersonaPresenceByName(displayName);
-        if (personaPresenceByName.getPersonaId() == 0) {
-            throw new EngineException(EngineExceptionCode.PersonaNotFound);
-        }
-        return personaPresenceByName;
+        return driverPersonaBO.getPersonaPresenceByName(displayName);
     }
 
     @POST

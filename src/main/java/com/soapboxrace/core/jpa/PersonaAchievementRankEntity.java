@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
                         "WHERE obj.personaAchievementEntity.personaEntity.id = :personaId " +
                         "AND obj.personaAchievementEntity.achievementEntity.id = :achievementId " +
                         "AND (obj.state = 'Completed' OR obj.state = 'RewardWaiting') " +
-                        "ORDER BY obj.achievementRankEntity.rank")
+                        "ORDER BY obj.achievementRankEntity.rank DESC")
 })
 public class PersonaAchievementRankEntity {
 
