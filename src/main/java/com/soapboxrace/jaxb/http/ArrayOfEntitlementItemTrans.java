@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * <p>Java class for ArrayOfEntitlementItemTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ArrayOfEntitlementItemTrans">
  *   &lt;complexContent>
@@ -31,12 +31,10 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArrayOfEntitlementItemTrans", propOrder = {
-    "entitlementItemTrans"
+        "entitlementItemTrans"
 })
 public class ArrayOfEntitlementItemTrans {
 
@@ -45,25 +43,23 @@ public class ArrayOfEntitlementItemTrans {
 
     /**
      * Gets the value of the entitlementItemTrans property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the entitlementItemTrans property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getEntitlementItemTrans().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link EntitlementItemTrans }
-     * 
-     * 
      */
     public List<EntitlementItemTrans> getEntitlementItemTrans() {
         if (entitlementItemTrans == null) {

@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LuckyDrawBox complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LuckyDrawBox">
  *   &lt;complexContent>
@@ -31,14 +31,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LuckyDrawBox", propOrder = {
-    "isValid",
-    "localizationString",
-    "luckyDrawSetCategoryId"
+        "isValid",
+        "localizationString",
+        "luckyDrawSetCategoryId"
 })
 public class LuckyDrawBox {
 
@@ -51,7 +49,6 @@ public class LuckyDrawBox {
 
     /**
      * Gets the value of the isValid property.
-     * 
      */
     public boolean isIsValid() {
         return isValid;
@@ -59,7 +56,6 @@ public class LuckyDrawBox {
 
     /**
      * Sets the value of the isValid property.
-     * 
      */
     public void setIsValid(boolean value) {
         this.isValid = value;
@@ -67,11 +63,9 @@ public class LuckyDrawBox {
 
     /**
      * Gets the value of the localizationString property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLocalizationString() {
         return localizationString;
@@ -79,11 +73,9 @@ public class LuckyDrawBox {
 
     /**
      * Sets the value of the localizationString property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLocalizationString(String value) {
         this.localizationString = value;
@@ -91,7 +83,6 @@ public class LuckyDrawBox {
 
     /**
      * Gets the value of the luckyDrawSetCategoryId property.
-     * 
      */
     public int getLuckyDrawSetCategoryId() {
         return luckyDrawSetCategoryId;
@@ -99,7 +90,6 @@ public class LuckyDrawBox {
 
     /**
      * Sets the value of the luckyDrawSetCategoryId property.
-     * 
      */
     public void setLuckyDrawSetCategoryId(int value) {
         this.luckyDrawSetCategoryId = value;

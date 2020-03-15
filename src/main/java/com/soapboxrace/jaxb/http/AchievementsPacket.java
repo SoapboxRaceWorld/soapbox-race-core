@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for AchievementsPacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AchievementsPacket">
  *   &lt;complexContent>
@@ -31,14 +31,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AchievementsPacket", propOrder = {
-    "badges",
-    "definitions",
-    "personaId"
+        "badges",
+        "definitions",
+        "personaId"
 })
 public class AchievementsPacket {
 
@@ -51,11 +49,9 @@ public class AchievementsPacket {
 
     /**
      * Gets the value of the badges property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfBadgeDefinitionPacket }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfBadgeDefinitionPacket }
      */
     public ArrayOfBadgeDefinitionPacket getBadges() {
         return badges;
@@ -63,11 +59,9 @@ public class AchievementsPacket {
 
     /**
      * Sets the value of the badges property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfBadgeDefinitionPacket }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfBadgeDefinitionPacket }
      */
     public void setBadges(ArrayOfBadgeDefinitionPacket value) {
         this.badges = value;
@@ -75,11 +69,9 @@ public class AchievementsPacket {
 
     /**
      * Gets the value of the definitions property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfAchievementDefinitionPacket }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfAchievementDefinitionPacket }
      */
     public ArrayOfAchievementDefinitionPacket getDefinitions() {
         return definitions;
@@ -87,11 +79,9 @@ public class AchievementsPacket {
 
     /**
      * Sets the value of the definitions property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfAchievementDefinitionPacket }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfAchievementDefinitionPacket }
      */
     public void setDefinitions(ArrayOfAchievementDefinitionPacket value) {
         this.definitions = value;
@@ -99,7 +89,6 @@ public class AchievementsPacket {
 
     /**
      * Gets the value of the personaId property.
-     * 
      */
     public long getPersonaId() {
         return personaId;
@@ -107,7 +96,6 @@ public class AchievementsPacket {
 
     /**
      * Sets the value of the personaId property.
-     * 
      */
     public void setPersonaId(long value) {
         this.personaId = value;

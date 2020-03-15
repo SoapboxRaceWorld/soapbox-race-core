@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for BlockPlayerMsg complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BlockPlayerMsg">
  *   &lt;complexContent>
@@ -35,12 +35,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BlockPlayerMsg", propOrder = {
-    "userId"
+        "userId"
 })
 public class BlockPlayerMsg {
 
@@ -48,7 +46,6 @@ public class BlockPlayerMsg {
 
     /**
      * Gets the value of the userId property.
-     * 
      */
     public long getUserId() {
         return userId;
@@ -56,7 +53,6 @@ public class BlockPlayerMsg {
 
     /**
      * Sets the value of the userId property.
-     * 
      */
     public void setUserId(long value) {
         this.userId = value;

@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Reward complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Reward">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Reward", propOrder = {
-    "rep",
-    "tokens"
+        "rep",
+        "tokens"
 })
 public class Reward {
 
@@ -47,7 +45,6 @@ public class Reward {
 
     /**
      * Gets the value of the rep property.
-     * 
      */
     public int getRep() {
         return rep;
@@ -55,7 +52,6 @@ public class Reward {
 
     /**
      * Sets the value of the rep property.
-     * 
      */
     public void setRep(int value) {
         this.rep = value;
@@ -63,7 +59,6 @@ public class Reward {
 
     /**
      * Gets the value of the tokens property.
-     * 
      */
     public int getTokens() {
         return tokens;
@@ -71,7 +66,6 @@ public class Reward {
 
     /**
      * Sets the value of the tokens property.
-     * 
      */
     public void setTokens(int value) {
         this.tokens = value;

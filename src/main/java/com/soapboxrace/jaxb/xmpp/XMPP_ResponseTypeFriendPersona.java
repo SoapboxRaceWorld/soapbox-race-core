@@ -9,10 +9,9 @@ package com.soapboxrace.jaxb.xmpp;
 import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "XMPP_ResponseTypeFriendPersona", propOrder = { "friendPersona" })
+@XmlType(name = "XMPP_ResponseTypeFriendPersona", propOrder = {"friendPersona"})
 @XmlRootElement(name = "response")
-public class XMPP_ResponseTypeFriendPersona
-{
+public class XMPP_ResponseTypeFriendPersona {
     @XmlElement(name = "FriendPersona", required = true)
     protected XMPP_FriendPersonaType friendPersona;
 
@@ -21,13 +20,11 @@ public class XMPP_ResponseTypeFriendPersona
     @XmlAttribute(name = "ticket")
     protected int ticket = 0;
 
-    public XMPP_FriendPersonaType getFriendPersona()
-    {
+    public XMPP_FriendPersonaType getFriendPersona() {
         return friendPersona;
     }
 
-    public void setFriendPersona(XMPP_FriendPersonaType friendPersona)
-    {
+    public void setFriendPersona(XMPP_FriendPersonaType friendPersona) {
         this.friendPersona = friendPersona;
     }
 

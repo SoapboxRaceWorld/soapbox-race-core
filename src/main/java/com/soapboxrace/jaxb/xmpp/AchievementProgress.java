@@ -13,31 +13,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "AchievementProgress")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AchievementProgress
-{
+public class AchievementProgress {
     @XmlElement(name = "AchievementDefinitionId")
     private Long achievementDefinitionId;
-    
+
     @XmlElement(name = "CurrentValue")
     private long currentValue;
 
-    public Long getAchievementDefinitionId()
-    {
+    public Long getAchievementDefinitionId() {
         return achievementDefinitionId;
     }
 
-    public void setAchievementDefinitionId(Long achievementDefinitionId)
-    {
+    public void setAchievementDefinitionId(Long achievementDefinitionId) {
         this.achievementDefinitionId = achievementDefinitionId;
     }
 
-    public long getCurrentValue()
-    {
+    public long getCurrentValue() {
         return currentValue;
     }
 
-    public void setCurrentValue(long currentValue)
-    {
+    public void setCurrentValue(long currentValue) {
         this.currentValue = currentValue;
     }
 }

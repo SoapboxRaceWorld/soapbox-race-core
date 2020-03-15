@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for EntrantResult complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="EntrantResult">
  *   &lt;complexContent>
@@ -30,21 +30,19 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EntrantResult", propOrder = {
-    "eventDurationInMilliseconds",
-    "eventSessionId",
-    "finishReason",
-    "personaId",
-    "ranking"
+        "eventDurationInMilliseconds",
+        "eventSessionId",
+        "finishReason",
+        "personaId",
+        "ranking"
 })
 @XmlSeeAlso({
-    RouteEntrantResult.class,
-    TeamEscapeEntrantResult.class,
-    DragEntrantResult.class
+        RouteEntrantResult.class,
+        TeamEscapeEntrantResult.class,
+        DragEntrantResult.class
 })
 public class EntrantResult {
 
@@ -62,7 +60,6 @@ public class EntrantResult {
 
     /**
      * Gets the value of the eventDurationInMilliseconds property.
-     * 
      */
     public long getEventDurationInMilliseconds() {
         return eventDurationInMilliseconds;
@@ -70,7 +67,6 @@ public class EntrantResult {
 
     /**
      * Sets the value of the eventDurationInMilliseconds property.
-     * 
      */
     public void setEventDurationInMilliseconds(long value) {
         this.eventDurationInMilliseconds = value;
@@ -78,7 +74,6 @@ public class EntrantResult {
 
     /**
      * Gets the value of the eventSessionId property.
-     * 
      */
     public long getEventSessionId() {
         return eventSessionId;
@@ -86,7 +81,6 @@ public class EntrantResult {
 
     /**
      * Sets the value of the eventSessionId property.
-     * 
      */
     public void setEventSessionId(long value) {
         this.eventSessionId = value;
@@ -94,7 +88,6 @@ public class EntrantResult {
 
     /**
      * Gets the value of the finishReason property.
-     * 
      */
     public int getFinishReason() {
         return finishReason;
@@ -102,7 +95,6 @@ public class EntrantResult {
 
     /**
      * Sets the value of the finishReason property.
-     * 
      */
     public void setFinishReason(int value) {
         this.finishReason = value;
@@ -110,7 +102,6 @@ public class EntrantResult {
 
     /**
      * Gets the value of the personaId property.
-     * 
      */
     public long getPersonaId() {
         return personaId;
@@ -118,7 +109,6 @@ public class EntrantResult {
 
     /**
      * Sets the value of the personaId property.
-     * 
      */
     public void setPersonaId(long value) {
         this.personaId = value;
@@ -126,7 +116,6 @@ public class EntrantResult {
 
     /**
      * Gets the value of the ranking property.
-     * 
      */
     public int getRanking() {
         return ranking;
@@ -134,7 +123,6 @@ public class EntrantResult {
 
     /**
      * Sets the value of the ranking property.
-     * 
      */
     public void setRanking(int value) {
         this.ranking = value;

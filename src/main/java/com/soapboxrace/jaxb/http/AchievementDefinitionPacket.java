@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for AchievementDefinitionPacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AchievementDefinitionPacket">
  *   &lt;complexContent>
@@ -33,19 +33,17 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AchievementDefinitionPacket", propOrder = {
-    "achievementDefinitionId",
-    "achievementRanks",
-    "badgeDefinitionId",
-    "canProgress",
-    "currentValue",
-    "isVisible",
-    "progressText",
-    "statConversion"
+        "achievementDefinitionId",
+        "achievementRanks",
+        "badgeDefinitionId",
+        "canProgress",
+        "currentValue",
+        "isVisible",
+        "progressText",
+        "statConversion"
 })
 public class AchievementDefinitionPacket {
 
@@ -69,7 +67,6 @@ public class AchievementDefinitionPacket {
 
     /**
      * Gets the value of the achievementDefinitionId property.
-     * 
      */
     public int getAchievementDefinitionId() {
         return achievementDefinitionId;
@@ -77,7 +74,6 @@ public class AchievementDefinitionPacket {
 
     /**
      * Sets the value of the achievementDefinitionId property.
-     * 
      */
     public void setAchievementDefinitionId(int value) {
         this.achievementDefinitionId = value;
@@ -85,11 +81,9 @@ public class AchievementDefinitionPacket {
 
     /**
      * Gets the value of the achievementRanks property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfAchievementRankPacket }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfAchievementRankPacket }
      */
     public ArrayOfAchievementRankPacket getAchievementRanks() {
         return achievementRanks;
@@ -97,11 +91,9 @@ public class AchievementDefinitionPacket {
 
     /**
      * Sets the value of the achievementRanks property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfAchievementRankPacket }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfAchievementRankPacket }
      */
     public void setAchievementRanks(ArrayOfAchievementRankPacket value) {
         this.achievementRanks = value;
@@ -109,7 +101,6 @@ public class AchievementDefinitionPacket {
 
     /**
      * Gets the value of the badgeDefinitionId property.
-     * 
      */
     public int getBadgeDefinitionId() {
         return badgeDefinitionId;
@@ -117,7 +108,6 @@ public class AchievementDefinitionPacket {
 
     /**
      * Sets the value of the badgeDefinitionId property.
-     * 
      */
     public void setBadgeDefinitionId(int value) {
         this.badgeDefinitionId = value;
@@ -125,7 +115,6 @@ public class AchievementDefinitionPacket {
 
     /**
      * Gets the value of the canProgress property.
-     * 
      */
     public boolean isCanProgress() {
         return canProgress;
@@ -133,7 +122,6 @@ public class AchievementDefinitionPacket {
 
     /**
      * Sets the value of the canProgress property.
-     * 
      */
     public void setCanProgress(boolean value) {
         this.canProgress = value;
@@ -141,7 +129,6 @@ public class AchievementDefinitionPacket {
 
     /**
      * Gets the value of the currentValue property.
-     * 
      */
     public long getCurrentValue() {
         return currentValue;
@@ -149,7 +136,6 @@ public class AchievementDefinitionPacket {
 
     /**
      * Sets the value of the currentValue property.
-     * 
      */
     public void setCurrentValue(long value) {
         this.currentValue = value;
@@ -157,7 +143,6 @@ public class AchievementDefinitionPacket {
 
     /**
      * Gets the value of the isVisible property.
-     * 
      */
     public boolean isIsVisible() {
         return isVisible;
@@ -165,7 +150,6 @@ public class AchievementDefinitionPacket {
 
     /**
      * Sets the value of the isVisible property.
-     * 
      */
     public void setIsVisible(boolean value) {
         this.isVisible = value;
@@ -173,11 +157,9 @@ public class AchievementDefinitionPacket {
 
     /**
      * Gets the value of the progressText property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getProgressText() {
         return progressText;
@@ -185,11 +167,9 @@ public class AchievementDefinitionPacket {
 
     /**
      * Sets the value of the progressText property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setProgressText(String value) {
         this.progressText = value;
@@ -197,11 +177,9 @@ public class AchievementDefinitionPacket {
 
     /**
      * Gets the value of the statConversion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link StatConversion }
-     *     
+     *
+     * @return possible object is
+     * {@link StatConversion }
      */
     public StatConversion getStatConversion() {
         return statConversion;
@@ -209,11 +187,9 @@ public class AchievementDefinitionPacket {
 
     /**
      * Sets the value of the statConversion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link StatConversion }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link StatConversion }
      */
     public void setStatConversion(StatConversion value) {
         this.statConversion = value;

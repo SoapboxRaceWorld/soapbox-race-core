@@ -15,11 +15,11 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * <p>
  * Java class for VisualPartTrans complex type.
- * 
+ *
  * <p>
  * The following schema fragment specifies the expected content contained within
  * this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="VisualPartTrans">
  *   &lt;complexContent>
@@ -32,70 +32,62 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "VisualPartTrans", propOrder = { "partHash", "slotHash" })
+@XmlType(name = "VisualPartTrans", propOrder = {"partHash", "slotHash"})
 public class VisualPartTrans {
 
-	@XmlElement(name = "PartHash")
-	protected int partHash;
-	@XmlElement(name = "SlotHash")
-	protected int slotHash;
+    @XmlElement(name = "PartHash")
+    protected int partHash;
+    @XmlElement(name = "SlotHash")
+    protected int slotHash;
 
-	/**
-	 * Gets the value of the partHash property.
-	 * 
-	 */
-	public int getPartHash() {
-		return partHash;
-	}
+    /**
+     * Gets the value of the partHash property.
+     */
+    public int getPartHash() {
+        return partHash;
+    }
 
-	/**
-	 * Sets the value of the partHash property.
-	 * 
-	 */
-	public void setPartHash(int value) {
-		this.partHash = value;
-	}
+    /**
+     * Sets the value of the partHash property.
+     */
+    public void setPartHash(int value) {
+        this.partHash = value;
+    }
 
-	/**
-	 * Gets the value of the slotHash property.
-	 * 
-	 */
-	public int getSlotHash() {
-		return slotHash;
-	}
+    /**
+     * Gets the value of the slotHash property.
+     */
+    public int getSlotHash() {
+        return slotHash;
+    }
 
-	/**
-	 * Sets the value of the slotHash property.
-	 * 
-	 */
-	public void setSlotHash(int value) {
-		this.slotHash = value;
-	}
+    /**
+     * Sets the value of the slotHash property.
+     */
+    public void setSlotHash(int value) {
+        this.slotHash = value;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + partHash;
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + partHash;
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		VisualPartTrans other = (VisualPartTrans) obj;
-		if (partHash != other.partHash)
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        VisualPartTrans other = (VisualPartTrans) obj;
+        return partHash == other.partHash;
+    }
 
 }

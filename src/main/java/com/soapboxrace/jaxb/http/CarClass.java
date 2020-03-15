@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for CarClass complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CarClass">
  *   &lt;complexContent>
@@ -31,14 +31,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CarClass", propOrder = {
-    "carClassHash",
-    "maxRating",
-    "minRating"
+        "carClassHash",
+        "maxRating",
+        "minRating"
 })
 public class CarClass {
 
@@ -51,7 +49,6 @@ public class CarClass {
 
     /**
      * Gets the value of the carClassHash property.
-     * 
      */
     public int getCarClassHash() {
         return carClassHash;
@@ -59,7 +56,6 @@ public class CarClass {
 
     /**
      * Sets the value of the carClassHash property.
-     * 
      */
     public void setCarClassHash(int value) {
         this.carClassHash = value;
@@ -67,7 +63,6 @@ public class CarClass {
 
     /**
      * Gets the value of the maxRating property.
-     * 
      */
     public short getMaxRating() {
         return maxRating;
@@ -75,7 +70,6 @@ public class CarClass {
 
     /**
      * Sets the value of the maxRating property.
-     * 
      */
     public void setMaxRating(short value) {
         this.maxRating = value;
@@ -83,7 +77,6 @@ public class CarClass {
 
     /**
      * Gets the value of the minRating property.
-     * 
      */
     public short getMinRating() {
         return minRating;
@@ -91,7 +84,6 @@ public class CarClass {
 
     /**
      * Sets the value of the minRating property.
-     * 
      */
     public void setMinRating(short value) {
         this.minRating = value;

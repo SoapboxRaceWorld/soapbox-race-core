@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * <p>Java class for ArrayOfCommerceItemTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ArrayOfCommerceItemTrans">
  *   &lt;complexContent>
@@ -31,12 +31,10 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArrayOfCommerceItemTrans", propOrder = {
-    "commerceItemTrans"
+        "commerceItemTrans"
 })
 public class ArrayOfCommerceItemTrans {
 
@@ -45,25 +43,23 @@ public class ArrayOfCommerceItemTrans {
 
     /**
      * Gets the value of the commerceItemTrans property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the commerceItemTrans property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getCommerceItemTrans().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link CommerceItemTrans }
-     * 
-     * 
      */
     public List<CommerceItemTrans> getCommerceItemTrans() {
         if (commerceItemTrans == null) {

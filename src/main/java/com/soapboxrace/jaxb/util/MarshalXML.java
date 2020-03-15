@@ -16,30 +16,30 @@ import java.io.StringWriter;
 
 public class MarshalXML {
 
-	@SuppressWarnings("unchecked")
-	public static String marshal(Object obj) {
-		if (obj == null) {
-			return "";
-		}
+    @SuppressWarnings("unchecked")
+    public static String marshal(Object obj) {
+        if (obj == null) {
+            return "";
+        }
 
-		StringWriter stringWriter = new StringWriter();
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-			XmlRootElement xmlRootAnnotation = obj.getClass().getAnnotation(XmlRootElement.class);
-			if (xmlRootAnnotation == null) {
-				XmlType xmlTypeAnnotation = obj.getClass().getAnnotation(XmlType.class);
-				QName qname = new QName("", xmlTypeAnnotation.name());
-				JAXBElement<Object> jaxbElement = new JAXBElement<Object>(qname, (Class<Object>) obj.getClass(), null, obj);
-				jaxbMarshaller.marshal(jaxbElement, stringWriter);
-			} else {
-				jaxbMarshaller.marshal(obj, stringWriter);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return stringWriter.toString();
-	}
+        StringWriter stringWriter = new StringWriter();
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+            XmlRootElement xmlRootAnnotation = obj.getClass().getAnnotation(XmlRootElement.class);
+            if (xmlRootAnnotation == null) {
+                XmlType xmlTypeAnnotation = obj.getClass().getAnnotation(XmlType.class);
+                QName qname = new QName("", xmlTypeAnnotation.name());
+                JAXBElement<Object> jaxbElement = new JAXBElement<Object>(qname, (Class<Object>) obj.getClass(), null, obj);
+                jaxbMarshaller.marshal(jaxbElement, stringWriter);
+            } else {
+                jaxbMarshaller.marshal(obj, stringWriter);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stringWriter.toString();
+    }
 }

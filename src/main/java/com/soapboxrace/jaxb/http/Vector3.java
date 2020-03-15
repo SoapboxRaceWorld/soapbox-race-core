@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Vector3 complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Vector3">
  *   &lt;complexContent>
@@ -31,14 +31,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Vector3", propOrder = {
-    "x",
-    "y",
-    "z"
+        "x",
+        "y",
+        "z"
 })
 public class Vector3 {
 
@@ -51,7 +49,6 @@ public class Vector3 {
 
     /**
      * Gets the value of the x property.
-     * 
      */
     public float getX() {
         return x;
@@ -59,7 +56,6 @@ public class Vector3 {
 
     /**
      * Sets the value of the x property.
-     * 
      */
     public void setX(float value) {
         this.x = value;
@@ -67,7 +63,6 @@ public class Vector3 {
 
     /**
      * Gets the value of the y property.
-     * 
      */
     public float getY() {
         return y;
@@ -75,7 +70,6 @@ public class Vector3 {
 
     /**
      * Sets the value of the y property.
-     * 
      */
     public void setY(float value) {
         this.y = value;
@@ -83,7 +77,6 @@ public class Vector3 {
 
     /**
      * Gets the value of the z property.
-     * 
      */
     public float getZ() {
         return z;
@@ -91,7 +84,6 @@ public class Vector3 {
 
     /**
      * Sets the value of the z property.
-     * 
      */
     public void setZ(float value) {
         this.z = value;

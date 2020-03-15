@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for DragEventResult complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="DragEventResult">
  *   &lt;complexContent>
@@ -29,27 +29,22 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DragEventResult", propOrder = {
-    "entrants"
+        "entrants"
 })
 public class DragEventResult
-    extends EventResult
-{
+        extends EventResult {
 
     @XmlElement(name = "Entrants")
     protected ArrayOfDragEntrantResult entrants;
 
     /**
      * Gets the value of the entrants property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfDragEntrantResult }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfDragEntrantResult }
      */
     public ArrayOfDragEntrantResult getEntrants() {
         return entrants;
@@ -57,11 +52,9 @@ public class DragEventResult
 
     /**
      * Sets the value of the entrants property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfDragEntrantResult }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfDragEntrantResult }
      */
     public void setEntrants(ArrayOfDragEntrantResult value) {
         this.entrants = value;

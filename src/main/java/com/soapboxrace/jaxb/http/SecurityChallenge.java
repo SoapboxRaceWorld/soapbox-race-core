@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for SecurityChallenge complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SecurityChallenge">
  *   &lt;complexContent>
@@ -32,15 +32,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SecurityChallenge", propOrder = {
-    "challengeId",
-    "leftSize",
-    "pattern",
-    "rightSize"
+        "challengeId",
+        "leftSize",
+        "pattern",
+        "rightSize"
 })
 public class SecurityChallenge {
 
@@ -55,11 +53,9 @@ public class SecurityChallenge {
 
     /**
      * Gets the value of the challengeId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getChallengeId() {
         return challengeId;
@@ -67,11 +63,9 @@ public class SecurityChallenge {
 
     /**
      * Sets the value of the challengeId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setChallengeId(String value) {
         this.challengeId = value;
@@ -79,7 +73,6 @@ public class SecurityChallenge {
 
     /**
      * Gets the value of the leftSize property.
-     * 
      */
     public int getLeftSize() {
         return leftSize;
@@ -87,7 +80,6 @@ public class SecurityChallenge {
 
     /**
      * Sets the value of the leftSize property.
-     * 
      */
     public void setLeftSize(int value) {
         this.leftSize = value;
@@ -95,11 +87,9 @@ public class SecurityChallenge {
 
     /**
      * Gets the value of the pattern property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getPattern() {
         return pattern;
@@ -107,11 +97,9 @@ public class SecurityChallenge {
 
     /**
      * Sets the value of the pattern property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPattern(String value) {
         this.pattern = value;
@@ -119,7 +107,6 @@ public class SecurityChallenge {
 
     /**
      * Gets the value of the rightSize property.
-     * 
      */
     public int getRightSize() {
         return rightSize;
@@ -127,7 +114,6 @@ public class SecurityChallenge {
 
     /**
      * Sets the value of the rightSize property.
-     * 
      */
     public void setRightSize(int value) {
         this.rightSize = value;

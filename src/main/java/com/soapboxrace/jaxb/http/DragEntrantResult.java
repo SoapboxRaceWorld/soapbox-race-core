@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for DragEntrantResult complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="DragEntrantResult">
  *   &lt;complexContent>
@@ -29,23 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DragEntrantResult", propOrder = {
-    "topSpeed"
+        "topSpeed"
 })
 public class DragEntrantResult
-    extends EntrantResult
-{
+        extends EntrantResult {
 
     @XmlElement(name = "TopSpeed")
     protected float topSpeed;
 
     /**
      * Gets the value of the topSpeed property.
-     * 
      */
     public float getTopSpeed() {
         return topSpeed;
@@ -53,7 +49,6 @@ public class DragEntrantResult
 
     /**
      * Sets the value of the topSpeed property.
-     * 
      */
     public void setTopSpeed(float value) {
         this.topSpeed = value;

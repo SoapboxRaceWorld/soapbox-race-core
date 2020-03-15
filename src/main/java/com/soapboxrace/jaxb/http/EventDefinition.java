@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for EventDefinition complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="EventDefinition">
  *   &lt;complexContent>
@@ -52,35 +52,33 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EventDefinition", propOrder = {
-    "carClassHash",
-    "coins",
-    "engagePoint",
-    "eventId",
-    "eventLocalization",
-    "eventModeDescriptionLocalization",
-    "eventModeIcon",
-    "eventModeId",
-    "eventModeLocalization",
-    "isEnabled",
-    "isLocked",
-    "laps",
-    "length",
-    "maxClassRating",
-    "maxEntrants",
-    "maxLevel",
-    "minClassRating",
-    "minEntrants",
-    "minLevel",
-    "regionLocalization",
-    "rewardModes",
-    "timeLimit",
-    "trackLayoutMap",
-    "trackLocalization"
+        "carClassHash",
+        "coins",
+        "engagePoint",
+        "eventId",
+        "eventLocalization",
+        "eventModeDescriptionLocalization",
+        "eventModeIcon",
+        "eventModeId",
+        "eventModeLocalization",
+        "isEnabled",
+        "isLocked",
+        "laps",
+        "length",
+        "maxClassRating",
+        "maxEntrants",
+        "maxLevel",
+        "minClassRating",
+        "minEntrants",
+        "minLevel",
+        "regionLocalization",
+        "rewardModes",
+        "timeLimit",
+        "trackLayoutMap",
+        "trackLocalization"
 })
 public class EventDefinition {
 
@@ -135,7 +133,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the carClassHash property.
-     * 
      */
     public int getCarClassHash() {
         return carClassHash;
@@ -143,7 +140,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the carClassHash property.
-     * 
      */
     public void setCarClassHash(int value) {
         this.carClassHash = value;
@@ -151,7 +147,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the coins property.
-     * 
      */
     public int getCoins() {
         return coins;
@@ -159,7 +154,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the coins property.
-     * 
      */
     public void setCoins(int value) {
         this.coins = value;
@@ -167,11 +161,9 @@ public class EventDefinition {
 
     /**
      * Gets the value of the engagePoint property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Vector3 }
-     *     
+     *
+     * @return possible object is
+     * {@link Vector3 }
      */
     public Vector3 getEngagePoint() {
         return engagePoint;
@@ -179,11 +171,9 @@ public class EventDefinition {
 
     /**
      * Sets the value of the engagePoint property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Vector3 }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Vector3 }
      */
     public void setEngagePoint(Vector3 value) {
         this.engagePoint = value;
@@ -191,7 +181,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the eventId property.
-     * 
      */
     public int getEventId() {
         return eventId;
@@ -199,7 +188,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the eventId property.
-     * 
      */
     public void setEventId(int value) {
         this.eventId = value;
@@ -207,7 +195,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the eventLocalization property.
-     * 
      */
     public int getEventLocalization() {
         return eventLocalization;
@@ -215,7 +202,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the eventLocalization property.
-     * 
      */
     public void setEventLocalization(int value) {
         this.eventLocalization = value;
@@ -223,7 +209,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the eventModeDescriptionLocalization property.
-     * 
      */
     public int getEventModeDescriptionLocalization() {
         return eventModeDescriptionLocalization;
@@ -231,7 +216,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the eventModeDescriptionLocalization property.
-     * 
      */
     public void setEventModeDescriptionLocalization(int value) {
         this.eventModeDescriptionLocalization = value;
@@ -239,11 +223,9 @@ public class EventDefinition {
 
     /**
      * Gets the value of the eventModeIcon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getEventModeIcon() {
         return eventModeIcon;
@@ -251,11 +233,9 @@ public class EventDefinition {
 
     /**
      * Sets the value of the eventModeIcon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEventModeIcon(String value) {
         this.eventModeIcon = value;
@@ -263,7 +243,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the eventModeId property.
-     * 
      */
     public int getEventModeId() {
         return eventModeId;
@@ -271,7 +250,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the eventModeId property.
-     * 
      */
     public void setEventModeId(int value) {
         this.eventModeId = value;
@@ -279,7 +257,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the eventModeLocalization property.
-     * 
      */
     public int getEventModeLocalization() {
         return eventModeLocalization;
@@ -287,7 +264,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the eventModeLocalization property.
-     * 
      */
     public void setEventModeLocalization(int value) {
         this.eventModeLocalization = value;
@@ -295,7 +271,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the isEnabled property.
-     * 
      */
     public boolean isIsEnabled() {
         return isEnabled;
@@ -303,7 +278,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the isEnabled property.
-     * 
      */
     public void setIsEnabled(boolean value) {
         this.isEnabled = value;
@@ -311,7 +285,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the isLocked property.
-     * 
      */
     public boolean isIsLocked() {
         return isLocked;
@@ -319,7 +292,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the isLocked property.
-     * 
      */
     public void setIsLocked(boolean value) {
         this.isLocked = value;
@@ -327,7 +299,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the laps property.
-     * 
      */
     public int getLaps() {
         return laps;
@@ -335,7 +306,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the laps property.
-     * 
      */
     public void setLaps(int value) {
         this.laps = value;
@@ -343,7 +313,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the length property.
-     * 
      */
     public float getLength() {
         return length;
@@ -351,7 +320,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the length property.
-     * 
      */
     public void setLength(float value) {
         this.length = value;
@@ -359,7 +327,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the maxClassRating property.
-     * 
      */
     public int getMaxClassRating() {
         return maxClassRating;
@@ -367,7 +334,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the maxClassRating property.
-     * 
      */
     public void setMaxClassRating(int value) {
         this.maxClassRating = value;
@@ -375,7 +341,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the maxEntrants property.
-     * 
      */
     public int getMaxEntrants() {
         return maxEntrants;
@@ -383,7 +348,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the maxEntrants property.
-     * 
      */
     public void setMaxEntrants(int value) {
         this.maxEntrants = value;
@@ -391,7 +355,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the maxLevel property.
-     * 
      */
     public int getMaxLevel() {
         return maxLevel;
@@ -399,7 +362,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the maxLevel property.
-     * 
      */
     public void setMaxLevel(int value) {
         this.maxLevel = value;
@@ -407,7 +369,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the minClassRating property.
-     * 
      */
     public int getMinClassRating() {
         return minClassRating;
@@ -415,7 +376,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the minClassRating property.
-     * 
      */
     public void setMinClassRating(int value) {
         this.minClassRating = value;
@@ -423,7 +383,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the minEntrants property.
-     * 
      */
     public int getMinEntrants() {
         return minEntrants;
@@ -431,7 +390,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the minEntrants property.
-     * 
      */
     public void setMinEntrants(int value) {
         this.minEntrants = value;
@@ -439,7 +397,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the minLevel property.
-     * 
      */
     public int getMinLevel() {
         return minLevel;
@@ -447,7 +404,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the minLevel property.
-     * 
      */
     public void setMinLevel(int value) {
         this.minLevel = value;
@@ -455,7 +411,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the regionLocalization property.
-     * 
      */
     public int getRegionLocalization() {
         return regionLocalization;
@@ -463,7 +418,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the regionLocalization property.
-     * 
      */
     public void setRegionLocalization(int value) {
         this.regionLocalization = value;
@@ -471,11 +425,9 @@ public class EventDefinition {
 
     /**
      * Gets the value of the rewardModes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfInt }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfInt }
      */
     public ArrayOfInt getRewardModes() {
         return rewardModes;
@@ -483,11 +435,9 @@ public class EventDefinition {
 
     /**
      * Sets the value of the rewardModes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfInt }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfInt }
      */
     public void setRewardModes(ArrayOfInt value) {
         this.rewardModes = value;
@@ -495,7 +445,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the timeLimit property.
-     * 
      */
     public float getTimeLimit() {
         return timeLimit;
@@ -503,7 +452,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the timeLimit property.
-     * 
      */
     public void setTimeLimit(float value) {
         this.timeLimit = value;
@@ -511,11 +459,9 @@ public class EventDefinition {
 
     /**
      * Gets the value of the trackLayoutMap property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getTrackLayoutMap() {
         return trackLayoutMap;
@@ -523,11 +469,9 @@ public class EventDefinition {
 
     /**
      * Sets the value of the trackLayoutMap property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTrackLayoutMap(String value) {
         this.trackLayoutMap = value;
@@ -535,7 +479,6 @@ public class EventDefinition {
 
     /**
      * Gets the value of the trackLocalization property.
-     * 
      */
     public int getTrackLocalization() {
         return trackLocalization;
@@ -543,7 +486,6 @@ public class EventDefinition {
 
     /**
      * Sets the value of the trackLocalization property.
-     * 
      */
     public void setTrackLocalization(int value) {
         this.trackLocalization = value;

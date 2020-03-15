@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for SocialSettings complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SocialSettings">
  *   &lt;complexContent>
@@ -35,18 +35,16 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SocialSettings", propOrder = {
-    "appearOffline",
-    "declineGroupInvite",
-    "declineIncommingFriendRequests",
-    "declinePrivateInvite",
-    "hideOfflineFriends",
-    "showNewsOnSignIn",
-    "showOnlyPlayersInSameChatChannel"
+        "appearOffline",
+        "declineGroupInvite",
+        "declineIncommingFriendRequests",
+        "declinePrivateInvite",
+        "hideOfflineFriends",
+        "showNewsOnSignIn",
+        "showOnlyPlayersInSameChatChannel"
 })
 public class SocialSettings {
 
@@ -67,7 +65,6 @@ public class SocialSettings {
 
     /**
      * Gets the value of the appearOffline property.
-     * 
      */
     public boolean isAppearOffline() {
         return appearOffline;
@@ -75,7 +72,6 @@ public class SocialSettings {
 
     /**
      * Sets the value of the appearOffline property.
-     * 
      */
     public void setAppearOffline(boolean value) {
         this.appearOffline = value;
@@ -83,7 +79,6 @@ public class SocialSettings {
 
     /**
      * Gets the value of the declineGroupInvite property.
-     * 
      */
     public int getDeclineGroupInvite() {
         return declineGroupInvite;
@@ -91,7 +86,6 @@ public class SocialSettings {
 
     /**
      * Sets the value of the declineGroupInvite property.
-     * 
      */
     public void setDeclineGroupInvite(int value) {
         this.declineGroupInvite = value;
@@ -99,7 +93,6 @@ public class SocialSettings {
 
     /**
      * Gets the value of the declineIncommingFriendRequests property.
-     * 
      */
     public boolean isDeclineIncommingFriendRequests() {
         return declineIncommingFriendRequests;
@@ -107,7 +100,6 @@ public class SocialSettings {
 
     /**
      * Sets the value of the declineIncommingFriendRequests property.
-     * 
      */
     public void setDeclineIncommingFriendRequests(boolean value) {
         this.declineIncommingFriendRequests = value;
@@ -115,7 +107,6 @@ public class SocialSettings {
 
     /**
      * Gets the value of the declinePrivateInvite property.
-     * 
      */
     public int getDeclinePrivateInvite() {
         return declinePrivateInvite;
@@ -123,7 +114,6 @@ public class SocialSettings {
 
     /**
      * Sets the value of the declinePrivateInvite property.
-     * 
      */
     public void setDeclinePrivateInvite(int value) {
         this.declinePrivateInvite = value;
@@ -131,7 +121,6 @@ public class SocialSettings {
 
     /**
      * Gets the value of the hideOfflineFriends property.
-     * 
      */
     public boolean isHideOfflineFriends() {
         return hideOfflineFriends;
@@ -139,7 +128,6 @@ public class SocialSettings {
 
     /**
      * Sets the value of the hideOfflineFriends property.
-     * 
      */
     public void setHideOfflineFriends(boolean value) {
         this.hideOfflineFriends = value;
@@ -147,7 +135,6 @@ public class SocialSettings {
 
     /**
      * Gets the value of the showNewsOnSignIn property.
-     * 
      */
     public boolean isShowNewsOnSignIn() {
         return showNewsOnSignIn;
@@ -155,7 +142,6 @@ public class SocialSettings {
 
     /**
      * Sets the value of the showNewsOnSignIn property.
-     * 
      */
     public void setShowNewsOnSignIn(boolean value) {
         this.showNewsOnSignIn = value;
@@ -163,7 +149,6 @@ public class SocialSettings {
 
     /**
      * Gets the value of the showOnlyPlayersInSameChatChannel property.
-     * 
      */
     public boolean isShowOnlyPlayersInSameChatChannel() {
         return showOnlyPlayersInSameChatChannel;
@@ -171,7 +156,6 @@ public class SocialSettings {
 
     /**
      * Sets the value of the showOnlyPlayersInSameChatChannel property.
-     * 
      */
     public void setShowOnlyPlayersInSameChatChannel(boolean value) {
         this.showOnlyPlayersInSameChatChannel = value;

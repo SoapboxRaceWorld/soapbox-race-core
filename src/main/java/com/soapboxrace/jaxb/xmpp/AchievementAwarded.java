@@ -13,148 +13,125 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "AchievementAwarded")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AchievementAwarded
-{
+public class AchievementAwarded {
     @XmlElement(name = "AchievedOn")
     private String achievedOn;
-    
+
     @XmlElement(name = "Clip")
     private String clip = "AchievementFlasherBase";
-    
+
     @XmlElement(name = "Description")
     private String description = "";
-    
+
     @XmlElement(name = "Icon")
     private String icon = "";
-    
+
     @XmlElement(name = "Name")
     private String name = "";
-    
+
     @XmlElement(name = "AchievementDefinitionId")
     private Long achievementDefinitionId;
-    
+
     @XmlElement(name = "AchievementRankId")
     private Long achievementRankId;
-    
+
     @XmlElement(name = "ClipLengthInSeconds")
     private float clipLengthInSeconds = 5f;
-    
+
     @XmlElement(name = "IsRare")
     private boolean isRare;
-    
+
     @XmlElement(name = "Points")
     private int points;
-    
+
     @XmlElement(name = "Rarity")
     private float rarity;
 
-    public String getAchievedOn()
-    {
+    public String getAchievedOn() {
         return achievedOn;
     }
 
-    public void setAchievedOn(String achievedOn)
-    {
+    public void setAchievedOn(String achievedOn) {
         this.achievedOn = achievedOn;
     }
 
-    public String getClip()
-    {
+    public String getClip() {
         return clip;
     }
 
-    public void setClip(String clip)
-    {
+    public void setClip(String clip) {
         this.clip = clip;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getIcon()
-    {
+    public String getIcon() {
         return icon;
     }
 
-    public void setIcon(String icon)
-    {
+    public void setIcon(String icon) {
         this.icon = icon;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Long getAchievementDefinitionId()
-    {
+    public Long getAchievementDefinitionId() {
         return achievementDefinitionId;
     }
 
-    public void setAchievementDefinitionId(Long achievementDefinitionId)
-    {
+    public void setAchievementDefinitionId(Long achievementDefinitionId) {
         this.achievementDefinitionId = achievementDefinitionId;
     }
 
-    public Long getAchievementRankId()
-    {
+    public Long getAchievementRankId() {
         return achievementRankId;
     }
 
-    public void setAchievementRankId(Long achievementRankId)
-    {
+    public void setAchievementRankId(Long achievementRankId) {
         this.achievementRankId = achievementRankId;
     }
 
-    public float getClipLengthInSeconds()
-    {
+    public float getClipLengthInSeconds() {
         return clipLengthInSeconds;
     }
 
-    public void setClipLengthInSeconds(float clipLengthInSeconds)
-    {
+    public void setClipLengthInSeconds(float clipLengthInSeconds) {
         this.clipLengthInSeconds = clipLengthInSeconds;
     }
 
-    public boolean isRare()
-    {
+    public boolean isRare() {
         return isRare;
     }
 
-    public void setRare(boolean rare)
-    {
+    public void setRare(boolean rare) {
         isRare = rare;
     }
 
-    public int getPoints()
-    {
+    public int getPoints() {
         return points;
     }
 
-    public void setPoints(int points)
-    {
+    public void setPoints(int points) {
         this.points = points;
     }
 
-    public float getRarity()
-    {
+    public float getRarity() {
         return rarity;
     }
 
-    public void setRarity(float rarity)
-    {
+    public void setRarity(float rarity) {
         this.rarity = rarity;
     }
 }

@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for CommerceSessionTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CommerceSessionTrans">
  *   &lt;complexContent>
@@ -31,14 +31,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CommerceSessionTrans", propOrder = {
-    "basket",
-    "entitlementsToSell",
-    "updatedCar"
+        "basket",
+        "entitlementsToSell",
+        "updatedCar"
 })
 public class CommerceSessionTrans {
 
@@ -51,11 +49,9 @@ public class CommerceSessionTrans {
 
     /**
      * Gets the value of the basket property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BasketTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link BasketTrans }
      */
     public BasketTrans getBasket() {
         return basket;
@@ -63,11 +59,9 @@ public class CommerceSessionTrans {
 
     /**
      * Sets the value of the basket property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BasketTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link BasketTrans }
      */
     public void setBasket(BasketTrans value) {
         this.basket = value;
@@ -75,11 +69,9 @@ public class CommerceSessionTrans {
 
     /**
      * Gets the value of the entitlementsToSell property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link EntitlementTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link EntitlementTrans }
      */
     public EntitlementTrans getEntitlementsToSell() {
         return entitlementsToSell;
@@ -87,11 +79,9 @@ public class CommerceSessionTrans {
 
     /**
      * Sets the value of the entitlementsToSell property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link EntitlementTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link EntitlementTrans }
      */
     public void setEntitlementsToSell(EntitlementTrans value) {
         this.entitlementsToSell = value;
@@ -99,11 +89,9 @@ public class CommerceSessionTrans {
 
     /**
      * Gets the value of the updatedCar property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link OwnedCarTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link OwnedCarTrans }
      */
     public OwnedCarTrans getUpdatedCar() {
         return updatedCar;
@@ -111,11 +99,9 @@ public class CommerceSessionTrans {
 
     /**
      * Sets the value of the updatedCar property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link OwnedCarTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link OwnedCarTrans }
      */
     public void setUpdatedCar(OwnedCarTrans value) {
         this.updatedCar = value;

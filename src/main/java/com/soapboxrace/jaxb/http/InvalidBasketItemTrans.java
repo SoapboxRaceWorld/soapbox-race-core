@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for InvalidBasketItemTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="InvalidBasketItemTrans">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InvalidBasketItemTrans", propOrder = {
-    "index",
-    "reason"
+        "index",
+        "reason"
 })
 public class InvalidBasketItemTrans {
 
@@ -47,7 +45,6 @@ public class InvalidBasketItemTrans {
 
     /**
      * Gets the value of the index property.
-     * 
      */
     public int getIndex() {
         return index;
@@ -55,7 +52,6 @@ public class InvalidBasketItemTrans {
 
     /**
      * Sets the value of the index property.
-     * 
      */
     public void setIndex(int value) {
         this.index = value;
@@ -63,7 +59,6 @@ public class InvalidBasketItemTrans {
 
     /**
      * Gets the value of the reason property.
-     * 
      */
     public int getReason() {
         return reason;
@@ -71,7 +66,6 @@ public class InvalidBasketItemTrans {
 
     /**
      * Sets the value of the reason property.
-     * 
      */
     public void setReason(int value) {
         this.reason = value;

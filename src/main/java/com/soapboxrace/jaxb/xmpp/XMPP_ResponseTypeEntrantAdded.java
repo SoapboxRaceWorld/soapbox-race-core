@@ -14,34 +14,34 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "XMPP_ResponseTypeEntrantAdded", propOrder = {"lobbyInvite"})
 @XmlRootElement(name = "response")
 public class XMPP_ResponseTypeEntrantAdded {
-	@XmlElement(name = "LobbyEntrantAdded", required = true)
-	protected LobbyEntrantAdded lobbyInvite;
-	@XmlAttribute(name = "status")
-	protected int status = 1;
-	@XmlAttribute(name = "ticket")
-	protected int ticket = 0;
+    @XmlElement(name = "LobbyEntrantAdded", required = true)
+    protected LobbyEntrantAdded lobbyInvite;
+    @XmlAttribute(name = "status")
+    protected int status = 1;
+    @XmlAttribute(name = "ticket")
+    protected int ticket = 0;
 
-	public LobbyEntrantAdded getLobbyInvite() {
-		return lobbyInvite;
-	}
+    public LobbyEntrantAdded getLobbyInvite() {
+        return lobbyInvite;
+    }
 
-	public void setLobbyInvite(LobbyEntrantAdded lobbyInvite) {
-		this.lobbyInvite = lobbyInvite;
-	}
+    public void setLobbyInvite(LobbyEntrantAdded lobbyInvite) {
+        this.lobbyInvite = lobbyInvite;
+    }
 
-	public int getStatus() {
-		return status;
-	}
+    public int getStatus() {
+        return status;
+    }
 
-	public void setStatus(int status) {
-		this.status = status;
-	}
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
-	public int getTicket() {
-		return ticket;
-	}
+    public int getTicket() {
+        return ticket;
+    }
 
-	public void setTicket(int ticket) {
-		this.ticket = ticket;
-	}
+    public void setTicket(int ticket) {
+        this.ticket = ticket;
+    }
 }

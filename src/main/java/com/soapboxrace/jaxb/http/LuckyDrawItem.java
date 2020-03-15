@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LuckyDrawItem complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LuckyDrawItem">
  *   &lt;complexContent>
@@ -36,19 +36,17 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LuckyDrawItem", propOrder = {
-    "description",
-    "hash",
-    "icon",
-    "remainingUseCount",
-    "resellPrice",
-    "virtualItem",
-    "virtualItemType",
-    "wasSold"
+        "description",
+        "hash",
+        "icon",
+        "remainingUseCount",
+        "resellPrice",
+        "virtualItem",
+        "virtualItemType",
+        "wasSold"
 })
 public class LuckyDrawItem {
 
@@ -71,11 +69,9 @@ public class LuckyDrawItem {
 
     /**
      * Gets the value of the description property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getDescription() {
         return description;
@@ -83,11 +79,9 @@ public class LuckyDrawItem {
 
     /**
      * Sets the value of the description property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDescription(String value) {
         this.description = value;
@@ -95,7 +89,6 @@ public class LuckyDrawItem {
 
     /**
      * Gets the value of the hash property.
-     * 
      */
     public int getHash() {
         return hash;
@@ -103,7 +96,6 @@ public class LuckyDrawItem {
 
     /**
      * Sets the value of the hash property.
-     * 
      */
     public void setHash(int value) {
         this.hash = value;
@@ -111,11 +103,9 @@ public class LuckyDrawItem {
 
     /**
      * Gets the value of the icon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getIcon() {
         return icon;
@@ -123,11 +113,9 @@ public class LuckyDrawItem {
 
     /**
      * Sets the value of the icon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setIcon(String value) {
         this.icon = value;
@@ -135,7 +123,6 @@ public class LuckyDrawItem {
 
     /**
      * Gets the value of the remainingUseCount property.
-     * 
      */
     public int getRemainingUseCount() {
         return remainingUseCount;
@@ -143,7 +130,6 @@ public class LuckyDrawItem {
 
     /**
      * Sets the value of the remainingUseCount property.
-     * 
      */
     public void setRemainingUseCount(int value) {
         this.remainingUseCount = value;
@@ -151,7 +137,6 @@ public class LuckyDrawItem {
 
     /**
      * Gets the value of the resellPrice property.
-     * 
      */
     public float getResellPrice() {
         return resellPrice;
@@ -159,7 +144,6 @@ public class LuckyDrawItem {
 
     /**
      * Sets the value of the resellPrice property.
-     * 
      */
     public void setResellPrice(float value) {
         this.resellPrice = value;
@@ -167,11 +151,9 @@ public class LuckyDrawItem {
 
     /**
      * Gets the value of the virtualItem property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getVirtualItem() {
         return virtualItem;
@@ -179,11 +161,9 @@ public class LuckyDrawItem {
 
     /**
      * Sets the value of the virtualItem property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setVirtualItem(String value) {
         this.virtualItem = value;
@@ -191,11 +171,9 @@ public class LuckyDrawItem {
 
     /**
      * Gets the value of the virtualItemType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getVirtualItemType() {
         return virtualItemType;
@@ -203,11 +181,9 @@ public class LuckyDrawItem {
 
     /**
      * Sets the value of the virtualItemType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setVirtualItemType(String value) {
         this.virtualItemType = value;
@@ -215,7 +191,6 @@ public class LuckyDrawItem {
 
     /**
      * Gets the value of the wasSold property.
-     * 
      */
     public boolean isWasSold() {
         return wasSold;
@@ -223,7 +198,6 @@ public class LuckyDrawItem {
 
     /**
      * Sets the value of the wasSold property.
-     * 
      */
     public void setWasSold(boolean value) {
         this.wasSold = value;

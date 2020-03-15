@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for RouteEntrantResult complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RouteEntrantResult">
  *   &lt;complexContent>
@@ -27,17 +27,14 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RouteEntrantResult", propOrder = {
-    "bestLapDurationInMilliseconds",
-    "topSpeed"
+        "bestLapDurationInMilliseconds",
+        "topSpeed"
 })
 public class RouteEntrantResult
-    extends EntrantResult
-{
+        extends EntrantResult {
 
     @XmlElement(name = "BestLapDurationInMilliseconds")
     @XmlSchemaType(name = "unsignedInt")
@@ -47,7 +44,6 @@ public class RouteEntrantResult
 
     /**
      * Gets the value of the bestLapDurationInMilliseconds property.
-     * 
      */
     public long getBestLapDurationInMilliseconds() {
         return bestLapDurationInMilliseconds;
@@ -55,7 +51,6 @@ public class RouteEntrantResult
 
     /**
      * Sets the value of the bestLapDurationInMilliseconds property.
-     * 
      */
     public void setBestLapDurationInMilliseconds(long value) {
         this.bestLapDurationInMilliseconds = value;
@@ -63,7 +58,6 @@ public class RouteEntrantResult
 
     /**
      * Gets the value of the topSpeed property.
-     * 
      */
     public float getTopSpeed() {
         return topSpeed;
@@ -71,7 +65,6 @@ public class RouteEntrantResult
 
     /**
      * Sets the value of the topSpeed property.
-     * 
      */
     public void setTopSpeed(float value) {
         this.topSpeed = value;

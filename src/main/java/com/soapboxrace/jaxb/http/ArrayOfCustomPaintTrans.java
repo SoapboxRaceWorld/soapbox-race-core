@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * <p>Java class for ArrayOfCustomPaintTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ArrayOfCustomPaintTrans">
  *   &lt;complexContent>
@@ -31,12 +31,10 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArrayOfCustomPaintTrans", propOrder = {
-    "customPaintTrans"
+        "customPaintTrans"
 })
 public class ArrayOfCustomPaintTrans {
 
@@ -45,25 +43,23 @@ public class ArrayOfCustomPaintTrans {
 
     /**
      * Gets the value of the customPaintTrans property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the customPaintTrans property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getCustomPaintTrans().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link CustomPaintTrans }
-     * 
-     * 
      */
     public List<CustomPaintTrans> getCustomPaintTrans() {
         if (customPaintTrans == null) {

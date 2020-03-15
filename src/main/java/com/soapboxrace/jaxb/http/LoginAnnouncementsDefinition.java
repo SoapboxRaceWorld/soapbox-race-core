@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LoginAnnouncementsDefinition complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LoginAnnouncementsDefinition">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LoginAnnouncementsDefinition", propOrder = {
-    "announcements",
-    "imagesPath"
+        "announcements",
+        "imagesPath"
 })
 public class LoginAnnouncementsDefinition {
 
@@ -47,11 +45,9 @@ public class LoginAnnouncementsDefinition {
 
     /**
      * Gets the value of the announcements property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfLoginAnnouncementDefinition }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfLoginAnnouncementDefinition }
      */
     public ArrayOfLoginAnnouncementDefinition getAnnouncements() {
         return announcements;
@@ -59,11 +55,9 @@ public class LoginAnnouncementsDefinition {
 
     /**
      * Sets the value of the announcements property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfLoginAnnouncementDefinition }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfLoginAnnouncementDefinition }
      */
     public void setAnnouncements(ArrayOfLoginAnnouncementDefinition value) {
         this.announcements = value;
@@ -71,11 +65,9 @@ public class LoginAnnouncementsDefinition {
 
     /**
      * Gets the value of the imagesPath property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getImagesPath() {
         return imagesPath;
@@ -83,11 +75,9 @@ public class LoginAnnouncementsDefinition {
 
     /**
      * Sets the value of the imagesPath property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setImagesPath(String value) {
         this.imagesPath = value;

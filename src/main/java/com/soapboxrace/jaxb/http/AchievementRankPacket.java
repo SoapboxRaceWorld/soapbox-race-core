@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for AchievementRankPacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AchievementRankPacket">
  *   &lt;complexContent>
@@ -36,22 +36,20 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AchievementRankPacket", propOrder = {
-    "achievedOn",
-    "achievementRankId",
-    "isRare",
-    "points",
-    "rank",
-    "rarity",
-    "rewardDescription",
-    "rewardType",
-    "rewardVisualStyle",
-    "state",
-    "thresholdValue"
+        "achievedOn",
+        "achievementRankId",
+        "isRare",
+        "points",
+        "rank",
+        "rarity",
+        "rewardDescription",
+        "rewardType",
+        "rewardVisualStyle",
+        "state",
+        "thresholdValue"
 })
 public class AchievementRankPacket {
 
@@ -81,11 +79,9 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the achievedOn property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getAchievedOn() {
         return achievedOn;
@@ -93,11 +89,9 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the achievedOn property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAchievedOn(String value) {
         this.achievedOn = value;
@@ -105,7 +99,6 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the achievementRankId property.
-     * 
      */
     public int getAchievementRankId() {
         return achievementRankId;
@@ -113,7 +106,6 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the achievementRankId property.
-     * 
      */
     public void setAchievementRankId(int value) {
         this.achievementRankId = value;
@@ -121,7 +113,6 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the isRare property.
-     * 
      */
     public boolean isIsRare() {
         return isRare;
@@ -129,7 +120,6 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the isRare property.
-     * 
      */
     public void setIsRare(boolean value) {
         this.isRare = value;
@@ -137,7 +127,6 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the points property.
-     * 
      */
     public short getPoints() {
         return points;
@@ -145,7 +134,6 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the points property.
-     * 
      */
     public void setPoints(short value) {
         this.points = value;
@@ -153,7 +141,6 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the rank property.
-     * 
      */
     public short getRank() {
         return rank;
@@ -161,7 +148,6 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the rank property.
-     * 
      */
     public void setRank(short value) {
         this.rank = value;
@@ -169,7 +155,6 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the rarity property.
-     * 
      */
     public float getRarity() {
         return rarity;
@@ -177,7 +162,6 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the rarity property.
-     * 
      */
     public void setRarity(float value) {
         this.rarity = value;
@@ -185,11 +169,9 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the rewardDescription property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getRewardDescription() {
         return rewardDescription;
@@ -197,11 +179,9 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the rewardDescription property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRewardDescription(String value) {
         this.rewardDescription = value;
@@ -209,11 +189,9 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the rewardType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getRewardType() {
         return rewardType;
@@ -221,11 +199,9 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the rewardType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRewardType(String value) {
         this.rewardType = value;
@@ -233,11 +209,9 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the rewardVisualStyle property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getRewardVisualStyle() {
         return rewardVisualStyle;
@@ -245,11 +219,9 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the rewardVisualStyle property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRewardVisualStyle(String value) {
         this.rewardVisualStyle = value;
@@ -257,11 +229,9 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the state property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AchievementState }
-     *     
+     *
+     * @return possible object is
+     * {@link AchievementState }
      */
     public AchievementState getState() {
         return state;
@@ -269,11 +239,9 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the state property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AchievementState }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link AchievementState }
      */
     public void setState(AchievementState value) {
         this.state = value;
@@ -281,7 +249,6 @@ public class AchievementRankPacket {
 
     /**
      * Gets the value of the thresholdValue property.
-     * 
      */
     public long getThresholdValue() {
         return thresholdValue;
@@ -289,7 +256,6 @@ public class AchievementRankPacket {
 
     /**
      * Sets the value of the thresholdValue property.
-     * 
      */
     public void setThresholdValue(long value) {
         this.thresholdValue = value;

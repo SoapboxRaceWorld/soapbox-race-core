@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ProfileData complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ProfileData">
  *   &lt;complexContent>
@@ -42,25 +42,23 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ProfileData", propOrder = {
-    "badges",
-    "boost",
-    "cash",
-    "iconIndex",
-    "level",
-    "motto",
-    "name",
-    "percentToLevel",
-    "personaId",
-    "rating",
-    "rep",
-    "repAtCurrentLevel",
-    "score",
-    "ccar"
+        "badges",
+        "boost",
+        "cash",
+        "iconIndex",
+        "level",
+        "motto",
+        "name",
+        "percentToLevel",
+        "personaId",
+        "rating",
+        "rep",
+        "repAtCurrentLevel",
+        "score",
+        "ccar"
 })
 public class ProfileData {
 
@@ -94,11 +92,9 @@ public class ProfileData {
 
     /**
      * Gets the value of the badges property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfBadgePacket }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfBadgePacket }
      */
     public ArrayOfBadgePacket getBadges() {
         return badges;
@@ -106,11 +102,9 @@ public class ProfileData {
 
     /**
      * Sets the value of the badges property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfBadgePacket }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfBadgePacket }
      */
     public void setBadges(ArrayOfBadgePacket value) {
         this.badges = value;
@@ -118,7 +112,6 @@ public class ProfileData {
 
     /**
      * Gets the value of the boost property.
-     * 
      */
     public double getBoost() {
         return boost;
@@ -126,7 +119,6 @@ public class ProfileData {
 
     /**
      * Sets the value of the boost property.
-     * 
      */
     public void setBoost(double value) {
         this.boost = value;
@@ -134,7 +126,6 @@ public class ProfileData {
 
     /**
      * Gets the value of the cash property.
-     * 
      */
     public double getCash() {
         return cash;
@@ -142,7 +133,6 @@ public class ProfileData {
 
     /**
      * Sets the value of the cash property.
-     * 
      */
     public void setCash(double value) {
         this.cash = value;
@@ -150,7 +140,6 @@ public class ProfileData {
 
     /**
      * Gets the value of the iconIndex property.
-     * 
      */
     public int getIconIndex() {
         return iconIndex;
@@ -158,7 +147,6 @@ public class ProfileData {
 
     /**
      * Sets the value of the iconIndex property.
-     * 
      */
     public void setIconIndex(int value) {
         this.iconIndex = value;
@@ -166,7 +154,6 @@ public class ProfileData {
 
     /**
      * Gets the value of the level property.
-     * 
      */
     public int getLevel() {
         return level;
@@ -174,7 +161,6 @@ public class ProfileData {
 
     /**
      * Sets the value of the level property.
-     * 
      */
     public void setLevel(int value) {
         this.level = value;
@@ -182,11 +168,9 @@ public class ProfileData {
 
     /**
      * Gets the value of the motto property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getMotto() {
         return motto;
@@ -194,11 +178,9 @@ public class ProfileData {
 
     /**
      * Sets the value of the motto property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setMotto(String value) {
         this.motto = value;
@@ -206,11 +188,9 @@ public class ProfileData {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getName() {
         return name;
@@ -218,11 +198,9 @@ public class ProfileData {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -230,7 +208,6 @@ public class ProfileData {
 
     /**
      * Gets the value of the percentToLevel property.
-     * 
      */
     public float getPercentToLevel() {
         return percentToLevel;
@@ -238,7 +215,6 @@ public class ProfileData {
 
     /**
      * Sets the value of the percentToLevel property.
-     * 
      */
     public void setPercentToLevel(float value) {
         this.percentToLevel = value;
@@ -246,7 +222,6 @@ public class ProfileData {
 
     /**
      * Gets the value of the personaId property.
-     * 
      */
     public long getPersonaId() {
         return personaId;
@@ -254,7 +229,6 @@ public class ProfileData {
 
     /**
      * Sets the value of the personaId property.
-     * 
      */
     public void setPersonaId(long value) {
         this.personaId = value;
@@ -262,7 +236,6 @@ public class ProfileData {
 
     /**
      * Gets the value of the rating property.
-     * 
      */
     public double getRating() {
         return rating;
@@ -270,7 +243,6 @@ public class ProfileData {
 
     /**
      * Sets the value of the rating property.
-     * 
      */
     public void setRating(double value) {
         this.rating = value;
@@ -278,7 +250,6 @@ public class ProfileData {
 
     /**
      * Gets the value of the rep property.
-     * 
      */
     public double getRep() {
         return rep;
@@ -286,7 +257,6 @@ public class ProfileData {
 
     /**
      * Sets the value of the rep property.
-     * 
      */
     public void setRep(double value) {
         this.rep = value;
@@ -294,7 +264,6 @@ public class ProfileData {
 
     /**
      * Gets the value of the repAtCurrentLevel property.
-     * 
      */
     public int getRepAtCurrentLevel() {
         return repAtCurrentLevel;
@@ -302,7 +271,6 @@ public class ProfileData {
 
     /**
      * Sets the value of the repAtCurrentLevel property.
-     * 
      */
     public void setRepAtCurrentLevel(int value) {
         this.repAtCurrentLevel = value;
@@ -310,7 +278,6 @@ public class ProfileData {
 
     /**
      * Gets the value of the score property.
-     * 
      */
     public int getScore() {
         return score;
@@ -318,7 +285,6 @@ public class ProfileData {
 
     /**
      * Sets the value of the score property.
-     * 
      */
     public void setScore(int value) {
         this.score = value;
@@ -326,11 +292,9 @@ public class ProfileData {
 
     /**
      * Gets the value of the ccar property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfPersonaCCar }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfPersonaCCar }
      */
     public ArrayOfPersonaCCar getCcar() {
         return ccar;
@@ -338,11 +302,9 @@ public class ProfileData {
 
     /**
      * Sets the value of the ccar property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfPersonaCCar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfPersonaCCar }
      */
     public void setCcar(ArrayOfPersonaCCar value) {
         this.ccar = value;

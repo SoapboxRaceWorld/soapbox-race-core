@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for CommerceSessionResultTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CommerceSessionResultTrans">
  *   &lt;complexContent>
@@ -30,16 +30,14 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CommerceSessionResultTrans", propOrder = {
-    "invalidBasket",
-    "inventoryItems",
-    "status",
-    "updatedCar",
-    "wallets"
+        "invalidBasket",
+        "inventoryItems",
+        "status",
+        "updatedCar",
+        "wallets"
 })
 public class CommerceSessionResultTrans {
 
@@ -57,11 +55,9 @@ public class CommerceSessionResultTrans {
 
     /**
      * Gets the value of the invalidBasket property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link InvalidBasketTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link InvalidBasketTrans }
      */
     public InvalidBasketTrans getInvalidBasket() {
         return invalidBasket;
@@ -69,11 +65,9 @@ public class CommerceSessionResultTrans {
 
     /**
      * Sets the value of the invalidBasket property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link InvalidBasketTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link InvalidBasketTrans }
      */
     public void setInvalidBasket(InvalidBasketTrans value) {
         this.invalidBasket = value;
@@ -81,11 +75,9 @@ public class CommerceSessionResultTrans {
 
     /**
      * Gets the value of the inventoryItems property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfInventoryItemTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfInventoryItemTrans }
      */
     public ArrayOfInventoryItemTrans getInventoryItems() {
         return inventoryItems;
@@ -93,11 +85,9 @@ public class CommerceSessionResultTrans {
 
     /**
      * Sets the value of the inventoryItems property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfInventoryItemTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfInventoryItemTrans }
      */
     public void setInventoryItems(ArrayOfInventoryItemTrans value) {
         this.inventoryItems = value;
@@ -105,11 +95,9 @@ public class CommerceSessionResultTrans {
 
     /**
      * Gets the value of the status property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CommerceResultStatus }
-     *     
+     *
+     * @return possible object is
+     * {@link CommerceResultStatus }
      */
     public CommerceResultStatus getStatus() {
         return status;
@@ -117,11 +105,9 @@ public class CommerceSessionResultTrans {
 
     /**
      * Sets the value of the status property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CommerceResultStatus }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link CommerceResultStatus }
      */
     public void setStatus(CommerceResultStatus value) {
         this.status = value;
@@ -129,11 +115,9 @@ public class CommerceSessionResultTrans {
 
     /**
      * Gets the value of the updatedCar property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link OwnedCarTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link OwnedCarTrans }
      */
     public OwnedCarTrans getUpdatedCar() {
         return updatedCar;
@@ -141,11 +125,9 @@ public class CommerceSessionResultTrans {
 
     /**
      * Sets the value of the updatedCar property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link OwnedCarTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link OwnedCarTrans }
      */
     public void setUpdatedCar(OwnedCarTrans value) {
         this.updatedCar = value;
@@ -153,11 +135,9 @@ public class CommerceSessionResultTrans {
 
     /**
      * Gets the value of the wallets property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfWalletTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfWalletTrans }
      */
     public ArrayOfWalletTrans getWallets() {
         return wallets;
@@ -165,11 +145,9 @@ public class CommerceSessionResultTrans {
 
     /**
      * Sets the value of the wallets property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfWalletTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfWalletTrans }
      */
     public void setWallets(ArrayOfWalletTrans value) {
         this.wallets = value;

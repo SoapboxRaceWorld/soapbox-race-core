@@ -134,7 +134,7 @@ public class DriverPersonaBO {
         for (PersonaBadgeEntity personaBadgeEntity : personaBadgeDAO.findAllBadgesForPersona(personaId)) {
             PersonaAchievementRankEntity personaAchievementRankEntity =
                     personaAchievementRankDAO.findHighestCompletedRankOfAchievementByPersona(
-                    personaId, personaBadgeEntity.getBadgeDefinitionEntity().getAchievementEntity().getId());
+                            personaId, personaBadgeEntity.getBadgeDefinitionEntity().getAchievementEntity().getId());
             if (personaAchievementRankEntity != null) {
                 BadgePacket badgePacket = new BadgePacket();
                 badgePacket.setAchievementRankId(personaAchievementRankEntity.getAchievementRankEntity().getId().intValue());

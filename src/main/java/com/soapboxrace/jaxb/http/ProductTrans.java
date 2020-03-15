@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ProductTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ProductTrans">
  *   &lt;complexContent>
@@ -47,30 +47,28 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ProductTrans", propOrder = {
-    "bundleItems",
-    "categoryId",
-    "currency",
-    "description",
-    "durationMinute",
-    "hash",
-    "icon",
-    "level",
-    "longDescription",
-    "price",
-    "priority",
-    "productId",
-    "productTitle",
-    "productType",
-    "secondaryIcon",
-    "useCount",
-    "visualStyle",
-    "webIcon",
-    "webLocation"
+        "bundleItems",
+        "categoryId",
+        "currency",
+        "description",
+        "durationMinute",
+        "hash",
+        "icon",
+        "level",
+        "longDescription",
+        "price",
+        "priority",
+        "productId",
+        "productTitle",
+        "productType",
+        "secondaryIcon",
+        "useCount",
+        "visualStyle",
+        "webIcon",
+        "webLocation"
 })
 public class ProductTrans {
 
@@ -115,11 +113,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the bundleItems property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfProductTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfProductTrans }
      */
     public ArrayOfProductTrans getBundleItems() {
         return bundleItems;
@@ -127,11 +123,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the bundleItems property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfProductTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfProductTrans }
      */
     public void setBundleItems(ArrayOfProductTrans value) {
         this.bundleItems = value;
@@ -139,11 +133,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the categoryId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCategoryId() {
         return categoryId;
@@ -151,11 +143,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the categoryId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCategoryId(String value) {
         this.categoryId = value;
@@ -163,11 +153,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the currency property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCurrency() {
         return currency;
@@ -175,11 +163,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the currency property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCurrency(String value) {
         this.currency = value;
@@ -187,11 +173,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the description property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getDescription() {
         return description;
@@ -199,11 +183,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the description property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDescription(String value) {
         this.description = value;
@@ -211,7 +193,6 @@ public class ProductTrans {
 
     /**
      * Gets the value of the durationMinute property.
-     * 
      */
     public int getDurationMinute() {
         return durationMinute;
@@ -219,7 +200,6 @@ public class ProductTrans {
 
     /**
      * Sets the value of the durationMinute property.
-     * 
      */
     public void setDurationMinute(int value) {
         this.durationMinute = value;
@@ -227,7 +207,6 @@ public class ProductTrans {
 
     /**
      * Gets the value of the hash property.
-     * 
      */
     public int getHash() {
         return hash;
@@ -235,7 +214,6 @@ public class ProductTrans {
 
     /**
      * Sets the value of the hash property.
-     * 
      */
     public void setHash(int value) {
         this.hash = value;
@@ -243,11 +221,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the icon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getIcon() {
         return icon;
@@ -255,11 +231,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the icon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setIcon(String value) {
         this.icon = value;
@@ -267,7 +241,6 @@ public class ProductTrans {
 
     /**
      * Gets the value of the level property.
-     * 
      */
     public int getLevel() {
         return level;
@@ -275,7 +248,6 @@ public class ProductTrans {
 
     /**
      * Sets the value of the level property.
-     * 
      */
     public void setLevel(int value) {
         this.level = value;
@@ -283,11 +255,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the longDescription property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLongDescription() {
         return longDescription;
@@ -295,11 +265,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the longDescription property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLongDescription(String value) {
         this.longDescription = value;
@@ -307,7 +275,6 @@ public class ProductTrans {
 
     /**
      * Gets the value of the price property.
-     * 
      */
     public double getPrice() {
         return price;
@@ -315,7 +282,6 @@ public class ProductTrans {
 
     /**
      * Sets the value of the price property.
-     * 
      */
     public void setPrice(double value) {
         this.price = value;
@@ -323,7 +289,6 @@ public class ProductTrans {
 
     /**
      * Gets the value of the priority property.
-     * 
      */
     public int getPriority() {
         return priority;
@@ -331,7 +296,6 @@ public class ProductTrans {
 
     /**
      * Sets the value of the priority property.
-     * 
      */
     public void setPriority(int value) {
         this.priority = value;
@@ -339,11 +303,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the productId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getProductId() {
         return productId;
@@ -351,11 +313,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the productId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setProductId(String value) {
         this.productId = value;
@@ -363,11 +323,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the productTitle property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getProductTitle() {
         return productTitle;
@@ -375,11 +333,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the productTitle property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setProductTitle(String value) {
         this.productTitle = value;
@@ -387,11 +343,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the productType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getProductType() {
         return productType;
@@ -399,11 +353,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the productType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setProductType(String value) {
         this.productType = value;
@@ -411,11 +363,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the secondaryIcon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getSecondaryIcon() {
         return secondaryIcon;
@@ -423,11 +373,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the secondaryIcon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSecondaryIcon(String value) {
         this.secondaryIcon = value;
@@ -435,7 +383,6 @@ public class ProductTrans {
 
     /**
      * Gets the value of the useCount property.
-     * 
      */
     public int getUseCount() {
         return useCount;
@@ -443,7 +390,6 @@ public class ProductTrans {
 
     /**
      * Sets the value of the useCount property.
-     * 
      */
     public void setUseCount(int value) {
         this.useCount = value;
@@ -451,11 +397,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the visualStyle property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getVisualStyle() {
         return visualStyle;
@@ -463,11 +407,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the visualStyle property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setVisualStyle(String value) {
         this.visualStyle = value;
@@ -475,11 +417,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the webIcon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getWebIcon() {
         return webIcon;
@@ -487,11 +427,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the webIcon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setWebIcon(String value) {
         this.webIcon = value;
@@ -499,11 +437,9 @@ public class ProductTrans {
 
     /**
      * Gets the value of the webLocation property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getWebLocation() {
         return webLocation;
@@ -511,11 +447,9 @@ public class ProductTrans {
 
     /**
      * Sets the value of the webLocation property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setWebLocation(String value) {
         this.webLocation = value;

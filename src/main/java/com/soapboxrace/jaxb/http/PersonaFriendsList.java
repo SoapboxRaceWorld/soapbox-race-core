@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for PersonaFriendsList complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PersonaFriendsList">
  *   &lt;complexContent>
@@ -28,12 +28,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PersonaFriendsList", propOrder = {
-    "friendPersona"
+        "friendPersona"
 })
 public class PersonaFriendsList {
 
@@ -41,11 +39,9 @@ public class PersonaFriendsList {
 
     /**
      * Gets the value of the friendPersona property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfFriendPersona }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfFriendPersona }
      */
     public ArrayOfFriendPersona getFriendPersona() {
         return friendPersona;
@@ -53,11 +49,9 @@ public class PersonaFriendsList {
 
     /**
      * Sets the value of the friendPersona property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfFriendPersona }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfFriendPersona }
      */
     public void setFriendPersona(ArrayOfFriendPersona value) {
         this.friendPersona = value;

@@ -16,31 +16,26 @@ import javax.xml.bind.annotation.XmlType;
         "message"
 })
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ClientLog
-{
+public class ClientLog {
     @XmlElement
     private String date;
-    
+
     @XmlElement
     private String message;
 
-    public String getMessage()
-    {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message)
-    {
+    public void setMessage(String message) {
         this.message = message;
     }
 
-    public String getDate()
-    {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(String date)
-    {
+    public void setDate(String date) {
         this.date = date;
     }
 }

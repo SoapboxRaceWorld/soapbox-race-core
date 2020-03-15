@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LobbyInfo complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LobbyInfo">
  *   &lt;complexContent>
@@ -34,17 +34,15 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LobbyInfo", propOrder = {
-    "countdown",
-    "entrants",
-    "eventId",
-    "isInviteEnabled",
-    "lobbyId",
-    "lobbyInviteId"
+        "countdown",
+        "entrants",
+        "eventId",
+        "isInviteEnabled",
+        "lobbyId",
+        "lobbyInviteId"
 })
 public class LobbyInfo {
 
@@ -63,11 +61,9 @@ public class LobbyInfo {
 
     /**
      * Gets the value of the countdown property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link LobbyCountdown }
-     *     
+     *
+     * @return possible object is
+     * {@link LobbyCountdown }
      */
     public LobbyCountdown getCountdown() {
         return countdown;
@@ -75,11 +71,9 @@ public class LobbyInfo {
 
     /**
      * Sets the value of the countdown property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link LobbyCountdown }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link LobbyCountdown }
      */
     public void setCountdown(LobbyCountdown value) {
         this.countdown = value;
@@ -87,11 +81,9 @@ public class LobbyInfo {
 
     /**
      * Gets the value of the entrants property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfLobbyEntrantInfo }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfLobbyEntrantInfo }
      */
     public ArrayOfLobbyEntrantInfo getEntrants() {
         return entrants;
@@ -99,11 +91,9 @@ public class LobbyInfo {
 
     /**
      * Sets the value of the entrants property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfLobbyEntrantInfo }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfLobbyEntrantInfo }
      */
     public void setEntrants(ArrayOfLobbyEntrantInfo value) {
         this.entrants = value;
@@ -111,7 +101,6 @@ public class LobbyInfo {
 
     /**
      * Gets the value of the eventId property.
-     * 
      */
     public int getEventId() {
         return eventId;
@@ -119,7 +108,6 @@ public class LobbyInfo {
 
     /**
      * Sets the value of the eventId property.
-     * 
      */
     public void setEventId(int value) {
         this.eventId = value;
@@ -127,7 +115,6 @@ public class LobbyInfo {
 
     /**
      * Gets the value of the isInviteEnabled property.
-     * 
      */
     public boolean isIsInviteEnabled() {
         return isInviteEnabled;
@@ -135,7 +122,6 @@ public class LobbyInfo {
 
     /**
      * Sets the value of the isInviteEnabled property.
-     * 
      */
     public void setIsInviteEnabled(boolean value) {
         this.isInviteEnabled = value;
@@ -143,7 +129,6 @@ public class LobbyInfo {
 
     /**
      * Gets the value of the lobbyId property.
-     * 
      */
     public long getLobbyId() {
         return lobbyId;
@@ -151,7 +136,6 @@ public class LobbyInfo {
 
     /**
      * Sets the value of the lobbyId property.
-     * 
      */
     public void setLobbyId(long value) {
         this.lobbyId = value;
@@ -159,7 +143,6 @@ public class LobbyInfo {
 
     /**
      * Gets the value of the lobbyInviteId property.
-     * 
      */
     public long getLobbyInviteId() {
         return lobbyInviteId;
@@ -167,7 +150,6 @@ public class LobbyInfo {
 
     /**
      * Sets the value of the lobbyInviteId property.
-     * 
      */
     public void setLobbyInviteId(long value) {
         this.lobbyInviteId = value;

@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for InventoryTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="InventoryTrans">
  *   &lt;complexContent>
@@ -35,18 +35,16 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InventoryTrans", propOrder = {
-    "inventoryItems",
-    "performancePartsCapacity",
-    "performancePartsUsedSlotCount",
-    "skillModPartsCapacity",
-    "skillModPartsUsedSlotCount",
-    "visualPartsCapacity",
-    "visualPartsUsedSlotCount"
+        "inventoryItems",
+        "performancePartsCapacity",
+        "performancePartsUsedSlotCount",
+        "skillModPartsCapacity",
+        "skillModPartsUsedSlotCount",
+        "visualPartsCapacity",
+        "visualPartsUsedSlotCount"
 })
 public class InventoryTrans {
 
@@ -67,11 +65,9 @@ public class InventoryTrans {
 
     /**
      * Gets the value of the inventoryItems property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfInventoryItemTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfInventoryItemTrans }
      */
     public ArrayOfInventoryItemTrans getInventoryItems() {
         return inventoryItems;
@@ -79,11 +75,9 @@ public class InventoryTrans {
 
     /**
      * Sets the value of the inventoryItems property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfInventoryItemTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfInventoryItemTrans }
      */
     public void setInventoryItems(ArrayOfInventoryItemTrans value) {
         this.inventoryItems = value;
@@ -91,7 +85,6 @@ public class InventoryTrans {
 
     /**
      * Gets the value of the performancePartsCapacity property.
-     * 
      */
     public long getPerformancePartsCapacity() {
         return performancePartsCapacity;
@@ -99,7 +92,6 @@ public class InventoryTrans {
 
     /**
      * Sets the value of the performancePartsCapacity property.
-     * 
      */
     public void setPerformancePartsCapacity(long value) {
         this.performancePartsCapacity = value;
@@ -107,7 +99,6 @@ public class InventoryTrans {
 
     /**
      * Gets the value of the performancePartsUsedSlotCount property.
-     * 
      */
     public long getPerformancePartsUsedSlotCount() {
         return performancePartsUsedSlotCount;
@@ -115,7 +106,6 @@ public class InventoryTrans {
 
     /**
      * Sets the value of the performancePartsUsedSlotCount property.
-     * 
      */
     public void setPerformancePartsUsedSlotCount(long value) {
         this.performancePartsUsedSlotCount = value;
@@ -123,7 +113,6 @@ public class InventoryTrans {
 
     /**
      * Gets the value of the skillModPartsCapacity property.
-     * 
      */
     public long getSkillModPartsCapacity() {
         return skillModPartsCapacity;
@@ -131,7 +120,6 @@ public class InventoryTrans {
 
     /**
      * Sets the value of the skillModPartsCapacity property.
-     * 
      */
     public void setSkillModPartsCapacity(long value) {
         this.skillModPartsCapacity = value;
@@ -139,7 +127,6 @@ public class InventoryTrans {
 
     /**
      * Gets the value of the skillModPartsUsedSlotCount property.
-     * 
      */
     public long getSkillModPartsUsedSlotCount() {
         return skillModPartsUsedSlotCount;
@@ -147,7 +134,6 @@ public class InventoryTrans {
 
     /**
      * Sets the value of the skillModPartsUsedSlotCount property.
-     * 
      */
     public void setSkillModPartsUsedSlotCount(long value) {
         this.skillModPartsUsedSlotCount = value;
@@ -155,7 +141,6 @@ public class InventoryTrans {
 
     /**
      * Gets the value of the visualPartsCapacity property.
-     * 
      */
     public long getVisualPartsCapacity() {
         return visualPartsCapacity;
@@ -163,7 +148,6 @@ public class InventoryTrans {
 
     /**
      * Sets the value of the visualPartsCapacity property.
-     * 
      */
     public void setVisualPartsCapacity(long value) {
         this.visualPartsCapacity = value;
@@ -171,7 +155,6 @@ public class InventoryTrans {
 
     /**
      * Gets the value of the visualPartsUsedSlotCount property.
-     * 
      */
     public long getVisualPartsUsedSlotCount() {
         return visualPartsUsedSlotCount;
@@ -179,7 +162,6 @@ public class InventoryTrans {
 
     /**
      * Sets the value of the visualPartsUsedSlotCount property.
-     * 
      */
     public void setVisualPartsUsedSlotCount(long value) {
         this.visualPartsUsedSlotCount = value;

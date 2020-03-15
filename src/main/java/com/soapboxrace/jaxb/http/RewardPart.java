@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for RewardPart complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RewardPart">
  *   &lt;complexContent>
@@ -29,15 +29,13 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RewardPart", propOrder = {
-    "repPart",
-    "rewardCategory",
-    "rewardType",
-    "tokenPart"
+        "repPart",
+        "rewardCategory",
+        "rewardType",
+        "tokenPart"
 })
 public class RewardPart {
 
@@ -54,7 +52,6 @@ public class RewardPart {
 
     /**
      * Gets the value of the repPart property.
-     * 
      */
     public int getRepPart() {
         return repPart;
@@ -62,7 +59,6 @@ public class RewardPart {
 
     /**
      * Sets the value of the repPart property.
-     * 
      */
     public void setRepPart(int value) {
         this.repPart = value;
@@ -70,11 +66,9 @@ public class RewardPart {
 
     /**
      * Gets the value of the rewardCategory property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link EnumRewardCategory }
-     *     
+     *
+     * @return possible object is
+     * {@link EnumRewardCategory }
      */
     public EnumRewardCategory getRewardCategory() {
         return rewardCategory;
@@ -82,11 +76,9 @@ public class RewardPart {
 
     /**
      * Sets the value of the rewardCategory property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link EnumRewardCategory }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link EnumRewardCategory }
      */
     public void setRewardCategory(EnumRewardCategory value) {
         this.rewardCategory = value;
@@ -94,11 +86,9 @@ public class RewardPart {
 
     /**
      * Gets the value of the rewardType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link EnumRewardType }
-     *     
+     *
+     * @return possible object is
+     * {@link EnumRewardType }
      */
     public EnumRewardType getRewardType() {
         return rewardType;
@@ -106,11 +96,9 @@ public class RewardPart {
 
     /**
      * Sets the value of the rewardType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link EnumRewardType }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link EnumRewardType }
      */
     public void setRewardType(EnumRewardType value) {
         this.rewardType = value;
@@ -118,7 +106,6 @@ public class RewardPart {
 
     /**
      * Gets the value of the tokenPart property.
-     * 
      */
     public int getTokenPart() {
         return tokenPart;
@@ -126,7 +113,6 @@ public class RewardPart {
 
     /**
      * Sets the value of the tokenPart property.
-     * 
      */
     public void setTokenPart(int value) {
         this.tokenPart = value;

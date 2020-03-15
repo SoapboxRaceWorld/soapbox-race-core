@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for FriendPersona complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="FriendPersona">
  *   &lt;complexContent>
@@ -35,19 +35,17 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FriendPersona", propOrder = {
-    "iconIndex",
-    "level",
-    "name",
-    "originalName",
-    "personaId",
-    "presence",
-    "socialNetwork",
-    "userId"
+        "iconIndex",
+        "level",
+        "name",
+        "originalName",
+        "personaId",
+        "presence",
+        "socialNetwork",
+        "userId"
 })
 public class FriendPersona {
 
@@ -62,7 +60,6 @@ public class FriendPersona {
 
     /**
      * Gets the value of the iconIndex property.
-     * 
      */
     public int getIconIndex() {
         return iconIndex;
@@ -70,7 +67,6 @@ public class FriendPersona {
 
     /**
      * Sets the value of the iconIndex property.
-     * 
      */
     public void setIconIndex(int value) {
         this.iconIndex = value;
@@ -78,7 +74,6 @@ public class FriendPersona {
 
     /**
      * Gets the value of the level property.
-     * 
      */
     public int getLevel() {
         return level;
@@ -86,7 +81,6 @@ public class FriendPersona {
 
     /**
      * Sets the value of the level property.
-     * 
      */
     public void setLevel(int value) {
         this.level = value;
@@ -94,11 +88,9 @@ public class FriendPersona {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getName() {
         return name;
@@ -106,11 +98,9 @@ public class FriendPersona {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -118,11 +108,9 @@ public class FriendPersona {
 
     /**
      * Gets the value of the originalName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getOriginalName() {
         return originalName;
@@ -130,11 +118,9 @@ public class FriendPersona {
 
     /**
      * Sets the value of the originalName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setOriginalName(String value) {
         this.originalName = value;
@@ -142,7 +128,6 @@ public class FriendPersona {
 
     /**
      * Gets the value of the personaId property.
-     * 
      */
     public long getPersonaId() {
         return personaId;
@@ -150,7 +135,6 @@ public class FriendPersona {
 
     /**
      * Sets the value of the personaId property.
-     * 
      */
     public void setPersonaId(long value) {
         this.personaId = value;
@@ -158,7 +142,6 @@ public class FriendPersona {
 
     /**
      * Gets the value of the presence property.
-     * 
      */
     public Long getPresence() {
         return presence;
@@ -166,7 +149,6 @@ public class FriendPersona {
 
     /**
      * Sets the value of the presence property.
-     * 
      */
     public void setPresence(Long value) {
         this.presence = value;
@@ -174,7 +156,6 @@ public class FriendPersona {
 
     /**
      * Gets the value of the socialNetwork property.
-     * 
      */
     public int getSocialNetwork() {
         return socialNetwork;
@@ -182,7 +163,6 @@ public class FriendPersona {
 
     /**
      * Sets the value of the socialNetwork property.
-     * 
      */
     public void setSocialNetwork(int value) {
         this.socialNetwork = value;
@@ -190,7 +170,6 @@ public class FriendPersona {
 
     /**
      * Gets the value of the userId property.
-     * 
      */
     public long getUserId() {
         return userId;
@@ -198,7 +177,6 @@ public class FriendPersona {
 
     /**
      * Sets the value of the userId property.
-     * 
      */
     public void setUserId(long value) {
         this.userId = value;

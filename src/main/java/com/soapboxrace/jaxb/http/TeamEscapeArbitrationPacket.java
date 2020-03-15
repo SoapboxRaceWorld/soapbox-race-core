@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for TeamEscapeArbitrationPacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="TeamEscapeArbitrationPacket">
  *   &lt;complexContent>
@@ -40,30 +40,27 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TeamEscapeArbitrationPacket", propOrder = {
-    "bustedCount",
-    "copsDeployed",
-    "copsDisabled",
-    "copsRammed",
-    "costToState",
-    "distanceToFinish",
-    "fractionCompleted",
-    "infractions",
-    "longestJumpDurationInMilliseconds",
-    "numberOfCollisions",
-    "perfectStart",
-    "roadBlocksDodged",
-    "spikeStripsDodged",
-    "sumOfJumpsDurationInMilliseconds",
-    "topSpeed"
+        "bustedCount",
+        "copsDeployed",
+        "copsDisabled",
+        "copsRammed",
+        "costToState",
+        "distanceToFinish",
+        "fractionCompleted",
+        "infractions",
+        "longestJumpDurationInMilliseconds",
+        "numberOfCollisions",
+        "perfectStart",
+        "roadBlocksDodged",
+        "spikeStripsDodged",
+        "sumOfJumpsDurationInMilliseconds",
+        "topSpeed"
 })
 public class TeamEscapeArbitrationPacket
-    extends ArbitrationPacket
-{
+        extends ArbitrationPacket {
 
     @XmlElement(name = "BustedCount")
     protected int bustedCount;
@@ -100,7 +97,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the bustedCount property.
-     * 
      */
     public int getBustedCount() {
         return bustedCount;
@@ -108,7 +104,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the bustedCount property.
-     * 
      */
     public void setBustedCount(int value) {
         this.bustedCount = value;
@@ -116,7 +111,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the copsDeployed property.
-     * 
      */
     public int getCopsDeployed() {
         return copsDeployed;
@@ -124,7 +118,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the copsDeployed property.
-     * 
      */
     public void setCopsDeployed(int value) {
         this.copsDeployed = value;
@@ -132,7 +125,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the copsDisabled property.
-     * 
      */
     public int getCopsDisabled() {
         return copsDisabled;
@@ -140,7 +132,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the copsDisabled property.
-     * 
      */
     public void setCopsDisabled(int value) {
         this.copsDisabled = value;
@@ -148,7 +139,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the copsRammed property.
-     * 
      */
     public int getCopsRammed() {
         return copsRammed;
@@ -156,7 +146,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the copsRammed property.
-     * 
      */
     public void setCopsRammed(int value) {
         this.copsRammed = value;
@@ -164,7 +153,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the costToState property.
-     * 
      */
     public int getCostToState() {
         return costToState;
@@ -172,7 +160,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the costToState property.
-     * 
      */
     public void setCostToState(int value) {
         this.costToState = value;
@@ -180,7 +167,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the distanceToFinish property.
-     * 
      */
     public float getDistanceToFinish() {
         return distanceToFinish;
@@ -188,7 +174,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the distanceToFinish property.
-     * 
      */
     public void setDistanceToFinish(float value) {
         this.distanceToFinish = value;
@@ -196,7 +181,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the fractionCompleted property.
-     * 
      */
     public float getFractionCompleted() {
         return fractionCompleted;
@@ -204,7 +188,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the fractionCompleted property.
-     * 
      */
     public void setFractionCompleted(float value) {
         this.fractionCompleted = value;
@@ -212,7 +195,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the infractions property.
-     * 
      */
     public int getInfractions() {
         return infractions;
@@ -220,7 +202,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the infractions property.
-     * 
      */
     public void setInfractions(int value) {
         this.infractions = value;
@@ -228,7 +209,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the longestJumpDurationInMilliseconds property.
-     * 
      */
     public long getLongestJumpDurationInMilliseconds() {
         return longestJumpDurationInMilliseconds;
@@ -236,7 +216,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the longestJumpDurationInMilliseconds property.
-     * 
      */
     public void setLongestJumpDurationInMilliseconds(long value) {
         this.longestJumpDurationInMilliseconds = value;
@@ -244,7 +223,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the numberOfCollisions property.
-     * 
      */
     public int getNumberOfCollisions() {
         return numberOfCollisions;
@@ -252,7 +230,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the numberOfCollisions property.
-     * 
      */
     public void setNumberOfCollisions(int value) {
         this.numberOfCollisions = value;
@@ -260,7 +237,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the perfectStart property.
-     * 
      */
     public int getPerfectStart() {
         return perfectStart;
@@ -268,7 +244,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the perfectStart property.
-     * 
      */
     public void setPerfectStart(int value) {
         this.perfectStart = value;
@@ -276,7 +251,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the roadBlocksDodged property.
-     * 
      */
     public int getRoadBlocksDodged() {
         return roadBlocksDodged;
@@ -284,7 +258,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the roadBlocksDodged property.
-     * 
      */
     public void setRoadBlocksDodged(int value) {
         this.roadBlocksDodged = value;
@@ -292,7 +265,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the spikeStripsDodged property.
-     * 
      */
     public int getSpikeStripsDodged() {
         return spikeStripsDodged;
@@ -300,7 +272,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the spikeStripsDodged property.
-     * 
      */
     public void setSpikeStripsDodged(int value) {
         this.spikeStripsDodged = value;
@@ -308,7 +279,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the sumOfJumpsDurationInMilliseconds property.
-     * 
      */
     public long getSumOfJumpsDurationInMilliseconds() {
         return sumOfJumpsDurationInMilliseconds;
@@ -316,7 +286,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the sumOfJumpsDurationInMilliseconds property.
-     * 
      */
     public void setSumOfJumpsDurationInMilliseconds(long value) {
         this.sumOfJumpsDurationInMilliseconds = value;
@@ -324,7 +293,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Gets the value of the topSpeed property.
-     * 
      */
     public float getTopSpeed() {
         return topSpeed;
@@ -332,7 +300,6 @@ public class TeamEscapeArbitrationPacket
 
     /**
      * Sets the value of the topSpeed property.
-     * 
      */
     public void setTopSpeed(float value) {
         this.topSpeed = value;

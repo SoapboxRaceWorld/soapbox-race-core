@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for BasketItemTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BasketItemTrans">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BasketItemTrans", propOrder = {
-    "productId",
-    "quantity"
+        "productId",
+        "quantity"
 })
 public class BasketItemTrans {
 
@@ -47,11 +45,9 @@ public class BasketItemTrans {
 
     /**
      * Gets the value of the productId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getProductId() {
         return productId;
@@ -59,11 +55,9 @@ public class BasketItemTrans {
 
     /**
      * Sets the value of the productId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setProductId(String value) {
         this.productId = value;
@@ -71,7 +65,6 @@ public class BasketItemTrans {
 
     /**
      * Gets the value of the quantity property.
-     * 
      */
     public int getQuantity() {
         return quantity;
@@ -79,7 +72,6 @@ public class BasketItemTrans {
 
     /**
      * Sets the value of the quantity property.
-     * 
      */
     public void setQuantity(int value) {
         this.quantity = value;

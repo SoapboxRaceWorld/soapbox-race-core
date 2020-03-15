@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for HardwareInfo complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="HardwareInfo">
  *   &lt;complexContent>
@@ -54,40 +54,38 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HardwareInfo", propOrder = {
-    "availableMem",
-    "cpuBrand",
-    "cpuid0",
-    "cpuid10",
-    "cpuid11",
-    "cpuid12",
-    "cpuid13",
-    "deviceID",
-    "excpuid10",
-    "excpuid11",
-    "excpuid12",
-    "excpuid13",
-    "gpuDescription",
-    "gpuDriverBuild",
-    "gpuDriverSubversion",
-    "gpuDriverVersion",
-    "gpuMemory",
-    "gpuProduct",
-    "osBuildNumber",
-    "osMajorVersion",
-    "osMinorVersion",
-    "physicalCores",
-    "platformID",
-    "processAffinityMask",
-    "servicePack",
-    "systemAffinityMask",
-    "totalMemory",
-    "userID",
-    "vendorID"
+        "availableMem",
+        "cpuBrand",
+        "cpuid0",
+        "cpuid10",
+        "cpuid11",
+        "cpuid12",
+        "cpuid13",
+        "deviceID",
+        "excpuid10",
+        "excpuid11",
+        "excpuid12",
+        "excpuid13",
+        "gpuDescription",
+        "gpuDriverBuild",
+        "gpuDriverSubversion",
+        "gpuDriverVersion",
+        "gpuMemory",
+        "gpuProduct",
+        "osBuildNumber",
+        "osMajorVersion",
+        "osMinorVersion",
+        "physicalCores",
+        "platformID",
+        "processAffinityMask",
+        "servicePack",
+        "systemAffinityMask",
+        "totalMemory",
+        "userID",
+        "vendorID"
 })
 public class HardwareInfo {
 
@@ -155,7 +153,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the availableMem property.
-     * 
      */
     public long getAvailableMem() {
         return availableMem;
@@ -163,7 +160,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the availableMem property.
-     * 
      */
     public void setAvailableMem(long value) {
         this.availableMem = value;
@@ -171,11 +167,9 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the cpuBrand property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCpuBrand() {
         return cpuBrand;
@@ -183,11 +177,9 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the cpuBrand property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCpuBrand(String value) {
         this.cpuBrand = value;
@@ -195,11 +187,9 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the cpuid0 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCpuid0() {
         return cpuid0;
@@ -207,11 +197,9 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the cpuid0 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCpuid0(String value) {
         this.cpuid0 = value;
@@ -219,7 +207,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the cpuid10 property.
-     * 
      */
     public long getCpuid10() {
         return cpuid10;
@@ -227,7 +214,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the cpuid10 property.
-     * 
      */
     public void setCpuid10(long value) {
         this.cpuid10 = value;
@@ -235,7 +221,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the cpuid11 property.
-     * 
      */
     public long getCpuid11() {
         return cpuid11;
@@ -243,7 +228,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the cpuid11 property.
-     * 
      */
     public void setCpuid11(long value) {
         this.cpuid11 = value;
@@ -251,7 +235,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the cpuid12 property.
-     * 
      */
     public long getCpuid12() {
         return cpuid12;
@@ -259,7 +242,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the cpuid12 property.
-     * 
      */
     public void setCpuid12(long value) {
         this.cpuid12 = value;
@@ -267,7 +249,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the cpuid13 property.
-     * 
      */
     public long getCpuid13() {
         return cpuid13;
@@ -275,7 +256,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the cpuid13 property.
-     * 
      */
     public void setCpuid13(long value) {
         this.cpuid13 = value;
@@ -283,7 +263,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the deviceID property.
-     * 
      */
     public long getDeviceID() {
         return deviceID;
@@ -291,7 +270,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the deviceID property.
-     * 
      */
     public void setDeviceID(long value) {
         this.deviceID = value;
@@ -299,7 +277,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the excpuid10 property.
-     * 
      */
     public long getExcpuid10() {
         return excpuid10;
@@ -307,7 +284,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the excpuid10 property.
-     * 
      */
     public void setExcpuid10(long value) {
         this.excpuid10 = value;
@@ -315,7 +291,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the excpuid11 property.
-     * 
      */
     public long getExcpuid11() {
         return excpuid11;
@@ -323,7 +298,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the excpuid11 property.
-     * 
      */
     public void setExcpuid11(long value) {
         this.excpuid11 = value;
@@ -331,7 +305,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the excpuid12 property.
-     * 
      */
     public long getExcpuid12() {
         return excpuid12;
@@ -339,7 +312,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the excpuid12 property.
-     * 
      */
     public void setExcpuid12(long value) {
         this.excpuid12 = value;
@@ -347,7 +319,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the excpuid13 property.
-     * 
      */
     public long getExcpuid13() {
         return excpuid13;
@@ -355,7 +326,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the excpuid13 property.
-     * 
      */
     public void setExcpuid13(long value) {
         this.excpuid13 = value;
@@ -363,11 +333,9 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the gpuDescription property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getGpuDescription() {
         return gpuDescription;
@@ -375,11 +343,9 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the gpuDescription property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setGpuDescription(String value) {
         this.gpuDescription = value;
@@ -387,7 +353,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the gpuDriverBuild property.
-     * 
      */
     public long getGpuDriverBuild() {
         return gpuDriverBuild;
@@ -395,7 +360,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the gpuDriverBuild property.
-     * 
      */
     public void setGpuDriverBuild(long value) {
         this.gpuDriverBuild = value;
@@ -403,7 +367,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the gpuDriverSubversion property.
-     * 
      */
     public long getGpuDriverSubversion() {
         return gpuDriverSubversion;
@@ -411,7 +374,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the gpuDriverSubversion property.
-     * 
      */
     public void setGpuDriverSubversion(long value) {
         this.gpuDriverSubversion = value;
@@ -419,7 +381,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the gpuDriverVersion property.
-     * 
      */
     public long getGpuDriverVersion() {
         return gpuDriverVersion;
@@ -427,7 +388,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the gpuDriverVersion property.
-     * 
      */
     public void setGpuDriverVersion(long value) {
         this.gpuDriverVersion = value;
@@ -435,7 +395,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the gpuMemory property.
-     * 
      */
     public long getGpuMemory() {
         return gpuMemory;
@@ -443,7 +402,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the gpuMemory property.
-     * 
      */
     public void setGpuMemory(long value) {
         this.gpuMemory = value;
@@ -451,7 +409,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the gpuProduct property.
-     * 
      */
     public long getGpuProduct() {
         return gpuProduct;
@@ -459,7 +416,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the gpuProduct property.
-     * 
      */
     public void setGpuProduct(long value) {
         this.gpuProduct = value;
@@ -467,7 +423,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the osBuildNumber property.
-     * 
      */
     public long getOsBuildNumber() {
         return osBuildNumber;
@@ -475,7 +430,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the osBuildNumber property.
-     * 
      */
     public void setOsBuildNumber(long value) {
         this.osBuildNumber = value;
@@ -483,7 +437,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the osMajorVersion property.
-     * 
      */
     public long getOsMajorVersion() {
         return osMajorVersion;
@@ -491,7 +444,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the osMajorVersion property.
-     * 
      */
     public void setOsMajorVersion(long value) {
         this.osMajorVersion = value;
@@ -499,7 +451,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the osMinorVersion property.
-     * 
      */
     public long getOsMinorVersion() {
         return osMinorVersion;
@@ -507,7 +458,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the osMinorVersion property.
-     * 
      */
     public void setOsMinorVersion(long value) {
         this.osMinorVersion = value;
@@ -515,7 +465,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the physicalCores property.
-     * 
      */
     public long getPhysicalCores() {
         return physicalCores;
@@ -523,7 +472,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the physicalCores property.
-     * 
      */
     public void setPhysicalCores(long value) {
         this.physicalCores = value;
@@ -531,7 +479,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the platformID property.
-     * 
      */
     public long getPlatformID() {
         return platformID;
@@ -539,7 +486,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the platformID property.
-     * 
      */
     public void setPlatformID(long value) {
         this.platformID = value;
@@ -547,7 +493,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the processAffinityMask property.
-     * 
      */
     public long getProcessAffinityMask() {
         return processAffinityMask;
@@ -555,7 +500,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the processAffinityMask property.
-     * 
      */
     public void setProcessAffinityMask(long value) {
         this.processAffinityMask = value;
@@ -563,11 +507,9 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the servicePack property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getServicePack() {
         return servicePack;
@@ -575,11 +517,9 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the servicePack property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setServicePack(String value) {
         this.servicePack = value;
@@ -587,7 +527,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the systemAffinityMask property.
-     * 
      */
     public long getSystemAffinityMask() {
         return systemAffinityMask;
@@ -595,7 +534,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the systemAffinityMask property.
-     * 
      */
     public void setSystemAffinityMask(long value) {
         this.systemAffinityMask = value;
@@ -603,7 +541,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the totalMemory property.
-     * 
      */
     public long getTotalMemory() {
         return totalMemory;
@@ -611,7 +548,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the totalMemory property.
-     * 
      */
     public void setTotalMemory(long value) {
         this.totalMemory = value;
@@ -619,7 +555,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the userID property.
-     * 
      */
     public long getUserID() {
         return userID;
@@ -627,7 +562,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the userID property.
-     * 
      */
     public void setUserID(long value) {
         this.userID = value;
@@ -635,7 +569,6 @@ public class HardwareInfo {
 
     /**
      * Gets the value of the vendorID property.
-     * 
      */
     public long getVendorID() {
         return vendorID;
@@ -643,7 +576,6 @@ public class HardwareInfo {
 
     /**
      * Sets the value of the vendorID property.
-     * 
      */
     public void setVendorID(long value) {
         this.vendorID = value;

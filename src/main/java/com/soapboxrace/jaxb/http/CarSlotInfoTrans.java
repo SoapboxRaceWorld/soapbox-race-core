@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for CarSlotInfoTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CarSlotInfoTrans">
  *   &lt;complexContent>
@@ -32,15 +32,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CarSlotInfoTrans", propOrder = {
-    "carsOwnedByPersona",
-    "defaultOwnedCarIndex",
-    "obtainableSlots",
-    "ownedCarSlotsCount"
+        "carsOwnedByPersona",
+        "defaultOwnedCarIndex",
+        "obtainableSlots",
+        "ownedCarSlotsCount"
 })
 public class CarSlotInfoTrans {
 
@@ -55,11 +53,9 @@ public class CarSlotInfoTrans {
 
     /**
      * Gets the value of the carsOwnedByPersona property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfOwnedCarTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfOwnedCarTrans }
      */
     public ArrayOfOwnedCarTrans getCarsOwnedByPersona() {
         return carsOwnedByPersona;
@@ -67,11 +63,9 @@ public class CarSlotInfoTrans {
 
     /**
      * Sets the value of the carsOwnedByPersona property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfOwnedCarTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfOwnedCarTrans }
      */
     public void setCarsOwnedByPersona(ArrayOfOwnedCarTrans value) {
         this.carsOwnedByPersona = value;
@@ -79,7 +73,6 @@ public class CarSlotInfoTrans {
 
     /**
      * Gets the value of the defaultOwnedCarIndex property.
-     * 
      */
     public int getDefaultOwnedCarIndex() {
         return defaultOwnedCarIndex;
@@ -87,7 +80,6 @@ public class CarSlotInfoTrans {
 
     /**
      * Sets the value of the defaultOwnedCarIndex property.
-     * 
      */
     public void setDefaultOwnedCarIndex(int value) {
         this.defaultOwnedCarIndex = value;
@@ -95,11 +87,9 @@ public class CarSlotInfoTrans {
 
     /**
      * Gets the value of the obtainableSlots property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfProductTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfProductTrans }
      */
     public ArrayOfProductTrans getObtainableSlots() {
         return obtainableSlots;
@@ -107,11 +97,9 @@ public class CarSlotInfoTrans {
 
     /**
      * Sets the value of the obtainableSlots property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfProductTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfProductTrans }
      */
     public void setObtainableSlots(ArrayOfProductTrans value) {
         this.obtainableSlots = value;
@@ -119,7 +107,6 @@ public class CarSlotInfoTrans {
 
     /**
      * Gets the value of the ownedCarSlotsCount property.
-     * 
      */
     public int getOwnedCarSlotsCount() {
         return ownedCarSlotsCount;
@@ -127,7 +114,6 @@ public class CarSlotInfoTrans {
 
     /**
      * Sets the value of the ownedCarSlotsCount property.
-     * 
      */
     public void setOwnedCarSlotsCount(int value) {
         this.ownedCarSlotsCount = value;

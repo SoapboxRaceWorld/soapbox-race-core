@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for CommerceItemTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CommerceItemTrans">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CommerceItemTrans", propOrder = {
-    "hash",
-    "title"
+        "hash",
+        "title"
 })
 public class CommerceItemTrans {
 
@@ -47,7 +45,6 @@ public class CommerceItemTrans {
 
     /**
      * Gets the value of the hash property.
-     * 
      */
     public int getHash() {
         return hash;
@@ -55,7 +52,6 @@ public class CommerceItemTrans {
 
     /**
      * Sets the value of the hash property.
-     * 
      */
     public void setHash(int value) {
         this.hash = value;
@@ -63,11 +59,9 @@ public class CommerceItemTrans {
 
     /**
      * Gets the value of the title property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getTitle() {
         return title;
@@ -75,11 +69,9 @@ public class CommerceItemTrans {
 
     /**
      * Sets the value of the title property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTitle(String value) {
         this.title = value;

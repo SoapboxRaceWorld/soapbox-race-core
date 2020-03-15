@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for PursuitEventResult complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PursuitEventResult">
  *   &lt;complexContent>
@@ -29,23 +29,19 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PursuitEventResult", propOrder = {
-    "heat"
+        "heat"
 })
 public class PursuitEventResult
-    extends EventResult
-{
+        extends EventResult {
 
     @XmlElement(name = "Heat")
     protected float heat;
 
     /**
      * Gets the value of the heat property.
-     * 
      */
     public float getHeat() {
         return heat;
@@ -53,7 +49,6 @@ public class PursuitEventResult
 
     /**
      * Sets the value of the heat property.
-     * 
      */
     public void setHeat(float value) {
         this.heat = value;

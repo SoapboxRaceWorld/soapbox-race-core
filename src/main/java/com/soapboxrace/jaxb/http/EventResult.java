@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for EventResult complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="EventResult">
  *   &lt;complexContent>
@@ -33,25 +33,23 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EventResult", propOrder = {
-    "accolades",
-    "durability",
-    "eventId",
-    "eventSessionId",
-    "exitPath",
-    "inviteLifetimeInMilliseconds",
-    "lobbyInviteId",
-    "personaId"
+        "accolades",
+        "durability",
+        "eventId",
+        "eventSessionId",
+        "exitPath",
+        "inviteLifetimeInMilliseconds",
+        "lobbyInviteId",
+        "personaId"
 })
 @XmlSeeAlso({
-    DragEventResult.class,
-    TeamEscapeEventResult.class,
-    RouteEventResult.class,
-    PursuitEventResult.class
+        DragEventResult.class,
+        TeamEscapeEventResult.class,
+        RouteEventResult.class,
+        PursuitEventResult.class
 })
 public class EventResult {
 
@@ -75,11 +73,9 @@ public class EventResult {
 
     /**
      * Gets the value of the accolades property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Accolades }
-     *     
+     *
+     * @return possible object is
+     * {@link Accolades }
      */
     public Accolades getAccolades() {
         return accolades;
@@ -87,11 +83,9 @@ public class EventResult {
 
     /**
      * Sets the value of the accolades property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Accolades }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Accolades }
      */
     public void setAccolades(Accolades value) {
         this.accolades = value;
@@ -99,7 +93,6 @@ public class EventResult {
 
     /**
      * Gets the value of the durability property.
-     * 
      */
     public int getDurability() {
         return durability;
@@ -107,7 +100,6 @@ public class EventResult {
 
     /**
      * Sets the value of the durability property.
-     * 
      */
     public void setDurability(int value) {
         this.durability = value;
@@ -115,7 +107,6 @@ public class EventResult {
 
     /**
      * Gets the value of the eventId property.
-     * 
      */
     public int getEventId() {
         return eventId;
@@ -123,7 +114,6 @@ public class EventResult {
 
     /**
      * Sets the value of the eventId property.
-     * 
      */
     public void setEventId(int value) {
         this.eventId = value;
@@ -131,7 +121,6 @@ public class EventResult {
 
     /**
      * Gets the value of the eventSessionId property.
-     * 
      */
     public long getEventSessionId() {
         return eventSessionId;
@@ -139,7 +128,6 @@ public class EventResult {
 
     /**
      * Sets the value of the eventSessionId property.
-     * 
      */
     public void setEventSessionId(long value) {
         this.eventSessionId = value;
@@ -147,11 +135,9 @@ public class EventResult {
 
     /**
      * Gets the value of the exitPath property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ExitPath }
-     *     
+     *
+     * @return possible object is
+     * {@link ExitPath }
      */
     public ExitPath getExitPath() {
         return exitPath;
@@ -159,11 +145,9 @@ public class EventResult {
 
     /**
      * Sets the value of the exitPath property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ExitPath }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ExitPath }
      */
     public void setExitPath(ExitPath value) {
         this.exitPath = value;
@@ -171,7 +155,6 @@ public class EventResult {
 
     /**
      * Gets the value of the inviteLifetimeInMilliseconds property.
-     * 
      */
     public int getInviteLifetimeInMilliseconds() {
         return inviteLifetimeInMilliseconds;
@@ -179,7 +162,6 @@ public class EventResult {
 
     /**
      * Sets the value of the inviteLifetimeInMilliseconds property.
-     * 
      */
     public void setInviteLifetimeInMilliseconds(int value) {
         this.inviteLifetimeInMilliseconds = value;
@@ -187,7 +169,6 @@ public class EventResult {
 
     /**
      * Gets the value of the lobbyInviteId property.
-     * 
      */
     public long getLobbyInviteId() {
         return lobbyInviteId;
@@ -195,7 +176,6 @@ public class EventResult {
 
     /**
      * Sets the value of the lobbyInviteId property.
-     * 
      */
     public void setLobbyInviteId(long value) {
         this.lobbyInviteId = value;
@@ -203,7 +183,6 @@ public class EventResult {
 
     /**
      * Gets the value of the personaId property.
-     * 
      */
     public long getPersonaId() {
         return personaId;
@@ -211,7 +190,6 @@ public class EventResult {
 
     /**
      * Sets the value of the personaId property.
-     * 
      */
     public void setPersonaId(long value) {
         this.personaId = value;

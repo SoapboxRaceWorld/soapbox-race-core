@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * <p>Java class for ArrayOfLuckyDrawItem complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ArrayOfLuckyDrawItem">
  *   &lt;complexContent>
@@ -31,12 +31,10 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArrayOfLuckyDrawItem", propOrder = {
-    "luckyDrawItem"
+        "luckyDrawItem"
 })
 public class ArrayOfLuckyDrawItem {
 
@@ -45,25 +43,23 @@ public class ArrayOfLuckyDrawItem {
 
     /**
      * Gets the value of the luckyDrawItem property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the luckyDrawItem property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getLuckyDrawItem().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link LuckyDrawItem }
-     * 
-     * 
      */
     public List<LuckyDrawItem> getLuckyDrawItem() {
         if (luckyDrawItem == null) {

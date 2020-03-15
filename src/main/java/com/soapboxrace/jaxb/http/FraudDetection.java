@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for FraudDetection complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="FraudDetection">
  *   &lt;complexContent>
@@ -39,22 +39,20 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FraudDetection", propOrder = {
-    "checksum",
-    "intValue1",
-    "intValue2",
-    "intValue3",
-    "intValue4",
-    "isEncrypted",
-    "moduleName",
-    "modulePath",
-    "moduleValue",
-    "stringValue1",
-    "stringValue2"
+        "checksum",
+        "intValue1",
+        "intValue2",
+        "intValue3",
+        "intValue4",
+        "isEncrypted",
+        "moduleName",
+        "modulePath",
+        "moduleValue",
+        "stringValue1",
+        "stringValue2"
 })
 public class FraudDetection {
 
@@ -83,7 +81,6 @@ public class FraudDetection {
 
     /**
      * Gets the value of the checksum property.
-     * 
      */
     public int getChecksum() {
         return checksum;
@@ -91,7 +88,6 @@ public class FraudDetection {
 
     /**
      * Sets the value of the checksum property.
-     * 
      */
     public void setChecksum(int value) {
         this.checksum = value;
@@ -99,7 +95,6 @@ public class FraudDetection {
 
     /**
      * Gets the value of the intValue1 property.
-     * 
      */
     public int getIntValue1() {
         return intValue1;
@@ -107,7 +102,6 @@ public class FraudDetection {
 
     /**
      * Sets the value of the intValue1 property.
-     * 
      */
     public void setIntValue1(int value) {
         this.intValue1 = value;
@@ -115,7 +109,6 @@ public class FraudDetection {
 
     /**
      * Gets the value of the intValue2 property.
-     * 
      */
     public int getIntValue2() {
         return intValue2;
@@ -123,7 +116,6 @@ public class FraudDetection {
 
     /**
      * Sets the value of the intValue2 property.
-     * 
      */
     public void setIntValue2(int value) {
         this.intValue2 = value;
@@ -131,7 +123,6 @@ public class FraudDetection {
 
     /**
      * Gets the value of the intValue3 property.
-     * 
      */
     public int getIntValue3() {
         return intValue3;
@@ -139,7 +130,6 @@ public class FraudDetection {
 
     /**
      * Sets the value of the intValue3 property.
-     * 
      */
     public void setIntValue3(int value) {
         this.intValue3 = value;
@@ -147,7 +137,6 @@ public class FraudDetection {
 
     /**
      * Gets the value of the intValue4 property.
-     * 
      */
     public int getIntValue4() {
         return intValue4;
@@ -155,7 +144,6 @@ public class FraudDetection {
 
     /**
      * Sets the value of the intValue4 property.
-     * 
      */
     public void setIntValue4(int value) {
         this.intValue4 = value;
@@ -163,7 +151,6 @@ public class FraudDetection {
 
     /**
      * Gets the value of the isEncrypted property.
-     * 
      */
     public boolean isIsEncrypted() {
         return isEncrypted;
@@ -171,7 +158,6 @@ public class FraudDetection {
 
     /**
      * Sets the value of the isEncrypted property.
-     * 
      */
     public void setIsEncrypted(boolean value) {
         this.isEncrypted = value;
@@ -179,11 +165,9 @@ public class FraudDetection {
 
     /**
      * Gets the value of the moduleName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getModuleName() {
         return moduleName;
@@ -191,11 +175,9 @@ public class FraudDetection {
 
     /**
      * Sets the value of the moduleName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setModuleName(String value) {
         this.moduleName = value;
@@ -203,11 +185,9 @@ public class FraudDetection {
 
     /**
      * Gets the value of the modulePath property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getModulePath() {
         return modulePath;
@@ -215,11 +195,9 @@ public class FraudDetection {
 
     /**
      * Sets the value of the modulePath property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setModulePath(String value) {
         this.modulePath = value;
@@ -227,11 +205,9 @@ public class FraudDetection {
 
     /**
      * Gets the value of the moduleValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getModuleValue() {
         return moduleValue;
@@ -239,11 +215,9 @@ public class FraudDetection {
 
     /**
      * Sets the value of the moduleValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setModuleValue(String value) {
         this.moduleValue = value;
@@ -251,11 +225,9 @@ public class FraudDetection {
 
     /**
      * Gets the value of the stringValue1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getStringValue1() {
         return stringValue1;
@@ -263,11 +235,9 @@ public class FraudDetection {
 
     /**
      * Sets the value of the stringValue1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setStringValue1(String value) {
         this.stringValue1 = value;
@@ -275,11 +245,9 @@ public class FraudDetection {
 
     /**
      * Gets the value of the stringValue2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getStringValue2() {
         return stringValue2;
@@ -287,11 +255,9 @@ public class FraudDetection {
 
     /**
      * Sets the value of the stringValue2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setStringValue2(String value) {
         this.stringValue2 = value;

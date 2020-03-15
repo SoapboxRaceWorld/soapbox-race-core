@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for UdpRelayInfo complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="UdpRelayInfo">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UdpRelayInfo", propOrder = {
-    "host",
-    "port"
+        "host",
+        "port"
 })
 public class UdpRelayInfo {
 
@@ -47,11 +45,9 @@ public class UdpRelayInfo {
 
     /**
      * Gets the value of the host property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getHost() {
         return host;
@@ -59,11 +55,9 @@ public class UdpRelayInfo {
 
     /**
      * Sets the value of the host property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setHost(String value) {
         this.host = value;
@@ -71,7 +65,6 @@ public class UdpRelayInfo {
 
     /**
      * Gets the value of the port property.
-     * 
      */
     public int getPort() {
         return port;
@@ -79,7 +72,6 @@ public class UdpRelayInfo {
 
     /**
      * Sets the value of the port property.
-     * 
      */
     public void setPort(int value) {
         this.port = value;

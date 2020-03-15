@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for CommerceResultStatus.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -35,7 +35,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- * 
  */
 @XmlType(name = "CommerceResultStatus")
 @XmlEnum
@@ -71,17 +70,17 @@ public enum CommerceResultStatus {
         value = v;
     }
 
-    public String value() {
-        return value;
-    }
-
     public static CommerceResultStatus fromValue(String v) {
-        for (CommerceResultStatus c: CommerceResultStatus.values()) {
+        for (CommerceResultStatus c : CommerceResultStatus.values()) {
             if (c.value.equals(v)) {
                 return c;
             }
         }
         throw new IllegalArgumentException(v);
+    }
+
+    public String value() {
+        return value;
     }
 
 }

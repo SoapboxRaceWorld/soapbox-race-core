@@ -21,7 +21,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;

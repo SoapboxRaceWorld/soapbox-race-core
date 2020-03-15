@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LobbyEntrantRemoved complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LobbyEntrantRemoved">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LobbyEntrantRemoved", propOrder = {
-    "lobbyId",
-    "personaId"
+        "lobbyId",
+        "personaId"
 })
 public class LobbyEntrantRemoved {
 
@@ -47,7 +45,6 @@ public class LobbyEntrantRemoved {
 
     /**
      * Gets the value of the lobbyId property.
-     * 
      */
     public long getLobbyId() {
         return lobbyId;
@@ -55,7 +52,6 @@ public class LobbyEntrantRemoved {
 
     /**
      * Sets the value of the lobbyId property.
-     * 
      */
     public void setLobbyId(long value) {
         this.lobbyId = value;
@@ -63,7 +59,6 @@ public class LobbyEntrantRemoved {
 
     /**
      * Gets the value of the personaId property.
-     * 
      */
     public long getPersonaId() {
         return personaId;
@@ -71,7 +66,6 @@ public class LobbyEntrantRemoved {
 
     /**
      * Sets the value of the personaId property.
-     * 
      */
     public void setPersonaId(long value) {
         this.personaId = value;

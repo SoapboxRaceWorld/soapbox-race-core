@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for PursuitArbitrationPacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PursuitArbitrationPacket">
  *   &lt;complexContent>
@@ -36,26 +36,23 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PursuitArbitrationPacket", propOrder = {
-    "copsDeployed",
-    "copsDisabled",
-    "copsRammed",
-    "costToState",
-    "heat",
-    "infractions",
-    "longestJumpDurationInMilliseconds",
-    "roadBlocksDodged",
-    "spikeStripsDodged",
-    "sumOfJumpsDurationInMilliseconds",
-    "topSpeed"
+        "copsDeployed",
+        "copsDisabled",
+        "copsRammed",
+        "costToState",
+        "heat",
+        "infractions",
+        "longestJumpDurationInMilliseconds",
+        "roadBlocksDodged",
+        "spikeStripsDodged",
+        "sumOfJumpsDurationInMilliseconds",
+        "topSpeed"
 })
 public class PursuitArbitrationPacket
-    extends ArbitrationPacket
-{
+        extends ArbitrationPacket {
 
     @XmlElement(name = "CopsDeployed")
     protected int copsDeployed;
@@ -84,7 +81,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the copsDeployed property.
-     * 
      */
     public int getCopsDeployed() {
         return copsDeployed;
@@ -92,7 +88,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the copsDeployed property.
-     * 
      */
     public void setCopsDeployed(int value) {
         this.copsDeployed = value;
@@ -100,7 +95,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the copsDisabled property.
-     * 
      */
     public int getCopsDisabled() {
         return copsDisabled;
@@ -108,7 +102,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the copsDisabled property.
-     * 
      */
     public void setCopsDisabled(int value) {
         this.copsDisabled = value;
@@ -116,7 +109,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the copsRammed property.
-     * 
      */
     public int getCopsRammed() {
         return copsRammed;
@@ -124,7 +116,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the copsRammed property.
-     * 
      */
     public void setCopsRammed(int value) {
         this.copsRammed = value;
@@ -132,7 +123,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the costToState property.
-     * 
      */
     public int getCostToState() {
         return costToState;
@@ -140,7 +130,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the costToState property.
-     * 
      */
     public void setCostToState(int value) {
         this.costToState = value;
@@ -148,7 +137,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the heat property.
-     * 
      */
     public float getHeat() {
         return heat;
@@ -156,7 +144,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the heat property.
-     * 
      */
     public void setHeat(float value) {
         this.heat = value;
@@ -164,7 +151,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the infractions property.
-     * 
      */
     public int getInfractions() {
         return infractions;
@@ -172,7 +158,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the infractions property.
-     * 
      */
     public void setInfractions(int value) {
         this.infractions = value;
@@ -180,7 +165,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the longestJumpDurationInMilliseconds property.
-     * 
      */
     public long getLongestJumpDurationInMilliseconds() {
         return longestJumpDurationInMilliseconds;
@@ -188,7 +172,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the longestJumpDurationInMilliseconds property.
-     * 
      */
     public void setLongestJumpDurationInMilliseconds(long value) {
         this.longestJumpDurationInMilliseconds = value;
@@ -196,7 +179,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the roadBlocksDodged property.
-     * 
      */
     public int getRoadBlocksDodged() {
         return roadBlocksDodged;
@@ -204,7 +186,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the roadBlocksDodged property.
-     * 
      */
     public void setRoadBlocksDodged(int value) {
         this.roadBlocksDodged = value;
@@ -212,7 +193,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the spikeStripsDodged property.
-     * 
      */
     public int getSpikeStripsDodged() {
         return spikeStripsDodged;
@@ -220,7 +200,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the spikeStripsDodged property.
-     * 
      */
     public void setSpikeStripsDodged(int value) {
         this.spikeStripsDodged = value;
@@ -228,7 +207,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the sumOfJumpsDurationInMilliseconds property.
-     * 
      */
     public long getSumOfJumpsDurationInMilliseconds() {
         return sumOfJumpsDurationInMilliseconds;
@@ -236,7 +214,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the sumOfJumpsDurationInMilliseconds property.
-     * 
      */
     public void setSumOfJumpsDurationInMilliseconds(long value) {
         this.sumOfJumpsDurationInMilliseconds = value;
@@ -244,7 +221,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Gets the value of the topSpeed property.
-     * 
      */
     public float getTopSpeed() {
         return topSpeed;
@@ -252,7 +228,6 @@ public class PursuitArbitrationPacket
 
     /**
      * Sets the value of the topSpeed property.
-     * 
      */
     public void setTopSpeed(float value) {
         this.topSpeed = value;

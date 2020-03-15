@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ClientConfig complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ClientConfig">
  *   &lt;complexContent>
@@ -29,13 +29,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ClientConfig", propOrder = {
-    "group",
-    "level"
+        "group",
+        "level"
 })
 public class ClientConfig {
 
@@ -44,11 +42,9 @@ public class ClientConfig {
 
     /**
      * Gets the value of the group property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getGroup() {
         return group;
@@ -56,11 +52,9 @@ public class ClientConfig {
 
     /**
      * Sets the value of the group property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setGroup(String value) {
         this.group = value;
@@ -68,7 +62,6 @@ public class ClientConfig {
 
     /**
      * Gets the value of the level property.
-     * 
      */
     public long getLevel() {
         return level;
@@ -76,7 +69,6 @@ public class ClientConfig {
 
     /**
      * Sets the value of the level property.
-     * 
      */
     public void setLevel(long value) {
         this.level = value;

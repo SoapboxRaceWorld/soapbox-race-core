@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for EntitlementItemTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="EntitlementItemTrans">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EntitlementItemTrans", propOrder = {
-    "entitlementId",
-    "quantity"
+        "entitlementId",
+        "quantity"
 })
 public class EntitlementItemTrans {
 
@@ -47,11 +45,9 @@ public class EntitlementItemTrans {
 
     /**
      * Gets the value of the entitlementId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getEntitlementId() {
         return entitlementId;
@@ -59,11 +55,9 @@ public class EntitlementItemTrans {
 
     /**
      * Sets the value of the entitlementId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEntitlementId(String value) {
         this.entitlementId = value;
@@ -71,7 +65,6 @@ public class EntitlementItemTrans {
 
     /**
      * Gets the value of the quantity property.
-     * 
      */
     public int getQuantity() {
         return quantity;
@@ -79,7 +72,6 @@ public class EntitlementItemTrans {
 
     /**
      * Sets the value of the quantity property.
-     * 
      */
     public void setQuantity(int value) {
         this.quantity = value;

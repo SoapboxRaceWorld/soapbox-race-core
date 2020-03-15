@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for TeamEscapeEntrantResult complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="TeamEscapeEntrantResult">
  *   &lt;complexContent>
@@ -30,17 +30,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TeamEscapeEntrantResult", propOrder = {
-    "distanceToFinish",
-    "fractionCompleted"
+        "distanceToFinish",
+        "fractionCompleted"
 })
 public class TeamEscapeEntrantResult
-    extends EntrantResult
-{
+        extends EntrantResult {
 
     @XmlElement(name = "DistanceToFinish")
     protected float distanceToFinish;
@@ -49,7 +46,6 @@ public class TeamEscapeEntrantResult
 
     /**
      * Gets the value of the distanceToFinish property.
-     * 
      */
     public float getDistanceToFinish() {
         return distanceToFinish;
@@ -57,7 +53,6 @@ public class TeamEscapeEntrantResult
 
     /**
      * Sets the value of the distanceToFinish property.
-     * 
      */
     public void setDistanceToFinish(float value) {
         this.distanceToFinish = value;
@@ -65,7 +60,6 @@ public class TeamEscapeEntrantResult
 
     /**
      * Gets the value of the fractionCompleted property.
-     * 
      */
     public float getFractionCompleted() {
         return fractionCompleted;
@@ -73,7 +67,6 @@ public class TeamEscapeEntrantResult
 
     /**
      * Sets the value of the fractionCompleted property.
-     * 
      */
     public void setFractionCompleted(float value) {
         this.fractionCompleted = value;

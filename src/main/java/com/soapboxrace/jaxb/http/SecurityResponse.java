@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for SecurityResponse complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SecurityResponse">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SecurityResponse", propOrder = {
-    "challengeId",
-    "result"
+        "challengeId",
+        "result"
 })
 public class SecurityResponse {
 
@@ -47,11 +45,9 @@ public class SecurityResponse {
 
     /**
      * Gets the value of the challengeId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getChallengeId() {
         return challengeId;
@@ -59,11 +55,9 @@ public class SecurityResponse {
 
     /**
      * Sets the value of the challengeId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setChallengeId(String value) {
         this.challengeId = value;
@@ -71,7 +65,6 @@ public class SecurityResponse {
 
     /**
      * Gets the value of the result property.
-     * 
      */
     public long getResult() {
         return result;
@@ -79,7 +72,6 @@ public class SecurityResponse {
 
     /**
      * Sets the value of the result property.
-     * 
      */
     public void setResult(long value) {
         this.result = value;

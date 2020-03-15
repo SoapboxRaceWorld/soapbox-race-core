@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ClientConfigTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ClientConfigTrans">
  *   &lt;complexContent>
@@ -28,12 +28,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ClientConfigTrans", propOrder = {
-    "clientConfigs"
+        "clientConfigs"
 })
 public class ClientConfigTrans {
 
@@ -41,11 +39,9 @@ public class ClientConfigTrans {
 
     /**
      * Gets the value of the clientConfigs property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfClientConfig }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfClientConfig }
      */
     public ArrayOfClientConfig getClientConfigs() {
         return clientConfigs;
@@ -53,11 +49,9 @@ public class ClientConfigTrans {
 
     /**
      * Sets the value of the clientConfigs property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfClientConfig }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfClientConfig }
      */
     public void setClientConfigs(ArrayOfClientConfig value) {
         this.clientConfigs = value;

@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for EntitlementTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="EntitlementTrans">
  *   &lt;complexContent>
@@ -29,12 +29,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EntitlementTrans", propOrder = {
-    "items"
+        "items"
 })
 public class EntitlementTrans {
 
@@ -43,11 +41,9 @@ public class EntitlementTrans {
 
     /**
      * Gets the value of the items property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfEntitlementItemTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfEntitlementItemTrans }
      */
     public ArrayOfEntitlementItemTrans getItems() {
         return items;
@@ -55,11 +51,9 @@ public class EntitlementTrans {
 
     /**
      * Sets the value of the items property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfEntitlementItemTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfEntitlementItemTrans }
      */
     public void setItems(ArrayOfEntitlementItemTrans value) {
         this.items = value;
