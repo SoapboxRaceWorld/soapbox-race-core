@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * <p>Java class for ArrayOfOwnedCarTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ArrayOfOwnedCarTrans">
  *   &lt;complexContent>
@@ -31,12 +31,10 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArrayOfOwnedCarTrans", propOrder = {
-    "ownedCarTrans"
+        "ownedCarTrans"
 })
 public class ArrayOfOwnedCarTrans {
 
@@ -45,25 +43,23 @@ public class ArrayOfOwnedCarTrans {
 
     /**
      * Gets the value of the ownedCarTrans property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the ownedCarTrans property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getOwnedCarTrans().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link OwnedCarTrans }
-     * 
-     * 
      */
     public List<OwnedCarTrans> getOwnedCarTrans() {
         if (ownedCarTrans == null) {

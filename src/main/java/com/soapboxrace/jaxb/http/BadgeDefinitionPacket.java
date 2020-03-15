@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for BadgeDefinitionPacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BadgeDefinitionPacket">
  *   &lt;complexContent>
@@ -34,17 +34,15 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BadgeDefinitionPacket", propOrder = {
-    "background",
-    "badgeDefinitionId",
-    "border",
-    "description",
-    "icon",
-    "name"
+        "background",
+        "badgeDefinitionId",
+        "border",
+        "description",
+        "icon",
+        "name"
 })
 public class BadgeDefinitionPacket {
 
@@ -63,11 +61,9 @@ public class BadgeDefinitionPacket {
 
     /**
      * Gets the value of the background property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getBackground() {
         return background;
@@ -75,11 +71,9 @@ public class BadgeDefinitionPacket {
 
     /**
      * Sets the value of the background property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBackground(String value) {
         this.background = value;
@@ -87,7 +81,6 @@ public class BadgeDefinitionPacket {
 
     /**
      * Gets the value of the badgeDefinitionId property.
-     * 
      */
     public int getBadgeDefinitionId() {
         return badgeDefinitionId;
@@ -95,7 +88,6 @@ public class BadgeDefinitionPacket {
 
     /**
      * Sets the value of the badgeDefinitionId property.
-     * 
      */
     public void setBadgeDefinitionId(int value) {
         this.badgeDefinitionId = value;
@@ -103,11 +95,9 @@ public class BadgeDefinitionPacket {
 
     /**
      * Gets the value of the border property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getBorder() {
         return border;
@@ -115,11 +105,9 @@ public class BadgeDefinitionPacket {
 
     /**
      * Sets the value of the border property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBorder(String value) {
         this.border = value;
@@ -127,11 +115,9 @@ public class BadgeDefinitionPacket {
 
     /**
      * Gets the value of the description property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getDescription() {
         return description;
@@ -139,11 +125,9 @@ public class BadgeDefinitionPacket {
 
     /**
      * Sets the value of the description property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDescription(String value) {
         this.description = value;
@@ -151,11 +135,9 @@ public class BadgeDefinitionPacket {
 
     /**
      * Gets the value of the icon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getIcon() {
         return icon;
@@ -163,11 +145,9 @@ public class BadgeDefinitionPacket {
 
     /**
      * Sets the value of the icon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setIcon(String value) {
         this.icon = value;
@@ -175,11 +155,9 @@ public class BadgeDefinitionPacket {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getName() {
         return name;
@@ -187,11 +165,9 @@ public class BadgeDefinitionPacket {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name = value;

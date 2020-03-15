@@ -31,8 +31,6 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AchievementRewards", propOrder = {
@@ -69,10 +67,8 @@ public class AchievementRewards {
     /**
      * Gets the value of the commerceItems property.
      *
-     * @return
-     *     possible object is
-     *     {@link ArrayOfCommerceItemTrans }
-     *
+     * @return possible object is
+     * {@link ArrayOfCommerceItemTrans }
      */
     public ArrayOfCommerceItemTrans getCommerceItems() {
         return commerceItems;
@@ -81,10 +77,8 @@ public class AchievementRewards {
     /**
      * Sets the value of the commerceItems property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfCommerceItemTrans }
-     *
+     * @param value allowed object is
+     *              {@link ArrayOfCommerceItemTrans }
      */
     public void setCommerceItems(ArrayOfCommerceItemTrans value) {
         this.commerceItems = value;
@@ -93,10 +87,8 @@ public class AchievementRewards {
     /**
      * Gets the value of the invalidBasket property.
      *
-     * @return
-     *     possible object is
-     *     {@link InvalidBasketTrans }
-     *
+     * @return possible object is
+     * {@link InvalidBasketTrans }
      */
     public InvalidBasketTrans getInvalidBasket() {
         return invalidBasket;
@@ -105,10 +97,8 @@ public class AchievementRewards {
     /**
      * Sets the value of the invalidBasket property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link InvalidBasketTrans }
-     *
+     * @param value allowed object is
+     *              {@link InvalidBasketTrans }
      */
     public void setInvalidBasket(InvalidBasketTrans value) {
         this.invalidBasket = value;
@@ -117,10 +107,8 @@ public class AchievementRewards {
     /**
      * Gets the value of the inventoryItems property.
      *
-     * @return
-     *     possible object is
-     *     {@link ArrayOfInventoryItemTrans }
-     *
+     * @return possible object is
+     * {@link ArrayOfInventoryItemTrans }
      */
     public ArrayOfInventoryItemTrans getInventoryItems() {
         return inventoryItems;
@@ -129,10 +117,8 @@ public class AchievementRewards {
     /**
      * Sets the value of the inventoryItems property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfInventoryItemTrans }
-     *
+     * @param value allowed object is
+     *              {@link ArrayOfInventoryItemTrans }
      */
     public void setInventoryItems(ArrayOfInventoryItemTrans value) {
         this.inventoryItems = value;
@@ -141,10 +127,8 @@ public class AchievementRewards {
     /**
      * Gets the value of the purchasedCars property.
      *
-     * @return
-     *     possible object is
-     *     {@link ArrayOfOwnedCarTrans }
-     *
+     * @return possible object is
+     * {@link ArrayOfOwnedCarTrans }
      */
     public ArrayOfOwnedCarTrans getPurchasedCars() {
         return purchasedCars;
@@ -153,10 +137,8 @@ public class AchievementRewards {
     /**
      * Sets the value of the purchasedCars property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfOwnedCarTrans }
-     *
+     * @param value allowed object is
+     *              {@link ArrayOfOwnedCarTrans }
      */
     public void setPurchasedCars(ArrayOfOwnedCarTrans value) {
         this.purchasedCars = value;
@@ -165,10 +147,8 @@ public class AchievementRewards {
     /**
      * Gets the value of the status property.
      *
-     * @return
-     *     possible object is
-     *     {@link CommerceResultStatus }
-     *
+     * @return possible object is
+     * {@link CommerceResultStatus }
      */
     public CommerceResultStatus getStatus() {
         return status;
@@ -177,10 +157,8 @@ public class AchievementRewards {
     /**
      * Sets the value of the status property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link CommerceResultStatus }
-     *
+     * @param value allowed object is
+     *              {@link CommerceResultStatus }
      */
     public void setStatus(CommerceResultStatus value) {
         this.status = value;
@@ -189,10 +167,8 @@ public class AchievementRewards {
     /**
      * Gets the value of the wallets property.
      *
-     * @return
-     *     possible object is
-     *     {@link ArrayOfWalletTrans }
-     *
+     * @return possible object is
+     * {@link ArrayOfWalletTrans }
      */
     public ArrayOfWalletTrans getWallets() {
         return wallets;
@@ -201,32 +177,26 @@ public class AchievementRewards {
     /**
      * Sets the value of the wallets property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfWalletTrans }
-     *
+     * @param value allowed object is
+     *              {@link ArrayOfWalletTrans }
      */
     public void setWallets(ArrayOfWalletTrans value) {
         this.wallets = value;
     }
 
-    public Long getAchievementRankId()
-    {
+    public Long getAchievementRankId() {
         return achievementRankId;
     }
 
-    public void setAchievementRankId(Long achievementRankId)
-    {
+    public void setAchievementRankId(Long achievementRankId) {
         this.achievementRankId = achievementRankId;
     }
 
-    public String getVisualStyle()
-    {
+    public String getVisualStyle() {
         return visualStyle;
     }
 
-    public void setVisualStyle(String visualStyle)
-    {
+    public void setVisualStyle(String visualStyle) {
         this.visualStyle = visualStyle;
     }
 }

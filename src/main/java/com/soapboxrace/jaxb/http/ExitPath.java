@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ExitPath.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -25,7 +25,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- * 
  */
 @XmlType(name = "ExitPath")
 @XmlEnum
@@ -41,17 +40,17 @@ public enum ExitPath {
         value = v;
     }
 
-    public String value() {
-        return value;
-    }
-
     public static ExitPath fromValue(String v) {
-        for (ExitPath c: ExitPath.values()) {
+        for (ExitPath c : ExitPath.values()) {
             if (c.value.equals(v)) {
                 return c;
             }
         }
         throw new IllegalArgumentException(v);
+    }
+
+    public String value() {
+        return value;
     }
 
 }

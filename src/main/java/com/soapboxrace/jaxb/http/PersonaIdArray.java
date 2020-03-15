@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for PersonaIdArray complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PersonaIdArray">
  *   &lt;complexContent>
@@ -29,12 +29,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PersonaIdArray", propOrder = {
-    "personaIds"
+        "personaIds"
 })
 public class PersonaIdArray {
 
@@ -43,11 +41,9 @@ public class PersonaIdArray {
 
     /**
      * Gets the value of the personaIds property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfLong }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfLong }
      */
     public ArrayOfLong getPersonaIds() {
         return personaIds;
@@ -55,11 +51,9 @@ public class PersonaIdArray {
 
     /**
      * Sets the value of the personaIds property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfLong }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfLong }
      */
     public void setPersonaIds(ArrayOfLong value) {
         this.personaIds = value;

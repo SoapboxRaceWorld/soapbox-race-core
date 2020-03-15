@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Accolades complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="Accolades">
  *   &lt;complexContent>
@@ -33,16 +33,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Accolades", propOrder = {
-    "finalRewards",
-    "hasLeveledUp",
-    "luckyDrawInfo",
-    "originalRewards",
-    "rewardInfo"
+        "finalRewards",
+        "hasLeveledUp",
+        "luckyDrawInfo",
+        "originalRewards",
+        "rewardInfo"
 })
 public class Accolades {
 
@@ -59,11 +57,9 @@ public class Accolades {
 
     /**
      * Gets the value of the finalRewards property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Reward }
-     *     
+     *
+     * @return possible object is
+     * {@link Reward }
      */
     public Reward getFinalRewards() {
         return finalRewards;
@@ -71,11 +67,9 @@ public class Accolades {
 
     /**
      * Sets the value of the finalRewards property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Reward }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Reward }
      */
     public void setFinalRewards(Reward value) {
         this.finalRewards = value;
@@ -83,7 +77,6 @@ public class Accolades {
 
     /**
      * Gets the value of the hasLeveledUp property.
-     * 
      */
     public boolean isHasLeveledUp() {
         return hasLeveledUp;
@@ -91,7 +84,6 @@ public class Accolades {
 
     /**
      * Sets the value of the hasLeveledUp property.
-     * 
      */
     public void setHasLeveledUp(boolean value) {
         this.hasLeveledUp = value;
@@ -99,11 +91,9 @@ public class Accolades {
 
     /**
      * Gets the value of the luckyDrawInfo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link LuckyDrawInfo }
-     *     
+     *
+     * @return possible object is
+     * {@link LuckyDrawInfo }
      */
     public LuckyDrawInfo getLuckyDrawInfo() {
         return luckyDrawInfo;
@@ -111,11 +101,9 @@ public class Accolades {
 
     /**
      * Sets the value of the luckyDrawInfo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link LuckyDrawInfo }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link LuckyDrawInfo }
      */
     public void setLuckyDrawInfo(LuckyDrawInfo value) {
         this.luckyDrawInfo = value;
@@ -123,11 +111,9 @@ public class Accolades {
 
     /**
      * Gets the value of the originalRewards property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Reward }
-     *     
+     *
+     * @return possible object is
+     * {@link Reward }
      */
     public Reward getOriginalRewards() {
         return originalRewards;
@@ -135,11 +121,9 @@ public class Accolades {
 
     /**
      * Sets the value of the originalRewards property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Reward }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Reward }
      */
     public void setOriginalRewards(Reward value) {
         this.originalRewards = value;
@@ -147,11 +131,9 @@ public class Accolades {
 
     /**
      * Gets the value of the rewardInfo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfRewardPart }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfRewardPart }
      */
     public ArrayOfRewardPart getRewardInfo() {
         return rewardInfo;
@@ -159,11 +141,9 @@ public class Accolades {
 
     /**
      * Sets the value of the rewardInfo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfRewardPart }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfRewardPart }
      */
     public void setRewardInfo(ArrayOfRewardPart value) {
         this.rewardInfo = value;

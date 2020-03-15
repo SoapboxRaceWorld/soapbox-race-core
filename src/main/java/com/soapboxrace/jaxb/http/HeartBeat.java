@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for HeartBeat complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="HeartBeat">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HeartBeat", propOrder = {
-    "metagameFlags",
-    "enabledBitField"
+        "metagameFlags",
+        "enabledBitField"
 })
 public class HeartBeat {
 
@@ -46,7 +44,6 @@ public class HeartBeat {
 
     /**
      * Gets the value of the metagameFlags property.
-     * 
      */
     public int getMetagameFlags() {
         return metagameFlags;
@@ -54,7 +51,6 @@ public class HeartBeat {
 
     /**
      * Sets the value of the metagameFlags property.
-     * 
      */
     public void setMetagameFlags(int value) {
         this.metagameFlags = value;
@@ -62,7 +58,6 @@ public class HeartBeat {
 
     /**
      * Gets the value of the enabledBitField property.
-     * 
      */
     public int getEnabledBitField() {
         return enabledBitField;
@@ -70,7 +65,6 @@ public class HeartBeat {
 
     /**
      * Sets the value of the enabledBitField property.
-     * 
      */
     public void setEnabledBitField(int value) {
         this.enabledBitField = value;

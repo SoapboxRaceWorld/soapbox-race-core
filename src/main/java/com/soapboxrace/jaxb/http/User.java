@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for User complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="User">
  *   &lt;complexContent>
@@ -56,40 +56,38 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "User", propOrder = {
-    "address1",
-    "address2",
-    "country",
-    "dateCreated",
-    "dob",
-    "email",
-    "emailStatus",
-    "firstName",
-    "fullGameAccess",
-    "gender",
-    "idDigits",
-    "isComplete",
-    "landlinePhone",
-    "language",
-    "lastAuthDate",
-    "lastName",
-    "mobile",
-    "nickname",
-    "postalCode",
-    "realName",
-    "reasonCode",
-    "remoteUserId",
-    "securityToken",
-    "starterPackEntitlementTag",
-    "status",
-    "subscribeMsg",
-    "tosVersion",
-    "userId",
-    "username"
+        "address1",
+        "address2",
+        "country",
+        "dateCreated",
+        "dob",
+        "email",
+        "emailStatus",
+        "firstName",
+        "fullGameAccess",
+        "gender",
+        "idDigits",
+        "isComplete",
+        "landlinePhone",
+        "language",
+        "lastAuthDate",
+        "lastName",
+        "mobile",
+        "nickname",
+        "postalCode",
+        "realName",
+        "reasonCode",
+        "remoteUserId",
+        "securityToken",
+        "starterPackEntitlementTag",
+        "status",
+        "subscribeMsg",
+        "tosVersion",
+        "userId",
+        "username"
 })
 public class User {
 
@@ -125,11 +123,9 @@ public class User {
 
     /**
      * Gets the value of the address1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getAddress1() {
         return address1;
@@ -137,11 +133,9 @@ public class User {
 
     /**
      * Sets the value of the address1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAddress1(String value) {
         this.address1 = value;
@@ -149,11 +143,9 @@ public class User {
 
     /**
      * Gets the value of the address2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getAddress2() {
         return address2;
@@ -161,11 +153,9 @@ public class User {
 
     /**
      * Sets the value of the address2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAddress2(String value) {
         this.address2 = value;
@@ -173,11 +163,9 @@ public class User {
 
     /**
      * Gets the value of the country property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCountry() {
         return country;
@@ -185,11 +173,9 @@ public class User {
 
     /**
      * Sets the value of the country property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCountry(String value) {
         this.country = value;
@@ -197,11 +183,9 @@ public class User {
 
     /**
      * Gets the value of the dateCreated property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getDateCreated() {
         return dateCreated;
@@ -209,11 +193,9 @@ public class User {
 
     /**
      * Sets the value of the dateCreated property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDateCreated(String value) {
         this.dateCreated = value;
@@ -221,11 +203,9 @@ public class User {
 
     /**
      * Gets the value of the dob property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getDob() {
         return dob;
@@ -233,11 +213,9 @@ public class User {
 
     /**
      * Sets the value of the dob property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDob(String value) {
         this.dob = value;
@@ -245,11 +223,9 @@ public class User {
 
     /**
      * Gets the value of the email property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getEmail() {
         return email;
@@ -257,11 +233,9 @@ public class User {
 
     /**
      * Sets the value of the email property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEmail(String value) {
         this.email = value;
@@ -269,11 +243,9 @@ public class User {
 
     /**
      * Gets the value of the emailStatus property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getEmailStatus() {
         return emailStatus;
@@ -281,11 +253,9 @@ public class User {
 
     /**
      * Sets the value of the emailStatus property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEmailStatus(String value) {
         this.emailStatus = value;
@@ -293,11 +263,9 @@ public class User {
 
     /**
      * Gets the value of the firstName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getFirstName() {
         return firstName;
@@ -305,11 +273,9 @@ public class User {
 
     /**
      * Sets the value of the firstName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setFirstName(String value) {
         this.firstName = value;
@@ -317,7 +283,6 @@ public class User {
 
     /**
      * Gets the value of the fullGameAccess property.
-     * 
      */
     public boolean isFullGameAccess() {
         return fullGameAccess;
@@ -325,7 +290,6 @@ public class User {
 
     /**
      * Sets the value of the fullGameAccess property.
-     * 
      */
     public void setFullGameAccess(boolean value) {
         this.fullGameAccess = value;
@@ -333,11 +297,9 @@ public class User {
 
     /**
      * Gets the value of the gender property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getGender() {
         return gender;
@@ -345,11 +307,9 @@ public class User {
 
     /**
      * Sets the value of the gender property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setGender(String value) {
         this.gender = value;
@@ -357,11 +317,9 @@ public class User {
 
     /**
      * Gets the value of the idDigits property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getIdDigits() {
         return idDigits;
@@ -369,11 +327,9 @@ public class User {
 
     /**
      * Sets the value of the idDigits property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setIdDigits(String value) {
         this.idDigits = value;
@@ -381,7 +337,6 @@ public class User {
 
     /**
      * Gets the value of the isComplete property.
-     * 
      */
     public boolean isIsComplete() {
         return isComplete;
@@ -389,7 +344,6 @@ public class User {
 
     /**
      * Sets the value of the isComplete property.
-     * 
      */
     public void setIsComplete(boolean value) {
         this.isComplete = value;
@@ -397,11 +351,9 @@ public class User {
 
     /**
      * Gets the value of the landlinePhone property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLandlinePhone() {
         return landlinePhone;
@@ -409,11 +361,9 @@ public class User {
 
     /**
      * Sets the value of the landlinePhone property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLandlinePhone(String value) {
         this.landlinePhone = value;
@@ -421,11 +371,9 @@ public class User {
 
     /**
      * Gets the value of the language property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLanguage() {
         return language;
@@ -433,11 +381,9 @@ public class User {
 
     /**
      * Sets the value of the language property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLanguage(String value) {
         this.language = value;
@@ -445,11 +391,9 @@ public class User {
 
     /**
      * Gets the value of the lastAuthDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLastAuthDate() {
         return lastAuthDate;
@@ -457,11 +401,9 @@ public class User {
 
     /**
      * Sets the value of the lastAuthDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLastAuthDate(String value) {
         this.lastAuthDate = value;
@@ -469,11 +411,9 @@ public class User {
 
     /**
      * Gets the value of the lastName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLastName() {
         return lastName;
@@ -481,11 +421,9 @@ public class User {
 
     /**
      * Sets the value of the lastName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLastName(String value) {
         this.lastName = value;
@@ -493,11 +431,9 @@ public class User {
 
     /**
      * Gets the value of the mobile property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getMobile() {
         return mobile;
@@ -505,11 +441,9 @@ public class User {
 
     /**
      * Sets the value of the mobile property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setMobile(String value) {
         this.mobile = value;
@@ -517,11 +451,9 @@ public class User {
 
     /**
      * Gets the value of the nickname property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getNickname() {
         return nickname;
@@ -529,11 +461,9 @@ public class User {
 
     /**
      * Sets the value of the nickname property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setNickname(String value) {
         this.nickname = value;
@@ -541,11 +471,9 @@ public class User {
 
     /**
      * Gets the value of the postalCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getPostalCode() {
         return postalCode;
@@ -553,11 +481,9 @@ public class User {
 
     /**
      * Sets the value of the postalCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPostalCode(String value) {
         this.postalCode = value;
@@ -565,11 +491,9 @@ public class User {
 
     /**
      * Gets the value of the realName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getRealName() {
         return realName;
@@ -577,11 +501,9 @@ public class User {
 
     /**
      * Sets the value of the realName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRealName(String value) {
         this.realName = value;
@@ -589,11 +511,9 @@ public class User {
 
     /**
      * Gets the value of the reasonCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getReasonCode() {
         return reasonCode;
@@ -601,11 +521,9 @@ public class User {
 
     /**
      * Sets the value of the reasonCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setReasonCode(String value) {
         this.reasonCode = value;
@@ -613,7 +531,6 @@ public class User {
 
     /**
      * Gets the value of the remoteUserId property.
-     * 
      */
     public long getRemoteUserId() {
         return remoteUserId;
@@ -621,7 +538,6 @@ public class User {
 
     /**
      * Sets the value of the remoteUserId property.
-     * 
      */
     public void setRemoteUserId(long value) {
         this.remoteUserId = value;
@@ -629,11 +545,9 @@ public class User {
 
     /**
      * Gets the value of the securityToken property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getSecurityToken() {
         return securityToken;
@@ -641,11 +555,9 @@ public class User {
 
     /**
      * Sets the value of the securityToken property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSecurityToken(String value) {
         this.securityToken = value;
@@ -653,11 +565,9 @@ public class User {
 
     /**
      * Gets the value of the starterPackEntitlementTag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getStarterPackEntitlementTag() {
         return starterPackEntitlementTag;
@@ -665,11 +575,9 @@ public class User {
 
     /**
      * Sets the value of the starterPackEntitlementTag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setStarterPackEntitlementTag(String value) {
         this.starterPackEntitlementTag = value;
@@ -677,11 +585,9 @@ public class User {
 
     /**
      * Gets the value of the status property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getStatus() {
         return status;
@@ -689,11 +595,9 @@ public class User {
 
     /**
      * Sets the value of the status property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setStatus(String value) {
         this.status = value;
@@ -701,7 +605,6 @@ public class User {
 
     /**
      * Gets the value of the subscribeMsg property.
-     * 
      */
     public boolean isSubscribeMsg() {
         return subscribeMsg;
@@ -709,7 +612,6 @@ public class User {
 
     /**
      * Sets the value of the subscribeMsg property.
-     * 
      */
     public void setSubscribeMsg(boolean value) {
         this.subscribeMsg = value;
@@ -717,11 +619,9 @@ public class User {
 
     /**
      * Gets the value of the tosVersion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getTosVersion() {
         return tosVersion;
@@ -729,11 +629,9 @@ public class User {
 
     /**
      * Sets the value of the tosVersion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTosVersion(String value) {
         this.tosVersion = value;
@@ -741,7 +639,6 @@ public class User {
 
     /**
      * Gets the value of the userId property.
-     * 
      */
     public long getUserId() {
         return userId;
@@ -749,7 +646,6 @@ public class User {
 
     /**
      * Sets the value of the userId property.
-     * 
      */
     public void setUserId(long value) {
         this.userId = value;
@@ -757,11 +653,9 @@ public class User {
 
     /**
      * Gets the value of the username property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getUsername() {
         return username;
@@ -769,11 +663,9 @@ public class User {
 
     /**
      * Sets the value of the username property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setUsername(String value) {
         this.username = value;

@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for chatServer complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="chatServer">
  *   &lt;complexContent>
@@ -32,15 +32,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "chatServer", propOrder = {
-    "rooms",
-    "ip",
-    "port",
-    "prefix"
+        "rooms",
+        "ip",
+        "port",
+        "prefix"
 })
 public class ChatServer {
 
@@ -52,11 +50,9 @@ public class ChatServer {
 
     /**
      * Gets the value of the rooms property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfChatRoom }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfChatRoom }
      */
     public ArrayOfChatRoom getRooms() {
         return rooms;
@@ -64,11 +60,9 @@ public class ChatServer {
 
     /**
      * Sets the value of the rooms property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfChatRoom }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfChatRoom }
      */
     public void setRooms(ArrayOfChatRoom value) {
         this.rooms = value;
@@ -76,11 +70,9 @@ public class ChatServer {
 
     /**
      * Gets the value of the ip property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getIp() {
         return ip;
@@ -88,11 +80,9 @@ public class ChatServer {
 
     /**
      * Sets the value of the ip property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setIp(String value) {
         this.ip = value;
@@ -100,7 +90,6 @@ public class ChatServer {
 
     /**
      * Gets the value of the port property.
-     * 
      */
     public int getPort() {
         return port;
@@ -108,7 +97,6 @@ public class ChatServer {
 
     /**
      * Sets the value of the port property.
-     * 
      */
     public void setPort(int value) {
         this.port = value;
@@ -116,11 +104,9 @@ public class ChatServer {
 
     /**
      * Gets the value of the prefix property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getPrefix() {
         return prefix;
@@ -128,11 +114,9 @@ public class ChatServer {
 
     /**
      * Sets the value of the prefix property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPrefix(String value) {
         this.prefix = value;

@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LuckyDrawInfo complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LuckyDrawInfo">
  *   &lt;complexContent>
@@ -35,18 +35,16 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LuckyDrawInfo", propOrder = {
-    "boxes",
-    "cardDeck",
-    "currentStreak",
-    "isStreakBroken",
-    "items",
-    "numBoxAnimations",
-    "numCards"
+        "boxes",
+        "cardDeck",
+        "currentStreak",
+        "isStreakBroken",
+        "items",
+        "numBoxAnimations",
+        "numCards"
 })
 public class LuckyDrawInfo {
 
@@ -67,11 +65,9 @@ public class LuckyDrawInfo {
 
     /**
      * Gets the value of the boxes property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfLuckyDrawBox }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfLuckyDrawBox }
      */
     public ArrayOfLuckyDrawBox getBoxes() {
         return boxes;
@@ -79,11 +75,9 @@ public class LuckyDrawInfo {
 
     /**
      * Sets the value of the boxes property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfLuckyDrawBox }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfLuckyDrawBox }
      */
     public void setBoxes(ArrayOfLuckyDrawBox value) {
         this.boxes = value;
@@ -91,11 +85,9 @@ public class LuckyDrawInfo {
 
     /**
      * Gets the value of the cardDeck property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCardDeck() {
         return cardDeck;
@@ -103,11 +95,9 @@ public class LuckyDrawInfo {
 
     /**
      * Sets the value of the cardDeck property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCardDeck(String value) {
         this.cardDeck = value;
@@ -115,7 +105,6 @@ public class LuckyDrawInfo {
 
     /**
      * Gets the value of the currentStreak property.
-     * 
      */
     public int getCurrentStreak() {
         return currentStreak;
@@ -123,7 +112,6 @@ public class LuckyDrawInfo {
 
     /**
      * Sets the value of the currentStreak property.
-     * 
      */
     public void setCurrentStreak(int value) {
         this.currentStreak = value;
@@ -131,7 +119,6 @@ public class LuckyDrawInfo {
 
     /**
      * Gets the value of the isStreakBroken property.
-     * 
      */
     public boolean isIsStreakBroken() {
         return isStreakBroken;
@@ -139,7 +126,6 @@ public class LuckyDrawInfo {
 
     /**
      * Sets the value of the isStreakBroken property.
-     * 
      */
     public void setIsStreakBroken(boolean value) {
         this.isStreakBroken = value;
@@ -147,11 +133,9 @@ public class LuckyDrawInfo {
 
     /**
      * Gets the value of the items property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfLuckyDrawItem }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfLuckyDrawItem }
      */
     public ArrayOfLuckyDrawItem getItems() {
         return items;
@@ -159,11 +143,9 @@ public class LuckyDrawInfo {
 
     /**
      * Sets the value of the items property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfLuckyDrawItem }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfLuckyDrawItem }
      */
     public void setItems(ArrayOfLuckyDrawItem value) {
         this.items = value;
@@ -171,7 +153,6 @@ public class LuckyDrawInfo {
 
     /**
      * Gets the value of the numBoxAnimations property.
-     * 
      */
     public int getNumBoxAnimations() {
         return numBoxAnimations;
@@ -179,7 +160,6 @@ public class LuckyDrawInfo {
 
     /**
      * Sets the value of the numBoxAnimations property.
-     * 
      */
     public void setNumBoxAnimations(int value) {
         this.numBoxAnimations = value;
@@ -187,7 +167,6 @@ public class LuckyDrawInfo {
 
     /**
      * Gets the value of the numCards property.
-     * 
      */
     public int getNumCards() {
         return numCards;
@@ -195,7 +174,6 @@ public class LuckyDrawInfo {
 
     /**
      * Sets the value of the numCards property.
-     * 
      */
     public void setNumCards(int value) {
         this.numCards = value;

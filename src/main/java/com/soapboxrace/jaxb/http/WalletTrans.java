@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for WalletTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="WalletTrans">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "WalletTrans", propOrder = {
-    "balance",
-    "currency"
+        "balance",
+        "currency"
 })
 public class WalletTrans {
 
@@ -47,7 +45,6 @@ public class WalletTrans {
 
     /**
      * Gets the value of the balance property.
-     * 
      */
     public double getBalance() {
         return balance;
@@ -55,7 +52,6 @@ public class WalletTrans {
 
     /**
      * Sets the value of the balance property.
-     * 
      */
     public void setBalance(double value) {
         this.balance = value;
@@ -63,11 +59,9 @@ public class WalletTrans {
 
     /**
      * Gets the value of the currency property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCurrency() {
         return currency;
@@ -75,11 +69,9 @@ public class WalletTrans {
 
     /**
      * Sets the value of the currency property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCurrency(String value) {
         this.currency = value;

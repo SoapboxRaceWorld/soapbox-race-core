@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * <p>Java class for ArrayOfAchievementRankPacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ArrayOfAchievementRankPacket">
  *   &lt;complexContent>
@@ -31,12 +31,10 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArrayOfAchievementRankPacket", propOrder = {
-    "achievementRankPacket"
+        "achievementRankPacket"
 })
 public class ArrayOfAchievementRankPacket {
 
@@ -45,25 +43,23 @@ public class ArrayOfAchievementRankPacket {
 
     /**
      * Gets the value of the achievementRankPacket property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the achievementRankPacket property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAchievementRankPacket().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AchievementRankPacket }
-     * 
-     * 
      */
     public List<AchievementRankPacket> getAchievementRankPacket() {
         if (achievementRankPacket == null) {

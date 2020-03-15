@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * <p>Java class for ArrayOfUdpRelayInfo complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ArrayOfUdpRelayInfo">
  *   &lt;complexContent>
@@ -31,12 +31,10 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArrayOfUdpRelayInfo", propOrder = {
-    "udpRelayInfo"
+        "udpRelayInfo"
 })
 public class ArrayOfUdpRelayInfo {
 
@@ -45,25 +43,23 @@ public class ArrayOfUdpRelayInfo {
 
     /**
      * Gets the value of the udpRelayInfo property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the udpRelayInfo property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getUdpRelayInfo().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link UdpRelayInfo }
-     * 
-     * 
      */
     public List<UdpRelayInfo> getUdpRelayInfo() {
         if (udpRelayInfo == null) {

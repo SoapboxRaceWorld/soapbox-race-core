@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for PersonaBase complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PersonaBase">
  *   &lt;complexContent>
@@ -37,20 +37,18 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PersonaBase", propOrder = {
-    "badges",
-    "iconIndex",
-    "level",
-    "motto",
-    "name",
-    "personaId",
-    "presence",
-    "score",
-    "userId"
+        "badges",
+        "iconIndex",
+        "level",
+        "motto",
+        "name",
+        "personaId",
+        "presence",
+        "score",
+        "userId"
 })
 public class PersonaBase {
 
@@ -75,11 +73,9 @@ public class PersonaBase {
 
     /**
      * Gets the value of the badges property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfBadgePacket }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfBadgePacket }
      */
     public ArrayOfBadgePacket getBadges() {
         return badges;
@@ -87,11 +83,9 @@ public class PersonaBase {
 
     /**
      * Sets the value of the badges property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfBadgePacket }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfBadgePacket }
      */
     public void setBadges(ArrayOfBadgePacket value) {
         this.badges = value;
@@ -99,7 +93,6 @@ public class PersonaBase {
 
     /**
      * Gets the value of the iconIndex property.
-     * 
      */
     public int getIconIndex() {
         return iconIndex;
@@ -107,7 +100,6 @@ public class PersonaBase {
 
     /**
      * Sets the value of the iconIndex property.
-     * 
      */
     public void setIconIndex(int value) {
         this.iconIndex = value;
@@ -115,7 +107,6 @@ public class PersonaBase {
 
     /**
      * Gets the value of the level property.
-     * 
      */
     public int getLevel() {
         return level;
@@ -123,7 +114,6 @@ public class PersonaBase {
 
     /**
      * Sets the value of the level property.
-     * 
      */
     public void setLevel(int value) {
         this.level = value;
@@ -131,11 +121,9 @@ public class PersonaBase {
 
     /**
      * Gets the value of the motto property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getMotto() {
         return motto;
@@ -143,11 +131,9 @@ public class PersonaBase {
 
     /**
      * Sets the value of the motto property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setMotto(String value) {
         this.motto = value;
@@ -155,11 +141,9 @@ public class PersonaBase {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getName() {
         return name;
@@ -167,11 +151,9 @@ public class PersonaBase {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -179,7 +161,6 @@ public class PersonaBase {
 
     /**
      * Gets the value of the personaId property.
-     * 
      */
     public long getPersonaId() {
         return personaId;
@@ -187,7 +168,6 @@ public class PersonaBase {
 
     /**
      * Sets the value of the personaId property.
-     * 
      */
     public void setPersonaId(long value) {
         this.personaId = value;
@@ -195,7 +175,6 @@ public class PersonaBase {
 
     /**
      * Gets the value of the presence property.
-     * 
      */
     public Long getPresence() {
         return presence;
@@ -203,7 +182,6 @@ public class PersonaBase {
 
     /**
      * Sets the value of the presence property.
-     * 
      */
     public void setPresence(Long value) {
         this.presence = value;
@@ -211,7 +189,6 @@ public class PersonaBase {
 
     /**
      * Gets the value of the score property.
-     * 
      */
     public int getScore() {
         return score;
@@ -219,7 +196,6 @@ public class PersonaBase {
 
     /**
      * Sets the value of the score property.
-     * 
      */
     public void setScore(int value) {
         this.score = value;
@@ -227,7 +203,6 @@ public class PersonaBase {
 
     /**
      * Gets the value of the userId property.
-     * 
      */
     public long getUserId() {
         return userId;
@@ -235,7 +210,6 @@ public class PersonaBase {
 
     /**
      * Sets the value of the userId property.
-     * 
      */
     public void setUserId(long value) {
         this.userId = value;

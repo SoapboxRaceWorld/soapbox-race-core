@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LobbyCountdown complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LobbyCountdown">
  *   &lt;complexContent>
@@ -33,16 +33,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LobbyCountdown", propOrder = {
-    "eventId",
-    "isWaiting",
-    "lobbyCountdownInMilliseconds",
-    "lobbyId",
-    "lobbyStuckDurationInMilliseconds"
+        "eventId",
+        "isWaiting",
+        "lobbyCountdownInMilliseconds",
+        "lobbyId",
+        "lobbyStuckDurationInMilliseconds"
 })
 public class LobbyCountdown {
 
@@ -59,7 +57,6 @@ public class LobbyCountdown {
 
     /**
      * Gets the value of the eventId property.
-     * 
      */
     public int getEventId() {
         return eventId;
@@ -67,7 +64,6 @@ public class LobbyCountdown {
 
     /**
      * Sets the value of the eventId property.
-     * 
      */
     public void setEventId(int value) {
         this.eventId = value;
@@ -75,7 +71,6 @@ public class LobbyCountdown {
 
     /**
      * Gets the value of the isWaiting property.
-     * 
      */
     public boolean isIsWaiting() {
         return isWaiting;
@@ -83,7 +78,6 @@ public class LobbyCountdown {
 
     /**
      * Sets the value of the isWaiting property.
-     * 
      */
     public void setIsWaiting(boolean value) {
         this.isWaiting = value;
@@ -91,7 +85,6 @@ public class LobbyCountdown {
 
     /**
      * Gets the value of the lobbyCountdownInMilliseconds property.
-     * 
      */
     public int getLobbyCountdownInMilliseconds() {
         return lobbyCountdownInMilliseconds;
@@ -99,7 +92,6 @@ public class LobbyCountdown {
 
     /**
      * Sets the value of the lobbyCountdownInMilliseconds property.
-     * 
      */
     public void setLobbyCountdownInMilliseconds(int value) {
         this.lobbyCountdownInMilliseconds = value;
@@ -107,7 +99,6 @@ public class LobbyCountdown {
 
     /**
      * Gets the value of the lobbyId property.
-     * 
      */
     public long getLobbyId() {
         return lobbyId;
@@ -115,7 +106,6 @@ public class LobbyCountdown {
 
     /**
      * Sets the value of the lobbyId property.
-     * 
      */
     public void setLobbyId(long value) {
         this.lobbyId = value;
@@ -123,7 +113,6 @@ public class LobbyCountdown {
 
     /**
      * Gets the value of the lobbyStuckDurationInMilliseconds property.
-     * 
      */
     public int getLobbyStuckDurationInMilliseconds() {
         return lobbyStuckDurationInMilliseconds;
@@ -131,7 +120,6 @@ public class LobbyCountdown {
 
     /**
      * Sets the value of the lobbyStuckDurationInMilliseconds property.
-     * 
      */
     public void setLobbyStuckDurationInMilliseconds(int value) {
         this.lobbyStuckDurationInMilliseconds = value;

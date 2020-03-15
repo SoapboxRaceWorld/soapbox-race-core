@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for ClientPhysicsMetrics complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ClientPhysicsMetrics">
  *   &lt;complexContent>
@@ -34,17 +34,15 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ClientPhysicsMetrics", propOrder = {
-    "accelerationAverage",
-    "accelerationMaximum",
-    "accelerationMedian",
-    "speedAverage",
-    "speedMaximum",
-    "speedMedian"
+        "accelerationAverage",
+        "accelerationMaximum",
+        "accelerationMedian",
+        "speedAverage",
+        "speedMaximum",
+        "speedMedian"
 })
 public class ClientPhysicsMetrics {
 
@@ -63,7 +61,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Gets the value of the accelerationAverage property.
-     * 
      */
     public float getAccelerationAverage() {
         return accelerationAverage;
@@ -71,7 +68,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Sets the value of the accelerationAverage property.
-     * 
      */
     public void setAccelerationAverage(float value) {
         this.accelerationAverage = value;
@@ -79,7 +75,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Gets the value of the accelerationMaximum property.
-     * 
      */
     public float getAccelerationMaximum() {
         return accelerationMaximum;
@@ -87,7 +82,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Sets the value of the accelerationMaximum property.
-     * 
      */
     public void setAccelerationMaximum(float value) {
         this.accelerationMaximum = value;
@@ -95,7 +89,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Gets the value of the accelerationMedian property.
-     * 
      */
     public float getAccelerationMedian() {
         return accelerationMedian;
@@ -103,7 +96,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Sets the value of the accelerationMedian property.
-     * 
      */
     public void setAccelerationMedian(float value) {
         this.accelerationMedian = value;
@@ -111,7 +103,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Gets the value of the speedAverage property.
-     * 
      */
     public float getSpeedAverage() {
         return speedAverage;
@@ -119,7 +110,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Sets the value of the speedAverage property.
-     * 
      */
     public void setSpeedAverage(float value) {
         this.speedAverage = value;
@@ -127,7 +117,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Gets the value of the speedMaximum property.
-     * 
      */
     public float getSpeedMaximum() {
         return speedMaximum;
@@ -135,7 +124,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Sets the value of the speedMaximum property.
-     * 
      */
     public void setSpeedMaximum(float value) {
         this.speedMaximum = value;
@@ -143,7 +131,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Gets the value of the speedMedian property.
-     * 
      */
     public float getSpeedMedian() {
         return speedMedian;
@@ -151,7 +138,6 @@ public class ClientPhysicsMetrics {
 
     /**
      * Sets the value of the speedMedian property.
-     * 
      */
     public void setSpeedMedian(float value) {
         this.speedMedian = value;

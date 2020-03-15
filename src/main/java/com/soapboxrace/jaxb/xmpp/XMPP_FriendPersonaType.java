@@ -13,14 +13,14 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FriendPersona", propOrder = {
-    "iconIndex",
-    "level",
-    "name",
-    "originalName",
-    "personaId",
-    "presence",
-    "socialNetwork",
-    "userId"
+        "iconIndex",
+        "level",
+        "name",
+        "originalName",
+        "personaId",
+        "presence",
+        "socialNetwork",
+        "userId"
 })
 @XmlRootElement(name = "FriendPersona")
 public class XMPP_FriendPersonaType {

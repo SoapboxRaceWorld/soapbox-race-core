@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for InvalidBasketTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="InvalidBasketTrans">
  *   &lt;complexContent>
@@ -30,13 +30,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InvalidBasketTrans", propOrder = {
-    "basket",
-    "invalidItems"
+        "basket",
+        "invalidItems"
 })
 public class InvalidBasketTrans {
 
@@ -47,11 +45,9 @@ public class InvalidBasketTrans {
 
     /**
      * Gets the value of the basket property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BasketTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link BasketTrans }
      */
     public BasketTrans getBasket() {
         return basket;
@@ -59,11 +55,9 @@ public class InvalidBasketTrans {
 
     /**
      * Sets the value of the basket property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BasketTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link BasketTrans }
      */
     public void setBasket(BasketTrans value) {
         this.basket = value;
@@ -71,11 +65,9 @@ public class InvalidBasketTrans {
 
     /**
      * Gets the value of the invalidItems property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfInvalidBasketItemTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfInvalidBasketItemTrans }
      */
     public ArrayOfInvalidBasketItemTrans getInvalidItems() {
         return invalidItems;
@@ -83,11 +75,9 @@ public class InvalidBasketTrans {
 
     /**
      * Sets the value of the invalidItems property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfInvalidBasketItemTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfInvalidBasketItemTrans }
      */
     public void setInvalidItems(ArrayOfInvalidBasketItemTrans value) {
         this.invalidItems = value;

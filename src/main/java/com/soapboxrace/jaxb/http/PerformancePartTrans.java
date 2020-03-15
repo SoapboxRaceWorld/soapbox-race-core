@@ -15,11 +15,11 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * <p>
  * Java class for PerformancePartTrans complex type.
- * 
+ *
  * <p>
  * The following schema fragment specifies the expected content contained within
  * this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PerformancePartTrans">
  *   &lt;complexContent>
@@ -31,57 +31,51 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PerformancePartTrans", propOrder = { "performancePartAttribHash" })
+@XmlType(name = "PerformancePartTrans", propOrder = {"performancePartAttribHash"})
 public class PerformancePartTrans {
 
-	@XmlElement(name = "PerformancePartAttribHash")
-	protected int performancePartAttribHash;
+    @XmlElement(name = "PerformancePartAttribHash")
+    protected int performancePartAttribHash;
 
-	/**
-	 * Gets the value of the performancePartAttribHash property.
-	 * 
-	 */
-	public int getPerformancePartAttribHash() {
-		return performancePartAttribHash;
-	}
+    /**
+     * Gets the value of the performancePartAttribHash property.
+     */
+    public int getPerformancePartAttribHash() {
+        return performancePartAttribHash;
+    }
 
-	/**
-	 * Sets the value of the performancePartAttribHash property.
-	 * 
-	 */
-	public void setPerformancePartAttribHash(int value) {
-		this.performancePartAttribHash = value;
-	}
+    /**
+     * Sets the value of the performancePartAttribHash property.
+     */
+    public void setPerformancePartAttribHash(int value) {
+        this.performancePartAttribHash = value;
+    }
 
-	@Override
-	public String toString() {
-		return Integer.toString(performancePartAttribHash);
-	}
+    @Override
+    public String toString() {
+        return Integer.toString(performancePartAttribHash);
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + performancePartAttribHash;
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + performancePartAttribHash;
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PerformancePartTrans other = (PerformancePartTrans) obj;
-		if (performancePartAttribHash != other.performancePartAttribHash)
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        PerformancePartTrans other = (PerformancePartTrans) obj;
+        return performancePartAttribHash == other.performancePartAttribHash;
+    }
 
 }

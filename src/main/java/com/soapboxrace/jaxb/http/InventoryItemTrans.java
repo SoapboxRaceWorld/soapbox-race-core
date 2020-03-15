@@ -13,9 +13,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * <p>Java class for InventoryItemTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="InventoryItemTrans">
  *   &lt;complexContent>
@@ -36,21 +36,19 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InventoryItemTrans", propOrder = {
-    "entitlementTag",
-    "expirationDate",
-    "hash",
-    "inventoryId",
-    "productId",
-    "remainingUseCount",
-    "resellPrice",
-    "status",
-    "stringHash",
-    "virtualItemType"
+        "entitlementTag",
+        "expirationDate",
+        "hash",
+        "inventoryId",
+        "productId",
+        "remainingUseCount",
+        "resellPrice",
+        "status",
+        "stringHash",
+        "virtualItemType"
 })
 public class InventoryItemTrans {
 
@@ -78,11 +76,9 @@ public class InventoryItemTrans {
 
     /**
      * Gets the value of the entitlementTag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getEntitlementTag() {
         return entitlementTag;
@@ -90,11 +86,9 @@ public class InventoryItemTrans {
 
     /**
      * Sets the value of the entitlementTag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEntitlementTag(String value) {
         this.entitlementTag = value;
@@ -102,11 +96,9 @@ public class InventoryItemTrans {
 
     /**
      * Gets the value of the expirationDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public String getExpirationDate() {
         return expirationDate;
@@ -114,11 +106,9 @@ public class InventoryItemTrans {
 
     /**
      * Sets the value of the expirationDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setExpirationDate(String value) {
         this.expirationDate = value;
@@ -126,7 +116,6 @@ public class InventoryItemTrans {
 
     /**
      * Gets the value of the hash property.
-     * 
      */
     public int getHash() {
         return hash;
@@ -134,7 +123,6 @@ public class InventoryItemTrans {
 
     /**
      * Sets the value of the hash property.
-     * 
      */
     public void setHash(int value) {
         this.hash = value;
@@ -142,7 +130,6 @@ public class InventoryItemTrans {
 
     /**
      * Gets the value of the inventoryId property.
-     * 
      */
     public long getInventoryId() {
         return inventoryId;
@@ -150,7 +137,6 @@ public class InventoryItemTrans {
 
     /**
      * Sets the value of the inventoryId property.
-     * 
      */
     public void setInventoryId(long value) {
         this.inventoryId = value;
@@ -158,11 +144,9 @@ public class InventoryItemTrans {
 
     /**
      * Gets the value of the productId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getProductId() {
         return productId;
@@ -170,11 +154,9 @@ public class InventoryItemTrans {
 
     /**
      * Sets the value of the productId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setProductId(String value) {
         this.productId = value;
@@ -182,7 +164,6 @@ public class InventoryItemTrans {
 
     /**
      * Gets the value of the remainingUseCount property.
-     * 
      */
     public long getRemainingUseCount() {
         return remainingUseCount;
@@ -190,7 +171,6 @@ public class InventoryItemTrans {
 
     /**
      * Sets the value of the remainingUseCount property.
-     * 
      */
     public void setRemainingUseCount(long value) {
         this.remainingUseCount = value;
@@ -198,7 +178,6 @@ public class InventoryItemTrans {
 
     /**
      * Gets the value of the resellPrice property.
-     * 
      */
     public double getResellPrice() {
         return resellPrice;
@@ -206,7 +185,6 @@ public class InventoryItemTrans {
 
     /**
      * Sets the value of the resellPrice property.
-     * 
      */
     public void setResellPrice(double value) {
         this.resellPrice = value;
@@ -214,11 +192,9 @@ public class InventoryItemTrans {
 
     /**
      * Gets the value of the status property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getStatus() {
         return status;
@@ -226,11 +202,9 @@ public class InventoryItemTrans {
 
     /**
      * Sets the value of the status property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setStatus(String value) {
         this.status = value;
@@ -238,11 +212,9 @@ public class InventoryItemTrans {
 
     /**
      * Gets the value of the stringHash property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getStringHash() {
         return stringHash;
@@ -250,11 +222,9 @@ public class InventoryItemTrans {
 
     /**
      * Sets the value of the stringHash property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setStringHash(String value) {
         this.stringHash = value;
@@ -262,11 +232,9 @@ public class InventoryItemTrans {
 
     /**
      * Gets the value of the virtualItemType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getVirtualItemType() {
         return virtualItemType;
@@ -274,11 +242,9 @@ public class InventoryItemTrans {
 
     /**
      * Sets the value of the virtualItemType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setVirtualItemType(String value) {
         this.virtualItemType = value;

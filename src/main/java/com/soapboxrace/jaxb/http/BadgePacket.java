@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for BadgePacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="BadgePacket">
  *   &lt;complexContent>
@@ -33,16 +33,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BadgePacket", propOrder = {
-    "achievementRankId",
-    "badgeDefinitionId",
-    "isRare",
-    "rarity",
-    "slotId"
+        "achievementRankId",
+        "badgeDefinitionId",
+        "isRare",
+        "rarity",
+        "slotId"
 })
 public class BadgePacket {
 
@@ -59,7 +57,6 @@ public class BadgePacket {
 
     /**
      * Gets the value of the achievementRankId property.
-     * 
      */
     public int getAchievementRankId() {
         return achievementRankId;
@@ -67,7 +64,6 @@ public class BadgePacket {
 
     /**
      * Sets the value of the achievementRankId property.
-     * 
      */
     public void setAchievementRankId(int value) {
         this.achievementRankId = value;
@@ -75,7 +71,6 @@ public class BadgePacket {
 
     /**
      * Gets the value of the badgeDefinitionId property.
-     * 
      */
     public int getBadgeDefinitionId() {
         return badgeDefinitionId;
@@ -83,7 +78,6 @@ public class BadgePacket {
 
     /**
      * Sets the value of the badgeDefinitionId property.
-     * 
      */
     public void setBadgeDefinitionId(int value) {
         this.badgeDefinitionId = value;
@@ -91,7 +85,6 @@ public class BadgePacket {
 
     /**
      * Gets the value of the isRare property.
-     * 
      */
     public boolean isIsRare() {
         return isRare;
@@ -99,7 +92,6 @@ public class BadgePacket {
 
     /**
      * Sets the value of the isRare property.
-     * 
      */
     public void setIsRare(boolean value) {
         this.isRare = value;
@@ -107,7 +99,6 @@ public class BadgePacket {
 
     /**
      * Gets the value of the rarity property.
-     * 
      */
     public float getRarity() {
         return rarity;
@@ -115,7 +106,6 @@ public class BadgePacket {
 
     /**
      * Sets the value of the rarity property.
-     * 
      */
     public void setRarity(float value) {
         this.rarity = value;
@@ -123,7 +113,6 @@ public class BadgePacket {
 
     /**
      * Gets the value of the slotId property.
-     * 
      */
     public short getSlotId() {
         return slotId;
@@ -131,7 +120,6 @@ public class BadgePacket {
 
     /**
      * Sets the value of the slotId property.
-     * 
      */
     public void setSlotId(short value) {
         this.slotId = value;

@@ -13,9 +13,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * <p>Java class for SystemInfo complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SystemInfo">
  *   &lt;complexContent>
@@ -45,30 +45,28 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SystemInfo", propOrder = {
-    "branch",
-    "changeList",
-    "clientVersion",
-    "clientVersionCheck",
-    "deployed",
-    "entitlementsToDownload",
-    "forcePermanentSession",
-    "jidPrepender",
-    "launcherServiceUrl",
-    "nucleusNamespace",
-    "nucleusNamespaceWeb",
-    "personaCacheTimeout",
-    "portalDomain",
-    "portalSecureDomain",
-    "portalStoreFailurePage",
-    "portalTimeOut",
-    "shardName",
-    "time",
-    "version"
+        "branch",
+        "changeList",
+        "clientVersion",
+        "clientVersionCheck",
+        "deployed",
+        "entitlementsToDownload",
+        "forcePermanentSession",
+        "jidPrepender",
+        "launcherServiceUrl",
+        "nucleusNamespace",
+        "nucleusNamespaceWeb",
+        "personaCacheTimeout",
+        "portalDomain",
+        "portalSecureDomain",
+        "portalStoreFailurePage",
+        "portalTimeOut",
+        "shardName",
+        "time",
+        "version"
 })
 public class SystemInfo {
 
@@ -114,11 +112,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the branch property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getBranch() {
         return branch;
@@ -126,11 +122,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the branch property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBranch(String value) {
         this.branch = value;
@@ -138,11 +132,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the changeList property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getChangeList() {
         return changeList;
@@ -150,11 +142,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the changeList property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setChangeList(String value) {
         this.changeList = value;
@@ -162,11 +152,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the clientVersion property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getClientVersion() {
         return clientVersion;
@@ -174,11 +162,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the clientVersion property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setClientVersion(String value) {
         this.clientVersion = value;
@@ -186,7 +172,6 @@ public class SystemInfo {
 
     /**
      * Gets the value of the clientVersionCheck property.
-     * 
      */
     public boolean isClientVersionCheck() {
         return clientVersionCheck;
@@ -194,7 +179,6 @@ public class SystemInfo {
 
     /**
      * Sets the value of the clientVersionCheck property.
-     * 
      */
     public void setClientVersionCheck(boolean value) {
         this.clientVersionCheck = value;
@@ -202,11 +186,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the deployed property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getDeployed() {
         return deployed;
@@ -214,11 +196,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the deployed property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDeployed(String value) {
         this.deployed = value;
@@ -226,7 +206,6 @@ public class SystemInfo {
 
     /**
      * Gets the value of the entitlementsToDownload property.
-     * 
      */
     public boolean isEntitlementsToDownload() {
         return entitlementsToDownload;
@@ -234,7 +213,6 @@ public class SystemInfo {
 
     /**
      * Sets the value of the entitlementsToDownload property.
-     * 
      */
     public void setEntitlementsToDownload(boolean value) {
         this.entitlementsToDownload = value;
@@ -242,7 +220,6 @@ public class SystemInfo {
 
     /**
      * Gets the value of the forcePermanentSession property.
-     * 
      */
     public boolean isForcePermanentSession() {
         return forcePermanentSession;
@@ -250,7 +227,6 @@ public class SystemInfo {
 
     /**
      * Sets the value of the forcePermanentSession property.
-     * 
      */
     public void setForcePermanentSession(boolean value) {
         this.forcePermanentSession = value;
@@ -258,11 +234,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the jidPrepender property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getJidPrepender() {
         return jidPrepender;
@@ -270,11 +244,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the jidPrepender property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setJidPrepender(String value) {
         this.jidPrepender = value;
@@ -282,11 +254,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the launcherServiceUrl property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLauncherServiceUrl() {
         return launcherServiceUrl;
@@ -294,11 +264,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the launcherServiceUrl property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLauncherServiceUrl(String value) {
         this.launcherServiceUrl = value;
@@ -306,11 +274,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the nucleusNamespace property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getNucleusNamespace() {
         return nucleusNamespace;
@@ -318,11 +284,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the nucleusNamespace property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setNucleusNamespace(String value) {
         this.nucleusNamespace = value;
@@ -330,11 +294,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the nucleusNamespaceWeb property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getNucleusNamespaceWeb() {
         return nucleusNamespaceWeb;
@@ -342,11 +304,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the nucleusNamespaceWeb property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setNucleusNamespaceWeb(String value) {
         this.nucleusNamespaceWeb = value;
@@ -354,7 +314,6 @@ public class SystemInfo {
 
     /**
      * Gets the value of the personaCacheTimeout property.
-     * 
      */
     public int getPersonaCacheTimeout() {
         return personaCacheTimeout;
@@ -362,7 +321,6 @@ public class SystemInfo {
 
     /**
      * Sets the value of the personaCacheTimeout property.
-     * 
      */
     public void setPersonaCacheTimeout(int value) {
         this.personaCacheTimeout = value;
@@ -370,11 +328,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the portalDomain property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getPortalDomain() {
         return portalDomain;
@@ -382,11 +338,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the portalDomain property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPortalDomain(String value) {
         this.portalDomain = value;
@@ -394,11 +348,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the portalSecureDomain property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getPortalSecureDomain() {
         return portalSecureDomain;
@@ -406,11 +358,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the portalSecureDomain property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPortalSecureDomain(String value) {
         this.portalSecureDomain = value;
@@ -418,11 +368,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the portalStoreFailurePage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getPortalStoreFailurePage() {
         return portalStoreFailurePage;
@@ -430,11 +378,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the portalStoreFailurePage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPortalStoreFailurePage(String value) {
         this.portalStoreFailurePage = value;
@@ -442,11 +388,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the portalTimeOut property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getPortalTimeOut() {
         return portalTimeOut;
@@ -454,11 +398,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the portalTimeOut property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPortalTimeOut(String value) {
         this.portalTimeOut = value;
@@ -466,11 +408,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the shardName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getShardName() {
         return shardName;
@@ -478,11 +418,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the shardName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setShardName(String value) {
         this.shardName = value;
@@ -490,11 +428,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the time property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getTime() {
         return time;
@@ -502,11 +438,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the time property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setTime(XMLGregorianCalendar value) {
         this.time = value;
@@ -514,11 +448,9 @@ public class SystemInfo {
 
     /**
      * Gets the value of the version property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getVersion() {
         return version;
@@ -526,11 +458,9 @@ public class SystemInfo {
 
     /**
      * Sets the value of the version property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setVersion(String value) {
         this.version = value;

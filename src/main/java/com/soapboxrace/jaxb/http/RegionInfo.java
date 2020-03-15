@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for RegionInfo complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RegionInfo">
  *   &lt;complexContent>
@@ -35,18 +35,16 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RegionInfo", propOrder = {
-    "countdownProposalInMilliseconds",
-    "directConnectTimeoutInMilliseconds",
-    "dropOutTimeInMilliseconds",
-    "eventLoadTimeoutInMilliseconds",
-    "heartbeatIntervalInMilliseconds",
-    "udpRelayBandwidthInBps",
-    "udpRelayTimeoutInMilliseconds"
+        "countdownProposalInMilliseconds",
+        "directConnectTimeoutInMilliseconds",
+        "dropOutTimeInMilliseconds",
+        "eventLoadTimeoutInMilliseconds",
+        "heartbeatIntervalInMilliseconds",
+        "udpRelayBandwidthInBps",
+        "udpRelayTimeoutInMilliseconds"
 })
 public class RegionInfo {
 
@@ -67,7 +65,6 @@ public class RegionInfo {
 
     /**
      * Gets the value of the countdownProposalInMilliseconds property.
-     * 
      */
     public int getCountdownProposalInMilliseconds() {
         return countdownProposalInMilliseconds;
@@ -75,7 +72,6 @@ public class RegionInfo {
 
     /**
      * Sets the value of the countdownProposalInMilliseconds property.
-     * 
      */
     public void setCountdownProposalInMilliseconds(int value) {
         this.countdownProposalInMilliseconds = value;
@@ -83,7 +79,6 @@ public class RegionInfo {
 
     /**
      * Gets the value of the directConnectTimeoutInMilliseconds property.
-     * 
      */
     public int getDirectConnectTimeoutInMilliseconds() {
         return directConnectTimeoutInMilliseconds;
@@ -91,7 +86,6 @@ public class RegionInfo {
 
     /**
      * Sets the value of the directConnectTimeoutInMilliseconds property.
-     * 
      */
     public void setDirectConnectTimeoutInMilliseconds(int value) {
         this.directConnectTimeoutInMilliseconds = value;
@@ -99,7 +93,6 @@ public class RegionInfo {
 
     /**
      * Gets the value of the dropOutTimeInMilliseconds property.
-     * 
      */
     public int getDropOutTimeInMilliseconds() {
         return dropOutTimeInMilliseconds;
@@ -107,7 +100,6 @@ public class RegionInfo {
 
     /**
      * Sets the value of the dropOutTimeInMilliseconds property.
-     * 
      */
     public void setDropOutTimeInMilliseconds(int value) {
         this.dropOutTimeInMilliseconds = value;
@@ -115,7 +107,6 @@ public class RegionInfo {
 
     /**
      * Gets the value of the eventLoadTimeoutInMilliseconds property.
-     * 
      */
     public int getEventLoadTimeoutInMilliseconds() {
         return eventLoadTimeoutInMilliseconds;
@@ -123,7 +114,6 @@ public class RegionInfo {
 
     /**
      * Sets the value of the eventLoadTimeoutInMilliseconds property.
-     * 
      */
     public void setEventLoadTimeoutInMilliseconds(int value) {
         this.eventLoadTimeoutInMilliseconds = value;
@@ -131,7 +121,6 @@ public class RegionInfo {
 
     /**
      * Gets the value of the heartbeatIntervalInMilliseconds property.
-     * 
      */
     public int getHeartbeatIntervalInMilliseconds() {
         return heartbeatIntervalInMilliseconds;
@@ -139,7 +128,6 @@ public class RegionInfo {
 
     /**
      * Sets the value of the heartbeatIntervalInMilliseconds property.
-     * 
      */
     public void setHeartbeatIntervalInMilliseconds(int value) {
         this.heartbeatIntervalInMilliseconds = value;
@@ -147,7 +135,6 @@ public class RegionInfo {
 
     /**
      * Gets the value of the udpRelayBandwidthInBps property.
-     * 
      */
     public int getUdpRelayBandwidthInBps() {
         return udpRelayBandwidthInBps;
@@ -155,7 +142,6 @@ public class RegionInfo {
 
     /**
      * Sets the value of the udpRelayBandwidthInBps property.
-     * 
      */
     public void setUdpRelayBandwidthInBps(int value) {
         this.udpRelayBandwidthInBps = value;
@@ -163,7 +149,6 @@ public class RegionInfo {
 
     /**
      * Gets the value of the udpRelayTimeoutInMilliseconds property.
-     * 
      */
     public int getUdpRelayTimeoutInMilliseconds() {
         return udpRelayTimeoutInMilliseconds;
@@ -171,7 +156,6 @@ public class RegionInfo {
 
     /**
      * Sets the value of the udpRelayTimeoutInMilliseconds property.
-     * 
      */
     public void setUdpRelayTimeoutInMilliseconds(int value) {
         this.udpRelayTimeoutInMilliseconds = value;

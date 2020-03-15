@@ -14,18 +14,17 @@ import javax.xml.namespace.QName;
 
 
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the com.soapboxrace.jaxb.http package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the com.soapboxrace.jaxb.http package.
+ * <p>An ObjectFactory allows you to programatically
+ * construct new instances of the Java representation
+ * for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces
+ * and classes representing the binding of schema
+ * type definitions, element declarations and model
+ * groups.  Factory methods for each of these are
  * provided in this class.
- * 
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -97,14 +96,12 @@ public class ObjectFactory {
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.soapboxrace.jaxb.http
-     * 
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link SystemInfo }
-     * 
      */
     public SystemInfo createSystemInfo() {
         return new SystemInfo();
@@ -112,7 +109,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ChatServer }
-     * 
      */
     public ChatServer createChatServer() {
         return new ChatServer();
@@ -120,7 +116,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PersonaPresence }
-     * 
      */
     public PersonaPresence createPersonaPresence() {
         return new PersonaPresence();
@@ -128,7 +123,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfUdpRelayInfo }
-     * 
      */
     public ArrayOfUdpRelayInfo createArrayOfUdpRelayInfo() {
         return new ArrayOfUdpRelayInfo();
@@ -136,7 +130,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EventsPacket }
-     * 
      */
     public EventsPacket createEventsPacket() {
         return new EventsPacket();
@@ -144,7 +137,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EventDefinition }
-     * 
      */
     public EventDefinition createEventDefinition() {
         return new EventDefinition();
@@ -152,7 +144,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DragEventResult }
-     * 
      */
     public DragEventResult createDragEventResult() {
         return new DragEventResult();
@@ -160,7 +151,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EntrantResult }
-     * 
      */
     public EntrantResult createEntrantResult() {
         return new EntrantResult();
@@ -168,7 +158,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link FraudConfig }
-     * 
      */
     public FraudConfig createFraudConfig() {
         return new FraudConfig();
@@ -176,7 +165,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TeamEscapeEventResult }
-     * 
      */
     public TeamEscapeEventResult createTeamEscapeEventResult() {
         return new TeamEscapeEventResult();
@@ -184,7 +172,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LobbyEntrantRemoved }
-     * 
      */
     public LobbyEntrantRemoved createLobbyEntrantRemoved() {
         return new LobbyEntrantRemoved();
@@ -192,7 +179,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfLevelGiftDefinition }
-     * 
      */
     public ArrayOfLevelGiftDefinition createArrayOfLevelGiftDefinition() {
         return new ArrayOfLevelGiftDefinition();
@@ -200,7 +186,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SocialSettings }
-     * 
      */
     public SocialSettings createSocialSettings() {
         return new SocialSettings();
@@ -208,7 +193,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LobbyInfo }
-     * 
      */
     public LobbyInfo createLobbyInfo() {
         return new LobbyInfo();
@@ -216,7 +200,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RouteEntrantResult }
-     * 
      */
     public RouteEntrantResult createRouteEntrantResult() {
         return new RouteEntrantResult();
@@ -224,7 +207,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RouteEventResult }
-     * 
      */
     public RouteEventResult createRouteEventResult() {
         return new RouteEventResult();
@@ -232,7 +214,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CategoryTrans }
-     * 
      */
     public CategoryTrans createCategoryTrans() {
         return new CategoryTrans();
@@ -240,7 +221,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TeamEscapeEntrantResult }
-     * 
      */
     public TeamEscapeEntrantResult createTeamEscapeEntrantResult() {
         return new TeamEscapeEntrantResult();
@@ -248,7 +228,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link HeartBeat }
-     * 
      */
     public HeartBeat createHeartBeat() {
         return new HeartBeat();
@@ -256,7 +235,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfNewsArticleTrans }
-     * 
      */
     public ArrayOfNewsArticleTrans createArrayOfNewsArticleTrans() {
         return new ArrayOfNewsArticleTrans();
@@ -264,7 +242,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TreasureHuntEventSession }
-     * 
      */
     public TreasureHuntEventSession createTreasureHuntEventSession() {
         return new TreasureHuntEventSession();
@@ -272,7 +249,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProfileData }
-     * 
      */
     public ProfileData createProfileData() {
         return new ProfileData();
@@ -280,7 +256,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfCarClass }
-     * 
      */
     public ArrayOfCarClass createArrayOfCarClass() {
         return new ArrayOfCarClass();
@@ -288,7 +263,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PersonaIdArray }
-     * 
      */
     public PersonaIdArray createPersonaIdArray() {
         return new PersonaIdArray();
@@ -296,7 +270,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfProductTrans }
-     * 
      */
     public ArrayOfProductTrans createArrayOfProductTrans() {
         return new ArrayOfProductTrans();
@@ -304,7 +277,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EntitlementItemTrans }
-     * 
      */
     public EntitlementItemTrans createEntitlementItemTrans() {
         return new EntitlementItemTrans();
@@ -312,7 +284,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PersonaFriendsList }
-     * 
      */
     public PersonaFriendsList createPersonaFriendsList() {
         return new PersonaFriendsList();
@@ -320,7 +291,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ProductTrans }
-     * 
      */
     public ProductTrans createProductTrans() {
         return new ProductTrans();
@@ -328,7 +298,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LobbyEntrantInfo }
-     * 
      */
     public LobbyEntrantInfo createLobbyEntrantInfo() {
         return new LobbyEntrantInfo();
@@ -336,7 +305,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CommerceResultTrans }
-     * 
      */
     public CommerceResultTrans createCommerceResultTrans() {
         return new CommerceResultTrans();
@@ -344,7 +312,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ClientConfigTrans }
-     * 
      */
     public ClientConfigTrans createClientConfigTrans() {
         return new ClientConfigTrans();
@@ -352,7 +319,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfCategoryTrans }
-     * 
      */
     public ArrayOfCategoryTrans createArrayOfCategoryTrans() {
         return new ArrayOfCategoryTrans();
@@ -360,7 +326,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RouteArbitrationPacket }
-     * 
      */
     public RouteArbitrationPacket createRouteArbitrationPacket() {
         return new RouteArbitrationPacket();
@@ -368,7 +333,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link NewsArticleTrans }
-     * 
      */
     public NewsArticleTrans createNewsArticleTrans() {
         return new NewsArticleTrans();
@@ -376,7 +340,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SessionInfo }
-     * 
      */
     public SessionInfo createSessionInfo() {
         return new SessionInfo();
@@ -384,7 +347,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link UserInfo }
-     * 
      */
     public UserInfo createUserInfo() {
         return new UserInfo();
@@ -392,7 +354,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RegionInfo }
-     * 
      */
     public RegionInfo createRegionInfo() {
         return new RegionInfo();
@@ -400,7 +361,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LobbyEntrantAdded }
-     * 
      */
     public LobbyEntrantAdded createLobbyEntrantAdded() {
         return new LobbyEntrantAdded();
@@ -408,7 +368,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DragEntrantResult }
-     * 
      */
     public DragEntrantResult createDragEntrantResult() {
         return new DragEntrantResult();
@@ -416,7 +375,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PersonaMotto }
-     * 
      */
     public PersonaMotto createPersonaMotto() {
         return new PersonaMotto();
@@ -424,7 +382,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LoginAnnouncementsDefinition }
-     * 
      */
     public LoginAnnouncementsDefinition createLoginAnnouncementsDefinition() {
         return new LoginAnnouncementsDefinition();
@@ -432,7 +389,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CarSlotInfoTrans }
-     * 
      */
     public CarSlotInfoTrans createCarSlotInfoTrans() {
         return new CarSlotInfoTrans();
@@ -440,7 +396,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfInventoryItemTrans }
-     * 
      */
     public ArrayOfInventoryItemTrans createArrayOfInventoryItemTrans() {
         return new ArrayOfInventoryItemTrans();
@@ -448,7 +403,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AchievementsPacket }
-     * 
      */
     public AchievementsPacket createAchievementsPacket() {
         return new AchievementsPacket();
@@ -456,7 +410,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SocialNetworkInfo }
-     * 
      */
     public SocialNetworkInfo createSocialNetworkInfo() {
         return new SocialNetworkInfo();
@@ -464,7 +417,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TeamEscapeArbitrationPacket }
-     * 
      */
     public TeamEscapeArbitrationPacket createTeamEscapeArbitrationPacket() {
         return new TeamEscapeArbitrationPacket();
@@ -472,7 +424,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link OwnedCarTrans }
-     * 
      */
     public OwnedCarTrans createOwnedCarTrans() {
         return new OwnedCarTrans();
@@ -480,7 +431,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PursuitEventResult }
-     * 
      */
     public PursuitEventResult createPursuitEventResult() {
         return new PursuitEventResult();
@@ -488,7 +438,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CommerceSessionTrans }
-     * 
      */
     public CommerceSessionTrans createCommerceSessionTrans() {
         return new CommerceSessionTrans();
@@ -496,7 +445,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EntitlementTrans }
-     * 
      */
     public EntitlementTrans createEntitlementTrans() {
         return new EntitlementTrans();
@@ -504,7 +452,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link HardwareInfo }
-     * 
      */
     public HardwareInfo createHardwareInfo() {
         return new HardwareInfo();
@@ -512,7 +459,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArbitrationPacket }
-     * 
      */
     public ArbitrationPacket createArbitrationPacket() {
         return new ArbitrationPacket();
@@ -520,7 +466,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link DragArbitrationPacket }
-     * 
      */
     public DragArbitrationPacket createDragArbitrationPacket() {
         return new DragArbitrationPacket();
@@ -528,7 +473,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CommerceSessionResultTrans }
-     * 
      */
     public CommerceSessionResultTrans createCommerceSessionResultTrans() {
         return new CommerceSessionResultTrans();
@@ -536,7 +480,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link UserSettings }
-     * 
      */
     public UserSettings createUserSettings() {
         return new UserSettings();
@@ -544,7 +487,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PersonaBase }
-     * 
      */
     public PersonaBase createPersonaBase() {
         return new PersonaBase();
@@ -552,7 +494,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfLong }
-     * 
      */
     public ArrayOfLong createArrayOfLong() {
         return new ArrayOfLong();
@@ -560,7 +501,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfPersonaBase }
-     * 
      */
     public ArrayOfPersonaBase createArrayOfPersonaBase() {
         return new ArrayOfPersonaBase();
@@ -568,7 +508,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PursuitArbitrationPacket }
-     * 
      */
     public PursuitArbitrationPacket createPursuitArbitrationPacket() {
         return new PursuitArbitrationPacket();
@@ -576,7 +515,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfString }
-     * 
      */
     public ArrayOfString createArrayOfString() {
         return new ArrayOfString();
@@ -584,7 +522,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EventResult }
-     * 
      */
     public EventResult createEventResult() {
         return new EventResult();
@@ -592,7 +529,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfInt }
-     * 
      */
     public ArrayOfInt createArrayOfInt() {
         return new ArrayOfInt();
@@ -600,7 +536,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link UdpRelayCryptoTicket }
-     * 
      */
     public UdpRelayCryptoTicket createUdpRelayCryptoTicket() {
         return new UdpRelayCryptoTicket();
@@ -608,7 +543,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link InventoryTrans }
-     * 
      */
     public InventoryTrans createInventoryTrans() {
         return new InventoryTrans();
@@ -616,7 +550,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfLuckyDrawItem }
-     * 
      */
     public ArrayOfLuckyDrawItem createArrayOfLuckyDrawItem() {
         return new ArrayOfLuckyDrawItem();
@@ -624,7 +557,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CustomCarTrans }
-     * 
      */
     public CustomCarTrans createCustomCarTrans() {
         return new CustomCarTrans();
@@ -632,7 +564,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CustomVinylTrans }
-     * 
      */
     public CustomVinylTrans createCustomVinylTrans() {
         return new CustomVinylTrans();
@@ -640,7 +571,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link WalletTrans }
-     * 
      */
     public WalletTrans createWalletTrans() {
         return new WalletTrans();
@@ -648,7 +578,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Accolades }
-     * 
      */
     public Accolades createAccolades() {
         return new Accolades();
@@ -656,7 +585,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PersonaCCar }
-     * 
      */
     public PersonaCCar createPersonaCCar() {
         return new PersonaCCar();
@@ -664,7 +592,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LuckyDrawBox }
-     * 
      */
     public LuckyDrawBox createLuckyDrawBox() {
         return new LuckyDrawBox();
@@ -672,7 +599,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BadgePacket }
-     * 
      */
     public BadgePacket createBadgePacket() {
         return new BadgePacket();
@@ -680,7 +606,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ClientPhysicsMetrics }
-     * 
      */
     public ClientPhysicsMetrics createClientPhysicsMetrics() {
         return new ClientPhysicsMetrics();
@@ -688,7 +613,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BasketTrans }
-     * 
      */
     public BasketTrans createBasketTrans() {
         return new BasketTrans();
@@ -696,7 +620,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfCustomVinylTrans }
-     * 
      */
     public ArrayOfCustomVinylTrans createArrayOfCustomVinylTrans() {
         return new ArrayOfCustomVinylTrans();
@@ -704,7 +627,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfSkillModPartTrans }
-     * 
      */
     public ArrayOfSkillModPartTrans createArrayOfSkillModPartTrans() {
         return new ArrayOfSkillModPartTrans();
@@ -712,7 +634,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfProfileData }
-     * 
      */
     public ArrayOfProfileData createArrayOfProfileData() {
         return new ArrayOfProfileData();
@@ -720,7 +641,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfFriendPersona }
-     * 
      */
     public ArrayOfFriendPersona createArrayOfFriendPersona() {
         return new ArrayOfFriendPersona();
@@ -728,7 +648,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfBadgePacket }
-     * 
      */
     public ArrayOfBadgePacket createArrayOfBadgePacket() {
         return new ArrayOfBadgePacket();
@@ -736,7 +655,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfAchievementRankPacket }
-     * 
      */
     public ArrayOfAchievementRankPacket createArrayOfAchievementRankPacket() {
         return new ArrayOfAchievementRankPacket();
@@ -744,7 +662,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfEntitlementItemTrans }
-     * 
      */
     public ArrayOfEntitlementItemTrans createArrayOfEntitlementItemTrans() {
         return new ArrayOfEntitlementItemTrans();
@@ -752,7 +669,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfOwnedCarTrans }
-     * 
      */
     public ArrayOfOwnedCarTrans createArrayOfOwnedCarTrans() {
         return new ArrayOfOwnedCarTrans();
@@ -760,7 +676,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LuckyDrawItem }
-     * 
      */
     public LuckyDrawItem createLuckyDrawItem() {
         return new LuckyDrawItem();
@@ -768,7 +683,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SkillModPartTrans }
-     * 
      */
     public SkillModPartTrans createSkillModPartTrans() {
         return new SkillModPartTrans();
@@ -776,7 +690,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AchievementDefinitionPacket }
-     * 
      */
     public AchievementDefinitionPacket createAchievementDefinitionPacket() {
         return new AchievementDefinitionPacket();
@@ -784,7 +697,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SecurityResponse }
-     * 
      */
     public SecurityResponse createSecurityResponse() {
         return new SecurityResponse();
@@ -792,7 +704,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BasketItemTrans }
-     * 
      */
     public BasketItemTrans createBasketItemTrans() {
         return new BasketItemTrans();
@@ -800,7 +711,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CommerceItemTrans }
-     * 
      */
     public CommerceItemTrans createCommerceItemTrans() {
         return new CommerceItemTrans();
@@ -808,7 +718,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Vector3 }
-     * 
      */
     public Vector3 createVector3() {
         return new Vector3();
@@ -816,7 +725,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfPerformancePartTrans }
-     * 
      */
     public ArrayOfPerformancePartTrans createArrayOfPerformancePartTrans() {
         return new ArrayOfPerformancePartTrans();
@@ -824,7 +732,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfBadgeDefinitionPacket }
-     * 
      */
     public ArrayOfBadgeDefinitionPacket createArrayOfBadgeDefinitionPacket() {
         return new ArrayOfBadgeDefinitionPacket();
@@ -832,7 +739,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LoginAnnouncementDefinition }
-     * 
      */
     public LoginAnnouncementDefinition createLoginAnnouncementDefinition() {
         return new LoginAnnouncementDefinition();
@@ -840,7 +746,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link FraudDetection }
-     * 
      */
     public FraudDetection createFraudDetection() {
         return new FraudDetection();
@@ -848,7 +753,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PerformancePartTrans }
-     * 
      */
     public PerformancePartTrans createPerformancePartTrans() {
         return new PerformancePartTrans();
@@ -856,7 +760,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RewardPart }
-     * 
      */
     public RewardPart createRewardPart() {
         return new RewardPart();
@@ -864,7 +767,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfBasketItemTrans }
-     * 
      */
     public ArrayOfBasketItemTrans createArrayOfBasketItemTrans() {
         return new ArrayOfBasketItemTrans();
@@ -872,7 +774,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfRewardPart }
-     * 
      */
     public ArrayOfRewardPart createArrayOfRewardPart() {
         return new ArrayOfRewardPart();
@@ -880,7 +781,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfLuckyDrawBox }
-     * 
      */
     public ArrayOfLuckyDrawBox createArrayOfLuckyDrawBox() {
         return new ArrayOfLuckyDrawBox();
@@ -888,7 +788,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfCommerceItemTrans }
-     * 
      */
     public ArrayOfCommerceItemTrans createArrayOfCommerceItemTrans() {
         return new ArrayOfCommerceItemTrans();
@@ -896,7 +795,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfVisualPartTrans }
-     * 
      */
     public ArrayOfVisualPartTrans createArrayOfVisualPartTrans() {
         return new ArrayOfVisualPartTrans();
@@ -904,7 +802,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfLoginAnnouncementDefinition }
-     * 
      */
     public ArrayOfLoginAnnouncementDefinition createArrayOfLoginAnnouncementDefinition() {
         return new ArrayOfLoginAnnouncementDefinition();
@@ -912,7 +809,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link SecurityChallenge }
-     * 
      */
     public SecurityChallenge createSecurityChallenge() {
         return new SecurityChallenge();
@@ -920,7 +816,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link UdpRelayInfo }
-     * 
      */
     public UdpRelayInfo createUdpRelayInfo() {
         return new UdpRelayInfo();
@@ -928,7 +823,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CustomPaintTrans }
-     * 
      */
     public CustomPaintTrans createCustomPaintTrans() {
         return new CustomPaintTrans();
@@ -936,7 +830,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link AchievementRankPacket }
-     * 
      */
     public AchievementRankPacket createAchievementRankPacket() {
         return new AchievementRankPacket();
@@ -944,7 +837,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link InventoryItemTrans }
-     * 
      */
     public InventoryItemTrans createInventoryItemTrans() {
         return new InventoryItemTrans();
@@ -952,7 +844,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfRouteEntrantResult }
-     * 
      */
     public ArrayOfRouteEntrantResult createArrayOfRouteEntrantResult() {
         return new ArrayOfRouteEntrantResult();
@@ -960,7 +851,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link VisualPartTrans }
-     * 
      */
     public VisualPartTrans createVisualPartTrans() {
         return new VisualPartTrans();
@@ -968,7 +858,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfDragEntrantResult }
-     * 
      */
     public ArrayOfDragEntrantResult createArrayOfDragEntrantResult() {
         return new ArrayOfDragEntrantResult();
@@ -976,7 +865,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfClientConfig }
-     * 
      */
     public ArrayOfClientConfig createArrayOfClientConfig() {
         return new ArrayOfClientConfig();
@@ -984,7 +872,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CarClass }
-     * 
      */
     public CarClass createCarClass() {
         return new CarClass();
@@ -992,7 +879,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LevelGiftDefinition }
-     * 
      */
     public LevelGiftDefinition createLevelGiftDefinition() {
         return new LevelGiftDefinition();
@@ -1000,7 +886,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link InvalidBasketTrans }
-     * 
      */
     public InvalidBasketTrans createInvalidBasketTrans() {
         return new InvalidBasketTrans();
@@ -1008,7 +893,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link User }
-     * 
      */
     public User createUser() {
         return new User();
@@ -1016,7 +900,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfWalletTrans }
-     * 
      */
     public ArrayOfWalletTrans createArrayOfWalletTrans() {
         return new ArrayOfWalletTrans();
@@ -1024,7 +907,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfChatRoom }
-     * 
      */
     public ArrayOfChatRoom createArrayOfChatRoom() {
         return new ArrayOfChatRoom();
@@ -1032,7 +914,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfPersonaCCar }
-     * 
      */
     public ArrayOfPersonaCCar createArrayOfPersonaCCar() {
         return new ArrayOfPersonaCCar();
@@ -1040,7 +921,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfInvalidBasketItemTrans }
-     * 
      */
     public ArrayOfInvalidBasketItemTrans createArrayOfInvalidBasketItemTrans() {
         return new ArrayOfInvalidBasketItemTrans();
@@ -1048,7 +928,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link FriendPersona }
-     * 
      */
     public FriendPersona createFriendPersona() {
         return new FriendPersona();
@@ -1056,7 +935,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfCustomPaintTrans }
-     * 
      */
     public ArrayOfCustomPaintTrans createArrayOfCustomPaintTrans() {
         return new ArrayOfCustomPaintTrans();
@@ -1064,7 +942,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BadgeDefinitionPacket }
-     * 
      */
     public BadgeDefinitionPacket createBadgeDefinitionPacket() {
         return new BadgeDefinitionPacket();
@@ -1072,7 +949,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfTeamEscapeEntrantResult }
-     * 
      */
     public ArrayOfTeamEscapeEntrantResult createArrayOfTeamEscapeEntrantResult() {
         return new ArrayOfTeamEscapeEntrantResult();
@@ -1080,7 +956,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ClientConfig }
-     * 
      */
     public ClientConfig createClientConfig() {
         return new ClientConfig();
@@ -1088,7 +963,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfAchievementDefinitionPacket }
-     * 
      */
     public ArrayOfAchievementDefinitionPacket createArrayOfAchievementDefinitionPacket() {
         return new ArrayOfAchievementDefinitionPacket();
@@ -1096,7 +970,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LuckyDrawInfo }
-     * 
      */
     public LuckyDrawInfo createLuckyDrawInfo() {
         return new LuckyDrawInfo();
@@ -1104,7 +977,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfEventDefinition }
-     * 
      */
     public ArrayOfEventDefinition createArrayOfEventDefinition() {
         return new ArrayOfEventDefinition();
@@ -1112,7 +984,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LobbyCountdown }
-     * 
      */
     public LobbyCountdown createLobbyCountdown() {
         return new LobbyCountdown();
@@ -1120,7 +991,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ArrayOfLobbyEntrantInfo }
-     * 
      */
     public ArrayOfLobbyEntrantInfo createArrayOfLobbyEntrantInfo() {
         return new ArrayOfLobbyEntrantInfo();
@@ -1128,7 +998,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Entrants }
-     * 
      */
     public Entrants createEntrants() {
         return new Entrants();
@@ -1136,7 +1005,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Reward }
-     * 
      */
     public Reward createReward() {
         return new Reward();
@@ -1144,7 +1012,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link InvalidBasketItemTrans }
-     * 
      */
     public InvalidBasketItemTrans createInvalidBasketItemTrans() {
         return new InvalidBasketItemTrans();
@@ -1152,7 +1019,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ChatRoom }
-     * 
      */
     public ChatRoom createChatRoom() {
         return new ChatRoom();
@@ -1160,7 +1026,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SystemInfo }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "SystemInfo")
     public JAXBElement<SystemInfo> createSystemInfo(SystemInfo value) {
@@ -1169,7 +1034,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ChatServer }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "chatServer")
     public JAXBElement<ChatServer> createChatServer(ChatServer value) {
@@ -1178,7 +1042,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PersonaPresence }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "PersonaPresence")
     public JAXBElement<PersonaPresence> createPersonaPresence(PersonaPresence value) {
@@ -1187,7 +1050,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfUdpRelayInfo }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfUdpRelayInfo")
     public JAXBElement<ArrayOfUdpRelayInfo> createArrayOfUdpRelayInfo(ArrayOfUdpRelayInfo value) {
@@ -1196,7 +1058,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link EventsPacket }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "EventsPacket")
     public JAXBElement<EventsPacket> createEventsPacket(EventsPacket value) {
@@ -1205,7 +1066,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link EventDefinition }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "EventDefinition")
     public JAXBElement<EventDefinition> createEventDefinition(EventDefinition value) {
@@ -1214,7 +1074,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link DragEventResult }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "DragEventResult")
     public JAXBElement<DragEventResult> createDragEventResult(DragEventResult value) {
@@ -1223,7 +1082,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link EntrantResult }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "EntrantResult")
     public JAXBElement<EntrantResult> createEntrantResult(EntrantResult value) {
@@ -1232,7 +1090,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link FraudConfig }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "FraudConfig")
     public JAXBElement<FraudConfig> createFraudConfig(FraudConfig value) {
@@ -1241,7 +1098,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TeamEscapeEventResult }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "TeamEscapeEventResult")
     public JAXBElement<TeamEscapeEventResult> createTeamEscapeEventResult(TeamEscapeEventResult value) {
@@ -1250,7 +1106,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link LobbyEntrantRemoved }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "LobbyEntrantRemoved")
     public JAXBElement<LobbyEntrantRemoved> createLobbyEntrantRemoved(LobbyEntrantRemoved value) {
@@ -1259,7 +1114,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfLevelGiftDefinition }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfLevelGiftDefinition")
     public JAXBElement<ArrayOfLevelGiftDefinition> createArrayOfLevelGiftDefinition(ArrayOfLevelGiftDefinition value) {
@@ -1268,7 +1122,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SocialSettings }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "SocialSettings")
     public JAXBElement<SocialSettings> createSocialSettings(SocialSettings value) {
@@ -1277,7 +1130,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link LobbyInfo }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "LobbyInfo")
     public JAXBElement<LobbyInfo> createLobbyInfo(LobbyInfo value) {
@@ -1286,7 +1138,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link RouteEntrantResult }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "RouteEntrantResult")
     public JAXBElement<RouteEntrantResult> createRouteEntrantResult(RouteEntrantResult value) {
@@ -1295,7 +1146,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link RouteEventResult }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "RouteEventResult")
     public JAXBElement<RouteEventResult> createRouteEventResult(RouteEventResult value) {
@@ -1304,7 +1154,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CategoryTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "CategoryTrans")
     public JAXBElement<CategoryTrans> createCategoryTrans(CategoryTrans value) {
@@ -1313,7 +1162,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TeamEscapeEntrantResult }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "TeamEscapeEntrantResult")
     public JAXBElement<TeamEscapeEntrantResult> createTeamEscapeEntrantResult(TeamEscapeEntrantResult value) {
@@ -1322,7 +1170,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link HeartBeat }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "HeartBeat")
     public JAXBElement<HeartBeat> createHeartBeat(HeartBeat value) {
@@ -1331,7 +1178,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfNewsArticleTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfNewsArticleTrans")
     public JAXBElement<ArrayOfNewsArticleTrans> createArrayOfNewsArticleTrans(ArrayOfNewsArticleTrans value) {
@@ -1340,7 +1186,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TreasureHuntEventSession }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "TreasureHuntEventSession")
     public JAXBElement<TreasureHuntEventSession> createTreasureHuntEventSession(TreasureHuntEventSession value) {
@@ -1349,7 +1194,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ProfileData }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ProfileData")
     public JAXBElement<ProfileData> createProfileData(ProfileData value) {
@@ -1358,7 +1202,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfCarClass }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfCarClass")
     public JAXBElement<ArrayOfCarClass> createArrayOfCarClass(ArrayOfCarClass value) {
@@ -1367,7 +1210,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PersonaIdArray }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "PersonaIdArray")
     public JAXBElement<PersonaIdArray> createPersonaIdArray(PersonaIdArray value) {
@@ -1376,7 +1218,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfProductTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfProductTrans")
     public JAXBElement<ArrayOfProductTrans> createArrayOfProductTrans(ArrayOfProductTrans value) {
@@ -1385,7 +1226,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link EntitlementItemTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "EntitlementItemTrans")
     public JAXBElement<EntitlementItemTrans> createEntitlementItemTrans(EntitlementItemTrans value) {
@@ -1394,7 +1234,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PersonaFriendsList }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "PersonaFriendsList")
     public JAXBElement<PersonaFriendsList> createPersonaFriendsList(PersonaFriendsList value) {
@@ -1403,7 +1242,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ProductTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ProductTrans")
     public JAXBElement<ProductTrans> createProductTrans(ProductTrans value) {
@@ -1412,7 +1250,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link LobbyEntrantInfo }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "LobbyEntrantInfo")
     public JAXBElement<LobbyEntrantInfo> createLobbyEntrantInfo(LobbyEntrantInfo value) {
@@ -1421,7 +1258,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CommerceResultTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "CommerceResultTrans")
     public JAXBElement<CommerceResultTrans> createCommerceResultTrans(CommerceResultTrans value) {
@@ -1430,7 +1266,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ClientConfigTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ClientConfigTrans")
     public JAXBElement<ClientConfigTrans> createClientConfigTrans(ClientConfigTrans value) {
@@ -1439,7 +1274,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfCategoryTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfCategoryTrans")
     public JAXBElement<ArrayOfCategoryTrans> createArrayOfCategoryTrans(ArrayOfCategoryTrans value) {
@@ -1448,7 +1282,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link RouteArbitrationPacket }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "RouteArbitrationPacket")
     public JAXBElement<RouteArbitrationPacket> createRouteArbitrationPacket(RouteArbitrationPacket value) {
@@ -1457,7 +1290,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link NewsArticleTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "NewsArticleTrans")
     public JAXBElement<NewsArticleTrans> createNewsArticleTrans(NewsArticleTrans value) {
@@ -1466,7 +1298,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SessionInfo }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "SessionInfo")
     public JAXBElement<SessionInfo> createSessionInfo(SessionInfo value) {
@@ -1475,7 +1306,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link UserInfo }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "UserInfo")
     public JAXBElement<UserInfo> createUserInfo(UserInfo value) {
@@ -1484,7 +1314,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link RegionInfo }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "RegionInfo")
     public JAXBElement<RegionInfo> createRegionInfo(RegionInfo value) {
@@ -1493,7 +1322,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link LobbyEntrantAdded }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "LobbyEntrantAdded")
     public JAXBElement<LobbyEntrantAdded> createLobbyEntrantAdded(LobbyEntrantAdded value) {
@@ -1502,7 +1330,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link DragEntrantResult }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "DragEntrantResult")
     public JAXBElement<DragEntrantResult> createDragEntrantResult(DragEntrantResult value) {
@@ -1511,7 +1338,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PersonaMotto }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "PersonaMotto")
     public JAXBElement<PersonaMotto> createPersonaMotto(PersonaMotto value) {
@@ -1520,7 +1346,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link LoginAnnouncementsDefinition }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "LoginAnnouncementsDefinition")
     public JAXBElement<LoginAnnouncementsDefinition> createLoginAnnouncementsDefinition(LoginAnnouncementsDefinition value) {
@@ -1529,7 +1354,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CarSlotInfoTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "CarSlotInfoTrans")
     public JAXBElement<CarSlotInfoTrans> createCarSlotInfoTrans(CarSlotInfoTrans value) {
@@ -1538,7 +1362,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfInventoryItemTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfInventoryItemTrans")
     public JAXBElement<ArrayOfInventoryItemTrans> createArrayOfInventoryItemTrans(ArrayOfInventoryItemTrans value) {
@@ -1547,7 +1370,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AchievementsPacket }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "AchievementsPacket")
     public JAXBElement<AchievementsPacket> createAchievementsPacket(AchievementsPacket value) {
@@ -1556,7 +1378,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SocialNetworkInfo }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "SocialNetworkInfo")
     public JAXBElement<SocialNetworkInfo> createSocialNetworkInfo(SocialNetworkInfo value) {
@@ -1565,7 +1386,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TeamEscapeArbitrationPacket }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "TeamEscapeArbitrationPacket")
     public JAXBElement<TeamEscapeArbitrationPacket> createTeamEscapeArbitrationPacket(TeamEscapeArbitrationPacket value) {
@@ -1574,7 +1394,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link OwnedCarTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "OwnedCarTrans")
     public JAXBElement<OwnedCarTrans> createOwnedCarTrans(OwnedCarTrans value) {
@@ -1583,7 +1402,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PursuitEventResult }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "PursuitEventResult")
     public JAXBElement<PursuitEventResult> createPursuitEventResult(PursuitEventResult value) {
@@ -1592,7 +1410,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CommerceSessionTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "CommerceSessionTrans")
     public JAXBElement<CommerceSessionTrans> createCommerceSessionTrans(CommerceSessionTrans value) {
@@ -1601,7 +1418,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link EntitlementTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "EntitlementTrans")
     public JAXBElement<EntitlementTrans> createEntitlementTrans(EntitlementTrans value) {
@@ -1610,7 +1426,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link HardwareInfo }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "HardwareInfo")
     public JAXBElement<HardwareInfo> createHardwareInfo(HardwareInfo value) {
@@ -1619,7 +1434,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArbitrationPacket }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArbitrationPacket")
     public JAXBElement<ArbitrationPacket> createArbitrationPacket(ArbitrationPacket value) {
@@ -1628,7 +1442,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link DragArbitrationPacket }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "DragArbitrationPacket")
     public JAXBElement<DragArbitrationPacket> createDragArbitrationPacket(DragArbitrationPacket value) {
@@ -1637,7 +1450,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CommerceSessionResultTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "CommerceSessionResultTrans")
     public JAXBElement<CommerceSessionResultTrans> createCommerceSessionResultTrans(CommerceSessionResultTrans value) {
@@ -1646,7 +1458,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link UserSettings }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "User_Settings")
     public JAXBElement<UserSettings> createUserSettings(UserSettings value) {
@@ -1655,7 +1466,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PersonaBase }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "PersonaBase")
     public JAXBElement<PersonaBase> createPersonaBase(PersonaBase value) {
@@ -1664,7 +1474,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfLong }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOflong")
     public JAXBElement<ArrayOfLong> createArrayOflong(ArrayOfLong value) {
@@ -1673,7 +1482,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfPersonaBase }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfPersonaBase")
     public JAXBElement<ArrayOfPersonaBase> createArrayOfPersonaBase(ArrayOfPersonaBase value) {
@@ -1682,7 +1490,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PursuitArbitrationPacket }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "PursuitArbitrationPacket")
     public JAXBElement<PursuitArbitrationPacket> createPursuitArbitrationPacket(PursuitArbitrationPacket value) {
@@ -1691,7 +1498,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfString }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfstring")
     public JAXBElement<ArrayOfString> createArrayOfstring(ArrayOfString value) {
@@ -1700,7 +1506,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link EventResult }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "EventResult")
     public JAXBElement<EventResult> createEventResult(EventResult value) {
@@ -1709,7 +1514,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfInt }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "ArrayOfInt")
     public JAXBElement<ArrayOfInt> createArrayOfInt(ArrayOfInt value) {
@@ -1718,7 +1522,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link UdpRelayCryptoTicket }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "UdpRelayCryptoTicket")
     public JAXBElement<UdpRelayCryptoTicket> createUdpRelayCryptoTicket(UdpRelayCryptoTicket value) {
@@ -1727,7 +1530,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link InventoryTrans }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "InventoryTrans")
     public JAXBElement<InventoryTrans> createInventoryTrans(InventoryTrans value) {

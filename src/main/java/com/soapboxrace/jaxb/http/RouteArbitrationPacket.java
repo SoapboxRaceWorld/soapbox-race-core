@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for RouteArbitrationPacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RouteArbitrationPacket">
  *   &lt;complexContent>
@@ -32,22 +32,19 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RouteArbitrationPacket", propOrder = {
-    "bestLapDurationInMilliseconds",
-    "fractionCompleted",
-    "longestJumpDurationInMilliseconds",
-    "numberOfCollisions",
-    "perfectStart",
-    "sumOfJumpsDurationInMilliseconds",
-    "topSpeed"
+        "bestLapDurationInMilliseconds",
+        "fractionCompleted",
+        "longestJumpDurationInMilliseconds",
+        "numberOfCollisions",
+        "perfectStart",
+        "sumOfJumpsDurationInMilliseconds",
+        "topSpeed"
 })
 public class RouteArbitrationPacket
-    extends ArbitrationPacket
-{
+        extends ArbitrationPacket {
 
     @XmlElement(name = "BestLapDurationInMilliseconds")
     @XmlSchemaType(name = "unsignedInt")
@@ -69,7 +66,6 @@ public class RouteArbitrationPacket
 
     /**
      * Gets the value of the bestLapDurationInMilliseconds property.
-     * 
      */
     public long getBestLapDurationInMilliseconds() {
         return bestLapDurationInMilliseconds;
@@ -77,7 +73,6 @@ public class RouteArbitrationPacket
 
     /**
      * Sets the value of the bestLapDurationInMilliseconds property.
-     * 
      */
     public void setBestLapDurationInMilliseconds(long value) {
         this.bestLapDurationInMilliseconds = value;
@@ -85,7 +80,6 @@ public class RouteArbitrationPacket
 
     /**
      * Gets the value of the fractionCompleted property.
-     * 
      */
     public float getFractionCompleted() {
         return fractionCompleted;
@@ -93,7 +87,6 @@ public class RouteArbitrationPacket
 
     /**
      * Sets the value of the fractionCompleted property.
-     * 
      */
     public void setFractionCompleted(float value) {
         this.fractionCompleted = value;
@@ -101,7 +94,6 @@ public class RouteArbitrationPacket
 
     /**
      * Gets the value of the longestJumpDurationInMilliseconds property.
-     * 
      */
     public long getLongestJumpDurationInMilliseconds() {
         return longestJumpDurationInMilliseconds;
@@ -109,7 +101,6 @@ public class RouteArbitrationPacket
 
     /**
      * Sets the value of the longestJumpDurationInMilliseconds property.
-     * 
      */
     public void setLongestJumpDurationInMilliseconds(long value) {
         this.longestJumpDurationInMilliseconds = value;
@@ -117,7 +108,6 @@ public class RouteArbitrationPacket
 
     /**
      * Gets the value of the numberOfCollisions property.
-     * 
      */
     public int getNumberOfCollisions() {
         return numberOfCollisions;
@@ -125,7 +115,6 @@ public class RouteArbitrationPacket
 
     /**
      * Sets the value of the numberOfCollisions property.
-     * 
      */
     public void setNumberOfCollisions(int value) {
         this.numberOfCollisions = value;
@@ -133,7 +122,6 @@ public class RouteArbitrationPacket
 
     /**
      * Gets the value of the perfectStart property.
-     * 
      */
     public int getPerfectStart() {
         return perfectStart;
@@ -141,7 +129,6 @@ public class RouteArbitrationPacket
 
     /**
      * Sets the value of the perfectStart property.
-     * 
      */
     public void setPerfectStart(int value) {
         this.perfectStart = value;
@@ -149,7 +136,6 @@ public class RouteArbitrationPacket
 
     /**
      * Gets the value of the sumOfJumpsDurationInMilliseconds property.
-     * 
      */
     public long getSumOfJumpsDurationInMilliseconds() {
         return sumOfJumpsDurationInMilliseconds;
@@ -157,7 +143,6 @@ public class RouteArbitrationPacket
 
     /**
      * Sets the value of the sumOfJumpsDurationInMilliseconds property.
-     * 
      */
     public void setSumOfJumpsDurationInMilliseconds(long value) {
         this.sumOfJumpsDurationInMilliseconds = value;
@@ -165,7 +150,6 @@ public class RouteArbitrationPacket
 
     /**
      * Gets the value of the topSpeed property.
-     * 
      */
     public float getTopSpeed() {
         return topSpeed;
@@ -173,7 +157,6 @@ public class RouteArbitrationPacket
 
     /**
      * Sets the value of the topSpeed property.
-     * 
      */
     public void setTopSpeed(float value) {
         this.topSpeed = value;

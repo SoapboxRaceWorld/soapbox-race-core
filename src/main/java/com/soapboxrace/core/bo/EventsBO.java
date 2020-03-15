@@ -54,7 +54,7 @@ public class EventsBO {
 
         LocalDate thDate = treasureHuntEntity.getThDate();
         LocalDate nowDate = LocalDate.now();
-        
+
         if (!thDate.equals(nowDate)) {
             int days = (int) ChronoUnit.DAYS.between(thDate, nowDate);
             if (days >= 2 || treasureHuntEntity.getCoinsCollected() != 32767) {

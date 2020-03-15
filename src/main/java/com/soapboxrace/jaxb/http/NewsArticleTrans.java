@@ -13,9 +13,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * <p>Java class for NewsArticleTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="NewsArticleTrans">
  *   &lt;complexContent>
@@ -37,22 +37,20 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "NewsArticleTrans", propOrder = {
-    "expiryTime",
-    "filters",
-    "iconType",
-    "longTextHALId",
-    "newsId",
-    "parameters",
-    "personaId",
-    "shortTextHALId",
-    "sticky",
-    "timestamp",
-    "type"
+        "expiryTime",
+        "filters",
+        "iconType",
+        "longTextHALId",
+        "newsId",
+        "parameters",
+        "personaId",
+        "shortTextHALId",
+        "sticky",
+        "timestamp",
+        "type"
 })
 public class NewsArticleTrans {
 
@@ -82,11 +80,9 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the expiryTime property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getExpiryTime() {
         return expiryTime;
@@ -94,11 +90,9 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the expiryTime property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setExpiryTime(XMLGregorianCalendar value) {
         this.expiryTime = value;
@@ -106,7 +100,6 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the filters property.
-     * 
      */
     public int getFilters() {
         return filters;
@@ -114,7 +107,6 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the filters property.
-     * 
      */
     public void setFilters(int value) {
         this.filters = value;
@@ -122,7 +114,6 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the iconType property.
-     * 
      */
     public int getIconType() {
         return iconType;
@@ -130,7 +121,6 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the iconType property.
-     * 
      */
     public void setIconType(int value) {
         this.iconType = value;
@@ -138,11 +128,9 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the longTextHALId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLongTextHALId() {
         return longTextHALId;
@@ -150,11 +138,9 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the longTextHALId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLongTextHALId(String value) {
         this.longTextHALId = value;
@@ -162,7 +148,6 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the newsId property.
-     * 
      */
     public long getNewsId() {
         return newsId;
@@ -170,7 +155,6 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the newsId property.
-     * 
      */
     public void setNewsId(long value) {
         this.newsId = value;
@@ -178,11 +162,9 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the parameters property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getParameters() {
         return parameters;
@@ -190,11 +172,9 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the parameters property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setParameters(String value) {
         this.parameters = value;
@@ -202,7 +182,6 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the personaId property.
-     * 
      */
     public long getPersonaId() {
         return personaId;
@@ -210,7 +189,6 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the personaId property.
-     * 
      */
     public void setPersonaId(long value) {
         this.personaId = value;
@@ -218,11 +196,9 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the shortTextHALId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getShortTextHALId() {
         return shortTextHALId;
@@ -230,11 +206,9 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the shortTextHALId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setShortTextHALId(String value) {
         this.shortTextHALId = value;
@@ -242,7 +216,6 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the sticky property.
-     * 
      */
     public int getSticky() {
         return sticky;
@@ -250,7 +223,6 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the sticky property.
-     * 
      */
     public void setSticky(int value) {
         this.sticky = value;
@@ -258,7 +230,6 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the timestamp property.
-     * 
      */
     public long getTimestamp() {
         return timestamp;
@@ -266,7 +237,6 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the timestamp property.
-     * 
      */
     public void setTimestamp(long value) {
         this.timestamp = value;
@@ -274,7 +244,6 @@ public class NewsArticleTrans {
 
     /**
      * Gets the value of the type property.
-     * 
      */
     public int getType() {
         return type;
@@ -282,7 +251,6 @@ public class NewsArticleTrans {
 
     /**
      * Sets the value of the type property.
-     * 
      */
     public void setType(int value) {
         this.type = value;

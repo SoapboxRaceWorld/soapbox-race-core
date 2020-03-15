@@ -9,38 +9,38 @@ package com.soapboxrace.jaxb.xmpp;
 import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "XMPP_ResponseTypeTeamEscapeEntrantResult", propOrder = { "teamEscapeEntrantResult" })
+@XmlType(name = "XMPP_ResponseTypeTeamEscapeEntrantResult", propOrder = {"teamEscapeEntrantResult"})
 @XmlRootElement(name = "response")
 public class XMPP_ResponseTypeTeamEscapeEntrantResult {
-	@XmlElement(name = "TeamEscapeEntrantResult", required = true)
-	private XMPP_TeamEscapeEntrantResultType teamEscapeEntrantResult;
+    @XmlElement(name = "TeamEscapeEntrantResult", required = true)
+    private XMPP_TeamEscapeEntrantResultType teamEscapeEntrantResult;
 
-	@XmlAttribute(name = "status")
-	private Integer status = 1;
-	@XmlAttribute(name = "ticket")
-	private Integer ticket = 0;
+    @XmlAttribute(name = "status")
+    private Integer status = 1;
+    @XmlAttribute(name = "ticket")
+    private Integer ticket = 0;
 
-	public XMPP_TeamEscapeEntrantResultType getTeamEscapeEntrantResult() {
-		return teamEscapeEntrantResult;
-	}
+    public XMPP_TeamEscapeEntrantResultType getTeamEscapeEntrantResult() {
+        return teamEscapeEntrantResult;
+    }
 
-	public void setTeamEscapeEntrantResult(XMPP_TeamEscapeEntrantResultType teamEscapeEntrantResult) {
-		this.teamEscapeEntrantResult = teamEscapeEntrantResult;
-	}
+    public void setTeamEscapeEntrantResult(XMPP_TeamEscapeEntrantResultType teamEscapeEntrantResult) {
+        this.teamEscapeEntrantResult = teamEscapeEntrantResult;
+    }
 
-	public Integer getStatus() {
-		return status;
-	}
+    public Integer getStatus() {
+        return status;
+    }
 
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
-	public Integer getTicket() {
-		return ticket;
-	}
+    public Integer getTicket() {
+        return ticket;
+    }
 
-	public void setTicket(Integer ticket) {
-		this.ticket = ticket;
-	}
+    public void setTicket(Integer ticket) {
+        this.ticket = ticket;
+    }
 }

@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for CustomCarTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CustomCarTrans">
  *   &lt;complexContent>
@@ -45,28 +45,26 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CustomCarTrans", propOrder = {
-    "baseCar",
-    "carClassHash",
-    "id",
-    "isPreset",
-    "level",
-    "name",
-    "paints",
-    "performanceParts",
-    "physicsProfileHash",
-    "rating",
-    "resalePrice",
-    "rideHeightDrop",
-    "skillModParts",
-    "skillModSlotCount",
-    "version",
-    "vinyls",
-    "visualParts"
+        "baseCar",
+        "carClassHash",
+        "id",
+        "isPreset",
+        "level",
+        "name",
+        "paints",
+        "performanceParts",
+        "physicsProfileHash",
+        "rating",
+        "resalePrice",
+        "rideHeightDrop",
+        "skillModParts",
+        "skillModSlotCount",
+        "version",
+        "vinyls",
+        "visualParts"
 })
 public class CustomCarTrans {
 
@@ -107,7 +105,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the baseCar property.
-     * 
      */
     public int getBaseCar() {
         return baseCar;
@@ -115,7 +112,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the baseCar property.
-     * 
      */
     public void setBaseCar(int value) {
         this.baseCar = value;
@@ -123,7 +119,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the carClassHash property.
-     * 
      */
     public int getCarClassHash() {
         return carClassHash;
@@ -131,7 +126,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the carClassHash property.
-     * 
      */
     public void setCarClassHash(int value) {
         this.carClassHash = value;
@@ -139,7 +133,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the id property.
-     * 
      */
     public int getId() {
         return id;
@@ -147,7 +140,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the id property.
-     * 
      */
     public void setId(int value) {
         this.id = value;
@@ -155,7 +147,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the isPreset property.
-     * 
      */
     public boolean isIsPreset() {
         return isPreset;
@@ -163,7 +154,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the isPreset property.
-     * 
      */
     public void setIsPreset(boolean value) {
         this.isPreset = value;
@@ -171,7 +161,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the level property.
-     * 
      */
     public int getLevel() {
         return level;
@@ -179,7 +168,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the level property.
-     * 
      */
     public void setLevel(int value) {
         this.level = value;
@@ -187,11 +175,9 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getName() {
         return name;
@@ -199,11 +185,9 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -211,11 +195,9 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the paints property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfCustomPaintTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfCustomPaintTrans }
      */
     public ArrayOfCustomPaintTrans getPaints() {
         return paints;
@@ -223,11 +205,9 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the paints property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfCustomPaintTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfCustomPaintTrans }
      */
     public void setPaints(ArrayOfCustomPaintTrans value) {
         this.paints = value;
@@ -235,11 +215,9 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the performanceParts property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfPerformancePartTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfPerformancePartTrans }
      */
     public ArrayOfPerformancePartTrans getPerformanceParts() {
         return performanceParts;
@@ -247,11 +225,9 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the performanceParts property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfPerformancePartTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfPerformancePartTrans }
      */
     public void setPerformanceParts(ArrayOfPerformancePartTrans value) {
         this.performanceParts = value;
@@ -259,7 +235,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the physicsProfileHash property.
-     * 
      */
     public int getPhysicsProfileHash() {
         return physicsProfileHash;
@@ -267,7 +242,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the physicsProfileHash property.
-     * 
      */
     public void setPhysicsProfileHash(int value) {
         this.physicsProfileHash = value;
@@ -275,7 +249,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the rating property.
-     * 
      */
     public int getRating() {
         return rating;
@@ -283,7 +256,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the rating property.
-     * 
      */
     public void setRating(int value) {
         this.rating = value;
@@ -291,7 +263,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the resalePrice property.
-     * 
      */
     public float getResalePrice() {
         return resalePrice;
@@ -299,7 +270,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the resalePrice property.
-     * 
      */
     public void setResalePrice(float value) {
         this.resalePrice = value;
@@ -307,7 +277,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the rideHeightDrop property.
-     * 
      */
     public float getRideHeightDrop() {
         return rideHeightDrop;
@@ -315,7 +284,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the rideHeightDrop property.
-     * 
      */
     public void setRideHeightDrop(float value) {
         this.rideHeightDrop = value;
@@ -323,11 +291,9 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the skillModParts property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfSkillModPartTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfSkillModPartTrans }
      */
     public ArrayOfSkillModPartTrans getSkillModParts() {
         return skillModParts;
@@ -335,11 +301,9 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the skillModParts property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfSkillModPartTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfSkillModPartTrans }
      */
     public void setSkillModParts(ArrayOfSkillModPartTrans value) {
         this.skillModParts = value;
@@ -347,7 +311,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the skillModSlotCount property.
-     * 
      */
     public int getSkillModSlotCount() {
         return skillModSlotCount;
@@ -355,7 +318,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the skillModSlotCount property.
-     * 
      */
     public void setSkillModSlotCount(int value) {
         this.skillModSlotCount = value;
@@ -363,7 +325,6 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the version property.
-     * 
      */
     public int getVersion() {
         return version;
@@ -371,7 +332,6 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the version property.
-     * 
      */
     public void setVersion(int value) {
         this.version = value;
@@ -379,11 +339,9 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the vinyls property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfCustomVinylTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfCustomVinylTrans }
      */
     public ArrayOfCustomVinylTrans getVinyls() {
         return vinyls;
@@ -391,11 +349,9 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the vinyls property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfCustomVinylTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfCustomVinylTrans }
      */
     public void setVinyls(ArrayOfCustomVinylTrans value) {
         this.vinyls = value;
@@ -403,11 +359,9 @@ public class CustomCarTrans {
 
     /**
      * Gets the value of the visualParts property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfVisualPartTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfVisualPartTrans }
      */
     public ArrayOfVisualPartTrans getVisualParts() {
         return visualParts;
@@ -415,11 +369,9 @@ public class CustomCarTrans {
 
     /**
      * Sets the value of the visualParts property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfVisualPartTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfVisualPartTrans }
      */
     public void setVisualParts(ArrayOfVisualPartTrans value) {
         this.visualParts = value;

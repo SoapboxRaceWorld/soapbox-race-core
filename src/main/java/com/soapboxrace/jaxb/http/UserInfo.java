@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for UserInfo complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="UserInfo">
  *   &lt;complexContent>
@@ -30,14 +30,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UserInfo", propOrder = {
-    "defaultPersonaIdx",
-    "personas",
-    "user"
+        "defaultPersonaIdx",
+        "personas",
+        "user"
 })
 public class UserInfo {
 
@@ -47,7 +45,6 @@ public class UserInfo {
 
     /**
      * Gets the value of the defaultPersonaIdx property.
-     * 
      */
     public int getDefaultPersonaIdx() {
         return defaultPersonaIdx;
@@ -55,7 +52,6 @@ public class UserInfo {
 
     /**
      * Sets the value of the defaultPersonaIdx property.
-     * 
      */
     public void setDefaultPersonaIdx(int value) {
         this.defaultPersonaIdx = value;
@@ -63,11 +59,9 @@ public class UserInfo {
 
     /**
      * Gets the value of the personas property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfProfileData }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfProfileData }
      */
     public ArrayOfProfileData getPersonas() {
         return personas;
@@ -75,11 +69,9 @@ public class UserInfo {
 
     /**
      * Sets the value of the personas property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfProfileData }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfProfileData }
      */
     public void setPersonas(ArrayOfProfileData value) {
         this.personas = value;
@@ -87,11 +79,9 @@ public class UserInfo {
 
     /**
      * Gets the value of the user property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User }
-     *     
+     *
+     * @return possible object is
+     * {@link User }
      */
     public User getUser() {
         return user;
@@ -99,11 +89,9 @@ public class UserInfo {
 
     /**
      * Sets the value of the user property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link User }
      */
     public void setUser(User value) {
         this.user = value;

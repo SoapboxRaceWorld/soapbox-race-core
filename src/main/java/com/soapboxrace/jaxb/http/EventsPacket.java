@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for EventsPacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="EventsPacket">
  *   &lt;complexContent>
@@ -29,12 +29,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EventsPacket", propOrder = {
-    "events"
+        "events"
 })
 public class EventsPacket {
 
@@ -43,11 +41,9 @@ public class EventsPacket {
 
     /**
      * Gets the value of the events property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfEventDefinition }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfEventDefinition }
      */
     public ArrayOfEventDefinition getEvents() {
         return events;
@@ -55,11 +51,9 @@ public class EventsPacket {
 
     /**
      * Sets the value of the events property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfEventDefinition }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfEventDefinition }
      */
     public void setEvents(ArrayOfEventDefinition value) {
         this.events = value;

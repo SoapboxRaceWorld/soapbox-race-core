@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LoginAnnouncementType.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- * 
  */
 @XmlType(name = "LoginAnnouncementType")
 @XmlEnum
@@ -50,17 +49,17 @@ public enum LoginAnnouncementType {
         value = v;
     }
 
-    public String value() {
-        return value;
-    }
-
     public static LoginAnnouncementType fromValue(String v) {
-        for (LoginAnnouncementType c: LoginAnnouncementType.values()) {
+        for (LoginAnnouncementType c : LoginAnnouncementType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }
         }
         throw new IllegalArgumentException(v);
+    }
+
+    public String value() {
+        return value;
     }
 
 }

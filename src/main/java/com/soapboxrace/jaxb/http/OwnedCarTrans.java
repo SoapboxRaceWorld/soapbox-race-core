@@ -13,9 +13,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * <p>Java class for OwnedCarTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="OwnedCarTrans">
  *   &lt;complexContent>
@@ -32,17 +32,15 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "OwnedCarTrans", propOrder = {
-    "customCar",
-    "durability",
-    "expirationDate",
-    "heat",
-    "id",
-    "ownershipType"
+        "customCar",
+        "durability",
+        "expirationDate",
+        "heat",
+        "id",
+        "ownershipType"
 })
 public class OwnedCarTrans {
 
@@ -62,11 +60,9 @@ public class OwnedCarTrans {
 
     /**
      * Gets the value of the customCar property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CustomCarTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link CustomCarTrans }
      */
     public CustomCarTrans getCustomCar() {
         return customCar;
@@ -74,11 +70,9 @@ public class OwnedCarTrans {
 
     /**
      * Sets the value of the customCar property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CustomCarTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link CustomCarTrans }
      */
     public void setCustomCar(CustomCarTrans value) {
         this.customCar = value;
@@ -86,7 +80,6 @@ public class OwnedCarTrans {
 
     /**
      * Gets the value of the durability property.
-     * 
      */
     public int getDurability() {
         return durability;
@@ -94,7 +87,6 @@ public class OwnedCarTrans {
 
     /**
      * Sets the value of the durability property.
-     * 
      */
     public void setDurability(int value) {
         this.durability = value;
@@ -102,11 +94,9 @@ public class OwnedCarTrans {
 
     /**
      * Gets the value of the expirationDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getExpirationDate() {
         return expirationDate;
@@ -114,11 +104,9 @@ public class OwnedCarTrans {
 
     /**
      * Sets the value of the expirationDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setExpirationDate(XMLGregorianCalendar value) {
         this.expirationDate = value;
@@ -126,7 +114,6 @@ public class OwnedCarTrans {
 
     /**
      * Gets the value of the heat property.
-     * 
      */
     public float getHeat() {
         return heat;
@@ -134,7 +121,6 @@ public class OwnedCarTrans {
 
     /**
      * Sets the value of the heat property.
-     * 
      */
     public void setHeat(float value) {
         this.heat = value;
@@ -142,7 +128,6 @@ public class OwnedCarTrans {
 
     /**
      * Gets the value of the id property.
-     * 
      */
     public long getId() {
         return id;
@@ -150,7 +135,6 @@ public class OwnedCarTrans {
 
     /**
      * Sets the value of the id property.
-     * 
      */
     public void setId(long value) {
         this.id = value;
@@ -158,11 +142,9 @@ public class OwnedCarTrans {
 
     /**
      * Gets the value of the ownershipType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getOwnershipType() {
         return ownershipType;
@@ -170,11 +152,9 @@ public class OwnedCarTrans {
 
     /**
      * Sets the value of the ownershipType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setOwnershipType(String value) {
         this.ownershipType = value;

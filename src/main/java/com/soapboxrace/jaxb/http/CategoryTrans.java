@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for CategoryTrans complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="CategoryTrans">
  *   &lt;complexContent>
@@ -42,25 +42,23 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CategoryTrans", propOrder = {
-    "catalogVersion",
-    "categories",
-    "displayName",
-    "filterType",
-    "icon",
-    "id",
-    "longDescription",
-    "name",
-    "priority",
-    "products",
-    "shortDescription",
-    "showInNavigationPane",
-    "showPromoPage",
-    "webIcon"
+        "catalogVersion",
+        "categories",
+        "displayName",
+        "filterType",
+        "icon",
+        "id",
+        "longDescription",
+        "name",
+        "priority",
+        "products",
+        "shortDescription",
+        "showInNavigationPane",
+        "showPromoPage",
+        "webIcon"
 })
 public class CategoryTrans {
 
@@ -95,7 +93,6 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the catalogVersion property.
-     * 
      */
     public int getCatalogVersion() {
         return catalogVersion;
@@ -103,7 +100,6 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the catalogVersion property.
-     * 
      */
     public void setCatalogVersion(int value) {
         this.catalogVersion = value;
@@ -111,11 +107,9 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the categories property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfCategoryTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfCategoryTrans }
      */
     public ArrayOfCategoryTrans getCategories() {
         return categories;
@@ -123,11 +117,9 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the categories property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfCategoryTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfCategoryTrans }
      */
     public void setCategories(ArrayOfCategoryTrans value) {
         this.categories = value;
@@ -135,11 +127,9 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the displayName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getDisplayName() {
         return displayName;
@@ -147,11 +137,9 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the displayName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDisplayName(String value) {
         this.displayName = value;
@@ -159,7 +147,6 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the filterType property.
-     * 
      */
     public int getFilterType() {
         return filterType;
@@ -167,7 +154,6 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the filterType property.
-     * 
      */
     public void setFilterType(int value) {
         this.filterType = value;
@@ -175,11 +161,9 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the icon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getIcon() {
         return icon;
@@ -187,11 +171,9 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the icon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setIcon(String value) {
         this.icon = value;
@@ -199,11 +181,9 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getId() {
         return id;
@@ -211,11 +191,9 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setId(String value) {
         this.id = value;
@@ -223,11 +201,9 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the longDescription property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLongDescription() {
         return longDescription;
@@ -235,11 +211,9 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the longDescription property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLongDescription(String value) {
         this.longDescription = value;
@@ -247,11 +221,9 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getName() {
         return name;
@@ -259,11 +231,9 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -271,7 +241,6 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the priority property.
-     * 
      */
     public int getPriority() {
         return priority;
@@ -279,7 +248,6 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the priority property.
-     * 
      */
     public void setPriority(int value) {
         this.priority = value;
@@ -287,11 +255,9 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the products property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfProductTrans }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfProductTrans }
      */
     public ArrayOfProductTrans getProducts() {
         return products;
@@ -299,11 +265,9 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the products property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfProductTrans }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfProductTrans }
      */
     public void setProducts(ArrayOfProductTrans value) {
         this.products = value;
@@ -311,11 +275,9 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the shortDescription property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getShortDescription() {
         return shortDescription;
@@ -323,11 +285,9 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the shortDescription property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setShortDescription(String value) {
         this.shortDescription = value;
@@ -335,7 +295,6 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the showInNavigationPane property.
-     * 
      */
     public boolean isShowInNavigationPane() {
         return showInNavigationPane;
@@ -343,7 +302,6 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the showInNavigationPane property.
-     * 
      */
     public void setShowInNavigationPane(boolean value) {
         this.showInNavigationPane = value;
@@ -351,7 +309,6 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the showPromoPage property.
-     * 
      */
     public boolean isShowPromoPage() {
         return showPromoPage;
@@ -359,7 +316,6 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the showPromoPage property.
-     * 
      */
     public void setShowPromoPage(boolean value) {
         this.showPromoPage = value;
@@ -367,11 +323,9 @@ public class CategoryTrans {
 
     /**
      * Gets the value of the webIcon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getWebIcon() {
         return webIcon;
@@ -379,11 +333,9 @@ public class CategoryTrans {
 
     /**
      * Sets the value of the webIcon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setWebIcon(String value) {
         this.webIcon = value;

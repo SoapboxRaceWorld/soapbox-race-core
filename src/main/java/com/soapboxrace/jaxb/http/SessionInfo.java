@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for SessionInfo complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="SessionInfo">
  *   &lt;complexContent>
@@ -31,14 +31,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SessionInfo", propOrder = {
-    "challenge",
-    "eventId",
-    "sessionId"
+        "challenge",
+        "eventId",
+        "sessionId"
 })
 public class SessionInfo {
 
@@ -51,11 +49,9 @@ public class SessionInfo {
 
     /**
      * Gets the value of the challenge property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SecurityChallenge }
-     *     
+     *
+     * @return possible object is
+     * {@link SecurityChallenge }
      */
     public SecurityChallenge getChallenge() {
         return challenge;
@@ -63,11 +59,9 @@ public class SessionInfo {
 
     /**
      * Sets the value of the challenge property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SecurityChallenge }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link SecurityChallenge }
      */
     public void setChallenge(SecurityChallenge value) {
         this.challenge = value;
@@ -75,7 +69,6 @@ public class SessionInfo {
 
     /**
      * Gets the value of the eventId property.
-     * 
      */
     public int getEventId() {
         return eventId;
@@ -83,7 +76,6 @@ public class SessionInfo {
 
     /**
      * Sets the value of the eventId property.
-     * 
      */
     public void setEventId(int value) {
         this.eventId = value;
@@ -91,7 +83,6 @@ public class SessionInfo {
 
     /**
      * Gets the value of the sessionId property.
-     * 
      */
     public long getSessionId() {
         return sessionId;
@@ -99,7 +90,6 @@ public class SessionInfo {
 
     /**
      * Sets the value of the sessionId property.
-     * 
      */
     public void setSessionId(long value) {
         this.sessionId = value;

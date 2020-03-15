@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LobbyEntrantState.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- * 
  */
 @XmlType(name = "LobbyEntrantState")
 @XmlEnum
@@ -50,17 +49,17 @@ public enum LobbyEntrantState {
         value = v;
     }
 
-    public String value() {
-        return value;
-    }
-
     public static LobbyEntrantState fromValue(String v) {
-        for (LobbyEntrantState c: LobbyEntrantState.values()) {
+        for (LobbyEntrantState c : LobbyEntrantState.values()) {
             if (c.value.equals(v)) {
                 return c;
             }
         }
         throw new IllegalArgumentException(v);
+    }
+
+    public String value() {
+        return value;
     }
 
 }

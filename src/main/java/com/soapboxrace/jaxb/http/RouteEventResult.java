@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for RouteEventResult complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="RouteEventResult">
  *   &lt;complexContent>
@@ -29,27 +29,22 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RouteEventResult", propOrder = {
-    "entrants"
+        "entrants"
 })
 public class RouteEventResult
-    extends EventResult
-{
+        extends EventResult {
 
     @XmlElement(name = "Entrants")
     protected ArrayOfRouteEntrantResult entrants;
 
     /**
      * Gets the value of the entrants property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfRouteEntrantResult }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfRouteEntrantResult }
      */
     public ArrayOfRouteEntrantResult getEntrants() {
         return entrants;
@@ -57,11 +52,9 @@ public class RouteEventResult
 
     /**
      * Sets the value of the entrants property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfRouteEntrantResult }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfRouteEntrantResult }
      */
     public void setEntrants(ArrayOfRouteEntrantResult value) {
         this.entrants = value;

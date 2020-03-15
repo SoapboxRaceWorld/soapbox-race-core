@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for TeamEscapeEventResult complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="TeamEscapeEventResult">
  *   &lt;complexContent>
@@ -29,27 +29,22 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TeamEscapeEventResult", propOrder = {
-    "entrants"
+        "entrants"
 })
 public class TeamEscapeEventResult
-    extends EventResult
-{
+        extends EventResult {
 
     @XmlElement(name = "Entrants")
     protected ArrayOfTeamEscapeEntrantResult entrants;
 
     /**
      * Gets the value of the entrants property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfTeamEscapeEntrantResult }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfTeamEscapeEntrantResult }
      */
     public ArrayOfTeamEscapeEntrantResult getEntrants() {
         return entrants;
@@ -57,11 +52,9 @@ public class TeamEscapeEventResult
 
     /**
      * Sets the value of the entrants property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfTeamEscapeEntrantResult }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfTeamEscapeEntrantResult }
      */
     public void setEntrants(ArrayOfTeamEscapeEntrantResult value) {
         this.entrants = value;

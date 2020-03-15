@@ -11,7 +11,7 @@ import com.soapboxrace.jaxb.http.PersonaBase;
 import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "XMPP_ResponseTypePersonaBase", propOrder = { "personaBase" })
+@XmlType(name = "XMPP_ResponseTypePersonaBase", propOrder = {"personaBase"})
 @XmlRootElement(name = "response")
 public class XMPP_ResponseTypePersonaBase {
     @XmlElement(name = "PersonaBase", required = true)
@@ -22,13 +22,11 @@ public class XMPP_ResponseTypePersonaBase {
     @XmlAttribute(name = "ticket")
     protected int ticket = 0;
 
-    public PersonaBase getPersonaBase()
-    {
+    public PersonaBase getPersonaBase() {
         return personaBase;
     }
 
-    public void setPersonaBase(PersonaBase personaBase)
-    {
+    public void setPersonaBase(PersonaBase personaBase) {
         this.personaBase = personaBase;
     }
 

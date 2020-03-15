@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for UdpRelayCryptoTicket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="UdpRelayCryptoTicket">
  *   &lt;complexContent>
@@ -31,14 +31,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UdpRelayCryptoTicket", propOrder = {
-    "cryptoTicket",
-    "sessionKey",
-    "ticketIv"
+        "cryptoTicket",
+        "sessionKey",
+        "ticketIv"
 })
 public class UdpRelayCryptoTicket {
 
@@ -51,11 +49,9 @@ public class UdpRelayCryptoTicket {
 
     /**
      * Gets the value of the cryptoTicket property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getCryptoTicket() {
         return cryptoTicket;
@@ -63,11 +59,9 @@ public class UdpRelayCryptoTicket {
 
     /**
      * Sets the value of the cryptoTicket property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCryptoTicket(String value) {
         this.cryptoTicket = value;
@@ -75,11 +69,9 @@ public class UdpRelayCryptoTicket {
 
     /**
      * Gets the value of the sessionKey property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getSessionKey() {
         return sessionKey;
@@ -87,11 +79,9 @@ public class UdpRelayCryptoTicket {
 
     /**
      * Sets the value of the sessionKey property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSessionKey(String value) {
         this.sessionKey = value;
@@ -99,11 +89,9 @@ public class UdpRelayCryptoTicket {
 
     /**
      * Gets the value of the ticketIv property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getTicketIv() {
         return ticketIv;
@@ -111,11 +99,9 @@ public class UdpRelayCryptoTicket {
 
     /**
      * Sets the value of the ticketIv property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTicketIv(String value) {
         this.ticketIv = value;

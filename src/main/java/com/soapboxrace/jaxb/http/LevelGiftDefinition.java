@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for LevelGiftDefinition complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LevelGiftDefinition">
  *   &lt;complexContent>
@@ -31,14 +31,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LevelGiftDefinition", propOrder = {
-    "boost",
-    "level",
-    "levelGiftId"
+        "boost",
+        "level",
+        "levelGiftId"
 })
 public class LevelGiftDefinition {
 
@@ -51,7 +49,6 @@ public class LevelGiftDefinition {
 
     /**
      * Gets the value of the boost property.
-     * 
      */
     public int getBoost() {
         return boost;
@@ -59,7 +56,6 @@ public class LevelGiftDefinition {
 
     /**
      * Sets the value of the boost property.
-     * 
      */
     public void setBoost(int value) {
         this.boost = value;
@@ -67,7 +63,6 @@ public class LevelGiftDefinition {
 
     /**
      * Gets the value of the level property.
-     * 
      */
     public int getLevel() {
         return level;
@@ -75,7 +70,6 @@ public class LevelGiftDefinition {
 
     /**
      * Sets the value of the level property.
-     * 
      */
     public void setLevel(int value) {
         this.level = value;
@@ -83,7 +77,6 @@ public class LevelGiftDefinition {
 
     /**
      * Gets the value of the levelGiftId property.
-     * 
      */
     public int getLevelGiftId() {
         return levelGiftId;
@@ -91,7 +84,6 @@ public class LevelGiftDefinition {
 
     /**
      * Sets the value of the levelGiftId property.
-     * 
      */
     public void setLevelGiftId(int value) {
         this.levelGiftId = value;

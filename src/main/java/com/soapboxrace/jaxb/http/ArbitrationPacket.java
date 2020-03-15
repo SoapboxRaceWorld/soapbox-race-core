@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for ArbitrationPacket complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ArbitrationPacket">
  *   &lt;complexContent>
@@ -34,26 +34,24 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArbitrationPacket", propOrder = {
-    "alternateEventDurationInMilliseconds",
-    "carId",
-    "eventDurationInMilliseconds",
-    "finishReason",
-    "fraudDetectionInfo",
-    "hacksDetected",
-    "physicsMetrics",
-    "rank",
-    "response"
+        "alternateEventDurationInMilliseconds",
+        "carId",
+        "eventDurationInMilliseconds",
+        "finishReason",
+        "fraudDetectionInfo",
+        "hacksDetected",
+        "physicsMetrics",
+        "rank",
+        "response"
 })
 @XmlSeeAlso({
-    RouteArbitrationPacket.class,
-    TeamEscapeArbitrationPacket.class,
-    DragArbitrationPacket.class,
-    PursuitArbitrationPacket.class
+        RouteArbitrationPacket.class,
+        TeamEscapeArbitrationPacket.class,
+        DragArbitrationPacket.class,
+        PursuitArbitrationPacket.class
 })
 public class ArbitrationPacket {
 
@@ -81,7 +79,6 @@ public class ArbitrationPacket {
 
     /**
      * Gets the value of the alternateEventDurationInMilliseconds property.
-     * 
      */
     public long getAlternateEventDurationInMilliseconds() {
         return alternateEventDurationInMilliseconds;
@@ -89,7 +86,6 @@ public class ArbitrationPacket {
 
     /**
      * Sets the value of the alternateEventDurationInMilliseconds property.
-     * 
      */
     public void setAlternateEventDurationInMilliseconds(long value) {
         this.alternateEventDurationInMilliseconds = value;
@@ -97,7 +93,6 @@ public class ArbitrationPacket {
 
     /**
      * Gets the value of the carId property.
-     * 
      */
     public long getCarId() {
         return carId;
@@ -105,7 +100,6 @@ public class ArbitrationPacket {
 
     /**
      * Sets the value of the carId property.
-     * 
      */
     public void setCarId(long value) {
         this.carId = value;
@@ -113,7 +107,6 @@ public class ArbitrationPacket {
 
     /**
      * Gets the value of the eventDurationInMilliseconds property.
-     * 
      */
     public long getEventDurationInMilliseconds() {
         return eventDurationInMilliseconds;
@@ -121,7 +114,6 @@ public class ArbitrationPacket {
 
     /**
      * Sets the value of the eventDurationInMilliseconds property.
-     * 
      */
     public void setEventDurationInMilliseconds(long value) {
         this.eventDurationInMilliseconds = value;
@@ -129,7 +121,6 @@ public class ArbitrationPacket {
 
     /**
      * Gets the value of the finishReason property.
-     * 
      */
     public int getFinishReason() {
         return finishReason;
@@ -137,7 +128,6 @@ public class ArbitrationPacket {
 
     /**
      * Sets the value of the finishReason property.
-     * 
      */
     public void setFinishReason(int value) {
         this.finishReason = value;
@@ -145,11 +135,9 @@ public class ArbitrationPacket {
 
     /**
      * Gets the value of the fraudDetectionInfo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link FraudDetection }
-     *     
+     *
+     * @return possible object is
+     * {@link FraudDetection }
      */
     public FraudDetection getFraudDetectionInfo() {
         return fraudDetectionInfo;
@@ -157,11 +145,9 @@ public class ArbitrationPacket {
 
     /**
      * Sets the value of the fraudDetectionInfo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link FraudDetection }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link FraudDetection }
      */
     public void setFraudDetectionInfo(FraudDetection value) {
         this.fraudDetectionInfo = value;
@@ -169,7 +155,6 @@ public class ArbitrationPacket {
 
     /**
      * Gets the value of the hacksDetected property.
-     * 
      */
     public long getHacksDetected() {
         return hacksDetected;
@@ -177,7 +162,6 @@ public class ArbitrationPacket {
 
     /**
      * Sets the value of the hacksDetected property.
-     * 
      */
     public void setHacksDetected(long value) {
         this.hacksDetected = value;
@@ -185,11 +169,9 @@ public class ArbitrationPacket {
 
     /**
      * Gets the value of the physicsMetrics property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ClientPhysicsMetrics }
-     *     
+     *
+     * @return possible object is
+     * {@link ClientPhysicsMetrics }
      */
     public ClientPhysicsMetrics getPhysicsMetrics() {
         return physicsMetrics;
@@ -197,11 +179,9 @@ public class ArbitrationPacket {
 
     /**
      * Sets the value of the physicsMetrics property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ClientPhysicsMetrics }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ClientPhysicsMetrics }
      */
     public void setPhysicsMetrics(ClientPhysicsMetrics value) {
         this.physicsMetrics = value;
@@ -209,7 +189,6 @@ public class ArbitrationPacket {
 
     /**
      * Gets the value of the rank property.
-     * 
      */
     public int getRank() {
         return rank;
@@ -217,7 +196,6 @@ public class ArbitrationPacket {
 
     /**
      * Sets the value of the rank property.
-     * 
      */
     public void setRank(int value) {
         this.rank = value;
@@ -225,11 +203,9 @@ public class ArbitrationPacket {
 
     /**
      * Gets the value of the response property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SecurityResponse }
-     *     
+     *
+     * @return possible object is
+     * {@link SecurityResponse }
      */
     public SecurityResponse getResponse() {
         return response;
@@ -237,11 +213,9 @@ public class ArbitrationPacket {
 
     /**
      * Sets the value of the response property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SecurityResponse }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link SecurityResponse }
      */
     public void setResponse(SecurityResponse value) {
         this.response = value;

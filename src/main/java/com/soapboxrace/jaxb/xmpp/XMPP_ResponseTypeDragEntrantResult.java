@@ -9,38 +9,38 @@ package com.soapboxrace.jaxb.xmpp;
 import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "XMPP_ResponseTypeDragEntrantResult", propOrder = { "dragEntrantResult" })
+@XmlType(name = "XMPP_ResponseTypeDragEntrantResult", propOrder = {"dragEntrantResult"})
 @XmlRootElement(name = "response")
 public class XMPP_ResponseTypeDragEntrantResult {
-	@XmlElement(name = "DragEntrantResult", required = true)
-	private XMPP_DragEntrantResultType dragEntrantResult;
+    @XmlElement(name = "DragEntrantResult", required = true)
+    private XMPP_DragEntrantResultType dragEntrantResult;
 
-	@XmlAttribute(name = "status")
-	private Integer status = 1;
-	@XmlAttribute(name = "ticket")
-	private Integer ticket = 0;
+    @XmlAttribute(name = "status")
+    private Integer status = 1;
+    @XmlAttribute(name = "ticket")
+    private Integer ticket = 0;
 
-	public XMPP_DragEntrantResultType getDragEntrantResult() {
-		return dragEntrantResult;
-	}
+    public XMPP_DragEntrantResultType getDragEntrantResult() {
+        return dragEntrantResult;
+    }
 
-	public void setDragEntrantResult(XMPP_DragEntrantResultType dragEntrantResult) {
-		this.dragEntrantResult = dragEntrantResult;
-	}
+    public void setDragEntrantResult(XMPP_DragEntrantResultType dragEntrantResult) {
+        this.dragEntrantResult = dragEntrantResult;
+    }
 
-	public Integer getStatus() {
-		return status;
-	}
+    public Integer getStatus() {
+        return status;
+    }
 
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
-	public Integer getTicket() {
-		return ticket;
-	}
+    public Integer getTicket() {
+        return ticket;
+    }
 
-	public void setTicket(Integer ticket) {
-		this.ticket = ticket;
-	}
+    public void setTicket(Integer ticket) {
+        this.ticket = ticket;
+    }
 }

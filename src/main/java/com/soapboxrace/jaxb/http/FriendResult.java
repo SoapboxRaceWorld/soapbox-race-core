@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FriendResult", propOrder = { "persona", "result" })
+@XmlType(name = "FriendResult", propOrder = {"persona", "result"})
 @XmlRootElement(name = "FriendResult")
 public class FriendResult {
 

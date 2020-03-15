@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for FraudConfig complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="FraudConfig">
  *   &lt;complexContent>
@@ -32,16 +32,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FraudConfig", propOrder = {
-    "enabledBitField",
-    "gameFileFreq",
-    "moduleFreq",
-    "startUpFreq",
-    "userID"
+        "enabledBitField",
+        "gameFileFreq",
+        "moduleFreq",
+        "startUpFreq",
+        "userID"
 })
 public class FraudConfig {
 
@@ -53,7 +51,6 @@ public class FraudConfig {
 
     /**
      * Gets the value of the enabledBitField property.
-     * 
      */
     public int getEnabledBitField() {
         return enabledBitField;
@@ -61,7 +58,6 @@ public class FraudConfig {
 
     /**
      * Sets the value of the enabledBitField property.
-     * 
      */
     public void setEnabledBitField(int value) {
         this.enabledBitField = value;
@@ -69,7 +65,6 @@ public class FraudConfig {
 
     /**
      * Gets the value of the gameFileFreq property.
-     * 
      */
     public int getGameFileFreq() {
         return gameFileFreq;
@@ -77,7 +72,6 @@ public class FraudConfig {
 
     /**
      * Sets the value of the gameFileFreq property.
-     * 
      */
     public void setGameFileFreq(int value) {
         this.gameFileFreq = value;
@@ -85,7 +79,6 @@ public class FraudConfig {
 
     /**
      * Gets the value of the moduleFreq property.
-     * 
      */
     public int getModuleFreq() {
         return moduleFreq;
@@ -93,7 +86,6 @@ public class FraudConfig {
 
     /**
      * Sets the value of the moduleFreq property.
-     * 
      */
     public void setModuleFreq(int value) {
         this.moduleFreq = value;
@@ -101,7 +93,6 @@ public class FraudConfig {
 
     /**
      * Gets the value of the startUpFreq property.
-     * 
      */
     public int getStartUpFreq() {
         return startUpFreq;
@@ -109,7 +100,6 @@ public class FraudConfig {
 
     /**
      * Sets the value of the startUpFreq property.
-     * 
      */
     public void setStartUpFreq(int value) {
         this.startUpFreq = value;
@@ -117,7 +107,6 @@ public class FraudConfig {
 
     /**
      * Gets the value of the userID property.
-     * 
      */
     public long getUserID() {
         return userID;
@@ -125,7 +114,6 @@ public class FraudConfig {
 
     /**
      * Sets the value of the userID property.
-     * 
      */
     public void setUserID(long value) {
         this.userID = value;

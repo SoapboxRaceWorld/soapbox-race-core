@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * <p>Java class for ArrayOfTeamEscapeEntrantResult complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="ArrayOfTeamEscapeEntrantResult">
  *   &lt;complexContent>
@@ -31,12 +31,10 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ArrayOfTeamEscapeEntrantResult", propOrder = {
-    "teamEscapeEntrantResult"
+        "teamEscapeEntrantResult"
 })
 public class ArrayOfTeamEscapeEntrantResult {
 
@@ -45,25 +43,23 @@ public class ArrayOfTeamEscapeEntrantResult {
 
     /**
      * Gets the value of the teamEscapeEntrantResult property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the teamEscapeEntrantResult property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getTeamEscapeEntrantResult().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link TeamEscapeEntrantResult }
-     * 
-     * 
      */
     public List<TeamEscapeEntrantResult> getTeamEscapeEntrantResult() {
         if (teamEscapeEntrantResult == null) {

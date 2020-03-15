@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for LoginAnnouncementDefinition complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="LoginAnnouncementDefinition">
  *   &lt;complexContent>
@@ -31,17 +31,15 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "LoginAnnouncementDefinition", propOrder = {
-    "context",
-    "id",
-    "imageChecksum",
-    "imageUrl",
-    "target",
-    "type"
+        "context",
+        "id",
+        "imageChecksum",
+        "imageUrl",
+        "target",
+        "type"
 })
 public class LoginAnnouncementDefinition {
 
@@ -62,11 +60,9 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Gets the value of the context property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link LoginAnnouncementContext }
-     *     
+     *
+     * @return possible object is
+     * {@link LoginAnnouncementContext }
      */
     public LoginAnnouncementContext getContext() {
         return context;
@@ -74,11 +70,9 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Sets the value of the context property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link LoginAnnouncementContext }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link LoginAnnouncementContext }
      */
     public void setContext(LoginAnnouncementContext value) {
         this.context = value;
@@ -86,7 +80,6 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Gets the value of the id property.
-     * 
      */
     public int getId() {
         return id;
@@ -94,7 +87,6 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Sets the value of the id property.
-     * 
      */
     public void setId(int value) {
         this.id = value;
@@ -102,7 +94,6 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Gets the value of the imageChecksum property.
-     * 
      */
     public int getImageChecksum() {
         return imageChecksum;
@@ -110,7 +101,6 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Sets the value of the imageChecksum property.
-     * 
      */
     public void setImageChecksum(int value) {
         this.imageChecksum = value;
@@ -118,11 +108,9 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Gets the value of the imageUrl property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getImageUrl() {
         return imageUrl;
@@ -130,11 +118,9 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Sets the value of the imageUrl property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setImageUrl(String value) {
         this.imageUrl = value;
@@ -142,11 +128,9 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Gets the value of the target property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getTarget() {
         return target;
@@ -154,11 +138,9 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Sets the value of the target property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTarget(String value) {
         this.target = value;
@@ -166,11 +148,9 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link LoginAnnouncementType }
-     *     
+     *
+     * @return possible object is
+     * {@link LoginAnnouncementType }
      */
     public LoginAnnouncementType getType() {
         return type;
@@ -178,11 +158,9 @@ public class LoginAnnouncementDefinition {
 
     /**
      * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link LoginAnnouncementType }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link LoginAnnouncementType }
      */
     public void setType(LoginAnnouncementType value) {
         this.type = value;

@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for PersonaCCar complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="PersonaCCar">
  *   &lt;complexContent>
@@ -33,16 +33,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PersonaCCar", propOrder = {
-    "ccid",
-    "durability",
-    "heat",
-    "isDefault",
-    "personaId"
+        "ccid",
+        "durability",
+        "heat",
+        "isDefault",
+        "personaId"
 })
 public class PersonaCCar {
 
@@ -59,7 +57,6 @@ public class PersonaCCar {
 
     /**
      * Gets the value of the ccid property.
-     * 
      */
     public int getCCID() {
         return ccid;
@@ -67,7 +64,6 @@ public class PersonaCCar {
 
     /**
      * Sets the value of the ccid property.
-     * 
      */
     public void setCCID(int value) {
         this.ccid = value;
@@ -75,7 +71,6 @@ public class PersonaCCar {
 
     /**
      * Gets the value of the durability property.
-     * 
      */
     public int getDurability() {
         return durability;
@@ -83,7 +78,6 @@ public class PersonaCCar {
 
     /**
      * Sets the value of the durability property.
-     * 
      */
     public void setDurability(int value) {
         this.durability = value;
@@ -91,7 +85,6 @@ public class PersonaCCar {
 
     /**
      * Gets the value of the heat property.
-     * 
      */
     public float getHeat() {
         return heat;
@@ -99,7 +92,6 @@ public class PersonaCCar {
 
     /**
      * Sets the value of the heat property.
-     * 
      */
     public void setHeat(float value) {
         this.heat = value;
@@ -107,7 +99,6 @@ public class PersonaCCar {
 
     /**
      * Gets the value of the isDefault property.
-     * 
      */
     public boolean isIsDefault() {
         return isDefault;
@@ -115,7 +106,6 @@ public class PersonaCCar {
 
     /**
      * Sets the value of the isDefault property.
-     * 
      */
     public void setIsDefault(boolean value) {
         this.isDefault = value;
@@ -123,7 +113,6 @@ public class PersonaCCar {
 
     /**
      * Gets the value of the personaId property.
-     * 
      */
     public long getPersonaId() {
         return personaId;
@@ -131,7 +120,6 @@ public class PersonaCCar {
 
     /**
      * Sets the value of the personaId property.
-     * 
      */
     public void setPersonaId(long value) {
         this.personaId = value;

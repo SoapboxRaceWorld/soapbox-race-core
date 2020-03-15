@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for chatRoom complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="chatRoom">
  *   &lt;complexContent>
@@ -30,14 +30,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "chatRoom", propOrder = {
-    "channelCount",
-    "longName",
-    "shortName"
+        "channelCount",
+        "longName",
+        "shortName"
 })
 public class ChatRoom {
 
@@ -47,7 +45,6 @@ public class ChatRoom {
 
     /**
      * Gets the value of the channelCount property.
-     * 
      */
     public int getChannelCount() {
         return channelCount;
@@ -55,7 +52,6 @@ public class ChatRoom {
 
     /**
      * Sets the value of the channelCount property.
-     * 
      */
     public void setChannelCount(int value) {
         this.channelCount = value;
@@ -63,11 +59,9 @@ public class ChatRoom {
 
     /**
      * Gets the value of the longName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLongName() {
         return longName;
@@ -75,11 +69,9 @@ public class ChatRoom {
 
     /**
      * Sets the value of the longName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLongName(String value) {
         this.longName = value;
@@ -87,11 +79,9 @@ public class ChatRoom {
 
     /**
      * Gets the value of the shortName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getShortName() {
         return shortName;
@@ -99,11 +89,9 @@ public class ChatRoom {
 
     /**
      * Sets the value of the shortName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setShortName(String value) {
         this.shortName = value;

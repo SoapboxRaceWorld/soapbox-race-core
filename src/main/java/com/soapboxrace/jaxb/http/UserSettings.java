@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for User_Settings complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="User_Settings">
  *   &lt;complexContent>
@@ -40,23 +40,21 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "User_Settings", propOrder = {
-    "carCacheAgeLimit",
-    "isRaceNowEnabled",
-    "maxCarCacheSize",
-    "minRaceNowLevel",
-    "voipAvailable",
-    "activatedHolidaySceneryGroups",
-    "activeHolidayIds",
-    "disactivatedHolidaySceneryGroups",
-    "firstTimeLogin",
-    "maxLevel",
-    "starterPackApplied",
-    "userId"
+        "carCacheAgeLimit",
+        "isRaceNowEnabled",
+        "maxCarCacheSize",
+        "minRaceNowLevel",
+        "voipAvailable",
+        "activatedHolidaySceneryGroups",
+        "activeHolidayIds",
+        "disactivatedHolidaySceneryGroups",
+        "firstTimeLogin",
+        "maxLevel",
+        "starterPackApplied",
+        "userId"
 })
 public class UserSettings {
 
@@ -80,7 +78,6 @@ public class UserSettings {
 
     /**
      * Gets the value of the carCacheAgeLimit property.
-     * 
      */
     public int getCarCacheAgeLimit() {
         return carCacheAgeLimit;
@@ -88,7 +85,6 @@ public class UserSettings {
 
     /**
      * Sets the value of the carCacheAgeLimit property.
-     * 
      */
     public void setCarCacheAgeLimit(int value) {
         this.carCacheAgeLimit = value;
@@ -96,7 +92,6 @@ public class UserSettings {
 
     /**
      * Gets the value of the isRaceNowEnabled property.
-     * 
      */
     public boolean isIsRaceNowEnabled() {
         return isRaceNowEnabled;
@@ -104,7 +99,6 @@ public class UserSettings {
 
     /**
      * Sets the value of the isRaceNowEnabled property.
-     * 
      */
     public void setIsRaceNowEnabled(boolean value) {
         this.isRaceNowEnabled = value;
@@ -112,7 +106,6 @@ public class UserSettings {
 
     /**
      * Gets the value of the maxCarCacheSize property.
-     * 
      */
     public int getMaxCarCacheSize() {
         return maxCarCacheSize;
@@ -120,7 +113,6 @@ public class UserSettings {
 
     /**
      * Sets the value of the maxCarCacheSize property.
-     * 
      */
     public void setMaxCarCacheSize(int value) {
         this.maxCarCacheSize = value;
@@ -128,7 +120,6 @@ public class UserSettings {
 
     /**
      * Gets the value of the minRaceNowLevel property.
-     * 
      */
     public int getMinRaceNowLevel() {
         return minRaceNowLevel;
@@ -136,7 +127,6 @@ public class UserSettings {
 
     /**
      * Sets the value of the minRaceNowLevel property.
-     * 
      */
     public void setMinRaceNowLevel(int value) {
         this.minRaceNowLevel = value;
@@ -144,7 +134,6 @@ public class UserSettings {
 
     /**
      * Gets the value of the voipAvailable property.
-     * 
      */
     public boolean isVoipAvailable() {
         return voipAvailable;
@@ -152,7 +141,6 @@ public class UserSettings {
 
     /**
      * Sets the value of the voipAvailable property.
-     * 
      */
     public void setVoipAvailable(boolean value) {
         this.voipAvailable = value;
@@ -160,11 +148,9 @@ public class UserSettings {
 
     /**
      * Gets the value of the activatedHolidaySceneryGroups property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfString }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfString }
      */
     public ArrayOfString getActivatedHolidaySceneryGroups() {
         return activatedHolidaySceneryGroups;
@@ -172,11 +158,9 @@ public class UserSettings {
 
     /**
      * Sets the value of the activatedHolidaySceneryGroups property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfString }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfString }
      */
     public void setActivatedHolidaySceneryGroups(ArrayOfString value) {
         this.activatedHolidaySceneryGroups = value;
@@ -184,11 +168,9 @@ public class UserSettings {
 
     /**
      * Gets the value of the activeHolidayIds property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfLong }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfLong }
      */
     public ArrayOfLong getActiveHolidayIds() {
         return activeHolidayIds;
@@ -196,11 +178,9 @@ public class UserSettings {
 
     /**
      * Sets the value of the activeHolidayIds property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfLong }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfLong }
      */
     public void setActiveHolidayIds(ArrayOfLong value) {
         this.activeHolidayIds = value;
@@ -208,11 +188,9 @@ public class UserSettings {
 
     /**
      * Gets the value of the disactivatedHolidaySceneryGroups property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ArrayOfString }
-     *     
+     *
+     * @return possible object is
+     * {@link ArrayOfString }
      */
     public ArrayOfString getDisactivatedHolidaySceneryGroups() {
         return disactivatedHolidaySceneryGroups;
@@ -220,11 +198,9 @@ public class UserSettings {
 
     /**
      * Sets the value of the disactivatedHolidaySceneryGroups property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ArrayOfString }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ArrayOfString }
      */
     public void setDisactivatedHolidaySceneryGroups(ArrayOfString value) {
         this.disactivatedHolidaySceneryGroups = value;
@@ -232,7 +208,6 @@ public class UserSettings {
 
     /**
      * Gets the value of the firstTimeLogin property.
-     * 
      */
     public boolean isFirstTimeLogin() {
         return firstTimeLogin;
@@ -240,7 +215,6 @@ public class UserSettings {
 
     /**
      * Sets the value of the firstTimeLogin property.
-     * 
      */
     public void setFirstTimeLogin(boolean value) {
         this.firstTimeLogin = value;
@@ -248,7 +222,6 @@ public class UserSettings {
 
     /**
      * Gets the value of the maxLevel property.
-     * 
      */
     public int getMaxLevel() {
         return maxLevel;
@@ -256,7 +229,6 @@ public class UserSettings {
 
     /**
      * Sets the value of the maxLevel property.
-     * 
      */
     public void setMaxLevel(int value) {
         this.maxLevel = value;
@@ -264,7 +236,6 @@ public class UserSettings {
 
     /**
      * Gets the value of the starterPackApplied property.
-     * 
      */
     public boolean isStarterPackApplied() {
         return starterPackApplied;
@@ -272,7 +243,6 @@ public class UserSettings {
 
     /**
      * Sets the value of the starterPackApplied property.
-     * 
      */
     public void setStarterPackApplied(boolean value) {
         this.starterPackApplied = value;
@@ -280,7 +250,6 @@ public class UserSettings {
 
     /**
      * Gets the value of the userId property.
-     * 
      */
     public long getUserId() {
         return userId;
@@ -288,7 +257,6 @@ public class UserSettings {
 
     /**
      * Sets the value of the userId property.
-     * 
      */
     public void setUserId(long value) {
         this.userId = value;
