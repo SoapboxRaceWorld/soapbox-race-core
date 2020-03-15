@@ -102,6 +102,10 @@ public class Personas {
                         commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken,
                                 commerceResultTrans));
                         break;
+                    case "BUNDLE":
+                        commerceResultTrans.setStatus(basketBO.buyBundle(productId, personaEntity,
+                                commerceResultTrans));
+                        break;
                     case "AMPLIFIER":
                         commerceResultTrans.setStatus(basketBO.buyAmplifier(personaEntity, productId
                         ));
