@@ -23,7 +23,6 @@ public class BuildInfo {
     public static void load() {
         if (!loadedInfo) {
             String gitPropertiesJson = readGitProperties();
-            System.out.println(gitPropertiesJson);
             GitStateInfo gitStateInfo = new Gson().fromJson(gitPropertiesJson, GitStateInfo.class);
             branch = gitStateInfo.branch;
             commitID = gitStateInfo.commitIdAbbreviated;
@@ -38,6 +37,11 @@ public class BuildInfo {
     private static String readGitProperties() {
         ClassLoader classLoader = BuildInfo.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream("git.properties");
+
+        if (inputStream == null) {
+            throw new RuntimeException("git.properties resource was not found!");
+        }
+
         try {
             return readFromInputStream(inputStream);
         } catch (IOException e) {
