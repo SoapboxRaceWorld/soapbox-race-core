@@ -19,6 +19,7 @@ import com.soapboxrace.jaxb.http.ProductTrans;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -35,6 +36,43 @@ public class ProductBO {
 
     @EJB
     private PersonaDAO personaDao;
+
+    public List<ProductTrans> getProductTransList(List<ProductEntity> productEntities) {
+        List<ProductTrans> productTransList = new ArrayList<>();
+
+        for (ProductEntity productEntity : productEntities) {
+            productTransList.add(productEntityToProductTrans(productEntity));
+        }
+
+        return productTransList;
+    }
+
+    private ProductTrans productEntityToProductTrans(ProductEntity productEntity) {
+        ProductTrans productTrans = new ProductTrans();
+        productTrans.setBundleItems(new ArrayOfProductTrans());
+        productTrans.setCurrency(productEntity.getCurrency());
+        productTrans.setDurationMinute(productEntity.getDurationMinute());
+        productTrans.setHash(productEntity.getHash());
+        productTrans.setIcon(productEntity.getIcon());
+        productTrans.setSecondaryIcon(productEntity.getSecondaryIcon());
+        productTrans.setLevel(productEntity.getLevel());
+        productTrans.setPrice(productEntity.getPrice());
+        productTrans.setPriority(productEntity.getPriority());
+        productTrans.setProductId(productEntity.getProductId());
+        productTrans.setProductTitle(productEntity.getProductTitle());
+        productTrans.setProductType(productEntity.getProductType());
+        productTrans.setUseCount(productEntity.getUseCount());
+        productTrans.setSecondaryIcon(productEntity.getSecondaryIcon());
+        productTrans.setVisualStyle(productEntity.getVisualStyle());
+        productTrans.setWebIcon(productEntity.getWebIcon());
+        productTrans.setWebLocation(productEntity.getWebLocation());
+
+        for (ProductEntity bundledProductEntity : productEntity.getBundleItems()) {
+            productTrans.getBundleItems().getProductTrans().add(productEntityToProductTrans(bundledProductEntity));
+        }
+
+        return productTrans;
+    }
 
     public List<ProductEntity> productsInCategory(String categoryName, String productType, Long personaId) {
         boolean premium = false;

@@ -41,48 +41,8 @@ public class Catalog {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
         List<ProductEntity> productsInCategory = productBO.productsInCategory(categoryName, clientProductType,
                 activePersonaId);
-        for (ProductEntity productEntity : productsInCategory) {
-            ProductTrans productTrans = new ProductTrans();
-            productTrans.setBundleItems(new ArrayOfProductTrans());
-
-            for (ProductEntity bundleProduct : productEntity.getBundleItems()) {
-                ProductTrans bundleProductTrans = new ProductTrans();
-                bundleProductTrans.setCurrency(bundleProduct.getCurrency());
-                bundleProductTrans.setDurationMinute(bundleProduct.getDurationMinute());
-                bundleProductTrans.setHash(bundleProduct.getHash());
-                bundleProductTrans.setIcon(bundleProduct.getIcon());
-                bundleProductTrans.setSecondaryIcon(bundleProduct.getSecondaryIcon());
-                bundleProductTrans.setLevel(bundleProduct.getLevel());
-                bundleProductTrans.setPrice(bundleProduct.getPrice());
-                bundleProductTrans.setPriority(bundleProduct.getPriority());
-                bundleProductTrans.setProductId(bundleProduct.getProductId());
-                bundleProductTrans.setProductTitle(bundleProduct.getProductTitle());
-                bundleProductTrans.setProductType(bundleProduct.getProductType());
-                bundleProductTrans.setUseCount(bundleProduct.getUseCount());
-                bundleProductTrans.setSecondaryIcon(bundleProduct.getSecondaryIcon());
-                bundleProductTrans.setWebIcon(bundleProduct.getWebIcon());
-                bundleProductTrans.setWebLocation(bundleProduct.getWebLocation());
-
-                productTrans.getBundleItems().getProductTrans().add(bundleProductTrans);
-            }
-
-            productTrans.setCurrency(productEntity.getCurrency());
-            productTrans.setDurationMinute(productEntity.getDurationMinute());
-            productTrans.setHash(productEntity.getHash());
-            productTrans.setIcon(productEntity.getIcon());
-            productTrans.setSecondaryIcon(productEntity.getSecondaryIcon());
-            productTrans.setLevel(productEntity.getLevel());
-            productTrans.setPrice(productEntity.getPrice());
-            productTrans.setPriority(productEntity.getPriority());
-            productTrans.setProductId(productEntity.getProductId());
-            productTrans.setProductTitle(productEntity.getProductTitle());
-            productTrans.setProductType(productEntity.getProductType());
-            productTrans.setUseCount(productEntity.getUseCount());
-            productTrans.setSecondaryIcon(productEntity.getSecondaryIcon());
-            productTrans.setWebIcon(productEntity.getWebIcon());
-            productTrans.setWebLocation(productEntity.getWebLocation());
-            arrayOfProductTrans.getProductTrans().add(productTrans);
-        }
+        List<ProductTrans> productTransList = productBO.getProductTransList(productsInCategory);
+        arrayOfProductTrans.getProductTrans().addAll(productTransList);
         return arrayOfProductTrans;
     }
 
