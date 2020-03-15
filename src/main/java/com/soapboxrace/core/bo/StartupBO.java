@@ -17,8 +17,6 @@ import javax.ejb.Startup;
 public class StartupBO {
     @PostConstruct
     public void init() {
-        BuildInfo.load();
-
         String template = "StartupBO: Server running on code version %s (%s) - branch %s";
 
         System.out.println(String.format(template, BuildInfo.getCommitID(), BuildInfo.getLongCommitID(),
