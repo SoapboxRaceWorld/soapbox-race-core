@@ -12,10 +12,7 @@ import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
-import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
-import com.soapboxrace.jaxb.http.CommerceResultStatus;
-import com.soapboxrace.jaxb.http.CommerceResultTrans;
-import com.soapboxrace.jaxb.http.OwnedCarTrans;
+import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 import javax.ejb.EJB;
@@ -43,6 +40,9 @@ public class BasketBO {
 
     @EJB
     private OwnedCarDAO ownedCarDAO;
+
+    @EJB
+    private CardPackDAO cardPackDAO;
 
     @EJB
     private ProductDAO productDao;
@@ -76,6 +76,9 @@ public class BasketBO {
 
     @EJB
     private PerformanceBO performanceBO;
+
+    @EJB
+    private ItemRewardBO itemRewardBO;
 
     public ProductEntity findProduct(String productId) {
         return productDao.findByProductId(productId);
@@ -156,6 +159,40 @@ public class BasketBO {
             }
 
             return CommerceResultStatus.SUCCESS;
+        }
+
+        return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+    }
+
+    public CommerceResultStatus buyBundle(String productId, PersonaEntity personaEntity, CommerceResultTrans commerceResultTrans) {
+        ProductEntity bundleProduct = productDao.findByProductId(productId);
+
+        if (bundleProduct == null) {
+            return CommerceResultStatus.FAIL_INVALID_BASKET;
+        }
+
+        if (performPersonaTransaction(personaEntity, productId)) {
+            try {
+                CardPackEntity cardPackEntity = cardPackDAO.findByEntitlementTag(bundleProduct.getEntitlementTag());
+
+                if (cardPackEntity == null) {
+                    throw new EngineException("Could not find card pack with name: " + bundleProduct.getEntitlementTag() + " (product ID: " + productId + ")", EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                }
+
+                ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
+
+                for (CardPackItemEntity cardPackItemEntity : cardPackEntity.getItems()) {
+                    itemRewardBO.loadReward(personaEntity.getPersonaId(), cardPackItemEntity.getScript(), arrayOfCommerceItemTrans);
+                }
+
+                commerceResultTrans.setCommerceItems(arrayOfCommerceItemTrans);
+
+                return CommerceResultStatus.SUCCESS;
+            } catch (EngineException e) {
+                this.performPersonaTransaction(personaEntity, productId, -1, true);
+
+                throw new EngineException("Error occurred in bundle purchase (product ID: " + productId + ")", e, e.getCode());
+            }
         }
 
         return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
@@ -396,5 +433,17 @@ public class BasketBO {
         }
 
         return false;
+    }
+
+    private CommerceItemTrans productToCommerceItem(ProductEntity productEntity, Integer useCount) {
+        CommerceItemTrans commerceItemTrans = new CommerceItemTrans();
+        commerceItemTrans.setHash(productEntity.getHash());
+        commerceItemTrans.setTitle(productEntity.getProductTitle());
+
+        if (useCount != -1) {
+            commerceItemTrans.setTitle(commerceItemTrans.getTitle() + " x" + useCount);
+        }
+
+        return commerceItemTrans;
     }
 }

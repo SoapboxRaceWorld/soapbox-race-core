@@ -68,6 +68,18 @@ public class ItemRewardBO {
         }
     }
 
+    public void loadReward(Long personaId, String rewardScript, ArrayOfCommerceItemTrans arrayOfCommerceItemTrans) {
+        try {
+            PersonaEntity personaEntity = personaDAO.findById(personaId);
+
+            if (rewardScript != null) {
+                handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, personaEntity);
+            }
+        } catch (Exception e) {
+            throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+        }
+    }
+
     private ItemRewardBase scriptToItem(String rewardScript) {
         Bindings bindings = scriptEngine.get().createBindings();
         bindings.put("generator", getGenerator());
