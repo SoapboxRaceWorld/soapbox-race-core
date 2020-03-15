@@ -434,16 +434,4 @@ public class BasketBO {
 
         return false;
     }
-
-    private CommerceItemTrans productToCommerceItem(ProductEntity productEntity, Integer useCount) {
-        CommerceItemTrans commerceItemTrans = new CommerceItemTrans();
-        commerceItemTrans.setHash(productEntity.getHash());
-        commerceItemTrans.setTitle(productEntity.getProductTitle());
-
-        if (useCount != -1) {
-            commerceItemTrans.setTitle(commerceItemTrans.getTitle() + " x" + useCount);
-        }
-
-        return commerceItemTrans;
-    }
 }
