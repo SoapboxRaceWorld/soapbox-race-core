@@ -18,21 +18,18 @@ import java.nio.charset.StandardCharsets;
 
 public class UnmarshalXML {
 
-    @SuppressWarnings("unchecked")
     public static <T> T unMarshal(InputStream is, Class<T> classz) {
-        T objTmp = null;
         try {
             InputStreamReader inputStreamReader = new InputStreamReader(is);
             JAXBContext jaxbContext = JAXBContext.newInstance(classz);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             XMLStreamReader xsr = XMLInputFactory.newFactory().createXMLStreamReader(inputStreamReader);
             XMLReaderWithoutNamespace xr = new XMLReaderWithoutNamespace(xsr);
-            JAXBElement<Object> jaxbElement = jaxbUnmarshaller.unmarshal(xr, classz);
-            objTmp = (T) jaxbElement.getValue();
+            JAXBElement<T> jaxbElement = jaxbUnmarshaller.unmarshal(xr, classz);
+            return jaxbElement.getValue();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to unmarshal stream to " + classz.getCanonicalName() + " instance", e);
         }
-        return objTmp;
     }
 
     public static <T> T unMarshal(String xmlStr, Class<T> classz) {
