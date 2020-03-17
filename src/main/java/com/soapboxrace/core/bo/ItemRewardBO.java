@@ -59,7 +59,7 @@ public class ItemRewardBO {
             ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
 
             if (rewardScript != null) {
-                handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, personaEntity);
+                handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, inventoryBO.getInventory(personaId), personaEntity);
             }
 
             return arrayOfCommerceItemTrans;
@@ -73,7 +73,7 @@ public class ItemRewardBO {
             PersonaEntity personaEntity = personaDAO.findById(personaId);
 
             if (rewardScript != null) {
-                handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, personaEntity);
+                handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, inventoryBO.getInventory(personaId), personaEntity);
             }
         } catch (Exception e) {
             throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
@@ -108,6 +108,7 @@ public class ItemRewardBO {
     }
 
     private void handleReward(ItemRewardBase itemRewardBase, ArrayOfCommerceItemTrans arrayOfCommerceItemTrans,
+                              InventoryEntity inventoryEntity,
                               PersonaEntity personaEntity) {
         if (itemRewardBase instanceof ItemRewardCash) {
             ItemRewardCash achievementRewardCash = (ItemRewardCash) itemRewardBase;
@@ -121,7 +122,7 @@ public class ItemRewardBO {
         } else if (itemRewardBase instanceof ItemRewardMulti) {
             ItemRewardMulti achievementRewardMulti = (ItemRewardMulti) itemRewardBase;
             achievementRewardMulti.getAchievementRewardList().forEach(r -> handleReward(r, arrayOfCommerceItemTrans,
-                    personaEntity));
+                    inventoryEntity, personaEntity));
         } else {
             List<ProductEntity> productEntities = new ArrayList<>(itemRewardBase.getProducts());
             Integer useCount = -1;
@@ -140,11 +141,11 @@ public class ItemRewardBO {
                     case "performancepart":
                     case "skillmodpart":
                     case "visualpart":
-                        inventoryBO.addInventoryItem(inventoryBO.getInventory(personaEntity.getPersonaId()),
+                        inventoryBO.addInventoryItem(inventoryEntity,
                                 productEntity.getProductId(), useCount, true);
                         break;
                     case "powerup":
-                        inventoryBO.addStackedInventoryItem(inventoryBO.getInventory(personaEntity.getPersonaId()),
+                        inventoryBO.addStackedInventoryItem(inventoryEntity,
                                 productEntity.getProductId(), useCount, true);
                         break;
                 }
