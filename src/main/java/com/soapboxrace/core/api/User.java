@@ -9,13 +9,10 @@ package com.soapboxrace.core.api;
 import com.soapboxrace.core.api.util.LauncherChecks;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
-import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.SocialRelationshipDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.UserEntity;
-import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.http.UserInfo;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
 
@@ -55,15 +52,6 @@ public class User {
 
     @EJB
     private PresenceBO presenceBO;
-
-    @EJB
-    private SocialRelationshipDAO socialRelationshipDAO;
-
-    @EJB
-    private PersonaDAO personaDAO;
-
-    @EJB
-    private OpenFireSoapBoxCli openFireSoapBoxCli;
 
     @POST
     @Secured
