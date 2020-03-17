@@ -163,7 +163,19 @@ public class InventoryBO {
      * @return The new {@link InventoryItemEntity} instance.
      */
     public InventoryItemEntity addInventoryItem(InventoryEntity inventoryEntity, String productId) {
-        return addInventoryItem(inventoryEntity, productId, -1, null);
+        return addInventoryItem(inventoryEntity, productId, -1, null, false);
+    }
+
+    /**
+     * Adds a new item to the given {@link InventoryEntity} instance.
+     *
+     * @param inventoryEntity The {@link InventoryEntity} instance to manipulate.
+     * @param productId       The ID of the product that should be added.
+     * @param ignoreLimits    Whether inventory limits should be ignored.
+     * @return The new {@link InventoryItemEntity} instance.
+     */
+    public InventoryItemEntity addInventoryItem(InventoryEntity inventoryEntity, String productId, boolean ignoreLimits) {
+        return addInventoryItem(inventoryEntity, productId, -1, null, ignoreLimits);
     }
 
     /**
@@ -175,7 +187,20 @@ public class InventoryBO {
      * @return The new {@link InventoryItemEntity} instance.
      */
     public InventoryItemEntity addInventoryItem(InventoryEntity inventoryEntity, String productId, int quantity) {
-        return addInventoryItem(inventoryEntity, productId, quantity, null);
+        return addInventoryItem(inventoryEntity, productId, quantity, null, false);
+    }
+
+    /**
+     * Adds a new item to the given {@link InventoryEntity} instance.
+     *
+     * @param inventoryEntity The {@link InventoryEntity} instance to manipulate.
+     * @param productId       The ID of the product that should be added.
+     * @param quantity        The quantity of the product to be added.
+     * @param ignoreLimits    Whether inventory limits should be ignored.
+     * @return The new {@link InventoryItemEntity} instance.
+     */
+    public InventoryItemEntity addInventoryItem(InventoryEntity inventoryEntity, String productId, int quantity, boolean ignoreLimits) {
+        return addInventoryItem(inventoryEntity, productId, quantity, null, ignoreLimits);
     }
 
     /**
@@ -189,6 +214,21 @@ public class InventoryBO {
      */
     public InventoryItemEntity addInventoryItem(InventoryEntity inventoryEntity, String productId, int quantity,
                                                 LocalDateTime expirationDate) {
+        return addInventoryItem(inventoryEntity, productId, quantity, expirationDate, false);
+    }
+
+    /**
+     * Adds a new item to the given {@link InventoryEntity} instance.
+     *
+     * @param inventoryEntity The {@link InventoryEntity} instance to manipulate.
+     * @param productId       The ID of the product that should be added.
+     * @param quantity        The quantity of the product to be added.
+     * @param expirationDate  The expiration date of the inventory item as a {@link LocalDateTime}. Nullable.
+     * @param ignoreLimits    Whether inventory limits should be ignored.
+     * @return The new {@link InventoryItemEntity} instance.
+     */
+    public InventoryItemEntity addInventoryItem(InventoryEntity inventoryEntity, String productId, int quantity,
+                                                LocalDateTime expirationDate, boolean ignoreLimits) {
         ProductEntity productEntity = productDAO.findByProductId(productId);
 
         // Validation
@@ -198,7 +238,7 @@ public class InventoryBO {
         if (quantity < -1)
             throw new EngineException("Invalid product quantity: " + quantity,
                     EngineExceptionCode.EntitlementInvalidCount);
-        if (!this.canInventoryHold(inventoryEntity, productEntity))
+        if (!this.canInventoryHold(inventoryEntity, productEntity) && !ignoreLimits)
             throw new EngineException("Cannot add item to inventory. ID=" + productId + " IID=" + inventoryEntity.getId(), EngineExceptionCode.NotEnoughSpace);
 
         // Setup
@@ -234,6 +274,21 @@ public class InventoryBO {
      */
     public InventoryItemEntity addStackedInventoryItem(InventoryEntity inventoryEntity, String productId,
                                                        int quantity) {
+        return addStackedInventoryItem(inventoryEntity, productId, quantity, false);
+    }
+
+    /**
+     * Adds a new item to the given {@link InventoryEntity} instance, contributing to a stack if necessary.
+     * Does not persist the inventory to the database!
+     *
+     * @param inventoryEntity The {@link InventoryEntity} instance to manipulate.
+     * @param productId       The ID of the product that should be added.
+     * @param quantity        The quantity of the product to be added.
+     * @param ignoreLimits    Whether inventory limits should be ignored.
+     * @return The new {@link InventoryItemEntity} instance.
+     */
+    public InventoryItemEntity addStackedInventoryItem(InventoryEntity inventoryEntity, String productId,
+                                                       int quantity, boolean ignoreLimits) {
         ProductEntity productEntity = productDAO.findByProductId(productId);
 
         // Validation
@@ -255,7 +310,7 @@ public class InventoryBO {
             return existingItem;
         } else {
             // create a new item
-            return addInventoryItem(inventoryEntity, productId, quantity);
+            return addInventoryItem(inventoryEntity, productId, quantity, ignoreLimits);
         }
     }
 
