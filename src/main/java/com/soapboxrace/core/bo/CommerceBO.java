@@ -155,8 +155,7 @@ public class CommerceBO {
                         , e.getEntitlementId());
 
                 if (inventoryItemEntity != null) {
-                    inventoryBO.removeItem(inventoryEntity, e.getEntitlementId(), e.getQuantity());
-                    addCash.addAndGet(inventoryItemEntity.getResellPrice());
+                    inventoryBO.removeItem(personaEntity, e.getEntitlementId(), e.getQuantity());
                 }
             });
         }
