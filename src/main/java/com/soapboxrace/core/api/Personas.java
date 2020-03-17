@@ -193,7 +193,7 @@ public class Personas {
     public String sellInventoryItem(@HeaderParam("securityToken") String securityToken,
                                     @PathParam("entitlementTag") String entitlementTag) {
         long personaId = sessionBO.getActivePersonaId(securityToken);
-        inventoryBO.removeItem(inventoryBO.getInventory(personaId), entitlementTag);
+        inventoryBO.removeItem(personaId, entitlementTag);
         return "";
     }
 

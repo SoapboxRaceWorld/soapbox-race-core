@@ -49,6 +49,9 @@ public class InventoryBO {
 
     @EJB
     private ParameterBO parameterBO;
+
+    @EJB
+    private DriverPersonaBO driverPersonaBO;
     //endregion
 
     @Schedule(minute = "*", hour = "*")
@@ -312,6 +315,50 @@ public class InventoryBO {
     }
 
     /**
+     * Removes the FIRST item with the given entitlement tag from the inventory belonging to the persona with the given ID.
+     * Changes are persisted!
+     *
+     * @param personaId      The ID of the persona whose inventory should be updated
+     * @param entitlementTag The entitlement tag to search for in the inventory.
+     * @throws EngineException if no item with the given entitlement
+     */
+    public void removeItem(Long personaId, String entitlementTag) {
+        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
+
+        removeItem(personaEntity, inventoryEntity, entitlementTag, -1);
+    }
+
+    /**
+     * Removes the FIRST item with the given entitlement tag from the inventory belonging to the persona with the given ID.
+     * Changes are persisted!
+     *
+     * @param personaId      The ID of the persona whose inventory should be updated
+     * @param entitlementTag The entitlement tag to search for in the inventory.
+     * @throws EngineException if no item with the given entitlement
+     */
+    public void removeItem(Long personaId, String entitlementTag, Integer quantity) {
+        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
+
+        removeItem(personaEntity, inventoryEntity, entitlementTag, quantity);
+    }
+
+    /**
+     * Removes the FIRST item with the given entitlement tag from the inventory belonging to the persona with the given ID.
+     * Changes are persisted!
+     *
+     * @param personaEntity  The ID of the persona whose inventory should be updated
+     * @param entitlementTag The entitlement tag to search for in the inventory.
+     * @throws EngineException if no item with the given entitlement
+     */
+    public void removeItem(PersonaEntity personaEntity, String entitlementTag, Integer quantity) {
+        InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
+
+        removeItem(personaEntity, inventoryEntity, entitlementTag, quantity);
+    }
+
+    /**
      * Removes the FIRST item with the given entitlement tag from the given {@link InventoryEntity}.
      * Changes are persisted!
      *
@@ -319,8 +366,8 @@ public class InventoryBO {
      * @param entitlementTag  The entitlement tag to search for in the inventory.
      * @throws EngineException if no item with the given entitlement
      */
-    public void removeItem(InventoryEntity inventoryEntity, String entitlementTag) {
-        removeItem(inventoryEntity, entitlementTag, -1);
+    private void removeItem(PersonaEntity personaEntity, InventoryEntity inventoryEntity, String entitlementTag) {
+        removeItem(personaEntity, inventoryEntity, entitlementTag, -1);
     }
 
     /**
@@ -334,7 +381,7 @@ public class InventoryBO {
      *                        entire stack is removed.
      * @throws EngineException if no item with the given entitlement
      */
-    public void removeItem(InventoryEntity inventoryEntity, String entitlementTag, Integer quantity) {
+    private void removeItem(PersonaEntity personaEntity, InventoryEntity inventoryEntity, String entitlementTag, Integer quantity) {
         InventoryItemEntity inventoryItemEntity =
                 inventoryItemDAO.findByInventoryIdAndEntitlementTag(inventoryEntity.getId(), entitlementTag);
 
@@ -349,6 +396,7 @@ public class InventoryBO {
             inventoryEntity.getInventoryItems().remove(inventoryItemEntity);
             inventoryItemDAO.delete(inventoryItemEntity);
             inventoryDAO.update(inventoryEntity);
+            driverPersonaBO.updateCash(personaEntity, personaEntity.getCash() + inventoryItemEntity.getResellPrice());
         } else {
             if (quantity < 1)
                 throw new EngineException("An invalid removal operation was requested. Cannot remove " + quantity +
