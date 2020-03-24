@@ -27,16 +27,13 @@ public class RewardTeamEscapeBO extends RewardBO {
     private PersonaDAO personaDao;
 
     @EJB
-    private ParameterBO parameterBO;
-
-    @EJB
     private LegitRaceBO legitRaceBO;
 
     public Accolades getTeamEscapeAccolades(Long activePersonaId,
                                             TeamEscapeArbitrationPacket teamEscapeArbitrationPacket,
                                             EventSessionEntity eventSessionEntity) {
         int finishReason = teamEscapeArbitrationPacket.getFinishReason();
-        if (!legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity) && finishReason != 22) {
+        if (!legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity) || finishReason != 22) {
             return new Accolades();
         }
 
@@ -50,11 +47,11 @@ public class RewardTeamEscapeBO extends RewardBO {
         setBaseReward(personaEntity, eventEntity, teamEscapeArbitrationPacket, rewardVO);
         setRankReward(eventEntity, teamEscapeArbitrationPacket, rewardVO);
 
-        Float bustedBaseRep = rewardVO.getBaseRep() / bustedCount;
-        Float bustedBaseCash = rewardVO.getBaseCash() / bustedCount;
+        float bustedBaseRep = rewardVO.getBaseRep() / bustedCount;
+        float bustedBaseCash = rewardVO.getBaseCash() / bustedCount;
 
-        rewardVO.setBaseRep(bustedBaseRep.intValue());
-        rewardVO.setBaseCash(bustedBaseCash.intValue());
+        rewardVO.setBaseRep((int) bustedBaseRep);
+        rewardVO.setBaseCash((int) bustedBaseCash);
 
         setPerfectStartReward(eventEntity, teamEscapeArbitrationPacket.getPerfectStart(), rewardVO);
         setPursitParamReward(teamEscapeArbitrationPacket.getCopsDeployed(), EnumRewardType.COP_CARS_DEPLOYED, rewardVO);

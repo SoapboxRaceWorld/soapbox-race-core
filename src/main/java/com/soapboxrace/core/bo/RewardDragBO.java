@@ -29,7 +29,8 @@ public class RewardDragBO extends RewardBO {
 
     public Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket,
                                       EventSessionEntity eventSessionEntity) {
-        if (!legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity)) {
+        int finishReason = dragArbitrationPacket.getFinishReason();
+        if (!legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity) || finishReason != 22) {
             return new Accolades();
         }
         EventEntity eventEntity = eventSessionEntity.getEvent();
