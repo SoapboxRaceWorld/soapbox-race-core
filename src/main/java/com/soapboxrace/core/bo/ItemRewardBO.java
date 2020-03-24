@@ -16,12 +16,9 @@ import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
 import com.soapboxrace.jaxb.http.CommerceItemTrans;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.script.Bindings;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.*;
 import java.util.function.Function;
@@ -30,8 +27,10 @@ import java.util.stream.Collectors;
 
 @Stateless
 public class ItemRewardBO {
-    private final ThreadLocal<NashornScriptEngine> scriptEngine =
-            ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
+
+    @EJB
+    private ScriptingBO scriptingBO;
+
     @EJB
     private PersonaDAO personaDAO;
 
@@ -81,7 +80,7 @@ public class ItemRewardBO {
     }
 
     private ItemRewardBase scriptToItem(String rewardScript) {
-        Bindings bindings = scriptEngine.get().createBindings();
+        Map<String, Object> bindings = new HashMap<>();
         bindings.put("generator", getGenerator());
 
         try {
@@ -95,8 +94,8 @@ public class ItemRewardBO {
         return new RewardGenerator();
     }
 
-    private ItemRewardBase scriptToItem(String rewardScript, Bindings bindings) throws ScriptException {
-        Object obj = scriptEngine.get().eval(rewardScript, bindings);
+    private ItemRewardBase scriptToItem(String rewardScript, Map<String, Object> bindings) throws ScriptException {
+        Object obj = scriptingBO.eval(rewardScript, bindings);
 
         if (obj instanceof ItemRewardBase) {
             return (ItemRewardBase) obj;

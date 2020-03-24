@@ -16,13 +16,10 @@ import com.soapboxrace.jaxb.xmpp.AchievementAwarded;
 import com.soapboxrace.jaxb.xmpp.AchievementProgress;
 import com.soapboxrace.jaxb.xmpp.AchievementsAwarded;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeAchievementsAwarded;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
 
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
-import javax.script.Bindings;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,10 +29,10 @@ import java.util.OptionalInt;
 
 @Stateless
 public class AchievementBO {
-    private final ThreadLocal<NashornScriptEngine> scriptEngine =
-            ThreadLocal.withInitial(() -> (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn"));
     @EJB
     private ItemRewardBO itemRewardBO;
+    @EJB
+    private ScriptingBO scriptingBO;
     @EJB
     private PersonaAchievementDAO personaAchievementDAO;
     @EJB
@@ -188,9 +185,6 @@ public class AchievementBO {
      */
     public void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
                                    Map<String, Object> properties) {
-        final Bindings bindings = scriptEngine.get().createBindings();
-        bindings.putAll(properties);
-
         AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
         achievementsAwarded.setAchievements(new ArrayList<>());
         achievementsAwarded.setBadges(new ArrayList<>());
@@ -217,15 +211,15 @@ public class AchievementBO {
                 insert = true;
             }
 
-            bindings.put("personaAchievement", personaAchievementEntity);
+            properties.put("personaAchievement", personaAchievementEntity);
 
             try {
-                Boolean shouldUpdate = (Boolean) scriptEngine.get().eval(achievementEntity.getUpdateTrigger(),
-                        bindings);
+                Boolean shouldUpdate = (Boolean) scriptingBO.eval(achievementEntity.getUpdateTrigger(),
+                        properties);
                 if (shouldUpdate) {
                     if (insert)
                         personaAchievementDAO.insert(personaAchievementEntity);
-                    updateAchievement(personaEntity, achievementEntity, bindings, achievementsAwarded,
+                    updateAchievement(personaEntity, achievementEntity, properties, achievementsAwarded,
                             personaAchievementEntity);
                 }
             } catch (ScriptException ex) {
@@ -243,7 +237,7 @@ public class AchievementBO {
         openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
     }
 
-    private void updateAchievement(PersonaEntity personaEntity, AchievementEntity achievementEntity, Bindings bindings,
+    private void updateAchievement(PersonaEntity personaEntity, AchievementEntity achievementEntity, Map<String, Object> bindings,
                                    AchievementsAwarded achievementsAwarded,
                                    PersonaAchievementEntity personaAchievementEntity) {
         // If no progression can be made, there's nothing to do.
@@ -263,7 +257,7 @@ public class AchievementBO {
                 return;
             }
 
-            Object rawVal = scriptEngine.get().eval(achievementEntity.getUpdateValue(), bindings);
+            Object rawVal = scriptingBO.eval(achievementEntity.getUpdateValue(), bindings);
 
             if (rawVal instanceof Integer) {
                 cleanVal = ((Integer) rawVal).longValue();
