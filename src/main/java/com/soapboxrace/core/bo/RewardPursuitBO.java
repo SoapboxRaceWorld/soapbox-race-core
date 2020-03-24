@@ -33,7 +33,7 @@ public class RewardPursuitBO extends RewardBO {
                                          EventSessionEntity eventSessionEntity,
                                          Boolean isBusted) {
         int finishReason = pursuitArbitrationPacket.getFinishReason();
-        if (!legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity) || isBusted || finishReason != 22) {
+        if (!legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity) || isBusted || finishReason != 518) {
             return new Accolades();
         }
         EventEntity eventEntity = eventSessionEntity.getEvent();
