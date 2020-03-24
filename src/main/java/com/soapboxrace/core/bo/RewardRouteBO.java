@@ -29,7 +29,8 @@ public class RewardRouteBO extends RewardBO {
 
     public Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket,
                                        EventSessionEntity eventSessionEntity) {
-        if (!legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity)) {
+        int finishReason = routeArbitrationPacket.getFinishReason();
+        if (!legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity) || finishReason != 22) {
             return new Accolades();
         }
         EventEntity eventEntity = eventSessionEntity.getEvent();
