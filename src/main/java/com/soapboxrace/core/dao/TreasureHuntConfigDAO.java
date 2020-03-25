@@ -7,12 +7,15 @@
 package com.soapboxrace.core.dao;
 
 import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.engine.EngineException;
+import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.TreasureHuntConfigEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Stateless
 public class TreasureHuntConfigDAO extends BaseDAO<TreasureHuntConfigEntity> {
@@ -26,6 +29,12 @@ public class TreasureHuntConfigDAO extends BaseDAO<TreasureHuntConfigEntity> {
         TypedQuery<TreasureHuntConfigEntity> query = this.entityManager.createNamedQuery(
                 "TreasureHuntConfigEntity.findConfigForStreak", TreasureHuntConfigEntity.class);
         query.setParameter("streak", streak);
-        return query.getSingleResult();
+        List<TreasureHuntConfigEntity> resultList = query.getResultList();
+
+        if (!resultList.isEmpty()) {
+            return resultList.get(0);
+        }
+
+        throw new EngineException("No treasure hunt configuration was found in the database", EngineExceptionCode.UnspecifiedError);
     }
 }
