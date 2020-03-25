@@ -118,7 +118,7 @@ public class Events {
     @Produces(MediaType.APPLICATION_XML)
     public String accolades(@HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-        return MarshalXML.marshal(eventsBO.accolades(activePersonaId, true));
+        return MarshalXML.marshal(eventsBO.accolades(activePersonaId, false));
     }
 
     @GET

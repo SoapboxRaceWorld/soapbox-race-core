@@ -202,8 +202,6 @@ public class BasketBO {
         if (performPersonaTransaction(personaEntity, productId)) {
             TreasureHuntEntity treasureHuntEntity = treasureHuntDAO.findById(personaEntity.getPersonaId());
             treasureHuntEntity.setIsStreakBroken(false);
-            treasureHuntEntity.setStreak(treasureHuntEntity.getStreak() + 1);
-            treasureHuntEntity.setThDate(LocalDate.now());
 
             treasureHuntDAO.update(treasureHuntEntity);
 
@@ -426,6 +424,7 @@ public class BasketBO {
         return getPersonasCar(personaId).size();
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean canPurchaseProduct(PersonaEntity personaEntity, ProductEntity productEntity) {
         if (productEntity.isEnabled()) {
             // non-premium products are available to all; user must be premium to purchase a premium product

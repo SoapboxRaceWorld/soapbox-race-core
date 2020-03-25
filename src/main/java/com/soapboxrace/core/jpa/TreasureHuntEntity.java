@@ -21,6 +21,8 @@ public class TreasureHuntEntity {
     private Long personaId;
     private Integer coinsCollected;
     private Boolean isStreakBroken;
+    @Column(nullable = false)
+    private Boolean isCompleted = false;
     private Integer numCoins;
     private Integer seed;
     private Integer streak;
@@ -48,6 +50,14 @@ public class TreasureHuntEntity {
 
     public void setIsStreakBroken(Boolean isStreakBroken) {
         this.isStreakBroken = isStreakBroken;
+    }
+
+    public Boolean getCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(Boolean completed) {
+        isCompleted = completed;
     }
 
     public Integer getNumCoins() {
