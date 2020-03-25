@@ -16,7 +16,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
 @Secured
 @Provider
@@ -27,7 +26,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private TokenSessionBO tokenSessionBO;
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
         String userIdStr = requestContext.getHeaderString("userId");
         String securityToken = requestContext.getHeaderString("securityToken");
         if (userIdStr == null || securityToken == null || userIdStr.isEmpty() || securityToken.isEmpty()) {
@@ -41,9 +40,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
     }
 
-    private void validateToken(Long userId, String securityToken) throws Exception {
+    private void validateToken(Long userId, String securityToken) {
         if (!tokenSessionBO.verifyToken(userId, securityToken)) {
-            throw new Exception("Invalid Token");
+            throw new NotAuthorizedException("Invalid Token");
         }
     }
 }
