@@ -56,15 +56,23 @@ public class EventsBO {
         LocalDate nowDate = LocalDate.now();
 
         if (!thDate.equals(nowDate)) {
-            int days = (int) ChronoUnit.DAYS.between(thDate, nowDate);
-            if (days >= 2 || treasureHuntEntity.getCoinsCollected() != 32767) {
-                return createNewTreasureHunt(treasureHuntEntity, true);
-            } else {
-                return createNewTreasureHunt(treasureHuntEntity, false);
-            }
+            return createNewTreasureHunt(treasureHuntEntity, isStreakBroken(treasureHuntEntity));
         }
 
         return getTreasureHuntEventSession(treasureHuntEntity);
+    }
+
+    private boolean isStreakBroken(TreasureHuntEntity treasureHuntEntity) {
+        LocalDate thDate = treasureHuntEntity.getThDate();
+        LocalDate nowDate = LocalDate.now();
+
+        if (!thDate.equals(nowDate)) {
+            int days = (int) ChronoUnit.DAYS.between(thDate, nowDate);
+
+            return days >= 2 || treasureHuntEntity.getCoinsCollected() != 32767;
+        }
+
+        return false;
     }
 
     private TreasureHuntEventSession getTreasureHuntEventSession(TreasureHuntEntity treasureHuntEntity) {
@@ -94,26 +102,57 @@ public class EventsBO {
             treasureHuntEntity.setCoinsCollected(coins);
             treasureHuntDao.update(treasureHuntEntity);
 
-            return coins == 32767 ? accolades(activePersonaId, false) : null;
+            return coins == 32767 ? accolades(activePersonaId, true) : null;
         }
 
         return null;
     }
 
-    public Accolades accolades(Long activePersonaId, Boolean isBroken) {
+    public Accolades accolades(Long activePersonaId, boolean isCoinCollected) {
+        /*
+            active streak -> you get rewards for your streak, no need to revive
+            broken streak ->
+                choose to revive -> you get rewards for your streak, back to green
+                don't revive -> reset to day 1 + get day 1 rewards, back to green
+         */
+
         TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
 
-        if (isBroken) {
-            treasureHuntEntity.setStreak(1);
-            treasureHuntEntity.setIsStreakBroken(false);
-        } else {
-            treasureHuntEntity.setStreak(treasureHuntEntity.getStreak() + 1);
+        if (treasureHuntEntity == null) {
+            throw new EngineException("TreasureHunt does not exist for driver: " + activePersonaId, EngineExceptionCode.InvalidOperation);
         }
 
-        treasureHuntEntity.setThDate(LocalDate.now());
-        treasureHuntDao.update(treasureHuntEntity);
+        if (treasureHuntEntity.getCoinsCollected() != 32767 || treasureHuntEntity.getCompleted()) {
+            throw new EngineException("TH is not ready", EngineExceptionCode.SecurityKickedArbitration);
+        }
 
-        return getTreasureHuntAccolades(activePersonaId, treasureHuntEntity);
+        if (!treasureHuntEntity.getIsStreakBroken()) {
+            // active streak -> you get rewards for your streak, no need to revive
+            Accolades accolades = getTreasureHuntAccolades(activePersonaId, treasureHuntEntity, true);
+            treasureHuntEntity.setSeed(new Random().nextInt());
+            treasureHuntEntity.setIsStreakBroken(false);
+            treasureHuntEntity.setStreak(treasureHuntEntity.getStreak() + 1);
+            treasureHuntEntity.setThDate(LocalDate.now());
+            treasureHuntEntity.setCompleted(true);
+            treasureHuntDao.update(treasureHuntEntity);
+
+            return accolades;
+        }
+
+        // don't revive -> reset to day 1 + get day 1 rewards, back to green
+
+        if (isCoinCollected) {
+            // we don't want to give the driver a reward just yet
+            return getTreasureHuntAccolades(activePersonaId, treasureHuntEntity, false);
+        }
+
+        // if we get here, the driver hasn't revived their streak
+        treasureHuntEntity.setIsStreakBroken(false);
+        treasureHuntEntity.setStreak(1);
+        treasureHuntEntity.setThDate(LocalDate.now());
+        treasureHuntEntity.setCompleted(true);
+        treasureHuntDao.update(treasureHuntEntity);
+        return getTreasureHuntAccolades(activePersonaId, treasureHuntEntity, true);
     }
 
     private TreasureHuntEventSession createNewTreasureHunt(TreasureHuntEntity treasureHuntEntity, Boolean isBroken) {
@@ -121,12 +160,13 @@ public class EventsBO {
         treasureHuntEntity.setIsStreakBroken(isBroken);
         treasureHuntEntity.setSeed(new Random().nextInt());
         treasureHuntEntity.setThDate(LocalDate.now());
+        treasureHuntEntity.setCompleted(false);
         treasureHuntDao.update(treasureHuntEntity);
 
         return getTreasureHuntEventSession(treasureHuntEntity);
     }
 
-    private Accolades getTreasureHuntAccolades(Long activePersonaId, TreasureHuntEntity treasureHuntEntity) {
+    private Accolades getTreasureHuntAccolades(Long activePersonaId, TreasureHuntEntity treasureHuntEntity, boolean giveReward) {
         PersonaEntity personaEntity = personaDao.findById(activePersonaId);
         TreasureHuntConfigEntity treasureHuntConfigEntity =
                 treasureHuntConfigDAO.findForStreak(treasureHuntEntity.getStreak());
@@ -144,26 +184,25 @@ public class EventsBO {
         float baseRep = playerLevelRepConst * repThMultiplier;
         float baseCash = playerLevelCashConst * cashThMultiplier;
 
-        rewardVO.setBaseRep((int) baseRep);
-        rewardVO.setBaseCash((int) baseCash);
-
         float repDayMultiplier = treasureHuntConfigEntity.getRepMultiplier();
         float cashDayMultiplier = treasureHuntConfigEntity.getCashMultiplier();
 
         float dayRep = baseRep + (repDayMultiplier * treasureHuntEntity.getStreak());
         float dayCash = baseCash + (cashDayMultiplier * treasureHuntEntity.getStreak());
 
-        rewardVO.add((int) dayRep, (int) dayCash, EnumRewardCategory.BASE, EnumRewardType.NONE);
-        rewardBO.setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.EXPLORER);
-        rewardBO.setAmplifierReward(personaEntity, rewardVO);
-
         ArbitrationPacket arbitrationPacket = new ArbitrationPacket();
         arbitrationPacket.setRank(1);
-        if (!treasureHuntEntity.getIsStreakBroken()) {
+        if (!treasureHuntEntity.getIsStreakBroken() && giveReward) {
+            rewardVO.setBaseRep((int) baseRep);
+            rewardVO.setBaseCash((int) baseCash);
+            rewardVO.add((int) dayRep, (int) dayCash, EnumRewardCategory.BASE, EnumRewardType.NONE);
+            rewardBO.setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.EXPLORER);
+            rewardBO.setAmplifierReward(personaEntity, rewardVO);
+
             rewardBO.applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, false);
         }
 
         return rewardBO.getAccolades(personaEntity, treasureHuntEntity, treasureHuntConfigEntity,
-                rewardVO);
+                rewardVO, giveReward);
     }
 }

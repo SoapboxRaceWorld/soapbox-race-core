@@ -105,7 +105,7 @@ public class RewardBO {
 
         if (parameterBO.getBoolParam("ENABLE_REPUTATION") && personaEntity.getLevel() < maxLevel) {
             Long expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
-            Long expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
+            long expMax = personaEntity.getRepAtCurrentLevel() + exp;
             if (expMax >= expToNextLevel) {
                 boolean isLeveledUp = true;
                 hasLevelChanged = true;
@@ -114,7 +114,7 @@ public class RewardBO {
                     personaEntity.setRepAtCurrentLevel((int) (expMax - expToNextLevel));
 
                     expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
-                    expMax = (long) (personaEntity.getRepAtCurrentLevel() + exp);
+                    expMax = personaEntity.getRepAtCurrentLevel() + exp;
 
                     isLeveledUp = (expMax >= expToNextLevel);
                     if (personaEntity.getLevel() >= maxLevel) {
@@ -122,7 +122,7 @@ public class RewardBO {
                     }
                 }
             } else {
-                personaEntity.setRepAtCurrentLevel(expMax.intValue());
+                personaEntity.setRepAtCurrentLevel((int) expMax);
             }
             personaEntity.setRep(personaEntity.getRep() + exp);
         }
@@ -186,12 +186,12 @@ public class RewardBO {
 
     public Accolades getAccolades(PersonaEntity personaEntity, TreasureHuntEntity treasureHuntEntity,
                                   TreasureHuntConfigEntity treasureHuntConfigEntity,
-                                  RewardVO rewardVO) {
+                                  RewardVO rewardVO, boolean giveReward) {
         Accolades accolades = new Accolades();
         accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
         accolades.setLuckyDrawInfo(getTreasureHuntLuckyDraw(
-                personaEntity, treasureHuntEntity, treasureHuntConfigEntity));
+                personaEntity, treasureHuntEntity, treasureHuntConfigEntity, giveReward));
         accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
         return accolades;
@@ -307,10 +307,11 @@ public class RewardBO {
     }
 
     private LuckyDrawInfo getTreasureHuntLuckyDraw(PersonaEntity personaEntity,
-                                                   TreasureHuntEntity treasureHuntEntity, TreasureHuntConfigEntity treasureHuntConfigEntity) {
+                                                   TreasureHuntEntity treasureHuntEntity, TreasureHuntConfigEntity treasureHuntConfigEntity,
+                                                   boolean giveReward) {
         ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-        arrayOfLuckyDrawItem.getLuckyDrawItem().add(getTreasureHuntRewardItem(personaEntity, treasureHuntConfigEntity));
-
+        if (giveReward)
+            arrayOfLuckyDrawItem.getLuckyDrawItem().add(getTreasureHuntRewardItem(personaEntity, treasureHuntConfigEntity));
         ArrayOfLuckyDrawBox arrayOfLuckyDrawBox = new ArrayOfLuckyDrawBox();
         LuckyDrawBox luckyDrawBox = new LuckyDrawBox();
         luckyDrawBox.setIsValid(true);
