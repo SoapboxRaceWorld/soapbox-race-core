@@ -39,8 +39,6 @@ public class ScriptingBO {
      */
     @Lock(LockType.READ)
     public Object eval(String script, Map<String, Object> bindings) throws ScriptException {
-        SimpleBindings simpleBindings = new SimpleBindings(bindings);
-
-        return scriptEngine.eval(script, simpleBindings);
+        return scriptEngine.eval(script, new SimpleBindings(bindings));
     }
 }

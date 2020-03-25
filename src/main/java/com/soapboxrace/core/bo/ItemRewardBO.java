@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 @Stateless
 public class ItemRewardBO {
 
+    private final Random random = new Random();
+
     @EJB
     private ScriptingBO scriptingBO;
 
@@ -274,7 +276,7 @@ public class ItemRewardBO {
                 throw new IllegalArgumentException("No rewards to choose from!");
             }
 
-            return rewards.get(new Random().nextInt(rewards.size()));
+            return rewards.get(random.nextInt(rewards.size()));
         }
 
         public ItemRewardBase randomTableItem(String tableId) {
@@ -336,7 +338,7 @@ public class ItemRewardBO {
         @Override
         public ItemRewardBase build() {
             Objects.requireNonNull(this.choices);
-            return this.choices.get(new Random().nextInt(this.choices.size()));
+            return this.choices.get(random.nextInt(this.choices.size()));
         }
     }
 
@@ -421,14 +423,20 @@ public class ItemRewardBO {
             int numProducts = productEntities.size();
 
             if (this.isWeighted) {
-                double weightSum =
-                        productEntities.stream().mapToDouble(getDropWeight(numProducts)).sum();
+                Map<Long, Double> weights = new HashMap<>();
+                double defaultWeight = 1.0d / numProducts;
+
+                for (ProductEntity productEntity : productEntities) {
+                    Double dropWeight = productEntity.getDropWeight();
+                    weights.put(productEntity.getId(), dropWeight == null ? defaultWeight : dropWeight);
+                }
+                double weightSum = weights.values().stream().mapToDouble(d -> d).sum();
 
                 int randomIndex = -1;
                 double random = Math.random() * weightSum;
 
                 for (int i = 0; i < productEntities.size(); i++) {
-                    random -= getDropWeight(numProducts).applyAsDouble(productEntities.get(i));
+                    random -= weights.get(productEntities.get(i).getId());
 
                     if (random <= 0.0d) {
                         randomIndex = i;
@@ -444,17 +452,8 @@ public class ItemRewardBO {
             }
 
             return new ItemRewardQuantityProduct(
-                    productEntities.get(new Random().nextInt(productEntities.size())),
+                    productEntities.get(random.nextInt(numProducts)),
                     quantity);
-        }
-
-        private ToDoubleFunction<ProductEntity> getDropWeight(int numProducts) {
-            return p -> {
-                Double dropWeight = p.getDropWeight();
-                if (dropWeight == null)
-                    return 1.0d / numProducts;
-                return dropWeight;
-            };
         }
     }
 
@@ -482,9 +481,7 @@ public class ItemRewardBO {
             Objects.requireNonNull(this.tableName);
 
             RewardTableEntity rewardTableEntity = rewardTableDAO.findByName(this.tableName);
-
             Objects.requireNonNull(rewardTableEntity, this.tableName + " not found!");
-
             List<RewardTableItemEntity> items = rewardTableEntity.getItems();
 
             if (items.isEmpty()) {
@@ -495,14 +492,20 @@ public class ItemRewardBO {
             int numItems = items.size();
 
             if (this.weighted) {
-                double weightSum =
-                        items.stream().mapToDouble(getDropWeight(numItems)).sum();
+                Map<Long, Double> weights = new HashMap<>();
+                double defaultWeight = 1.0d / numItems;
+
+                for (RewardTableItemEntity rewardTableItemEntity : items) {
+                    Double dropWeight = rewardTableItemEntity.getDropWeight();
+                    weights.put(rewardTableItemEntity.getId(), dropWeight == null ? defaultWeight : dropWeight);
+                }
+                double weightSum = weights.values().stream().mapToDouble(d -> d).sum();
 
                 int randomIndex = -1;
                 double random = Math.random() * weightSum;
 
                 for (int i = 0; i < items.size(); i++) {
-                    random -= getDropWeight(numItems).applyAsDouble(items.get(i));
+                    random -= weights.get(items.get(i).getId());
 
                     if (random <= 0.0d) {
                         randomIndex = i;
@@ -523,22 +526,13 @@ public class ItemRewardBO {
                 }
             }
 
-            RewardTableItemEntity rewardTableItemEntity = items.get(new Random().nextInt(items.size()));
+            RewardTableItemEntity rewardTableItemEntity = items.get(random.nextInt(numItems));
 
             try {
                 return scriptToItem(rewardTableItemEntity.getScript());
             } catch (Exception e) {
                 throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
             }
-        }
-
-        private ToDoubleFunction<RewardTableItemEntity> getDropWeight(int numItems) {
-            return item -> {
-                Double dropWeight = item.getDropWeight();
-                if (dropWeight == null)
-                    return 1.0d / numItems;
-                return dropWeight;
-            };
         }
     }
 
