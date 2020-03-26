@@ -135,7 +135,6 @@ public class EventsBO {
             treasureHuntEntity.setThDate(LocalDate.now());
             treasureHuntEntity.setCompleted(true);
             treasureHuntDao.update(treasureHuntEntity);
-
             return accolades;
         }
 
