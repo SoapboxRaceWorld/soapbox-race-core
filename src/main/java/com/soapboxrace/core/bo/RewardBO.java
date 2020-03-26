@@ -325,7 +325,7 @@ public class RewardBO {
 
         LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
         luckyDrawInfo.setBoxes(arrayOfLuckyDrawBox);
-        luckyDrawInfo.setCurrentStreak(treasureHuntEntity.getStreak() > 1 ? (treasureHuntEntity.getStreak() - 1) : 1);
+        luckyDrawInfo.setCurrentStreak(treasureHuntEntity.getStreak());
         luckyDrawInfo.setIsStreakBroken(treasureHuntEntity.getIsStreakBroken());
         luckyDrawInfo.setItems(arrayOfLuckyDrawItem);
         luckyDrawInfo.setNumBoxAnimations(180);
