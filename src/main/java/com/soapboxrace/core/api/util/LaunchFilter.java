@@ -6,7 +6,6 @@
 
 package com.soapboxrace.core.api.util;
 
-import com.soapboxrace.core.bo.AuthenticationBO;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.UserEntity;
@@ -22,15 +21,11 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
 @LauncherChecks
 @Provider
 @Priority(Priorities.AUTHORIZATION)
 public class LaunchFilter implements ContainerRequestFilter {
-
-    @EJB
-    private AuthenticationBO authenticationBO;
 
     @EJB
     private ParameterBO parameterBO;
@@ -46,7 +41,7 @@ public class LaunchFilter implements ContainerRequestFilter {
         String[] components2 = v2.split("\\.");
         int length = Math.min(components1.length, components2.length);
         for (int i = 0; i < length; i++) {
-            int result = new Integer(components1[i]).compareTo(Integer.parseInt(components2[i]));
+            int result = Integer.valueOf(components1[i]).compareTo(Integer.valueOf(components2[i]));
             if (result != 0) {
                 return result;
             }
@@ -55,7 +50,7 @@ public class LaunchFilter implements ContainerRequestFilter {
     }
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
         String hwid = requestContext.getHeaderString("X-HWID");
         String email = sr.getParameter("email");
 
@@ -65,14 +60,12 @@ public class LaunchFilter implements ContainerRequestFilter {
             userDao.update(userEntity);
         }
 
-
         if (parameterBO.getBoolParam("ENABLE_WHITELISTED_LAUNCHERS_ONLY")) {
             String json_whitelisted_launchers = parameterBO.getStrParam("WHITELISTED_LAUNCHERS_ONLY", null);
             String get_useragent = "";
-            String get_launcher = "";
-            String get_version = "";
+            String get_launcher;
             String[] ua_split;
-            Boolean lock_access = false;
+            boolean lock_access = false;
 
             if (json_whitelisted_launchers != null) {
                 JSONObject obj_json_whitelisted_launchers = new JSONObject(json_whitelisted_launchers);
@@ -94,7 +87,7 @@ public class LaunchFilter implements ContainerRequestFilter {
                         lock_access = true;
                     }
                 } else if (get_launcher.equals("ELECTRON")) {
-                    ua_split = get_useragent.split("\\/");
+                    ua_split = get_useragent.split("/");
 
                     if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("electron")) == -1) {
                         lock_access = true;
@@ -130,19 +123,13 @@ public class LaunchFilter implements ContainerRequestFilter {
             }
 
             //disable electron aswell
-            try {
-                String userAgent2 = requestContext.getHeaderString("X-User-Agent");
-                if ((userAgent2 != null || userAgent2.startsWith("electron"))) {
-                    LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-                    loginStatusVO.setDescription("Please use MeTonaTOR's launcher. Or, are you tampering?");
+            String userAgent2 = requestContext.getHeaderString("X-User-Agent");
+            if ((userAgent2 != null && userAgent2.startsWith("electron"))) {
+                LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
+                loginStatusVO.setDescription("Please use MeTonaTOR's launcher. Or, are you tampering?");
 
-                    requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
-
-                    return;
-                }
-            } catch (Exception x) {
+                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
             }
         }
     }
-
 }
