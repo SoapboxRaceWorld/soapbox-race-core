@@ -45,14 +45,14 @@ public class CarDamageBO {
         }
 
         Long carId = arbitrationPacket.getCarId();
-        Long eventDuration = arbitrationPacket.getEventDurationInMilliseconds();
+        long eventDuration = arbitrationPacket.getEventDurationInMilliseconds();
         OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(carId);
         CarSlotEntity carSlotEntity = ownedCarEntity.getCarSlot();
         int durability = ownedCarEntity.getDurability();
-        if (durability > 10) {
-            Integer calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
-            Integer newCarDamage = durability - calcDamage;
-            ownedCarEntity.setDurability(newCarDamage < 10 ? 10 : newCarDamage);
+        if (durability > 0) {
+            int calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
+            int newCarDamage = durability - calcDamage;
+            ownedCarEntity.setDurability(Math.max(newCarDamage, 0));
             if (carSlotEntity != null) {
                 carSlotDao.update(carSlotEntity);
             }
