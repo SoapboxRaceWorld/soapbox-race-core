@@ -7,12 +7,10 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.jaxb.http.FraudConfig;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("/security")
@@ -30,5 +28,13 @@ public class Security {
         fraudConfig.setStartUpFreq(1000000);
         fraudConfig.setUserID(userId);
         return fraudConfig;
+    }
+
+    @POST
+    @Secured
+    @Path("/generateWebToken")
+    @Produces(MediaType.APPLICATION_XML)
+    public String generateWebToken() {
+        return "<string>" + UUIDGen.getRandomUUID() + "</string>";
     }
 }
