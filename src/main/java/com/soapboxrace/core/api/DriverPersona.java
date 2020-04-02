@@ -131,10 +131,10 @@ public class DriverPersona {
     @Path("/UpdatePersonaPresence")
     @Produces(MediaType.APPLICATION_XML)
     public String updatePersonaPresence(@HeaderParam("securityToken") String securityToken,
+                                        @QueryParam("personaId") Long personaId,
                                         @QueryParam("presence") Long presence) {
-        if (tokenSessionBo.getActivePersonaId(securityToken) == 0L)
-            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
-        presenceBO.updatePresence(tokenSessionBo.getActivePersonaId(securityToken), presence);
+        tokenSessionBo.verifyPersonaOwnership(securityToken, personaId);
+        presenceBO.updatePresence(personaId, presence);
 
         return "";
     }
