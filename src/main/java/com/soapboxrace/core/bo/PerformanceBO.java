@@ -90,5 +90,6 @@ public class PerformanceBO {
         }
 
         customCarEntity.setCarClassHash(carclassHash);
+        customCarEntity.setRating(finalClassInt);
     }
 }
