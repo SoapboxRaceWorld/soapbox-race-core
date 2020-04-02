@@ -133,7 +133,7 @@ public class AchievementBO {
             for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
                 AchievementRankPacket rankPacket = new AchievementRankPacket();
                 rankPacket.setAchievedOn("0001-01-01T00:00:00");
-                rankPacket.setIsRare(false);
+                rankPacket.setIsRare(achievementRankEntity.getRarity() <= 0.05); // <= threshold for "rare" is <= 5%
                 rankPacket.setRarity(achievementRankEntity.getRarity());
                 rankPacket.setRank(achievementRankEntity.getRank().shortValue());
                 rankPacket.setRewardDescription(achievementRankEntity.getRewardDescription());
