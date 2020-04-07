@@ -112,8 +112,9 @@ public class PersonaBO {
         List<CarSlotEntity> carSlotEntities = getPersonasCar(personaId);
 
         for (CarSlotEntity carSlotEntity : carSlotEntities) {
-            carSlotEntity.getOwnedCar().setDurability(100);
-            carSlotDAO.update(carSlotEntity);
+            OwnedCarEntity ownedCarEntity = carSlotEntity.getOwnedCar();
+            ownedCarEntity.setDurability(100);
+            ownedCarDAO.update(ownedCarEntity);
         }
     }
 

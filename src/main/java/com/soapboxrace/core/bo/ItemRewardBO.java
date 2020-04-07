@@ -137,7 +137,7 @@ public class ItemRewardBO {
 
                 switch (productEntity.getProductType().toLowerCase()) {
                     case "presetcar":
-                        basketBO.addCar(productEntity.getProductId(), personaEntity);
+                        basketBO.addCar(productEntity, personaEntity);
                         break;
                     case "performancepart":
                     case "skillmodpart":

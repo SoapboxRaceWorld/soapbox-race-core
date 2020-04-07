@@ -99,7 +99,7 @@ public class Personas {
             if (productEntity != null) {
                 switch (productEntity.getProductType()) {
                     case "PRESETCAR":
-                        commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken,
+                        commerceResultTrans.setStatus(basketBO.buyCar(productEntity, personaEntity, securityToken,
                                 commerceResultTrans));
                         break;
                     case "BUNDLE":
