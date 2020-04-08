@@ -55,8 +55,6 @@ public class CarDamageBO {
             int calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
             int newCarDamage = Math.max(durability - calcDamage, 0);
 
-            System.out.println("OLD DURABILITY: " + durability + " | NEW DURABILITY: " + newCarDamage);
-
             updateDurability(ownedCarEntity, newCarDamage);
         }
         return ownedCarEntity.getDurability();
