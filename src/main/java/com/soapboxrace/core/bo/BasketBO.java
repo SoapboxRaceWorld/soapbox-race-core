@@ -80,6 +80,9 @@ public class BasketBO {
     private ItemRewardBO itemRewardBO;
 
     @EJB
+    private CarDamageBO carDamageBO;
+
+    @EJB
     private AmplifierDAO amplifierDAO;
 
     public ProductEntity findProduct(String productId) {
@@ -97,7 +100,8 @@ public class BasketBO {
         }
         if (this.performPersonaTransaction(personaEntity, repairProduct, price)) {
             personaDao.update(personaEntity);
-            defaultCarEntity.getOwnedCar().setDurability(100);
+            OwnedCarEntity ownedCarEntity = defaultCarEntity.getOwnedCar();
+            carDamageBO.updateDurability(ownedCarEntity, 100);
             carSlotDAO.update(defaultCarEntity);
             return CommerceResultStatus.SUCCESS;
         }

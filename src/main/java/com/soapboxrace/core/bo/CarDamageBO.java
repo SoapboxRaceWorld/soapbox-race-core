@@ -6,10 +6,9 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.InventoryItemDAO;
 import com.soapboxrace.core.dao.OwnedCarDAO;
-import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
@@ -21,18 +20,18 @@ import javax.ejb.Stateless;
 public class CarDamageBO {
 
     @EJB
-    private CarSlotDAO carSlotDao;
-
-    @EJB
     private OwnedCarDAO ownedCarDAO;
 
     @EJB
     private ParameterBO parameterBO;
 
     @EJB
+    private PerformanceBO performanceBO;
+
+    @EJB
     private InventoryItemDAO inventoryItemDAO;
 
-    public Integer updateDamageCar(Long personaId, ArbitrationPacket arbitrationPacket, Integer numberOfCollision) {
+    public Integer induceCarDamage(Long personaId, ArbitrationPacket arbitrationPacket, Integer numberOfCollision) {
         if (!parameterBO.getBoolParam("ENABLE_CAR_DAMAGE")) {
             return 100;
         }
@@ -47,16 +46,20 @@ public class CarDamageBO {
         Long carId = arbitrationPacket.getCarId();
         long eventDuration = arbitrationPacket.getEventDurationInMilliseconds();
         OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(carId);
-        CarSlotEntity carSlotEntity = ownedCarEntity.getCarSlot();
         int durability = ownedCarEntity.getDurability();
         if (durability > 0) {
             int calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
-            int newCarDamage = durability - calcDamage;
-            ownedCarEntity.setDurability(Math.max(newCarDamage, 0));
-            if (carSlotEntity != null) {
-                carSlotDao.update(carSlotEntity);
-            }
+            int newCarDamage = Math.max(durability - calcDamage, 0);
+
+            updateDurability(ownedCarEntity, newCarDamage);
         }
         return ownedCarEntity.getDurability();
+    }
+
+    public void updateDurability(OwnedCarEntity ownedCarEntity, int newDurability) {
+        CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
+        ownedCarEntity.setDurability(newDurability);
+        performanceBO.calcNewCarClass(customCarEntity);
+        ownedCarDAO.update(ownedCarEntity);
     }
 }

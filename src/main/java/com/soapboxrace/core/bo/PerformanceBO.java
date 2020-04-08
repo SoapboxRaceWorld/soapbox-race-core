@@ -27,6 +27,10 @@ public class PerformanceBO {
     private ProductDAO productDAO;
 
     public void calcNewCarClass(CustomCarEntity customCarEntity) {
+        calcNewCarClass(customCarEntity, customCarEntity.getOwnedCar().getDurability() == 0);
+    }
+
+    private void calcNewCarClass(CustomCarEntity customCarEntity, boolean ignoreParts) {
         int physicsProfileHash = customCarEntity.getPhysicsProfileHash();
         CarClassesEntity carClassesEntity = carClassesDAO.findByHash(physicsProfileHash);
         if (carClassesEntity == null) {
@@ -36,12 +40,14 @@ public class PerformanceBO {
         int topSpeed = 0;
         int accel = 0;
         int handling = 0;
-        for (PerformancePartEntity performancePartEntity : performanceParts) {
-            int perfHash = performancePartEntity.getPerformancePartAttribHash();
-            ProductEntity productEntity = productDAO.findByHash(perfHash);
-            topSpeed = productEntity.getTopSpeed() + topSpeed;
-            accel = productEntity.getAccel() + accel;
-            handling = productEntity.getHandling() + handling;
+        if (!ignoreParts) {
+            for (PerformancePartEntity performancePartEntity : performanceParts) {
+                int perfHash = performancePartEntity.getPerformancePartAttribHash();
+                ProductEntity productEntity = productDAO.findByHash(perfHash);
+                topSpeed = productEntity.getTopSpeed() + topSpeed;
+                accel = productEntity.getAccel() + accel;
+                handling = productEntity.getHandling() + handling;
+            }
         }
         float tt = (float) (topSpeed * 0.01);
         float ta = (float) (accel * 0.01);
@@ -52,28 +58,28 @@ public class PerformanceBO {
         th = th * totalChanges;
         float finalConstant = 1 - tt - ta - th;
 
-        Float finalTopSpeed1 = carClassesEntity.getTsVar1().floatValue() * th;
-        Float finalTopSpeed2 = carClassesEntity.getTsVar2().floatValue() * ta;
-        Float finalTopSpeed3 = carClassesEntity.getTsVar3().floatValue() * tt;
-        Float finalTopSpeed =
+        float finalTopSpeed1 = carClassesEntity.getTsVar1().floatValue() * th;
+        float finalTopSpeed2 = carClassesEntity.getTsVar2().floatValue() * ta;
+        float finalTopSpeed3 = carClassesEntity.getTsVar3().floatValue() * tt;
+        float finalTopSpeed =
                 (finalConstant * carClassesEntity.getTsStock().floatValue()) + finalTopSpeed1 + finalTopSpeed2
                         + finalTopSpeed3;
 
-        Float finalAccel1 = carClassesEntity.getAcVar1().floatValue() * th;
-        Float finalAccel2 = carClassesEntity.getAcVar2().floatValue() * ta;
-        Float finalAccel3 = carClassesEntity.getAcVar3().floatValue() * tt;
-        Float finalAccel = (finalConstant * carClassesEntity.getAcStock().floatValue()) + finalAccel1 + finalAccel2
+        float finalAccel1 = carClassesEntity.getAcVar1().floatValue() * th;
+        float finalAccel2 = carClassesEntity.getAcVar2().floatValue() * ta;
+        float finalAccel3 = carClassesEntity.getAcVar3().floatValue() * tt;
+        float finalAccel = (finalConstant * carClassesEntity.getAcStock().floatValue()) + finalAccel1 + finalAccel2
                 + finalAccel3;
 
-        Float finalHandling1 = carClassesEntity.getHaVar1().floatValue() * th;
-        Float finalHandling2 = carClassesEntity.getHaVar2().floatValue() * ta;
-        Float finalHandling3 = carClassesEntity.getHaVar3().floatValue() * tt;
-        Float finalHandling =
+        float finalHandling1 = carClassesEntity.getHaVar1().floatValue() * th;
+        float finalHandling2 = carClassesEntity.getHaVar2().floatValue() * ta;
+        float finalHandling3 = carClassesEntity.getHaVar3().floatValue() * tt;
+        float finalHandling =
                 (finalConstant * carClassesEntity.getHaStock().floatValue()) + finalHandling1 + finalHandling2
                         + finalHandling3;
 
-        Float finalClass = (finalTopSpeed.intValue() + finalAccel.intValue() + finalHandling.intValue()) / 3f;
-        int finalClassInt = finalClass.intValue();
+        float finalClass = ((int) finalTopSpeed + (int) finalAccel + (int) finalHandling) / 3f;
+        int finalClassInt = (int) finalClass;
 
         // move to new method
         int carclassHash = 872416321;

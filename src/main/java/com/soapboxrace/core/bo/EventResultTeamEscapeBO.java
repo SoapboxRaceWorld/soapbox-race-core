@@ -123,7 +123,7 @@ public class EventResultTeamEscapeBO {
         teamEscapeEventResult.setAccolades(rewardTeamEscapeBO.getTeamEscapeAccolades(activePersonaId,
                 teamEscapeArbitrationPacket, eventSessionEntity));
         teamEscapeEventResult
-                .setDurability(carDamageBO.updateDamageCar(activePersonaId, teamEscapeArbitrationPacket,
+                .setDurability(carDamageBO.induceCarDamage(activePersonaId, teamEscapeArbitrationPacket,
                         teamEscapeArbitrationPacket.getNumberOfCollisions()));
         teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
         teamEscapeEventResult.setEventId(eventDataEntity.getEvent().getId());
