@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.dao.CustomCarDAO;
 import com.soapboxrace.core.dao.InventoryItemDAO;
 import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.jpa.CustomCarEntity;
@@ -21,6 +22,9 @@ public class CarDamageBO {
 
     @EJB
     private OwnedCarDAO ownedCarDAO;
+
+    @EJB
+    private CustomCarDAO customCarDAO;
 
     @EJB
     private ParameterBO parameterBO;
@@ -51,6 +55,8 @@ public class CarDamageBO {
             int calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
             int newCarDamage = Math.max(durability - calcDamage, 0);
 
+            System.out.println("OLD DURABILITY: " + durability + " | NEW DURABILITY: " + newCarDamage);
+
             updateDurability(ownedCarEntity, newCarDamage);
         }
         return ownedCarEntity.getDurability();
@@ -59,7 +65,9 @@ public class CarDamageBO {
     public void updateDurability(OwnedCarEntity ownedCarEntity, int newDurability) {
         CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
         ownedCarEntity.setDurability(newDurability);
-        performanceBO.calcNewCarClass(customCarEntity);
+        performanceBO.calcNewCarClass(customCarEntity, newDurability == 0);
+
         ownedCarDAO.update(ownedCarEntity);
+        customCarDAO.update(customCarEntity);
     }
 }

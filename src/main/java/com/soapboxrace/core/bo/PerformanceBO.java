@@ -30,17 +30,17 @@ public class PerformanceBO {
         calcNewCarClass(customCarEntity, customCarEntity.getOwnedCar().getDurability() == 0);
     }
 
-    private void calcNewCarClass(CustomCarEntity customCarEntity, boolean ignoreParts) {
+    public void calcNewCarClass(CustomCarEntity customCarEntity, boolean ignoreParts) {
         int physicsProfileHash = customCarEntity.getPhysicsProfileHash();
         CarClassesEntity carClassesEntity = carClassesDAO.findByHash(physicsProfileHash);
         if (carClassesEntity == null) {
             return;
         }
-        Set<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
         int topSpeed = 0;
         int accel = 0;
         int handling = 0;
         if (!ignoreParts) {
+            Set<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
             for (PerformancePartEntity performancePartEntity : performanceParts) {
                 int perfHash = performancePartEntity.getPerformancePartAttribHash();
                 ProductEntity productEntity = productDAO.findByHash(perfHash);
