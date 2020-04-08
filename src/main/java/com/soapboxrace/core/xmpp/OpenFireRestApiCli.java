@@ -25,6 +25,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Startup
@@ -125,7 +126,7 @@ public class OpenFireRestApiCli {
     public List<Long> getAllOccupantsInRoom(String roomName) {
         Builder builder = getBuilder("chatrooms/" + roomName + "/occupants");
         OccupantEntities occupantEntities = builder.get(OccupantEntities.class);
-        List<Long> listOfPersona = new ArrayList<Long>();
+        List<Long> listOfPersona = new ArrayList<>();
         for (OccupantEntity entity : occupantEntities.getOccupants()) {
             String jid = entity.getJid();
             try {
@@ -150,7 +151,7 @@ public class OpenFireRestApiCli {
         builder.post(Entity.entity(message, MediaType.TEXT_PLAIN_TYPE));
     }
 
-    private MUCRoomEntity createGeneralChatRoom(String language, Integer number) {
+    private void createGeneralChatRoom(String language, Integer number) {
         String name = "channel." + language + "__" + number;
         Builder builder = getBuilder("chatrooms");
         MUCRoomEntity mucRoomEntity = new MUCRoomEntity();
@@ -159,9 +160,9 @@ public class OpenFireRestApiCli {
         mucRoomEntity.setDescription(name);
         mucRoomEntity.setMaxUsers(0);
         mucRoomEntity.setPersistent(true);
+        mucRoomEntity.setBroadcastPresenceRoles(Arrays.asList("moderator", "participant", "visitor"));
+        mucRoomEntity.setLogEnabled(true);
 
         builder.post(Entity.entity(mucRoomEntity, MediaType.APPLICATION_XML));
-
-        return mucRoomEntity;
     }
 }
