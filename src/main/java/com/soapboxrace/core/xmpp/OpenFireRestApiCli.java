@@ -27,12 +27,14 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Startup
 @Singleton
 public class OpenFireRestApiCli {
     private String openFireToken;
     private String openFireAddress;
+    private String xmppIp;
     private boolean restApiEnabled = false;
 
     @EJB
@@ -45,6 +47,7 @@ public class OpenFireRestApiCli {
     public void init() {
         openFireToken = parameterBO.getStrParam("OPENFIRE_TOKEN");
         openFireAddress = parameterBO.getStrParam("OPENFIRE_ADDRESS");
+        xmppIp = parameterBO.getStrParam("XMPP_IP");
         if (openFireToken != null && openFireAddress != null) {
             restApiEnabled = true;
         }
@@ -58,8 +61,19 @@ public class OpenFireRestApiCli {
     }
 
     private Builder getBuilder(String path) {
+        return getBuilder(path, null);
+    }
+
+    private Builder getBuilder(String path, Map<String, Object> query) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(openFireAddress).path(path);
+
+        if (query != null) {
+            for (Map.Entry<String, Object> queryEntry : query.entrySet()) {
+                target = target.queryParam(queryEntry.getKey(), queryEntry.getValue());
+            }
+        }
+
         Builder request = target.request(MediaType.APPLICATION_XML);
         request.header("Authorization", openFireToken);
         return request;
@@ -108,16 +122,19 @@ public class OpenFireRestApiCli {
         if (!restApiEnabled) {
             return new ArrayList<>();
         }
-        Builder builder = getBuilder("chatrooms");
+        Builder builder = getBuilder("chatrooms/forUser",
+                Map.of(
+                        "userName", "sbrw." + personaId,
+                        "domain", xmppIp,
+                        "resource", "EA-Chat"));
         MUCRoomEntities roomEntities = builder.get(MUCRoomEntities.class);
         List<MUCRoomEntity> listRoomEntity = roomEntities.getMucRooms();
         for (MUCRoomEntity entity : listRoomEntity) {
             String roomName = entity.getRoomName();
             if (roomName.contains("group.channel.")) {
-                List<Long> groupMembers = getAllOccupantsInRoom(roomName);
-                if (groupMembers.contains(personaId)) {
-                    return groupMembers;
-                }
+                // FIXME: apparently we need to make the request TWICE, first one will always fail for some reason
+                getAllOccupantsInRoom(roomName);
+                return getAllOccupantsInRoom(roomName);
             }
         }
         return new ArrayList<>();

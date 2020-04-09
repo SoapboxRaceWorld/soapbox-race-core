@@ -1,6 +1,7 @@
 package com.soapboxrace.core.xmpp;
 
 import com.soapboxrace.core.bo.ParameterBO;
+import org.jivesoftware.smack.ReconnectionManager;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
@@ -69,6 +70,10 @@ public class OpenFireConnector {
         try {
             this.connection.connect();
             this.connection.login();
+
+            ReconnectionManager.getInstanceFor(this.connection).enableAutomaticReconnection();
+            ReconnectionManager.getInstanceFor(this.connection)
+                    .setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.RANDOM_INCREASING_DELAY);
 
             System.out.println("Logged in to Openfire server!");
         } catch (IOException | SmackException | XMPPException | InterruptedException e) {
