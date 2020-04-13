@@ -71,7 +71,7 @@ public class DriverPersonaBO {
         UserEntity userEntity = userDao.findById(userId);
 
         if (userEntity.getPersonas().size() >= 3) {
-            throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached, true);
+            throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached, false);
         }
 
         personaEntity.setUser(userEntity);

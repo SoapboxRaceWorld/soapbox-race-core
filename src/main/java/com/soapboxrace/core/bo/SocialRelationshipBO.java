@@ -98,7 +98,7 @@ public class SocialRelationshipBO {
         PersonaEntity personaEntity = personaDAO.findById(personaId);
 
         if (personaEntity == null) {
-            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, true);
+            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
         }
 
         ArrayOfLong arrayOfLong = new ArrayOfLong();
@@ -119,7 +119,7 @@ public class SocialRelationshipBO {
 
         // This shouldn't happen, but we have to catch it anyway.
         if (activePersonaId == 0L || activePersonaEntity == null) {
-            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, true);
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, false);
         }
 
         // Sanity check
@@ -163,7 +163,7 @@ public class SocialRelationshipBO {
                 if (socialRelationshipEntity.getStatus() == 2L) {
                     // no dedicated exception code for this, so we just use SocialFriendRequestNotResolvable. game is
                     // fine with EngineExceptions.
-                    throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, true);
+                    throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, false);
                 } else {
                     friendResult.setResult(FriendResultStatus.AlreadyFriends);
                     return friendResult;
@@ -185,23 +185,23 @@ public class SocialRelationshipBO {
 
     public PersonaBase resolveFriendsRequest(Long activePersonaId, Long friendPersonaId, int resolution) {
         if (activePersonaId == 0L) {
-            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, true);
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, false);
         }
 
         if (friendPersonaId == 0L) {
-            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, true);
+            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
         }
 
         PersonaEntity activePersonaEntity = personaDAO.findById(activePersonaId);
 
         if (activePersonaEntity == null) {
-            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, true);
+            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
         }
 
         PersonaEntity friendPersonaEntity = personaDAO.findById(friendPersonaId);
 
         if (friendPersonaEntity == null) {
-            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, true);
+            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
         }
 
         SocialRelationshipEntity socialRelationshipEntity =
@@ -212,7 +212,7 @@ public class SocialRelationshipBO {
                         activePersonaEntity.getUser().getId());
 
         if (socialRelationshipEntity == null || pendingSocialRelationshipEntity == null) {
-            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, true);
+            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, false);
         }
 
         switch (resolution) {
@@ -231,7 +231,7 @@ public class SocialRelationshipBO {
 
                 return driverPersonaBO.getPersonaBase(friendPersonaEntity);
             default:
-                throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, true);
+                throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, false);
         }
     }
 
@@ -239,13 +239,13 @@ public class SocialRelationshipBO {
         PersonaEntity activePersonaEntity = personaDAO.findById(activePersonaId);
 
         if (activePersonaEntity == null) {
-            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, true);
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, false);
         }
 
         PersonaEntity friendPersonaEntity = personaDAO.findById(friendPersonaId);
 
         if (friendPersonaEntity == null) {
-            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, true);
+            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
         }
 
         // Possible cases:
@@ -261,12 +261,12 @@ public class SocialRelationshipBO {
         if (remoteSide == null || activeSide == null) {
             // for lack of a better exception code, we just use the "not resolvable" error... they're all the same
             // to the game.
-            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, true);
+            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, false);
         }
 
         if (remoteSide.getStatus() == 2L || activeSide.getStatus() == 2L) {
             // something like this shouldn't ever happen, but... better to be safe than sorry
-            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, true);
+            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, false);
         }
 
         socialRelationshipDAO.delete(activeSide);
@@ -279,13 +279,13 @@ public class SocialRelationshipBO {
         PersonaEntity activePersonaEntity = personaDAO.findById(activePersonaId);
 
         if (activePersonaEntity == null) {
-            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, true);
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, false);
         }
 
         PersonaEntity otherPersonaEntity = personaDAO.findById(otherPersonaId);
 
         if (otherPersonaEntity == null) {
-            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, true);
+            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
         }
 
         SocialRelationshipEntity localSide = socialRelationshipDAO.findByLocalAndRemoteUser(userId,
@@ -313,7 +313,7 @@ public class SocialRelationshipBO {
         PersonaEntity otherPersonaEntity = personaDAO.findById(otherPersonaId);
 
         if (otherPersonaEntity == null) {
-            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, true);
+            throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
         }
 
         SocialRelationshipEntity localSide = socialRelationshipDAO.findByLocalAndRemoteUser(userId,
@@ -322,7 +322,7 @@ public class SocialRelationshipBO {
         if (localSide != null && localSide.getStatus() == 2L) {
             socialRelationshipDAO.delete(localSide);
         } else {
-            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, true);
+            throw new EngineException(EngineExceptionCode.SocialFriendRequestNotResolvable, false);
         }
 
         return driverPersonaBO.getPersonaBase(otherPersonaEntity);
