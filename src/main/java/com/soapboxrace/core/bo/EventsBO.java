@@ -89,14 +89,14 @@ public class EventsBO {
         TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
         if (treasureHuntEntity != null) {
             if (treasureHuntEntity.getCoinsCollected() == 32767) {
-                throw new EngineException("TH is not ready", EngineExceptionCode.SecurityKickedArbitration);
+                throw new EngineException("TH is not ready", EngineExceptionCode.SecurityKickedArbitration, true);
             }
 
             int difference = coins - treasureHuntEntity.getCoinsCollected();
 
             // coin difference should be exactly 1 (or 0)
             if ((difference & (difference - 1)) != 0) {
-                throw new EngineException("Invalid coins", EngineExceptionCode.SecurityKickedArbitration);
+                throw new EngineException("Invalid coins", EngineExceptionCode.SecurityKickedArbitration, true);
             }
 
             treasureHuntEntity.setCoinsCollected(coins);
@@ -119,11 +119,11 @@ public class EventsBO {
         TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
 
         if (treasureHuntEntity == null) {
-            throw new EngineException("TreasureHunt does not exist for driver: " + activePersonaId, EngineExceptionCode.InvalidOperation);
+            throw new EngineException("TreasureHunt does not exist for driver: " + activePersonaId, EngineExceptionCode.InvalidOperation, true);
         }
 
         if (treasureHuntEntity.getCoinsCollected() != 32767 || treasureHuntEntity.getCompleted()) {
-            throw new EngineException("TH is not ready", EngineExceptionCode.SecurityKickedArbitration);
+            throw new EngineException("TH is not ready", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
         if (!treasureHuntEntity.getIsStreakBroken()) {

@@ -83,13 +83,13 @@ public class DriverPersona {
                                      @QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan,
                                      @QueryParam("clanIcon") String clanIcon) {
         if (!NAME_PATTERN.matcher(name).matches()) {
-            throw new EngineException(EngineExceptionCode.DisplayNameNotAllowed);
+            throw new EngineException(EngineExceptionCode.DisplayNameNotAllowed, true);
         }
 
         ArrayOfString nameReserveResult = driverPersonaBO.reserveName(name);
 
         if (!nameReserveResult.getString().isEmpty()) {
-            throw new EngineException(EngineExceptionCode.DisplayNameDuplicate);
+            throw new EngineException(EngineExceptionCode.DisplayNameDuplicate, true);
         }
 
         PersonaEntity personaEntity = new PersonaEntity();
@@ -98,7 +98,7 @@ public class DriverPersona {
         ProfileData persona = driverPersonaBO.createPersona(userId, personaEntity);
 
         if (persona == null) {
-            throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached);
+            throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached, true);
         }
 
         long personaId = persona.getPersonaId();

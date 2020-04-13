@@ -24,7 +24,7 @@ public enum EventMode {
                 return type;
             }
         }
-        throw new EngineException("Invalid eventModeId: " + id, EngineExceptionCode.UnspecifiedError);
+        throw new EngineException("Invalid eventModeId: " + id, EngineExceptionCode.UnspecifiedError, true);
     }
 
     public int getEventModeId() {

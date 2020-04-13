@@ -36,7 +36,7 @@ public class Badges {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
 
         if (activePersonaId == 0L) {
-            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, true);
         }
 
         personaBO.updateBadges(activePersonaId, UnmarshalXML.unMarshal(inputStream, BadgeBundle.class));

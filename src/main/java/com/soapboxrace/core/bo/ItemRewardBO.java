@@ -22,7 +22,6 @@ import javax.ejb.Stateless;
 import javax.script.ScriptException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -65,7 +64,7 @@ public class ItemRewardBO {
 
             return arrayOfCommerceItemTrans;
         } catch (Exception e) {
-            throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+            throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
         }
     }
 
@@ -77,7 +76,7 @@ public class ItemRewardBO {
                 handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, inventoryBO.getInventory(personaId), personaEntity);
             }
         } catch (Exception e) {
-            throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+            throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
         }
     }
 
@@ -88,7 +87,7 @@ public class ItemRewardBO {
         try {
             return scriptToItem(rewardScript, bindings);
         } catch (ScriptException e) {
-            throw new EngineException("Failed to execute script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+            throw new EngineException("Failed to execute script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
         }
     }
 
@@ -486,7 +485,7 @@ public class ItemRewardBO {
 
             if (items.isEmpty()) {
                 throw new EngineException("No items are available in table " + this.tableName,
-                        EngineExceptionCode.LuckyDrawContextNotFoundOrEmpty);
+                        EngineExceptionCode.LuckyDrawContextNotFoundOrEmpty, true);
             }
 
             int numItems = items.size();
@@ -515,14 +514,14 @@ public class ItemRewardBO {
 
                 if (randomIndex == -1) {
                     throw new EngineException("Weighted random failed for " + this.tableName,
-                            EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                            EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
                 }
 
                 RewardTableItemEntity rewardTableItemEntity = items.get(randomIndex);
                 try {
                     return scriptToItem(rewardTableItemEntity.getScript());
                 } catch (Exception e) {
-                    throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                    throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
                 }
             }
 
@@ -531,7 +530,7 @@ public class ItemRewardBO {
             try {
                 return scriptToItem(rewardTableItemEntity.getScript());
             } catch (Exception e) {
-                throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
             }
         }
     }

@@ -75,7 +75,7 @@ public class InventoryBO {
         PersonaEntity personaEntity = personaDAO.findById(personaId);
 
         if (personaEntity == null)
-            throw new EngineException("Cannot find persona: " + personaId, EngineExceptionCode.PersonaNotFound);
+            throw new EngineException("Cannot find persona: " + personaId, EngineExceptionCode.PersonaNotFound, true);
 
         // Do the important work!
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
@@ -234,12 +234,12 @@ public class InventoryBO {
         // Validation
         if (productEntity == null)
             throw new EngineException("Could not find product " + productId + " to be added",
-                    EngineExceptionCode.NoSuchEntitlementExists);
+                    EngineExceptionCode.NoSuchEntitlementExists, true);
         if (quantity < -1)
             throw new EngineException("Invalid product quantity: " + quantity,
-                    EngineExceptionCode.EntitlementInvalidCount);
+                    EngineExceptionCode.EntitlementInvalidCount, true);
         if (!this.canInventoryHold(inventoryEntity, productEntity) && !ignoreLimits)
-            throw new EngineException("Cannot add item to inventory. ID=" + productId + " IID=" + inventoryEntity.getId(), EngineExceptionCode.NotEnoughSpace);
+            throw new EngineException("Cannot add item to inventory. ID=" + productId + " IID=" + inventoryEntity.getId(), EngineExceptionCode.NotEnoughSpace, true);
 
         // Setup
         if (expirationDate == null && productEntity.getDurationMinute() != 0)
@@ -294,10 +294,10 @@ public class InventoryBO {
         // Validation
         if (productEntity == null)
             throw new EngineException("Could not find product " + productId + " to be added",
-                    EngineExceptionCode.NoSuchEntitlementExists);
+                    EngineExceptionCode.NoSuchEntitlementExists, true);
         if (quantity < -1)
             throw new EngineException("Invalid product quantity for addStackedInventoryItem: " + quantity,
-                    EngineExceptionCode.EntitlementInvalidCount);
+                    EngineExceptionCode.EntitlementInvalidCount, true);
         if (quantity == -1)
             quantity = productEntity.getUseCount();
         InventoryItemEntity existingItem =
@@ -337,7 +337,7 @@ public class InventoryBO {
                 inventoryItemDAO.findByInventoryIdAndEntitlementTag(inventoryEntity.getId(),
                         entitlementTag);
         if (existingItem == null)
-            throw new EngineException("Could not find entitlement '" + entitlementTag + "' in IID " + inventoryEntity.getId(), EngineExceptionCode.NoSuchEntitlementExists);
+            throw new EngineException("Could not find entitlement '" + entitlementTag + "' in IID " + inventoryEntity.getId(), EngineExceptionCode.NoSuchEntitlementExists, true);
 
         existingItem.setRemainingUseCount(existingItem.getRemainingUseCount() - 1);
 
@@ -444,7 +444,7 @@ public class InventoryBO {
             throw new EngineException("An item stack with the entitlement tag '" + entitlementTag + "' could not be " +
                     "found. " +
                     "IID: " + inventoryEntity.getId(),
-                    EngineExceptionCode.EntitlementNoSuchGroup);
+                    EngineExceptionCode.EntitlementNoSuchGroup, true);
 
         if (quantity == -1 || quantity == inventoryItemEntity.getRemainingUseCount()) {
             updateInventorySlots(inventoryEntity, inventoryItemEntity.getProductEntity(), false);
@@ -455,11 +455,11 @@ public class InventoryBO {
         } else {
             if (quantity < 1)
                 throw new EngineException("An invalid removal operation was requested. Cannot remove " + quantity +
-                        " items from a stack.", EngineExceptionCode.EntitlementInvalidCount);
+                        " items from a stack.", EngineExceptionCode.EntitlementInvalidCount, true);
             if (quantity > inventoryItemEntity.getRemainingUseCount())
                 throw new EngineException("An invalid removal operation was requested. Cannot remove " + quantity +
                         " items from the stack, as there are only " + inventoryItemEntity.getRemainingUseCount(),
-                        EngineExceptionCode.EntitlementInvalidCount);
+                        EngineExceptionCode.EntitlementInvalidCount, true);
             inventoryItemEntity.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount() - quantity);
             inventoryItemDAO.update(inventoryItemEntity);
         }
@@ -501,7 +501,7 @@ public class InventoryBO {
                 String[] parts = itemInfo.split("\\|");
                 if (parts.length != 2) {
                     throw new EngineException("Failed to parse default inventory items",
-                            EngineExceptionCode.UnspecifiedError);
+                            EngineExceptionCode.UnspecifiedError, true);
                 }
 
                 String productId = parts[0];

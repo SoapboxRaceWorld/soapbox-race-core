@@ -83,7 +83,7 @@ public class LobbyBO {
         if (eventEntity.getCarClassHash() != 607077938) {
             if (customCarEntity.getCarClassHash() != eventEntity.getCarClassHash()) {
                 // The client UI does not allow you to join events outside your current car's class
-                throw new EngineException(EngineExceptionCode.CarDataInvalid);
+                throw new EngineException(EngineExceptionCode.CarDataInvalid, true);
             }
         }
 
@@ -298,17 +298,17 @@ public class LobbyBO {
     }
 
     private class LobbyCountDown extends Thread {
-        private LobbyDAO lobbyDao;
+        private final LobbyDAO lobbyDao;
 
-        private EventSessionDAO eventSessionDao;
+        private final EventSessionDAO eventSessionDao;
 
-        private Long lobbyId;
+        private final Long lobbyId;
 
-        private TokenSessionDAO tokenDAO;
+        private final TokenSessionDAO tokenDAO;
 
-        private ParameterBO parameterBO;
+        private final ParameterBO parameterBO;
 
-        private OpenFireSoapBoxCli openFireSoapBoxCli;
+        private final OpenFireSoapBoxCli openFireSoapBoxCli;
 
         public LobbyCountDown(Long lobbyId, LobbyDAO lobbyDao, EventSessionDAO eventSessionDao,
                               TokenSessionDAO tokenDAO, ParameterBO parameterBO,

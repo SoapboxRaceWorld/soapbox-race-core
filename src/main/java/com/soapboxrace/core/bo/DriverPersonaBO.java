@@ -7,6 +7,8 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.engine.EngineException;
+import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.*;
 
@@ -69,7 +71,7 @@ public class DriverPersonaBO {
         UserEntity userEntity = userDao.findById(userId);
 
         if (userEntity.getPersonas().size() >= 3) {
-            return null;
+            throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached, true);
         }
 
         personaEntity.setUser(userEntity);
@@ -203,8 +205,7 @@ public class DriverPersonaBO {
             personaPresence.setUserId(personaEntity.getUser().getId());
             return personaPresence;
         }
-        return new PersonaPresence();
-//        throw new EngineException(EngineExceptionCode.PersonaNotFound);
+        throw new EngineException(EngineExceptionCode.PersonaNotFound, false);
     }
 
     public void updateStatusMessage(String message, Long personaId) {

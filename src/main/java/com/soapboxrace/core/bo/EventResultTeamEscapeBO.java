@@ -70,7 +70,7 @@ public class EventResultTeamEscapeBO {
         EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
 
         if (eventDataEntity.getFinishReason() != 0) {
-            throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration);
+            throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
         eventDataEntity.setAlternateEventDurationInMilliseconds(teamEscapeArbitrationPacket.getAlternateEventDurationInMilliseconds());

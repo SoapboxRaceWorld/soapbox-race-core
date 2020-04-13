@@ -25,10 +25,13 @@ public class EngineExceptionHandler implements ExceptionMapper<Exception> {
     @Override
     public Response toResponse(Exception exception) {
         if (exception instanceof EngineException) {
-            errorReportingBO.sendException(exception);
             EngineException engineException = (EngineException) exception;
             EngineExceptionTrans engineExceptionTrans = new EngineExceptionTrans();
             String stackTrace = ExceptionUtils.getStackTrace(exception);
+
+            if (engineException.isFatal()) {
+                errorReportingBO.sendException(exception);
+            }
 
             engineExceptionTrans.setErrorCode(engineException.getCode().getErrorCode());
             engineExceptionTrans.setStackTrace(stackTrace);

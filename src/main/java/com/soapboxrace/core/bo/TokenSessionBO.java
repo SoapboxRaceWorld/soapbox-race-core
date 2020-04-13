@@ -76,11 +76,11 @@ public class TokenSessionBO {
     public void verifyPersonaOwnership(String securityToken, Long personaId) {
         TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
         if (tokenSession == null) {
-            throw new EngineException(EngineExceptionCode.NoSuchSessionInSessionStore);
+            throw new EngineException(EngineExceptionCode.NoSuchSessionInSessionStore, true);
         }
 
         if (!tokenSession.getUserEntity().ownsPersona(personaId)) {
-            throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser);
+            throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser, true);
         }
     }
 
@@ -164,7 +164,7 @@ public class TokenSessionBO {
 
         if (!isLogout) {
             if (!tokenSessionEntity.getUserEntity().ownsPersona(personaId)) {
-                throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser);
+                throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser, true);
             }
         }
 

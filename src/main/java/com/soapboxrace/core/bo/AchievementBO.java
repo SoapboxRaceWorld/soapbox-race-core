@@ -102,7 +102,7 @@ public class AchievementBO {
 
     public AchievementsPacket loadAll(Long personaId) {
         if (personaId.equals(0L)) {
-            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, true);
         }
 
         AchievementsPacket achievementsPacket = new AchievementsPacket();

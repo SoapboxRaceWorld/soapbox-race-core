@@ -76,7 +76,7 @@ public class EventBO {
         if (eventEntity.getCarClassHash() != 607077938) {
             if (customCarEntity.getCarClassHash() != eventEntity.getCarClassHash()) {
                 // The client UI does not allow you to join events outside your current car's class
-                throw new EngineException(EngineExceptionCode.CarDataInvalid);
+                throw new EngineException(EngineExceptionCode.CarDataInvalid, true);
             }
         }
 

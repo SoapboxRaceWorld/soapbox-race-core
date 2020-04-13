@@ -36,7 +36,7 @@ public class GetBlockersByUsers {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
 
         if (activePersonaId == 0) {
-            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy);
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, true);
         }
 
         return Response.ok().entity(socialRelationshipBO.getBlockersByUsers(activePersonaId)).build();

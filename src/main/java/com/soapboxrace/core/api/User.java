@@ -66,7 +66,7 @@ public class User {
             // Ideally this will never happen. Then again, plenty of weird stuff has happened.
             tokenBO.deleteByUserId(userId);
 
-            throw new EngineException(EngineExceptionCode.BannedEntitlements);
+            throw new EngineException(EngineExceptionCode.BannedEntitlements, true);
         }
 
         int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
@@ -74,7 +74,7 @@ public class User {
 
         if (maxOnlinePlayers != -1) {
             if (numberOfUsersOnlineNow >= maxOnlinePlayers) {
-                throw new EngineException(EngineExceptionCode.MaximumUsersLoggedInHardCapReached);
+                throw new EngineException(EngineExceptionCode.MaximumUsersLoggedInHardCapReached, true);
             }
         }
 

@@ -186,7 +186,7 @@ public class BasketBO {
                 CardPackEntity cardPackEntity = cardPackDAO.findByEntitlementTag(bundleProduct.getEntitlementTag());
 
                 if (cardPackEntity == null) {
-                    throw new EngineException("Could not find card pack with name: " + bundleProduct.getEntitlementTag() + " (product ID: " + productId + ")", EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                    throw new EngineException("Could not find card pack with name: " + bundleProduct.getEntitlementTag() + " (product ID: " + productId + ")", EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
                 }
 
                 ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
@@ -201,7 +201,7 @@ public class BasketBO {
             } catch (EngineException e) {
                 this.performPersonaTransaction(personaEntity, bundleProduct, -1, true);
 
-                throw new EngineException("Error occurred in bundle purchase (product ID: " + productId + ")", e, e.getCode());
+                throw new EngineException("Error occurred in bundle purchase (product ID: " + productId + ")", e, e.getCode(), true);
             }
         }
 
@@ -259,7 +259,7 @@ public class BasketBO {
             List<CarSlotEntity> nonRentals = carSlotDAO.findNonRentalsByPersonaId(personaEntity.getPersonaId());
 
             if (nonRentals.isEmpty()) {
-                throw new EngineException("Persona " + personaEntity.getName() + " has no non-rental cars", EngineExceptionCode.MissingRequiredEntitlements);
+                throw new EngineException("Persona " + personaEntity.getName() + " has no non-rental cars", EngineExceptionCode.MissingRequiredEntitlements, true);
             }
         }
 
