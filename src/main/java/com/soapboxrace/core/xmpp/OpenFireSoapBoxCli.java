@@ -9,9 +9,7 @@ package com.soapboxrace.core.xmpp;
 import com.soapboxrace.jaxb.util.MarshalXML;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.ejb.*;
 
 @Startup
 @Singleton
@@ -23,14 +21,16 @@ public class OpenFireSoapBoxCli {
     @PostConstruct
     public void init() {
         openFireConnector.connect();
-        openFireConnector.send("hey!", 0L);
     }
 
+    @Asynchronous
+    @Lock(LockType.READ)
     public void send(String msg, Long to) {
-//        xmppTalk.send(msg, to, parameterBO);
         openFireConnector.send(msg, to);
     }
 
+    @Asynchronous
+    @Lock(LockType.READ)
     public void send(Object object, Long to) {
         openFireConnector.send(MarshalXML.marshal(object), to);
     }

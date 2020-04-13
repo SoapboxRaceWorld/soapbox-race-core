@@ -11,8 +11,7 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
+import javax.ejb.*;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
@@ -87,6 +86,8 @@ public class OpenFireConnector {
      * @param msg       The message to send.
      * @param personaId The ID of the persona to send the message to.
      */
+    @Asynchronous
+    @Lock(LockType.READ)
     public void send(String msg, Long personaId) {
         Message message = new Message();
         message.setSubject("1337733113377331");
