@@ -12,10 +12,15 @@ import com.soapboxrace.core.jpa.ParameterEntity;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
-@Stateless
+@Startup
+@Singleton
 public class ParameterBO {
 
     @EJB
@@ -24,14 +29,33 @@ public class ParameterBO {
     @EJB
     private TokenSessionDAO tokenDAO;
 
-    private String getParameter(String name) {
-        ParameterEntity findById = parameterDao.findById(name);
+    private final ConcurrentMap<String, String> parameterMap;
 
-        if (findById != null) {
-            return findById.getValue();
+    public ParameterBO() {
+        parameterMap = new ConcurrentHashMap<>();
+    }
+
+    @PostConstruct
+    public void init() {
+        loadParameters();
+    }
+
+    /**
+     * Loads parameters from the database
+     */
+    public void loadParameters() {
+        parameterMap.clear();
+
+        for (ParameterEntity parameterEntity : parameterDao.findAll()) {
+            if (parameterEntity.getValue() != null)
+                parameterMap.put(parameterEntity.getName(), parameterEntity.getValue());
         }
 
-        return null;
+        System.out.println("Loaded " + parameterMap.size() + " parameters from database");
+    }
+
+    private String getParameter(String name) {
+        return parameterMap.get(name);
     }
 
     public int getCarLimit(String securityToken) {

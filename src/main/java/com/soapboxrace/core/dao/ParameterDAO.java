@@ -12,6 +12,7 @@ import com.soapboxrace.core.jpa.ParameterEntity;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Stateless
 public class ParameterDAO extends BaseDAO<ParameterEntity> {
@@ -25,4 +26,7 @@ public class ParameterDAO extends BaseDAO<ParameterEntity> {
         return entityManager.find(ParameterEntity.class, name);
     }
 
+    public List<ParameterEntity> findAll() {
+        return entityManager.createNamedQuery("ParameterEntity.findAll", ParameterEntity.class).getResultList();
+    }
 }

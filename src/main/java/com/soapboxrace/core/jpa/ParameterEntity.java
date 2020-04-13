@@ -6,13 +6,13 @@
 
 package com.soapboxrace.core.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "PARAMETER")
+@NamedQueries({
+        @NamedQuery(name = "ParameterEntity.findAll", query = "SELECT obj FROM ParameterEntity obj")
+})
 public class ParameterEntity {
 
     @Id
