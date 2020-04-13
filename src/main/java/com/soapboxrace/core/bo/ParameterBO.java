@@ -34,39 +34,9 @@ public class ParameterBO {
         return null;
     }
 
-    public boolean isShardingEnabled() {
-        String property = System.getProperty("sharding.enabled");
-
-        return Boolean.parseBoolean(property);
-    }
-
-    public boolean isShardingMaster() {
-        String property = System.getProperty("sharding.master");
-
-        return Boolean.parseBoolean(property);
-    }
-
-    public String getShardId() {
-        String property = System.getProperty("sharding.id");
-
-        if (property == null)
-            return null;
-        if (property.trim().isEmpty())
-            return null;
-        if (!isShardingEnabled() || isShardingMaster())
-            return null;
-        return property.trim();
-    }
-
     public int getCarLimit(String securityToken) {
         TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
         return getCarLimit(tokenSession.getUserEntity());
-    }
-
-    public int getMaxCash(String securityToken) {
-        TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
-
-        return getMaxCash(tokenSession.getUserEntity());
     }
 
     public int getMaxLevel(String securityToken) {
