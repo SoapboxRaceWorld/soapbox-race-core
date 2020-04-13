@@ -232,24 +232,12 @@ public class BasketBO {
         if (!canPurchaseProduct(personaEntity, productEntity))
             return CommerceResultStatus.FAIL_LOCKED_PRODUCT_NOT_ACCESSIBLE_TO_THIS_USER;
 
-        List<InventoryItemEntity> existing =
-                inventoryItemDao.findAllByPersonaIdAndEntitlementTag(personaEntity.getPersonaId(),
-                        productEntity.getEntitlementTag());
-
-        if (!existing.isEmpty()) {
+        if (!canAddAmplifier(personaEntity.getPersonaId(), productEntity.getEntitlementTag())) {
             return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;
         }
 
         if (performPersonaTransaction(personaEntity, productEntity)) {
-            InventoryEntity inventoryEntity = inventoryBO.getInventory(personaEntity.getPersonaId());
-            inventoryBO.addInventoryItem(inventoryEntity, productId);
-
-            AmplifierEntity amplifierEntity = amplifierDAO.findAmplifierByHash(productEntity.getHash());
-
-            if (amplifierEntity.getAmpType().equals("INSURANCE")) {
-                personaBo.repairAllCars(personaEntity.getPersonaId());
-            }
-
+            addAmplifier(personaEntity.getPersonaId(), productEntity);
             return CommerceResultStatus.SUCCESS;
         }
 
@@ -300,6 +288,10 @@ public class BasketBO {
         carSlotDAO.insert(carSlotEntity);
 
         performanceBO.calcNewCarClass(carSlotEntity.getOwnedCar().getCustomCar());
+
+        if (isRental && canAddAmplifier(personaEntity.getPersonaId(), "INSURANCE_AMPLIFIER")) {
+            addAmplifier(personaEntity.getPersonaId(), productDao.findByEntitlementTag("INSURANCE_AMPLIFIER"));
+        }
 
         return carSlotEntity;
     }
@@ -372,6 +364,21 @@ public class BasketBO {
         personaDao.update(personaEntity);
 
         return true;
+    }
+
+    private boolean canAddAmplifier(Long personaId, String entitlementTag) {
+        return inventoryItemDao.findAllByPersonaIdAndEntitlementTag(personaId, entitlementTag).isEmpty();
+    }
+
+    private void addAmplifier(Long personaId, ProductEntity productEntity) {
+        InventoryEntity inventoryEntity = inventoryBO.getInventory(personaId);
+        inventoryBO.addInventoryItem(inventoryEntity, productEntity.getProductId());
+
+        AmplifierEntity amplifierEntity = amplifierDAO.findAmplifierByHash(productEntity.getHash());
+
+        if (amplifierEntity.getAmpType().equals("INSURANCE")) {
+            personaBo.repairAllCars(personaId);
+        }
     }
 
     private OwnedCarTrans getCar(ProductEntity productEntity) {
