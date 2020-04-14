@@ -23,13 +23,11 @@ public class OpenFireSoapBoxCli {
         openFireConnector.connect();
     }
 
-    @Asynchronous
     @Lock(LockType.READ)
     public void send(String msg, Long to) {
         openFireConnector.send(msg, to);
     }
 
-    @Asynchronous
     @Lock(LockType.READ)
     public void send(Object object, Long to) {
         openFireConnector.send(MarshalXML.marshal(object), to);
