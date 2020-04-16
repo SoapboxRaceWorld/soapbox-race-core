@@ -74,6 +74,11 @@ public class DriverPersonaBO {
             throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached, false);
         }
 
+        if (personaEntity.getIconIndex() < 0
+                || personaEntity.getIconIndex() > parameterBO.getIntParam("MAX_ICON_INDEX", 26)) {
+            throw new EngineException(EngineExceptionCode.InvalidOperation, false);
+        }
+
         personaEntity.setUser(userEntity);
         personaEntity.setCash(parameterBO.getIntParam("STARTING_CASH_AMOUNT"));
         personaEntity.setLevel(parameterBO.getIntParam("STARTING_LEVEL_NUMBER"));
