@@ -53,9 +53,6 @@ public class EventResultPursuitBO {
                                                PursuitArbitrationPacket pursuitArbitrationPacket,
                                                Boolean isBusted) {
         Long eventSessionId = eventSessionEntity.getId();
-        eventSessionEntity.setEnded(System.currentTimeMillis());
-
-        eventSessionDao.update(eventSessionEntity);
 
         EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
 
@@ -81,6 +78,9 @@ public class EventResultPursuitBO {
         eventDataEntity.setSpikeStripsDodged(pursuitArbitrationPacket.getSpikeStripsDodged());
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(pursuitArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
         eventDataEntity.setTopSpeed(pursuitArbitrationPacket.getTopSpeed());
+        eventSessionEntity.setEnded(System.currentTimeMillis());
+
+        eventSessionDao.update(eventSessionEntity);
         eventDataDao.update(eventDataEntity);
 
         pursuitArbitrationPacket.setRank(1); // there's only ever 1 player, and the game sets rank to 0... idk why

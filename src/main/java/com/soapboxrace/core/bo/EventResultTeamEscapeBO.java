@@ -53,9 +53,6 @@ public class EventResultTeamEscapeBO {
     public TeamEscapeEventResult handleTeamEscapeEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
                                                      TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
-        eventSessionEntity.setEnded(System.currentTimeMillis());
-
-        eventSessionDao.update(eventSessionEntity);
 
         XMPP_TeamEscapeEntrantResultType xmppTeamEscapeResult = new XMPP_TeamEscapeEntrantResultType();
         xmppTeamEscapeResult.setEventDurationInMilliseconds(teamEscapeArbitrationPacket.getEventDurationInMilliseconds());
@@ -96,6 +93,9 @@ public class EventResultTeamEscapeBO {
         eventDataEntity.setSpikeStripsDodged(teamEscapeArbitrationPacket.getSpikeStripsDodged());
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(teamEscapeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
         eventDataEntity.setTopSpeed(teamEscapeArbitrationPacket.getTopSpeed());
+        eventSessionEntity.setEnded(System.currentTimeMillis());
+
+        eventSessionDao.update(eventSessionEntity);
         eventDataDao.update(eventDataEntity);
 
         ArrayOfTeamEscapeEntrantResult arrayOfTeamEscapeEntrantResult = new ArrayOfTeamEscapeEntrantResult();

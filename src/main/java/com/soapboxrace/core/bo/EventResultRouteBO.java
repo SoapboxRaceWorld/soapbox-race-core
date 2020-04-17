@@ -53,9 +53,6 @@ public class EventResultRouteBO {
     public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
                                           RouteArbitrationPacket routeArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
-        eventSessionEntity.setEnded(System.currentTimeMillis());
-
-        eventSessionDao.update(eventSessionEntity);
 
         EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
 
@@ -76,6 +73,9 @@ public class EventResultRouteBO {
 
         eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
         eventDataEntity.setPersonaId(activePersonaId);
+        eventSessionEntity.setEnded(System.currentTimeMillis());
+
+        eventSessionDao.update(eventSessionEntity);
         eventDataDao.update(eventDataEntity);
 
         ArrayOfRouteEntrantResult arrayOfRouteEntrantResult = new ArrayOfRouteEntrantResult();

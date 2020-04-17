@@ -53,9 +53,6 @@ public class EventResultDragBO {
     public DragEventResult handleDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
                                          DragArbitrationPacket dragArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
-        eventSessionEntity.setEnded(System.currentTimeMillis());
-
-        eventSessionDao.update(eventSessionEntity);
 
         XMPP_DragEntrantResultType xmppDragResult = new XMPP_DragEntrantResultType();
         xmppDragResult.setEventDurationInMilliseconds(dragArbitrationPacket.getEventDurationInMilliseconds());
@@ -88,6 +85,9 @@ public class EventResultDragBO {
         eventDataEntity.setRank(dragArbitrationPacket.getRank());
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(dragArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
         eventDataEntity.setTopSpeed(dragArbitrationPacket.getTopSpeed());
+        eventSessionEntity.setEnded(System.currentTimeMillis());
+
+        eventSessionDao.update(eventSessionEntity);
         eventDataDao.update(eventDataEntity);
 
         ArrayOfDragEntrantResult arrayOfDragEntrantResult = new ArrayOfDragEntrantResult();
