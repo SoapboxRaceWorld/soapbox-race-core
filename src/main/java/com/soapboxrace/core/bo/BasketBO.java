@@ -333,6 +333,9 @@ public class BasketBO {
         if (carSlotEntity == null) {
             return false;
         }
+        if (!carSlotEntity.getPersona().getPersonaId().equals(personaEntity.getPersonaId())) {
+            return false;
+        }
         int nonRentalCarCount = carSlotDAO.findNonRentalsByPersonaId(personaEntity.getPersonaId()).size();
 
         // If the car is not a rental, check the number of non-rentals
