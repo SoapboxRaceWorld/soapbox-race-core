@@ -40,6 +40,7 @@ public class LegitRaceBO {
         if (!legit) {
             socialBo.sendReport(0L, activePersonaId, 3, String.format("Abnormal event time: %d", timeDiff),
                     (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
+            return false;
         }
         if (arbitrationPacket.getHacksDetected() > 0) {
             socialBo.sendReport(0L, activePersonaId, 3, "hacksDetected > 0", (int) arbitrationPacket.getCarId(), 0,
@@ -50,17 +51,13 @@ public class LegitRaceBO {
         if (arbitrationPacket instanceof PursuitArbitrationPacket) {
             PursuitArbitrationPacket pursuitArbitrationPacket = (PursuitArbitrationPacket) arbitrationPacket;
 
-            if (pursuitArbitrationPacket.getCopsDisabled() >= pursuitArbitrationPacket.getCopsDeployed()) {
-                return false;
-            }
+            return pursuitArbitrationPacket.getCopsDisabled() < pursuitArbitrationPacket.getCopsDeployed();
         } else if (arbitrationPacket instanceof TeamEscapeArbitrationPacket) {
             TeamEscapeArbitrationPacket teamEscapeArbitrationPacket = (TeamEscapeArbitrationPacket) arbitrationPacket;
 
-            if (teamEscapeArbitrationPacket.getCopsDisabled() >= teamEscapeArbitrationPacket.getCopsDeployed()) {
-                return false;
-            }
+            return teamEscapeArbitrationPacket.getCopsDisabled() < teamEscapeArbitrationPacket.getCopsDeployed();
         }
 
-        return legit;
+        return true;
     }
 }
