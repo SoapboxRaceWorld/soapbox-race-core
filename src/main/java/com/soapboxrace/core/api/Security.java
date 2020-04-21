@@ -23,7 +23,8 @@ public class Security {
     public FraudConfig fraudConfig(@HeaderParam("userId") Long userId) {
         FraudConfig fraudConfig = new FraudConfig();
         fraudConfig.setEnabledBitField(12);
-        fraudConfig.setGameFileFreq(1000000);
+//        fraudConfig.setGameFileFreq(1000000);
+        fraudConfig.setGameFileFreq(-1);
         fraudConfig.setModuleFreq(360000);
         fraudConfig.setStartUpFreq(1000000);
         fraudConfig.setUserID(userId);
