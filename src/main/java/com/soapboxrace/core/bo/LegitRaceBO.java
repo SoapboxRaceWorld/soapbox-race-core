@@ -46,7 +46,6 @@ public class LegitRaceBO {
         if (arbitrationPacket.getHacksDetected() > 0) {
             socialBo.sendReport(0L, activePersonaId, 3, "hacksDetected > 0", (int) arbitrationPacket.getCarId(), 0,
                     arbitrationPacket.getHacksDetected());
-            return false;
         }
 
         return true;
