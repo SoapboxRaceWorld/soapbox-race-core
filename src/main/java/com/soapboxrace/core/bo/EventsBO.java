@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.bo.util.AchievementProgressionContext;
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.TreasureHuntConfigDAO;
@@ -22,6 +23,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.Random;
 
 @Stateless
@@ -41,6 +43,9 @@ public class EventsBO {
 
     @EJB
     private ParameterBO parameterBO;
+
+    @EJB
+    private AchievementBO achievementBO;
 
     @EJB
     private TreasureHuntConfigDAO treasureHuntConfigDAO;
@@ -116,6 +121,7 @@ public class EventsBO {
                 don't revive -> reset to day 1 + get day 1 rewards, back to green
          */
 
+        PersonaEntity personaEntity = personaDao.findById(activePersonaId);
         TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
 
         if (treasureHuntEntity == null) {
@@ -128,6 +134,7 @@ public class EventsBO {
 
         if (!treasureHuntEntity.getIsStreakBroken()) {
             // active streak -> you get rewards for your streak, no need to revive
+            Integer originalStreak = treasureHuntEntity.getStreak();
             Accolades accolades = getTreasureHuntAccolades(activePersonaId, treasureHuntEntity, true);
             treasureHuntEntity.setSeed(new Random().nextInt());
             treasureHuntEntity.setIsStreakBroken(false);
@@ -135,6 +142,7 @@ public class EventsBO {
             treasureHuntEntity.setThDate(LocalDate.now());
             treasureHuntEntity.setCompleted(true);
             treasureHuntDao.update(treasureHuntEntity);
+            updateTreasureHuntStreak(personaEntity, treasureHuntEntity, !treasureHuntEntity.getStreak().equals(originalStreak));
             return accolades;
         }
 
@@ -151,6 +159,7 @@ public class EventsBO {
         treasureHuntEntity.setThDate(LocalDate.now());
         treasureHuntEntity.setCompleted(true);
         treasureHuntDao.update(treasureHuntEntity);
+        updateTreasureHuntStreak(personaEntity, treasureHuntEntity, true);
         return getTreasureHuntAccolades(activePersonaId, treasureHuntEntity, true);
     }
 
@@ -203,5 +212,15 @@ public class EventsBO {
 
         return rewardBO.getAccolades(personaEntity, treasureHuntEntity, treasureHuntConfigEntity,
                 rewardVO, giveReward);
+    }
+
+    private void updateTreasureHuntStreak(PersonaEntity personaEntity, TreasureHuntEntity treasureHuntEntity, boolean streakChanged) {
+        AchievementProgressionContext progressionContext = new AchievementProgressionContext(0, 0,
+                personaEntity.getLevel(), personaEntity.getScore(), treasureHuntEntity.getStreak(), false, false, streakChanged, false);
+
+        achievementBO.updateAchievements(personaEntity, "PROGRESSION", new HashMap<>() {{
+            put("persona", personaEntity);
+            put("progression", progressionContext);
+        }});
     }
 }

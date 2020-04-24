@@ -23,6 +23,7 @@ import com.soapboxrace.jaxb.login.LoginStatusVO;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -46,6 +47,9 @@ public class UserBO {
 
     @EJB
     private PersonaDAO personaDAO;
+
+    @EJB
+    private AchievementBO achievementBO;
 
     public void createXmppUser(UserInfo userInfo) {
         String securityToken = userInfo.getUser().getSecurityToken();
@@ -199,6 +203,10 @@ public class UserBO {
             personaEntity.setLastLogin(LocalDateTime.now());
 
             personaDAO.update(personaEntity);
+
+            achievementBO.updateAchievements(personaEntity, "LOGIN", new HashMap<>() {{
+                put("persona", personaEntity);
+            }});
         }
     }
 

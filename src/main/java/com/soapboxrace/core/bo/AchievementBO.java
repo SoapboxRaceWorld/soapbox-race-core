@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.bo.util.AchievementProgressionContext;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
@@ -24,6 +25,7 @@ import javax.script.ScriptException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
 
@@ -185,6 +187,19 @@ public class AchievementBO {
      */
     public void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
                                    Map<String, Object> properties) {
+        updateAchievements(personaEntity, achievementCategory, properties, false);
+    }
+
+    /**
+     * Update all appropriate achievements in the given category for the persona by the given ID
+     *
+     * @param personaEntity       The {@link PersonaEntity} instance to be updated
+     * @param achievementCategory The category of achievements to evaluate
+     * @param properties          Relevant contextual information for achievements.
+     */
+    public void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
+                                   Map<String, Object> properties, boolean recursiveUpdate) {
+        int originalScore = personaEntity.getScore();
         AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
         achievementsAwarded.setAchievements(new ArrayList<>());
         achievementsAwarded.setBadges(new ArrayList<>());
@@ -234,7 +249,19 @@ public class AchievementBO {
                 new XMPP_ResponseTypeAchievementsAwarded();
         responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
 
+        personaDAO.update(personaEntity);
         openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
+
+        if (personaEntity.getScore() != originalScore) {
+            AchievementProgressionContext progressionContext = new AchievementProgressionContext(0, 0,
+                    personaEntity.getLevel(), personaEntity.getScore(), 0, false, true,
+                    false, false);
+
+            updateAchievements(personaEntity, "PROGRESSION", new HashMap<>() {{
+                put("persona", personaEntity);
+                put("progression", progressionContext);
+            }}, true);
+        }
     }
 
     private void updateAchievement(PersonaEntity personaEntity, AchievementEntity achievementEntity, Map<String, Object> bindings,
@@ -357,7 +384,6 @@ public class AchievementBO {
 
         achievementsAwarded.setScore(newScore);
         personaEntity.setScore(newScore);
-
         personaDAO.update(personaEntity);
     }
 
