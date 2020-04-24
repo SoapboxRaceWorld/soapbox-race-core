@@ -52,10 +52,12 @@ public class ProductBO {
         productTrans.setBundleItems(new ArrayOfProductTrans());
         productTrans.setCurrency(productEntity.getCurrency());
         productTrans.setDurationMinute(productEntity.getDurationMinute());
+        productTrans.setDescription(productEntity.getDescription());
         productTrans.setHash(productEntity.getHash());
         productTrans.setIcon(productEntity.getIcon());
         productTrans.setSecondaryIcon(productEntity.getSecondaryIcon());
         productTrans.setLevel(productEntity.getLevel());
+        productTrans.setLongDescription(productEntity.getLongDescription());
         productTrans.setPrice(productEntity.getPrice());
         productTrans.setPriority(productEntity.getPriority());
         productTrans.setProductId(productEntity.getProductId());
