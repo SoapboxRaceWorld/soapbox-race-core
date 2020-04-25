@@ -23,7 +23,6 @@ import com.soapboxrace.jaxb.login.LoginStatusVO;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -203,10 +202,6 @@ public class UserBO {
             personaEntity.setLastLogin(LocalDateTime.now());
 
             personaDAO.update(personaEntity);
-
-            achievementBO.updateAchievements(personaEntity, "LOGIN", new HashMap<>() {{
-                put("persona", personaEntity);
-            }});
         }
     }
 
