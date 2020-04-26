@@ -107,7 +107,7 @@ public class LobbyBO {
                 XMPP_LobbyInviteType lobbyInviteType = new XMPP_LobbyInviteType();
                 lobbyInviteType.setEventId(eventId);
                 lobbyInviteType.setInvitedByPersonaId(personaId);
-                lobbyInviteType.setInviteLifetimeInMilliseconds(parameterBO.getIntParam("LOBBY_COUNTDOWN_TIME", 60000));
+                lobbyInviteType.setInviteLifetimeInMilliseconds(getLobbyInviteLifetime());
                 lobbyInviteType.setPrivate(true);
                 lobbyInviteType.setLobbyInviteId(lobbys.getId());
 
@@ -121,7 +121,11 @@ public class LobbyBO {
         }
     }
 
-    private void createLobby(PersonaEntity personaEntity, int eventId, int carClassHash, Boolean isPrivate) {
+    public Integer getLobbyInviteLifetime() {
+        return parameterBO.getIntParam("LOBBY_COUNTDOWN_TIME", 60000);
+    }
+
+    public LobbyEntity createLobby(PersonaEntity personaEntity, int eventId, int carClassHash, Boolean isPrivate) {
         EventEntity eventEntity = eventDao.findById(eventId);
 
         LobbyEntity lobbyEntity = new LobbyEntity();
@@ -138,7 +142,7 @@ public class LobbyBO {
             XMPP_LobbyInviteType lobbyInviteType = new XMPP_LobbyInviteType();
             lobbyInviteType.setEventId(eventId);
             lobbyInviteType.setInvitedByPersonaId(personaEntity.getPersonaId());
-            lobbyInviteType.setInviteLifetimeInMilliseconds(parameterBO.getIntParam("LOBBY_COUNTDOWN_TIME", 60000));
+            lobbyInviteType.setInviteLifetimeInMilliseconds(getLobbyInviteLifetime());
             lobbyInviteType.setPrivate(false);
             lobbyInviteType.setLobbyInviteId(lobbyEntity.getId());
 
@@ -157,6 +161,8 @@ public class LobbyBO {
         }
 
         new LobbyCountDown(lobbyEntity.getId(), lobbyDao, eventSessionDao, tokenDAO, parameterBO, openFireSoapBoxCli).start();
+
+        return lobbyEntity;
     }
 
     private void joinLobby(PersonaEntity personaEntity, List<LobbyEntity> lobbys) {
@@ -212,7 +218,7 @@ public class LobbyBO {
         LobbyCountdown lobbyCountdown = new LobbyCountdown();
         lobbyCountdown.setLobbyId(lobbyInviteId);
         lobbyCountdown.setEventId(eventId);
-        lobbyCountdown.setLobbyCountdownInMilliseconds(lobbyEntity.getLobbyCountdownInMilliseconds(parameterBO.getIntParam("LOBBY_COUNTDOWN_TIME", 60000)));
+        lobbyCountdown.setLobbyCountdownInMilliseconds(lobbyEntity.getLobbyCountdownInMilliseconds(getLobbyInviteLifetime()));
         lobbyCountdown.setLobbyStuckDurationInMilliseconds(10000);
 
         ArrayOfLobbyEntrantInfo arrayOfLobbyEntrantInfo = new ArrayOfLobbyEntrantInfo();
@@ -323,7 +329,7 @@ public class LobbyBO {
 
         public void run() {
             try {
-                Thread.sleep(parameterBO.getIntParam("LOBBY_COUNTDOWN_TIME", 60000));
+                Thread.sleep(getLobbyInviteLifetime());
             } catch (Exception e) {
                 e.printStackTrace();
             }

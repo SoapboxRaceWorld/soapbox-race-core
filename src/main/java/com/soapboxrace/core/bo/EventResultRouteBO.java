@@ -12,10 +12,7 @@ import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
-import com.soapboxrace.core.jpa.EventDataEntity;
-import com.soapboxrace.core.jpa.EventMode;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
 import com.soapboxrace.jaxb.http.*;
@@ -49,6 +46,9 @@ public class EventResultRouteBO {
 
     @EJB
     private AchievementBO achievementBO;
+
+    @EJB
+    private LobbyBO lobbyBO;
 
     public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
                                           RouteArbitrationPacket routeArbitrationPacket) {
@@ -102,13 +102,30 @@ public class EventResultRouteBO {
         routeEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM :
                 ExitPath.EXIT_TO_LOBBY);
         routeEventResult.setInviteLifetimeInMilliseconds(0);
-        routeEventResult.setLobbyInviteId(0);
+        if (eventSessionEntity.getLobby() == null) {
+            routeEventResult.setLobbyInviteId(0);
+        } else if (eventSessionEntity.getNextLobby() != null) {
+            routeEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
+            routeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
+                    .getLobbyCountdownInMilliseconds(lobbyBO.getLobbyInviteLifetime()));
+        } else {
+            LobbyEntity oldLobby = eventSessionEntity.getLobby();
+            LobbyEntity newLobby = lobbyBO.createLobby(
+                    personaDAO.findById(oldLobby.getPersonaId()),
+                    oldLobby.getEvent().getId(),
+                    oldLobby.getEvent().getCarClassHash(),
+                    oldLobby.getIsPrivate());
+            eventSessionEntity.setNextLobby(newLobby);
+            eventSessionDao.update(eventSessionEntity);
+            routeEventResult.setLobbyInviteId(newLobby.getId());
+            routeEventResult.setInviteLifetimeInMilliseconds(lobbyBO.getLobbyInviteLifetime());
+        }
         routeEventResult.setPersonaId(activePersonaId);
         sendXmppPacket(eventSessionId, activePersonaId, routeArbitrationPacket);
 
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
 
-        achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<String, Object>() {{
+        achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<>() {{
             put("persona", personaEntity);
             put("event", eventDataEntity.getEvent());
             put("eventData", eventDataEntity);

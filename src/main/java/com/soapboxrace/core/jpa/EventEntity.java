@@ -67,6 +67,7 @@ public class EventEntity {
     private long legitTime;
     private float trackLength;
 
+
     @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank1_id", referencedColumnName = "ID")
     private RewardTableEntity rewardTableRank1;

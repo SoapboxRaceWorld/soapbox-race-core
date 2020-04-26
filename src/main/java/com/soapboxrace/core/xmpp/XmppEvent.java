@@ -10,9 +10,9 @@ import com.soapboxrace.jaxb.xmpp.*;
 
 public class XmppEvent {
 
-    private long personaId;
+    private final long personaId;
 
-    private OpenFireSoapBoxCli openFireSoapBoxCli;
+    private final OpenFireSoapBoxCli openFireSoapBoxCli;
 
     public XmppEvent(long personaId, OpenFireSoapBoxCli openFireSoapBoxCli) {
         this.personaId = personaId;

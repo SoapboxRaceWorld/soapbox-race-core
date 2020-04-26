@@ -12,10 +12,7 @@ import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
-import com.soapboxrace.core.jpa.EventDataEntity;
-import com.soapboxrace.core.jpa.EventMode;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
 import com.soapboxrace.jaxb.http.*;
@@ -49,6 +46,9 @@ public class EventResultDragBO {
 
     @EJB
     private AchievementBO achievementBO;
+
+    @EJB
+    private LobbyBO lobbyBO;
 
     public DragEventResult handleDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
                                          DragArbitrationPacket dragArbitrationPacket) {
@@ -121,9 +121,26 @@ public class EventResultDragBO {
         dragEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM :
                 ExitPath.EXIT_TO_LOBBY);
         dragEventResult.setInviteLifetimeInMilliseconds(0);
-        dragEventResult.setLobbyInviteId(0);
         dragEventResult.setPersonaId(activePersonaId);
 
+        if (eventSessionEntity.getLobby() == null) {
+            dragEventResult.setLobbyInviteId(0);
+        } else if (eventSessionEntity.getNextLobby() != null) {
+            dragEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
+            dragEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
+                    .getLobbyCountdownInMilliseconds(lobbyBO.getLobbyInviteLifetime()));
+        } else {
+            LobbyEntity oldLobby = eventSessionEntity.getLobby();
+            LobbyEntity newLobby = lobbyBO.createLobby(
+                    personaDAO.findById(oldLobby.getPersonaId()),
+                    oldLobby.getEvent().getId(),
+                    oldLobby.getEvent().getCarClassHash(),
+                    oldLobby.getIsPrivate());
+            eventSessionEntity.setNextLobby(newLobby);
+            eventSessionDao.update(eventSessionEntity);
+            dragEventResult.setLobbyInviteId(newLobby.getId());
+            dragEventResult.setInviteLifetimeInMilliseconds(lobbyBO.getLobbyInviteLifetime());
+        }
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
 
         achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<String, Object>() {{
