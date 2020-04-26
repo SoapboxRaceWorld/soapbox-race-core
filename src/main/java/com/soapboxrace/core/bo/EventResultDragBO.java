@@ -50,6 +50,9 @@ public class EventResultDragBO {
     @EJB
     private LobbyBO lobbyBO;
 
+    @EJB
+    private DNFTimerBO dnfTimerBO;
+
     public DragEventResult handleDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
                                          DragArbitrationPacket dragArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
@@ -105,7 +108,8 @@ public class EventResultDragBO {
                 XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId(), openFireSoapBoxCli);
                 xmppEvent.sendDragEnd(dragEntrantResultResponse);
                 if (dragArbitrationPacket.getRank() == 1) {
-                    xmppEvent.sendEventTimingOut(eventSessionId);
+                    xmppEvent.sendEventTimingOut(eventSessionEntity);
+                    dnfTimerBO.scheduleDNF(eventSessionEntity, racer.getPersonaId());
                 }
             }
         }
@@ -128,7 +132,7 @@ public class EventResultDragBO {
         } else if (eventSessionEntity.getNextLobby() != null) {
             dragEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
             dragEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
-                    .getLobbyCountdownInMilliseconds(lobbyBO.getLobbyInviteLifetime()));
+                    .getLobbyCountdownInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime()));
         } else {
             LobbyEntity oldLobby = eventSessionEntity.getLobby();
             LobbyEntity newLobby = lobbyBO.createLobby(
@@ -139,7 +143,7 @@ public class EventResultDragBO {
             eventSessionEntity.setNextLobby(newLobby);
             eventSessionDao.update(eventSessionEntity);
             dragEventResult.setLobbyInviteId(newLobby.getId());
-            dragEventResult.setInviteLifetimeInMilliseconds(lobbyBO.getLobbyInviteLifetime());
+            dragEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime());
         }
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
 

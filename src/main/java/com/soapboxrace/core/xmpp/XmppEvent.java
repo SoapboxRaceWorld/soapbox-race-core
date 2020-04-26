@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.xmpp;
 
+import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.jaxb.xmpp.*;
 
 public class XmppEvent {
@@ -31,9 +32,10 @@ public class XmppEvent {
         openFireSoapBoxCli.send(dragEntrantResultResponse, personaId);
     }
 
-    public void sendEventTimingOut(Long eventSessionId) {
+    public void sendEventTimingOut(EventSessionEntity eventSessionEntity) {
         XMPP_EventTimingOutType eventTimingOut = new XMPP_EventTimingOutType();
-        eventTimingOut.setEventSessionId(eventSessionId);
+        eventTimingOut.setEventSessionId(eventSessionEntity.getId());
+        eventTimingOut.setTimeInMilliseconds(eventSessionEntity.getEvent().getDnfTimerTime());
         XMPP_ResponseTypeEventTimingOut eventTimingOutResponse = new XMPP_ResponseTypeEventTimingOut();
         eventTimingOutResponse.setEventTimingOut(eventTimingOut);
         openFireSoapBoxCli.send(eventTimingOutResponse, personaId);

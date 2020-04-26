@@ -66,7 +66,10 @@ public class EventEntity {
     private float minTopSpeedTrigger;
     private long legitTime;
     private float trackLength;
-
+    @Column(columnDefinition = "integer default 60000")
+    private int lobbyCountdownTime = 60000;
+    @Column(columnDefinition = "integer default 60000")
+    private int dnfTimerTime = 60000;
 
     @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank1_id", referencedColumnName = "ID")
@@ -426,6 +429,22 @@ public class EventEntity {
 
     public void setTrackLength(float trackLength) {
         this.trackLength = trackLength;
+    }
+
+    public int getLobbyCountdownTime() {
+        return lobbyCountdownTime;
+    }
+
+    public void setLobbyCountdownTime(int lobbyCountdownTime) {
+        this.lobbyCountdownTime = lobbyCountdownTime;
+    }
+
+    public int getDnfTimerTime() {
+        return dnfTimerTime;
+    }
+
+    public void setDnfTimerTime(int dnfTimerTime) {
+        this.dnfTimerTime = dnfTimerTime;
     }
 
     public RewardTableEntity getRewardTableRank1() {

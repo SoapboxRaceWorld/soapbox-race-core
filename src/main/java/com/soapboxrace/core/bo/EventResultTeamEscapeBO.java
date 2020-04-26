@@ -50,6 +50,9 @@ public class EventResultTeamEscapeBO {
     @EJB
     private LobbyBO lobbyBO;
 
+    @EJB
+    private DNFTimerBO dnfTimerBO;
+
     public TeamEscapeEventResult handleTeamEscapeEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
                                                      TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
@@ -113,8 +116,10 @@ public class EventResultTeamEscapeBO {
             if (!racer.getPersonaId().equals(activePersonaId)) {
                 XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId(), openFireSoapBoxCli);
                 xmppEvent.sendTeamEscapeEnd(teamEscapeEntrantResultResponse);
-                if (teamEscapeArbitrationPacket.getRank() == 1) {
-                    xmppEvent.sendEventTimingOut(eventSessionId);
+                if ((teamEscapeArbitrationPacket.getFinishReason() == 518 ||
+                        teamEscapeArbitrationPacket.getFinishReason() == 22) && teamEscapeArbitrationPacket.getRank() == 1) {
+                    xmppEvent.sendEventTimingOut(eventSessionEntity);
+                    dnfTimerBO.scheduleDNF(eventSessionEntity, racer.getPersonaId());
                 }
             }
         }
@@ -137,7 +142,7 @@ public class EventResultTeamEscapeBO {
         } else if (eventSessionEntity.getNextLobby() != null) {
             teamEscapeEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
             teamEscapeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
-                    .getLobbyCountdownInMilliseconds(lobbyBO.getLobbyInviteLifetime()));
+                    .getLobbyCountdownInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime()));
         } else {
             LobbyEntity oldLobby = eventSessionEntity.getLobby();
             LobbyEntity newLobby = lobbyBO.createLobby(
@@ -148,7 +153,7 @@ public class EventResultTeamEscapeBO {
             eventSessionEntity.setNextLobby(newLobby);
             eventSessionDao.update(eventSessionEntity);
             teamEscapeEventResult.setLobbyInviteId(newLobby.getId());
-            teamEscapeEventResult.setInviteLifetimeInMilliseconds(lobbyBO.getLobbyInviteLifetime());
+            teamEscapeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime());
         }
 
         if (teamEscapeArbitrationPacket.getBustedCount() == 0) {
