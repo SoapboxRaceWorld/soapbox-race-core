@@ -107,7 +107,7 @@ public class EventResultDragBO {
             if (!racer.getPersonaId().equals(activePersonaId)) {
                 XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId(), openFireSoapBoxCli);
                 xmppEvent.sendDragEnd(dragEntrantResultResponse);
-                if (dragArbitrationPacket.getRank() == 1) {
+                if (dragArbitrationPacket.getRank() == 1 && eventSessionEntity.getEvent().isDnfEnabled()) {
                     xmppEvent.sendEventTimingOut(eventSessionEntity);
                     dnfTimerBO.scheduleDNF(eventSessionEntity, racer.getPersonaId());
                 }
@@ -127,27 +127,30 @@ public class EventResultDragBO {
         dragEventResult.setInviteLifetimeInMilliseconds(0);
         dragEventResult.setPersonaId(activePersonaId);
 
-        if (eventSessionEntity.getLobby() == null) {
-            dragEventResult.setLobbyInviteId(0);
-        } else if (eventSessionEntity.getNextLobby() != null) {
-            dragEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
-            dragEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
-                    .getLobbyCountdownInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime()));
-        } else {
-            LobbyEntity oldLobby = eventSessionEntity.getLobby();
-            LobbyEntity newLobby = lobbyBO.createLobby(
-                    personaDAO.findById(oldLobby.getPersonaId()),
-                    oldLobby.getEvent().getId(),
-                    oldLobby.getEvent().getCarClassHash(),
-                    oldLobby.getIsPrivate());
-            eventSessionEntity.setNextLobby(newLobby);
-            eventSessionDao.update(eventSessionEntity);
-            dragEventResult.setLobbyInviteId(newLobby.getId());
-            dragEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime());
+        if (eventSessionEntity.getEvent().isRaceAgainEnabled()) {
+            if (eventSessionEntity.getLobby() == null) {
+                dragEventResult.setLobbyInviteId(0);
+            } else if (eventSessionEntity.getNextLobby() != null) {
+                dragEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
+                dragEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
+                        .getLobbyCountdownInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime()));
+            } else {
+                LobbyEntity oldLobby = eventSessionEntity.getLobby();
+                LobbyEntity newLobby = lobbyBO.createLobby(
+                        personaDAO.findById(oldLobby.getPersonaId()),
+                        oldLobby.getEvent().getId(),
+                        oldLobby.getEvent().getCarClassHash(),
+                        oldLobby.getIsPrivate());
+                eventSessionEntity.setNextLobby(newLobby);
+                eventSessionDao.update(eventSessionEntity);
+                dragEventResult.setLobbyInviteId(newLobby.getId());
+                dragEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime());
+            }
         }
+
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
 
-        achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<String, Object>() {{
+        achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<>() {{
             put("persona", personaEntity);
             put("event", eventDataEntity.getEvent());
             put("eventData", eventDataEntity);

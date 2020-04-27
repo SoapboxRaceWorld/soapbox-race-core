@@ -105,23 +105,25 @@ public class EventResultRouteBO {
         routeEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM :
                 ExitPath.EXIT_TO_LOBBY);
         routeEventResult.setInviteLifetimeInMilliseconds(0);
-        if (eventSessionEntity.getLobby() == null) {
-            routeEventResult.setLobbyInviteId(0);
-        } else if (eventSessionEntity.getNextLobby() != null) {
-            routeEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
-            routeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
-                    .getLobbyCountdownInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime()));
-        } else {
-            LobbyEntity oldLobby = eventSessionEntity.getLobby();
-            LobbyEntity newLobby = lobbyBO.createLobby(
-                    personaDAO.findById(oldLobby.getPersonaId()),
-                    oldLobby.getEvent().getId(),
-                    oldLobby.getEvent().getCarClassHash(),
-                    oldLobby.getIsPrivate());
-            eventSessionEntity.setNextLobby(newLobby);
-            eventSessionDao.update(eventSessionEntity);
-            routeEventResult.setLobbyInviteId(newLobby.getId());
-            routeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime());
+        if (eventSessionEntity.getEvent().isRaceAgainEnabled()) {
+            if (eventSessionEntity.getLobby() == null) {
+                routeEventResult.setLobbyInviteId(0);
+            } else if (eventSessionEntity.getNextLobby() != null) {
+                routeEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
+                routeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
+                        .getLobbyCountdownInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime()));
+            } else {
+                LobbyEntity oldLobby = eventSessionEntity.getLobby();
+                LobbyEntity newLobby = lobbyBO.createLobby(
+                        personaDAO.findById(oldLobby.getPersonaId()),
+                        oldLobby.getEvent().getId(),
+                        oldLobby.getEvent().getCarClassHash(),
+                        oldLobby.getIsPrivate());
+                eventSessionEntity.setNextLobby(newLobby);
+                eventSessionDao.update(eventSessionEntity);
+                routeEventResult.setLobbyInviteId(newLobby.getId());
+                routeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime());
+            }
         }
         routeEventResult.setPersonaId(activePersonaId);
         sendXmppPacket(eventSessionEntity, activePersonaId, routeArbitrationPacket);
@@ -169,7 +171,7 @@ public class EventResultRouteBO {
             if (!racer.getPersonaId().equals(activePersonaId)) {
                 XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId(), openFireSoapBoxCli);
                 xmppEvent.sendRaceEnd(routeEntrantResultResponse);
-                if (routeArbitrationPacket.getRank() == 1) {
+                if (routeArbitrationPacket.getRank() == 1 && eventSessionEntity.getEvent().isDnfEnabled()) {
                     xmppEvent.sendEventTimingOut(eventSessionEntity);
                     dnfTimerBO.scheduleDNF(eventSessionEntity, racer.getPersonaId());
                 }

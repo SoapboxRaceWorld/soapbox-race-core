@@ -70,6 +70,10 @@ public class EventEntity {
     private int lobbyCountdownTime = 60000;
     @Column(columnDefinition = "integer default 60000")
     private int dnfTimerTime = 60000;
+    @Column(columnDefinition = "tinyint(1) default 1")
+    private boolean isRaceAgainEnabled;
+    @Column(columnDefinition = "tinyint(1) default 1")
+    private boolean isDnfEnabled;
 
     @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank1_id", referencedColumnName = "ID")
@@ -517,5 +521,21 @@ public class EventEntity {
 
     public void setRotationEnabled(boolean rotationEnabled) {
         isRotationEnabled = rotationEnabled;
+    }
+
+    public boolean isDnfEnabled() {
+        return isDnfEnabled;
+    }
+
+    public void setDnfEnabled(boolean dnfEnabled) {
+        isDnfEnabled = dnfEnabled;
+    }
+
+    public boolean isRaceAgainEnabled() {
+        return isRaceAgainEnabled;
+    }
+
+    public void setRaceAgainEnabled(boolean raceAgainEnabled) {
+        isRaceAgainEnabled = raceAgainEnabled;
     }
 }
