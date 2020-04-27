@@ -46,6 +46,27 @@ public class LegitRaceBO {
         if (arbitrationPacket.getHacksDetected() > 0) {
             socialBo.sendReport(0L, activePersonaId, 3, "hacksDetected > 0", (int) arbitrationPacket.getCarId(), 0,
                     arbitrationPacket.getHacksDetected());
+            return false;
+        }
+
+        if (arbitrationPacket instanceof TeamEscapeArbitrationPacket) {
+            TeamEscapeArbitrationPacket teamEscapeArbitrationPacket = (TeamEscapeArbitrationPacket) arbitrationPacket;
+
+            if (teamEscapeArbitrationPacket.getFinishReason() != 8202) {
+                return teamEscapeArbitrationPacket.getCopsDisabled() <= teamEscapeArbitrationPacket.getCopsDeployed();
+            }
+        }
+
+        if (arbitrationPacket instanceof PursuitArbitrationPacket) {
+            PursuitArbitrationPacket pursuitArbitrationPacket = (PursuitArbitrationPacket) arbitrationPacket;
+
+            if (pursuitArbitrationPacket.getFinishReason() != 8202) {
+                if (pursuitArbitrationPacket.getCopsDisabled() > pursuitArbitrationPacket.getCopsDeployed()) {
+                    return false;
+                }
+
+                return pursuitArbitrationPacket.getTopSpeed() != 0 || pursuitArbitrationPacket.getInfractions() == 0;
+            }
         }
 
         return true;
