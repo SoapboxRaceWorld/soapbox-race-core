@@ -22,15 +22,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 import java.util.Objects;
 
 @Path("User")
 public class User {
-
-    @Context
-    UriInfo uri;
 
     @Context
     private HttpServletRequest sr;
@@ -79,8 +74,7 @@ public class User {
         }
 
         tokenBO.deleteByUserId(userId);
-        URI myUri = uri.getBaseUri();
-        String randomUUID = tokenBO.createToken(userId, myUri.getHost());
+        String randomUUID = tokenBO.createToken(userId, sr.getRemoteHost());
         UserInfo userInfo = userBO.getUserById(userId);
         userInfo.getUser().setSecurityToken(randomUUID);
         userBO.createXmppUser(userInfo);
