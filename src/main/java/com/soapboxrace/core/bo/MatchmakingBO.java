@@ -11,9 +11,7 @@ import io.lettuce.core.ScanIterator;
 import io.lettuce.core.api.StatefulRedisConnection;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.ejb.*;
 
 /**
  * Responsible for managing the multiplayer matchmaking system.
@@ -27,6 +25,7 @@ import javax.ejb.Startup;
  */
 @Singleton
 @Startup
+@Lock(LockType.READ)
 public class MatchmakingBO {
 
     @EJB

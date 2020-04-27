@@ -11,13 +11,12 @@ import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.ejb.*;
 import java.util.List;
 
 @Singleton
 @Startup
+@Lock(LockType.READ)
 public class PresenceBO {
     @EJB
     private RedisBO redisBO;
