@@ -64,6 +64,7 @@ public class EventEntity {
     private float rank7CashMultiplier;
     private float rank8CashMultiplier;
     private float minTopSpeedTrigger;
+    private long rewardsTimeLimit;
     private long legitTime;
     private float trackLength;
     @Column(columnDefinition = "integer default 60000")
@@ -187,12 +188,12 @@ public class EventEntity {
         this.maxPlayers = maxPlayers;
     }
 
-    public long getLegitTime() {
-        return legitTime;
+    public long getRewardsTimeLimit() {
+        return rewardsTimeLimit;
     }
 
-    public void setLegitTime(long legitTime) {
-        this.legitTime = legitTime;
+    public void setRewardsTimeLimit(long rewardsTimeLimit) {
+        this.rewardsTimeLimit = rewardsTimeLimit;
     }
 
     public int getBaseRepReward() {
@@ -537,5 +538,13 @@ public class EventEntity {
 
     public void setRaceAgainEnabled(boolean raceAgainEnabled) {
         isRaceAgainEnabled = raceAgainEnabled;
+    }
+
+    public long getLegitTime() {
+        return legitTime;
+    }
+
+    public void setLegitTime(long legitTime) {
+        this.legitTime = legitTime;
     }
 }

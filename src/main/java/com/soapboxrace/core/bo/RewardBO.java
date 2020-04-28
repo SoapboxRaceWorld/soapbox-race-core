@@ -77,7 +77,7 @@ public class RewardBO {
                 eventEntity.getLevelRepRewardMultiplier());
         Float playerLevelCashConst = getPlayerLevelConst(personaEntity.getLevel(),
                 eventEntity.getLevelCashRewardMultiplier());
-        Float timeConst = getTimeConst(eventEntity.getLegitTime(), arbitrationPacket.getEventDurationInMilliseconds());
+        Float timeConst = getTimeConst(eventEntity.getRewardsTimeLimit(), arbitrationPacket.getEventDurationInMilliseconds());
         rewardVO.setBaseRep(getBaseReward(baseRep, playerLevelRepConst, timeConst));
         rewardVO.setBaseCash(getBaseReward(baseCash, playerLevelCashConst, timeConst));
     }
@@ -131,7 +131,7 @@ public class RewardBO {
         AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp,
                 personaEntity.getLevel(), personaEntity.getScore(), 0, hasLevelChanged, false, false, isInEvent);
 
-        achievementBO.updateAchievements(personaEntity, "PROGRESSION", new HashMap<String, Object>() {{
+        achievementBO.updateAchievements(personaEntity, "PROGRESSION", new HashMap<>() {{
             put("persona", personaEntity);
             put("progression", progressionContext);
         }});
