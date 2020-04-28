@@ -65,7 +65,7 @@ public class User {
         }
 
         int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
-        int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
+        int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS", -1);
 
         if (maxOnlinePlayers != -1) {
             if (numberOfUsersOnlineNow >= maxOnlinePlayers) {
