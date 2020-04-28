@@ -10,6 +10,7 @@ import com.soapboxrace.core.dao.CustomCarDAO;
 import com.soapboxrace.core.dao.InventoryItemDAO;
 import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.jpa.CustomCarEntity;
+import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
@@ -35,7 +36,7 @@ public class CarDamageBO {
     @EJB
     private InventoryItemDAO inventoryItemDAO;
 
-    public Integer induceCarDamage(Long personaId, ArbitrationPacket arbitrationPacket, Integer numberOfCollision) {
+    public Integer induceCarDamage(Long personaId, ArbitrationPacket arbitrationPacket, EventEntity eventEntity) {
         if (!parameterBO.getBoolParam("ENABLE_CAR_DAMAGE")) {
             return 100;
         }
@@ -52,7 +53,8 @@ public class CarDamageBO {
         OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(carId);
         int durability = ownedCarEntity.getDurability();
         if (durability > 0) {
-            int calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
+//            int calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
+            int calcDamage = eventEntity.getEventModeId() == 19 ? 2 : 5; // 5% for non-drags, 2% for drags
             int newCarDamage = Math.max(durability - calcDamage, 0);
 
             updateDurability(ownedCarEntity, newCarDamage);

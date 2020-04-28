@@ -98,7 +98,7 @@ public class EventResultRouteBO {
         routeEventResult.setAccolades(rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket,
                 eventSessionEntity));
         routeEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, routeArbitrationPacket,
-                routeArbitrationPacket.getNumberOfCollisions()));
+                eventDataEntity.getEvent()));
         routeEventResult.setEntrants(arrayOfRouteEntrantResult);
         routeEventResult.setEventId(eventDataEntity.getEvent().getId());
         routeEventResult.setEventSessionId(eventSessionId);

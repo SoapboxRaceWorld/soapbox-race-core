@@ -118,7 +118,7 @@ public class EventResultDragBO {
         dragEventResult.setAccolades(rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket,
                 eventSessionEntity));
         dragEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, dragArbitrationPacket,
-                dragArbitrationPacket.getNumberOfCollisions()));
+                eventDataEntity.getEvent()));
         dragEventResult.setEntrants(arrayOfDragEntrantResult);
         dragEventResult.setEventId(eventDataEntity.getEvent().getId());
         dragEventResult.setEventSessionId(eventSessionId);

@@ -88,7 +88,8 @@ public class EventResultPursuitBO {
         PursuitEventResult pursuitEventResult = new PursuitEventResult();
         pursuitEventResult.setAccolades(rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket
                 , eventSessionEntity, isBusted));
-        pursuitEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, pursuitArbitrationPacket, 0));
+        pursuitEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, pursuitArbitrationPacket,
+                eventDataEntity.getEvent()));
         pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
         pursuitEventResult.setEventSessionId(eventSessionId);
         pursuitEventResult.setExitPath(ExitPath.EXIT_TO_FREEROAM);
@@ -100,7 +101,7 @@ public class EventResultPursuitBO {
         if (!isBusted) {
             PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
 
-            achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<String, Object>() {{
+            achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<>() {{
                 put("persona", personaEntity);
                 put("event", eventDataEntity.getEvent());
                 put("eventData", eventDataEntity);
