@@ -91,7 +91,6 @@ public class EventResultDragBO {
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
         eventSessionDao.update(eventSessionEntity);
-        eventDataDao.update(eventDataEntity);
 
         ArrayOfDragEntrantResult arrayOfDragEntrantResult = new ArrayOfDragEntrantResult();
         for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
@@ -116,7 +115,7 @@ public class EventResultDragBO {
 
         DragEventResult dragEventResult = new DragEventResult();
         dragEventResult.setAccolades(rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket,
-                eventSessionEntity));
+                eventDataEntity, eventSessionEntity));
         dragEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, dragArbitrationPacket,
                 eventDataEntity.getEvent()));
         dragEventResult.setEntrants(arrayOfDragEntrantResult);
@@ -161,6 +160,7 @@ public class EventResultDragBO {
                     eventSessionEntity));
         }});
 
+        eventDataDao.update(eventDataEntity);
         return dragEventResult;
     }
 

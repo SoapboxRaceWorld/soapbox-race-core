@@ -79,7 +79,6 @@ public class EventResultRouteBO {
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
         eventSessionDao.update(eventSessionEntity);
-        eventDataDao.update(eventDataEntity);
 
         ArrayOfRouteEntrantResult arrayOfRouteEntrantResult = new ArrayOfRouteEntrantResult();
         for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
@@ -96,7 +95,7 @@ public class EventResultRouteBO {
 
         RouteEventResult routeEventResult = new RouteEventResult();
         routeEventResult.setAccolades(rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket,
-                eventSessionEntity));
+                eventDataEntity, eventSessionEntity));
         routeEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, routeArbitrationPacket,
                 eventDataEntity.getEvent()));
         routeEventResult.setEntrants(arrayOfRouteEntrantResult);
@@ -141,6 +140,7 @@ public class EventResultRouteBO {
                     eventSessionEntity));
         }});
 
+        eventDataDao.update(eventDataEntity);
         return routeEventResult;
     }
 

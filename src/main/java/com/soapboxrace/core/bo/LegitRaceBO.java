@@ -20,7 +20,6 @@ public class LegitRaceBO {
     @EJB
     private SocialBO socialBo;
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isLegit(Long activePersonaId, ArbitrationPacket arbitrationPacket,
                            EventSessionEntity sessionEntity) {
         long minimumTime = sessionEntity.getEvent().getLegitTime();

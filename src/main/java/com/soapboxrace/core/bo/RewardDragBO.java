@@ -8,10 +8,7 @@ package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.EventEntity;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.SkillModRewardType;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.DragArbitrationPacket;
 
@@ -28,9 +25,11 @@ public class RewardDragBO extends RewardBO {
     private LegitRaceBO legitRaceBO;
 
     public Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket,
-                                      EventSessionEntity eventSessionEntity) {
+                                      EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity) {
         int finishReason = dragArbitrationPacket.getFinishReason();
-        if (!legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity) || finishReason != 22) {
+        boolean legit = legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity);
+        eventDataEntity.setLegit(legit);
+        if (!legit || finishReason != 22) {
             return new Accolades();
         }
         EventEntity eventEntity = eventSessionEntity.getEvent();

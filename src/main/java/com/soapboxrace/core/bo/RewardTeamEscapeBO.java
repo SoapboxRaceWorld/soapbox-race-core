@@ -8,10 +8,7 @@ package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.EventEntity;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.SkillModRewardType;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
@@ -31,9 +28,11 @@ public class RewardTeamEscapeBO extends RewardBO {
 
     public Accolades getTeamEscapeAccolades(Long activePersonaId,
                                             TeamEscapeArbitrationPacket teamEscapeArbitrationPacket,
-                                            EventSessionEntity eventSessionEntity) {
+                                            EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity) {
         int finishReason = teamEscapeArbitrationPacket.getFinishReason();
-        if (!legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity) || finishReason != 22) {
+        boolean legit = legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity);
+        eventDataEntity.setLegit(legit);
+        if (!legit || finishReason != 22) {
             return new Accolades();
         }
 

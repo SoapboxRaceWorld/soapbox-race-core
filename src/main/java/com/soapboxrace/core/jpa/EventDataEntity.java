@@ -62,6 +62,8 @@ public class EventDataEntity {
     private long hacksDetected;
     @Column(name = "`rank`")
     private int rank;
+    @Column(columnDefinition = "tinyint(1) default 0")
+    private boolean isLegit;
 
     public Long getId() {
         return id;
@@ -293,4 +295,11 @@ public class EventDataEntity {
         this.distanceToFinish = value;
     }
 
+    public boolean isLegit() {
+        return isLegit;
+    }
+
+    public void setLegit(boolean legit) {
+        isLegit = legit;
+    }
 }

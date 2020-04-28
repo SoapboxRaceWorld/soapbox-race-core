@@ -81,13 +81,12 @@ public class EventResultPursuitBO {
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
         eventSessionDao.update(eventSessionEntity);
-        eventDataDao.update(eventDataEntity);
 
         pursuitArbitrationPacket.setRank(1); // there's only ever 1 player, and the game sets rank to 0... idk why
 
         PursuitEventResult pursuitEventResult = new PursuitEventResult();
         pursuitEventResult.setAccolades(rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket
-                , eventSessionEntity, isBusted));
+                , eventDataEntity, eventSessionEntity, isBusted));
         pursuitEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, pursuitArbitrationPacket,
                 eventDataEntity.getEvent()));
         pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
@@ -117,6 +116,7 @@ public class EventResultPursuitBO {
         ownedCarEntity.setHeat(isBusted ? 1 : pursuitArbitrationPacket.getHeat());
         ownedCarDAO.update(ownedCarEntity);
 
+        eventDataDao.update(eventDataEntity);
         return pursuitEventResult;
     }
 
