@@ -7,7 +7,9 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.jaxb.http.*;
+import com.soapboxrace.jaxb.http.ArbitrationPacket;
+import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
+import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -16,24 +18,12 @@ import javax.ejb.Stateless;
 public class LegitRaceBO {
 
     @EJB
-    private ParameterBO parameterBO;
-
-    @EJB
     private SocialBO socialBo;
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isLegit(Long activePersonaId, ArbitrationPacket arbitrationPacket,
                            EventSessionEntity sessionEntity) {
-        int minimumTime = 0;
-
-        if (arbitrationPacket instanceof PursuitArbitrationPacket)
-            minimumTime = parameterBO.getIntParam("PURSUIT_MINIMUM_TIME");
-        else if (arbitrationPacket instanceof RouteArbitrationPacket)
-            minimumTime = parameterBO.getIntParam("ROUTE_MINIMUM_TIME");
-        else if (arbitrationPacket instanceof TeamEscapeArbitrationPacket)
-            minimumTime = parameterBO.getIntParam("TE_MINIMUM_TIME");
-        else if (arbitrationPacket instanceof DragArbitrationPacket)
-            minimumTime = parameterBO.getIntParam("DRAG_MINIMUM_TIME");
-
+        long minimumTime = sessionEntity.getEvent().getLegitTime();
         final long timeDiff = sessionEntity.getEnded() - sessionEntity.getStarted();
         boolean legit = timeDiff >= minimumTime;
 
