@@ -71,9 +71,9 @@ public class EventEntity {
     private int lobbyCountdownTime = 60000;
     @Column(columnDefinition = "integer default 60000")
     private int dnfTimerTime = 60000;
-    @Column(columnDefinition = "tinyint(1) default 1")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 1", nullable = false)
     private boolean isRaceAgainEnabled;
-    @Column(columnDefinition = "tinyint(1) default 1")
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 1", nullable = false)
     private boolean isDnfEnabled;
 
     @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
