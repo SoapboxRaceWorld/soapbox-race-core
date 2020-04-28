@@ -18,6 +18,7 @@ import com.soapboxrace.jaxb.xmpp.AchievementProgress;
 import com.soapboxrace.jaxb.xmpp.AchievementsAwarded;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeAchievementsAwarded;
 
+import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
@@ -185,6 +186,7 @@ public class AchievementBO {
      * @param achievementCategory The category of achievements to evaluate
      * @param properties          Relevant contextual information for achievements.
      */
+    @Asynchronous
     public void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
                                    Map<String, Object> properties) {
         updateAchievements(personaEntity, achievementCategory, properties, false);
@@ -197,6 +199,7 @@ public class AchievementBO {
      * @param achievementCategory The category of achievements to evaluate
      * @param properties          Relevant contextual information for achievements.
      */
+    @Asynchronous
     public void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
                                    Map<String, Object> properties, boolean recursiveUpdate) {
         int originalScore = personaEntity.getScore();
