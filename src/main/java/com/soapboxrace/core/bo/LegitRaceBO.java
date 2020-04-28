@@ -28,14 +28,18 @@ public class LegitRaceBO {
         boolean legit = timeDiff >= minimumTime;
 
         if (!legit) {
-            socialBo.sendReport(0L, activePersonaId, 3, String.format("Abnormal event time: %d", timeDiff),
+            socialBo.sendReport(0L, activePersonaId, 3,
+                    String.format("Abnormal event time: %d (below minimum of %d on event %d; session %d)",
+                            timeDiff, minimumTime, sessionEntity.getEvent().getId(), sessionEntity.getId()),
                     (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
             return false;
         }
 
         if (arbitrationPacket.getHacksDetected() > 0) {
-            socialBo.sendReport(0L, activePersonaId, 3, "hacksDetected > 0", (int) arbitrationPacket.getCarId(), 0,
-                    arbitrationPacket.getHacksDetected());
+            socialBo.sendReport(0L, activePersonaId, 3,
+                    String.format("hacksDetected=%d (event %d; session %d)",
+                            arbitrationPacket.getHacksDetected(), sessionEntity.getEvent().getId(), sessionEntity.getId()),
+                    (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
             return false;
         }
 
