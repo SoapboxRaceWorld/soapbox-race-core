@@ -42,7 +42,7 @@ public class PersonaAchievementRankEntity {
     @JoinColumn(name = "achievement_rank_id", referencedColumnName = "ID", nullable = false)
     private AchievementRankEntity achievementRankEntity;
 
-    @Column(columnDefinition = "ENUM('Locked', 'InProgress', 'Completed', 'RewardWaiting')")
+    @Column
     private String state;
 
     @Column(name = "achieved_on")
