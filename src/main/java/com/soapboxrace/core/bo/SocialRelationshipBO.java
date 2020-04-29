@@ -43,26 +43,33 @@ public class SocialRelationshipBO {
     private DriverPersonaBO driverPersonaBO;
     @EJB
     private PresenceBO presenceBO;
+    @EJB
+    private ParameterBO parameterBO;
     private StatefulRedisPubSubConnection<String, String> pubSubConnection;
     private SocialRelationshipListener listener;
+    private boolean enabled;
 
     @PostConstruct
     public void init() {
         System.out.println("SocialRelationshipBO init");
-
-        this.listener = new SocialRelationshipListener();
-        this.pubSubConnection = this.redisBO.createPubSub();
-        this.pubSubConnection.addListener(this.listener);
-        this.pubSubConnection.sync().subscribe("game_presence_updates");
+        this.enabled = parameterBO.getBoolParam("ENABLE_REDIS");
+        if (this.enabled) {
+            this.listener = new SocialRelationshipListener();
+            this.pubSubConnection = this.redisBO.createPubSub();
+            this.pubSubConnection.addListener(this.listener);
+            this.pubSubConnection.sync().subscribe("game_presence_updates");
+        }
     }
 
     @PreDestroy
     public void shutdown() {
         System.out.println("SocialRelationshipBO shutdown");
 
-        this.pubSubConnection.removeListener(this.listener);
-        this.pubSubConnection.close();
-        this.listener = null;
+        if (this.enabled) {
+            this.pubSubConnection.removeListener(this.listener);
+            this.pubSubConnection.close();
+            this.listener = null;
+        }
     }
 
     public PersonaFriendsList getFriendsList(Long userId) {

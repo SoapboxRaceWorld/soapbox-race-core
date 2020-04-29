@@ -31,11 +31,18 @@ public class MatchmakingBO {
     @EJB
     private RedisBO redisBO;
 
+    @EJB
+    private ParameterBO parameterBO;
+
+    private boolean enabled;
     private StatefulRedisConnection<String, String> redisConnection;
 
     @PostConstruct
     public void initialize() {
-        this.redisConnection = this.redisBO.getConnection();
+        this.enabled = parameterBO.getBoolParam("ENABLE_REDIS");
+        if (this.enabled) {
+            this.redisConnection = this.redisBO.getConnection();
+        }
     }
 
     /**
@@ -45,7 +52,9 @@ public class MatchmakingBO {
      * @param carClass  The class of the persona's current car.
      */
     public void addPlayerToQueue(Long personaId, Integer carClass) {
-        this.redisConnection.sync().hset("matchmaking_queue", personaId.toString(), carClass.toString());
+        if (this.enabled) {
+            this.redisConnection.sync().hset("matchmaking_queue", personaId.toString(), carClass.toString());
+        }
     }
 
     /**
@@ -54,7 +63,9 @@ public class MatchmakingBO {
      * @param personaId The ID of the persona to remove from the queue.
      */
     public void removePlayerFromQueue(Long personaId) {
-        this.redisConnection.sync().hdel("matchmaking_queue", personaId.toString());
+        if (this.enabled) {
+            this.redisConnection.sync().hdel("matchmaking_queue", personaId.toString());
+        }
     }
 
     /**
@@ -65,6 +76,9 @@ public class MatchmakingBO {
      */
     public Long getPlayerFromQueue(Integer carClass) {
         // Are we looking for a player for an OPEN event?
+        if (!this.enabled)
+            return -1L;
+
         ScanIterator<KeyValue<String, String>> iterator = ScanIterator.hscan(this.redisConnection.sync(), "matchmaking_queue");
         long personaId = -1L;
 
