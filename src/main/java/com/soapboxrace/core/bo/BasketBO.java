@@ -146,17 +146,15 @@ public class BasketBO {
                 if (carClassesEntity != null) {
                     AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity,
                             AchievementCommerceContext.CommerceType.CAR_PURCHASE);
-                    achievementBO.updateAchievements(personaEntity, "COMMERCE", new HashMap<String,
-                            Object>() {{
+                    achievementBO.updateAchievements(personaEntity, "COMMERCE", new HashMap<>() {{
                         put("persona", personaEntity);
                         put("carSlot", carSlotEntity);
                         put("commerceCtx", commerceContext);
                     }});
                 }
 
+                personaBo.changeDefaultCar(personaEntity, carSlotEntity.getOwnedCar().getId());
                 personaDao.update(personaEntity);
-
-                personaBo.changeDefaultCar(personaEntity.getPersonaId(), carSlotEntity.getOwnedCar().getId());
 
                 ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
                 OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
@@ -293,6 +291,7 @@ public class BasketBO {
             addAmplifier(personaEntity.getPersonaId(), productDao.findByEntitlementTag("INSURANCE_AMPLIFIER"));
         }
 
+//        System.out.println("baskets: " + personaEntity.getPersonaId() + " has " + getPersonasCar(personaEntity.getPersonaId()).size() + " cars");
         return carSlotEntity;
     }
 

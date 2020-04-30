@@ -69,7 +69,12 @@ public class PersonaBO {
 
     public void changeDefaultCar(Long personaId, Long defaultCarId) {
         PersonaEntity personaEntity = personaDAO.findById(personaId);
-        List<CarSlotEntity> carSlotList = carSlotDAO.findByPersonaId(personaId);
+        changeDefaultCar(personaEntity, defaultCarId);
+        personaDAO.update(personaEntity);
+    }
+
+    public void changeDefaultCar(PersonaEntity personaEntity, Long defaultCarId) {
+        List<CarSlotEntity> carSlotList = carSlotDAO.findByPersonaId(personaEntity.getPersonaId());
         int i = 0;
         for (CarSlotEntity carSlotEntity : carSlotList) {
             if (carSlotEntity.getOwnedCar().getId().equals(defaultCarId)) {
@@ -78,7 +83,7 @@ public class PersonaBO {
             i++;
         }
         personaEntity.setCurCarIndex(i);
-        personaDAO.update(personaEntity);
+//        System.out.println("changeDefaultCar: curCarIndex=" + i);
     }
 
     public PersonaEntity getPersonaById(Long personaId) {
@@ -89,11 +94,12 @@ public class PersonaBO {
         PersonaEntity personaEntity = personaDAO.findById(personaId);
         List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
         int curCarIndex = personaEntity.getCurCarIndex();
+//        System.out.println("getDefaultCarEntity: curCarIndex=" + curCarIndex + ", carSlotList has " + carSlotList.size() + " cars");
         if (!carSlotList.isEmpty()) {
             if (curCarIndex >= carSlotList.size()) {
                 curCarIndex = carSlotList.size() - 1;
                 CarSlotEntity ownedCarEntity = carSlotList.get(curCarIndex);
-                changeDefaultCar(personaId, ownedCarEntity.getId());
+                changeDefaultCar(personaEntity, ownedCarEntity.getId());
             }
             return carSlotList.get(curCarIndex);
         }
@@ -126,6 +132,7 @@ public class PersonaBO {
         return levelRepDAO.findByLevel(level);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public OwnedCarEntity getCarByOwnedCarId(Long ownedCarId) {
         OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(ownedCarId);
         CustomCarEntity customCar = ownedCarEntity.getCustomCar();

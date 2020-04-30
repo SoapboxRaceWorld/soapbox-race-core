@@ -141,6 +141,7 @@ public class Personas {
 
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
         List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
+//        System.out.println("personas/id/carslots: " + personaId + " has " + personasCar.size() + " cars (curCarIndex=" + personaEntity.getCurCarIndex() + ")");
         ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
         for (CarSlotEntity carSlotEntity : personasCar) {
             OwnedCarEntity ownedCarEntity = carSlotEntity.getOwnedCar();
