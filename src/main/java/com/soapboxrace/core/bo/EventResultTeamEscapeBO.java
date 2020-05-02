@@ -80,7 +80,6 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
         eventDataEntity.setCopsRammed(teamEscapeArbitrationPacket.getCopsRammed());
         eventDataEntity.setCostToState(teamEscapeArbitrationPacket.getCostToState());
         eventDataEntity.setDistanceToFinish(teamEscapeArbitrationPacket.getDistanceToFinish());
-        eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
         eventDataEntity.setFractionCompleted(teamEscapeArbitrationPacket.getFractionCompleted());
         eventDataEntity.setInfractions(teamEscapeArbitrationPacket.getInfractions());
         eventDataEntity.setLongestJumpDurationInMilliseconds(teamEscapeArbitrationPacket.getLongestJumpDurationInMilliseconds());
@@ -92,6 +91,7 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
         eventDataEntity.setTopSpeed(teamEscapeArbitrationPacket.getTopSpeed());
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
+        eventDataDao.update(eventDataEntity);
         eventSessionDao.update(eventSessionEntity);
 
         ArrayOfTeamEscapeEntrantResult arrayOfTeamEscapeEntrantResult = new ArrayOfTeamEscapeEntrantResult();
@@ -166,7 +166,6 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
             }});
         }
 
-        eventDataDao.update(eventDataEntity);
         return teamEscapeEventResult;
     }
 

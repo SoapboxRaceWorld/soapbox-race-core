@@ -75,7 +75,6 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
         }
 
         prepareBasicEventData(eventDataEntity, activePersonaId, dragArbitrationPacket);
-        eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
         eventDataEntity.setFractionCompleted(dragArbitrationPacket.getFractionCompleted());
         eventDataEntity.setLongestJumpDurationInMilliseconds(dragArbitrationPacket.getLongestJumpDurationInMilliseconds());
         eventDataEntity.setNumberOfCollisions(dragArbitrationPacket.getNumberOfCollisions());
@@ -84,6 +83,7 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
         eventDataEntity.setTopSpeed(dragArbitrationPacket.getTopSpeed());
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
+        eventDataDao.update(eventDataEntity);
         eventSessionDao.update(eventSessionEntity);
 
         ArrayOfDragEntrantResult arrayOfDragEntrantResult = new ArrayOfDragEntrantResult();
@@ -154,7 +154,6 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
                     eventSessionEntity));
         }});
 
-        eventDataDao.update(eventDataEntity);
         return dragEventResult;
     }
 

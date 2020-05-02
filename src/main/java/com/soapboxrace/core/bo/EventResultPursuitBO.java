@@ -65,7 +65,6 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
         eventDataEntity.setCopsDisabled(pursuitArbitrationPacket.getCopsDisabled());
         eventDataEntity.setCopsRammed(pursuitArbitrationPacket.getCopsRammed());
         eventDataEntity.setCostToState(pursuitArbitrationPacket.getCostToState());
-        eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
         eventDataEntity.setHeat(pursuitArbitrationPacket.getHeat());
         eventDataEntity.setInfractions(pursuitArbitrationPacket.getInfractions());
         eventDataEntity.setLongestJumpDurationInMilliseconds(pursuitArbitrationPacket.getLongestJumpDurationInMilliseconds());
@@ -74,7 +73,7 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(pursuitArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
         eventDataEntity.setTopSpeed(pursuitArbitrationPacket.getTopSpeed());
         eventSessionEntity.setEnded(System.currentTimeMillis());
-
+        eventDataDao.update(eventDataEntity);
         eventSessionDao.update(eventSessionEntity);
 
         pursuitArbitrationPacket.setRank(1); // there's only ever 1 player, and the game sets rank to 0... idk why
@@ -111,7 +110,6 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
         ownedCarEntity.setHeat(isBusted ? 1 : pursuitArbitrationPacket.getHeat());
         ownedCarDAO.update(ownedCarEntity);
 
-        eventDataDao.update(eventDataEntity);
         return pursuitEventResult;
     }
 

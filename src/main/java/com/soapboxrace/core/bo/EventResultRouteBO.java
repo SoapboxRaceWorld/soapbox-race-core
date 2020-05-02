@@ -72,9 +72,9 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
         eventDataEntity.setPerfectStart(routeArbitrationPacket.getPerfectStart());
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(routeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
         eventDataEntity.setTopSpeed(routeArbitrationPacket.getTopSpeed());
-        eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
+        eventDataDao.update(eventDataEntity);
         eventSessionDao.update(eventSessionEntity);
 
         ArrayOfRouteEntrantResult arrayOfRouteEntrantResult = new ArrayOfRouteEntrantResult();
@@ -137,7 +137,6 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
                     eventSessionEntity));
         }});
 
-        eventDataDao.update(eventDataEntity);
         return routeEventResult;
     }
 

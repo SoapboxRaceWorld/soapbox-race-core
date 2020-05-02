@@ -51,5 +51,6 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
         eventDataEntity.setHacksDetected(packet.getHacksDetected());
         eventDataEntity.setRank(packet.getRank());
         eventDataEntity.setPersonaId(activePersonaId);
+        eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
     }
 }
