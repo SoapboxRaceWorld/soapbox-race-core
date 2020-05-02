@@ -63,9 +63,8 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
             throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
-        updateEventDataEntity(eventDataEntity, routeArbitrationPacket);
+        prepareBasicEventData(eventDataEntity, activePersonaId, routeArbitrationPacket);
 
-        // RouteArbitrationPacket
         eventDataEntity.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
         eventDataEntity.setFractionCompleted(routeArbitrationPacket.getFractionCompleted());
         eventDataEntity.setLongestJumpDurationInMilliseconds(routeArbitrationPacket.getLongestJumpDurationInMilliseconds());
@@ -73,9 +72,7 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
         eventDataEntity.setPerfectStart(routeArbitrationPacket.getPerfectStart());
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(routeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
         eventDataEntity.setTopSpeed(routeArbitrationPacket.getTopSpeed());
-
         eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
-        eventDataEntity.setPersonaId(activePersonaId);
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
         eventSessionDao.update(eventSessionEntity);
@@ -142,15 +139,6 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
 
         eventDataDao.update(eventDataEntity);
         return routeEventResult;
-    }
-
-    private void updateEventDataEntity(EventDataEntity eventDataEntity, ArbitrationPacket arbitrationPacket) {
-        eventDataEntity.setAlternateEventDurationInMilliseconds(arbitrationPacket.getAlternateEventDurationInMilliseconds());
-        eventDataEntity.setCarId(arbitrationPacket.getCarId());
-        eventDataEntity.setEventDurationInMilliseconds(arbitrationPacket.getEventDurationInMilliseconds());
-        eventDataEntity.setFinishReason(arbitrationPacket.getFinishReason());
-        eventDataEntity.setHacksDetected(arbitrationPacket.getHacksDetected());
-        eventDataEntity.setRank(arbitrationPacket.getRank());
     }
 
     private void sendXmppPacket(EventSessionEntity eventSessionEntity, Long activePersonaId,

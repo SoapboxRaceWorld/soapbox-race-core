@@ -74,18 +74,12 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
             throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
-        eventDataEntity.setAlternateEventDurationInMilliseconds(dragArbitrationPacket.getAlternateEventDurationInMilliseconds());
-        eventDataEntity.setCarId(dragArbitrationPacket.getCarId());
-        eventDataEntity.setEventDurationInMilliseconds(dragArbitrationPacket.getEventDurationInMilliseconds());
+        prepareBasicEventData(eventDataEntity, activePersonaId, dragArbitrationPacket);
         eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
-        eventDataEntity.setFinishReason(dragArbitrationPacket.getFinishReason());
         eventDataEntity.setFractionCompleted(dragArbitrationPacket.getFractionCompleted());
-        eventDataEntity.setHacksDetected(dragArbitrationPacket.getHacksDetected());
         eventDataEntity.setLongestJumpDurationInMilliseconds(dragArbitrationPacket.getLongestJumpDurationInMilliseconds());
         eventDataEntity.setNumberOfCollisions(dragArbitrationPacket.getNumberOfCollisions());
         eventDataEntity.setPerfectStart(dragArbitrationPacket.getPerfectStart());
-        eventDataEntity.setPersonaId(activePersonaId);
-        eventDataEntity.setRank(dragArbitrationPacket.getRank());
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(dragArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
         eventDataEntity.setTopSpeed(dragArbitrationPacket.getTopSpeed());
         eventSessionEntity.setEnded(System.currentTimeMillis());

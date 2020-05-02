@@ -40,23 +40,16 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
      * Sets some basic properties of the given {@link EventDataEntity}
      *
      * @param eventDataEntity the {@link EventDataEntity} instance
+     * @param activePersonaId the ID of the current persona
      * @param packet          the {@link TA} instance
      */
-    protected void prepareBasicEventData(EventDataEntity eventDataEntity, TA packet) {
-//        packet.getAlternateEventDurationInMilliseconds()
-//        packet.getCarId()
-//        packet.getEventDurationInMilliseconds()
-//        packet.getFinishReason()
-//        packet.getFraudDetectionInfo()
-//        packet.getHacksDetected()
-//        packet.getPhysicsMetrics()
-//        packet.getRank()
-//        packet.getResponse()
+    protected void prepareBasicEventData(EventDataEntity eventDataEntity, Long activePersonaId, TA packet) {
         eventDataEntity.setAlternateEventDurationInMilliseconds(packet.getAlternateEventDurationInMilliseconds());
         eventDataEntity.setCarId(packet.getCarId());
         eventDataEntity.setEventDurationInMilliseconds(packet.getEventDurationInMilliseconds());
         eventDataEntity.setFinishReason(packet.getFinishReason());
         eventDataEntity.setHacksDetected(packet.getHacksDetected());
         eventDataEntity.setRank(packet.getRank());
+        eventDataEntity.setPersonaId(activePersonaId);
     }
 }

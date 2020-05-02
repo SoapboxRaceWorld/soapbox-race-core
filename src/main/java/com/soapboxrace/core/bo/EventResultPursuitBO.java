@@ -60,20 +60,15 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
         }
 
         boolean isBusted = pursuitArbitrationPacket.getFinishReason() == 266;
-        eventDataEntity.setAlternateEventDurationInMilliseconds(pursuitArbitrationPacket.getAlternateEventDurationInMilliseconds());
-        eventDataEntity.setCarId(pursuitArbitrationPacket.getCarId());
+        prepareBasicEventData(eventDataEntity, activePersonaId, pursuitArbitrationPacket);
         eventDataEntity.setCopsDeployed(pursuitArbitrationPacket.getCopsDeployed());
         eventDataEntity.setCopsDisabled(pursuitArbitrationPacket.getCopsDisabled());
         eventDataEntity.setCopsRammed(pursuitArbitrationPacket.getCopsRammed());
         eventDataEntity.setCostToState(pursuitArbitrationPacket.getCostToState());
-        eventDataEntity.setEventDurationInMilliseconds(pursuitArbitrationPacket.getEventDurationInMilliseconds());
         eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
-        eventDataEntity.setFinishReason(pursuitArbitrationPacket.getFinishReason());
-        eventDataEntity.setHacksDetected(pursuitArbitrationPacket.getHacksDetected());
         eventDataEntity.setHeat(pursuitArbitrationPacket.getHeat());
         eventDataEntity.setInfractions(pursuitArbitrationPacket.getInfractions());
         eventDataEntity.setLongestJumpDurationInMilliseconds(pursuitArbitrationPacket.getLongestJumpDurationInMilliseconds());
-        eventDataEntity.setPersonaId(activePersonaId);
         eventDataEntity.setRoadBlocksDodged(pursuitArbitrationPacket.getRoadBlocksDodged());
         eventDataEntity.setSpikeStripsDodged(pursuitArbitrationPacket.getSpikeStripsDodged());
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(pursuitArbitrationPacket.getSumOfJumpsDurationInMilliseconds());

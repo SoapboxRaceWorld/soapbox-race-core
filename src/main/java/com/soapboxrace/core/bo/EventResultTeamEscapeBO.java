@@ -73,25 +73,19 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
             throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
-        eventDataEntity.setAlternateEventDurationInMilliseconds(teamEscapeArbitrationPacket.getAlternateEventDurationInMilliseconds());
+        prepareBasicEventData(eventDataEntity, activePersonaId, teamEscapeArbitrationPacket);
         eventDataEntity.setBustedCount(teamEscapeArbitrationPacket.getBustedCount());
-        eventDataEntity.setCarId(teamEscapeArbitrationPacket.getCarId());
         eventDataEntity.setCopsDeployed(teamEscapeArbitrationPacket.getCopsDeployed());
         eventDataEntity.setCopsDisabled(teamEscapeArbitrationPacket.getCopsDisabled());
         eventDataEntity.setCopsRammed(teamEscapeArbitrationPacket.getCopsRammed());
         eventDataEntity.setCostToState(teamEscapeArbitrationPacket.getCostToState());
         eventDataEntity.setDistanceToFinish(teamEscapeArbitrationPacket.getDistanceToFinish());
-        eventDataEntity.setEventDurationInMilliseconds(teamEscapeArbitrationPacket.getEventDurationInMilliseconds());
         eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
-        eventDataEntity.setFinishReason(teamEscapeArbitrationPacket.getFinishReason());
         eventDataEntity.setFractionCompleted(teamEscapeArbitrationPacket.getFractionCompleted());
-        eventDataEntity.setHacksDetected(teamEscapeArbitrationPacket.getHacksDetected());
         eventDataEntity.setInfractions(teamEscapeArbitrationPacket.getInfractions());
         eventDataEntity.setLongestJumpDurationInMilliseconds(teamEscapeArbitrationPacket.getLongestJumpDurationInMilliseconds());
         eventDataEntity.setNumberOfCollisions(teamEscapeArbitrationPacket.getNumberOfCollisions());
         eventDataEntity.setPerfectStart(teamEscapeArbitrationPacket.getPerfectStart());
-        eventDataEntity.setRank(teamEscapeArbitrationPacket.getRank());
-        eventDataEntity.setPersonaId(activePersonaId);
         eventDataEntity.setRoadBlocksDodged(teamEscapeArbitrationPacket.getRoadBlocksDodged());
         eventDataEntity.setSpikeStripsDodged(teamEscapeArbitrationPacket.getSpikeStripsDodged());
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(teamEscapeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
