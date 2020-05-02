@@ -1,57 +1,62 @@
-/*
- * This file is part of the Soapbox Race World core source code.
- * If you use any of this code for third-party purposes, please provide attribution.
- * Copyright (c) 2020.
- */
-
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.jaxb.http.*;
+import com.soapboxrace.jaxb.http.ArbitrationPacket;
+import com.soapboxrace.jaxb.http.EventResult;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
+/**
+ * Base class for {@link ArbitrationPacket} -> {@link EventResult} converters
+ *
+ * @param <TA> The type of {@link ArbitrationPacket} that this converter accepts
+ * @param <TR> The type of {@link EventResult} that this converter produces
+ */
+public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends EventResult> {
+    /**
+     * Converts the given {@link TA} instance to a new {@link TR} instance.
+     *
+     * @param eventSessionEntity The {@link EventSessionEntity} associated with the arbitration packet
+     * @param activePersonaId    The ID of the current persona
+     * @param packet             The {@link TA} instance
+     * @return new {@link TR} instance
+     */
+    public TR handle(EventSessionEntity eventSessionEntity, Long activePersonaId, TA packet) {
+        packet.setHacksDetected(packet.getHacksDetected() & ~32); // remove ModifiedFiles flag
 
-@Stateless
-public class EventResultBO {
-
-    @EJB
-    private EventResultRouteBO eventResultRouteBO;
-
-    @EJB
-    private EventResultDragBO eventResultDragBO;
-
-    @EJB
-    private EventResultTeamEscapeBO eventResultTeamEscapeBO;
-
-    @EJB
-    private EventResultPursuitBO eventResultPursuitBO;
-
-    public PursuitEventResult handlePursitEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
-                                              PursuitArbitrationPacket pursuitArbitrationPacket,
-                                              Boolean isBusted) {
-        pursuitArbitrationPacket.setHacksDetected(pursuitArbitrationPacket.getHacksDetected() & ~32);
-        return eventResultPursuitBO.handlePursuitEnd(eventSessionEntity, activePersonaId, pursuitArbitrationPacket,
-                isBusted);
+        return handleInternal(eventSessionEntity, activePersonaId, packet);
     }
 
-    public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
-                                          RouteArbitrationPacket routeArbitrationPacket) {
-        routeArbitrationPacket.setHacksDetected(routeArbitrationPacket.getHacksDetected() & ~32);
-        return eventResultRouteBO.handleRaceEnd(eventSessionEntity, activePersonaId, routeArbitrationPacket);
-    }
+    /**
+     * Internal method to convert the given {@link TA} instance to a new {@link TR} instance.
+     *
+     * @param eventSessionEntity The {@link EventSessionEntity} associated with the arbitration packet
+     * @param activePersonaId    The ID of the current persona
+     * @param packet             The {@link TA} instance
+     * @return new {@link TR} instance
+     */
+    protected abstract TR handleInternal(EventSessionEntity eventSessionEntity, Long activePersonaId, TA packet);
 
-    public DragEventResult handleDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
-                                         DragArbitrationPacket dragArbitrationPacket) {
-        dragArbitrationPacket.setHacksDetected(dragArbitrationPacket.getHacksDetected() & ~32);
-        return eventResultDragBO.handleDragEnd(eventSessionEntity, activePersonaId, dragArbitrationPacket);
+    /**
+     * Sets some basic properties of the given {@link EventDataEntity}
+     *
+     * @param eventDataEntity the {@link EventDataEntity} instance
+     * @param packet          the {@link TA} instance
+     */
+    protected void prepareBasicEventData(EventDataEntity eventDataEntity, TA packet) {
+//        packet.getAlternateEventDurationInMilliseconds()
+//        packet.getCarId()
+//        packet.getEventDurationInMilliseconds()
+//        packet.getFinishReason()
+//        packet.getFraudDetectionInfo()
+//        packet.getHacksDetected()
+//        packet.getPhysicsMetrics()
+//        packet.getRank()
+//        packet.getResponse()
+        eventDataEntity.setAlternateEventDurationInMilliseconds(packet.getAlternateEventDurationInMilliseconds());
+        eventDataEntity.setCarId(packet.getCarId());
+        eventDataEntity.setEventDurationInMilliseconds(packet.getEventDurationInMilliseconds());
+        eventDataEntity.setFinishReason(packet.getFinishReason());
+        eventDataEntity.setHacksDetected(packet.getHacksDetected());
+        eventDataEntity.setRank(packet.getRank());
     }
-
-    public TeamEscapeEventResult handleTeamEscapeEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
-                                                     TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
-        teamEscapeArbitrationPacket.setHacksDetected(teamEscapeArbitrationPacket.getHacksDetected() & ~32);
-        return eventResultTeamEscapeBO.handleTeamEscapeEnd(eventSessionEntity, activePersonaId,
-                teamEscapeArbitrationPacket);
-    }
-
 }

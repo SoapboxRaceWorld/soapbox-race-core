@@ -24,7 +24,7 @@ import javax.ejb.Stateless;
 import java.util.HashMap;
 
 @Stateless
-public class EventResultRouteBO {
+public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, RouteEventResult> {
 
     @EJB
     private EventSessionDAO eventSessionDao;
@@ -53,8 +53,8 @@ public class EventResultRouteBO {
     @EJB
     private DNFTimerBO dnfTimerBO;
 
-    public RouteEventResult handleRaceEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
-                                          RouteArbitrationPacket routeArbitrationPacket) {
+    protected RouteEventResult handleInternal(EventSessionEntity eventSessionEntity, Long activePersonaId,
+                                              RouteArbitrationPacket routeArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
 
         EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);

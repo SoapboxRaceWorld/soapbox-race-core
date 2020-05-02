@@ -24,7 +24,7 @@ import javax.ejb.Stateless;
 import java.util.HashMap;
 
 @Stateless
-public class EventResultDragBO {
+public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, DragEventResult> {
 
     @EJB
     private EventSessionDAO eventSessionDao;
@@ -53,8 +53,8 @@ public class EventResultDragBO {
     @EJB
     private DNFTimerBO dnfTimerBO;
 
-    public DragEventResult handleDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
-                                         DragArbitrationPacket dragArbitrationPacket) {
+    protected DragEventResult handleInternal(EventSessionEntity eventSessionEntity, Long activePersonaId,
+                                             DragArbitrationPacket dragArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
 
         XMPP_DragEntrantResultType xmppDragResult = new XMPP_DragEntrantResultType();

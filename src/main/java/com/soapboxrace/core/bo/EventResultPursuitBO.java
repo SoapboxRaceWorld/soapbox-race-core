@@ -23,7 +23,7 @@ import javax.ejb.Stateless;
 import java.util.HashMap;
 
 @Stateless
-public class EventResultPursuitBO {
+public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket, PursuitEventResult> {
 
     @EJB
     private EventSessionDAO eventSessionDao;
@@ -49,9 +49,8 @@ public class EventResultPursuitBO {
     @EJB
     private PersonaBO personaBO;
 
-    public PursuitEventResult handlePursuitEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
-                                               PursuitArbitrationPacket pursuitArbitrationPacket,
-                                               Boolean isBusted) {
+    protected PursuitEventResult handleInternal(EventSessionEntity eventSessionEntity, Long activePersonaId,
+                                                PursuitArbitrationPacket pursuitArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
 
         EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
@@ -60,6 +59,7 @@ public class EventResultPursuitBO {
             throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
+        boolean isBusted = pursuitArbitrationPacket.getFinishReason() == 266;
         eventDataEntity.setAlternateEventDurationInMilliseconds(pursuitArbitrationPacket.getAlternateEventDurationInMilliseconds());
         eventDataEntity.setCarId(pursuitArbitrationPacket.getCarId());
         eventDataEntity.setCopsDeployed(pursuitArbitrationPacket.getCopsDeployed());

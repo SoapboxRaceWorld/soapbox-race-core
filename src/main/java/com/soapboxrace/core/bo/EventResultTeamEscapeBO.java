@@ -24,7 +24,7 @@ import javax.ejb.Stateless;
 import java.util.HashMap;
 
 @Stateless
-public class EventResultTeamEscapeBO {
+public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitrationPacket, TeamEscapeEventResult> {
 
     @EJB
     private EventSessionDAO eventSessionDao;
@@ -53,8 +53,8 @@ public class EventResultTeamEscapeBO {
     @EJB
     private DNFTimerBO dnfTimerBO;
 
-    public TeamEscapeEventResult handleTeamEscapeEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
-                                                     TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
+    protected TeamEscapeEventResult handleInternal(EventSessionEntity eventSessionEntity, Long activePersonaId,
+                                                   TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
         Long eventSessionId = eventSessionEntity.getId();
 
         XMPP_TeamEscapeEntrantResultType xmppTeamEscapeResult = new XMPP_TeamEscapeEntrantResultType();
