@@ -13,7 +13,7 @@ import com.soapboxrace.jaxb.http.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Stateless
@@ -131,10 +131,7 @@ public class RewardBO {
         AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp,
                 personaEntity.getLevel(), personaEntity.getScore(), 0, hasLevelChanged, false, false, isInEvent);
 
-        achievementBO.updateAchievements(personaEntity, "PROGRESSION", new HashMap<>() {{
-            put("persona", personaEntity);
-            put("progression", progressionContext);
-        }});
+        achievementBO.updateAchievements(personaEntity, "PROGRESSION", Map.of("persona", personaEntity, "progression", progressionContext));
     }
 
     public void setTopSpeedReward(EventEntity eventEntity, float topSpeed, RewardVO rewardVO) {

@@ -1,14 +1,14 @@
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.jpa.EventDataEntity;
-import com.soapboxrace.core.jpa.EventEntity;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.LobbyEntity;
+import com.soapboxrace.core.bo.util.AchievementEventContext;
+import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
 import com.soapboxrace.jaxb.http.EventResult;
 import com.soapboxrace.jaxb.http.ExitPath;
 
 import javax.ejb.EJB;
+import java.util.Map;
 
 /**
  * Base class for {@link ArbitrationPacket} -> {@link EventResult} converters
@@ -19,7 +19,13 @@ import javax.ejb.EJB;
 public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends EventResult> {
 
     @EJB
+    protected AchievementBO achievementBO;
+
+    @EJB
     protected LobbyBO lobbyBO;
+
+    @EJB
+    protected PersonaDAO personaDAO;
 
     /**
      * Converts the given {@link TA} instance to a new {@link TR} instance.
@@ -63,6 +69,12 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
         eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
     }
 
+    /**
+     * Sets up Race Again and updates the info on the given {@link TR} instance
+     *
+     * @param eventSessionEntity the {@link EventSessionEntity} instance
+     * @param result             the {@link TR} instance
+     */
     protected final void prepareRaceAgain(EventSessionEntity eventSessionEntity, TR result) {
         ExitPath exitPath = ExitPath.EXIT_TO_FREEROAM;
         EventEntity eventEntity = eventSessionEntity.getEvent();
@@ -93,5 +105,26 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
         }
 
         result.setExitPath(exitPath);
+    }
+
+    /**
+     * Trigger an EVENT achievement progress update
+     *
+     * @param eventDataEntity    the {@link EventDataEntity} instance
+     * @param eventSessionEntity the {@link EventSessionEntity} instance
+     * @param activePersonaId    the active persona ID
+     * @param packet             the {@link TA} instance
+     */
+    protected void updateEventAchievements(EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, Long activePersonaId, TA packet) {
+        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        EventEntity eventEntity = eventDataEntity.getEvent();
+
+        achievementBO.updateAchievements(personaEntity, "EVENT", Map.of(
+                "persona", personaEntity,
+                "event", eventEntity,
+                "eventData", eventDataEntity,
+                "eventSession", eventSessionEntity,
+                "eventContext", new AchievementEventContext(EventMode.fromId(eventEntity.getEventModeId()), packet, eventSessionEntity)
+        ));
     }
 }

@@ -6,21 +6,21 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
-import com.soapboxrace.core.jpa.*;
+import com.soapboxrace.core.jpa.EventDataEntity;
+import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.OwnedCarEntity;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.HashMap;
 
 @Stateless
 public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket, PursuitEventResult> {
@@ -92,18 +92,7 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
         pursuitEventResult.setPersonaId(activePersonaId);
 
         if (!isBusted) {
-            PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
-
-            achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<>() {{
-                put("persona", personaEntity);
-                put("event", eventDataEntity.getEvent());
-                put("eventData", eventDataEntity);
-                put("eventSession", eventSessionEntity);
-                put("eventContext", new AchievementEventContext(
-                        EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
-                        pursuitArbitrationPacket,
-                        eventSessionEntity));
-            }});
+            updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, pursuitArbitrationPacket);
         }
 
         OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(activePersonaId).getOwnedCar();

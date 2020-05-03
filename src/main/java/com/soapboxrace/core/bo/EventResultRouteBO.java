@@ -6,16 +6,13 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.EventDataEntity;
-import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
 import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
@@ -27,7 +24,6 @@ import com.soapboxrace.jaxb.xmpp.XMPP_RouteEntrantResultType;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.HashMap;
 
 @Stateless
 public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, RouteEventResult> {
@@ -104,18 +100,7 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
         prepareRaceAgain(eventSessionEntity, routeEventResult);
         sendXmppPacket(eventSessionEntity, activePersonaId, routeArbitrationPacket);
 
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
-
-        achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<>() {{
-            put("persona", personaEntity);
-            put("event", eventDataEntity.getEvent());
-            put("eventData", eventDataEntity);
-            put("eventSession", eventSessionEntity);
-            put("eventContext", new AchievementEventContext(
-                    EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
-                    routeArbitrationPacket,
-                    eventSessionEntity));
-        }});
+        updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, routeArbitrationPacket);
 
         eventSessionDao.update(eventSessionEntity);
         return routeEventResult;

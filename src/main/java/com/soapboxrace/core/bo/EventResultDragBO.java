@@ -6,16 +6,13 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.EventDataEntity;
-import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
 import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
@@ -27,7 +24,6 @@ import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeDragEntrantResult;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.HashMap;
 
 @Stateless
 public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, DragEventResult> {
@@ -119,19 +115,7 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
         dragEventResult.setEventSessionId(eventSessionId);
         dragEventResult.setPersonaId(activePersonaId);
         prepareRaceAgain(eventSessionEntity, dragEventResult);
-
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
-
-        achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<>() {{
-            put("persona", personaEntity);
-            put("event", eventDataEntity.getEvent());
-            put("eventData", eventDataEntity);
-            put("eventSession", eventSessionEntity);
-            put("eventContext", new AchievementEventContext(
-                    EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
-                    dragArbitrationPacket,
-                    eventSessionEntity));
-        }});
+        updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, dragArbitrationPacket);
 
         eventSessionDao.update(eventSessionEntity);
         return dragEventResult;

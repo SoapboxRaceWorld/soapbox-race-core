@@ -207,6 +207,7 @@ public class AchievementBO {
         achievementsAwarded.setAchievements(new ArrayList<>());
         achievementsAwarded.setBadges(new ArrayList<>());
         achievementsAwarded.setProgressed(new ArrayList<>());
+        properties = new HashMap<>(properties);
 
         for (AchievementEntity achievementEntity : achievementDAO.findAllByCategory(achievementCategory)) {
             if (!achievementEntity.getAutoUpdate()) continue;
@@ -260,10 +261,7 @@ public class AchievementBO {
                     personaEntity.getLevel(), personaEntity.getScore(), 0, false, true,
                     false, false);
 
-            updateAchievements(personaEntity, "PROGRESSION", new HashMap<>() {{
-                put("persona", personaEntity);
-                put("progression", progressionContext);
-            }}, true);
+            updateAchievements(personaEntity, "PROGRESSION", Map.of("persona", personaEntity, "progression", progressionContext), true);
         }
     }
 
