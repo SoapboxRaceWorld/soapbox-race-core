@@ -89,7 +89,7 @@ public class LobbyBO {
 
         List<LobbyEntity> lobbys = lobbyDao.findByEventStarted(eventId);
         if (lobbys.size() == 0) {
-            createLobby(personaEntity, eventId, eventEntity.getCarClassHash(), false);
+            createLobby(personaEntity.getPersonaId(), eventId, eventEntity.getCarClassHash(), false);
         } else {
             joinLobby(personaEntity, lobbys);
         }
@@ -100,7 +100,7 @@ public class LobbyBO {
         EventEntity eventEntity = eventDao.findById(eventId);
         if (!listOfPersona.isEmpty()) {
             PersonaEntity personaEntity = personaDao.findById(personaId);
-            createLobby(personaEntity, eventId, eventEntity.getCarClassHash(), true);
+            createLobby(personaEntity.getPersonaId(), eventId, eventEntity.getCarClassHash(), true);
 
             LobbyEntity lobbys = lobbyDao.findByEventAndPersona(eventId, personaId);
             if (lobbys != null) {
@@ -121,23 +121,23 @@ public class LobbyBO {
         }
     }
 
-    public LobbyEntity createLobby(PersonaEntity personaEntity, int eventId, int carClassHash, Boolean isPrivate) {
+    public LobbyEntity createLobby(Long personaId, int eventId, int carClassHash, Boolean isPrivate) {
         EventEntity eventEntity = eventDao.findById(eventId);
 
         LobbyEntity lobbyEntity = new LobbyEntity();
         lobbyEntity.setEvent(eventEntity);
         lobbyEntity.setIsPrivate(isPrivate);
-        lobbyEntity.setPersonaId(personaEntity.getPersonaId());
+        lobbyEntity.setPersonaId(personaId);
         lobbyEntity.setStartedTime(LocalDateTime.now());
 
         lobbyDao.insert(lobbyEntity);
 
-        sendJoinEvent(personaEntity.getPersonaId(), lobbyEntity);
+        sendJoinEvent(personaId, lobbyEntity);
 
         if (!isPrivate) {
             XMPP_LobbyInviteType lobbyInviteType = new XMPP_LobbyInviteType();
             lobbyInviteType.setEventId(eventId);
-            lobbyInviteType.setInvitedByPersonaId(personaEntity.getPersonaId());
+            lobbyInviteType.setInvitedByPersonaId(personaId);
             lobbyInviteType.setInviteLifetimeInMilliseconds(eventEntity.getLobbyCountdownTime());
             lobbyInviteType.setPrivate(false);
             lobbyInviteType.setLobbyInviteId(lobbyEntity.getId());

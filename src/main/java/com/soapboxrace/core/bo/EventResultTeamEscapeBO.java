@@ -12,10 +12,16 @@ import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
-import com.soapboxrace.core.jpa.*;
+import com.soapboxrace.core.jpa.EventDataEntity;
+import com.soapboxrace.core.jpa.EventMode;
+import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
-import com.soapboxrace.jaxb.http.*;
+import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
+import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
+import com.soapboxrace.jaxb.http.TeamEscapeEntrantResult;
+import com.soapboxrace.jaxb.http.TeamEscapeEventResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_TeamEscapeEntrantResultType;
 
@@ -46,9 +52,6 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
 
     @EJB
     private AchievementBO achievementBO;
-
-    @EJB
-    private LobbyBO lobbyBO;
 
     @EJB
     private DNFTimerBO dnfTimerBO;
@@ -92,7 +95,6 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
         eventDataDao.update(eventDataEntity);
-        eventSessionDao.update(eventSessionEntity);
 
         ArrayOfTeamEscapeEntrantResult arrayOfTeamEscapeEntrantResult = new ArrayOfTeamEscapeEntrantResult();
         for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
@@ -126,30 +128,8 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
         teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
         teamEscapeEventResult.setEventId(eventDataEntity.getEvent().getId());
         teamEscapeEventResult.setEventSessionId(eventSessionId);
-        teamEscapeEventResult.setExitPath(ExitPath.EXIT_TO_LOBBY);
-        teamEscapeEventResult.setInviteLifetimeInMilliseconds(0);
         teamEscapeEventResult.setPersonaId(activePersonaId);
-
-        if (eventSessionEntity.getEvent().isRaceAgainEnabled()) {
-            if (eventSessionEntity.getLobby() == null) {
-                teamEscapeEventResult.setLobbyInviteId(0);
-            } else if (eventSessionEntity.getNextLobby() != null) {
-                teamEscapeEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
-                teamEscapeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
-                        .getLobbyCountdownInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime()));
-            } else {
-                LobbyEntity oldLobby = eventSessionEntity.getLobby();
-                LobbyEntity newLobby = lobbyBO.createLobby(
-                        personaDAO.findById(oldLobby.getPersonaId()),
-                        oldLobby.getEvent().getId(),
-                        oldLobby.getEvent().getCarClassHash(),
-                        oldLobby.getIsPrivate());
-                eventSessionEntity.setNextLobby(newLobby);
-                eventSessionDao.update(eventSessionEntity);
-                teamEscapeEventResult.setLobbyInviteId(newLobby.getId());
-                teamEscapeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime());
-            }
-        }
+        prepareRaceAgain(eventSessionEntity, teamEscapeEventResult);
 
         if (teamEscapeArbitrationPacket.getBustedCount() == 0) {
             PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
@@ -166,6 +146,7 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
             }});
         }
 
+        eventSessionDao.update(eventSessionEntity);
         return teamEscapeEventResult;
     }
 

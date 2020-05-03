@@ -12,10 +12,16 @@ import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
-import com.soapboxrace.core.jpa.*;
+import com.soapboxrace.core.jpa.EventDataEntity;
+import com.soapboxrace.core.jpa.EventMode;
+import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
-import com.soapboxrace.jaxb.http.*;
+import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
+import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
+import com.soapboxrace.jaxb.http.RouteEntrantResult;
+import com.soapboxrace.jaxb.http.RouteEventResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeRouteEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_RouteEntrantResultType;
 
@@ -48,9 +54,6 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
     private AchievementBO achievementBO;
 
     @EJB
-    private LobbyBO lobbyBO;
-
-    @EJB
     private DNFTimerBO dnfTimerBO;
 
     protected RouteEventResult handleInternal(EventSessionEntity eventSessionEntity, Long activePersonaId,
@@ -75,7 +78,6 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
         eventDataDao.update(eventDataEntity);
-        eventSessionDao.update(eventSessionEntity);
 
         ArrayOfRouteEntrantResult arrayOfRouteEntrantResult = new ArrayOfRouteEntrantResult();
         for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
@@ -98,30 +100,8 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
         routeEventResult.setEntrants(arrayOfRouteEntrantResult);
         routeEventResult.setEventId(eventDataEntity.getEvent().getId());
         routeEventResult.setEventSessionId(eventSessionId);
-        routeEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM :
-                ExitPath.EXIT_TO_LOBBY);
-        routeEventResult.setInviteLifetimeInMilliseconds(0);
-        if (eventSessionEntity.getEvent().isRaceAgainEnabled()) {
-            if (eventSessionEntity.getLobby() == null) {
-                routeEventResult.setLobbyInviteId(0);
-            } else if (eventSessionEntity.getNextLobby() != null) {
-                routeEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
-                routeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
-                        .getLobbyCountdownInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime()));
-            } else {
-                LobbyEntity oldLobby = eventSessionEntity.getLobby();
-                LobbyEntity newLobby = lobbyBO.createLobby(
-                        personaDAO.findById(oldLobby.getPersonaId()),
-                        oldLobby.getEvent().getId(),
-                        oldLobby.getEvent().getCarClassHash(),
-                        oldLobby.getIsPrivate());
-                eventSessionEntity.setNextLobby(newLobby);
-                eventSessionDao.update(eventSessionEntity);
-                routeEventResult.setLobbyInviteId(newLobby.getId());
-                routeEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime());
-            }
-        }
         routeEventResult.setPersonaId(activePersonaId);
+        prepareRaceAgain(eventSessionEntity, routeEventResult);
         sendXmppPacket(eventSessionEntity, activePersonaId, routeArbitrationPacket);
 
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
@@ -137,6 +117,7 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
                     eventSessionEntity));
         }});
 
+        eventSessionDao.update(eventSessionEntity);
         return routeEventResult;
     }
 

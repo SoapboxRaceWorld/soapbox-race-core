@@ -12,10 +12,16 @@ import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
-import com.soapboxrace.core.jpa.*;
+import com.soapboxrace.core.jpa.EventDataEntity;
+import com.soapboxrace.core.jpa.EventMode;
+import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
-import com.soapboxrace.jaxb.http.*;
+import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
+import com.soapboxrace.jaxb.http.DragArbitrationPacket;
+import com.soapboxrace.jaxb.http.DragEntrantResult;
+import com.soapboxrace.jaxb.http.DragEventResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_DragEntrantResultType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeDragEntrantResult;
 
@@ -46,9 +52,6 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
 
     @EJB
     private AchievementBO achievementBO;
-
-    @EJB
-    private LobbyBO lobbyBO;
 
     @EJB
     private DNFTimerBO dnfTimerBO;
@@ -84,7 +87,6 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
         eventDataDao.update(eventDataEntity);
-        eventSessionDao.update(eventSessionEntity);
 
         ArrayOfDragEntrantResult arrayOfDragEntrantResult = new ArrayOfDragEntrantResult();
         for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
@@ -115,31 +117,8 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
         dragEventResult.setEntrants(arrayOfDragEntrantResult);
         dragEventResult.setEventId(eventDataEntity.getEvent().getId());
         dragEventResult.setEventSessionId(eventSessionId);
-        dragEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM :
-                ExitPath.EXIT_TO_LOBBY);
-        dragEventResult.setInviteLifetimeInMilliseconds(0);
         dragEventResult.setPersonaId(activePersonaId);
-
-        if (eventSessionEntity.getEvent().isRaceAgainEnabled()) {
-            if (eventSessionEntity.getLobby() == null) {
-                dragEventResult.setLobbyInviteId(0);
-            } else if (eventSessionEntity.getNextLobby() != null) {
-                dragEventResult.setLobbyInviteId(eventSessionEntity.getNextLobby().getId());
-                dragEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getNextLobby()
-                        .getLobbyCountdownInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime()));
-            } else {
-                LobbyEntity oldLobby = eventSessionEntity.getLobby();
-                LobbyEntity newLobby = lobbyBO.createLobby(
-                        personaDAO.findById(oldLobby.getPersonaId()),
-                        oldLobby.getEvent().getId(),
-                        oldLobby.getEvent().getCarClassHash(),
-                        oldLobby.getIsPrivate());
-                eventSessionEntity.setNextLobby(newLobby);
-                eventSessionDao.update(eventSessionEntity);
-                dragEventResult.setLobbyInviteId(newLobby.getId());
-                dragEventResult.setInviteLifetimeInMilliseconds(eventSessionEntity.getEvent().getLobbyCountdownTime());
-            }
-        }
+        prepareRaceAgain(eventSessionEntity, dragEventResult);
 
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
 
@@ -154,6 +133,7 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
                     eventSessionEntity));
         }});
 
+        eventSessionDao.update(eventSessionEntity);
         return dragEventResult;
     }
 
