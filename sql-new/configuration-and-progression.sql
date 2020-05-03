@@ -1,0 +1,214 @@
+-- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
+--
+-- Host: localhost    Database: SOAPBOX
+-- ------------------------------------------------------
+-- Server version	8.0.18
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE = @@TIME_ZONE */;
+/*!40103 SET TIME_ZONE = '+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS = @@UNIQUE_CHECKS, UNIQUE_CHECKS = 0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS = 0 */;
+/*!40101 SET @OLD_SQL_MODE = @@SQL_MODE, SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES = @@SQL_NOTES, SQL_NOTES = 0 */;
+
+--
+-- Dumping data for table `LEVEL_REP`
+--
+
+LOCK TABLES `LEVEL_REP` WRITE;
+/*!40000 ALTER TABLE `LEVEL_REP`
+    DISABLE KEYS */;
+INSERT INTO `LEVEL_REP`
+VALUES (1, 150),
+       (2, 518),
+       (3, 1132),
+       (4, 2017),
+       (5, 3204),
+       (6, 4725),
+       (7, 6613),
+       (8, 8905),
+       (9, 11641),
+       (10, 14865),
+       (11, 18621),
+       (12, 22961),
+       (13, 27938),
+       (14, 33613),
+       (15, 40050),
+       (16, 47318),
+       (17, 55495),
+       (18, 64665),
+       (19, 74920),
+       (20, 86362),
+       (21, 99103),
+       (22, 113268),
+       (23, 128992),
+       (24, 146430),
+       (25, 165750),
+       (26, 187142),
+       (27, 210820),
+       (28, 237024),
+       (29, 266023),
+       (30, 298125),
+       (31, 333677),
+       (32, 373080),
+       (33, 416790),
+       (34, 465335),
+       (35, 519330),
+       (36, 579487),
+       (37, 646647),
+       (38, 721801),
+       (39, 806130),
+       (40, 901050),
+       (41, 1008276),
+       (42, 1129905),
+       (43, 1268525),
+       (44, 1427373),
+       (45, 1610550),
+       (46, 1823325),
+       (47, 2072591),
+       (48, 2367540),
+       (49, 2720702),
+       (50, 3149625),
+       (51, 3679650),
+       (52, 4348792),
+       (53, 5216790),
+       (54, 6383205),
+       (55, 8027250),
+       (56, 10507350),
+       (57, 14659830),
+       (58, 22993665),
+       (59, 48053730),
+       (60, 2000000000);
+/*!40000 ALTER TABLE `LEVEL_REP`
+    ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `SERVER_INFO`
+--
+
+LOCK TABLES `SERVER_INFO` WRITE;
+/*!40000 ALTER TABLE `SERVER_INFO`
+    DISABLE KEYS */;
+INSERT INTO `SERVER_INFO` (`serverName`, `activatedHolidaySceneryGroups`, `adminList`, `allowedCountries`, `bannerUrl`,
+                           `country`, `disactivatedHolidaySceneryGroups`, `discordUrl`, `facebookUrl`, `homePageUrl`,
+                           `messageSrv`, `numberOfRegistered`, `ownerList`, `timezone`)
+VALUES ('My New Server', 'SCENERY_GROUP_NORMAL', 'Insert admins here', NULL, NULL, 'GL', 'SCENERY_GROUP_NORMAL_DISABLE',
+        NULL, NULL,
+        NULL, 'yay!', 0, NULL, 5);
+
+/*!40000 ALTER TABLE `SERVER_INFO`
+    ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `PARAMETER`
+--
+
+LOCK TABLES `PARAMETER` WRITE;
+/*!40000 ALTER TABLE `PARAMETER`
+    DISABLE KEYS */;
+INSERT INTO `PARAMETER`
+VALUES ('ADMIN_AUTH', 'InsertAdminAuthHere'),
+       ('ANNOUNCEMENT_AUTH', 'InsertAnnouncementAuthHere'),
+       ('ANNOUNCEMENT_DOMAIN', 'http://i.imgur.com/'),
+       ('EMAIL_FROM', 'sbrwserver@sbrw.com'),
+       ('ENABLE_CAR_DAMAGE', 'true'),
+       ('ENABLE_DROP_ITEM', 'true'),
+       ('ENABLE_ECONOMY', 'true'),
+       ('ENABLE_POWERUP_DECREASE', 'true'),
+       ('ENABLE_REPUTATION', 'true'),
+       ('ENABLE_TREASURE_HUNT', 'true'),
+       ('LOBBY_COUNTDOWN_TIME', '45000'),
+       ('MAX_CAR_SLOTS_FREE', '100'),
+       ('MAX_CAR_SLOTS_PREMIUM', '150'),
+       ('MAX_PLAYER_CASH_FREE', '100000000'),
+       ('MAX_PLAYER_CASH_PREMIUM', '100000000'),
+       ('MAX_PLAYER_LEVEL_FREE', '60'),
+       ('MAX_PLAYER_LEVEL_PREMIUM', '60'),
+       ('OPENFIRE_ADDRESS', 'http://localhost:9090/plugins/restapi/v1'),
+       ('OPENFIRE_TOKEN', 'IjylmC4sBLwsBr8q'),
+       ('PORTAL_DOMAIN', 'heyitsleo.io'),
+       ('PORTAL_FAILURE_PAGE', 'heyitsleo.io/nfsw-portal-error'),
+       ('PURSUIT_COP_CARS_DEPLOYED_CASH_MULTIPLIER', '0.025'),
+       ('PURSUIT_COP_CARS_DEPLOYED_REP_MULTIPLIER', '0.025'),
+       ('PURSUIT_COP_CARS_DISABLED_CASH_MULTIPLIER', '0.1'),
+       ('PURSUIT_COP_CARS_DISABLED_REP_MULTIPLIER', '0.1'),
+       ('PURSUIT_COP_CARS_RAMMED_CASH_MULTIPLIER', '0.05'),
+       ('PURSUIT_COP_CARS_RAMMED_REP_MULTIPLIER', '0.05'),
+       ('PURSUIT_COST_TO_STATE_CASH_MULTIPLIER', '0.00005'),
+       ('PURSUIT_COST_TO_STATE_REP_MULTIPLIER', '0.00005'),
+       ('PURSUIT_HEAT_LEVEL_CASH_MULTIPLIER', '0.2'),
+       ('PURSUIT_HEAT_LEVEL_REP_MULTIPLIER', '0.2'),
+       ('PURSUIT_INFRACTIONS_CASH_MULTIPLIER', '0.001'),
+       ('PURSUIT_INFRACTIONS_REP_MULTIPLIER', '0.001'),
+       ('PURSUIT_PURSUIT_LENGTH_CASH_MULTIPLIER', '0'),
+       ('PURSUIT_PURSUIT_LENGTH_REP_MULTIPLIER', '0'),
+       ('PURSUIT_ROADBLOCKS_DODGED_CASH_MULTIPLIER', '0.2'),
+       ('PURSUIT_ROADBLOCKS_DODGED_REP_MULTIPLIER', '0.2'),
+       ('PURSUIT_SPIKE_STRIPS_DODGED_CASH_MULTIPLIER', '0.3'),
+       ('PURSUIT_SPIKE_STRIPS_DODGED_REP_MULTIPLIER', '0.3'),
+       ('SERVER_ADDRESS', 'http://127.0.0.1'),
+       ('STARTING_CASH_AMOUNT', '350000'),
+       ('STARTING_INVENTORY_ITEMS',
+        'SRV-POWERUP0|15;SRV-POWERUP2|15;SRV-POWERUP4|15;SRV-POWERUP5|15;SRV-POWERUP6|15;SRV-POWERUP7|15;SRV-POWERUP8|15;SRV-POWERUP9|15;SRV-POWERUP10|15;SRV-POWERUP11|15;SRV-AMP-INSURANCE|1'),
+       ('STARTING_INVENTORY_PERF_SLOTS', '100'),
+       ('STARTING_INVENTORY_SKILL_SLOTS', '150'),
+       ('STARTING_INVENTORY_VISUAL_SLOTS', '200'),
+       ('STARTING_LEVEL_NUMBER', '1'),
+       ('TH_BASE_CASH', '1200'),
+       ('TH_BASE_REP', '1200'),
+       ('TH_CASH_MULTIPLIER', '1'),
+       ('TH_DAY_CASH_MULTIPLIER', '1'),
+       ('TH_DAY_REP_MULTIPLIER', '1'),
+       ('TH_REP_MULTIPLIER', '1'),
+       ('UDP_FREEROAM_IP', '127.0.0.1'),
+       ('UDP_FREEROAM_PORT', '9999'),
+       ('UDP_RACE_IP', '127.0.0.1'),
+       ('UDP_RACE_PORT', '9998'),
+       ('XMPP_IP', '127.0.0.1'),
+       ('XMPP_PORT', '5222');
+/*!40000 ALTER TABLE `PARAMETER`
+    ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `TREASURE_HUNT_CONFIG`
+--
+
+LOCK TABLES `TREASURE_HUNT_CONFIG` WRITE;
+/*!40000 ALTER TABLE `TREASURE_HUNT_CONFIG`
+    DISABLE KEYS */;
+INSERT INTO `TREASURE_HUNT_CONFIG`
+VALUES (1, 1200, 1200, 0, 0, 1, 29);
+/*!40000 ALTER TABLE `TREASURE_HUNT_CONFIG`
+    ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `CHAT_ROOM`
+--
+
+LOCK TABLES `CHAT_ROOM` WRITE;
+/*!40000 ALTER TABLE `CHAT_ROOM`
+    DISABLE KEYS */;
+INSERT INTO `CHAT_ROOM`
+VALUES (1, 2, 'TXT_CHAT_LANG_ENGLISH', 'EN');
+/*!40000 ALTER TABLE `CHAT_ROOM`
+    ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE = @OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE = @OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
+
+-- Dump completed on 2020-05-02 23:17:15
