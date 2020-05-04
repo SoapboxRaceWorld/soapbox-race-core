@@ -50,17 +50,12 @@ public class TokenSessionBO {
         }
         long time = new Date().getTime();
         long tokenTime = tokenSessionEntity.getExpirationDate().getTime();
-        if (time > tokenTime) {
-            return false;
-        }
-        tokenSessionEntity.setExpirationDate(getMinutes(3));
-        tokenDAO.update(tokenSessionEntity);
-        return true;
+        return time <= tokenTime;
     }
 
     public String createToken(Long userId, String clientHostName) {
         TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
-        Date expirationDate = getMinutes(15);
+        Date expirationDate = getMinutes(parameterBO.getIntParam("SESSION_LENGTH_MINUTES", 130));
         tokenSessionEntity.setExpirationDate(expirationDate);
         String randomUUID = UUIDGen.getRandomUUID();
         tokenSessionEntity.setSecurityToken(randomUUID);
