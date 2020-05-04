@@ -24,6 +24,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Stateless
@@ -202,6 +203,7 @@ public class UserBO {
             personaEntity.setLastLogin(LocalDateTime.now());
 
             personaDAO.update(personaEntity);
+            achievementBO.updateAchievements(personaEntity, "LOGIN", Map.of("persona", personaEntity));
         }
     }
 
