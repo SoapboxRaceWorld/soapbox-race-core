@@ -33,6 +33,8 @@ public class ServerInfoEntity {
     private String adminList;
     private String ownerList;
     private Integer numberOfRegistered;
+    @Column(columnDefinition = "integer default 7200")
+    private Integer secondsToShutDown = 7200;
     private String allowedCountries;
 
     @Convert(converter = SceneryGroupConverter.class)
@@ -184,4 +186,11 @@ public class ServerInfoEntity {
         this.allowedCountries = allowedCountries;
     }
 
+    public Integer getSecondsToShutDown() {
+        return secondsToShutDown;
+    }
+
+    public void setSecondsToShutDown(Integer secondsToShutDown) {
+        this.secondsToShutDown = secondsToShutDown;
+    }
 }
