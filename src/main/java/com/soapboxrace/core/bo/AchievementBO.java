@@ -18,7 +18,6 @@ import com.soapboxrace.jaxb.xmpp.AchievementProgress;
 import com.soapboxrace.jaxb.xmpp.AchievementsAwarded;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeAchievementsAwarded;
 
-import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
@@ -186,22 +185,8 @@ public class AchievementBO {
      * @param achievementCategory The category of achievements to evaluate
      * @param properties          Relevant contextual information for achievements.
      */
-    @Asynchronous
     public void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
                                    Map<String, Object> properties) {
-        updateAchievements(personaEntity, achievementCategory, properties, false);
-    }
-
-    /**
-     * Update all appropriate achievements in the given category for the persona by the given ID
-     *
-     * @param personaEntity       The {@link PersonaEntity} instance to be updated
-     * @param achievementCategory The category of achievements to evaluate
-     * @param properties          Relevant contextual information for achievements.
-     */
-    @Asynchronous
-    public void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
-                                   Map<String, Object> properties, boolean recursiveUpdate) {
         int originalScore = personaEntity.getScore();
         AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
         achievementsAwarded.setAchievements(new ArrayList<>());
@@ -261,7 +246,8 @@ public class AchievementBO {
                     personaEntity.getLevel(), personaEntity.getScore(), 0, false, true,
                     false, false);
 
-            updateAchievements(personaEntity, "PROGRESSION", Map.of("persona", personaEntity, "progression", progressionContext), true);
+            updateAchievements(personaEntity, "PROGRESSION",
+                    Map.of("persona", personaEntity, "progression", progressionContext));
         }
     }
 
