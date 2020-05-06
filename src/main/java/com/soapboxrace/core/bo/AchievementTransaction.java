@@ -1,6 +1,8 @@
 package com.soapboxrace.core.bo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,9 +17,9 @@ public class AchievementTransaction {
     private final Long personaId;
 
     /**
-     * The transaction entries; key is achievement category, value is the map of global values for scripts
+     * The transaction entries; key is achievement category, value is a list of maps of global values for scripts
      */
-    private final Map<String, Map<String, Object>> entries = new HashMap<>();
+    private final Map<String, List<Map<String, Object>>> entries = new HashMap<>();
 
     /**
      * Whether the transaction has been committed
@@ -44,18 +46,16 @@ public class AchievementTransaction {
             throw new RuntimeException("add() is not permitted for committed transactions.");
         }
 
-        if (this.entries.containsKey(category)) {
-            throw new RuntimeException("Called add() with a category that has already been added: " + category);
-        }
+        List<Map<String, Object>> categoryEntries = this.entries.computeIfAbsent(category, k -> new ArrayList<>());
 
-        this.entries.put(category, parameters);
+        categoryEntries.add(parameters);
     }
 
     public Long getPersonaId() {
         return personaId;
     }
 
-    public Map<String, Map<String, Object>> getEntries() {
+    public Map<String, List<Map<String, Object>>> getEntries() {
         return entries;
     }
 
@@ -69,5 +69,13 @@ public class AchievementTransaction {
         }
 
         this.committed = true;
+    }
+
+    public void clear() {
+        if (!this.committed) {
+            throw new RuntimeException("Non-committed transactions cannot be cleared");
+        }
+
+        this.entries.clear();
     }
 }

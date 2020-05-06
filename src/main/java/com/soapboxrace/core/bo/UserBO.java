@@ -24,6 +24,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Stateless
@@ -202,8 +203,9 @@ public class UserBO {
             personaEntity.setLastLogin(LocalDateTime.now());
 
             personaDAO.update(personaEntity);
-            // TODO fix this code
-//            achievementBO.updateAchievements(personaEntity, "LOGIN", Map.of("persona", personaEntity));
+            AchievementTransaction transaction = achievementBO.createTransaction(personaId);
+            transaction.add("LOGIN", Map.of("persona", personaEntity));
+            achievementBO.commitTransaction(personaEntity, transaction);
         }
     }
 

@@ -13,6 +13,7 @@ import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
 import com.soapboxrace.jaxb.http.ArrayOfRouteEntrantResult;
@@ -88,9 +89,11 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
             arrayOfRouteEntrantResult.getRouteEntrantResult().add(routeEntrantResult);
         }
 
+        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         RouteEventResult routeEventResult = new RouteEventResult();
         routeEventResult.setAccolades(rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket,
-                eventDataEntity, eventSessionEntity));
+                eventDataEntity, eventSessionEntity, transaction));
         routeEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, routeArbitrationPacket,
                 eventDataEntity.getEvent()));
         routeEventResult.setEntrants(arrayOfRouteEntrantResult);
@@ -100,7 +103,8 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
         prepareRaceAgain(eventSessionEntity, routeEventResult);
         sendXmppPacket(eventSessionEntity, activePersonaId, routeArbitrationPacket);
 
-        updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, routeArbitrationPacket);
+        updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, routeArbitrationPacket, transaction);
+        achievementBO.commitTransaction(personaEntity, transaction);
 
         eventSessionDao.update(eventSessionEntity);
         return routeEventResult;

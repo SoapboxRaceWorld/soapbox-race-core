@@ -28,7 +28,7 @@ public class RewardTeamEscapeBO extends RewardBO {
 
     public Accolades getTeamEscapeAccolades(Long activePersonaId,
                                             TeamEscapeArbitrationPacket teamEscapeArbitrationPacket,
-                                            EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity) {
+                                            EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, AchievementTransaction achievementTransaction) {
         int finishReason = teamEscapeArbitrationPacket.getFinishReason();
         boolean legit = legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity);
         eventDataEntity.setLegit(legit);
@@ -71,7 +71,7 @@ public class RewardTeamEscapeBO extends RewardBO {
         setAmplifierReward(personaEntity, rewardVO);
 
         teamEscapeArbitrationPacket.setRank(RandomUtils.nextInt(1, 5));
-        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, true, achievementTransaction);
         return getAccolades(personaEntity, eventEntity, teamEscapeArbitrationPacket, rewardVO);
     }
 }

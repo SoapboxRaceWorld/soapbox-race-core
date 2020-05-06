@@ -25,7 +25,7 @@ public class RewardRouteBO extends RewardBO {
     private LegitRaceBO legitRaceBO;
 
     public Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket,
-                                       EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity) {
+                                       EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, AchievementTransaction achievementTransaction) {
         int finishReason = routeArbitrationPacket.getFinishReason();
         boolean legit = legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity);
         eventDataEntity.setLegit(legit);
@@ -44,7 +44,7 @@ public class RewardRouteBO extends RewardBO {
         setMultiplierReward(eventEntity, rewardVO);
         setAmplifierReward(personaEntity, rewardVO);
 
-        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, true, achievementTransaction);
         return getAccolades(personaEntity, eventEntity, routeArbitrationPacket, rewardVO);
     }
 

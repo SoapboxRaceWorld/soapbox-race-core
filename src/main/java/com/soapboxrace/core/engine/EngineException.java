@@ -6,6 +6,9 @@
 
 package com.soapboxrace.core.engine;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException
 public class EngineException extends RuntimeException {
     private final EngineExceptionCode code;
 

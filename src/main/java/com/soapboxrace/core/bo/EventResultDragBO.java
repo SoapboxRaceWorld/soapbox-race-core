@@ -13,6 +13,7 @@ import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
 import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
@@ -105,9 +106,11 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
             }
         }
 
+        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         DragEventResult dragEventResult = new DragEventResult();
         dragEventResult.setAccolades(rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket,
-                eventDataEntity, eventSessionEntity));
+                eventDataEntity, eventSessionEntity, transaction));
         dragEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, dragArbitrationPacket,
                 eventDataEntity.getEvent()));
         dragEventResult.setEntrants(arrayOfDragEntrantResult);
@@ -115,7 +118,8 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
         dragEventResult.setEventSessionId(eventSessionId);
         dragEventResult.setPersonaId(activePersonaId);
         prepareRaceAgain(eventSessionEntity, dragEventResult);
-        updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, dragArbitrationPacket);
+        updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, dragArbitrationPacket, transaction);
+        achievementBO.commitTransaction(personaEntity, transaction);
 
         eventSessionDao.update(eventSessionEntity);
         return dragEventResult;

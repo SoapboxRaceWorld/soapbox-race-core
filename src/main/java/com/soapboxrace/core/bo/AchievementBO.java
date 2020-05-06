@@ -7,6 +7,7 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.AchievementProgressionContext;
+import com.soapboxrace.core.bo.util.AchievementUpdateInfo;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
@@ -78,11 +79,16 @@ public class AchievementBO {
     /**
      * Commits the changes for the given {@link AchievementTransaction} instance.
      *
-     * @param transaction the {@link AchievementTransaction} instance
+     * @param personaEntity the {@link PersonaEntity} instance
+     * @param transaction   the {@link AchievementTransaction} instance
      */
     @Asynchronous
-    public void commitTransaction(AchievementTransaction transaction) {
+    public void commitTransaction(PersonaEntity personaEntity, AchievementTransaction transaction) {
+        transaction.getEntries().forEach((k, v) -> v.forEach(m -> updateAchievements(personaEntity, k, m)));
+        personaDAO.update(personaEntity);
 
+        transaction.markCommitted();
+        transaction.clear();
     }
 
     public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
@@ -207,10 +213,7 @@ public class AchievementBO {
     private void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
                                     Map<String, Object> properties) {
         int originalScore = personaEntity.getScore();
-        AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
-        achievementsAwarded.setAchievements(new ArrayList<>());
-        achievementsAwarded.setBadges(new ArrayList<>());
-        achievementsAwarded.setProgressed(new ArrayList<>());
+        int newScore = originalScore;
         properties = new HashMap<>(properties);
 
         for (AchievementEntity achievementEntity : achievementDAO.findAllByCategory(achievementCategory)) {
@@ -242,25 +245,16 @@ public class AchievementBO {
                 if (shouldUpdate) {
                     if (insert)
                         personaAchievementDAO.insert(personaAchievementEntity);
-                    updateAchievement(personaEntity, achievementEntity, properties, achievementsAwarded,
-                            personaAchievementEntity);
+                    AchievementUpdateInfo achievementUpdateInfo = updateAchievement(personaEntity, achievementEntity, properties, personaAchievementEntity);
+                    sendUpdateInfoMessage(personaEntity.getPersonaId(), achievementUpdateInfo);
+                    newScore += achievementUpdateInfo.getPointsGiven();
                 }
             } catch (ScriptException ex) {
                 ex.printStackTrace();
             }
         }
 
-
-        achievementsAwarded.setPersonaId(personaEntity.getPersonaId());
-
-        XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded =
-                new XMPP_ResponseTypeAchievementsAwarded();
-        responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
-
-        personaDAO.update(personaEntity);
-        openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
-
-        if (personaEntity.getScore() != originalScore) {
+        if (newScore != originalScore) {
             AchievementProgressionContext progressionContext = new AchievementProgressionContext(0, 0,
                     personaEntity.getLevel(), personaEntity.getScore(), 0, false, true,
                     false, false);
@@ -268,28 +262,72 @@ public class AchievementBO {
             updateAchievements(personaEntity, "PROGRESSION",
                     Map.of("persona", personaEntity, "progression", progressionContext));
         }
+
+        personaEntity.setScore(newScore);
     }
 
-    private void updateAchievement(PersonaEntity personaEntity, AchievementEntity achievementEntity, Map<String, Object> bindings,
-                                   AchievementsAwarded achievementsAwarded,
-                                   PersonaAchievementEntity personaAchievementEntity) {
-        // If no progression can be made, there's nothing to do.
-        if (!personaAchievementEntity.isCanProgress()) {
-            return;
+    private void sendUpdateInfoMessage(Long personaId, AchievementUpdateInfo achievementUpdateInfo) {
+        XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded =
+                new XMPP_ResponseTypeAchievementsAwarded();
+
+        for (AchievementUpdateInfo.CompletedAchievementRank completedAchievementRank : achievementUpdateInfo.getCompletedAchievementRanks()) {
+            AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
+            achievementsAwarded.setAchievements(new ArrayList<>());
+            achievementsAwarded.setBadges(new ArrayList<>());
+            achievementsAwarded.setProgressed(new ArrayList<>());
+            achievementsAwarded.setPersonaId(personaId);
+            AchievementAwarded achievementAwarded = new AchievementAwarded();
+            LocalDateTime achievedOn = completedAchievementRank.getAchievedOn();
+            AchievementRankEntity achievementRankEntity = completedAchievementRank.getAchievementRankEntity();
+            AchievementEntity achievementEntity = completedAchievementRank.getAchievementEntity();
+            achievementAwarded.setAchievedOn(achievedOn.format(DateTimeFormatter.ofPattern("yyyyy-MM-dd'T'hh:mm:ss")));
+            achievementAwarded.setAchievementDefinitionId(achievementEntity.getId());
+            achievementAwarded.setAchievementRankId(achievementRankEntity.getId());
+            achievementAwarded.setDescription(achievementEntity.getBadgeDefinitionEntity().getDescription());
+            achievementAwarded.setIcon(achievementEntity.getBadgeDefinitionEntity().getIcon());
+            achievementAwarded.setName(achievementEntity.getBadgeDefinitionEntity().getName());
+            achievementAwarded.setRarity(achievementRankEntity.getRarity());
+            achievementAwarded.setPoints(achievementRankEntity.getPoints());
+            achievementsAwarded.getAchievements().add(achievementAwarded);
+            responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
+
+            openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaId);
         }
 
-        Integer newScore = personaEntity.getScore();
+        for (AchievementUpdateInfo.ProgressedAchievement progressedAchievement : achievementUpdateInfo.getProgressedAchievements()) {
+            AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
+            achievementsAwarded.setAchievements(new ArrayList<>());
+            achievementsAwarded.setBadges(new ArrayList<>());
+            achievementsAwarded.setProgressed(new ArrayList<>());
+            achievementsAwarded.setPersonaId(personaId);
+            AchievementProgress progress = new AchievementProgress();
+            progress.setAchievementDefinitionId(progressedAchievement.getAchievementDefinitionId());
+            progress.setCurrentValue(progressedAchievement.getValue());
+            achievementsAwarded.getProgressed().add(progress);
+            responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
 
-//        bindings.put("personaAchievement", personaAchievementEntity);
+            openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaId);
+        }
+    }
+
+    private AchievementUpdateInfo updateAchievement(PersonaEntity personaEntity, AchievementEntity achievementEntity, Map<String, Object> bindings,
+                                                    PersonaAchievementEntity personaAchievementEntity) {
+        // If no progression can be made, there's nothing to do.
+        if (!personaAchievementEntity.isCanProgress()) {
+            return new AchievementUpdateInfo();
+        }
+
+        Integer pointsAdded = 0;
 
         // Determine the value to add to the achievement progress.
         try {
             Long cleanVal = 0L;
 
             if (achievementEntity.getUpdateValue() == null || achievementEntity.getUpdateValue().trim().isEmpty()) {
-                return;
+                return new AchievementUpdateInfo();
             }
 
+            AchievementUpdateInfo achievementUpdateInfo = new AchievementUpdateInfo();
             Object rawVal = scriptingBO.eval(achievementEntity.getUpdateValue(), bindings);
 
             if (rawVal instanceof Integer) {
@@ -318,65 +356,56 @@ public class AchievementBO {
                 long newVal = Math.max(0, Math.min(maxVal.getAsInt(),
                         achievementEntity.getShouldOverwriteProgress() ? cleanVal :
                                 (personaAchievementEntity.getCurrentValue() + cleanVal)));
-
-                for (int i = 0; i < achievementEntity.getRanks().size(); i++) {
-                    AchievementRankEntity previous = null;
-                    AchievementRankEntity current = achievementEntity.getRanks().get(i);
-                    PersonaAchievementRankEntity previousRank = null;
-                    PersonaAchievementRankEntity currentRank =
-                            personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaEntity.getPersonaId(),
-                                    current.getId());
-
-                    if (i > 0) {
-                        previous = achievementEntity.getRanks().get(i - 1);
-                        previousRank =
+                System.out.println(achievementEntity.getName() + ": newVal=" + newVal);
+                if (newVal == 0L) {
+                    achievementUpdateInfo.getProgressedAchievements().add(new AchievementUpdateInfo.ProgressedAchievement(achievementEntity.getId(), newVal));
+                } else {
+                    for (int i = 0; i < achievementEntity.getRanks().size(); i++) {
+                        AchievementRankEntity previous = null;
+                        AchievementRankEntity current = achievementEntity.getRanks().get(i);
+                        PersonaAchievementRankEntity previousRank = null;
+                        PersonaAchievementRankEntity currentRank =
                                 personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaEntity.getPersonaId(),
-                                        previous.getId());
+                                        current.getId());
 
-                        if (previousRank == null) {
-                            previousRank = createPersonaAchievementRank(personaAchievementEntity, previous);
+                        if (i > 0) {
+                            previous = achievementEntity.getRanks().get(i - 1);
+                            previousRank =
+                                    personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaEntity.getPersonaId(),
+                                            previous.getId());
+
+                            if (previousRank == null) {
+                                previousRank = createPersonaAchievementRank(personaAchievementEntity, previous);
+                            }
                         }
-                    }
 
-                    if (currentRank == null) {
-                        currentRank = createPersonaAchievementRank(personaAchievementEntity, current);
-                    }
+                        if (currentRank == null) {
+                            currentRank = createPersonaAchievementRank(personaAchievementEntity, current);
+                        }
 
-                    long threshold = current.getThresholdValue();
+                        long threshold = current.getThresholdValue();
 
-                    if (currentRank.getState().equals("Completed") || currentRank.getState().equals("RewardWaiting"))
-                        continue;
+                        if (currentRank.getState().equals("Completed") || currentRank.getState().equals("RewardWaiting"))
+                            continue;
 
-                    if (newVal >= threshold && newVal != personaAchievementEntity.getCurrentValue()) {
-                        currentRank.setState("RewardWaiting");
-                        currentRank.setAchievedOn(LocalDateTime.now());
-                        personaAchievementRankDAO.update(currentRank);
+                        if (newVal >= threshold && newVal != personaAchievementEntity.getCurrentValue()) {
+                            currentRank.setState("RewardWaiting");
+                            currentRank.setAchievedOn(LocalDateTime.now());
+                            personaAchievementRankDAO.update(currentRank);
+                            pointsAdded += current.getPoints();
 
-                        AchievementAwarded achievementAwarded = new AchievementAwarded();
-                        achievementAwarded.setAchievedOn(currentRank.getAchievedOn().format(DateTimeFormatter.ofPattern("yyyyy-MM-dd'T'hh:mm:ss")));
-                        achievementAwarded.setAchievementDefinitionId(achievementEntity.getId());
-                        achievementAwarded.setAchievementRankId(current.getId());
-                        achievementAwarded.setDescription(achievementEntity.getBadgeDefinitionEntity().getDescription());
-                        achievementAwarded.setIcon(achievementEntity.getBadgeDefinitionEntity().getIcon());
-                        achievementAwarded.setName(achievementEntity.getBadgeDefinitionEntity().getName());
-                        achievementAwarded.setRarity(current.getRarity());
-                        achievementAwarded.setPoints(current.getPoints());
-
-                        achievementsAwarded.getAchievements().add(achievementAwarded);
-
-                        newScore += current.getPoints();
-                    } else if (previous != null && previousRank.getState().equals("InProgress")) {
-                        currentRank.setState("Locked");
-                        personaAchievementRankDAO.update(currentRank);
-                        break;
-                    } else if (newVal > 0 && newVal != personaAchievementEntity.getCurrentValue() && newVal < threshold) {
-                        currentRank.setState("InProgress");
-                        personaAchievementRankDAO.update(currentRank);
-                        AchievementProgress progress = new AchievementProgress();
-                        progress.setAchievementDefinitionId(achievementEntity.getId());
-                        progress.setCurrentValue(newVal);
-                        achievementsAwarded.getProgressed().add(progress);
-                        break;
+                            achievementUpdateInfo.getCompletedAchievementRanks().add(new AchievementUpdateInfo.CompletedAchievementRank(
+                                    achievementEntity, current, currentRank.getAchievedOn()));
+                        } else if (previous != null && previousRank.getState().equals("InProgress")) {
+                            currentRank.setState("Locked");
+                            personaAchievementRankDAO.update(currentRank);
+                            break;
+                        } else if (newVal > 0 && newVal != personaAchievementEntity.getCurrentValue() && newVal < threshold) {
+                            currentRank.setState("InProgress");
+                            personaAchievementRankDAO.update(currentRank);
+                            achievementUpdateInfo.getProgressedAchievements().add(new AchievementUpdateInfo.ProgressedAchievement(achievementEntity.getId(), newVal));
+                            break;
+                        }
                     }
                 }
 
@@ -384,13 +413,12 @@ public class AchievementBO {
                 personaAchievementEntity.setCanProgress(newVal < maxVal.getAsInt());
                 personaAchievementDAO.update(personaAchievementEntity);
             }
-        } catch (ScriptException ex) {
-            ex.printStackTrace();
-        }
 
-        achievementsAwarded.setScore(newScore);
-        personaEntity.setScore(newScore);
-        personaDAO.update(personaEntity);
+            achievementUpdateInfo.setPointsGiven(pointsAdded);
+            return achievementUpdateInfo;
+        } catch (ScriptException ex) {
+            throw new EngineException(ex, EngineExceptionCode.UnspecifiedError, true);
+        }
     }
 
     private PersonaAchievementRankEntity createPersonaAchievementRank(PersonaAchievementEntity personaAchievementEntity, AchievementRankEntity achievementRankEntity) {

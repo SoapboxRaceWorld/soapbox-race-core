@@ -15,6 +15,7 @@ import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.OwnedCarEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.jaxb.http.ExitPath;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitEventResult;
@@ -78,9 +79,11 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
 
         pursuitArbitrationPacket.setRank(1); // there's only ever 1 player, and the game sets rank to 0... idk why
 
+        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         PursuitEventResult pursuitEventResult = new PursuitEventResult();
         pursuitEventResult.setAccolades(rewardPursuitBO.getPursuitAccolades(activePersonaId, pursuitArbitrationPacket
-                , eventDataEntity, eventSessionEntity, isBusted));
+                , eventDataEntity, eventSessionEntity, isBusted, transaction));
         pursuitEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, pursuitArbitrationPacket,
                 eventDataEntity.getEvent()));
         pursuitEventResult.setEventId(eventDataEntity.getEvent().getId());
@@ -92,8 +95,10 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
         pursuitEventResult.setPersonaId(activePersonaId);
 
         if (!isBusted) {
-            updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, pursuitArbitrationPacket);
+            updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, pursuitArbitrationPacket, transaction);
         }
+
+        achievementBO.commitTransaction(personaEntity, transaction);
 
         OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(activePersonaId).getOwnedCar();
         ownedCarEntity.setHeat(isBusted ? 1 : pursuitArbitrationPacket.getHeat());

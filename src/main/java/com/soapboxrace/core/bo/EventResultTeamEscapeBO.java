@@ -13,6 +13,7 @@ import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
 import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
@@ -115,9 +116,11 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
             }
         }
 
+        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
         teamEscapeEventResult.setAccolades(rewardTeamEscapeBO.getTeamEscapeAccolades(activePersonaId,
-                teamEscapeArbitrationPacket, eventDataEntity, eventSessionEntity));
+                teamEscapeArbitrationPacket, eventDataEntity, eventSessionEntity, transaction));
         teamEscapeEventResult
                 .setDurability(carDamageBO.induceCarDamage(activePersonaId, teamEscapeArbitrationPacket,
                         eventDataEntity.getEvent()));
@@ -128,8 +131,10 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
         prepareRaceAgain(eventSessionEntity, teamEscapeEventResult);
 
         if (teamEscapeArbitrationPacket.getBustedCount() == 0) {
-            updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, teamEscapeArbitrationPacket);
+            updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, teamEscapeArbitrationPacket, transaction);
         }
+
+        achievementBO.commitTransaction(personaEntity, transaction);
 
         eventSessionDao.update(eventSessionEntity);
         return teamEscapeEventResult;

@@ -25,7 +25,7 @@ public class RewardDragBO extends RewardBO {
     private LegitRaceBO legitRaceBO;
 
     public Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket,
-                                      EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity) {
+                                      EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, AchievementTransaction achievementTransaction) {
         int finishReason = dragArbitrationPacket.getFinishReason();
         boolean legit = legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity);
         eventDataEntity.setLegit(legit);
@@ -44,7 +44,7 @@ public class RewardDragBO extends RewardBO {
         setMultiplierReward(eventEntity, rewardVO);
         setAmplifierReward(personaEntity, rewardVO);
 
-        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, true, achievementTransaction);
         return getAccolades(personaEntity, eventEntity, dragArbitrationPacket, rewardVO);
     }
 }
