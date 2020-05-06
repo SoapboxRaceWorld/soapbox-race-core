@@ -13,7 +13,6 @@ import com.soapboxrace.jaxb.http.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.Map;
 import java.util.Set;
 
 @Stateless
@@ -128,10 +127,11 @@ public class RewardBO {
         }
         personaDao.update(personaEntity);
 
-        AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp,
-                personaEntity.getLevel(), personaEntity.getScore(), 0, hasLevelChanged, false, false, isInEvent);
-
-        achievementBO.updateAchievements(personaEntity, "PROGRESSION", Map.of("persona", personaEntity, "progression", progressionContext));
+        // TODO fix this code
+//        AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp,
+//                personaEntity.getLevel(), personaEntity.getScore(), 0, hasLevelChanged, false, false, isInEvent);
+//
+//        achievementBO.updateAchievements(personaEntity, "PROGRESSION", Map.of("persona", personaEntity, "progression", progressionContext));
     }
 
     public void setTopSpeedReward(EventEntity eventEntity, float topSpeed, RewardVO rewardVO) {

@@ -1,6 +1,5 @@
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
@@ -8,7 +7,6 @@ import com.soapboxrace.jaxb.http.EventResult;
 import com.soapboxrace.jaxb.http.ExitPath;
 
 import javax.ejb.EJB;
-import java.util.Map;
 
 /**
  * Base class for {@link ArbitrationPacket} -> {@link EventResult} converters
@@ -119,12 +117,13 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
         EventEntity eventEntity = eventDataEntity.getEvent();
 
-        achievementBO.updateAchievements(personaEntity, "EVENT", Map.of(
-                "persona", personaEntity,
-                "event", eventEntity,
-                "eventData", eventDataEntity,
-                "eventSession", eventSessionEntity,
-                "eventContext", new AchievementEventContext(EventMode.fromId(eventEntity.getEventModeId()), packet, eventSessionEntity)
-        ));
+        // TODO fix this code
+//        achievementBO.updateAchievements(personaEntity, "EVENT", Map.of(
+//                "persona", personaEntity,
+//                "event", eventEntity,
+//                "eventData", eventDataEntity,
+//                "eventSession", eventSessionEntity,
+//                "eventContext", new AchievementEventContext(EventMode.fromId(eventEntity.getEventModeId()), packet, eventSessionEntity)
+//        ));
     }
 }

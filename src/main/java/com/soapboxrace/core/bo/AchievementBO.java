@@ -18,9 +18,7 @@ import com.soapboxrace.jaxb.xmpp.AchievementProgress;
 import com.soapboxrace.jaxb.xmpp.AchievementsAwarded;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeAchievementsAwarded;
 
-import javax.ejb.EJB;
-import javax.ejb.Schedule;
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import javax.script.ScriptException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +27,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
 
-@Stateless
+@Singleton
+@Lock(LockType.READ)
 public class AchievementBO {
     @EJB
     private ItemRewardBO itemRewardBO;
@@ -64,6 +63,26 @@ public class AchievementBO {
                 achievementRankDAO.update(achievementRankEntity);
             }
         }
+    }
+
+    /**
+     * Creates a new achievement transaction for the given persona ID
+     *
+     * @param personaId the persona ID
+     * @return new {@link AchievementTransaction} instance
+     */
+    public AchievementTransaction createTransaction(Long personaId) {
+        return new AchievementTransaction(personaId);
+    }
+
+    /**
+     * Commits the changes for the given {@link AchievementTransaction} instance.
+     *
+     * @param transaction the {@link AchievementTransaction} instance
+     */
+    @Asynchronous
+    public void commitTransaction(AchievementTransaction transaction) {
+
     }
 
     public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
@@ -185,8 +204,8 @@ public class AchievementBO {
      * @param achievementCategory The category of achievements to evaluate
      * @param properties          Relevant contextual information for achievements.
      */
-    public void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
-                                   Map<String, Object> properties) {
+    private void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
+                                    Map<String, Object> properties) {
         int originalScore = personaEntity.getScore();
         AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
         achievementsAwarded.setAchievements(new ArrayList<>());

@@ -23,7 +23,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
 import java.util.Random;
 
 @Stateless
@@ -218,6 +217,7 @@ public class EventsBO {
         AchievementProgressionContext progressionContext = new AchievementProgressionContext(0, 0,
                 personaEntity.getLevel(), personaEntity.getScore(), treasureHuntEntity.getStreak(), false, false, streakChanged, false);
 
-        achievementBO.updateAchievements(personaEntity, "PROGRESSION", Map.of("persona", personaEntity, "progression", progressionContext));
+        // TODO fix this code
+//        achievementBO.updateAchievements(personaEntity, "PROGRESSION", Map.of("persona", personaEntity, "progression", progressionContext));
     }
 }
