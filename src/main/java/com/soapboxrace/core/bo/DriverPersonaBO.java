@@ -133,7 +133,7 @@ public class DriverPersonaBO {
         return profileData;
     }
 
-    private ArrayOfBadgePacket getBadges(Long personaId) {
+    public ArrayOfBadgePacket getBadges(Long personaId) {
         ArrayOfBadgePacket arrayOfBadgePacket = new ArrayOfBadgePacket();
 
         for (PersonaBadgeEntity personaBadgeEntity : personaBadgeDAO.findAllBadgesForPersona(personaId)) {

@@ -34,6 +34,8 @@ public class AchievementBO {
     @EJB
     private ItemRewardBO itemRewardBO;
     @EJB
+    private DriverPersonaBO driverPersonaBO;
+    @EJB
     private ScriptingBO scriptingBO;
     @EJB
     private PersonaAchievementDAO personaAchievementDAO;
@@ -273,7 +275,7 @@ public class AchievementBO {
         for (AchievementUpdateInfo.CompletedAchievementRank completedAchievementRank : achievementUpdateInfo.getCompletedAchievementRanks()) {
             AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
             achievementsAwarded.setAchievements(new ArrayList<>());
-            achievementsAwarded.setBadges(new ArrayList<>());
+            achievementsAwarded.setBadges(driverPersonaBO.getBadges(personaId).getBadgePacket());
             achievementsAwarded.setProgressed(new ArrayList<>());
             achievementsAwarded.setPersonaId(personaId);
             AchievementAwarded achievementAwarded = new AchievementAwarded();
@@ -297,7 +299,7 @@ public class AchievementBO {
         for (AchievementUpdateInfo.ProgressedAchievement progressedAchievement : achievementUpdateInfo.getProgressedAchievements()) {
             AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
             achievementsAwarded.setAchievements(new ArrayList<>());
-            achievementsAwarded.setBadges(new ArrayList<>());
+            achievementsAwarded.setBadges(driverPersonaBO.getBadges(personaId).getBadgePacket());
             achievementsAwarded.setProgressed(new ArrayList<>());
             achievementsAwarded.setPersonaId(personaId);
             AchievementProgress progress = new AchievementProgress();
