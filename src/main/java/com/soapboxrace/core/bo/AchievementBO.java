@@ -356,7 +356,6 @@ public class AchievementBO {
                 long newVal = Math.max(0, Math.min(maxVal.getAsInt(),
                         achievementEntity.getShouldOverwriteProgress() ? cleanVal :
                                 (personaAchievementEntity.getCurrentValue() + cleanVal)));
-                System.out.println(achievementEntity.getName() + ": newVal=" + newVal);
                 if (newVal == 0L) {
                     achievementUpdateInfo.getProgressedAchievements().add(new AchievementUpdateInfo.ProgressedAchievement(achievementEntity.getId(), newVal));
                 } else {
