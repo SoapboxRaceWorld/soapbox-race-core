@@ -23,10 +23,7 @@ import javax.ejb.*;
 import javax.script.ScriptException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.OptionalInt;
+import java.util.*;
 
 @Singleton
 @Lock(LockType.READ)
@@ -272,10 +269,11 @@ public class AchievementBO {
         XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded =
                 new XMPP_ResponseTypeAchievementsAwarded();
 
+        List<BadgePacket> badgePacketList = driverPersonaBO.getBadges(personaId).getBadgePacket();
         for (AchievementUpdateInfo.CompletedAchievementRank completedAchievementRank : achievementUpdateInfo.getCompletedAchievementRanks()) {
             AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
             achievementsAwarded.setAchievements(new ArrayList<>());
-            achievementsAwarded.setBadges(driverPersonaBO.getBadges(personaId).getBadgePacket());
+            achievementsAwarded.setBadges(badgePacketList);
             achievementsAwarded.setProgressed(new ArrayList<>());
             achievementsAwarded.setPersonaId(personaId);
             AchievementAwarded achievementAwarded = new AchievementAwarded();
@@ -299,7 +297,7 @@ public class AchievementBO {
         for (AchievementUpdateInfo.ProgressedAchievement progressedAchievement : achievementUpdateInfo.getProgressedAchievements()) {
             AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
             achievementsAwarded.setAchievements(new ArrayList<>());
-            achievementsAwarded.setBadges(driverPersonaBO.getBadges(personaId).getBadgePacket());
+            achievementsAwarded.setBadges(badgePacketList);
             achievementsAwarded.setProgressed(new ArrayList<>());
             achievementsAwarded.setPersonaId(personaId);
             AchievementProgress progress = new AchievementProgress();
