@@ -91,8 +91,6 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
         eventDataEntity.setTopSpeed(teamEscapeArbitrationPacket.getTopSpeed());
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
-        eventDataDao.update(eventDataEntity);
-
         ArrayOfTeamEscapeEntrantResult arrayOfTeamEscapeEntrantResult = new ArrayOfTeamEscapeEntrantResult();
         for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
             TeamEscapeEntrantResult teamEscapeEntrantResult = new TeamEscapeEntrantResult();
@@ -137,6 +135,7 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
         achievementBO.commitTransaction(personaEntity, transaction);
 
         eventSessionDao.update(eventSessionEntity);
+        eventDataDao.update(eventDataEntity);
 
         if (eventSessionEntity.getLobby() != null && !eventSessionEntity.getLobby().getIsPrivate()) {
             matchmakingBO.resetIgnoredEvents(activePersonaId);

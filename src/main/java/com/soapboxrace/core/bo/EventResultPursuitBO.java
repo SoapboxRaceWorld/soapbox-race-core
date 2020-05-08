@@ -74,8 +74,6 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(pursuitArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
         eventDataEntity.setTopSpeed(pursuitArbitrationPacket.getTopSpeed());
         eventSessionEntity.setEnded(System.currentTimeMillis());
-        eventDataDao.update(eventDataEntity);
-        eventSessionDao.update(eventSessionEntity);
 
         pursuitArbitrationPacket.setRank(1); // there's only ever 1 player, and the game sets rank to 0... idk why
 
@@ -103,6 +101,8 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
         OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(activePersonaId).getOwnedCar();
         ownedCarEntity.setHeat(isBusted ? 1 : pursuitArbitrationPacket.getHeat());
         ownedCarDAO.update(ownedCarEntity);
+        eventDataDao.update(eventDataEntity);
+        eventSessionDao.update(eventSessionEntity);
 
         return pursuitEventResult;
     }

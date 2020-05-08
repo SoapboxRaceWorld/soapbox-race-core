@@ -74,8 +74,6 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
         eventDataEntity.setTopSpeed(routeArbitrationPacket.getTopSpeed());
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
-        eventDataDao.update(eventDataEntity);
-
         ArrayOfRouteEntrantResult arrayOfRouteEntrantResult = new ArrayOfRouteEntrantResult();
         for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
             RouteEntrantResult routeEntrantResult = new RouteEntrantResult();
@@ -107,6 +105,7 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
         achievementBO.commitTransaction(personaEntity, transaction);
 
         eventSessionDao.update(eventSessionEntity);
+        eventDataDao.update(eventDataEntity);
 
         if (eventSessionEntity.getLobby() != null && !eventSessionEntity.getLobby().getIsPrivate()) {
             matchmakingBO.resetIgnoredEvents(activePersonaId);
@@ -133,7 +132,7 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
             if (!racer.getPersonaId().equals(activePersonaId)) {
                 XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId(), openFireSoapBoxCli);
                 xmppEvent.sendRaceEnd(routeEntrantResultResponse);
-                if (routeArbitrationPacket.getRank() == 1 && eventSessionEntity.getEvent().isDnfEnabled()) {
+                if (routeArbitrationPacket.getFinishReason() == 22 && routeArbitrationPacket.getRank() == 1 && eventSessionEntity.getEvent().isDnfEnabled()) {
                     xmppEvent.sendEventTimingOut(eventSessionEntity);
                     dnfTimerBO.scheduleDNF(eventSessionEntity, racer.getPersonaId());
                 }

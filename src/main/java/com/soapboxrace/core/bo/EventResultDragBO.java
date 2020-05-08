@@ -83,8 +83,6 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
         eventDataEntity.setTopSpeed(dragArbitrationPacket.getTopSpeed());
         eventSessionEntity.setEnded(System.currentTimeMillis());
 
-        eventDataDao.update(eventDataEntity);
-
         ArrayOfDragEntrantResult arrayOfDragEntrantResult = new ArrayOfDragEntrantResult();
         for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
             DragEntrantResult dragEntrantResult = new DragEntrantResult();
@@ -99,7 +97,7 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
             if (!racer.getPersonaId().equals(activePersonaId)) {
                 XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId(), openFireSoapBoxCli);
                 xmppEvent.sendDragEnd(dragEntrantResultResponse);
-                if (dragArbitrationPacket.getRank() == 1 && eventSessionEntity.getEvent().isDnfEnabled()) {
+                if (dragArbitrationPacket.getFinishReason() == 22 && dragArbitrationPacket.getRank() == 1 && eventSessionEntity.getEvent().isDnfEnabled()) {
                     xmppEvent.sendEventTimingOut(eventSessionEntity);
                     dnfTimerBO.scheduleDNF(eventSessionEntity, racer.getPersonaId());
                 }
@@ -122,6 +120,7 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
         achievementBO.commitTransaction(personaEntity, transaction);
 
         eventSessionDao.update(eventSessionEntity);
+        eventDataDao.update(eventDataEntity);
 
         if (eventSessionEntity.getLobby() != null && !eventSessionEntity.getLobby().getIsPrivate()) {
             matchmakingBO.resetIgnoredEvents(activePersonaId);
