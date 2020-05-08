@@ -87,7 +87,7 @@ public class AchievementBO {
         transaction.getEntries().forEach((k, v) -> v.forEach(m -> achievementUpdateInfoList.addAll(updateAchievements(personaEntity, k, m))));
         personaDAO.update(personaEntity);
         List<BadgePacket> badgePacketList = driverPersonaBO.getBadges(personaEntity.getPersonaId()).getBadgePacket();
-        achievementUpdateInfoList.forEach(a -> this.sendUpdateInfoMessage(personaEntity.getPersonaId(), a, badgePacketList));
+        achievementUpdateInfoList.forEach(a -> this.sendUpdateInfoMessage(personaEntity, a, badgePacketList));
 
         transaction.markCommitted();
         transaction.clear();
@@ -272,7 +272,7 @@ public class AchievementBO {
         return achievementUpdateInfoList;
     }
 
-    private void sendUpdateInfoMessage(Long personaId, AchievementUpdateInfo achievementUpdateInfo, List<BadgePacket> badgePacketList) {
+    private void sendUpdateInfoMessage(PersonaEntity personaEntity, AchievementUpdateInfo achievementUpdateInfo, List<BadgePacket> badgePacketList) {
         XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded =
                 new XMPP_ResponseTypeAchievementsAwarded();
 
@@ -281,7 +281,8 @@ public class AchievementBO {
             achievementsAwarded.setAchievements(new ArrayList<>());
             achievementsAwarded.setBadges(badgePacketList);
             achievementsAwarded.setProgressed(new ArrayList<>());
-            achievementsAwarded.setPersonaId(personaId);
+            achievementsAwarded.setScore(personaEntity.getScore());
+            achievementsAwarded.setPersonaId(personaEntity.getPersonaId());
             AchievementAwarded achievementAwarded = new AchievementAwarded();
             LocalDateTime achievedOn = completedAchievementRank.getAchievedOn();
             AchievementRankEntity achievementRankEntity = completedAchievementRank.getAchievementRankEntity();
@@ -297,7 +298,7 @@ public class AchievementBO {
             achievementsAwarded.getAchievements().add(achievementAwarded);
             responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
 
-            openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaId);
+            openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
         }
 
         for (AchievementUpdateInfo.ProgressedAchievement progressedAchievement : achievementUpdateInfo.getProgressedAchievements()) {
@@ -305,14 +306,15 @@ public class AchievementBO {
             achievementsAwarded.setAchievements(new ArrayList<>());
             achievementsAwarded.setBadges(badgePacketList);
             achievementsAwarded.setProgressed(new ArrayList<>());
-            achievementsAwarded.setPersonaId(personaId);
+            achievementsAwarded.setScore(personaEntity.getScore());
+            achievementsAwarded.setPersonaId(personaEntity.getPersonaId());
             AchievementProgress progress = new AchievementProgress();
             progress.setAchievementDefinitionId(progressedAchievement.getAchievementDefinitionId());
             progress.setCurrentValue(progressedAchievement.getValue());
             achievementsAwarded.getProgressed().add(progress);
             responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
 
-            openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaId);
+            openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
         }
     }
 
