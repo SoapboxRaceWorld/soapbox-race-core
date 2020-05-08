@@ -258,6 +258,8 @@ public class AchievementBO {
             }
         }
 
+        personaEntity.setScore(newScore);
+
         if (newScore != originalScore) {
             AchievementProgressionContext progressionContext = new AchievementProgressionContext(0, 0,
                     personaEntity.getLevel(), personaEntity.getScore(), 0, false, true,
@@ -266,8 +268,6 @@ public class AchievementBO {
             achievementUpdateInfoList.addAll(updateAchievements(personaEntity, "PROGRESSION",
                     Map.of("persona", personaEntity, "progression", progressionContext)));
         }
-
-        personaEntity.setScore(newScore);
 
         return achievementUpdateInfoList;
     }
