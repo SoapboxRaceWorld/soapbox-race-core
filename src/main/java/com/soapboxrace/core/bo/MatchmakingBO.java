@@ -11,6 +11,7 @@ import io.lettuce.core.ScanIterator;
 import io.lettuce.core.api.StatefulRedisConnection;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.*;
 
 /**
@@ -45,6 +46,15 @@ public class MatchmakingBO {
         }
     }
 
+    @PreDestroy
+    public void shutdown() {
+        System.out.println("MatchmakingBO shutdown");
+
+        if (this.enabled) {
+            this.redisConnection.sync().del("matchmaking_queue");
+        }
+    }
+
     /**
      * Adds the given persona ID to the queue under the given car class.
      *
@@ -75,7 +85,6 @@ public class MatchmakingBO {
      * @return The ID of the persona, or {@literal -1} if no persona was found.
      */
     public Long getPlayerFromQueue(Integer carClass) {
-        // Are we looking for a player for an OPEN event?
         if (!this.enabled)
             return -1L;
 
@@ -92,5 +101,35 @@ public class MatchmakingBO {
         }
 
         return personaId;
+    }
+
+    /**
+     * Add the given event ID to the list of ignored events for the given persona ID.
+     *
+     * @param personaId the persona ID
+     * @param eventId   the event ID
+     */
+    public void ignoreEvent(long personaId, long eventId) {
+        this.redisConnection.sync().sadd("ignored_events." + personaId, Long.toString(eventId));
+    }
+
+    /**
+     * Resets the list of ignored events for the given persona ID
+     *
+     * @param personaId the persona ID
+     */
+    public void resetIgnoredEvents(long personaId) {
+        this.redisConnection.sync().del("ignored_events." + personaId);
+    }
+
+    /**
+     * Checks if the given event ID is in the list of ignored events for the given persona ID
+     *
+     * @param personaId the persona ID
+     * @param eventId   the event ID
+     * @return {@code true} if the given event ID is in the list of ignored events for the given persona ID
+     */
+    public boolean isEventIgnored(long personaId, long eventId) {
+        return this.redisConnection.sync().sismember("ignored_events." + personaId, Long.toString(eventId));
     }
 }

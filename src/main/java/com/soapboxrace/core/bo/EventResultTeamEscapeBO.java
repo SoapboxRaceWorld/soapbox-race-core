@@ -137,6 +137,11 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
         achievementBO.commitTransaction(personaEntity, transaction);
 
         eventSessionDao.update(eventSessionEntity);
+
+        if (eventSessionEntity.getLobby() != null && !eventSessionEntity.getLobby().getIsPrivate()) {
+            matchmakingBO.resetIgnoredEvents(activePersonaId);
+        }
+
         return teamEscapeEventResult;
     }
 

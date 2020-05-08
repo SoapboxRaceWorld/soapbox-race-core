@@ -147,7 +147,7 @@ public class LobbyBO {
 
                 Long queuePersona = matchmakingBO.getPlayerFromQueue(carClassHash);
 
-                if (!queuePersona.equals(-1L)) {
+                if (!queuePersona.equals(-1L) && !matchmakingBO.isEventIgnored(queuePersona, eventId)) {
                     if (lobbyEntity.getEntrants().size() < lobbyEntity.getEvent().getMaxPlayers()) {
                         XmppLobby xmppLobby = new XmppLobby(queuePersona, openFireSoapBoxCli);
                         xmppLobby.sendLobbyInvite(lobbyInviteType);
@@ -207,6 +207,16 @@ public class LobbyBO {
         xmppLobby.sendLobbyInvite(xMPP_LobbyInviteType);
     }
 
+    public void declineinvite(Long activePersonaId, Long lobbyInviteId) {
+        LobbyEntity lobbyEntity = lobbyDao.findById(lobbyInviteId);
+
+        if (lobbyEntity == null) {
+            throw new EngineException(EngineExceptionCode.GameDoesNotExist, false);
+        }
+
+        matchmakingBO.ignoreEvent(activePersonaId, lobbyEntity.getEvent().getId());
+    }
+
     public LobbyInfo acceptinvite(Long personaId, Long lobbyInviteId) {
         LobbyEntity lobbyEntity = lobbyDao.findById(lobbyInviteId);
         int eventId = lobbyEntity.getEvent().getId();
@@ -223,11 +233,14 @@ public class LobbyBO {
         List<LobbyEntrantEntity> entrants = lobbyEntity.getEntrants();
 
         if (entrants.size() >= lobbyEntity.getEvent().getMaxPlayers()) {
-            return new LobbyInfo();
+            throw new EngineException(EngineExceptionCode.GameLocked, false);
+        }
+
+        if (lobbyCountdown.getLobbyCountdownInMilliseconds() <= 6000) {
+            throw new EngineException(EngineExceptionCode.GameLocked, false);
         }
 
         matchmakingBO.removePlayerFromQueue(personaId);
-
         sendJoinMsg(personaId, entrants);
         boolean personaInside = false;
         for (LobbyEntrantEntity lobbyEntrantEntity : entrants) {

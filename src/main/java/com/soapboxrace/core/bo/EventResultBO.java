@@ -19,7 +19,7 @@ import java.util.Map;
 public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends EventResult> {
 
     @EJB
-    protected AchievementBO achievementBO;
+    protected MatchmakingBO matchmakingBO;
 
     @EJB
     protected LobbyBO lobbyBO;

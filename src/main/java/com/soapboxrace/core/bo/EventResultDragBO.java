@@ -122,6 +122,11 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
         achievementBO.commitTransaction(personaEntity, transaction);
 
         eventSessionDao.update(eventSessionEntity);
+
+        if (eventSessionEntity.getLobby() != null && !eventSessionEntity.getLobby().getIsPrivate()) {
+            matchmakingBO.resetIgnoredEvents(activePersonaId);
+        }
+
         return dragEventResult;
     }
 

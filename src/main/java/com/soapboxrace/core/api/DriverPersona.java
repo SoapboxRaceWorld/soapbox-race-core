@@ -7,10 +7,7 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.DriverPersonaBO;
-import com.soapboxrace.core.bo.PresenceBO;
-import com.soapboxrace.core.bo.TokenSessionBO;
-import com.soapboxrace.core.bo.UserBO;
+import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.PersonaEntity;
@@ -40,6 +37,9 @@ public class DriverPersona {
 
     @EJB
     private PresenceBO presenceBO;
+
+    @EJB
+    private MatchmakingBO matchmakingBO;
 
     @GET
     @Secured
@@ -135,6 +135,7 @@ public class DriverPersona {
                                         @QueryParam("presence") Long presence) {
         tokenSessionBo.verifyPersonaOwnership(securityToken, personaId);
         presenceBO.updatePresence(personaId, presence);
+        matchmakingBO.removePlayerFromQueue(personaId);
 
         return "";
     }

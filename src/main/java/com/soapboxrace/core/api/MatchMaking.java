@@ -107,7 +107,6 @@ public class MatchMaking {
     public String makePrivateLobby(@HeaderParam("securityToken") String securityToken,
                                    @PathParam("eventId") int eventId) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-        OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
         lobbyBO.createPrivateLobby(activePersonaId, eventId);
         return "";
     }
@@ -129,6 +128,8 @@ public class MatchMaking {
     @Produces(MediaType.APPLICATION_XML)
     public String declineInvite(@HeaderParam("securityToken") String securityToken,
                                 @QueryParam("lobbyInviteId") Long lobbyInviteId) {
+        Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+        lobbyBO.declineinvite(activePersonaId, lobbyInviteId);
         return "";
     }
 
