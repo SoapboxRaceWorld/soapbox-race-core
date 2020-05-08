@@ -83,11 +83,15 @@ public class AchievementBO {
      */
     @Asynchronous
     public void commitTransaction(PersonaEntity personaEntity, AchievementTransaction transaction) {
-        transaction.getEntries().forEach((k, v) -> v.forEach(m -> updateAchievements(personaEntity, k, m)));
+        List<AchievementUpdateInfo> achievementUpdateInfoList = new ArrayList<>();
+        transaction.getEntries().forEach((k, v) -> v.forEach(m -> achievementUpdateInfoList.addAll(updateAchievements(personaEntity, k, m))));
         personaDAO.update(personaEntity);
+        List<BadgePacket> badgePacketList = driverPersonaBO.getBadges(personaEntity.getPersonaId()).getBadgePacket();
+        achievementUpdateInfoList.forEach(a -> this.sendUpdateInfoMessage(personaEntity.getPersonaId(), a, badgePacketList));
 
         transaction.markCommitted();
         transaction.clear();
+        achievementUpdateInfoList.clear();
     }
 
     public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
@@ -209,11 +213,12 @@ public class AchievementBO {
      * @param achievementCategory The category of achievements to evaluate
      * @param properties          Relevant contextual information for achievements.
      */
-    private void updateAchievements(PersonaEntity personaEntity, String achievementCategory,
-                                    Map<String, Object> properties) {
+    private List<AchievementUpdateInfo> updateAchievements(PersonaEntity personaEntity, String achievementCategory,
+                                                           Map<String, Object> properties) {
         int originalScore = personaEntity.getScore();
         int newScore = originalScore;
         properties = new HashMap<>(properties);
+        List<AchievementUpdateInfo> achievementUpdateInfoList = new ArrayList<>();
 
         for (AchievementEntity achievementEntity : achievementDAO.findAllByCategory(achievementCategory)) {
             if (!achievementEntity.getAutoUpdate()) continue;
@@ -245,8 +250,8 @@ public class AchievementBO {
                     if (insert)
                         personaAchievementDAO.insert(personaAchievementEntity);
                     AchievementUpdateInfo achievementUpdateInfo = updateAchievement(personaEntity, achievementEntity, properties, personaAchievementEntity);
-                    sendUpdateInfoMessage(personaEntity.getPersonaId(), achievementUpdateInfo);
                     newScore += achievementUpdateInfo.getPointsGiven();
+                    achievementUpdateInfoList.add(achievementUpdateInfo);
                 }
             } catch (ScriptException ex) {
                 ex.printStackTrace();
@@ -258,18 +263,19 @@ public class AchievementBO {
                     personaEntity.getLevel(), personaEntity.getScore(), 0, false, true,
                     false, false);
 
-            updateAchievements(personaEntity, "PROGRESSION",
-                    Map.of("persona", personaEntity, "progression", progressionContext));
+            achievementUpdateInfoList.addAll(updateAchievements(personaEntity, "PROGRESSION",
+                    Map.of("persona", personaEntity, "progression", progressionContext)));
         }
 
         personaEntity.setScore(newScore);
+
+        return achievementUpdateInfoList;
     }
 
-    private void sendUpdateInfoMessage(Long personaId, AchievementUpdateInfo achievementUpdateInfo) {
+    private void sendUpdateInfoMessage(Long personaId, AchievementUpdateInfo achievementUpdateInfo, List<BadgePacket> badgePacketList) {
         XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded =
                 new XMPP_ResponseTypeAchievementsAwarded();
 
-        List<BadgePacket> badgePacketList = driverPersonaBO.getBadges(personaId).getBadgePacket();
         for (AchievementUpdateInfo.CompletedAchievementRank completedAchievementRank : achievementUpdateInfo.getCompletedAchievementRanks()) {
             AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
             achievementsAwarded.setAchievements(new ArrayList<>());
