@@ -18,7 +18,7 @@ import javax.ejb.Stateless;
 import java.util.Random;
 
 @Stateless
-public class RewardPursuitBO extends RewardBO {
+public class RewardPursuitBO extends RewardEventBO<PursuitArbitrationPacket> {
 
     @EJB
     private PersonaDAO personaDao;
@@ -26,12 +26,13 @@ public class RewardPursuitBO extends RewardBO {
     @EJB
     private LegitRaceBO legitRaceBO;
 
-    public Accolades getPursuitAccolades(Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
-                                         EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity,
-                                         Boolean isBusted, AchievementTransaction achievementTransaction) {
+    public Accolades getAccolades(Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
+                                  EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity,
+                                  AchievementTransaction achievementTransaction) {
         int finishReason = pursuitArbitrationPacket.getFinishReason();
-        boolean legit = legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity);
+        boolean legit = legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity, eventDataEntity);
         eventDataEntity.setLegit(legit);
+        boolean isBusted = pursuitArbitrationPacket.getFinishReason() == 266;
         if (!legit || isBusted || finishReason != 518) {
             return new Accolades();
         }

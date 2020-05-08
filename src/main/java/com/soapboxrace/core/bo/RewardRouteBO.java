@@ -16,7 +16,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
-public class RewardRouteBO extends RewardBO {
+public class RewardRouteBO extends RewardEventBO<RouteArbitrationPacket> {
 
     @EJB
     private PersonaDAO personaDao;
@@ -24,10 +24,10 @@ public class RewardRouteBO extends RewardBO {
     @EJB
     private LegitRaceBO legitRaceBO;
 
-    public Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket,
-                                       EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, AchievementTransaction achievementTransaction) {
+    public Accolades getAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket,
+                                  EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, AchievementTransaction achievementTransaction) {
         int finishReason = routeArbitrationPacket.getFinishReason();
-        boolean legit = legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity);
+        boolean legit = legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity, eventDataEntity);
         eventDataEntity.setLegit(legit);
         if (!legit || finishReason != 22) {
             return new Accolades();

@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
@@ -21,15 +22,15 @@ public class LegitRaceBO {
     private SocialBO socialBo;
 
     public boolean isLegit(Long activePersonaId, ArbitrationPacket arbitrationPacket,
-                           EventSessionEntity sessionEntity) {
+                           EventSessionEntity sessionEntity,
+                           EventDataEntity dataEntity) {
         long minimumTime = sessionEntity.getEvent().getLegitTime();
-        final long timeDiff = sessionEntity.getEnded() - sessionEntity.getStarted();
-        boolean legit = timeDiff >= minimumTime;
+        boolean legit = dataEntity.getServerTimeInMilliseconds() >= minimumTime;
 
         if (!legit) {
             socialBo.sendReport(0L, activePersonaId, 3,
                     String.format("Abnormal event time: %d (below minimum of %d on event %d; session %d)",
-                            timeDiff, minimumTime, sessionEntity.getEvent().getId(), sessionEntity.getId()),
+                            dataEntity.getServerTimeInMilliseconds(), minimumTime, sessionEntity.getEvent().getId(), sessionEntity.getId()),
                     (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
             return false;
         }

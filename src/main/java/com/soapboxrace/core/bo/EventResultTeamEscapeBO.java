@@ -73,7 +73,7 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
             throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
-        prepareBasicEventData(eventDataEntity, activePersonaId, teamEscapeArbitrationPacket);
+        prepareBasicEventData(eventDataEntity, activePersonaId, eventSessionEntity, teamEscapeArbitrationPacket);
         eventDataEntity.setBustedCount(teamEscapeArbitrationPacket.getBustedCount());
         eventDataEntity.setCopsDeployed(teamEscapeArbitrationPacket.getCopsDeployed());
         eventDataEntity.setCopsDisabled(teamEscapeArbitrationPacket.getCopsDisabled());
@@ -117,7 +117,7 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
         AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
-        teamEscapeEventResult.setAccolades(rewardTeamEscapeBO.getTeamEscapeAccolades(activePersonaId,
+        teamEscapeEventResult.setAccolades(rewardTeamEscapeBO.getAccolades(activePersonaId,
                 teamEscapeArbitrationPacket, eventDataEntity, eventSessionEntity, transaction));
         teamEscapeEventResult
                 .setDurability(carDamageBO.induceCarDamage(activePersonaId, teamEscapeArbitrationPacket,

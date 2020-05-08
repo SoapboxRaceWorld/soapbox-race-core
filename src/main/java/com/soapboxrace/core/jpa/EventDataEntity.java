@@ -64,6 +64,7 @@ public class EventDataEntity {
     private int rank;
     @Column(columnDefinition = "tinyint(1) default 0")
     private boolean isLegit;
+    private long serverTimeInMilliseconds;
 
     public Long getId() {
         return id;
@@ -301,5 +302,13 @@ public class EventDataEntity {
 
     public void setLegit(boolean legit) {
         isLegit = legit;
+    }
+
+    public long getServerTimeInMilliseconds() {
+        return serverTimeInMilliseconds;
+    }
+
+    public void setServerTimeInMilliseconds(long serverTimeInMilliseconds) {
+        this.serverTimeInMilliseconds = serverTimeInMilliseconds;
     }
 }

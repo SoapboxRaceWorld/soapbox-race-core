@@ -74,7 +74,7 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
             throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
-        prepareBasicEventData(eventDataEntity, activePersonaId, dragArbitrationPacket);
+        prepareBasicEventData(eventDataEntity, activePersonaId, eventSessionEntity, dragArbitrationPacket);
         eventDataEntity.setFractionCompleted(dragArbitrationPacket.getFractionCompleted());
         eventDataEntity.setLongestJumpDurationInMilliseconds(dragArbitrationPacket.getLongestJumpDurationInMilliseconds());
         eventDataEntity.setNumberOfCollisions(dragArbitrationPacket.getNumberOfCollisions());
@@ -107,7 +107,7 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
         AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         DragEventResult dragEventResult = new DragEventResult();
-        dragEventResult.setAccolades(rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket,
+        dragEventResult.setAccolades(rewardDragBO.getAccolades(activePersonaId, dragArbitrationPacket,
                 eventDataEntity, eventSessionEntity, transaction));
         dragEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, dragArbitrationPacket,
                 eventDataEntity.getEvent()));

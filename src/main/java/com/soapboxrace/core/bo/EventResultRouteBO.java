@@ -63,7 +63,7 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
             throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
-        prepareBasicEventData(eventDataEntity, activePersonaId, routeArbitrationPacket);
+        prepareBasicEventData(eventDataEntity, activePersonaId, eventSessionEntity, routeArbitrationPacket);
 
         eventDataEntity.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
         eventDataEntity.setFractionCompleted(routeArbitrationPacket.getFractionCompleted());
@@ -90,7 +90,7 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
         PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
         AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         RouteEventResult routeEventResult = new RouteEventResult();
-        routeEventResult.setAccolades(rewardRouteBO.getRouteAccolades(activePersonaId, routeArbitrationPacket,
+        routeEventResult.setAccolades(rewardRouteBO.getAccolades(activePersonaId, routeArbitrationPacket,
                 eventDataEntity, eventSessionEntity, transaction));
         routeEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, routeArbitrationPacket,
                 eventDataEntity.getEvent()));

@@ -16,7 +16,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
-public class RewardDragBO extends RewardBO {
+public class RewardDragBO extends RewardEventBO<DragArbitrationPacket> {
 
     @EJB
     private PersonaDAO personaDao;
@@ -24,10 +24,11 @@ public class RewardDragBO extends RewardBO {
     @EJB
     private LegitRaceBO legitRaceBO;
 
-    public Accolades getDragAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket,
-                                      EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, AchievementTransaction achievementTransaction) {
+    @Override
+    public Accolades getAccolades(Long activePersonaId, DragArbitrationPacket dragArbitrationPacket,
+                                  EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, AchievementTransaction achievementTransaction) {
         int finishReason = dragArbitrationPacket.getFinishReason();
-        boolean legit = legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity);
+        boolean legit = legitRaceBO.isLegit(activePersonaId, dragArbitrationPacket, eventSessionEntity, eventDataEntity);
         eventDataEntity.setLegit(legit);
         if (!legit || finishReason != 22) {
             return new Accolades();
