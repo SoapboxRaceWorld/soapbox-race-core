@@ -67,7 +67,7 @@ public class LobbyBO {
             matchmakingBO.addPlayerToQueue(personaId, carClassHash);
         } else {
             PersonaEntity personaEntity = personaDao.findById(personaId);
-            joinLobby(personaEntity, lobbys);
+            joinLobby(personaEntity, lobbys, true);
         }
     }
 
@@ -162,11 +162,18 @@ public class LobbyBO {
     }
 
     private void joinLobby(PersonaEntity personaEntity, List<LobbyEntity> lobbys) {
+        joinLobby(personaEntity, lobbys, false);
+    }
+
+    private void joinLobby(PersonaEntity personaEntity, List<LobbyEntity> lobbys, boolean checkIgnoredEvents) {
         LobbyEntity lobbyEntity = null;
         for (LobbyEntity lobbyEntityTmp : lobbys) {
             if (lobbyEntityTmp.getIsPrivate()) continue;
 
-            int maxEntrants = lobbyEntityTmp.getEvent().getMaxPlayers();
+            EventEntity event = lobbyEntityTmp.getEvent();
+            if (checkIgnoredEvents && matchmakingBO.isEventIgnored(personaEntity.getPersonaId(), event.getId()))
+                continue;
+            int maxEntrants = event.getMaxPlayers();
             List<LobbyEntrantEntity> lobbyEntrants = lobbyEntityTmp.getEntrants();
             int entrantsSize = lobbyEntrants.size();
             if (entrantsSize < maxEntrants) {
@@ -211,7 +218,7 @@ public class LobbyBO {
         LobbyEntity lobbyEntity = lobbyDao.findById(lobbyInviteId);
 
         if (lobbyEntity == null) {
-            throw new EngineException(EngineExceptionCode.GameDoesNotExist, false);
+            return;
         }
 
         matchmakingBO.ignoreEvent(activePersonaId, lobbyEntity.getEvent().getId());
@@ -219,6 +226,11 @@ public class LobbyBO {
 
     public LobbyInfo acceptinvite(Long personaId, Long lobbyInviteId) {
         LobbyEntity lobbyEntity = lobbyDao.findById(lobbyInviteId);
+
+        if (lobbyEntity == null) {
+            throw new EngineException(EngineExceptionCode.GameDoesNotExist, false);
+        }
+
         int eventId = lobbyEntity.getEvent().getId();
 
         LobbyCountdown lobbyCountdown = new LobbyCountdown();

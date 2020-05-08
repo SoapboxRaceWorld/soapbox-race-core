@@ -110,7 +110,9 @@ public class MatchmakingBO {
      * @param eventId   the event ID
      */
     public void ignoreEvent(long personaId, long eventId) {
-        this.redisConnection.sync().sadd("ignored_events." + personaId, Long.toString(eventId));
+        if (this.enabled) {
+            this.redisConnection.sync().sadd("ignored_events." + personaId, Long.toString(eventId));
+        }
     }
 
     /**
@@ -119,7 +121,9 @@ public class MatchmakingBO {
      * @param personaId the persona ID
      */
     public void resetIgnoredEvents(long personaId) {
-        this.redisConnection.sync().del("ignored_events." + personaId);
+        if (this.enabled) {
+            this.redisConnection.sync().del("ignored_events." + personaId);
+        }
     }
 
     /**
@@ -130,6 +134,10 @@ public class MatchmakingBO {
      * @return {@code true} if the given event ID is in the list of ignored events for the given persona ID
      */
     public boolean isEventIgnored(long personaId, long eventId) {
-        return this.redisConnection.sync().sismember("ignored_events." + personaId, Long.toString(eventId));
+        if (this.enabled) {
+            return this.redisConnection.sync().sismember("ignored_events." + personaId, Long.toString(eventId));
+        }
+
+        return false;
     }
 }
