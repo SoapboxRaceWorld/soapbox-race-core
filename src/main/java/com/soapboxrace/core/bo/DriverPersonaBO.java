@@ -184,6 +184,7 @@ public class DriverPersonaBO {
 
     public void deletePersona(Long personaId) {
         PersonaEntity personaEntity = personaDao.findById(personaId);
+        UserEntity user = personaEntity.getUser();
         List<CarSlotEntity> carSlots = carSlotDAO.findByPersonaId(personaId);
         for (CarSlotEntity carSlotEntity : carSlots) {
             carSlotDAO.delete(carSlotEntity);
@@ -199,6 +200,8 @@ public class DriverPersonaBO {
         socialRelationshipDAO.deleteAllByPersonaId(personaId);
 
         personaDao.delete(personaEntity);
+        user.setSelectedPersonaIndex(Math.max(0, user.getSelectedPersonaIndex() - 1));
+        userDao.update(user);
     }
 
     public PersonaPresence getPersonaPresenceByName(String name) {
