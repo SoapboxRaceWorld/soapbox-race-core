@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.bo;
 
+import com.google.common.collect.Iterables;
 import com.soapboxrace.core.dao.InviteTicketDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ServerInfoDAO;
@@ -195,17 +196,23 @@ public class UserBO {
     public void secureLoginPersona(Long userId, Long personaId) {
         PersonaEntity personaEntity = personaDAO.findById(personaId);
 
-        if (personaEntity != null && personaEntity.getUser().getId().equals(userId)) {
-            if (personaEntity.getFirstLogin() == null) {
-                personaEntity.setFirstLogin(LocalDateTime.now());
+        if (personaEntity != null) {
+            UserEntity user = personaEntity.getUser();
+            if (user.getId().equals(userId)) {
+                if (personaEntity.getFirstLogin() == null) {
+                    personaEntity.setFirstLogin(LocalDateTime.now());
+                }
+
+                personaEntity.setLastLogin(LocalDateTime.now());
+
+                personaDAO.update(personaEntity);
+                AchievementTransaction transaction = achievementBO.createTransaction(personaId);
+                transaction.add("LOGIN", Map.of("persona", personaEntity));
+                achievementBO.commitTransaction(personaEntity, transaction);
+                int index = Iterables.indexOf(user.getPersonas(), p -> p != null && p.getPersonaId().equals(personaId));
+                user.setSelectedPersonaIndex(index);
+                userDao.update(user);
             }
-
-            personaEntity.setLastLogin(LocalDateTime.now());
-
-            personaDAO.update(personaEntity);
-            AchievementTransaction transaction = achievementBO.createTransaction(personaId);
-            transaction.add("LOGIN", Map.of("persona", personaEntity));
-            achievementBO.commitTransaction(personaEntity, transaction);
         }
     }
 
@@ -229,6 +236,7 @@ public class UserBO {
         User user = new User();
         user.setUserId(userId);
         userInfo.setUser(user);
+        userInfo.setDefaultPersonaIdx(userEntity.getSelectedPersonaIndex());
         return userInfo;
     }
 
