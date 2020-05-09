@@ -54,12 +54,11 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
     /**
      * Sets some basic properties of the given {@link EventDataEntity}
      *
-     * @param eventDataEntity    the {@link EventDataEntity} instance
-     * @param activePersonaId    the ID of the current persona
-     * @param eventSessionEntity the {@link EventSessionEntity} instance
-     * @param packet             the {@link TA} instance
+     * @param eventDataEntity the {@link EventDataEntity} instance
+     * @param activePersonaId the ID of the current persona
+     * @param packet          the {@link TA} instance
      */
-    protected final void prepareBasicEventData(EventDataEntity eventDataEntity, Long activePersonaId, EventSessionEntity eventSessionEntity, TA packet) {
+    protected final void prepareBasicEventData(EventDataEntity eventDataEntity, Long activePersonaId, TA packet) {
         eventDataEntity.setAlternateEventDurationInMilliseconds(packet.getAlternateEventDurationInMilliseconds());
         eventDataEntity.setCarId(packet.getCarId());
         eventDataEntity.setEventDurationInMilliseconds(packet.getEventDurationInMilliseconds());
@@ -68,7 +67,8 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
         eventDataEntity.setRank(packet.getRank());
         eventDataEntity.setPersonaId(activePersonaId);
         eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
-        eventDataEntity.setServerTimeInMilliseconds(System.currentTimeMillis() - eventSessionEntity.getStarted());
+        eventDataEntity.setServerTimeEnded(System.currentTimeMillis());
+        eventDataEntity.setServerTimeInMilliseconds(eventDataEntity.getServerTimeEnded() - eventDataEntity.getServerTimeStarted());
     }
 
     /**

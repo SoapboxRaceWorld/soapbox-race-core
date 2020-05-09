@@ -47,6 +47,7 @@ public class EventBO {
         eventDataEntity.setPersonaId(personaId);
         eventDataEntity.setEventSessionId(eventSessionId);
         eventDataEntity.setEvent(eventSessionEntity.getEvent());
+        eventDataEntity.setServerTimeStarted(System.currentTimeMillis());
         eventDataDao.insert(eventDataEntity);
     }
 

@@ -73,7 +73,7 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
             throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
-        prepareBasicEventData(eventDataEntity, activePersonaId, eventSessionEntity, teamEscapeArbitrationPacket);
+        prepareBasicEventData(eventDataEntity, activePersonaId, teamEscapeArbitrationPacket);
         eventDataEntity.setBustedCount(teamEscapeArbitrationPacket.getBustedCount());
         eventDataEntity.setCopsDeployed(teamEscapeArbitrationPacket.getCopsDeployed());
         eventDataEntity.setCopsDisabled(teamEscapeArbitrationPacket.getCopsDisabled());

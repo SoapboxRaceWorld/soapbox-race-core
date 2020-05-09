@@ -41,6 +41,9 @@ public class Event {
     @EJB
     private EventResultTeamEscapeBO eventResultTeamEscapeBO;
 
+    @EJB
+    private MatchmakingBO matchmakingBO;
+
     @POST
     @Secured
     @Path("/abort")
@@ -56,6 +59,7 @@ public class Event {
     public String launched(@HeaderParam("securityToken") String securityToken,
                            @QueryParam("eventSessionId") Long eventSessionId) {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+        matchmakingBO.removePlayerFromQueue(activePersonaId);
         eventBO.createEventDataSession(activePersonaId, eventSessionId);
         return "";
     }

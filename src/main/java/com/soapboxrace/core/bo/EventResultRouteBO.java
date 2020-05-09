@@ -63,7 +63,7 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
             throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
-        prepareBasicEventData(eventDataEntity, activePersonaId, eventSessionEntity, routeArbitrationPacket);
+        prepareBasicEventData(eventDataEntity, activePersonaId, routeArbitrationPacket);
 
         eventDataEntity.setBestLapDurationInMilliseconds(routeArbitrationPacket.getBestLapDurationInMilliseconds());
         eventDataEntity.setFractionCompleted(routeArbitrationPacket.getFractionCompleted());

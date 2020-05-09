@@ -65,6 +65,8 @@ public class EventDataEntity {
     @Column(columnDefinition = "tinyint(1) default 0")
     private boolean isLegit;
     private long serverTimeInMilliseconds;
+    private long serverTimeStarted;
+    private long serverTimeEnded;
 
     public Long getId() {
         return id;
@@ -310,5 +312,21 @@ public class EventDataEntity {
 
     public void setServerTimeInMilliseconds(long serverTimeInMilliseconds) {
         this.serverTimeInMilliseconds = serverTimeInMilliseconds;
+    }
+
+    public long getServerTimeStarted() {
+        return serverTimeStarted;
+    }
+
+    public void setServerTimeStarted(long serverTimeStarted) {
+        this.serverTimeStarted = serverTimeStarted;
+    }
+
+    public long getServerTimeEnded() {
+        return serverTimeEnded;
+    }
+
+    public void setServerTimeEnded(long serverTimeEnded) {
+        this.serverTimeEnded = serverTimeEnded;
     }
 }
