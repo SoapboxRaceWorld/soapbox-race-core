@@ -25,6 +25,9 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
     protected LobbyBO lobbyBO;
 
     @EJB
+    protected PersonaBO personaBO;
+
+    @EJB
     protected PersonaDAO personaDAO;
 
     /**
@@ -127,7 +130,8 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
                 "event", eventEntity,
                 "eventData", eventDataEntity,
                 "eventSession", eventSessionEntity,
-                "eventContext", new AchievementEventContext(EventMode.fromId(eventEntity.getEventModeId()), packet, eventSessionEntity)
+                "eventContext", new AchievementEventContext(EventMode.fromId(eventEntity.getEventModeId()), packet, eventSessionEntity),
+                "car", personaBO.getDefaultCarEntity(activePersonaId)
         ));
     }
 }
