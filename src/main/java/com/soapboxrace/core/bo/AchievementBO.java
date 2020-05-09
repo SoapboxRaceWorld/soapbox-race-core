@@ -83,6 +83,16 @@ public class AchievementBO {
      */
     @Asynchronous
     public void commitTransaction(PersonaEntity personaEntity, AchievementTransaction transaction) {
+        commitTransactionSync(personaEntity, transaction);
+    }
+
+    /**
+     * Synchronously commits the changes for the given {@link AchievementTransaction} instance.
+     *
+     * @param personaEntity the {@link PersonaEntity} instance
+     * @param transaction   the {@link AchievementTransaction} instance
+     */
+    public void commitTransactionSync(PersonaEntity personaEntity, AchievementTransaction transaction) {
         List<AchievementUpdateInfo> achievementUpdateInfoList = new ArrayList<>();
         transaction.getEntries().forEach((k, v) -> v.forEach(m -> achievementUpdateInfoList.addAll(updateAchievements(personaEntity, k, m))));
         personaDAO.update(personaEntity);

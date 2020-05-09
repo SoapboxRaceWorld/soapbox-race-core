@@ -321,8 +321,8 @@ public class InventoryBO {
      * @param hash            The hash of the item.
      * @throws EngineException if no item with the entitlement tag can be found.
      */
-    public void decreaseItemCount(InventoryEntity inventoryEntity, Integer hash) {
-        decreaseItemCount(inventoryEntity, productDAO.findByHash(hash).getEntitlementTag());
+    public InventoryItemEntity decreaseItemCount(InventoryEntity inventoryEntity, Integer hash) {
+        return decreaseItemCount(inventoryEntity, productDAO.findByHash(hash).getEntitlementTag());
     }
 
     /**
@@ -332,7 +332,7 @@ public class InventoryBO {
      * @param entitlementTag  The entitlement tag of the item.
      * @throws EngineException if no item with the entitlement tag can be found.
      */
-    public void decreaseItemCount(InventoryEntity inventoryEntity, String entitlementTag) {
+    public InventoryItemEntity decreaseItemCount(InventoryEntity inventoryEntity, String entitlementTag) {
         InventoryItemEntity existingItem =
                 inventoryItemDAO.findByInventoryIdAndEntitlementTag(inventoryEntity.getId(),
                         entitlementTag);
@@ -348,6 +348,8 @@ public class InventoryBO {
             inventoryItemDAO.delete(existingItem);
             inventoryDAO.update(inventoryEntity);
         }
+
+        return existingItem;
     }
 
     /**
