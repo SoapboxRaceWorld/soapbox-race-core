@@ -6,8 +6,6 @@
 
 package com.soapboxrace.core.jpa;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -19,7 +17,6 @@ import java.time.temporal.ChronoUnit;
                 ":name"), //
         @NamedQuery(name = "PersonaEntity.countPersonas", query = "SELECT count(obj) FROM PersonaEntity obj")
 })
-@DynamicUpdate
 public class PersonaEntity {
 
     @Id
