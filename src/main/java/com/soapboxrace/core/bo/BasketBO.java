@@ -139,19 +139,6 @@ public class BasketBO {
         if (performPersonaTransaction(personaEntity, productEntity)) {
             try {
                 CarSlotEntity carSlotEntity = addCar(productEntity, personaEntity);
-
-                CarClassesEntity carClassesEntity =
-                        carClassesDAO.findById(carSlotEntity.getOwnedCar().getCustomCar().getName());
-
-                AchievementTransaction transaction = achievementBO.createTransaction(personaEntity.getPersonaId());
-
-                if (carClassesEntity != null) {
-                    AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity,
-                            AchievementCommerceContext.CommerceType.CAR_PURCHASE);
-                    transaction.add("COMMERCE", Map.of("persona", personaEntity, "carSlot", carSlotEntity, "commerceCtx", commerceContext));
-                    achievementBO.commitTransaction(personaEntity, transaction);
-                }
-
                 personaBo.changeDefaultCar(personaEntity, carSlotEntity.getOwnedCar().getId());
                 personaDao.update(personaEntity);
 
@@ -290,7 +277,18 @@ public class BasketBO {
             addAmplifier(personaEntity.getPersonaId(), productDao.findByEntitlementTag("INSURANCE_AMPLIFIER"));
         }
 
-//        System.out.println("baskets: " + personaEntity.getPersonaId() + " has " + getPersonasCar(personaEntity.getPersonaId()).size() + " cars");
+        CarClassesEntity carClassesEntity =
+                carClassesDAO.findById(carSlotEntity.getOwnedCar().getCustomCar().getName());
+
+        AchievementTransaction transaction = achievementBO.createTransaction(personaEntity.getPersonaId());
+
+        if (carClassesEntity != null) {
+            AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity,
+                    AchievementCommerceContext.CommerceType.CAR_PURCHASE);
+            transaction.add("COMMERCE", Map.of("persona", personaEntity, "carSlot", carSlotEntity, "commerceCtx", commerceContext));
+            achievementBO.commitTransaction(personaEntity, transaction);
+        }
+
         return carSlotEntity;
     }
 
