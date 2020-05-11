@@ -10,7 +10,9 @@ import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.*;
 
 import java.util.Collection;
+import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class AchievementCustomizationContext {
 
     private final Type type;
@@ -96,9 +98,26 @@ public class AchievementCustomizationContext {
         return countPartsWithRating(skillModPartsAdded, rating);
     }
 
+    public long countPerfPartsWithRatingAndType(Integer rating, String subType) {
+        return countPartsWithRatingAndType(performancePartsAdded, rating, subType);
+    }
+
+    public long countSkillModsWithRatingAndType(Integer rating, String subType) {
+        return countPartsWithRatingAndType(skillModPartsAdded, rating, subType);
+    }
+
     public <T> long countPartsWithRating(Collection<WrappedPart<T>> collection, Integer rating) {
+        Objects.requireNonNull(rating);
         return collection.stream()
-                .filter(p -> p.getProductEntity().getRarity().equals(rating))
+                .filter(p -> rating.equals(p.getProductEntity().getRarity()))
+                .count();
+    }
+
+    public <T> long countPartsWithRatingAndType(Collection<WrappedPart<T>> collection, Integer rating, String subType) {
+        Objects.requireNonNull(rating);
+        Objects.requireNonNull(subType);
+        return collection.stream()
+                .filter(p -> rating.equals(p.getProductEntity().getRarity()) && subType.equals(p.getProductEntity().getSubType()))
                 .count();
     }
 
