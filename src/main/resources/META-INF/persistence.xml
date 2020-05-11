@@ -4,7 +4,6 @@
   <persistence-unit name="soapboxrace-pu" transaction-type="JTA">
     <jta-data-source>jboss/datasources/SoapBoxDS</jta-data-source>
     <properties>
-        <property name="hibernate.hbm2ddl.auto" value="validate"/>
         <property name="hibernate.cache.use_second_level_cache" value="true"/>
         <property name="hibernate.cache.use_query_cache" value="true"/>
         <property name="hibernate.format_sql" value="false"/>
