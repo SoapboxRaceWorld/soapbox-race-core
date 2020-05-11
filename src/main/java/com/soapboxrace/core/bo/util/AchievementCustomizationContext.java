@@ -91,33 +91,57 @@ public class AchievementCustomizationContext {
     }
 
     public long countPerfPartsWithRating(Integer rating) {
-        return countPartsWithRating(performancePartsAdded, rating);
+        return countPerfPartsWithRating(rating, true);
+    }
+
+    public long countPerfPartsWithRating(Integer rating, boolean exact) {
+        return countPartsWithRating(performancePartsAdded, rating, exact);
     }
 
     public long countSkillModsWithRating(Integer rating) {
-        return countPartsWithRating(skillModPartsAdded, rating);
+        return countSkillModsWithRating(rating, true);
+    }
+
+    public long countSkillModsWithRating(Integer rating, boolean exact) {
+        return countPartsWithRating(skillModPartsAdded, rating, exact);
     }
 
     public long countPerfPartsWithRatingAndType(Integer rating, String subType) {
-        return countPartsWithRatingAndType(performancePartsAdded, rating, subType);
+        return countPerfPartsWithRatingAndType(rating, subType, true);
+    }
+
+    public long countPerfPartsWithRatingAndType(Integer rating, String subType, boolean exact) {
+        return countPartsWithRatingAndType(performancePartsAdded, rating, subType, exact);
     }
 
     public long countSkillModsWithRatingAndType(Integer rating, String subType) {
-        return countPartsWithRatingAndType(skillModPartsAdded, rating, subType);
+        return countSkillModsWithRatingAndType(rating, subType, true);
+    }
+
+    public long countSkillModsWithRatingAndType(Integer rating, String subType, boolean exact) {
+        return countPartsWithRatingAndType(skillModPartsAdded, rating, subType, exact);
     }
 
     public <T> long countPartsWithRating(Collection<WrappedPart<T>> collection, Integer rating) {
+        return countPartsWithRating(collection, rating, true);
+    }
+
+    public <T> long countPartsWithRating(Collection<WrappedPart<T>> collection, Integer rating, boolean exact) {
         Objects.requireNonNull(rating);
         return collection.stream()
-                .filter(p -> rating.equals(p.getProductEntity().getRarity()))
+                .filter(p -> exact ? rating.equals(p.getProductEntity().getRarity()) : rating >= p.getProductEntity().getRarity())
                 .count();
     }
 
     public <T> long countPartsWithRatingAndType(Collection<WrappedPart<T>> collection, Integer rating, String subType) {
+        return countPartsWithRatingAndType(collection, rating, subType, true);
+    }
+
+    public <T> long countPartsWithRatingAndType(Collection<WrappedPart<T>> collection, Integer rating, String subType, boolean exact) {
         Objects.requireNonNull(rating);
         Objects.requireNonNull(subType);
         return collection.stream()
-                .filter(p -> rating.equals(p.getProductEntity().getRarity()) && subType.equals(p.getProductEntity().getSubType()))
+                .filter(p -> (exact ? rating.equals(p.getProductEntity().getRarity()) : rating >= p.getProductEntity().getRarity()) && subType.equals(p.getProductEntity().getSubType()))
                 .count();
     }
 
