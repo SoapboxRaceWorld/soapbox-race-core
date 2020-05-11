@@ -12,7 +12,10 @@ import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
-import com.soapboxrace.jaxb.http.*;
+import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
+import com.soapboxrace.jaxb.http.CommerceResultStatus;
+import com.soapboxrace.jaxb.http.CommerceResultTrans;
+import com.soapboxrace.jaxb.http.OwnedCarTrans;
 import com.soapboxrace.jaxb.util.UnmarshalXML;
 
 import javax.ejb.EJB;
@@ -173,13 +176,12 @@ public class BasketBO {
                     throw new EngineException("Could not find card pack with name: " + bundleProduct.getEntitlementTag() + " (product ID: " + productId + ")", EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
                 }
 
-                ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
-
                 for (CardPackItemEntity cardPackItemEntity : cardPackEntity.getItems()) {
-                    itemRewardBO.loadReward(personaEntity.getPersonaId(), cardPackItemEntity.getScript(), arrayOfCommerceItemTrans);
+                    itemRewardBO.convertRewards(
+                            itemRewardBO.getRewards(personaEntity.getPersonaId(), cardPackItemEntity.getScript()),
+                            commerceResultTrans
+                    );
                 }
-
-                commerceResultTrans.setCommerceItems(arrayOfCommerceItemTrans);
 
                 return CommerceResultStatus.SUCCESS;
             } catch (EngineException e) {

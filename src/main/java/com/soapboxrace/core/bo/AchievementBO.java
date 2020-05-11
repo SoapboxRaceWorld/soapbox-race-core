@@ -120,13 +120,11 @@ public class AchievementBO {
         achievementRewards.setAchievementRankId(achievementRankId);
         achievementRewards.setVisualStyle(personaAchievementRankEntity.getAchievementRankEntity().getRewardVisualStyle());
         achievementRewards.setStatus(CommerceResultStatus.SUCCESS);
-        achievementRewards.setCommerceItems(
-                itemRewardBO.getRewards(
-                        personaId,
-                        achievementRewardDAO.findByDescription(personaAchievementRankEntity.getAchievementRankEntity().getRewardDescription())
-                                .getRewardScript()));
-        achievementRewards.setInventoryItems(new ArrayOfInventoryItemTrans());
-        achievementRewards.setPurchasedCars(new ArrayOfOwnedCarTrans());
+        ItemRewardBO.RewardedItemsContainer rewards = itemRewardBO.getRewards(
+                personaId,
+                achievementRewardDAO.findByDescription(personaAchievementRankEntity.getAchievementRankEntity().getRewardDescription())
+                        .getRewardScript());
+        itemRewardBO.convertRewards(rewards, achievementRewards);
         achievementRewards.setWallets(new ArrayOfWalletTrans());
 
         achievementRewards.getWallets().getWalletTrans().add(new WalletTrans() {{
