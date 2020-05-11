@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.bo.util.AchievementCustomizationContext;
 import com.soapboxrace.core.bo.util.ListDifferences;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
 import com.soapboxrace.core.dao.*;
@@ -14,10 +15,12 @@ import com.soapboxrace.jaxb.http.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Stateless
 public class CommerceBO {
@@ -47,6 +50,9 @@ public class CommerceBO {
 
     @EJB
     private PerformanceBO performanceBO;
+
+    @EJB
+    private AchievementBO achievementBO;
 
     public CommerceSessionResultTrans doCommerce(CommerceSessionTrans commerceSessionTrans, Long personaId) {
         List<BasketItemTrans> basketItems = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
@@ -85,15 +91,20 @@ public class CommerceBO {
         Map<Integer, Object> addedItems = new HashMap<>();
         Map<Integer, Object> removedItems = new HashMap<>();
 
-        paintDifferences.getAdded().forEach(p -> addedItems.put(p.getGroup(), p));
+        Collection<CustomPaintTrans> paintsAdded = paintDifferences.getAdded();
+        paintsAdded.forEach(p -> addedItems.put(p.getGroup(), p));
         paintDifferences.getRemoved().forEach(p -> removedItems.put(p.getGroup(), p));
-        performancePartDifferences.getAdded().forEach(p -> addedItems.put(p.getPerformancePartAttribHash(), p));
+        Collection<PerformancePartTrans> perfPartsAdded = performancePartDifferences.getAdded();
+        perfPartsAdded.forEach(p -> addedItems.put(p.getPerformancePartAttribHash(), p));
         performancePartDifferences.getRemoved().forEach(p -> removedItems.put(p.getPerformancePartAttribHash(), p));
-        skillModPartDifferences.getAdded().forEach(p -> addedItems.put(p.getSkillModPartAttribHash(), p));
+        Collection<SkillModPartTrans> skillModsAdded = skillModPartDifferences.getAdded();
+        skillModsAdded.forEach(p -> addedItems.put(p.getSkillModPartAttribHash(), p));
         skillModPartDifferences.getRemoved().forEach(p -> removedItems.put(p.getSkillModPartAttribHash(), p));
-        visualPartDifferences.getAdded().forEach(p -> addedItems.put(p.getPartHash(), p));
+        Collection<VisualPartTrans> visualPartsAdded = visualPartDifferences.getAdded();
+        visualPartsAdded.forEach(p -> addedItems.put(p.getPartHash(), p));
         visualPartDifferences.getRemoved().forEach(p -> removedItems.put(p.getPartHash(), p));
-        vinylDifferences.getAdded().forEach(p -> addedItems.put(p.getHash(), p));
+        Collection<CustomVinylTrans> vinylsAdded = vinylDifferences.getAdded();
+        vinylsAdded.forEach(p -> addedItems.put(p.getHash(), p));
         vinylDifferences.getRemoved().forEach(p -> removedItems.put(p.getHash(), p));
 
         CommerceSessionResultTrans commerceSessionResultTrans = new CommerceSessionResultTrans();
@@ -199,6 +210,39 @@ public class CommerceBO {
         arrayOfWalletTrans.getWalletTrans().add(boostWallet);
 
         commerceSessionResultTrans.setWallets(arrayOfWalletTrans);
+
+        AchievementCustomizationContext customizationContext = null;
+
+        if (!paintsAdded.isEmpty()) {
+            customizationContext = new AchievementCustomizationContext(AchievementCustomizationContext.Type.PAINT);
+            customizationContext.setPaintsAdded(paintsAdded);
+        } else if (!perfPartsAdded.isEmpty()) {
+            customizationContext = new AchievementCustomizationContext(AchievementCustomizationContext.Type.PERF);
+            customizationContext.setPerformancePartsAdded(perfPartsAdded.stream()
+                    .map(p -> {
+                        ProductEntity product = productDAO.findByHash(p.getPerformancePartAttribHash());
+                        return new AchievementCustomizationContext.WrappedPart<>(p, product, product.getRarity());
+                    }).collect(Collectors.toList()));
+        } else if (!skillModsAdded.isEmpty()) {
+            customizationContext = new AchievementCustomizationContext(AchievementCustomizationContext.Type.SKILLS);
+            customizationContext.setSkillModPartsAdded(skillModsAdded.stream()
+                    .map(p -> {
+                        ProductEntity product = productDAO.findByHash(p.getSkillModPartAttribHash());
+                        return new AchievementCustomizationContext.WrappedPart<>(p, product, product.getRarity());
+                    }).collect(Collectors.toList()));
+        } else if (!visualPartsAdded.isEmpty()) {
+            customizationContext = new AchievementCustomizationContext(AchievementCustomizationContext.Type.AFTERMARKET);
+            customizationContext.setVisualPartsAdded(visualPartsAdded);
+        } else if (!vinylsAdded.isEmpty()) {
+            customizationContext = new AchievementCustomizationContext(AchievementCustomizationContext.Type.VINYLS);
+            customizationContext.setVinylsAdded(vinylsAdded);
+        }
+
+        if (customizationContext != null) {
+            AchievementTransaction transaction = achievementBO.createTransaction(personaEntity.getPersonaId());
+            transaction.add("CUSTOMIZATION", Map.of("persona", personaEntity, "ctx", customizationContext));
+            achievementBO.commitTransaction(personaEntity, transaction);
+        }
 
         return commerceSessionResultTrans;
     }
