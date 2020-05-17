@@ -33,6 +33,8 @@ public class OpenFireConnector {
 
     private String engineToken;
 
+    private boolean debugMode;
+
     @EJB
     private ParameterBO parameterBO;
 
@@ -62,6 +64,7 @@ public class OpenFireConnector {
         this.ipAddress = parameterBO.getStrParam("XMPP_IP", "127.0.0.1");
         this.port = parameterBO.getIntParam("XMPP_PORT", 5222);
         this.engineToken = parameterBO.getStrParam("OPENFIRE_TOKEN");
+        this.debugMode = parameterBO.getBoolParam("XMPP_DEBUG");
     }
 
     /**
@@ -91,6 +94,10 @@ public class OpenFireConnector {
      */
     @Lock(LockType.READ)
     public void send(String msg, Long personaId) {
+        if (this.debugMode) {
+            System.out.println("MESSAGE TO " + personaId);
+            System.out.println(msg);
+        }
         Message message = new Message();
         message.setSubject("1337733113377331");
         message.setStanzaId("JN_1234567");

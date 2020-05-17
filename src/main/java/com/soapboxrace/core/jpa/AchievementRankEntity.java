@@ -117,4 +117,8 @@ public class AchievementRankEntity {
     public void setThresholdValue(Integer thresholdValue) {
         this.thresholdValue = thresholdValue;
     }
+
+    public boolean isRare() {
+        return this.getRarity() <= 0.05f;
+    }
 }

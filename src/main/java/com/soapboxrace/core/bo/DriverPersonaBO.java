@@ -144,7 +144,7 @@ public class DriverPersonaBO {
                 BadgePacket badgePacket = new BadgePacket();
                 badgePacket.setAchievementRankId(personaAchievementRankEntity.getAchievementRankEntity().getId().intValue());
                 badgePacket.setBadgeDefinitionId(personaBadgeEntity.getBadgeDefinitionEntity().getId().intValue());
-                badgePacket.setIsRare(personaAchievementRankEntity.getAchievementRankEntity().getRarity() <= 0.05f);
+                badgePacket.setIsRare(personaAchievementRankEntity.getAchievementRankEntity().isRare());
                 badgePacket.setRarity(personaAchievementRankEntity.getAchievementRankEntity().getRarity());
                 badgePacket.setSlotId(personaBadgeEntity.getSlot().shortValue());
                 arrayOfBadgePacket.getBadgePacket().add(badgePacket);

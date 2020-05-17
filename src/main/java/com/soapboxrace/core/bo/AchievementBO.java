@@ -28,6 +28,7 @@ import java.util.*;
 @Singleton
 @Lock(LockType.READ)
 public class AchievementBO {
+    public static final DateTimeFormatter RANK_COMPLETED_AT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss");
     @EJB
     private ItemRewardBO itemRewardBO;
     @EJB
@@ -97,11 +98,53 @@ public class AchievementBO {
         transaction.getEntries().forEach((k, v) -> v.forEach(m -> achievementUpdateInfoList.addAll(updateAchievements(personaEntity, k, m))));
         personaDAO.update(personaEntity);
         List<BadgePacket> badgePacketList = driverPersonaBO.getBadges(personaEntity.getPersonaId()).getBadgePacket();
-        achievementUpdateInfoList.forEach(a -> this.sendUpdateInfoMessage(personaEntity, a, badgePacketList));
+
+        sendUpdateMessage(personaEntity, achievementUpdateInfoList, badgePacketList);
 
         transaction.markCommitted();
         transaction.clear();
         achievementUpdateInfoList.clear();
+    }
+
+    private void sendUpdateMessage(PersonaEntity personaEntity, List<AchievementUpdateInfo> achievementUpdateInfoList, List<BadgePacket> badgePacketList) {
+        AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
+        achievementsAwarded.setScore(personaEntity.getScore());
+        achievementsAwarded.setPersonaId(personaEntity.getPersonaId());
+        achievementsAwarded.setProgressed(new ArrayList<>());
+        achievementsAwarded.setAchievements(new ArrayList<>());
+        achievementsAwarded.setBadges(badgePacketList);
+
+        for (AchievementUpdateInfo achievementUpdateInfo : achievementUpdateInfoList) {
+            AchievementEntity achievementEntity = achievementUpdateInfo.getAchievementEntity();
+            for (AchievementUpdateInfo.CompletedAchievementRank completedAchievementRank : achievementUpdateInfo.getCompletedAchievementRanks()) {
+                AchievementRankEntity achievementRankEntity = completedAchievementRank.getAchievementRankEntity();
+                AchievementAwarded achievementAwarded = new AchievementAwarded();
+                achievementAwarded.setAchievementDefinitionId(achievementEntity.getId());
+                achievementAwarded.setAchievedOn(completedAchievementRank.getAchievedOn().format(RANK_COMPLETED_AT_FORMATTER));
+                achievementAwarded.setAchievementRankId(achievementRankEntity.getId());
+                achievementAwarded.setDescription(achievementEntity.getBadgeDefinitionEntity().getDescription());
+                achievementAwarded.setIcon(achievementEntity.getBadgeDefinitionEntity().getIcon());
+                achievementAwarded.setRare(achievementRankEntity.isRare());
+                achievementAwarded.setName(achievementEntity.getBadgeDefinitionEntity().getName());
+                achievementAwarded.setPoints(achievementRankEntity.getPoints());
+                achievementAwarded.setRarity(achievementRankEntity.getRarity());
+                achievementsAwarded.getAchievements().add(achievementAwarded);
+            }
+
+            AchievementUpdateInfo.ProgressedAchievement progressedAchievement = achievementUpdateInfo.getProgressedAchievement();
+
+            if (progressedAchievement != null) {
+                AchievementProgress achievementProgress = new AchievementProgress();
+                achievementProgress.setAchievementDefinitionId(progressedAchievement.getAchievementDefinitionId());
+                achievementProgress.setCurrentValue(progressedAchievement.getValue());
+                achievementsAwarded.getProgressed().add(achievementProgress);
+            }
+        }
+
+        XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded = new XMPP_ResponseTypeAchievementsAwarded();
+        responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
+
+        openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
     }
 
     public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
@@ -171,7 +214,7 @@ public class AchievementBO {
             for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
                 AchievementRankPacket rankPacket = new AchievementRankPacket();
                 rankPacket.setAchievedOn("0001-01-01T00:00:00");
-                rankPacket.setIsRare(achievementRankEntity.getRarity() <= 0.05f); // <= threshold for "rare" is <= 5%
+                rankPacket.setIsRare(achievementRankEntity.isRare());
                 rankPacket.setRarity(achievementRankEntity.getRarity());
                 rankPacket.setRank(achievementRankEntity.getRank().shortValue());
                 rankPacket.setRewardDescription(achievementRankEntity.getRewardDescription());
@@ -179,7 +222,12 @@ public class AchievementBO {
                 rankPacket.setRewardVisualStyle(achievementRankEntity.getRewardVisualStyle());
                 rankPacket.setPoints(achievementRankEntity.getPoints().shortValue());
                 rankPacket.setAchievementRankId(achievementRankEntity.getId().intValue());
-                rankPacket.setState(AchievementState.LOCKED);
+                if (achievementRankEntity.getRank().equals(1)) {
+                    // NOTE 17.05.2020: this is apparently necessary, game ignores updates otherwise
+                    rankPacket.setState(AchievementState.IN_PROGRESS);
+                } else {
+                    rankPacket.setState(AchievementState.LOCKED);
+                }
                 rankPacket.setThresholdValue(achievementRankEntity.getThresholdValue());
 
                 PersonaAchievementRankEntity personaAchievementRankEntity =
@@ -190,7 +238,7 @@ public class AchievementBO {
                     rankPacket.setState(AchievementState.fromValue(personaAchievementRankEntity.getState()));
 
                     if (personaAchievementRankEntity.getAchievedOn() != null) {
-                        rankPacket.setAchievedOn(personaAchievementRankEntity.getAchievedOn().format(DateTimeFormatter.ofPattern("yyyyy-MM-dd'T'hh:mm:ss")));
+                        rankPacket.setAchievedOn(personaAchievementRankEntity.getAchievedOn().format(RANK_COMPLETED_AT_FORMATTER));
                     }
                 }
 
@@ -280,57 +328,11 @@ public class AchievementBO {
         return achievementUpdateInfoList;
     }
 
-    private void sendUpdateInfoMessage(PersonaEntity personaEntity, AchievementUpdateInfo achievementUpdateInfo, List<BadgePacket> badgePacketList) {
-        XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded =
-                new XMPP_ResponseTypeAchievementsAwarded();
-
-        for (AchievementUpdateInfo.CompletedAchievementRank completedAchievementRank : achievementUpdateInfo.getCompletedAchievementRanks()) {
-            AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
-            achievementsAwarded.setAchievements(new ArrayList<>());
-            achievementsAwarded.setBadges(badgePacketList);
-            achievementsAwarded.setProgressed(new ArrayList<>());
-            achievementsAwarded.setScore(personaEntity.getScore());
-            achievementsAwarded.setPersonaId(personaEntity.getPersonaId());
-            AchievementAwarded achievementAwarded = new AchievementAwarded();
-            LocalDateTime achievedOn = completedAchievementRank.getAchievedOn();
-            AchievementRankEntity achievementRankEntity = completedAchievementRank.getAchievementRankEntity();
-            AchievementEntity achievementEntity = completedAchievementRank.getAchievementEntity();
-            achievementAwarded.setAchievedOn(achievedOn.format(DateTimeFormatter.ofPattern("yyyyy-MM-dd'T'hh:mm:ss")));
-            achievementAwarded.setAchievementDefinitionId(achievementEntity.getId());
-            achievementAwarded.setAchievementRankId(achievementRankEntity.getId());
-            achievementAwarded.setDescription(achievementEntity.getBadgeDefinitionEntity().getDescription());
-            achievementAwarded.setIcon(achievementEntity.getBadgeDefinitionEntity().getIcon());
-            achievementAwarded.setName(achievementEntity.getBadgeDefinitionEntity().getName());
-            achievementAwarded.setRarity(achievementRankEntity.getRarity());
-            achievementAwarded.setPoints(achievementRankEntity.getPoints());
-            achievementsAwarded.getAchievements().add(achievementAwarded);
-            responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
-
-            openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
-        }
-
-        for (AchievementUpdateInfo.ProgressedAchievement progressedAchievement : achievementUpdateInfo.getProgressedAchievements()) {
-            AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
-            achievementsAwarded.setAchievements(new ArrayList<>());
-            achievementsAwarded.setBadges(badgePacketList);
-            achievementsAwarded.setProgressed(new ArrayList<>());
-            achievementsAwarded.setScore(personaEntity.getScore());
-            achievementsAwarded.setPersonaId(personaEntity.getPersonaId());
-            AchievementProgress progress = new AchievementProgress();
-            progress.setAchievementDefinitionId(progressedAchievement.getAchievementDefinitionId());
-            progress.setCurrentValue(progressedAchievement.getValue());
-            achievementsAwarded.getProgressed().add(progress);
-            responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
-
-            openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
-        }
-    }
-
     private AchievementUpdateInfo updateAchievement(PersonaEntity personaEntity, AchievementEntity achievementEntity, Map<String, Object> bindings,
                                                     PersonaAchievementEntity personaAchievementEntity) {
         // If no progression can be made, there's nothing to do.
         if (!personaAchievementEntity.isCanProgress()) {
-            return new AchievementUpdateInfo();
+            return new AchievementUpdateInfo(achievementEntity);
         }
 
         Integer pointsAdded = 0;
@@ -340,10 +342,10 @@ public class AchievementBO {
             Long cleanVal = 0L;
 
             if (achievementEntity.getUpdateValue() == null || achievementEntity.getUpdateValue().trim().isEmpty()) {
-                return new AchievementUpdateInfo();
+                return new AchievementUpdateInfo(achievementEntity);
             }
 
-            AchievementUpdateInfo achievementUpdateInfo = new AchievementUpdateInfo();
+            AchievementUpdateInfo achievementUpdateInfo = new AchievementUpdateInfo(achievementEntity);
             Object rawVal = scriptingBO.eval(achievementEntity.getUpdateValue(), bindings);
 
             if (rawVal instanceof Integer) {
@@ -373,7 +375,7 @@ public class AchievementBO {
                         achievementEntity.getShouldOverwriteProgress() ? cleanVal :
                                 (personaAchievementEntity.getCurrentValue() + cleanVal)));
                 if (newVal == 0L) {
-                    achievementUpdateInfo.getProgressedAchievements().add(new AchievementUpdateInfo.ProgressedAchievement(achievementEntity.getId(), newVal));
+                    achievementUpdateInfo.setProgressedAchievement(new AchievementUpdateInfo.ProgressedAchievement(achievementEntity.getId(), newVal));
                 } else {
                     for (int i = 0; i < achievementEntity.getRanks().size(); i++) {
                         AchievementRankEntity previous = null;
@@ -418,7 +420,7 @@ public class AchievementBO {
                         } else if (newVal > 0 && newVal != personaAchievementEntity.getCurrentValue() && newVal < threshold) {
                             currentRank.setState("InProgress");
                             personaAchievementRankDAO.update(currentRank);
-                            achievementUpdateInfo.getProgressedAchievements().add(new AchievementUpdateInfo.ProgressedAchievement(achievementEntity.getId(), newVal));
+                            achievementUpdateInfo.setProgressedAchievement(new AchievementUpdateInfo.ProgressedAchievement(achievementEntity.getId(), newVal));
                             break;
                         }
                     }

@@ -8,9 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AchievementUpdateInfo {
-    private final List<ProgressedAchievement> progressedAchievements = new ArrayList<>();
+    private final AchievementEntity achievementEntity;
+    private ProgressedAchievement progressedAchievement;
     private final List<CompletedAchievementRank> completedAchievementRanks = new ArrayList<>();
     private Integer pointsGiven = 0;
+
+    public AchievementUpdateInfo(AchievementEntity achievementEntity) {
+        this.achievementEntity = achievementEntity;
+    }
+
+    public AchievementEntity getAchievementEntity() {
+        return achievementEntity;
+    }
 
     public Integer getPointsGiven() {
         return pointsGiven;
@@ -24,8 +33,12 @@ public class AchievementUpdateInfo {
         return completedAchievementRanks;
     }
 
-    public List<ProgressedAchievement> getProgressedAchievements() {
-        return progressedAchievements;
+    public ProgressedAchievement getProgressedAchievement() {
+        return progressedAchievement;
+    }
+
+    public void setProgressedAchievement(ProgressedAchievement progressedAchievement) {
+        this.progressedAchievement = progressedAchievement;
     }
 
     public static class ProgressedAchievement {
