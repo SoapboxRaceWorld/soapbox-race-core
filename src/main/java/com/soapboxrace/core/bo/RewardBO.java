@@ -481,6 +481,7 @@ public class RewardBO {
                 inventoryBO.addInventoryItem(inventory, productEntity.getProductId(), quantity);
             }
             luckyDrawItem.setRemainingUseCount(quantity == -1 ? productEntity.getUseCount() : quantity);
+            luckyDrawItem.setDescription(luckyDrawItem.getDescription() + " x" + luckyDrawItem.getRemainingUseCount());
         }
         return luckyDrawItem;
     }
