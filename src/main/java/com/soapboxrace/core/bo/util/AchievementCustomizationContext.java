@@ -128,9 +128,19 @@ public class AchievementCustomizationContext {
 
     public <T> long countPartsWithRating(Collection<WrappedPart<T>> collection, Integer rating, boolean exact) {
         Objects.requireNonNull(rating);
-        return collection.stream()
-                .filter(p -> exact ? rating.equals(p.getProductEntity().getRarity()) : rating >= p.getProductEntity().getRarity())
-                .count();
+        long cnt = 0;
+
+        for (WrappedPart<T> wrappedPart : collection) {
+            ProductEntity productEntity = wrappedPart.getProductEntity();
+
+            if (exact && productEntity.getRarity().equals(rating)) {
+                cnt++;
+            } else if (!exact && (rating <= productEntity.getRarity())) {
+                cnt++;
+            }
+        }
+
+        return cnt;
     }
 
     public <T> long countPartsWithRatingAndType(Collection<WrappedPart<T>> collection, Integer rating, String subType) {
@@ -140,9 +150,21 @@ public class AchievementCustomizationContext {
     public <T> long countPartsWithRatingAndType(Collection<WrappedPart<T>> collection, Integer rating, String subType, boolean exact) {
         Objects.requireNonNull(rating);
         Objects.requireNonNull(subType);
-        return collection.stream()
-                .filter(p -> (exact ? rating.equals(p.getProductEntity().getRarity()) : rating >= p.getProductEntity().getRarity()) && subType.equals(p.getProductEntity().getSubType()))
-                .count();
+        long cnt = 0;
+
+        for (WrappedPart<T> wrappedPart : collection) {
+            ProductEntity productEntity = wrappedPart.getProductEntity();
+
+            if (subType.equalsIgnoreCase(productEntity.getSubType())) {
+                if (exact && productEntity.getRarity().equals(rating)) {
+                    cnt++;
+                } else if (!exact && (rating <= productEntity.getRarity())) {
+                    cnt++;
+                }
+            }
+        }
+
+        return cnt;
     }
 
     public enum Type {
@@ -158,12 +180,9 @@ public class AchievementCustomizationContext {
 
         private final ProductEntity productEntity;
 
-        private final Integer rating;
-
-        public WrappedPart(TP part, ProductEntity productEntity, Integer rating) {
+        public WrappedPart(TP part, ProductEntity productEntity) {
             this.part = part;
             this.productEntity = productEntity;
-            this.rating = rating;
         }
 
         public TP getPart() {
@@ -172,10 +191,6 @@ public class AchievementCustomizationContext {
 
         public ProductEntity getProductEntity() {
             return productEntity;
-        }
-
-        public Integer getRating() {
-            return rating;
         }
     }
 }

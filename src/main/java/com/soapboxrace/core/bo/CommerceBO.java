@@ -221,14 +221,14 @@ public class CommerceBO {
             customizationContext.setPerformancePartsAdded(perfPartsAdded.stream()
                     .map(p -> {
                         ProductEntity product = productDAO.findByHash(p.getPerformancePartAttribHash());
-                        return new AchievementCustomizationContext.WrappedPart<>(p, product, product.getRarity());
+                        return new AchievementCustomizationContext.WrappedPart<>(p, product);
                     }).collect(Collectors.toList()));
         } else if (!skillModsAdded.isEmpty()) {
             customizationContext = new AchievementCustomizationContext(AchievementCustomizationContext.Type.SKILLS);
             customizationContext.setSkillModPartsAdded(skillModsAdded.stream()
                     .map(p -> {
                         ProductEntity product = productDAO.findByHash(p.getSkillModPartAttribHash());
-                        return new AchievementCustomizationContext.WrappedPart<>(p, product, product.getRarity());
+                        return new AchievementCustomizationContext.WrappedPart<>(p, product);
                     }).collect(Collectors.toList()));
         } else if (!visualPartsAdded.isEmpty()) {
             customizationContext = new AchievementCustomizationContext(AchievementCustomizationContext.Type.AFTERMARKET);
