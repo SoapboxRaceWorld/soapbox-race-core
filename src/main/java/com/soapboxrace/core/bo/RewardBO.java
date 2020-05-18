@@ -464,7 +464,7 @@ public class RewardBO {
 
     private LuckyDrawItem getLuckyDrawItem(PersonaEntity personaEntity, ProductEntity productEntity, int quantity) {
         LuckyDrawItem luckyDrawItem = dropBO.copyProduct2LuckyDraw(productEntity);
-        InventoryEntity inventory = inventoryBO.getInventory(personaEntity.getPersonaId());
+        InventoryEntity inventory = inventoryBO.getInventory(personaEntity);
         boolean inventoryFull = !inventoryBO.canInventoryHold(inventory,
                 productEntity);
         if (inventoryFull) {

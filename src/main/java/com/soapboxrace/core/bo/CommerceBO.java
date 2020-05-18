@@ -113,7 +113,7 @@ public class CommerceBO {
         int addBoost = 0;
         int removeBoost = 0;
 
-        InventoryEntity inventoryEntity = inventoryBO.getInventory(personaId);
+        InventoryEntity inventoryEntity = inventoryBO.getInventory(personaEntity);
 
         for (Map.Entry<Integer, Object> addedItem : addedItems.entrySet()) {
             if (addedItem.getValue() instanceof CustomVinylTrans) {

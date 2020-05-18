@@ -114,8 +114,8 @@ public class PersonaBO {
         return OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
     }
 
-    public void repairAllCars(Long personaId) {
-        List<CarSlotEntity> carSlotEntities = getPersonasCar(personaId);
+    public void repairAllCars(PersonaEntity personaEntity) {
+        List<CarSlotEntity> carSlotEntities = getPersonasCar(personaEntity.getPersonaId());
 
         for (CarSlotEntity carSlotEntity : carSlotEntities) {
             OwnedCarEntity ownedCarEntity = carSlotEntity.getOwnedCar();

@@ -65,20 +65,14 @@ public class InventoryBO {
      * Finds the {@link InventoryEntity} associated with the given persona ID.
      * Creates a new inventory if one cannot be found.
      *
-     * @param personaId The ID of the persona to obtain the inventory record for.
+     * @param personaEntity The persona to obtain the inventory record for.
      * @return The obtained or created inventory record.
      * @throws com.soapboxrace.core.engine.EngineException if the given persona ID is invalid OR
      *                                                     inventory creation fails
      */
-    public InventoryEntity getInventory(Long personaId) {
-        // Ensure we have valid input
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
-
-        if (personaEntity == null)
-            throw new EngineException("Cannot find persona: " + personaId, EngineExceptionCode.PersonaNotFound, true);
-
+    public InventoryEntity getInventory(PersonaEntity personaEntity) {
         // Do the important work!
-        InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
+        InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaEntity.getPersonaId());
 
         if (inventoryEntity == null)
             inventoryEntity = this.createInventory(personaEntity);

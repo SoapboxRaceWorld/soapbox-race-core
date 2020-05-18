@@ -184,7 +184,7 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public InventoryTrans inventoryObjects(@HeaderParam("securityToken") String securityToken) {
         long personaId = sessionBO.getActivePersonaId(securityToken);
-        return inventoryBO.getClientInventory(inventoryBO.getInventory(personaId));
+        return inventoryBO.getClientInventory(inventoryBO.getInventory(personaBO.getPersonaById(personaId)));
     }
 
     @GET

@@ -178,7 +178,7 @@ public class BasketBO {
 
                 for (CardPackItemEntity cardPackItemEntity : cardPackEntity.getItems()) {
                     itemRewardBO.convertRewards(
-                            itemRewardBO.getRewards(personaEntity.getPersonaId(), cardPackItemEntity.getScript()),
+                            itemRewardBO.getRewards(personaEntity, cardPackItemEntity.getScript()),
                             commerceResultTrans
                     );
                 }
@@ -223,7 +223,7 @@ public class BasketBO {
         }
 
         if (performPersonaTransaction(personaEntity, productEntity)) {
-            addAmplifier(personaEntity.getPersonaId(), productEntity);
+            addAmplifier(personaEntity, productEntity);
             return CommerceResultStatus.SUCCESS;
         }
 
@@ -276,7 +276,7 @@ public class BasketBO {
         performanceBO.calcNewCarClass(carSlotEntity.getOwnedCar().getCustomCar());
 
         if (isRental && canAddAmplifier(personaEntity.getPersonaId(), "INSURANCE_AMPLIFIER")) {
-            addAmplifier(personaEntity.getPersonaId(), productDao.findByEntitlementTag("INSURANCE_AMPLIFIER"));
+            addAmplifier(personaEntity, productDao.findByEntitlementTag("INSURANCE_AMPLIFIER"));
         }
 
         CarClassesEntity carClassesEntity =
@@ -371,14 +371,14 @@ public class BasketBO {
         return inventoryItemDao.findAllByPersonaIdAndEntitlementTag(personaId, entitlementTag).isEmpty();
     }
 
-    private void addAmplifier(Long personaId, ProductEntity productEntity) {
-        InventoryEntity inventoryEntity = inventoryBO.getInventory(personaId);
+    private void addAmplifier(PersonaEntity personaEntity, ProductEntity productEntity) {
+        InventoryEntity inventoryEntity = inventoryBO.getInventory(personaEntity);
         inventoryBO.addInventoryItem(inventoryEntity, productEntity.getProductId());
 
         AmplifierEntity amplifierEntity = amplifierDAO.findAmplifierByHash(productEntity.getHash());
 
         if (amplifierEntity.getAmpType().equals("INSURANCE")) {
-            personaBo.repairAllCars(personaId);
+            personaBo.repairAllCars(personaEntity);
         }
     }
 

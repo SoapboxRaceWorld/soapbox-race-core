@@ -52,12 +52,10 @@ public class ItemRewardBO {
     @EJB
     private CardPackDAO cardPackDAO;
 
-    public RewardedItemsContainer getRewards(Long personaId, String rewardScript) {
+    public RewardedItemsContainer getRewards(PersonaEntity personaEntity, String rewardScript) {
         try {
-            PersonaEntity personaEntity = personaDAO.findById(personaId);
-
             if (rewardScript != null) {
-                return handleReward(scriptToItem(rewardScript), inventoryBO.getInventory(personaId), personaEntity);
+                return handleReward(scriptToItem(rewardScript), inventoryBO.getInventory(personaEntity), personaEntity);
             }
 
             throw new RuntimeException("rewardScript was null!");

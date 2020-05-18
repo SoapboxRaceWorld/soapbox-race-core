@@ -207,7 +207,7 @@ public class UserBO {
                 personaDAO.update(personaEntity);
                 AchievementTransaction transaction = achievementBO.createTransaction(personaId);
                 transaction.add("LOGIN", Map.of("persona", personaEntity));
-                achievementBO.commitTransactionSync(personaEntity, transaction);
+                achievementBO.commitTransaction(personaEntity, transaction);
                 int index = Iterables.indexOf(user.getPersonas(), p -> p != null && p.getPersonaId().equals(personaId));
                 user.setSelectedPersonaIndex(index);
                 userDao.update(user);

@@ -77,23 +77,12 @@ public class AchievementBO {
     }
 
     /**
-     * Commits the changes for the given {@link AchievementTransaction} instance.
-     *
-     * @param personaEntity the {@link PersonaEntity} instance
-     * @param transaction   the {@link AchievementTransaction} instance
-     */
-    @Asynchronous
-    public void commitTransaction(PersonaEntity personaEntity, AchievementTransaction transaction) {
-        commitTransactionSync(personaEntity, transaction);
-    }
-
-    /**
      * Synchronously commits the changes for the given {@link AchievementTransaction} instance.
      *
      * @param personaEntity the {@link PersonaEntity} instance
      * @param transaction   the {@link AchievementTransaction} instance
      */
-    public void commitTransactionSync(PersonaEntity personaEntity, AchievementTransaction transaction) {
+    public void commitTransaction(PersonaEntity personaEntity, AchievementTransaction transaction) {
         List<AchievementUpdateInfo> achievementUpdateInfoList = new ArrayList<>();
         transaction.getEntries().forEach((k, v) -> v.forEach(m -> achievementUpdateInfoList.addAll(updateAchievements(personaEntity, k, m))));
         personaDAO.update(personaEntity);
@@ -148,6 +137,7 @@ public class AchievementBO {
     }
 
     public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
+        PersonaEntity personaEntity = personaDAO.findById(personaId);
         PersonaAchievementRankEntity personaAchievementRankEntity =
                 personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, achievementRankId);
 
@@ -164,7 +154,7 @@ public class AchievementBO {
         achievementRewards.setVisualStyle(personaAchievementRankEntity.getAchievementRankEntity().getRewardVisualStyle());
         achievementRewards.setStatus(CommerceResultStatus.SUCCESS);
         ItemRewardBO.RewardedItemsContainer rewards = itemRewardBO.getRewards(
-                personaId,
+                personaEntity,
                 achievementRewardDAO.findByDescription(personaAchievementRankEntity.getAchievementRankEntity().getRewardDescription())
                         .getRewardScript());
         itemRewardBO.convertRewards(rewards, achievementRewards);

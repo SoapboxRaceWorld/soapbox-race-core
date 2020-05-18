@@ -64,11 +64,11 @@ public class Powerups {
             }
         }
         if (parameterBO.getBoolParam("ENABLE_POWERUP_DECREASE")) {
-            InventoryItemEntity inventoryItemEntity = inventoryBO.decreaseItemCount(inventoryBO.getInventory(activePersonaId), powerupHash);
-            AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
             PersonaEntity personaEntity = personaBO.getPersonaById(activePersonaId);
+            InventoryItemEntity inventoryItemEntity = inventoryBO.decreaseItemCount(inventoryBO.getInventory(personaEntity), powerupHash);
+            AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
             transaction.add("INVENTORY", Map.of("persona", personaEntity, "ctx", new AchievementInventoryContext(inventoryItemEntity, AchievementInventoryContext.Event.QUANTITY_DECREASED)));
-            achievementBO.commitTransactionSync(personaEntity, transaction);
+            achievementBO.commitTransaction(personaEntity, transaction);
         }
 
         return "";
