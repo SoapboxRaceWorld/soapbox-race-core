@@ -7,10 +7,7 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.DriverPersonaBO;
-import com.soapboxrace.core.bo.PresenceBO;
-import com.soapboxrace.core.bo.TokenSessionBO;
-import com.soapboxrace.core.bo.UserBO;
+import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.PersonaEntity;
@@ -40,6 +37,9 @@ public class DriverPersona {
 
     @EJB
     private PresenceBO presenceBO;
+
+    @EJB
+    private MatchmakingBO matchmakingBO;
 
     @GET
     @Secured
@@ -83,13 +83,13 @@ public class DriverPersona {
                                      @QueryParam("iconIndex") int iconIndex, @QueryParam("clan") String clan,
                                      @QueryParam("clanIcon") String clanIcon) {
         if (!NAME_PATTERN.matcher(name).matches()) {
-            throw new EngineException(EngineExceptionCode.DisplayNameNotAllowed);
+            throw new EngineException(EngineExceptionCode.DisplayNameNotAllowed, true);
         }
 
         ArrayOfString nameReserveResult = driverPersonaBO.reserveName(name);
 
         if (!nameReserveResult.getString().isEmpty()) {
-            throw new EngineException(EngineExceptionCode.DisplayNameDuplicate);
+            throw new EngineException(EngineExceptionCode.DisplayNameDuplicate, true);
         }
 
         PersonaEntity personaEntity = new PersonaEntity();
@@ -98,7 +98,7 @@ public class DriverPersona {
         ProfileData persona = driverPersonaBO.createPersona(userId, personaEntity);
 
         if (persona == null) {
-            throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached);
+            throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached, true);
         }
 
         long personaId = persona.getPersonaId();
@@ -135,6 +135,7 @@ public class DriverPersona {
                                         @QueryParam("presence") Long presence) {
         tokenSessionBo.verifyPersonaOwnership(securityToken, personaId);
         presenceBO.updatePresence(personaId, presence);
+        matchmakingBO.removePlayerFromQueue(personaId);
 
         return "";
     }

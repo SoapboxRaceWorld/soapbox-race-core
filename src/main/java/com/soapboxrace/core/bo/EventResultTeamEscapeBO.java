@@ -6,28 +6,28 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.EventDataEntity;
-import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
-import com.soapboxrace.jaxb.http.*;
+import com.soapboxrace.jaxb.http.ArrayOfTeamEscapeEntrantResult;
+import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
+import com.soapboxrace.jaxb.http.TeamEscapeEntrantResult;
+import com.soapboxrace.jaxb.http.TeamEscapeEventResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeTeamEscapeEntrantResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_TeamEscapeEntrantResultType;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.HashMap;
 
 @Stateless
-public class EventResultTeamEscapeBO {
+public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitrationPacket, TeamEscapeEventResult> {
 
     @EJB
     private EventSessionDAO eventSessionDao;
@@ -50,12 +50,12 @@ public class EventResultTeamEscapeBO {
     @EJB
     private AchievementBO achievementBO;
 
-    public TeamEscapeEventResult handleTeamEscapeEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
-                                                     TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
-        Long eventSessionId = eventSessionEntity.getId();
-        eventSessionEntity.setEnded(System.currentTimeMillis());
+    @EJB
+    private DNFTimerBO dnfTimerBO;
 
-        eventSessionDao.update(eventSessionEntity);
+    protected TeamEscapeEventResult handleInternal(EventSessionEntity eventSessionEntity, Long activePersonaId,
+                                                   TeamEscapeArbitrationPacket teamEscapeArbitrationPacket) {
+        Long eventSessionId = eventSessionEntity.getId();
 
         XMPP_TeamEscapeEntrantResultType xmppTeamEscapeResult = new XMPP_TeamEscapeEntrantResultType();
         xmppTeamEscapeResult.setEventDurationInMilliseconds(teamEscapeArbitrationPacket.getEventDurationInMilliseconds());
@@ -70,33 +70,26 @@ public class EventResultTeamEscapeBO {
         EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
 
         if (eventDataEntity.getFinishReason() != 0) {
-            throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration);
+            throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
-        eventDataEntity.setAlternateEventDurationInMilliseconds(teamEscapeArbitrationPacket.getAlternateEventDurationInMilliseconds());
+        prepareBasicEventData(eventDataEntity, activePersonaId, teamEscapeArbitrationPacket);
         eventDataEntity.setBustedCount(teamEscapeArbitrationPacket.getBustedCount());
-        eventDataEntity.setCarId(teamEscapeArbitrationPacket.getCarId());
         eventDataEntity.setCopsDeployed(teamEscapeArbitrationPacket.getCopsDeployed());
         eventDataEntity.setCopsDisabled(teamEscapeArbitrationPacket.getCopsDisabled());
         eventDataEntity.setCopsRammed(teamEscapeArbitrationPacket.getCopsRammed());
         eventDataEntity.setCostToState(teamEscapeArbitrationPacket.getCostToState());
         eventDataEntity.setDistanceToFinish(teamEscapeArbitrationPacket.getDistanceToFinish());
-        eventDataEntity.setEventDurationInMilliseconds(teamEscapeArbitrationPacket.getEventDurationInMilliseconds());
-        eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
-        eventDataEntity.setFinishReason(teamEscapeArbitrationPacket.getFinishReason());
         eventDataEntity.setFractionCompleted(teamEscapeArbitrationPacket.getFractionCompleted());
-        eventDataEntity.setHacksDetected(teamEscapeArbitrationPacket.getHacksDetected());
         eventDataEntity.setInfractions(teamEscapeArbitrationPacket.getInfractions());
         eventDataEntity.setLongestJumpDurationInMilliseconds(teamEscapeArbitrationPacket.getLongestJumpDurationInMilliseconds());
         eventDataEntity.setNumberOfCollisions(teamEscapeArbitrationPacket.getNumberOfCollisions());
         eventDataEntity.setPerfectStart(teamEscapeArbitrationPacket.getPerfectStart());
-        eventDataEntity.setRank(teamEscapeArbitrationPacket.getRank());
-        eventDataEntity.setPersonaId(activePersonaId);
         eventDataEntity.setRoadBlocksDodged(teamEscapeArbitrationPacket.getRoadBlocksDodged());
         eventDataEntity.setSpikeStripsDodged(teamEscapeArbitrationPacket.getSpikeStripsDodged());
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(teamEscapeArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
         eventDataEntity.setTopSpeed(teamEscapeArbitrationPacket.getTopSpeed());
-        eventDataDao.update(eventDataEntity);
+        eventSessionEntity.setEnded(System.currentTimeMillis());
 
         ArrayOfTeamEscapeEntrantResult arrayOfTeamEscapeEntrantResult = new ArrayOfTeamEscapeEntrantResult();
         for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
@@ -113,39 +106,39 @@ public class EventResultTeamEscapeBO {
             if (!racer.getPersonaId().equals(activePersonaId)) {
                 XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId(), openFireSoapBoxCli);
                 xmppEvent.sendTeamEscapeEnd(teamEscapeEntrantResultResponse);
-                if (teamEscapeArbitrationPacket.getRank() == 1) {
-                    xmppEvent.sendEventTimingOut(eventSessionId);
+                if ((teamEscapeArbitrationPacket.getFinishReason() == 518 ||
+                        teamEscapeArbitrationPacket.getFinishReason() == 22) && teamEscapeArbitrationPacket.getRank() == 1 && eventSessionEntity.getEvent().isDnfEnabled()) {
+                    xmppEvent.sendEventTimingOut(eventSessionEntity);
+                    dnfTimerBO.scheduleDNF(eventSessionEntity, racer.getPersonaId());
                 }
             }
         }
 
+        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
-        teamEscapeEventResult.setAccolades(rewardTeamEscapeBO.getTeamEscapeAccolades(activePersonaId,
-                teamEscapeArbitrationPacket, eventSessionEntity));
+        teamEscapeEventResult.setAccolades(rewardTeamEscapeBO.getAccolades(activePersonaId,
+                teamEscapeArbitrationPacket, eventDataEntity, eventSessionEntity, transaction));
         teamEscapeEventResult
-                .setDurability(carDamageBO.updateDamageCar(activePersonaId, teamEscapeArbitrationPacket,
-                        teamEscapeArbitrationPacket.getNumberOfCollisions()));
+                .setDurability(carDamageBO.induceCarDamage(activePersonaId, teamEscapeArbitrationPacket,
+                        eventDataEntity.getEvent()));
         teamEscapeEventResult.setEntrants(arrayOfTeamEscapeEntrantResult);
         teamEscapeEventResult.setEventId(eventDataEntity.getEvent().getId());
         teamEscapeEventResult.setEventSessionId(eventSessionId);
-        teamEscapeEventResult.setExitPath(ExitPath.EXIT_TO_LOBBY);
-        teamEscapeEventResult.setInviteLifetimeInMilliseconds(0);
-        teamEscapeEventResult.setLobbyInviteId(0);
         teamEscapeEventResult.setPersonaId(activePersonaId);
+        prepareRaceAgain(eventSessionEntity, teamEscapeEventResult);
 
         if (teamEscapeArbitrationPacket.getBustedCount() == 0) {
-            PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+            updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, teamEscapeArbitrationPacket, transaction);
+        }
 
-            achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<String, Object>() {{
-                put("persona", personaEntity);
-                put("event", eventDataEntity.getEvent());
-                put("eventData", eventDataEntity);
-                put("eventSession", eventSessionEntity);
-                put("eventContext", new AchievementEventContext(
-                        EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
-                        teamEscapeArbitrationPacket,
-                        eventSessionEntity));
-            }});
+        achievementBO.commitTransaction(personaEntity, transaction);
+
+        eventSessionDao.update(eventSessionEntity);
+        eventDataDao.update(eventDataEntity);
+
+        if (eventSessionEntity.getLobby() != null && !eventSessionEntity.getLobby().getIsPrivate()) {
+            matchmakingBO.resetIgnoredEvents(activePersonaId);
         }
 
         return teamEscapeEventResult;

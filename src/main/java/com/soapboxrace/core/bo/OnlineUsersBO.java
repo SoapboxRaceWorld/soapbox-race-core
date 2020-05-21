@@ -22,8 +22,6 @@ public class OnlineUsersBO {
     OpenFireRestApiCli openFireRestApiCli;
     @EJB
     private OnlineUsersDAO onlineUsersDAO;
-    @EJB
-    private ParameterBO parameterBO;
 
     public int getNumberOfUsersOnlineNow() {
         Date lastMinutes = getLastMinutes(1);
@@ -33,15 +31,10 @@ public class OnlineUsersBO {
 
     @Schedule(minute = "*", hour = "*", persistent = false)
     public void insertNumberOfUsesOnlineNow() {
-        if (parameterBO.isShardingEnabled()) {
-            if (!parameterBO.isShardingMaster())
-                return;
-        }
-
-        Long timeLong = new Date().getTime() / 1000L;
+        long timeLong = new Date().getTime() / 1000L;
         OnlineUsersEntity onlineUsersEntity = new OnlineUsersEntity();
         onlineUsersEntity.setNumberOfUsers(openFireRestApiCli.getTotalOnlineUsers());
-        onlineUsersEntity.setTimeRecord(timeLong.intValue());
+        onlineUsersEntity.setTimeRecord((int) timeLong);
         onlineUsersDAO.insert(onlineUsersEntity);
     }
 

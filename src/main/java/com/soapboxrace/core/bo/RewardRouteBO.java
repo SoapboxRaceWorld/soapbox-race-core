@@ -8,10 +8,7 @@ package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.EventEntity;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.SkillModRewardType;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.RouteArbitrationPacket;
 
@@ -19,7 +16,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
-public class RewardRouteBO extends RewardBO {
+public class RewardRouteBO extends RewardEventBO<RouteArbitrationPacket> {
 
     @EJB
     private PersonaDAO personaDao;
@@ -27,10 +24,12 @@ public class RewardRouteBO extends RewardBO {
     @EJB
     private LegitRaceBO legitRaceBO;
 
-    public Accolades getRouteAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket,
-                                       EventSessionEntity eventSessionEntity) {
+    public Accolades getAccolades(Long activePersonaId, RouteArbitrationPacket routeArbitrationPacket,
+                                  EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, AchievementTransaction achievementTransaction) {
         int finishReason = routeArbitrationPacket.getFinishReason();
-        if (!legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity) || finishReason != 22) {
+        boolean legit = legitRaceBO.isLegit(activePersonaId, routeArbitrationPacket, eventSessionEntity, eventDataEntity);
+        eventDataEntity.setLegit(legit);
+        if (!legit || finishReason != 22) {
             return new Accolades();
         }
         EventEntity eventEntity = eventSessionEntity.getEvent();
@@ -45,7 +44,7 @@ public class RewardRouteBO extends RewardBO {
         setMultiplierReward(eventEntity, rewardVO);
         setAmplifierReward(personaEntity, rewardVO);
 
-        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, true, achievementTransaction);
         return getAccolades(personaEntity, eventEntity, routeArbitrationPacket, rewardVO);
     }
 

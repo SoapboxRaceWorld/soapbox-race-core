@@ -19,16 +19,16 @@ public class BuildInfo {
     private static String time;
 
     static {
-        InputStream gitPropertiesJson = getGitPropertiesStream();
-
-        try (InputStreamReader reader = new InputStreamReader(gitPropertiesJson)) {
+        try (InputStream gitPropertiesJson = getGitPropertiesStream();
+             InputStreamReader reader = new InputStreamReader(gitPropertiesJson)) {
             GitStateInfo gitStateInfo = new Gson().fromJson(reader, GitStateInfo.class);
             branch = gitStateInfo.branch;
             commitID = gitStateInfo.commitIdAbbreviated;
             longCommitID = gitStateInfo.commitId;
             time = gitStateInfo.commitTime;
-        } catch (IOException exception) {
-            throw new RuntimeException("Failed to read git.properties", exception);
+        } catch (IOException | RuntimeException exception) {
+            System.out.println(exception.getMessage());
+            branch = commitID = longCommitID = time = "unknown";
         }
     }
 

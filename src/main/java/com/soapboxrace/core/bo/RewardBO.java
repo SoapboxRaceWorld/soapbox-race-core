@@ -13,7 +13,7 @@ import com.soapboxrace.jaxb.http.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Stateless
@@ -77,7 +77,7 @@ public class RewardBO {
                 eventEntity.getLevelRepRewardMultiplier());
         Float playerLevelCashConst = getPlayerLevelConst(personaEntity.getLevel(),
                 eventEntity.getLevelCashRewardMultiplier());
-        Float timeConst = getTimeConst(eventEntity.getLegitTime(), arbitrationPacket.getEventDurationInMilliseconds());
+        Float timeConst = getTimeConst(eventEntity.getRewardsTimeLimit(), arbitrationPacket.getEventDurationInMilliseconds());
         rewardVO.setBaseRep(getBaseReward(baseRep, playerLevelRepConst, timeConst));
         rewardVO.setBaseCash(getBaseReward(baseCash, playerLevelCashConst, timeConst));
     }
@@ -90,11 +90,7 @@ public class RewardBO {
         return new RewardVO(enableEconomy, enableReputation);
     }
 
-    public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity) {
-        applyRaceReward(exp, cash, personaEntity, true);
-    }
-
-    public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity, boolean isInEvent) {
+    public void applyRaceReward(Integer exp, Integer cash, PersonaEntity personaEntity, boolean isInEvent, AchievementTransaction achievementTransaction) {
         int maxLevel = parameterBO.getMaxLevel(personaEntity.getUser());
         if (parameterBO.getBoolParam("ENABLE_ECONOMY")) {
             double newCash = personaEntity.getCash() + cash;
@@ -128,13 +124,11 @@ public class RewardBO {
         }
         personaDao.update(personaEntity);
 
-        AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp,
-                personaEntity.getLevel(), personaEntity.getScore(), hasLevelChanged, isInEvent);
-
-        achievementBO.updateAchievements(personaEntity, "PROGRESSION", new HashMap<String, Object>() {{
-            put("persona", personaEntity);
-            put("progression", progressionContext);
-        }});
+        if (achievementTransaction != null) {
+            AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp,
+                    personaEntity.getLevel(), personaEntity.getScore(), 0, hasLevelChanged, false, false, isInEvent);
+            achievementTransaction.add("PROGRESSION", Map.of("persona", personaEntity, "progression", progressionContext));
+        }
     }
 
     public void setTopSpeedReward(EventEntity eventEntity, float topSpeed, RewardVO rewardVO) {
@@ -470,7 +464,7 @@ public class RewardBO {
 
     private LuckyDrawItem getLuckyDrawItem(PersonaEntity personaEntity, ProductEntity productEntity, int quantity) {
         LuckyDrawItem luckyDrawItem = dropBO.copyProduct2LuckyDraw(productEntity);
-        InventoryEntity inventory = inventoryBO.getInventory(personaEntity.getPersonaId());
+        InventoryEntity inventory = inventoryBO.getInventory(personaEntity);
         boolean inventoryFull = !inventoryBO.canInventoryHold(inventory,
                 productEntity);
         if (inventoryFull) {
@@ -487,6 +481,7 @@ public class RewardBO {
                 inventoryBO.addInventoryItem(inventory, productEntity.getProductId(), quantity);
             }
             luckyDrawItem.setRemainingUseCount(quantity == -1 ? productEntity.getUseCount() : quantity);
+            luckyDrawItem.setDescription(luckyDrawItem.getDescription() + " x" + luckyDrawItem.getRemainingUseCount());
         }
         return luckyDrawItem;
     }

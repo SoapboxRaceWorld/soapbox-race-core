@@ -7,9 +7,10 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.bo.InventoryBO;
-import com.soapboxrace.core.bo.ParameterBO;
-import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.bo.*;
+import com.soapboxrace.core.bo.util.AchievementInventoryContext;
+import com.soapboxrace.core.jpa.InventoryItemEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.xmpp.XMPP_PowerupActivatedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePowerupActivated;
@@ -17,6 +18,7 @@ import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePowerupActivated;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Map;
 
 @Path("/powerups")
 public class Powerups {
@@ -32,6 +34,12 @@ public class Powerups {
 
     @EJB
     private ParameterBO parameterBO;
+
+    @EJB
+    private PersonaBO personaBO;
+
+    @EJB
+    private AchievementBO achievementBO;
 
     @POST
     @Secured
@@ -56,7 +64,11 @@ public class Powerups {
             }
         }
         if (parameterBO.getBoolParam("ENABLE_POWERUP_DECREASE")) {
-            inventoryBO.decreaseItemCount(inventoryBO.getInventory(activePersonaId), powerupHash);
+            PersonaEntity personaEntity = personaBO.getPersonaById(activePersonaId);
+            InventoryItemEntity inventoryItemEntity = inventoryBO.decreaseItemCount(inventoryBO.getInventory(personaEntity), powerupHash);
+            AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
+            transaction.add("INVENTORY", Map.of("persona", personaEntity, "ctx", new AchievementInventoryContext(inventoryItemEntity, AchievementInventoryContext.Event.QUANTITY_DECREASED)));
+            achievementBO.commitTransaction(personaEntity, transaction);
         }
 
         return "";

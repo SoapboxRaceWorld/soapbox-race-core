@@ -12,10 +12,14 @@ import com.soapboxrace.core.jpa.ParameterEntity;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.annotation.PostConstruct;
+import javax.ejb.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
-@Stateless
+@Startup
+@Singleton
+@Lock(LockType.READ)
 public class ParameterBO {
 
     @EJB
@@ -24,49 +28,38 @@ public class ParameterBO {
     @EJB
     private TokenSessionDAO tokenDAO;
 
-    private String getParameter(String name) {
-        ParameterEntity findById = parameterDao.findById(name);
+    private final ConcurrentMap<String, String> parameterMap;
 
-        if (findById != null) {
-            return findById.getValue();
+    public ParameterBO() {
+        parameterMap = new ConcurrentHashMap<>();
+    }
+
+    @PostConstruct
+    public void init() {
+        loadParameters();
+    }
+
+    /**
+     * Loads parameters from the database
+     */
+    public void loadParameters() {
+        parameterMap.clear();
+
+        for (ParameterEntity parameterEntity : parameterDao.findAll()) {
+            if (parameterEntity.getValue() != null)
+                parameterMap.put(parameterEntity.getName(), parameterEntity.getValue());
         }
 
-        return null;
+        System.out.println("Loaded " + parameterMap.size() + " parameters from database");
     }
 
-    public boolean isShardingEnabled() {
-        String property = System.getProperty("sharding.enabled");
-
-        return Boolean.parseBoolean(property);
-    }
-
-    public boolean isShardingMaster() {
-        String property = System.getProperty("sharding.master");
-
-        return Boolean.parseBoolean(property);
-    }
-
-    public String getShardId() {
-        String property = System.getProperty("sharding.id");
-
-        if (property == null)
-            return null;
-        if (property.trim().isEmpty())
-            return null;
-        if (!isShardingEnabled() || isShardingMaster())
-            return null;
-        return property.trim();
+    private String getParameter(String name) {
+        return parameterMap.get(name);
     }
 
     public int getCarLimit(String securityToken) {
         TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
         return getCarLimit(tokenSession.getUserEntity());
-    }
-
-    public int getMaxCash(String securityToken) {
-        TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
-
-        return getMaxCash(tokenSession.getUserEntity());
     }
 
     public int getMaxLevel(String securityToken) {

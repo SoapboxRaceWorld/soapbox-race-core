@@ -14,15 +14,13 @@ import com.soapboxrace.core.dao.RewardTableDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
-import com.soapboxrace.jaxb.http.ArrayOfCommerceItemTrans;
-import com.soapboxrace.jaxb.http.CommerceItemTrans;
+import com.soapboxrace.jaxb.http.*;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.script.ScriptException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -54,30 +52,58 @@ public class ItemRewardBO {
     @EJB
     private CardPackDAO cardPackDAO;
 
-    public ArrayOfCommerceItemTrans getRewards(Long personaId, String rewardScript) {
+    public RewardedItemsContainer getRewards(PersonaEntity personaEntity, String rewardScript) {
         try {
-            PersonaEntity personaEntity = personaDAO.findById(personaId);
-            ArrayOfCommerceItemTrans arrayOfCommerceItemTrans = new ArrayOfCommerceItemTrans();
-
             if (rewardScript != null) {
-                handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, inventoryBO.getInventory(personaId), personaEntity);
+                return handleReward(scriptToItem(rewardScript), inventoryBO.getInventory(personaEntity), personaEntity);
             }
 
-            return arrayOfCommerceItemTrans;
+            throw new RuntimeException("rewardScript was null!");
         } catch (Exception e) {
-            throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+            throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
         }
     }
 
-    public void loadReward(Long personaId, String rewardScript, ArrayOfCommerceItemTrans arrayOfCommerceItemTrans) {
-        try {
-            PersonaEntity personaEntity = personaDAO.findById(personaId);
+    public void convertRewards(RewardedItemsContainer rewardedItemsContainer, GenericCommerceResult commerceResult) {
+        if (commerceResult.getCommerceItems() == null)
+            commerceResult.setCommerceItems(new ArrayOfCommerceItemTrans());
+        if (commerceResult.getInventoryItems() == null)
+            commerceResult.setInventoryItems(new ArrayOfInventoryItemTrans());
+        if (commerceResult.getPurchasedCars() == null)
+            commerceResult.setPurchasedCars(new ArrayOfOwnedCarTrans());
 
-            if (rewardScript != null) {
-                handleReward(scriptToItem(rewardScript), arrayOfCommerceItemTrans, inventoryBO.getInventory(personaId), personaEntity);
+        for (ItemRewardCash itemRewardCash : rewardedItemsContainer.getCashRewardList()) {
+            CommerceItemTrans commerceItemTrans = new CommerceItemTrans();
+            commerceItemTrans.setTitle("LB_CASH," + itemRewardCash.getCash());
+            commerceItemTrans.setHash(-429893590);
+            commerceResult.getCommerceItems().getCommerceItemTrans().add(commerceItemTrans);
+        }
+
+        for (WrappedInventoryItemReward wrappedInventoryItemReward : rewardedItemsContainer.getInventoryItemList()) {
+            CommerceItemTrans commerceItemTrans = new CommerceItemTrans();
+            InventoryItemEntity inventoryItemEntity = wrappedInventoryItemReward.getInventoryItemEntity();
+            ProductEntity productEntity = inventoryItemEntity.getProductEntity();
+            Integer useCount = wrappedInventoryItemReward.getUseCount();
+            commerceItemTrans.setHash(productEntity.getHash());
+            commerceItemTrans.setTitle(productEntity.getProductTitle());
+
+            if (useCount != -1) {
+                commerceItemTrans.setTitle(commerceItemTrans.getTitle() + " x" + useCount);
             }
-        } catch (Exception e) {
-            throw new EngineException("Failed to generate rewards with script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+
+            commerceResult.getCommerceItems().getCommerceItemTrans().add(commerceItemTrans);
+            commerceResult.getInventoryItems().getInventoryItemTrans().add(inventoryBO.convertItemToItemTrans(inventoryItemEntity));
+        }
+
+        for (WrappedCarReward carReward : rewardedItemsContainer.getCarRewardList()) {
+            commerceResult.getPurchasedCars().getOwnedCarTrans().add(OwnedCarConverter.entity2Trans(carReward.getCarSlotEntity().getOwnedCar()));
+            ProductEntity productEntity = carReward.getProductEntity();
+
+            CommerceItemTrans commerceItemTrans = new CommerceItemTrans();
+            commerceItemTrans.setHash(productEntity.getHash());
+            commerceItemTrans.setTitle(productEntity.getProductTitle());
+
+            commerceResult.getCommerceItems().getCommerceItemTrans().add(commerceItemTrans);
         }
     }
 
@@ -88,7 +114,7 @@ public class ItemRewardBO {
         try {
             return scriptToItem(rewardScript, bindings);
         } catch (ScriptException e) {
-            throw new EngineException("Failed to execute script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+            throw new EngineException("Failed to execute script: " + rewardScript, e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
         }
     }
 
@@ -108,22 +134,21 @@ public class ItemRewardBO {
         throw new RuntimeException("Invalid script return: " + obj.getClass().getName());
     }
 
-    private void handleReward(ItemRewardBase itemRewardBase, ArrayOfCommerceItemTrans arrayOfCommerceItemTrans,
-                              InventoryEntity inventoryEntity,
-                              PersonaEntity personaEntity) {
+    private RewardedItemsContainer handleReward(ItemRewardBase itemRewardBase, InventoryEntity inventoryEntity,
+                                                PersonaEntity personaEntity) {
+        RewardedItemsContainer rewardedItemsContainer = new RewardedItemsContainer();
         if (itemRewardBase instanceof ItemRewardCash) {
             ItemRewardCash achievementRewardCash = (ItemRewardCash) itemRewardBase;
-
-            arrayOfCommerceItemTrans.getCommerceItemTrans().add(new CommerceItemTrans() {{
-                setTitle("LB_CASH," + achievementRewardCash.getCash());
-                setHash(-429893590);
-            }});
-
             driverPersonaBO.updateCash(personaEntity, personaEntity.getCash() + achievementRewardCash.getCash());
+            rewardedItemsContainer.getCashRewardList().add(achievementRewardCash);
         } else if (itemRewardBase instanceof ItemRewardMulti) {
             ItemRewardMulti achievementRewardMulti = (ItemRewardMulti) itemRewardBase;
-            achievementRewardMulti.getAchievementRewardList().forEach(r -> handleReward(r, arrayOfCommerceItemTrans,
-                    inventoryEntity, personaEntity));
+            achievementRewardMulti.getAchievementRewardList().forEach(r -> {
+                RewardedItemsContainer newContainer = handleReward(r, inventoryEntity, personaEntity);
+                rewardedItemsContainer.getInventoryItemList().addAll(newContainer.getInventoryItemList());
+                rewardedItemsContainer.getCarRewardList().addAll(newContainer.getCarRewardList());
+                rewardedItemsContainer.getCashRewardList().addAll(newContainer.getCashRewardList());
+            });
         } else {
             List<ProductEntity> productEntities = new ArrayList<>(itemRewardBase.getProducts());
             Integer useCount = -1;
@@ -133,42 +158,126 @@ public class ItemRewardBO {
             }
 
             for (ProductEntity productEntity : productEntities) {
-                arrayOfCommerceItemTrans.getCommerceItemTrans().add(productToCommerceItem(productEntity, useCount));
-
                 switch (productEntity.getProductType().toLowerCase()) {
                     case "presetcar":
-                        basketBO.addCar(productEntity.getProductId(), personaEntity);
+                        rewardedItemsContainer.getCarRewardList().add(new WrappedCarReward(basketBO.addCar(productEntity, personaEntity), productEntity));
                         break;
                     case "performancepart":
                     case "skillmodpart":
                     case "visualpart":
-                        inventoryBO.addInventoryItem(inventoryEntity,
-                                productEntity.getProductId(), useCount, true);
+                        rewardedItemsContainer.getInventoryItemList().add(new WrappedInventoryItemReward(
+                                inventoryBO.addInventoryItem(inventoryEntity,
+                                        productEntity.getProductId(), useCount, true), useCount
+                        ));
                         break;
                     case "powerup":
-                        inventoryBO.addStackedInventoryItem(inventoryEntity,
-                                productEntity.getProductId(), useCount, true);
+                        rewardedItemsContainer.getInventoryItemList().add(new WrappedInventoryItemReward(
+                                inventoryBO.addStackedInventoryItem(inventoryEntity,
+                                        productEntity.getProductId(), useCount, true), useCount
+                        ));
                         break;
                 }
             }
         }
+
+        return rewardedItemsContainer;
     }
 
-    private CommerceItemTrans productToCommerceItem(ProductEntity productEntity, Integer useCount) {
-        CommerceItemTrans commerceItemTrans = new CommerceItemTrans();
-        commerceItemTrans.setHash(productEntity.getHash());
-        commerceItemTrans.setTitle(productEntity.getProductTitle());
+    public static class WrappedInventoryItemReward {
+        private final InventoryItemEntity inventoryItemEntity;
 
-        if (useCount != -1) {
-            commerceItemTrans.setTitle(commerceItemTrans.getTitle() + " x" + useCount);
+        private final Integer useCount;
+
+        public WrappedInventoryItemReward(InventoryItemEntity inventoryItemEntity, Integer useCount) {
+            this.inventoryItemEntity = inventoryItemEntity;
+            this.useCount = useCount;
         }
 
-        return commerceItemTrans;
+        public InventoryItemEntity getInventoryItemEntity() {
+            return inventoryItemEntity;
+        }
+
+        public Integer getUseCount() {
+            return useCount;
+        }
+    }
+
+    public static class WrappedCarReward {
+        private final CarSlotEntity carSlotEntity;
+
+        private final ProductEntity productEntity;
+
+        public WrappedCarReward(CarSlotEntity carSlotEntity, ProductEntity productEntity) {
+            this.carSlotEntity = carSlotEntity;
+            this.productEntity = productEntity;
+        }
+
+        public CarSlotEntity getCarSlotEntity() {
+            return carSlotEntity;
+        }
+
+        public ProductEntity getProductEntity() {
+            return productEntity;
+        }
+    }
+
+    public static class RewardedItemsContainer {
+        private final List<ItemRewardCash> cashRewardList = new ArrayList<>();
+
+        private final List<WrappedInventoryItemReward> inventoryItemList = new ArrayList<>();
+
+        private final List<WrappedCarReward> carRewardList = new ArrayList<>();
+
+        public List<ItemRewardCash> getCashRewardList() {
+            return cashRewardList;
+        }
+
+        public List<WrappedInventoryItemReward> getInventoryItemList() {
+            return inventoryItemList;
+        }
+
+        public List<WrappedCarReward> getCarRewardList() {
+            return carRewardList;
+        }
+    }
+
+    /**
+     * Reward builder for cash rewards
+     */
+    public static class CashRewardBuilder extends RewardBuilder<ItemRewardCash> {
+
+        private int cash;
+
+        /**
+         * Sets the cash amount of the reward
+         *
+         * @param cash The cash amount
+         * @return The updated builder
+         */
+        public CashRewardBuilder amount(int cash) {
+            this.cash = cash;
+            return this;
+        }
+
+        @Override
+        public ItemRewardCash build() {
+            return new ItemRewardCash(this.cash);
+        }
+    }
+
+    /**
+     * Base class for a reward builder
+     *
+     * @param <T> Reward object type
+     */
+    private abstract static class RewardBuilder<T extends ItemRewardBase> {
+        public abstract T build();
     }
 
     /**
      * Exposes access to builder objects for rewards.
      */
+    @SuppressWarnings("unused")
     public class RewardGenerator {
         /**
          * Creates a cash reward builder
@@ -291,55 +400,6 @@ public class ItemRewardBO {
             return table().tableName(tableName).weighted(true).build();
         }
         //endregion
-    }
-
-    /**
-     * Reward builder for cash rewards
-     */
-    public class CashRewardBuilder extends RewardBuilder<ItemRewardCash> {
-
-        private int cash;
-
-        /**
-         * Sets the cash amount of the reward
-         *
-         * @param cash The cash amount
-         * @return The updated builder
-         */
-        public CashRewardBuilder amount(int cash) {
-            this.cash = cash;
-            return this;
-        }
-
-        @Override
-        public ItemRewardCash build() {
-            return new ItemRewardCash(this.cash);
-        }
-    }
-
-    /**
-     * Reward builder for random selections
-     */
-    public class RandomSelectionBuilder extends RewardBuilder<ItemRewardBase> {
-
-        private List<ItemRewardBase> choices;
-
-        public RandomSelectionBuilder withChoices(List<ItemRewardBase> choices) {
-            this.choices = choices;
-            return this;
-        }
-
-        public RandomSelectionBuilder withBuilders(List<RewardBuilder<?>> choices) {
-            this.choices =
-                    choices.stream().map((Function<RewardBuilder<?>, ItemRewardBase>) RewardBuilder::build).collect(Collectors.toList());
-            return this;
-        }
-
-        @Override
-        public ItemRewardBase build() {
-            Objects.requireNonNull(this.choices);
-            return this.choices.get(random.nextInt(this.choices.size()));
-        }
     }
 
     /**
@@ -486,7 +546,7 @@ public class ItemRewardBO {
 
             if (items.isEmpty()) {
                 throw new EngineException("No items are available in table " + this.tableName,
-                        EngineExceptionCode.LuckyDrawContextNotFoundOrEmpty);
+                        EngineExceptionCode.LuckyDrawContextNotFoundOrEmpty, true);
             }
 
             int numItems = items.size();
@@ -515,14 +575,14 @@ public class ItemRewardBO {
 
                 if (randomIndex == -1) {
                     throw new EngineException("Weighted random failed for " + this.tableName,
-                            EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                            EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
                 }
 
                 RewardTableItemEntity rewardTableItemEntity = items.get(randomIndex);
                 try {
                     return scriptToItem(rewardTableItemEntity.getScript());
                 } catch (Exception e) {
-                    throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                    throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
                 }
             }
 
@@ -531,17 +591,34 @@ public class ItemRewardBO {
             try {
                 return scriptToItem(rewardTableItemEntity.getScript());
             } catch (Exception e) {
-                throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct);
+                throw new EngineException("Could not execute script: " + rewardTableItemEntity.getScript(), e, EngineExceptionCode.LuckyDrawCouldNotDrawProduct, true);
             }
         }
     }
 
     /**
-     * Base class for a reward builder
-     *
-     * @param <T> Reward object type
+     * Reward builder for random selections
      */
-    private abstract class RewardBuilder<T extends ItemRewardBase> {
-        public abstract T build();
+    @SuppressWarnings("unused")
+    public class RandomSelectionBuilder extends RewardBuilder<ItemRewardBase> {
+
+        private List<ItemRewardBase> choices;
+
+        public RandomSelectionBuilder withChoices(List<ItemRewardBase> choices) {
+            this.choices = choices;
+            return this;
+        }
+
+        public RandomSelectionBuilder withBuilders(List<RewardBuilder<?>> choices) {
+            this.choices =
+                    choices.stream().map((Function<RewardBuilder<?>, ItemRewardBase>) RewardBuilder::build).collect(Collectors.toList());
+            return this;
+        }
+
+        @Override
+        public ItemRewardBase build() {
+            Objects.requireNonNull(this.choices);
+            return this.choices.get(random.nextInt(this.choices.size()));
+        }
     }
 }

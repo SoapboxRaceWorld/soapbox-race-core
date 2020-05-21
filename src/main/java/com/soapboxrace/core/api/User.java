@@ -22,15 +22,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 import java.util.Objects;
 
 @Path("User")
 public class User {
-
-    @Context
-    UriInfo uri;
 
     @Context
     private HttpServletRequest sr;
@@ -53,6 +48,9 @@ public class User {
     @EJB
     private PresenceBO presenceBO;
 
+    @EJB
+    private MatchmakingBO matchmakingBO;
+
     @POST
     @Secured
     @Path("GetPermanentSession")
@@ -66,21 +64,20 @@ public class User {
             // Ideally this will never happen. Then again, plenty of weird stuff has happened.
             tokenBO.deleteByUserId(userId);
 
-            throw new EngineException(EngineExceptionCode.BannedEntitlements);
+            throw new EngineException(EngineExceptionCode.BannedEntitlements, true);
         }
 
         int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
-        int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS");
+        int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS", -1);
 
         if (maxOnlinePlayers != -1) {
             if (numberOfUsersOnlineNow >= maxOnlinePlayers) {
-                throw new EngineException(EngineExceptionCode.MaximumUsersLoggedInHardCapReached);
+                throw new EngineException(EngineExceptionCode.MaximumUsersLoggedInHardCapReached, true);
             }
         }
 
         tokenBO.deleteByUserId(userId);
-        URI myUri = uri.getBaseUri();
-        String randomUUID = tokenBO.createToken(userId, myUri.getHost());
+        String randomUUID = tokenBO.createToken(userId, sr.getRemoteHost());
         UserInfo userInfo = userBO.getUserById(userId);
         userInfo.getUser().setSecurityToken(randomUUID);
         userBO.createXmppUser(userInfo);
@@ -96,6 +93,9 @@ public class User {
                                      @QueryParam("personaId") Long personaId) {
         tokenBO.setActivePersonaId(securityToken, personaId, false);
         userBO.secureLoginPersona(userId, personaId);
+        // Question: Why is this here?
+        // Answer: Weird things happen sometimes.
+        matchmakingBO.removePlayerFromQueue(personaId);
         return "";
     }
 
@@ -109,6 +109,7 @@ public class User {
         long activePersonaId = tokenBO.getActivePersonaId(securityToken);
         tokenBO.setActivePersonaId(securityToken, 0L, true);
         presenceBO.removePresence(activePersonaId);
+        matchmakingBO.removePlayerFromQueue(personaId);
 
         return "";
     }

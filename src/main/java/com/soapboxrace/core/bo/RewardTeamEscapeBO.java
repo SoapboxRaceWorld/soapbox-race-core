@@ -8,10 +8,7 @@ package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.EventEntity;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.SkillModRewardType;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.TeamEscapeArbitrationPacket;
@@ -21,7 +18,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
-public class RewardTeamEscapeBO extends RewardBO {
+public class RewardTeamEscapeBO extends RewardEventBO<TeamEscapeArbitrationPacket> {
 
     @EJB
     private PersonaDAO personaDao;
@@ -29,11 +26,13 @@ public class RewardTeamEscapeBO extends RewardBO {
     @EJB
     private LegitRaceBO legitRaceBO;
 
-    public Accolades getTeamEscapeAccolades(Long activePersonaId,
-                                            TeamEscapeArbitrationPacket teamEscapeArbitrationPacket,
-                                            EventSessionEntity eventSessionEntity) {
+    public Accolades getAccolades(Long activePersonaId,
+                                  TeamEscapeArbitrationPacket teamEscapeArbitrationPacket,
+                                  EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, AchievementTransaction achievementTransaction) {
         int finishReason = teamEscapeArbitrationPacket.getFinishReason();
-        if (!legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity) || finishReason != 22) {
+        boolean legit = legitRaceBO.isLegit(activePersonaId, teamEscapeArbitrationPacket, eventSessionEntity, eventDataEntity);
+        eventDataEntity.setLegit(legit);
+        if (!legit || finishReason != 22) {
             return new Accolades();
         }
 
@@ -72,7 +71,7 @@ public class RewardTeamEscapeBO extends RewardBO {
         setAmplifierReward(personaEntity, rewardVO);
 
         teamEscapeArbitrationPacket.setRank(RandomUtils.nextInt(1, 5));
-        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, true, achievementTransaction);
         return getAccolades(personaEntity, eventEntity, teamEscapeArbitrationPacket, rewardVO);
     }
 }

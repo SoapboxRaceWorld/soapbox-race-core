@@ -64,8 +64,17 @@ public class EventEntity {
     private float rank7CashMultiplier;
     private float rank8CashMultiplier;
     private float minTopSpeedTrigger;
+    private long rewardsTimeLimit;
     private long legitTime;
     private float trackLength;
+    @Column(columnDefinition = "integer default 60000")
+    private int lobbyCountdownTime = 60000;
+    @Column(columnDefinition = "integer default 60000")
+    private int dnfTimerTime = 60000;
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 1", nullable = false)
+    private boolean isRaceAgainEnabled;
+    @Column(columnDefinition = "TINYINT(1) DEFAULT 1", nullable = false)
+    private boolean isDnfEnabled;
 
     @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank1_id", referencedColumnName = "ID")
@@ -179,12 +188,12 @@ public class EventEntity {
         this.maxPlayers = maxPlayers;
     }
 
-    public long getLegitTime() {
-        return legitTime;
+    public long getRewardsTimeLimit() {
+        return rewardsTimeLimit;
     }
 
-    public void setLegitTime(long legitTime) {
-        this.legitTime = legitTime;
+    public void setRewardsTimeLimit(long rewardsTimeLimit) {
+        this.rewardsTimeLimit = rewardsTimeLimit;
     }
 
     public int getBaseRepReward() {
@@ -427,6 +436,22 @@ public class EventEntity {
         this.trackLength = trackLength;
     }
 
+    public int getLobbyCountdownTime() {
+        return lobbyCountdownTime;
+    }
+
+    public void setLobbyCountdownTime(int lobbyCountdownTime) {
+        this.lobbyCountdownTime = lobbyCountdownTime;
+    }
+
+    public int getDnfTimerTime() {
+        return dnfTimerTime;
+    }
+
+    public void setDnfTimerTime(int dnfTimerTime) {
+        this.dnfTimerTime = dnfTimerTime;
+    }
+
     public RewardTableEntity getRewardTableRank1() {
         return rewardTableRank1;
     }
@@ -497,5 +522,29 @@ public class EventEntity {
 
     public void setRotationEnabled(boolean rotationEnabled) {
         isRotationEnabled = rotationEnabled;
+    }
+
+    public boolean isDnfEnabled() {
+        return isDnfEnabled;
+    }
+
+    public void setDnfEnabled(boolean dnfEnabled) {
+        isDnfEnabled = dnfEnabled;
+    }
+
+    public boolean isRaceAgainEnabled() {
+        return isRaceAgainEnabled;
+    }
+
+    public void setRaceAgainEnabled(boolean raceAgainEnabled) {
+        isRaceAgainEnabled = raceAgainEnabled;
+    }
+
+    public long getLegitTime() {
+        return legitTime;
+    }
+
+    public void setLegitTime(long legitTime) {
+        this.legitTime = legitTime;
     }
 }

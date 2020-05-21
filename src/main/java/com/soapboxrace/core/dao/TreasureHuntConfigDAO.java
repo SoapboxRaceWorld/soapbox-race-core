@@ -35,6 +35,6 @@ public class TreasureHuntConfigDAO extends BaseDAO<TreasureHuntConfigEntity> {
             return resultList.get(0);
         }
 
-        throw new EngineException("No treasure hunt configuration was found in the database", EngineExceptionCode.UnspecifiedError);
+        throw new EngineException("No treasure hunt configuration was found in the database", EngineExceptionCode.UnspecifiedError, true);
     }
 }

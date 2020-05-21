@@ -50,17 +50,12 @@ public class TokenSessionBO {
         }
         long time = new Date().getTime();
         long tokenTime = tokenSessionEntity.getExpirationDate().getTime();
-        if (time > tokenTime) {
-            return false;
-        }
-        tokenSessionEntity.setExpirationDate(getMinutes(3));
-        tokenDAO.update(tokenSessionEntity);
-        return true;
+        return time <= tokenTime;
     }
 
     public String createToken(Long userId, String clientHostName) {
         TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
-        Date expirationDate = getMinutes(15);
+        Date expirationDate = getMinutes(parameterBO.getIntParam("SESSION_LENGTH_MINUTES", 130));
         tokenSessionEntity.setExpirationDate(expirationDate);
         String randomUUID = UUIDGen.getRandomUUID();
         tokenSessionEntity.setSecurityToken(randomUUID);
@@ -76,11 +71,11 @@ public class TokenSessionBO {
     public void verifyPersonaOwnership(String securityToken, Long personaId) {
         TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
         if (tokenSession == null) {
-            throw new EngineException(EngineExceptionCode.NoSuchSessionInSessionStore);
+            throw new EngineException(EngineExceptionCode.NoSuchSessionInSessionStore, true);
         }
 
         if (!tokenSession.getUserEntity().ownsPersona(personaId)) {
-            throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser);
+            throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser, true);
         }
     }
 
@@ -142,7 +137,7 @@ public class TokenSessionBO {
                     userDAO.update(userEntity);
                     Long userId = userEntity.getId();
                     deleteByUserId(userId);
-                    String randomUUID = createToken(userId, null);
+                    String randomUUID = createToken(userId, httpRequest.getRemoteHost());
                     loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
                     loginStatusVO.setDescription("");
 
@@ -164,7 +159,7 @@ public class TokenSessionBO {
 
         if (!isLogout) {
             if (!tokenSessionEntity.getUserEntity().ownsPersona(personaId)) {
-                throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser);
+                throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser, true);
             }
         }
 

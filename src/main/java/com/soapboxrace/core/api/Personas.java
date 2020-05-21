@@ -99,7 +99,11 @@ public class Personas {
             if (productEntity != null) {
                 switch (productEntity.getProductType()) {
                     case "PRESETCAR":
-                        commerceResultTrans.setStatus(basketBO.buyCar(productId, personaEntity, securityToken,
+                        commerceResultTrans.setStatus(basketBO.buyCar(productEntity, personaEntity, securityToken,
+                                commerceResultTrans));
+                        break;
+                    case "BUNDLE":
+                        commerceResultTrans.setStatus(basketBO.buyBundle(productId, personaEntity,
                                 commerceResultTrans));
                         break;
                     case "BUNDLE":
@@ -141,6 +145,7 @@ public class Personas {
 
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
         List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
+//        System.out.println("personas/id/carslots: " + personaId + " has " + personasCar.size() + " cars (curCarIndex=" + personaEntity.getCurCarIndex() + ")");
         ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
         for (CarSlotEntity carSlotEntity : personasCar) {
             OwnedCarEntity ownedCarEntity = carSlotEntity.getOwnedCar();
@@ -183,7 +188,7 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public InventoryTrans inventoryObjects(@HeaderParam("securityToken") String securityToken) {
         long personaId = sessionBO.getActivePersonaId(securityToken);
-        return inventoryBO.getClientInventory(inventoryBO.getInventory(personaId));
+        return inventoryBO.getClientInventory(inventoryBO.getInventory(personaBO.getPersonaById(personaId)));
     }
 
     @GET

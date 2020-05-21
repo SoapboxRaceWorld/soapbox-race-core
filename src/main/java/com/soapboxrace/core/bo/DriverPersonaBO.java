@@ -71,7 +71,12 @@ public class DriverPersonaBO {
         UserEntity userEntity = userDao.findById(userId);
 
         if (userEntity.getPersonas().size() >= 3) {
-            return null;
+            throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached, false);
+        }
+
+        if (personaEntity.getIconIndex() < 0
+                || personaEntity.getIconIndex() > parameterBO.getIntParam("MAX_ICON_INDEX", 26)) {
+            throw new EngineException(EngineExceptionCode.InvalidOperation, false);
         }
 
         personaEntity.setUser(userEntity);
@@ -128,7 +133,7 @@ public class DriverPersonaBO {
         return profileData;
     }
 
-    private ArrayOfBadgePacket getBadges(Long personaId) {
+    public ArrayOfBadgePacket getBadges(Long personaId) {
         ArrayOfBadgePacket arrayOfBadgePacket = new ArrayOfBadgePacket();
 
         for (PersonaBadgeEntity personaBadgeEntity : personaBadgeDAO.findAllBadgesForPersona(personaId)) {
@@ -139,7 +144,7 @@ public class DriverPersonaBO {
                 BadgePacket badgePacket = new BadgePacket();
                 badgePacket.setAchievementRankId(personaAchievementRankEntity.getAchievementRankEntity().getId().intValue());
                 badgePacket.setBadgeDefinitionId(personaBadgeEntity.getBadgeDefinitionEntity().getId().intValue());
-                badgePacket.setIsRare(personaAchievementRankEntity.getAchievementRankEntity().getRarity() <= 0.05f);
+                badgePacket.setIsRare(personaAchievementRankEntity.getAchievementRankEntity().isRare());
                 badgePacket.setRarity(personaAchievementRankEntity.getAchievementRankEntity().getRarity());
                 badgePacket.setSlotId(personaBadgeEntity.getSlot().shortValue());
                 arrayOfBadgePacket.getBadgePacket().add(badgePacket);
@@ -179,6 +184,7 @@ public class DriverPersonaBO {
 
     public void deletePersona(Long personaId) {
         PersonaEntity personaEntity = personaDao.findById(personaId);
+        UserEntity user = personaEntity.getUser();
         List<CarSlotEntity> carSlots = carSlotDAO.findByPersonaId(personaId);
         for (CarSlotEntity carSlotEntity : carSlots) {
             carSlotDAO.delete(carSlotEntity);
@@ -194,6 +200,8 @@ public class DriverPersonaBO {
         socialRelationshipDAO.deleteAllByPersonaId(personaId);
 
         personaDao.delete(personaEntity);
+        user.setSelectedPersonaIndex(Math.max(0, user.getSelectedPersonaIndex() - 1));
+        userDao.update(user);
     }
 
     public PersonaPresence getPersonaPresenceByName(String name) {
@@ -205,7 +213,7 @@ public class DriverPersonaBO {
             personaPresence.setUserId(personaEntity.getUser().getId());
             return personaPresence;
         }
-        throw new EngineException(EngineExceptionCode.PersonaNotFound);
+        throw new EngineException(EngineExceptionCode.PersonaNotFound, false);
     }
 
     public void updateStatusMessage(String message, Long personaId) {

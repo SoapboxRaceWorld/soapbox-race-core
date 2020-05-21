@@ -6,28 +6,28 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.EventDataDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.EventDataEntity;
-import com.soapboxrace.core.jpa.EventMode;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.XmppEvent;
-import com.soapboxrace.jaxb.http.*;
+import com.soapboxrace.jaxb.http.ArrayOfDragEntrantResult;
+import com.soapboxrace.jaxb.http.DragArbitrationPacket;
+import com.soapboxrace.jaxb.http.DragEntrantResult;
+import com.soapboxrace.jaxb.http.DragEventResult;
 import com.soapboxrace.jaxb.xmpp.XMPP_DragEntrantResultType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeDragEntrantResult;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.HashMap;
 
 @Stateless
-public class EventResultDragBO {
+public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, DragEventResult> {
 
     @EJB
     private EventSessionDAO eventSessionDao;
@@ -50,12 +50,12 @@ public class EventResultDragBO {
     @EJB
     private AchievementBO achievementBO;
 
-    public DragEventResult handleDragEnd(EventSessionEntity eventSessionEntity, Long activePersonaId,
-                                         DragArbitrationPacket dragArbitrationPacket) {
-        Long eventSessionId = eventSessionEntity.getId();
-        eventSessionEntity.setEnded(System.currentTimeMillis());
+    @EJB
+    private DNFTimerBO dnfTimerBO;
 
-        eventSessionDao.update(eventSessionEntity);
+    protected DragEventResult handleInternal(EventSessionEntity eventSessionEntity, Long activePersonaId,
+                                             DragArbitrationPacket dragArbitrationPacket) {
+        Long eventSessionId = eventSessionEntity.getId();
 
         XMPP_DragEntrantResultType xmppDragResult = new XMPP_DragEntrantResultType();
         xmppDragResult.setEventDurationInMilliseconds(dragArbitrationPacket.getEventDurationInMilliseconds());
@@ -71,24 +71,17 @@ public class EventResultDragBO {
         EventDataEntity eventDataEntity = eventDataDao.findByPersonaAndEventSessionId(activePersonaId, eventSessionId);
 
         if (eventDataEntity.getFinishReason() != 0) {
-            throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration);
+            throw new EngineException("Session already completed.", EngineExceptionCode.SecurityKickedArbitration, true);
         }
 
-        eventDataEntity.setAlternateEventDurationInMilliseconds(dragArbitrationPacket.getAlternateEventDurationInMilliseconds());
-        eventDataEntity.setCarId(dragArbitrationPacket.getCarId());
-        eventDataEntity.setEventDurationInMilliseconds(dragArbitrationPacket.getEventDurationInMilliseconds());
-        eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
-        eventDataEntity.setFinishReason(dragArbitrationPacket.getFinishReason());
+        prepareBasicEventData(eventDataEntity, activePersonaId, dragArbitrationPacket);
         eventDataEntity.setFractionCompleted(dragArbitrationPacket.getFractionCompleted());
-        eventDataEntity.setHacksDetected(dragArbitrationPacket.getHacksDetected());
         eventDataEntity.setLongestJumpDurationInMilliseconds(dragArbitrationPacket.getLongestJumpDurationInMilliseconds());
         eventDataEntity.setNumberOfCollisions(dragArbitrationPacket.getNumberOfCollisions());
         eventDataEntity.setPerfectStart(dragArbitrationPacket.getPerfectStart());
-        eventDataEntity.setPersonaId(activePersonaId);
-        eventDataEntity.setRank(dragArbitrationPacket.getRank());
         eventDataEntity.setSumOfJumpsDurationInMilliseconds(dragArbitrationPacket.getSumOfJumpsDurationInMilliseconds());
         eventDataEntity.setTopSpeed(dragArbitrationPacket.getTopSpeed());
-        eventDataDao.update(eventDataEntity);
+        eventSessionEntity.setEnded(System.currentTimeMillis());
 
         ArrayOfDragEntrantResult arrayOfDragEntrantResult = new ArrayOfDragEntrantResult();
         for (EventDataEntity racer : eventDataDao.getRacers(eventSessionId)) {
@@ -104,38 +97,34 @@ public class EventResultDragBO {
             if (!racer.getPersonaId().equals(activePersonaId)) {
                 XmppEvent xmppEvent = new XmppEvent(racer.getPersonaId(), openFireSoapBoxCli);
                 xmppEvent.sendDragEnd(dragEntrantResultResponse);
-                if (dragArbitrationPacket.getRank() == 1) {
-                    xmppEvent.sendEventTimingOut(eventSessionId);
+                if (dragArbitrationPacket.getFinishReason() == 22 && dragArbitrationPacket.getRank() == 1 && eventSessionEntity.getEvent().isDnfEnabled()) {
+                    xmppEvent.sendEventTimingOut(eventSessionEntity);
+                    dnfTimerBO.scheduleDNF(eventSessionEntity, racer.getPersonaId());
                 }
             }
         }
 
+        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         DragEventResult dragEventResult = new DragEventResult();
-        dragEventResult.setAccolades(rewardDragBO.getDragAccolades(activePersonaId, dragArbitrationPacket,
-                eventSessionEntity));
-        dragEventResult.setDurability(carDamageBO.updateDamageCar(activePersonaId, dragArbitrationPacket,
-                dragArbitrationPacket.getNumberOfCollisions()));
+        dragEventResult.setAccolades(rewardDragBO.getAccolades(activePersonaId, dragArbitrationPacket,
+                eventDataEntity, eventSessionEntity, transaction));
+        dragEventResult.setDurability(carDamageBO.induceCarDamage(activePersonaId, dragArbitrationPacket,
+                eventDataEntity.getEvent()));
         dragEventResult.setEntrants(arrayOfDragEntrantResult);
         dragEventResult.setEventId(eventDataEntity.getEvent().getId());
         dragEventResult.setEventSessionId(eventSessionId);
-        dragEventResult.setExitPath(eventSessionEntity.getLobby() == null ? ExitPath.EXIT_TO_FREEROAM :
-                ExitPath.EXIT_TO_LOBBY);
-        dragEventResult.setInviteLifetimeInMilliseconds(0);
-        dragEventResult.setLobbyInviteId(0);
         dragEventResult.setPersonaId(activePersonaId);
+        prepareRaceAgain(eventSessionEntity, dragEventResult);
+        updateEventAchievements(eventDataEntity, eventSessionEntity, activePersonaId, dragArbitrationPacket, transaction);
+        achievementBO.commitTransaction(personaEntity, transaction);
 
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        eventSessionDao.update(eventSessionEntity);
+        eventDataDao.update(eventDataEntity);
 
-        achievementBO.updateAchievements(personaEntity, "EVENT", new HashMap<String, Object>() {{
-            put("persona", personaEntity);
-            put("event", eventDataEntity.getEvent());
-            put("eventData", eventDataEntity);
-            put("eventSession", eventSessionEntity);
-            put("eventContext", new AchievementEventContext(
-                    EventMode.fromId(eventDataEntity.getEvent().getEventModeId()),
-                    dragArbitrationPacket,
-                    eventSessionEntity));
-        }});
+        if (eventSessionEntity.getLobby() != null && !eventSessionEntity.getLobby().getIsPrivate()) {
+            matchmakingBO.resetIgnoredEvents(activePersonaId);
+        }
 
         return dragEventResult;
     }

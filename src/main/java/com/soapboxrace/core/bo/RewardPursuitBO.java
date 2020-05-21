@@ -8,10 +8,7 @@ package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.jpa.EventEntity;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.SkillModRewardType;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.EnumRewardType;
 import com.soapboxrace.jaxb.http.PursuitArbitrationPacket;
@@ -21,7 +18,7 @@ import javax.ejb.Stateless;
 import java.util.Random;
 
 @Stateless
-public class RewardPursuitBO extends RewardBO {
+public class RewardPursuitBO extends RewardEventBO<PursuitArbitrationPacket> {
 
     @EJB
     private PersonaDAO personaDao;
@@ -29,11 +26,14 @@ public class RewardPursuitBO extends RewardBO {
     @EJB
     private LegitRaceBO legitRaceBO;
 
-    public Accolades getPursuitAccolades(Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
-                                         EventSessionEntity eventSessionEntity,
-                                         Boolean isBusted) {
+    public Accolades getAccolades(Long activePersonaId, PursuitArbitrationPacket pursuitArbitrationPacket,
+                                  EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity,
+                                  AchievementTransaction achievementTransaction) {
         int finishReason = pursuitArbitrationPacket.getFinishReason();
-        if (!legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity) || isBusted || finishReason != 518) {
+        boolean legit = legitRaceBO.isLegit(activePersonaId, pursuitArbitrationPacket, eventSessionEntity, eventDataEntity);
+        eventDataEntity.setLegit(legit);
+        boolean isBusted = pursuitArbitrationPacket.getFinishReason() == 266;
+        if (!legit || isBusted || finishReason != 518) {
             return new Accolades();
         }
         EventEntity eventEntity = eventSessionEntity.getEvent();
@@ -44,7 +44,7 @@ public class RewardPursuitBO extends RewardBO {
 
         Random random = new Random();
         pursuitArbitrationPacket.setRank(random.nextInt(4 - 1) + 1);
-        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity);
+        applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, true, achievementTransaction);
         return getAccolades(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
     }
 

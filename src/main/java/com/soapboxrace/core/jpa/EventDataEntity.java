@@ -62,6 +62,11 @@ public class EventDataEntity {
     private long hacksDetected;
     @Column(name = "`rank`")
     private int rank;
+    @Column(columnDefinition = "tinyint(1) default 0")
+    private boolean isLegit;
+    private long serverTimeInMilliseconds;
+    private long serverTimeStarted;
+    private long serverTimeEnded;
 
     public Long getId() {
         return id;
@@ -293,4 +298,35 @@ public class EventDataEntity {
         this.distanceToFinish = value;
     }
 
+    public boolean isLegit() {
+        return isLegit;
+    }
+
+    public void setLegit(boolean legit) {
+        isLegit = legit;
+    }
+
+    public long getServerTimeInMilliseconds() {
+        return serverTimeInMilliseconds;
+    }
+
+    public void setServerTimeInMilliseconds(long serverTimeInMilliseconds) {
+        this.serverTimeInMilliseconds = serverTimeInMilliseconds;
+    }
+
+    public long getServerTimeStarted() {
+        return serverTimeStarted;
+    }
+
+    public void setServerTimeStarted(long serverTimeStarted) {
+        this.serverTimeStarted = serverTimeStarted;
+    }
+
+    public long getServerTimeEnded() {
+        return serverTimeEnded;
+    }
+
+    public void setServerTimeEnded(long serverTimeEnded) {
+        this.serverTimeEnded = serverTimeEnded;
+    }
 }

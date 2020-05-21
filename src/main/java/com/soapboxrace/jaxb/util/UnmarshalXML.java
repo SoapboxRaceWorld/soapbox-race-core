@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 public class UnmarshalXML {
 
+    @SuppressWarnings("deprecated")
     public static <T> T unMarshal(InputStream is, Class<T> classz) {
         try {
             InputStreamReader inputStreamReader = new InputStreamReader(is);

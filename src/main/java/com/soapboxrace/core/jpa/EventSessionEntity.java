@@ -25,6 +25,10 @@ public class EventSessionEntity {
     @JoinColumn(name = "LOBBYID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENTSESSION_LOBBY"))
     private LobbyEntity lobby;
 
+    @OneToOne
+    @JoinColumn(name = "NEXTLOBBYID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENTSESSION_NEXTLOBBY"))
+    private LobbyEntity nextLobby;
+
     @Column(name = "STARTED")
     private Long started;
 
@@ -53,6 +57,14 @@ public class EventSessionEntity {
 
     public void setLobby(LobbyEntity lobby) {
         this.lobby = lobby;
+    }
+
+    public LobbyEntity getNextLobby() {
+        return nextLobby;
+    }
+
+    public void setNextLobby(LobbyEntity nextLobby) {
+        this.nextLobby = nextLobby;
     }
 
     public Long getEnded() {

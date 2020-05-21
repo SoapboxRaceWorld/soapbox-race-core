@@ -58,6 +58,9 @@ public class UserEntity {
     @Column(name = "lastLogin")
     private LocalDateTime lastLogin;
 
+    @Column(columnDefinition = "integer default 0")
+    private Integer selectedPersonaIndex = 0;
+
     public Long getId() {
         return this.id;
     }
@@ -154,4 +157,11 @@ public class UserEntity {
         this.gameHardwareHash = gameHardwareHash;
     }
 
+    public Integer getSelectedPersonaIndex() {
+        return selectedPersonaIndex;
+    }
+
+    public void setSelectedPersonaIndex(Integer selectedPersonaIndex) {
+        this.selectedPersonaIndex = selectedPersonaIndex;
+    }
 }

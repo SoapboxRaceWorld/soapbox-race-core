@@ -30,29 +30,41 @@ public class RedisBO {
 
     @PostConstruct
     public void init() {
-        String redisHost = parameterBO.getStrParam("REDIS_HOST", "localhost");
-        Integer redisPort = parameterBO.getIntParam("REDIS_PORT", 6379);
-        String redisPassword = parameterBO.getStrParam("REDIS_PASSWORD", "");
+        if (this.parameterBO.getBoolParam("ENABLE_REDIS")) {
+            String redisHost = parameterBO.getStrParam("REDIS_HOST", "localhost");
+            Integer redisPort = parameterBO.getIntParam("REDIS_PORT", 6379);
+            String redisPassword = parameterBO.getStrParam("REDIS_PASSWORD", "");
 
-        this.redisURI = RedisURI.builder().withHost(redisHost).withPort(redisPort).withPassword(redisPassword).build();
-        this.redisClient = RedisClient.create();
+            this.redisURI = RedisURI.builder().withHost(redisHost).withPort(redisPort).withPassword(redisPassword).build();
+            this.redisClient = RedisClient.create();
 
-        try {
-            this.connection = this.redisClient.connect(redisURI);
-        } catch (RedisException exception) {
-            throw new RuntimeException("Failed to connect to Redis server on " + redisHost + ":" + redisPort, exception);
+            try {
+                this.connection = this.redisClient.connect(redisURI);
+                System.out.println("Connected to Redis server!");
+            } catch (RedisException exception) {
+                throw new RuntimeException("Failed to connect to Redis server on " + redisHost + ":" + redisPort, exception);
+            }
         }
     }
 
     public StatefulRedisPubSubConnection<String, String> createPubSub() {
+        if (this.redisClient == null) {
+            throw new RuntimeException("Redis is disabled!");
+        }
         return this.redisClient.connectPubSub(redisURI);
     }
 
     public RedisClient getRedisClient() {
+        if (this.redisClient == null) {
+            throw new RuntimeException("Redis is disabled!");
+        }
         return redisClient;
     }
 
     public StatefulRedisConnection<String, String> getConnection() {
+        if (this.redisClient == null) {
+            throw new RuntimeException("Redis is disabled!");
+        }
         return connection;
     }
 }
