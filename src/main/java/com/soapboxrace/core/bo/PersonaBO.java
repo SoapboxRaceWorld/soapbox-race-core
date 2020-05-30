@@ -86,7 +86,6 @@ public class PersonaBO {
             i++;
         }
         personaEntity.setCurCarIndex(i);
-//        System.out.println("changeDefaultCar: curCarIndex=" + i);
     }
 
     public PersonaEntity getPersonaById(Long personaId) {
@@ -97,7 +96,6 @@ public class PersonaBO {
         PersonaEntity personaEntity = personaDAO.findById(personaId);
         List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
         int curCarIndex = personaEntity.getCurCarIndex();
-//        System.out.println("getDefaultCarEntity: curCarIndex=" + curCarIndex + ", carSlotList has " + carSlotList.size() + " cars");
         if (!carSlotList.isEmpty()) {
             if (curCarIndex >= carSlotList.size()) {
                 curCarIndex = carSlotList.size() - 1;
