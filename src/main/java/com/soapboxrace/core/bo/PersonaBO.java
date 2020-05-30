@@ -38,6 +38,9 @@ public class PersonaBO {
     @EJB
     private BadgeDefinitionDAO badgeDefinitionDAO;
 
+    @EJB
+    private CarDamageBO carDamageBO;
+
     public void updateBadges(Long personaId, BadgeBundle badgeBundle) {
         PersonaEntity personaEntity = personaDAO.findById(personaId);
 
@@ -119,8 +122,8 @@ public class PersonaBO {
 
         for (CarSlotEntity carSlotEntity : carSlotEntities) {
             OwnedCarEntity ownedCarEntity = carSlotEntity.getOwnedCar();
-            ownedCarEntity.setDurability(100);
-            ownedCarDAO.update(ownedCarEntity);
+
+            carDamageBO.updateDurability(ownedCarEntity, 100);
         }
     }
 
