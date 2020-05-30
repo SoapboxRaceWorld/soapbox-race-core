@@ -41,6 +41,9 @@ public class Powerups {
     @EJB
     private AchievementBO achievementBO;
 
+    @EJB
+    private EventPowerupBO eventPowerupBO;
+
     @POST
     @Secured
     @Path("/activated/{powerupHash}")
@@ -69,6 +72,10 @@ public class Powerups {
             AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
             transaction.add("INVENTORY", Map.of("persona", personaEntity, "ctx", new AchievementInventoryContext(inventoryItemEntity, AchievementInventoryContext.Event.QUANTITY_DECREASED)));
             achievementBO.commitTransaction(personaEntity, transaction);
+        }
+
+        if (eventSessionId != 0L) {
+            eventPowerupBO.createPowerupRecord(eventSessionId, activePersonaId, powerupHash);
         }
 
         return "";
