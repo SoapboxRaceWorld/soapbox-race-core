@@ -13,7 +13,7 @@ import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.HardwareInfoEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.HardwareInfo;
-import com.soapboxrace.jaxb.util.UnmarshalXML;
+import com.soapboxrace.jaxb.util.JAXBUtility;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -37,7 +37,7 @@ public class Reporting {
     @Path("/SendHardwareInfo")
     @Produces(MediaType.APPLICATION_XML)
     public String sendHardwareInfo(InputStream is, @HeaderParam("securityToken") String securityToken) {
-        HardwareInfo hardwareInfo = UnmarshalXML.unMarshal(is, HardwareInfo.class);
+        HardwareInfo hardwareInfo = JAXBUtility.unMarshal(is, HardwareInfo.class);
         HardwareInfoEntity hardwareInfoEntity = hardwareInfoBO.save(hardwareInfo);
         UserEntity user = tokenBO.getUser(securityToken);
         user.setGameHardwareHash(hardwareInfoEntity.getHardwareHash());

@@ -9,7 +9,7 @@ package com.soapboxrace.core.bo;
 import com.soapboxrace.core.dao.HardwareInfoDAO;
 import com.soapboxrace.core.jpa.HardwareInfoEntity;
 import com.soapboxrace.jaxb.http.HardwareInfo;
-import com.soapboxrace.jaxb.util.MarshalXML;
+import com.soapboxrace.jaxb.util.JAXBUtility;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.ejb.EJB;
@@ -36,7 +36,7 @@ public class HardwareInfoBO {
         hardwareInfo.setCpuid12(0);
         hardwareInfo.setCpuid13(0);
         hardwareInfo.setUserID(0);
-        String hardwareInfoXml = MarshalXML.marshal(hardwareInfo);
+        String hardwareInfoXml = JAXBUtility.marshal(hardwareInfo);
         String calcHardwareInfoHash = calcHardwareInfoHash(hardwareInfoXml);
         HardwareInfoEntity hardwareInfoEntityTmp = hardwareInfoDAO.findByHardwareHash(calcHardwareInfoHash);
         if (hardwareInfoEntityTmp == null) {

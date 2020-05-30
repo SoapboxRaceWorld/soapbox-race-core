@@ -10,7 +10,7 @@ import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.jaxb.http.*;
-import com.soapboxrace.jaxb.util.MarshalXML;
+import com.soapboxrace.jaxb.util.JAXBUtility;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -109,7 +109,7 @@ public class Events {
     public String notifyCoinCollected(@HeaderParam("securityToken") String securityToken,
                                       @QueryParam("coins") Integer coins) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-        return MarshalXML.marshal(eventsBO.notifyCoinCollected(activePersonaId, coins));
+        return JAXBUtility.marshal(eventsBO.notifyCoinCollected(activePersonaId, coins));
     }
 
     @GET
@@ -118,7 +118,7 @@ public class Events {
     @Produces(MediaType.APPLICATION_XML)
     public String accolades(@HeaderParam("securityToken") String securityToken) {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-        return MarshalXML.marshal(eventsBO.accolades(activePersonaId, false));
+        return JAXBUtility.marshal(eventsBO.accolades(activePersonaId, false));
     }
 
     @GET

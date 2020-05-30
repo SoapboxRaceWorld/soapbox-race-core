@@ -12,7 +12,7 @@ import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.jaxb.http.BadgeBundle;
-import com.soapboxrace.jaxb.util.UnmarshalXML;
+import com.soapboxrace.jaxb.util.JAXBUtility;
 
 import javax.ejb.EJB;
 import javax.ws.rs.HeaderParam;
@@ -39,7 +39,7 @@ public class Badges {
             throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, false);
         }
 
-        personaBO.updateBadges(activePersonaId, UnmarshalXML.unMarshal(inputStream, BadgeBundle.class));
+        personaBO.updateBadges(activePersonaId, JAXBUtility.unMarshal(inputStream, BadgeBundle.class));
 
         return "";
     }
