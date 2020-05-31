@@ -47,6 +47,8 @@ public class TokenSessionEntity {
 
     private String webToken;
 
+    private Long eventSessionId;
+
     public String getSecurityToken() {
         return securityToken;
     }
@@ -117,5 +119,13 @@ public class TokenSessionEntity {
 
     public void setWebToken(String webToken) {
         this.webToken = webToken;
+    }
+
+    public Long getEventSessionId() {
+        return eventSessionId;
+    }
+
+    public void setEventSessionId(Long eventSessionId) {
+        this.eventSessionId = eventSessionId;
     }
 }

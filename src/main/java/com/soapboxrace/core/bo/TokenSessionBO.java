@@ -64,6 +64,7 @@ public class TokenSessionBO {
         tokenSessionEntity.setPremium(userEntity.isPremium());
         tokenSessionEntity.setClientHostIp(clientHostName);
         tokenSessionEntity.setActivePersonaId(0L);
+        tokenSessionEntity.setEventSessionId(null);
         tokenDAO.insert(tokenSessionEntity);
         return randomUUID;
     }
@@ -189,5 +190,15 @@ public class TokenSessionBO {
 
     public UserEntity getUser(String securityToken) {
         return tokenDAO.findById(securityToken).getUserEntity();
+    }
+
+    public void setEventSessionId(String securityToken, Long eventSessionId) {
+        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+        tokenSessionEntity.setEventSessionId(eventSessionId);
+        tokenDAO.update(tokenSessionEntity);
+    }
+
+    public Long getEventSessionId(String securityToken) {
+        return tokenDAO.findById(securityToken).getEventSessionId();
     }
 }

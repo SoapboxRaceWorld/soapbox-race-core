@@ -60,6 +60,7 @@ public class Event {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
         matchmakingBO.removePlayerFromQueue(activePersonaId);
         eventBO.createEventDataSession(activePersonaId, eventSessionId);
+        tokenBO.setEventSessionId(securityToken, eventSessionId);
         return "";
     }
 
@@ -104,6 +105,8 @@ public class Event {
             default:
                 break;
         }
+
+        tokenBO.setEventSessionId(securityToken, null);
 
         if (eventResult == null) {
             return "";

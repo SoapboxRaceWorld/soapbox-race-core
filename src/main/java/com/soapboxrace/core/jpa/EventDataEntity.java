@@ -62,7 +62,7 @@ public class EventDataEntity {
     private long hacksDetected;
     @Column(name = "`rank`")
     private int rank;
-    @Column(columnDefinition = "tinyint(1) default 0")
+    @Column(columnDefinition = "BIT default 0")
     private boolean isLegit;
     private long serverTimeInMilliseconds;
     private long serverTimeStarted;

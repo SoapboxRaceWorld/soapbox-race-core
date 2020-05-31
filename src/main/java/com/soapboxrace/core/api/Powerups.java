@@ -74,8 +74,9 @@ public class Powerups {
             achievementBO.commitTransaction(personaEntity, transaction);
         }
 
-        if (eventSessionId != 0L) {
-            eventPowerupBO.createPowerupRecord(eventSessionId, activePersonaId, powerupHash);
+        Long realEventSessionId = tokenBO.getEventSessionId(securityToken);
+        if (realEventSessionId != null) {
+            eventPowerupBO.createPowerupRecord(realEventSessionId, activePersonaId, powerupHash);
         }
 
         return "";

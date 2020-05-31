@@ -12,11 +12,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "PRODUCT", indexes = {
-        @Index(name = "prod_id_index", columnList = "productId")
+        @Index(name = "prod_id_index", columnList = "productId"),
+        @Index(name = "parent_prod_id_index", columnList = "parentProductId")
 })
 @NamedQueries({ //
         @NamedQuery(name = "ProductEntity.findByLevelEnabled", //
-                query = "SELECT obj FROM ProductEntity obj WHERE " //
+                query = "SELECT obj FROM ProductEntity obj INNER JOIN FETCH obj.bundleItems WHERE " //
                         + "obj.enabled = :enabled AND "//
                         + "obj.minLevel <= :minLevel AND " //
                         + "(obj.premium = false or obj.premium = :premium )AND " //

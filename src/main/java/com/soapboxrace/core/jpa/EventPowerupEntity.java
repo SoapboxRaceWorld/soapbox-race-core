@@ -14,11 +14,11 @@ public class EventPowerupEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(targetEntity = PersonaEntity.class, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(targetEntity = PersonaEntity.class, optional = false)
     @JoinColumn(name = "personaId", referencedColumnName = "id", nullable = false)
     private PersonaEntity personaEntity;
 
-    @ManyToOne(targetEntity = EventSessionEntity.class, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(targetEntity = EventSessionEntity.class, optional = false)
     @JoinColumn(name = "eventSessionId", referencedColumnName = "id", nullable = false)
     private EventSessionEntity eventSessionEntity;
 
