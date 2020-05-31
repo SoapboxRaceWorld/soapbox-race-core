@@ -49,11 +49,9 @@ public class CarDamageBO {
         }
 
         Long carId = arbitrationPacket.getCarId();
-        long eventDuration = arbitrationPacket.getEventDurationInMilliseconds();
         OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(carId);
         int durability = ownedCarEntity.getDurability();
         if (durability > 0) {
-//            int calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
             int calcDamage = eventEntity.getEventModeId() == 19 ? 2 : 5; // 5% for non-drags, 2% for drags
             int newCarDamage = Math.max(durability - calcDamage, 0);
 
