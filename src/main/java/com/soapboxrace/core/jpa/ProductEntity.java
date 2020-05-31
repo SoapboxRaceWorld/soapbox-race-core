@@ -17,7 +17,7 @@ import java.util.List;
 })
 @NamedQueries({ //
         @NamedQuery(name = "ProductEntity.findByLevelEnabled", //
-                query = "SELECT obj FROM ProductEntity obj INNER JOIN FETCH obj.bundleItems WHERE " //
+                query = "SELECT obj FROM ProductEntity obj WHERE " //
                         + "obj.enabled = :enabled AND "//
                         + "obj.minLevel <= :minLevel AND " //
                         + "(obj.premium = false or obj.premium = :premium )AND " //
