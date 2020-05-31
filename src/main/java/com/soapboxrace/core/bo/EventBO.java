@@ -42,12 +42,16 @@ public class EventBO {
     }
 
     public void createEventDataSession(Long personaId, Long eventSessionId) {
+        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId).getOwnedCar();
+
         EventSessionEntity eventSessionEntity = findEventSessionById(eventSessionId);
         EventDataEntity eventDataEntity = new EventDataEntity();
         eventDataEntity.setPersonaId(personaId);
         eventDataEntity.setEventSessionId(eventSessionId);
         eventDataEntity.setEvent(eventSessionEntity.getEvent());
         eventDataEntity.setServerTimeStarted(System.currentTimeMillis());
+        eventDataEntity.setCarClassHash(ownedCarEntity.getCustomCar().getCarClassHash());
+        eventDataEntity.setCarRating(ownedCarEntity.getCustomCar().getRating());
         eventDataDao.insert(eventDataEntity);
     }
 
