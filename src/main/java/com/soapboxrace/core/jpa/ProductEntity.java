@@ -6,9 +6,15 @@
 
 package com.soapboxrace.core.jpa;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "PRODUCT", indexes = {
@@ -99,7 +105,9 @@ public class ProductEntity implements Serializable {
     private Double dropWeight;
 
     @OneToMany(mappedBy = "parentProduct", targetEntity = ProductEntity.class, fetch = FetchType.EAGER)
-    private List<ProductEntity> bundleItems;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Fetch(FetchMode.JOIN)
+    private Set<ProductEntity> bundleItems;
 
     public Long getId() {
         return id;
@@ -341,11 +349,11 @@ public class ProductEntity implements Serializable {
         this.parentProduct = parentProduct;
     }
 
-    public List<ProductEntity> getBundleItems() {
+    public Set<ProductEntity> getBundleItems() {
         return bundleItems;
     }
 
-    public void setBundleItems(List<ProductEntity> bundleItems) {
+    public void setBundleItems(Set<ProductEntity> bundleItems) {
         this.bundleItems = bundleItems;
     }
 
