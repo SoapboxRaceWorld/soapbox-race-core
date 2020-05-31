@@ -29,7 +29,7 @@ public class GetServerInformationBO {
         serverInfoEntity.setOnlineNumber(onlineUsersBO.getNumberOfUsersOnlineNow());
         String ticketToken = parameterBO.getStrParam("TICKET_TOKEN");
         serverInfoEntity.setRequireTicket(ticketToken != null);
-        serverInfoEntity.setServerVersion("1.0.2");
+        serverInfoEntity.setServerVersion("1.0.3-snapshot");
 
         return serverInfoEntity;
     }
