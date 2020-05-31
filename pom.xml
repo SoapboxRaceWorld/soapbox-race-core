@@ -2,7 +2,7 @@
 <!--
   ~ This file is part of the Soapbox Race World core source code.
   ~ If you use any of this code for third-party purposes, please provide attribution.
-  ~ Copyright (c) 2019. 
+  ~ Copyright (c) 2020.
   -->
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -12,7 +12,7 @@
 
     <groupId>world.soapboxrace</groupId>
     <artifactId>core</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>Soapbox Race World Core</name>
