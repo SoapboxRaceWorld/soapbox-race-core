@@ -23,7 +23,7 @@ public class RewardVO implements Serializable {
     int baseCash = 0;
     int rep = 0;
     int cash = 0;
-    ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
+    final ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
     private final boolean enableEconomy;
     private final boolean enableReputation;
 

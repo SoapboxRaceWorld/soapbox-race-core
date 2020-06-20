@@ -14,19 +14,19 @@ import java.time.LocalDateTime;
 @NamedQueries({
         @NamedQuery(
                 name = "InventoryItemEntity.findAllByPersonaId",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.personaId = " +
                         ":personaId"),
         @NamedQuery(
                 name = "InventoryItemEntity.findAllByPersonaIdAndTag",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.personaId = " +
                         ":personaId AND obj.productEntity.entitlementTag = :entitlementTag"),
         @NamedQuery(
                 name = "InventoryItemEntity.findAllByPersonaIdAndHash",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.personaId = " +
                         ":personaId AND obj.productEntity.hash = :hash"),
         @NamedQuery(
                 name = "InventoryItemEntity.findAllByPersonaIdAndType",
-                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.id = " +
+                query = "SELECT obj FROM InventoryItemEntity obj WHERE obj.inventoryEntity.personaEntity.personaId = " +
                         ":personaId AND obj.productEntity.productType = :productType"),
         @NamedQuery(
                 name = "InventoryItemEntity.findAllByInventoryAndTag",

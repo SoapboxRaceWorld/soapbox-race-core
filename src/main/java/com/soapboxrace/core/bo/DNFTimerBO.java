@@ -35,8 +35,8 @@ public class DNFTimerBO {
     }
 
     private static class DNFTimerInfo implements Serializable {
-        public Long eventSessionId;
-        public Long personaId;
+        public final Long eventSessionId;
+        public final Long personaId;
 
         public DNFTimerInfo(Long eventSessionId, Long personaId) {
             this.eventSessionId = eventSessionId;
