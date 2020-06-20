@@ -11,22 +11,22 @@ import com.soapboxrace.jaxb.http.LobbyEntrantRemoved;
 import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "XMPP_ResponseTypeEntrantRemoved", propOrder = {"lobbyExit"})
+@XmlType(name = "XMPP_ResponseTypeEntrantRemoved", propOrder = {"lobbyEntrantRemoved"})
 @XmlRootElement(name = "response")
 public class XMPP_ResponseTypeEntrantRemoved {
     @XmlElement(name = "LobbyEntrantRemoved", required = true)
-    protected LobbyEntrantRemoved lobbyExit;
+    protected LobbyEntrantRemoved lobbyEntrantRemoved;
     @XmlAttribute(name = "status")
     protected int status = 1;
     @XmlAttribute(name = "ticket")
     protected int ticket = 0;
 
-    public LobbyEntrantRemoved getLobbyExit() {
-        return lobbyExit;
+    public LobbyEntrantRemoved getLobbyEntrantRemoved() {
+        return lobbyEntrantRemoved;
     }
 
-    public void setLobbyExit(LobbyEntrantRemoved lobbyExit) {
-        this.lobbyExit = lobbyExit;
+    public void setLobbyEntrantRemoved(LobbyEntrantRemoved lobbyEntrantRemoved) {
+        this.lobbyEntrantRemoved = lobbyEntrantRemoved;
     }
 
     public int getStatus() {

@@ -7,7 +7,6 @@ import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.LobbyEntrantEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
-import com.soapboxrace.core.xmpp.XmppLobby;
 import com.soapboxrace.jaxb.http.Entrants;
 import com.soapboxrace.jaxb.http.LobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.LobbyEntrantState;
@@ -40,6 +39,9 @@ public class LobbyCountdownBO {
 
     @EJB
     private ParameterBO parameterBO;
+
+    @EJB
+    private LobbyMessagingBO lobbyMessagingBO;
 
     public void scheduleLobbyStart(LobbyEntity lobbyEntity) {
         TimerConfig timerConfig = new TimerConfig();
@@ -119,7 +121,6 @@ public class LobbyCountdownBO {
 
         lobbyLaunched.setEventSession(xMPP_EventSessionType);
 
-        XmppLobby xmppLobby = new XmppLobby(0L, openFireSoapBoxCli);
-        xmppLobby.sendRelay(lobbyLaunched, xMPP_CryptoTicketsType);
+        lobbyMessagingBO.sendRelay(lobbyLaunched, xMPP_CryptoTicketsType);
     }
 }
