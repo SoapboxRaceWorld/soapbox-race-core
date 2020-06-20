@@ -134,28 +134,25 @@ public class AdminBO {
 
             info.action = action;
 
-            switch (action) {
-                case BAN: {
-                    LocalDateTime endTime;
-                    String reason = null;
+            if (action == CmdAction.BAN) {
+                LocalDateTime endTime;
+                String reason = null;
 
-                    if (split.length >= 2) {
-                        long givenTime = MiscUtils.lengthToMiliseconds(split[1]);
-                        if (givenTime != 0) {
-                            endTime = LocalDateTime.now().plusSeconds(givenTime / 1000);
-                            info.timeEnd = endTime;
+                if (split.length >= 2) {
+                    long givenTime = MiscUtils.lengthToMiliseconds(split[1]);
+                    if (givenTime != 0) {
+                        endTime = LocalDateTime.now().plusSeconds(givenTime / 1000);
+                        info.timeEnd = endTime;
 
-                            if (split.length > 2) {
-                                reason = MiscUtils.argsToString(split, 2, split.length);
-                            }
-                        } else {
-                            reason = MiscUtils.argsToString(split, 1, split.length);
+                        if (split.length > 2) {
+                            reason = MiscUtils.argsToString(split, 2, split.length);
                         }
+                    } else {
+                        reason = MiscUtils.argsToString(split, 1, split.length);
                     }
-
-                    info.reason = reason;
-                    break;
                 }
+
+                info.reason = reason;
             }
 
             return info;

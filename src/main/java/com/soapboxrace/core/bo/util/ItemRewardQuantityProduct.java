@@ -9,7 +9,7 @@ package com.soapboxrace.core.bo.util;
 import com.soapboxrace.core.jpa.ProductEntity;
 
 public class ItemRewardQuantityProduct extends ItemRewardProduct {
-    private Integer useCount;
+    private final Integer useCount;
 
     public ItemRewardQuantityProduct(ProductEntity productEntity) {
         super(productEntity);
