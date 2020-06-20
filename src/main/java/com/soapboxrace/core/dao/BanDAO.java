@@ -37,7 +37,7 @@ public class BanDAO extends BaseDAO<BanEntity> {
     }
 
     public void unbanUser(UserEntity userEntity) {
-        Query createQuery = entityManager.createQuery("DELETE BanEntity obj WHERE obj.userEntity = :user");
+        Query createQuery = entityManager.createQuery("DELETE FROM BanEntity obj WHERE obj.userEntity = :user");
         createQuery.setParameter("user", userEntity);
         createQuery.executeUpdate();
     }
