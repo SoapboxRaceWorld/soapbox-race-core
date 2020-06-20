@@ -25,6 +25,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Date;
+import java.util.UUID;
 
 @Stateless
 public class TokenSessionBO {
@@ -57,7 +58,7 @@ public class TokenSessionBO {
         TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
         Date expirationDate = getMinutes(parameterBO.getIntParam("SESSION_LENGTH_MINUTES", 130));
         tokenSessionEntity.setExpirationDate(expirationDate);
-        String randomUUID = UUIDGen.getRandomUUID();
+        String randomUUID = UUID.randomUUID().toString();
         tokenSessionEntity.setSecurityToken(randomUUID);
         UserEntity userEntity = userDAO.findById(userId);
         tokenSessionEntity.setUserEntity(userEntity);

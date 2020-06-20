@@ -7,11 +7,11 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
-import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.jaxb.http.FraudConfig;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.UUID;
 
 @Path("/security")
 public class Security {
@@ -35,6 +35,6 @@ public class Security {
     @Path("/generateWebToken")
     @Produces(MediaType.APPLICATION_XML)
     public String generateWebToken() {
-        return "<string>" + UUIDGen.getRandomUUID() + "</string>";
+        return "<string>" + UUID.randomUUID().toString() + "</string>";
     }
 }
