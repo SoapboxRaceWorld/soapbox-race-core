@@ -49,7 +49,7 @@ public class LobbyMessagingBO {
     }
 
     /**
-     * Prepares and sends a new {@link com.soapboxrace.jaxb.http.LobbyEntrantRemoved>} message
+     * Prepares and sends a new {@link com.soapboxrace.jaxb.http.LobbyEntrantRemoved} message
      * to the given recipient {@link com.soapboxrace.core.jpa.PersonaEntity}.
      *
      * @param lobbyEntity      The {@link LobbyEntity} attached to the message.
@@ -64,6 +64,31 @@ public class LobbyMessagingBO {
 
         XMPP_ResponseTypeEntrantRemoved response = new XMPP_ResponseTypeEntrantRemoved();
         response.setLobbyEntrantRemoved(lobbyEntrantRemoved);
+
+        openFireSoapBoxCli.send(response, recipientPersona.getPersonaId());
+    }
+
+    /**
+     * Prepares and sends a new {@link com.soapboxrace.jaxb.xmpp.XMPP_LobbyInviteType} message
+     * to the given recipient {@link com.soapboxrace.core.jpa.PersonaEntity}.
+     *
+     * @param lobbyEntity      The {@link LobbyEntity} attached to the message.
+     * @param recipientPersona The {@link PersonaEntity} receiving the message.
+     * @param inviteLifetime   The lifetime of the invitation in milliseconds.
+     */
+    public void sendLobbyInvitation(LobbyEntity lobbyEntity, PersonaEntity recipientPersona, long inviteLifetime) {
+        XMPP_LobbyInviteType lobbyInvite = new XMPP_LobbyInviteType();
+        lobbyInvite.setEventId(lobbyEntity.getEvent().getId());
+        lobbyInvite.setLobbyInviteId(lobbyEntity.getId());
+
+        if (!lobbyEntity.getPersonaId().equals(recipientPersona.getPersonaId())) {
+            lobbyInvite.setInvitedByPersonaId(lobbyEntity.getPersonaId());
+            lobbyInvite.setInviteLifetimeInMilliseconds(inviteLifetime);
+            lobbyInvite.setPrivate(lobbyEntity.getIsPrivate());
+        }
+
+        XMPP_ResponseTypeLobbyInvite response = new XMPP_ResponseTypeLobbyInvite();
+        response.setLobbyInvite(lobbyInvite);
 
         openFireSoapBoxCli.send(response, recipientPersona.getPersonaId());
     }
@@ -88,9 +113,5 @@ public class LobbyMessagingBO {
             responseType.setLobbyInvite(lobbyLaunched);
             openFireSoapBoxCli.send(responseType, personaId);
         }
-    }
-
-    public void sendLobbyInvite(XMPP_LobbyInviteType lobbyInviteType, PersonaEntity recipientPersona) {
-        openFireSoapBoxCli.send(lobbyInviteType, recipientPersona.getPersonaId());
     }
 }
