@@ -55,7 +55,6 @@ public class LobbyCountdownBO {
         LobbyEntity lobbyEntity = lobbyDAO.findById(lobbyId);
         List<LobbyEntrantEntity> entrants = lobbyEntity.getEntrants();
         if (entrants.size() < 2) {
-            lobbyDAO.delete(lobbyEntity);
             return;
         }
         entrants.sort(Comparator.<LobbyEntrantEntity>comparingLong(e -> e.getPersona().getPersonaId()).reversed());
