@@ -6,7 +6,6 @@ import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.LobbyEntrantEntity;
-import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.http.Entrants;
 import com.soapboxrace.jaxb.http.LobbyEntrantInfo;
 import com.soapboxrace.jaxb.http.LobbyEntrantState;
@@ -24,9 +23,6 @@ import java.util.List;
 public class LobbyCountdownBO {
     @Resource
     private TimerService timerService;
-
-    @EJB
-    private OpenFireSoapBoxCli openFireSoapBoxCli;
 
     @EJB
     private LobbyDAO lobbyDAO;
