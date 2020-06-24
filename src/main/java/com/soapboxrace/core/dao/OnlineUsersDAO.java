@@ -29,11 +29,11 @@ public class OnlineUsersDAO extends BaseDAO<OnlineUsersEntity> {
     }
 
     public OnlineUsersEntity findByTime(Date time) {
-        Long timeLong = time.getTime() / 1000L;
+        long timeLong = time.getTime() / 1000L;
 
         TypedQuery<OnlineUsersEntity> query = entityManager.createNamedQuery("OnlineUsersEntity.findByTime",
                 OnlineUsersEntity.class);
-        query.setParameter("time", timeLong.intValue());
+        query.setParameter("time", (int) timeLong);
 
         List<OnlineUsersEntity> resultList = query.getResultList();
         return !resultList.isEmpty() ? resultList.get(0) : null;

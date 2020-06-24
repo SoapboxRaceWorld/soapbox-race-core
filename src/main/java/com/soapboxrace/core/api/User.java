@@ -67,7 +67,7 @@ public class User {
             throw new EngineException(EngineExceptionCode.BannedEntitlements, true);
         }
 
-        int numberOfUsersOnlineNow = onlineUsersBO.getNumberOfUsersOnlineNow();
+        long numberOfUsersOnlineNow = onlineUsersBO.getOnlineUsersStats().getNumberOfOnline();
         int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS", -1);
 
         if (maxOnlinePlayers != -1) {

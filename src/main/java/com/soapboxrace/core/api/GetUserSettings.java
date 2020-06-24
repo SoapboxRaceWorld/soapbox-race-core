@@ -10,7 +10,7 @@ import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.GetServerInformationBO;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.SceneryBO;
-import com.soapboxrace.core.jpa.ServerInfoEntity;
+import com.soapboxrace.core.bo.util.ServerInformationVO;
 import com.soapboxrace.jaxb.http.ArrayOfLong;
 import com.soapboxrace.jaxb.http.ArrayOfString;
 import com.soapboxrace.jaxb.http.UserSettings;
@@ -40,7 +40,7 @@ public class GetUserSettings {
     @Produces(MediaType.APPLICATION_XML)
     public UserSettings getUserSettingsGet(@HeaderParam("userId") Long userId,
                                            @HeaderParam("securityToken") String securityToken) {
-        ServerInfoEntity serverInformation = serverInformationBO.getServerInformation();
+        ServerInformationVO serverInformation = serverInformationBO.getServerInformation();
         List<String> activatedSceneryGroups = serverInformation.getActivatedHolidaySceneryGroups();
         List<String> disactivatedSceneryGroups = serverInformation.getDisactivatedHolidaySceneryGroups();
         List<Long> sceneryIds = activatedSceneryGroups.stream()

@@ -46,4 +46,8 @@ public class UserDAO extends BaseDAO<UserEntity> {
         List<UserEntity> resultList = query.getResultList();
         return !resultList.isEmpty() ? resultList.get(0) : null;
     }
+
+    public Long countUsers() {
+        return entityManager.createNamedQuery("UserEntity.countUsers", Long.class).getSingleResult();
+    }
 }

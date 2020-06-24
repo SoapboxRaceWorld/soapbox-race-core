@@ -7,6 +7,7 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.OnlineUsersDAO;
+import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.OnlineUsersEntity;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 
@@ -22,18 +23,20 @@ public class OnlineUsersBO {
     OpenFireRestApiCli openFireRestApiCli;
     @EJB
     private OnlineUsersDAO onlineUsersDAO;
+    @EJB
+    private UserDAO userDAO;
 
-    public int getNumberOfUsersOnlineNow() {
+    public OnlineUsersEntity getOnlineUsersStats() {
         Date lastMinutes = getLastMinutes(1);
-        OnlineUsersEntity onlineUsersEntity = onlineUsersDAO.findByTime(lastMinutes);
-        return onlineUsersEntity != null ? onlineUsersEntity.getNumberOfUsers() : 0;
+        return onlineUsersDAO.findByTime(lastMinutes);
     }
 
     @Schedule(minute = "*", hour = "*", persistent = false)
     public void insertNumberOfUsesOnlineNow() {
         long timeLong = new Date().getTime() / 1000L;
         OnlineUsersEntity onlineUsersEntity = new OnlineUsersEntity();
-        onlineUsersEntity.setNumberOfUsers(openFireRestApiCli.getTotalOnlineUsers());
+        onlineUsersEntity.setNumberOfOnline(openFireRestApiCli.getTotalOnlineUsers());
+        onlineUsersEntity.setNumberOfRegistered(userDAO.countUsers());
         onlineUsersEntity.setTimeRecord((int) timeLong);
         onlineUsersDAO.insert(onlineUsersEntity);
     }

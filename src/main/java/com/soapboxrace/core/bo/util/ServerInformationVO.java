@@ -1,53 +1,29 @@
-/*
- * This file is part of the Soapbox Race World core source code.
- * If you use any of this code for third-party purposes, please provide attribution.
- * Copyright (c) 2020.
- */
+package com.soapboxrace.core.bo.util;
 
-package com.soapboxrace.core.jpa;
-
-import com.soapboxrace.core.jpa.convert.SceneryGroupConverter;
-
-import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "SERVER_INFO")
-@NamedQueries({ //
-        @NamedQuery(name = "ServerInfoEntity.findAll", query = "SELECT obj FROM ServerInfoEntity obj"), //
-        @NamedQuery(name = "ServerInfoEntity.updateNumberOfRegistered", query = "UPDATE ServerInfoEntity obj SET obj" +
-                ".numberOfRegistered=obj.numberOfRegistered+1") //
-})
-public class ServerInfoEntity {
-    @Column(length = 1000)
+public class ServerInformationVO {
     private String messageSrv;
 
     private String homePageUrl;
     private String facebookUrl;
     private String discordUrl;
-    @Id
+
     private String serverName;
     private String country;
     private Integer timezone;
     private String bannerUrl;
     private String adminList;
     private String ownerList;
-    private Integer numberOfRegistered;
-    @Column(columnDefinition = "integer default 7200")
+    private Long numberOfRegistered;
     private Integer secondsToShutDown = 7200;
     private String allowedCountries;
 
-    @Convert(converter = SceneryGroupConverter.class)
     private List<String> activatedHolidaySceneryGroups;
-
-    @Convert(converter = SceneryGroupConverter.class)
     private List<String> disactivatedHolidaySceneryGroups;
 
-    @Transient
-    private Integer onlineNumber;
-    @Transient
+    private Long onlineNumber;
     private boolean requireTicket = false;
-    @Transient
     private String serverVersion;
 
     public String getMessageSrv() {
@@ -130,19 +106,51 @@ public class ServerInfoEntity {
         this.ownerList = ownerList;
     }
 
-    public Integer getNumberOfRegistered() {
+    public Long getNumberOfRegistered() {
         return numberOfRegistered;
     }
 
-    public void setNumberOfRegistered(Integer numberOfRegistered) {
+    public void setNumberOfRegistered(Long numberOfRegistered) {
         this.numberOfRegistered = numberOfRegistered;
     }
 
-    public Integer getOnlineNumber() {
+    public Integer getSecondsToShutDown() {
+        return secondsToShutDown;
+    }
+
+    public void setSecondsToShutDown(Integer secondsToShutDown) {
+        this.secondsToShutDown = secondsToShutDown;
+    }
+
+    public String getAllowedCountries() {
+        return allowedCountries;
+    }
+
+    public void setAllowedCountries(String allowedCountries) {
+        this.allowedCountries = allowedCountries;
+    }
+
+    public List<String> getActivatedHolidaySceneryGroups() {
+        return activatedHolidaySceneryGroups;
+    }
+
+    public void setActivatedHolidaySceneryGroups(List<String> activatedHolidaySceneryGroups) {
+        this.activatedHolidaySceneryGroups = activatedHolidaySceneryGroups;
+    }
+
+    public List<String> getDisactivatedHolidaySceneryGroups() {
+        return disactivatedHolidaySceneryGroups;
+    }
+
+    public void setDisactivatedHolidaySceneryGroups(List<String> disactivatedHolidaySceneryGroups) {
+        this.disactivatedHolidaySceneryGroups = disactivatedHolidaySceneryGroups;
+    }
+
+    public Long getOnlineNumber() {
         return onlineNumber;
     }
 
-    public void setOnlineNumber(Integer onlineNumber) {
+    public void setOnlineNumber(Long onlineNumber) {
         this.onlineNumber = onlineNumber;
     }
 
@@ -160,37 +168,5 @@ public class ServerInfoEntity {
 
     public void setServerVersion(String serverVersion) {
         this.serverVersion = serverVersion;
-    }
-
-    public List<String> getActivatedHolidaySceneryGroups() {
-        return this.activatedHolidaySceneryGroups;
-    }
-
-    public void setActivatedHolidaySceneryGroups(List<String> activatedHolidaySceneryGroups) {
-        this.activatedHolidaySceneryGroups = activatedHolidaySceneryGroups;
-    }
-
-    public List<String> getDisactivatedHolidaySceneryGroups() {
-        return this.disactivatedHolidaySceneryGroups;
-    }
-
-    public void setDisactivatedHolidaySceneryGroups(List<String> disactivatedHolidaySceneryGroups) {
-        this.disactivatedHolidaySceneryGroups = disactivatedHolidaySceneryGroups;
-    }
-
-    public String getAllowedCountries() {
-        return allowedCountries;
-    }
-
-    public void setAllowedCountries(String allowedCountries) {
-        this.allowedCountries = allowedCountries;
-    }
-
-    public Integer getSecondsToShutDown() {
-        return secondsToShutDown;
-    }
-
-    public void setSecondsToShutDown(Integer secondsToShutDown) {
-        this.secondsToShutDown = secondsToShutDown;
     }
 }
