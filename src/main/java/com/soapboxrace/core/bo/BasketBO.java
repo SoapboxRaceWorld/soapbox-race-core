@@ -275,8 +275,13 @@ public class BasketBO {
 
         performanceBO.calcNewCarClass(carSlotEntity.getOwnedCar().getCustomCar());
 
-        if (isRental && canAddAmplifier(personaEntity.getPersonaId(), "INSURANCE_AMPLIFIER")) {
-            addAmplifier(personaEntity, productDao.findByEntitlementTag("INSURANCE_AMPLIFIER"));
+        if (isRental) {
+            Long personaId = personaEntity.getPersonaId();
+            String insuranceEnt = "INSURANCE_AMPLIFIER";
+            if (!canAddAmplifier(personaId, insuranceEnt)) {
+                inventoryBO.removeItem(personaId, insuranceEnt);
+            }
+            addAmplifier(personaEntity, productDao.findByEntitlementTag(insuranceEnt));
         }
 
         CarClassesEntity carClassesEntity =
