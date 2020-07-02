@@ -83,8 +83,16 @@ public class LaunchFilter implements ContainerRequestFilter {
 
                 if (get_launcher.equals("SBRW")) {
                     ua_split = get_useragent.split(" ");
-
-                    if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("sbrw")) == -1) {
+                    
+                    if(get_useragent.startsWith("LegacyLauncher")) {
+                        if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("legacy")) == -1) {
+                            lock_access = true;
+                        }               
+                    } else if(get_useragent.startsWith("GameLauncherReborn")) {
+                        if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("sbrw")) == -1) {
+                            lock_access = true;
+                        }
+                    } else {
                         lock_access = true;
                     }
                 } else if (get_launcher.equals("ELECTRON")) {
