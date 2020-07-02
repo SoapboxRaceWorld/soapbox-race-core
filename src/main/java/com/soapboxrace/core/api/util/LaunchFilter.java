@@ -70,12 +70,13 @@ public class LaunchFilter implements ContainerRequestFilter {
             if (json_whitelisted_launchers != null) {
                 JSONObject obj_json_whitelisted_launchers = new JSONObject(json_whitelisted_launchers);
 
-                if (requestContext.getHeaderString("X-User-Agent") != null) {
-                    get_useragent = requestContext.getHeaderString("X-User-Agent");
-                    get_launcher = "ELECTRON";
-                } else if (requestContext.getHeaderString("X-UserAgent") != null) {
+
+                if (requestContext.getHeaderString("X-UserAgent") != null) {
                     get_useragent = requestContext.getHeaderString("X-UserAgent");
                     get_launcher = "SBRW";
+                } else if (requestContext.getHeaderString("user-agent") != null) {
+                    get_useragent = requestContext.getHeaderString("user-agent");
+                    get_launcher = "ELECTRON";
                 } else {
                     get_launcher = "JLAUNCHER";
                 }
@@ -99,36 +100,11 @@ public class LaunchFilter implements ContainerRequestFilter {
                 if (lock_access) {
                     LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
                     loginStatusVO.setDescription("You're using the wrong launcher, please update to the latest one:\n\n" +
-                            "    SBRW Launcher: https://worldunited.gg/download\n" +
+                            "    SBRW Launcher: https://git.io/Download_NFSW\n" +
                             "    Electron Launcher: https://launcher.sparkserver.eu/");
 
                     requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
                 }
-            }
-        }
-
-
-        if (parameterBO.getBoolParam("ENABLE_METONATOR_LAUNCHER_PROTECTION")) {
-            String userAgent = requestContext.getHeaderString("User-Agent");
-            String gameLauncherHash = requestContext.getHeaderString("X-GameLauncherHash");
-
-            if ((userAgent == null || !userAgent.equals("GameLauncher (+https://github.com/SoapboxRaceWorld/GameLauncher_NFSW)"))
-                    || (hwid == null || hwid.trim().isEmpty()) || (gameLauncherHash == null || gameLauncherHash.trim().isEmpty())) {
-                LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-                loginStatusVO.setDescription("Please use MeTonaTOR's launcher. Or, are you tampering?");
-
-                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
-
-                return;
-            }
-
-            //disable electron aswell
-            String userAgent2 = requestContext.getHeaderString("X-User-Agent");
-            if ((userAgent2 != null && userAgent2.startsWith("electron"))) {
-                LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-                loginStatusVO.setDescription("Please use MeTonaTOR's launcher. Or, are you tampering?");
-
-                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
             }
         }
     }
