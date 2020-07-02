@@ -15,9 +15,6 @@ import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.HardwareInfo;
 import com.soapboxrace.jaxb.util.JAXBUtility;
 
-import com.soapboxrace.core.engine.EngineException;
-import com.soapboxrace.core.engine.EngineExceptionCode;
-
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -39,17 +36,18 @@ public class Reporting {
     @Secured
     @Path("/SendHardwareInfo")
     @Produces(MediaType.APPLICATION_XML)
-    public String sendHardwareInfo(InputStream is, @HeaderParam("securityToken") String securityToken) {
+    public String sendHardwareInfo(InputStream is, @HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId) {
         HardwareInfo hardwareInfo = JAXBUtility.unMarshal(is, HardwareInfo.class);
 
-        if(hardwareInfo.getCpuid0().equals("GenuineIntel") || hardwareInfo.getCpuid0().equals("AutenticAmd")) {
+        if(hardwareInfo.getCpuid0().equals("GenuineIntel") || hardwareInfo.getCpuid0().equals("AuthenticAMD")) {
             HardwareInfoEntity hardwareInfoEntity = hardwareInfoBO.save(hardwareInfo);
             UserEntity user = tokenBO.getUser(securityToken);
             user.setGameHardwareHash(hardwareInfoEntity.getHardwareHash());
             userDAO.update(user);
             return "";
         } else {
-            throw new EngineException(EngineExceptionCode.BannedEntitlements, true);
+            tokenBO.deleteByUserId(userId);
+            return "";
         }
     }
 
