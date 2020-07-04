@@ -36,13 +36,18 @@ public class Reporting {
     @Secured
     @Path("/SendHardwareInfo")
     @Produces(MediaType.APPLICATION_XML)
-    public String sendHardwareInfo(InputStream is, @HeaderParam("securityToken") String securityToken) {
+    public String sendHardwareInfo(InputStream is, @HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId) {
         HardwareInfo hardwareInfo = JAXBUtility.unMarshal(is, HardwareInfo.class);
-        HardwareInfoEntity hardwareInfoEntity = hardwareInfoBO.save(hardwareInfo);
-        UserEntity user = tokenBO.getUser(securityToken);
-        user.setGameHardwareHash(hardwareInfoEntity.getHardwareHash());
-        userDAO.update(user);
-        return "";
+        if(hardwareInfo.getCpuid0().equals("GenuineIntel") || hardwareInfo.getCpuid0().equals("AuthenticAMD")) {
+            HardwareInfoEntity hardwareInfoEntity = hardwareInfoBO.save(hardwareInfo);
+            UserEntity user = tokenBO.getUser(securityToken);
+            user.setGameHardwareHash(hardwareInfoEntity.getHardwareHash());
+            userDAO.update(user);
+            return "";
+        } else {
+            tokenBO.deleteByUserId(userId);
+            return "";
+        }
     }
 
     @POST
