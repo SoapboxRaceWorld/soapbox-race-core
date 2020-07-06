@@ -1,6 +1,107 @@
 # v1.0.3 -> v1.0.4
 # as of july 6 2020
 
+CREATE TABLE EVENT_REWARD
+(
+    ID                         VARCHAR(255) NOT NULL,
+    event_id                   INT          NOT NULL,
+    baseRepReward              INT          NOT NULL DEFAULT 0,
+    levelRepRewardMultiplier   FLOAT        NOT NULL DEFAULT 0,
+    finalRepRewardMultiplier   FLOAT        NOT NULL DEFAULT 0,
+    perfectStartRepMultiplier  FLOAT        NOT NULL DEFAULT 0,
+    topSpeedRepMultiplier      FLOAT        NOT NULL DEFAULT 0,
+    rank1RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
+    rank2RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
+    rank3RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
+    rank4RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
+    rank5RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
+    rank6RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
+    rank7RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
+    rank8RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
+    baseCashReward             INT          NOT NULL DEFAULT 0,
+    levelCashRewardMultiplier  FLOAT        NOT NULL DEFAULT 0,
+    finalCashRewardMultiplier  FLOAT        NOT NULL DEFAULT 0,
+    perfectStartCashMultiplier FLOAT        NOT NULL DEFAULT 0,
+    topSpeedCashMultiplier     FLOAT        NOT NULL DEFAULT 0,
+    rank1CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
+    rank2CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
+    rank3CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
+    rank4CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
+    rank5CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
+    rank6CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
+    rank7CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
+    rank8CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
+    minTopSpeedTrigger         FLOAT        NOT NULL DEFAULT 0,
+    rewardTable_rank1_id       BIGINT       NULL,
+    rewardTable_rank2_id       BIGINT       NULL,
+    rewardTable_rank3_id       BIGINT       NULL,
+    rewardTable_rank4_id       BIGINT       NULL,
+    rewardTable_rank5_id       BIGINT       NULL,
+    rewardTable_rank6_id       BIGINT       NULL,
+    rewardTable_rank7_id       BIGINT       NULL,
+    rewardTable_rank8_id       BIGINT       NULL,
+
+    PRIMARY KEY (ID),
+    CONSTRAINT FK_EVENT_REWARD_EVENTID FOREIGN KEY (event_id) REFERENCES EVENT (ID),
+    CONSTRAINT FK_EVENT_REWARD_RANK1TABLE_ID FOREIGN KEY (rewardTable_rank1_id) REFERENCES REWARD_TABLE (ID),
+    CONSTRAINT FK_EVENT_REWARD_RANK2TABLE_ID FOREIGN KEY (rewardTable_rank2_id) REFERENCES REWARD_TABLE (ID),
+    CONSTRAINT FK_EVENT_REWARD_RANK3TABLE_ID FOREIGN KEY (rewardTable_rank3_id) REFERENCES REWARD_TABLE (ID),
+    CONSTRAINT FK_EVENT_REWARD_RANK4TABLE_ID FOREIGN KEY (rewardTable_rank4_id) REFERENCES REWARD_TABLE (ID),
+    CONSTRAINT FK_EVENT_REWARD_RANK5TABLE_ID FOREIGN KEY (rewardTable_rank5_id) REFERENCES REWARD_TABLE (ID),
+    CONSTRAINT FK_EVENT_REWARD_RANK6TABLE_ID FOREIGN KEY (rewardTable_rank6_id) REFERENCES REWARD_TABLE (ID),
+    CONSTRAINT FK_EVENT_REWARD_RANK7TABLE_ID FOREIGN KEY (rewardTable_rank7_id) REFERENCES REWARD_TABLE (ID),
+    CONSTRAINT FK_EVENT_REWARD_RANK8TABLE_ID FOREIGN KEY (rewardTable_rank8_id) REFERENCES REWARD_TABLE (ID)
+);
+
+INSERT INTO EVENT_REWARD (ID, event_id, baseRepReward, levelRepRewardMultiplier, finalRepRewardMultiplier,
+                          perfectStartRepMultiplier, topSpeedRepMultiplier, rank1RepMultiplier, rank2RepMultiplier,
+                          rank3RepMultiplier, rank4RepMultiplier, rank5RepMultiplier, rank6RepMultiplier,
+                          rank7RepMultiplier, rank8RepMultiplier, baseCashReward, levelCashRewardMultiplier,
+                          finalCashRewardMultiplier, perfectStartCashMultiplier, topSpeedCashMultiplier,
+                          rank1CashMultiplier, rank2CashMultiplier, rank3CashMultiplier, rank4CashMultiplier,
+                          rank5CashMultiplier, rank6CashMultiplier, rank7CashMultiplier, rank8CashMultiplier,
+                          minTopSpeedTrigger, rewardTable_rank1_id, rewardTable_rank2_id, rewardTable_rank3_id,
+                          rewardTable_rank4_id, rewardTable_rank5_id, rewardTable_rank6_id, rewardTable_rank7_id,
+                          rewardTable_rank8_id)
+SELECT CONCAT(E.ID, '_generic'),
+       E.ID,
+       E.baseRepReward,
+       E.levelRepRewardMultiplier,
+       E.finalRepRewardMultiplier,
+       E.perfectStartRepMultiplier,
+       E.topSpeedRepMultiplier,
+       E.rank1RepMultiplier,
+       E.rank2RepMultiplier,
+       E.rank3RepMultiplier,
+       E.rank4RepMultiplier,
+       E.rank5RepMultiplier,
+       E.rank6RepMultiplier,
+       E.rank7RepMultiplier,
+       E.rank8RepMultiplier,
+       E.baseCashReward,
+       E.levelCashRewardMultiplier,
+       E.finalCashRewardMultiplier,
+       E.perfectStartCashMultiplier,
+       E.topSpeedCashMultiplier,
+       E.rank1CashMultiplier,
+       E.rank2CashMultiplier,
+       E.rank3CashMultiplier,
+       E.rank4CashMultiplier,
+       E.rank5CashMultiplier,
+       E.rank6CashMultiplier,
+       E.rank7CashMultiplier,
+       E.rank8CashMultiplier,
+       E.minTopSpeedTrigger,
+       E.rewardTable_rank1_id,
+       E.rewardTable_rank2_id,
+       E.rewardTable_rank3_id,
+       E.rewardTable_rank4_id,
+       E.rewardTable_rank5_id,
+       E.rewardTable_rank6_id,
+       E.rewardTable_rank7_id,
+       E.rewardTable_rank8_id
+FROM EVENT E;
+
 ALTER TABLE EVENT
     DROP COLUMN baseRepReward;
 ALTER TABLE EVENT
@@ -91,54 +192,20 @@ ALTER TABLE EVENT
 ALTER TABLE EVENT
     DROP COLUMN rewardTable_rank8_id;
 
-CREATE TABLE EVENT_REWARD
-(
-    ID                         VARCHAR(255) NOT NULL,
-    event_id                   INT          NOT NULL,
-    baseRepReward              INT          NOT NULL DEFAULT 0,
-    levelRepRewardMultiplier   FLOAT        NOT NULL DEFAULT 0,
-    finalRepRewardMultiplier   FLOAT        NOT NULL DEFAULT 0,
-    perfectStartRepMultiplier  FLOAT        NOT NULL DEFAULT 0,
-    topSpeedRepMultiplier      FLOAT        NOT NULL DEFAULT 0,
-    rank1RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
-    rank2RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
-    rank3RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
-    rank4RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
-    rank5RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
-    rank6RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
-    rank7RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
-    rank8RepMultiplier         FLOAT        NOT NULL DEFAULT 0,
-    baseCashReward             INT          NOT NULL DEFAULT 0,
-    levelCashRewardMultiplier  FLOAT        NOT NULL DEFAULT 0,
-    finalCashRewardMultiplier  FLOAT        NOT NULL DEFAULT 0,
-    perfectStartCashMultiplier FLOAT        NOT NULL DEFAULT 0,
-    topSpeedCashMultiplier     FLOAT        NOT NULL DEFAULT 0,
-    rank1CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
-    rank2CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
-    rank3CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
-    rank4CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
-    rank5CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
-    rank6CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
-    rank7CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
-    rank8CashMultiplier        FLOAT        NOT NULL DEFAULT 0,
-    minTopSpeedTrigger         FLOAT        NOT NULL DEFAULT 0,
-    rewardTable_rank1_id       BIGINT       NOT NULL,
-    rewardTable_rank2_id       BIGINT       NOT NULL,
-    rewardTable_rank3_id       BIGINT       NOT NULL,
-    rewardTable_rank4_id       BIGINT       NOT NULL,
-    rewardTable_rank5_id       BIGINT       NOT NULL,
-    rewardTable_rank6_id       BIGINT       NOT NULL,
-    rewardTable_rank7_id       BIGINT       NOT NULL,
-    rewardTable_rank8_id       BIGINT       NOT NULL,
-
-    PRIMARY KEY (ID),
-    CONSTRAINT FK_EVENT_REWARD_EVENTID FOREIGN KEY (event_id) REFERENCES EVENT (ID),
-    CONSTRAINT FK_EVENT_REWARD_RANK1TABLE_ID FOREIGN KEY (rewardTable_rank1_id) REFERENCES REWARD_TABLE (ID),
-    CONSTRAINT FK_EVENT_REWARD_RANK2TABLE_ID FOREIGN KEY (rewardTable_rank2_id) REFERENCES REWARD_TABLE (ID),
-    CONSTRAINT FK_EVENT_REWARD_RANK3TABLE_ID FOREIGN KEY (rewardTable_rank3_id) REFERENCES REWARD_TABLE (ID),
-    CONSTRAINT FK_EVENT_REWARD_RANK4TABLE_ID FOREIGN KEY (rewardTable_rank4_id) REFERENCES REWARD_TABLE (ID),
-    CONSTRAINT FK_EVENT_REWARD_RANK5TABLE_ID FOREIGN KEY (rewardTable_rank5_id) REFERENCES REWARD_TABLE (ID),
-    CONSTRAINT FK_EVENT_REWARD_RANK6TABLE_ID FOREIGN KEY (rewardTable_rank6_id) REFERENCES REWARD_TABLE (ID),
-    CONSTRAINT FK_EVENT_REWARD_RANK7TABLE_ID FOREIGN KEY (rewardTable_rank7_id) REFERENCES REWARD_TABLE (ID),
-    CONSTRAINT FK_EVENT_REWARD_RANK8TABLE_ID FOREIGN KEY (rewardTable_rank8_id) REFERENCES REWARD_TABLE (ID)
-);
+ALTER TABLE EVENT
+    ADD COLUMN singleplayer_reward_config_id VARCHAR(255) NOT NULL;
+ALTER TABLE EVENT
+    ADD COLUMN multiplayer_reward_config_id VARCHAR(255) NOT NULL;
+ALTER TABLE EVENT
+    ADD COLUMN private_reward_config_id VARCHAR(255) NOT NULL;
+UPDATE EVENT E
+SET singleplayer_reward_config_id=(SELECT ER.ID FROM EVENT_REWARD ER WHERE ER.event_id = E.ID),
+    multiplayer_reward_config_id=(SELECT ER.ID FROM EVENT_REWARD ER WHERE ER.event_id = E.ID),
+    private_reward_config_id=(SELECT ER.ID FROM EVENT_REWARD ER WHERE ER.event_id = E.ID)
+WHERE 1=1;
+ALTER TABLE EVENT
+    ADD CONSTRAINT FK_EVENT_SINGLEPLAYER_REWARD_CONFIG_ID FOREIGN KEY (singleplayer_reward_config_id) REFERENCES EVENT_REWARD (ID);
+ALTER TABLE EVENT
+    ADD CONSTRAINT FK_EVENT_MULTIPLAYER_REWARD_CONFIG_ID FOREIGN KEY (multiplayer_reward_config_id) REFERENCES EVENT_REWARD (ID);
+ALTER TABLE EVENT
+    ADD CONSTRAINT FK_EVENT_PRIVATE_REWARD_CONFIG_ID FOREIGN KEY (private_reward_config_id) REFERENCES EVENT_REWARD (ID);
