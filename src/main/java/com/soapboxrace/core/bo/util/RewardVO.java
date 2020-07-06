@@ -23,9 +23,9 @@ public class RewardVO implements Serializable {
     int baseCash = 0;
     int rep = 0;
     int cash = 0;
-    ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
-    private boolean enableEconomy;
-    private boolean enableReputation;
+    final ArrayOfRewardPart arrayOfRewardPart = new ArrayOfRewardPart();
+    private final boolean enableEconomy;
+    private final boolean enableReputation;
 
     public RewardVO(boolean enableEconomy, boolean enableReputation) {
         this.enableEconomy = enableEconomy;

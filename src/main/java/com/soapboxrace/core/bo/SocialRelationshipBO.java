@@ -335,16 +335,14 @@ public class SocialRelationshipBO {
         return driverPersonaBO.getPersonaBase(otherPersonaEntity);
     }
 
-    private SocialRelationshipEntity createNewRelationship(PersonaEntity localPersona, PersonaEntity remotePersona,
-                                                           long status) {
+    private void createNewRelationship(PersonaEntity localPersona, PersonaEntity remotePersona,
+                                       long status) {
         SocialRelationshipEntity socialRelationshipEntity = new SocialRelationshipEntity();
         socialRelationshipEntity.setRemotePersonaId(remotePersona.getPersonaId());
         socialRelationshipEntity.setStatus(status);
         socialRelationshipEntity.setUser(localPersona.getUser());
         socialRelationshipEntity.setRemoteUser(remotePersona.getUser());
         socialRelationshipDAO.insert(socialRelationshipEntity);
-
-        return socialRelationshipEntity;
     }
 
     private void addBlockedUserToList(ArrayOfBasicBlockPlayerInfo arrayOfBasicBlockPlayerInfo,
@@ -440,8 +438,6 @@ public class SocialRelationshipBO {
         @Override
         public void message(String channel, String message) {
             if ("game_presence_updates".equals(channel)) {
-//                System.out.println(message);
-
                 Long[] parts = Arrays.stream(message.split("\\|")).map(Long::parseLong).toArray(Long[]::new);
 
                 sendPresencePackets(personaDAO.findById(parts[0]), parts[1]);

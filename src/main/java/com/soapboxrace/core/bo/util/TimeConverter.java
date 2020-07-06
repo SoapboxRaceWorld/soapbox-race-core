@@ -12,7 +12,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.GregorianCalendar;
 
 public class TimeConverter {
-    private static DatatypeFactory DATATYPE_FACTORY;
+    private static final DatatypeFactory DATATYPE_FACTORY;
 
     static {
         try {

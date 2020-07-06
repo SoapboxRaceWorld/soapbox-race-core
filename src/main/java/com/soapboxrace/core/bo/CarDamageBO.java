@@ -49,11 +49,9 @@ public class CarDamageBO {
         }
 
         Long carId = arbitrationPacket.getCarId();
-        long eventDuration = arbitrationPacket.getEventDurationInMilliseconds();
         OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(carId);
         int durability = ownedCarEntity.getDurability();
         if (durability > 0) {
-//            int calcDamage = numberOfCollision + ((int) (eventDuration / 60000)) * 2;
             int calcDamage = eventEntity.getEventModeId() == 19 ? 2 : 5; // 5% for non-drags, 2% for drags
             int newCarDamage = Math.max(durability - calcDamage, 0);
 
@@ -64,10 +62,18 @@ public class CarDamageBO {
 
     public void updateDurability(OwnedCarEntity ownedCarEntity, int newDurability) {
         CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
+        int oldDurability = ownedCarEntity.getDurability();
         ownedCarEntity.setDurability(newDurability);
-        performanceBO.calcNewCarClass(customCarEntity, newDurability == 0);
-
         ownedCarDAO.update(ownedCarEntity);
-        customCarDAO.update(customCarEntity);
+
+        if (newDurability == 0 && oldDurability != 0) {
+            // recalculate excluding parts
+            performanceBO.calcNewCarClass(customCarEntity, true);
+            customCarDAO.update(customCarEntity);
+        } else if (newDurability != 0 && oldDurability == 0) {
+            // recalculate with parts
+            performanceBO.calcNewCarClass(customCarEntity, false);
+            customCarDAO.update(customCarEntity);
+        }
     }
 }

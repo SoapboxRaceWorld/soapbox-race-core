@@ -133,6 +133,8 @@ public class AchievementCustomizationContext {
         for (WrappedPart<T> wrappedPart : collection) {
             ProductEntity productEntity = wrappedPart.getProductEntity();
 
+            if (productEntity.getRarity() == null) continue;
+
             if (exact && productEntity.getRarity().equals(rating)) {
                 cnt++;
             } else if (!exact && (rating <= productEntity.getRarity())) {
@@ -156,6 +158,7 @@ public class AchievementCustomizationContext {
             ProductEntity productEntity = wrappedPart.getProductEntity();
 
             if (subType.equalsIgnoreCase(productEntity.getSubType())) {
+                if (productEntity.getRarity() == null) continue;
                 if (exact && productEntity.getRarity().equals(rating)) {
                     cnt++;
                 } else if (!exact && (rating <= productEntity.getRarity())) {

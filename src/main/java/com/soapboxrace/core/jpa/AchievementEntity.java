@@ -33,7 +33,8 @@ public class AchievementEntity {
     @Column(name = "progress_text")
     private String progressText;
 
-    @Column(name = "stat_conversion")
+    @Column(name = "stat_conversion", columnDefinition = "ENUM('None', 'FromMetersToDistance', " +
+            "'FromMillisecondsToMinutes')")
     private String statConversion;
 
     @Column(name = "category")

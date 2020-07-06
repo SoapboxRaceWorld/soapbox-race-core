@@ -17,7 +17,8 @@ import java.util.List;
         @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT obj FROM UserEntity obj WHERE obj.email = " +
                 ":email"), //
         @NamedQuery(name = "UserEntity.findByIpAddress", query = "SELECT obj FROM UserEntity obj WHERE obj.ipAddress " +
-                "= :ipAddress") //
+                "= :ipAddress"), //
+        @NamedQuery(name = "UserEntity.countUsers", query = "SELECT COUNT(obj) FROM UserEntity obj") //
 })
 public class UserEntity {
 
@@ -26,7 +27,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "EMAIL", length = 255)
+    @Column(name = "EMAIL")
     private String email;
 
     @Column(name = "PASSWORD", length = 50)
@@ -113,6 +114,7 @@ public class UserEntity {
         this.premium = premium;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean ownsPersona(Long id) {
         return this.personas.stream().anyMatch(p -> p.getPersonaId().equals(id));
     }

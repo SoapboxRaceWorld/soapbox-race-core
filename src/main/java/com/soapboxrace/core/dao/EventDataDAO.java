@@ -38,7 +38,7 @@ public class EventDataDAO extends BaseDAO<EventDataEntity> {
         TypedQuery<EventDataEntity> query = entityManager.createNamedQuery("EventDataEntity.findByPersonaAndType",
                 EventDataEntity.class);
         query.setParameter("personaId", personaId);
-        query.setParameter("eventModeID", type);
+        query.setParameter("eventModeId", type);
         return query.getResultList();
     }
 

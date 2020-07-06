@@ -30,11 +30,11 @@ public class EventEntity {
     private int minCarClassRating;
     private int maxCarClassRating;
     private int maxPlayers;
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 1", nullable = false)
+    @Column(columnDefinition = "BIT DEFAULT 1", nullable = false)
     private boolean isEnabled;
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
+    @Column(columnDefinition = "BIT DEFAULT 0", nullable = false)
     private boolean isLocked;
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 0", nullable = false)
+    @Column(columnDefinition = "BIT DEFAULT 0", nullable = false)
     private boolean isRotationEnabled;
     private String name;
     private int baseRepReward;
@@ -71,9 +71,9 @@ public class EventEntity {
     private int lobbyCountdownTime = 60000;
     @Column(columnDefinition = "integer default 60000")
     private int dnfTimerTime = 60000;
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 1", nullable = false)
+    @Column(columnDefinition = "BIT DEFAULT 1", nullable = false)
     private boolean isRaceAgainEnabled;
-    @Column(columnDefinition = "TINYINT(1) DEFAULT 1", nullable = false)
+    @Column(columnDefinition = "BIT DEFAULT 1", nullable = false)
     private boolean isDnfEnabled;
 
     @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)

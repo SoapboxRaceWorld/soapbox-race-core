@@ -30,9 +30,9 @@ public class GeoIp2 {
         return instance;
     }
 
-    private DatabaseReader setDatabaseReader(String pathToMmdb) {
+    private void setDatabaseReader(String pathToMmdb) {
         if (dbReader != null) {
-            return dbReader;
+            return;
         }
         try {
             File database = new File(pathToMmdb);
@@ -40,7 +40,6 @@ public class GeoIp2 {
         } catch (Exception e) {
             System.err.println("error inside geoip class [" + e.getMessage() + "]");
         }
-        return dbReader;
     }
 
     public String getCountryIso(String ip) {

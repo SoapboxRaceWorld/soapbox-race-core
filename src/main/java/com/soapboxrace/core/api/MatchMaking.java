@@ -75,7 +75,7 @@ public class MatchMaking {
         Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
         Long activeLobbyId = tokenSessionBO.getActiveLobbyId(securityToken);
         if (activeLobbyId != null && !activeLobbyId.equals(0L)) {
-            lobbyBO.deleteLobbyEntrant(activePersonaId, activeLobbyId);
+            lobbyBO.removeEntrantFromLobby(activePersonaId, activeLobbyId);
         }
         return "";
     }

@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.xmpp;
 
-import com.soapboxrace.jaxb.util.MarshalXML;
+import com.soapboxrace.jaxb.util.JAXBUtility;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
@@ -30,6 +30,6 @@ public class OpenFireSoapBoxCli {
 
     @Lock(LockType.READ)
     public void send(Object object, Long to) {
-        openFireConnector.send(MarshalXML.marshal(object), to);
+        openFireConnector.send(JAXBUtility.marshal(object), to);
     }
 }

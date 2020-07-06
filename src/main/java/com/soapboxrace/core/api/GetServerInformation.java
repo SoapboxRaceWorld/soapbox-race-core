@@ -7,7 +7,7 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.bo.GetServerInformationBO;
-import com.soapboxrace.core.jpa.ServerInfoEntity;
+import com.soapboxrace.core.bo.util.ServerInformationVO;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
@@ -23,7 +23,7 @@ public class GetServerInformation {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ServerInfoEntity getServerInformation() {
+    public ServerInformationVO getServerInformation() {
         return bo.getServerInformation();
     }
 }

@@ -15,7 +15,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
-          <factory-entry name="soapboxrace-pu" value="7d9519df-b1a7-48b7-aa02-9c45597e2f27" />
+          <factory-entry name="soapboxrace-pu" value="d9791c6e-3dd4-4196-83b9-b13ad16d6cf3" />
         </datasource-mapping>
         <naming-strategy-map />
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />

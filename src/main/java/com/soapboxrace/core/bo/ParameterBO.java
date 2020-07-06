@@ -14,6 +14,9 @@ import com.soapboxrace.core.jpa.UserEntity;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -117,6 +120,16 @@ public class ParameterBO {
         String parameterFromDB = getParameter(parameter);
 
         return parameterFromDB == null || parameterFromDB.isEmpty() ? defaultValue : parameterFromDB;
+    }
+
+    public List<String> getStrListParam(String parameter) {
+        String value = getParameter(parameter);
+
+        if (value == null) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.asList(value.split(";"));
     }
 
     public Float getFloatParam(String parameter) {

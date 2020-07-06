@@ -21,14 +21,16 @@ public class OnlineUsersEntity {
     @Column(name = "ID", nullable = false)
     private int timeRecord;
 
-    private int numberOfUsers = 0;
+    private long numberOfOnline = 0;
 
-    public int getNumberOfUsers() {
-        return numberOfUsers;
+    private long numberOfRegistered = 0;
+
+    public long getNumberOfOnline() {
+        return numberOfOnline;
     }
 
-    public void setNumberOfUsers(int numberOfUsers) {
-        this.numberOfUsers = numberOfUsers;
+    public void setNumberOfOnline(long numberOfUsers) {
+        this.numberOfOnline = numberOfUsers;
     }
 
     public int getTimeRecord() {
@@ -37,5 +39,13 @@ public class OnlineUsersEntity {
 
     public void setTimeRecord(int timeRecord) {
         this.timeRecord = timeRecord;
+    }
+
+    public long getNumberOfRegistered() {
+        return numberOfRegistered;
+    }
+
+    public void setNumberOfRegistered(long numberOfRegistered) {
+        this.numberOfRegistered = numberOfRegistered;
     }
 }

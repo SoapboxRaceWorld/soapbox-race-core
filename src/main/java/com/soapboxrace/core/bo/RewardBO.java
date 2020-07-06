@@ -44,9 +44,6 @@ public class RewardBO {
     private ProductDAO productDAO;
 
     @EJB
-    private AchievementBO achievementBO;
-
-    @EJB
     private ItemRewardBO itemRewardBO;
 
     @EJB

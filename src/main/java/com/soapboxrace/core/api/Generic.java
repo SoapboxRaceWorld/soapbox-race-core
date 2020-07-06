@@ -16,7 +16,6 @@ public class Generic {
     @Path("{path:.*}")
     @Produces(MediaType.APPLICATION_XML)
     public String genericEmptyGet(@PathParam("path") String path) {
-        System.out.println("empty GET!!!");
         return "";
     }
 
@@ -24,7 +23,6 @@ public class Generic {
     @Path("{path:.*}")
     @Produces(MediaType.APPLICATION_XML)
     public String genericEmptyPost(@PathParam("path") String path) {
-        System.out.println("empty POST!!!");
         return "";
     }
 
@@ -32,7 +30,6 @@ public class Generic {
     @Path("{path:.*}")
     @Produces(MediaType.APPLICATION_XML)
     public String genericEmptyPut(@PathParam("path") String path) {
-        System.out.println("empty PUT!!!");
         return "";
     }
 

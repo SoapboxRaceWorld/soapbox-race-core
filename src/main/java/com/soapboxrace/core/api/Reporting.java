@@ -13,7 +13,7 @@ import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.HardwareInfoEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.HardwareInfo;
-import com.soapboxrace.jaxb.util.UnmarshalXML;
+import com.soapboxrace.jaxb.util.JAXBUtility;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -36,13 +36,18 @@ public class Reporting {
     @Secured
     @Path("/SendHardwareInfo")
     @Produces(MediaType.APPLICATION_XML)
-    public String sendHardwareInfo(InputStream is, @HeaderParam("securityToken") String securityToken) {
-        HardwareInfo hardwareInfo = UnmarshalXML.unMarshal(is, HardwareInfo.class);
-        HardwareInfoEntity hardwareInfoEntity = hardwareInfoBO.save(hardwareInfo);
-        UserEntity user = tokenBO.getUser(securityToken);
-        user.setGameHardwareHash(hardwareInfoEntity.getHardwareHash());
-        userDAO.update(user);
-        return "";
+    public String sendHardwareInfo(InputStream is, @HeaderParam("securityToken") String securityToken, @HeaderParam("userId") Long userId) {
+        HardwareInfo hardwareInfo = JAXBUtility.unMarshal(is, HardwareInfo.class);
+        if(hardwareInfo.getCpuid0().equals("GenuineIntel") || hardwareInfo.getCpuid0().equals("AuthenticAMD")) {
+            HardwareInfoEntity hardwareInfoEntity = hardwareInfoBO.save(hardwareInfo);
+            UserEntity user = tokenBO.getUser(securityToken);
+            user.setGameHardwareHash(hardwareInfoEntity.getHardwareHash());
+            userDAO.update(user);
+            return "";
+        } else {
+            tokenBO.deleteByUserId(userId);
+            return "";
+        }
     }
 
     @POST
@@ -81,7 +86,6 @@ public class Reporting {
     @Path("{path:.*}")
     @Produces(MediaType.APPLICATION_XML)
     public String genericEmptyPut(@PathParam("path") String path) {
-        System.out.println("empty PUT!!!");
         return "";
     }
 }

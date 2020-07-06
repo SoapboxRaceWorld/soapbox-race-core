@@ -16,7 +16,7 @@ import com.soapboxrace.jaxb.http.ArrayOfOwnedCarTrans;
 import com.soapboxrace.jaxb.http.CommerceResultStatus;
 import com.soapboxrace.jaxb.http.CommerceResultTrans;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
-import com.soapboxrace.jaxb.util.UnmarshalXML;
+import com.soapboxrace.jaxb.util.JAXBUtility;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -390,7 +390,7 @@ public class BasketBO {
             throw new IllegalArgumentException(String.format("No basket definition for %s", productId));
         }
         String ownedCarTrans = basketDefinitionEntity.getOwnedCarTrans();
-        OwnedCarTrans ownedCarTrans1 = UnmarshalXML.unMarshal(ownedCarTrans, OwnedCarTrans.class);
+        OwnedCarTrans ownedCarTrans1 = JAXBUtility.unMarshal(ownedCarTrans, OwnedCarTrans.class);
 
         if (productEntity.getDurationMinute() != 0) {
             ownedCarTrans1.setOwnershipType("RentalCar");

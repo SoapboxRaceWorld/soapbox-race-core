@@ -17,15 +17,15 @@ import javax.persistence.*;
 @Table(name = "NEWS_ARTICLE")
 @NamedQueries({
         @NamedQuery(name = "NewsArticleEntity.findAllByPersona",
-                query = "SELECT obj FROM NewsArticleEntity obj WHERE obj.persona.id = :id"),
+                query = "SELECT obj FROM NewsArticleEntity obj WHERE obj.persona.personaId = :id"),
         @NamedQuery(name = "NewsArticleEntity.deleteAllByPersona",
-                query = "DELETE FROM NewsArticleEntity obj WHERE obj.persona.id = :id"),
+                query = "DELETE FROM NewsArticleEntity obj WHERE obj.persona.personaId = :id"),
         @NamedQuery(name = "NewsArticleEntity.findAllByReferencedPersona",
                 query = "SELECT obj FROM NewsArticleEntity obj WHERE obj.referencedPersona IS NOT NULL AND obj" +
-                        ".referencedPersona.id = :id"),
+                        ".referencedPersona.personaId = :id"),
         @NamedQuery(name = "NewsArticleEntity.deleteAllByReferencedPersona",
                 query = "DELETE FROM NewsArticleEntity obj WHERE obj.referencedPersona IS NOT NULL AND obj" +
-                        ".referencedPersona.id = :id"),
+                        ".referencedPersona.personaId = :id"),
 })
 public class NewsArticleEntity {
     @Id
