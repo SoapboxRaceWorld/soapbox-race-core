@@ -1,1452 +1,1111 @@
--- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
---
--- Host: 209.97.187.156    Database: SOAPBOX
--- ------------------------------------------------------
--- Server version	8.0.19
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE = @@TIME_ZONE */;
-/*!40103 SET TIME_ZONE = '+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS = @@UNIQUE_CHECKS, UNIQUE_CHECKS = 0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS = 0 */;
-/*!40101 SET @OLD_SQL_MODE = @@SQL_MODE, SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES = @@SQL_NOTES, SQL_NOTES = 0 */;
-
---
--- Table structure for table `ACHIEVEMENT`
---
-
-DROP TABLE IF EXISTS `ACHIEVEMENT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ACHIEVEMENT`
+create table if not exists ACHIEVEMENT_REWARD
 (
-    `ID`                        bigint NOT NULL AUTO_INCREMENT,
-    `auto_update`               bit(1)                                                           DEFAULT NULL,
-    `category`                  varchar(255)                                                     DEFAULT NULL,
-    `name`                      varchar(255)                                                     DEFAULT NULL,
-    `progress_text`             varchar(255)                                                     DEFAULT NULL,
-    `should_overwrite_progress` bit(1)                                                           DEFAULT b'0',
-    `stat_conversion`           enum ('None','FromMetersToDistance','FromMillisecondsToMinutes') DEFAULT NULL,
-    `update_trigger`            text,
-    `update_value`              text,
-    `visible`                   bit(1)                                                           DEFAULT NULL,
-    `badge_definition_id`       bigint NOT NULL,
-    PRIMARY KEY (`ID`),
-    UNIQUE KEY `UK_so6kbq2i8oy15k8f9m7vuylu5` (`badge_definition_id`),
-    CONSTRAINT `FK6xo8y7evmxkq6rbqgqlngxnxh` FOREIGN KEY (`badge_definition_id`) REFERENCES `BADGE_DEFINITION` (`ID`)
-) ENGINE = InnoDB
+    ID                          bigint auto_increment
+        primary key,
+    internal_reward_description varchar(255) null,
+    reward_description          varchar(255) null,
+    rewardScript                text         not null
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create index ACHIEVEMENT_REWARD_internal_reward_description_index
+    on ACHIEVEMENT_REWARD (internal_reward_description);
 
---
--- Table structure for table `ACHIEVEMENT_RANK`
---
-
-DROP TABLE IF EXISTS `ACHIEVEMENT_RANK`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ACHIEVEMENT_RANK`
+create table if not exists BADGE_DEFINITION
 (
-    `ID`                  bigint NOT NULL AUTO_INCREMENT,
-    `points`              int          DEFAULT NULL,
-    `rank`                int          DEFAULT NULL,
-    `rarity`              float        DEFAULT NULL,
-    `reward_description`  varchar(255) DEFAULT NULL,
-    `reward_type`         varchar(255) DEFAULT NULL,
-    `reward_visual_style` varchar(255) DEFAULT NULL,
-    `threshold_value`     int          DEFAULT NULL,
-    `achievement_id`      bigint NOT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FK276d2ojf04ey397aixbri1j42` (`achievement_id`),
-    CONSTRAINT `FK276d2ojf04ey397aixbri1j42` FOREIGN KEY (`achievement_id`) REFERENCES `ACHIEVEMENT` (`ID`)
-) ENGINE = InnoDB
+    ID          bigint auto_increment
+        primary key,
+    background  varchar(255) null,
+    border      varchar(255) null,
+    description varchar(255) null,
+    icon        varchar(255) null,
+    name        varchar(255) null
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ACHIEVEMENT_REWARD`
---
-
-DROP TABLE IF EXISTS `ACHIEVEMENT_REWARD`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ACHIEVEMENT_REWARD`
+create table if not exists ACHIEVEMENT
 (
-    `ID`                          bigint NOT NULL AUTO_INCREMENT,
-    `internal_reward_description` varchar(255) DEFAULT NULL,
-    `reward_description`          varchar(255) DEFAULT NULL,
-    `rewardScript`                text   NOT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB
+    ID                        bigint auto_increment
+        primary key,
+    auto_update               bit                                                                null,
+    category                  varchar(255)                                                       null,
+    name                      varchar(255)                                                       null,
+    progress_text             varchar(255)                                                       null,
+    should_overwrite_progress bit default b'0'                                                   null,
+    stat_conversion           enum ('None', 'FromMetersToDistance', 'FromMillisecondsToMinutes') null,
+    update_trigger            text                                                               null,
+    update_value              text                                                               null,
+    visible                   bit                                                                null,
+    badge_definition_id       bigint                                                             not null,
+    constraint UK_so6kbq2i8oy15k8f9m7vuylu5
+        unique (badge_definition_id),
+    constraint FK6xo8y7evmxkq6rbqgqlngxnxh
+        foreign key (badge_definition_id) references BADGE_DEFINITION (ID)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create index ACHIEVEMENT_category_index
+    on ACHIEVEMENT (category);
 
---
--- Table structure for table `AMPLIFIERS`
---
-
-DROP TABLE IF EXISTS `AMPLIFIERS`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `AMPLIFIERS`
+create table if not exists ACHIEVEMENT_RANK
 (
-    `id`             bigint       NOT NULL AUTO_INCREMENT,
-    `ampType`        varchar(255) DEFAULT NULL,
-    `cashMultiplier` float        DEFAULT NULL,
-    `repMultiplier`  float        DEFAULT NULL,
-    `product_id`     varchar(255) NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `UK_dpq9a1cdlxuukwbqor9ua1j2a` (`product_id`),
-    CONSTRAINT `FK8dw7pn0b32ngrloirp6m9xx5x` FOREIGN KEY (`product_id`) REFERENCES `PRODUCT` (`productId`)
-) ENGINE = InnoDB
+    ID                  bigint auto_increment
+        primary key,
+    points              int          null,
+    `rank`              int          null,
+    rarity              float        null,
+    reward_description  varchar(255) null,
+    reward_type         varchar(255) null,
+    reward_visual_style varchar(255) null,
+    threshold_value     int          null,
+    achievement_id      bigint       not null,
+    constraint FK276d2ojf04ey397aixbri1j42
+        foreign key (achievement_id) references ACHIEVEMENT (ID)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `BADGE_DEFINITION`
---
-
-DROP TABLE IF EXISTS `BADGE_DEFINITION`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `BADGE_DEFINITION`
+create table if not exists BASKETDEFINITION
 (
-    `ID`          bigint NOT NULL AUTO_INCREMENT,
-    `background`  varchar(255) DEFAULT NULL,
-    `border`      varchar(255) DEFAULT NULL,
-    `description` varchar(255) DEFAULT NULL,
-    `icon`        varchar(255) DEFAULT NULL,
-    `name`        varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB
+    productId     varchar(255) not null
+        primary key,
+    ownedCarTrans longtext     null,
+    constraint BASKETDEFINITION_productId_uindex
+        unique (productId)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+alter table BASKETDEFINITION
+    add primary key (productId);
 
---
--- Table structure for table `BAN`
---
-
-DROP TABLE IF EXISTS `BAN`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `BAN`
+create table if not exists CARD_PACK
 (
-    `id`           bigint NOT NULL AUTO_INCREMENT,
-    `data`         varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `endsAt`       datetime                                DEFAULT NULL,
-    `reason`       varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `type`         varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `user_id`      bigint                                  DEFAULT NULL,
-    `started`      datetime                                DEFAULT NULL,
-    `willEnd`      bit(1)                                  DEFAULT NULL,
-    `banned_by_id` bigint                                  DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FKlwawdqh4uid0isnsc9uomdyfx` (`user_id`),
-    KEY `FK_BANNED_BY` (`banned_by_id`),
-    CONSTRAINT `FK_BAN_USER` FOREIGN KEY (`user_id`) REFERENCES `USER` (`ID`),
-    CONSTRAINT `FK_BANNED_BY` FOREIGN KEY (`banned_by_id`) REFERENCES `PERSONA` (`ID`),
-    CONSTRAINT `FKlwawdqh4uid0isnsc9uomdyfx` FOREIGN KEY (`user_id`) REFERENCES `USER` (`ID`)
-) ENGINE = InnoDB
+    ID             bigint auto_increment
+        primary key,
+    entitlementTag varchar(255) null
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `BASKETDEFINITION`
---
-
-DROP TABLE IF EXISTS `BASKETDEFINITION`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `BASKETDEFINITION`
+create table if not exists CARD_PACK_ITEM
 (
-    `productId`     varchar(255) NOT NULL,
-    `ownedCarTrans` longtext,
-    PRIMARY KEY (`productId`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    ID                bigint auto_increment
+        primary key,
+    script            text   not null,
+    cardPackEntity_ID bigint not null,
+    constraint FK3wo6p0la6hflhtss9iqj5t5h6
+        foreign key (cardPackEntity_ID) references CARD_PACK (ID)
+)
+    charset = latin1;
 
---
--- Table structure for table `CARD_PACK`
---
-
-DROP TABLE IF EXISTS `CARD_PACK`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `CARD_PACK`
+create table if not exists CAR_CLASSES
 (
-    `ID`             bigint NOT NULL AUTO_INCREMENT,
-    `entitlementTag` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB
+    store_name varchar(255) collate utf8mb4_unicode_ci not null,
+    full_name  varchar(255)                            not null,
+    manufactor varchar(255)                            not null,
+    model      varchar(255)                            not null,
+    ts_stock   int                                     null,
+    ts_var1    int                                     null,
+    ts_var2    int                                     null,
+    ts_var3    int                                     null,
+    ac_stock   int                                     null,
+    ac_var1    int                                     null,
+    ac_var2    int                                     null,
+    ac_var3    int                                     null,
+    ha_stock   int                                     null,
+    ha_var1    int                                     null,
+    ha_var2    int                                     null,
+    ha_var3    int                                     null,
+    hash       int                                     null,
+    product_id varchar(255) collate utf8_unicode_ci    null,
+    constraint store_name_index
+        unique (store_name)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create index hash_index
+    on CAR_CLASSES (hash);
 
---
--- Table structure for table `CARD_PACK_ITEM`
---
+create index store_name_key
+    on CAR_CLASSES (store_name);
 
-DROP TABLE IF EXISTS `CARD_PACK_ITEM`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `CARD_PACK_ITEM`
+alter table CAR_CLASSES
+    add primary key (store_name);
+
+create table if not exists CATEGORY
 (
-    `ID`                bigint NOT NULL AUTO_INCREMENT,
-    `script`            text   NOT NULL,
-    `cardPackEntity_ID` bigint NOT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FK3wo6p0la6hflhtss9iqj5t5h6` (`cardPackEntity_ID`),
-    CONSTRAINT `FK3wo6p0la6hflhtss9iqj5t5h6` FOREIGN KEY (`cardPackEntity_ID`) REFERENCES `CARD_PACK` (`ID`)
-) ENGINE = InnoDB
+    idcategory           bigint auto_increment
+        primary key,
+    catalogVersion       varchar(255) null,
+    categories           varchar(255) null,
+    displayName          varchar(255) null,
+    filterType           int          null,
+    icon                 varchar(255) null,
+    id                   bigint       null,
+    longDescription      varchar(255) null,
+    name                 varchar(255) null,
+    priority             smallint     null,
+    shortDescription     varchar(255) null,
+    showInNavigationPane bit          null,
+    showPromoPage        bit          null,
+    webIcon              varchar(255) null
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `CARSLOT`
---
-
-DROP TABLE IF EXISTS `CARSLOT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `CARSLOT`
+create table if not exists CHAT_ANNOUNCEMENT
 (
-    `id`            bigint NOT NULL AUTO_INCREMENT,
-    `ownedCarTrans` longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-    `PersonaId`     bigint DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FK_CARSLOT_PERSONA` (`PersonaId`),
-    CONSTRAINT `FK_CARSLOT_PERSONA` FOREIGN KEY (`PersonaId`) REFERENCES `PERSONA` (`ID`),
-    CONSTRAINT `FKc8km27r2ln6pxi1wfr5r8qjrd` FOREIGN KEY (`PersonaId`) REFERENCES `PERSONA` (`ID`)
-) ENGINE = InnoDB
+    id                   int auto_increment
+        primary key,
+    announcementInterval int          null,
+    announcementMessage  varchar(255) null,
+    channelMask          varchar(255) null
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `CAR_CLASSES`
---
-
-DROP TABLE IF EXISTS `CAR_CLASSES`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `CAR_CLASSES`
+create table if not exists CHAT_ROOM
 (
-    `store_name` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `full_name`  text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-    `manufactor` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-    `model`      text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-    `ts_stock`   int                                                     DEFAULT NULL,
-    `ts_var1`    int                                                     DEFAULT NULL,
-    `ts_var2`    int                                                     DEFAULT NULL,
-    `ts_var3`    int                                                     DEFAULT NULL,
-    `ac_stock`   int                                                     DEFAULT NULL,
-    `ac_var1`    int                                                     DEFAULT NULL,
-    `ac_var2`    int                                                     DEFAULT NULL,
-    `ac_var3`    int                                                     DEFAULT NULL,
-    `ha_stock`   int                                                     DEFAULT NULL,
-    `ha_var1`    int                                                     DEFAULT NULL,
-    `ha_var2`    int                                                     DEFAULT NULL,
-    `ha_var3`    int                                                     DEFAULT NULL,
-    `hash`       int                                                     DEFAULT NULL,
-    `product_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    PRIMARY KEY (`store_name`(255))
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    ID        bigint auto_increment
+        primary key,
+    amount    int                                  null,
+    longName  varchar(255) collate utf8_unicode_ci null,
+    shortName varchar(255) collate utf8_unicode_ci null
+)
+    charset = utf8;
 
---
--- Table structure for table `CATEGORY`
---
-
-DROP TABLE IF EXISTS `CATEGORY`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `CATEGORY`
+create table if not exists GIFT_CODE
 (
-    `idcategory`           bigint NOT NULL AUTO_INCREMENT,
-    `catalogVersion`       varchar(255) DEFAULT NULL,
-    `categories`           varchar(255) DEFAULT NULL,
-    `displayName`          varchar(255) DEFAULT NULL,
-    `filterType`           int          DEFAULT NULL,
-    `icon`                 varchar(255) DEFAULT NULL,
-    `id`                   bigint       DEFAULT NULL,
-    `longDescription`      varchar(255) DEFAULT NULL,
-    `name`                 varchar(255) DEFAULT NULL,
-    `priority`             smallint     DEFAULT NULL,
-    `shortDescription`     varchar(255) DEFAULT NULL,
-    `showInNavigationPane` bit(1)       DEFAULT NULL,
-    `showPromoPage`        bit(1)       DEFAULT NULL,
-    `webIcon`              varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`idcategory`)
-) ENGINE = InnoDB
+    ID       bigint auto_increment
+        primary key,
+    code     varchar(255) null,
+    endsAt   datetime     null,
+    startsAt datetime     null
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `CHAT_ANNOUNCEMENT`
---
-
-DROP TABLE IF EXISTS `CHAT_ANNOUNCEMENT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `CHAT_ANNOUNCEMENT`
+create table if not exists HARDWARE_INFO
 (
-    `id`                   int NOT NULL AUTO_INCREMENT,
-    `announcementInterval` int          DEFAULT NULL,
-    `announcementMessage`  varchar(255) DEFAULT NULL,
-    `channelMask`          varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    ID           bigint auto_increment
+        primary key,
+    banned       bit          not null,
+    hardwareHash varchar(255) null,
+    hardwareInfo longtext     null,
+    userId       bigint       null
+)
+    charset = latin1;
 
---
--- Table structure for table `CHAT_ROOM`
---
+create index HARDWARE_INFO_hardwareHash_index
+    on HARDWARE_INFO (hardwareHash);
 
-DROP TABLE IF EXISTS `CHAT_ROOM`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `CHAT_ROOM`
+create table if not exists LEVEL_REP
 (
-    `ID`        bigint NOT NULL AUTO_INCREMENT,
-    `amount`    int                                                     DEFAULT NULL,
-    `longName`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `shortName` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB
+    level    bigint auto_increment
+        primary key,
+    expPoint bigint null
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `CUSTOMCAR`
---
-
-DROP TABLE IF EXISTS `CUSTOMCAR`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `CUSTOMCAR`
+create table if not exists LOGIN_ANNOUCEMENT
 (
-    `id`                 bigint NOT NULL AUTO_INCREMENT,
-    `baseCar`            int    NOT NULL,
-    `carClassHash`       int    NOT NULL,
-    `isPreset`           bit(1) NOT NULL,
-    `level`              int    NOT NULL,
-    `name`               varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `physicsProfileHash` int    NOT NULL,
-    `rating`             int    NOT NULL,
-    `resalePrice`        float  NOT NULL,
-    `rideHeightDrop`     float  NOT NULL,
-    `skillModSlotCount`  int    NOT NULL,
-    `version`            int    NOT NULL,
-    `ownedCarId`         bigint                                                  DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FKjgdh4g5me6ljh5srjkn2t0i71` (`ownedCarId`),
-    CONSTRAINT `FK_CUSTOMCAR_OWNEDCAR` FOREIGN KEY (`ownedCarId`) REFERENCES `OWNEDCAR` (`id`),
-    CONSTRAINT `FKjgdh4g5me6ljh5srjkn2t0i71` FOREIGN KEY (`ownedCarId`) REFERENCES `OWNEDCAR` (`id`)
-) ENGINE = InnoDB
+    id       int auto_increment
+        primary key,
+    imageUrl varchar(255) collate utf8_unicode_ci null,
+    target   varchar(255) collate utf8_unicode_ci null,
+    type     varchar(255) collate utf8_unicode_ci null
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `EVENT`
---
-
-DROP TABLE IF EXISTS `EVENT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `EVENT`
+create table if not exists ONLINE_USERS
 (
-    `ID`                         int        NOT NULL AUTO_INCREMENT,
-    `baseCashReward`             int        NOT NULL,
-    `baseRepReward`              int        NOT NULL,
-    `eventModeId`                int        NOT NULL,
-    `finalCashRewardMultiplier`  float      NOT NULL,
-    `finalRepRewardMultiplier`   float      NOT NULL,
-    `isEnabled`                  bit(1)     NOT NULL,
-    `isLocked`                   bit(1)     NOT NULL,
-    `rewardsTimeLimit`           bigint     NOT NULL,
-    `levelCashRewardMultiplier`  float      NOT NULL,
-    `levelRepRewardMultiplier`   float      NOT NULL,
-    `maxCarClassRating`          int        NOT NULL,
-    `maxLevel`                   int        NOT NULL,
-    `maxPlayers`                 int        NOT NULL,
-    `minCarClassRating`          int        NOT NULL,
-    `minLevel`                   int        NOT NULL,
-    `minTopSpeedTrigger`         float      NOT NULL,
-    `name`                       varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `perfectStartCashMultiplier` float      NOT NULL,
-    `perfectStartRepMultiplier`  float      NOT NULL,
-    `rank1CashMultiplier`        float      NOT NULL,
-    `rank1RepMultiplier`         float      NOT NULL,
-    `rank2CashMultiplier`        float      NOT NULL,
-    `rank2RepMultiplier`         float      NOT NULL,
-    `rank3CashMultiplier`        float      NOT NULL,
-    `rank3RepMultiplier`         float      NOT NULL,
-    `rank4CashMultiplier`        float      NOT NULL,
-    `rank4RepMultiplier`         float      NOT NULL,
-    `rank5CashMultiplier`        float      NOT NULL,
-    `rank5RepMultiplier`         float      NOT NULL,
-    `rank6CashMultiplier`        float      NOT NULL,
-    `rank6RepMultiplier`         float      NOT NULL,
-    `rank7CashMultiplier`        float      NOT NULL,
-    `rank7RepMultiplier`         float      NOT NULL,
-    `rank8CashMultiplier`        float      NOT NULL,
-    `rank8RepMultiplier`         float      NOT NULL,
-    `topSpeedCashMultiplier`     float      NOT NULL,
-    `topSpeedRepMultiplier`      float      NOT NULL,
-    `carClassHash`               int        NOT NULL,
-    `trackLength`                float      NOT NULL,
-    `rewardTable_rank1_id`       bigint                                                  DEFAULT NULL,
-    `rewardTable_rank2_id`       bigint                                                  DEFAULT NULL,
-    `rewardTable_rank3_id`       bigint                                                  DEFAULT NULL,
-    `rewardTable_rank4_id`       bigint                                                  DEFAULT NULL,
-    `rewardTable_rank5_id`       bigint                                                  DEFAULT NULL,
-    `rewardTable_rank6_id`       bigint                                                  DEFAULT NULL,
-    `rewardTable_rank7_id`       bigint                                                  DEFAULT NULL,
-    `rewardTable_rank8_id`       bigint                                                  DEFAULT NULL,
-    `isRotationEnabled`          tinyint(1) NOT NULL                                     DEFAULT '0',
-    `dnfTimerTime`               int                                                     DEFAULT '60000',
-    `lobbyCountdownTime`         int                                                     DEFAULT '60000',
-    `legitTime`                  bigint     NOT NULL,
-    `isDnfEnabled`               tinyint(1) NOT NULL                                     DEFAULT '1',
-    `isRaceAgainEnabled`         tinyint(1) NOT NULL                                     DEFAULT '1',
-    PRIMARY KEY (`ID`),
-    KEY `FKhky4tfvfpo91vixa09jkofjnc` (`rewardTable_rank1_id`),
-    KEY `FKdwjw797e5pirj7rnvcr6d71pi` (`rewardTable_rank2_id`),
-    KEY `FK5r8fjqwem02m1b4oyc6yy1esq` (`rewardTable_rank3_id`),
-    KEY `FK8g17bk7hkmabmnf88srvslxwm` (`rewardTable_rank4_id`),
-    KEY `FKalw5jfl728ahfpvdwhegdty6w` (`rewardTable_rank5_id`),
-    KEY `FK2xj5h4dvsmiy3fpyayhmgsm7y` (`rewardTable_rank6_id`),
-    KEY `FKfpntheixvd1mgifia39l2tf4b` (`rewardTable_rank7_id`),
-    KEY `FKfh6oit4kajywxhmxtid3yfukk` (`rewardTable_rank8_id`),
-    CONSTRAINT `FK2xj5h4dvsmiy3fpyayhmgsm7y` FOREIGN KEY (`rewardTable_rank6_id`) REFERENCES `REWARD_TABLE` (`ID`),
-    CONSTRAINT `FK5r8fjqwem02m1b4oyc6yy1esq` FOREIGN KEY (`rewardTable_rank3_id`) REFERENCES `REWARD_TABLE` (`ID`),
-    CONSTRAINT `FK8g17bk7hkmabmnf88srvslxwm` FOREIGN KEY (`rewardTable_rank4_id`) REFERENCES `REWARD_TABLE` (`ID`),
-    CONSTRAINT `FKalw5jfl728ahfpvdwhegdty6w` FOREIGN KEY (`rewardTable_rank5_id`) REFERENCES `REWARD_TABLE` (`ID`),
-    CONSTRAINT `FKdwjw797e5pirj7rnvcr6d71pi` FOREIGN KEY (`rewardTable_rank2_id`) REFERENCES `REWARD_TABLE` (`ID`),
-    CONSTRAINT `FKfh6oit4kajywxhmxtid3yfukk` FOREIGN KEY (`rewardTable_rank8_id`) REFERENCES `REWARD_TABLE` (`ID`),
-    CONSTRAINT `FKfpntheixvd1mgifia39l2tf4b` FOREIGN KEY (`rewardTable_rank7_id`) REFERENCES `REWARD_TABLE` (`ID`),
-    CONSTRAINT `FKhky4tfvfpo91vixa09jkofjnc` FOREIGN KEY (`rewardTable_rank1_id`) REFERENCES `REWARD_TABLE` (`ID`)
-) ENGINE = InnoDB
+    ID                 int    not null,
+    numberOfOnline     bigint not null,
+    numberOfRegistered bigint not null,
+    constraint ONLINE_USERS_id_index
+        unique (ID desc)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+alter table ONLINE_USERS
+    add primary key (ID);
 
---
--- Table structure for table `EVENT_DATA`
---
-
-DROP TABLE IF EXISTS `EVENT_DATA`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `EVENT_DATA`
+create table if not exists PARAMETER
 (
-    `ID`                                   bigint NOT NULL AUTO_INCREMENT,
-    `alternateEventDurationInMilliseconds` bigint NOT NULL,
-    `bestLapDurationInMilliseconds`        bigint NOT NULL,
-    `bustedCount`                          int    NOT NULL,
-    `carId`                                bigint NOT NULL,
-    `copsDeployed`                         int    NOT NULL,
-    `copsDisabled`                         int    NOT NULL,
-    `copsRammed`                           int    NOT NULL,
-    `costToState`                          int    NOT NULL,
-    `distanceToFinish`                     float  NOT NULL,
-    `eventDurationInMilliseconds`          bigint NOT NULL,
-    `eventModeId`                          int    NOT NULL,
-    `eventSessionId`                       bigint     DEFAULT NULL,
-    `finishReason`                         int    NOT NULL,
-    `fractionCompleted`                    float  NOT NULL,
-    `hacksDetected`                        bigint NOT NULL,
-    `heat`                                 float  NOT NULL,
-    `infractions`                          int    NOT NULL,
-    `longestJumpDurationInMilliseconds`    bigint NOT NULL,
-    `numberOfCollisions`                   int    NOT NULL,
-    `perfectStart`                         int    NOT NULL,
-    `personaId`                            bigint     DEFAULT NULL,
-    `rank`                                 int    NOT NULL,
-    `roadBlocksDodged`                     int    NOT NULL,
-    `spikeStripsDodged`                    int    NOT NULL,
-    `sumOfJumpsDurationInMilliseconds`     bigint NOT NULL,
-    `topSpeed`                             float  NOT NULL,
-    `EVENTID`                              int        DEFAULT NULL,
-    `isLegit`                              tinyint(1) DEFAULT '0',
-    PRIMARY KEY (`ID`),
-    UNIQUE KEY `esi_personaId` (`eventSessionId`, `personaId`),
-    KEY `FK_EVENTDATA_EVENT` (`EVENTID`),
-    KEY `eid_finishreason_index` (`EVENTID`, `finishReason`),
-    CONSTRAINT `FK_EVENTDATA_EVENT` FOREIGN KEY (`EVENTID`) REFERENCES `EVENT` (`ID`),
-    CONSTRAINT `FKjqbikfyvivd8pf6ke5ke5rv1k` FOREIGN KEY (`EVENTID`) REFERENCES `EVENT` (`ID`)
-) ENGINE = InnoDB
+    name  varchar(255) not null,
+    value varchar(255) null,
+    constraint PARAMETER_name_index
+        unique (name)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+alter table PARAMETER
+    add primary key (name);
 
---
--- Table structure for table `EVENT_SESSION`
---
-
-DROP TABLE IF EXISTS `EVENT_SESSION`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `EVENT_SESSION`
+create table if not exists PRODUCT
 (
-    `ID`          bigint NOT NULL AUTO_INCREMENT,
-    `EVENTID`     int    DEFAULT NULL,
-    `ENDED`       bigint DEFAULT NULL,
-    `STARTED`     bigint DEFAULT NULL,
-    `LOBBYID`     bigint DEFAULT NULL,
-    `NEXTLOBBYID` bigint DEFAULT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FK_EVENTSESSION_EVENT` (`EVENTID`),
-    KEY `FK_EVENTSESSION_LOBBY` (`LOBBYID`),
-    KEY `FK_EVENTSESSION_NEXTLOBBY` (`NEXTLOBBYID`),
-    CONSTRAINT `FK_EVENTSESSION_EVENT` FOREIGN KEY (`EVENTID`) REFERENCES `EVENT` (`ID`),
-    CONSTRAINT `FK_EVENTSESSION_LOBBY` FOREIGN KEY (`LOBBYID`) REFERENCES `LOBBY` (`ID`),
-    CONSTRAINT `FK_EVENTSESSION_NEXTLOBBY` FOREIGN KEY (`NEXTLOBBYID`) REFERENCES `LOBBY` (`ID`),
-    CONSTRAINT `FKj7j77j10kjso12h57nw1vdb1` FOREIGN KEY (`EVENTID`) REFERENCES `EVENT` (`ID`)
-) ENGINE = InnoDB
+    id              bigint auto_increment
+        primary key,
+    accel           int          null,
+    brand           varchar(255) null,
+    categoryId      varchar(255) null,
+    categoryName    varchar(255) null,
+    currency        varchar(255) not null,
+    description     varchar(255) null,
+    dropWeight      double       null,
+    durationMinute  int          not null,
+    enabled         bit          not null,
+    entitlementTag  varchar(255) null,
+    handling        int          null,
+    hash            int          null,
+    icon            varchar(255) not null,
+    isDropable      bit          not null,
+    level           int          not null,
+    longDescription varchar(255) null,
+    minLevel        int          not null,
+    premium         bit          not null,
+    price           float        not null,
+    priority        int          not null,
+    productId       varchar(255) not null,
+    productTitle    varchar(255) null,
+    productType     varchar(255) not null,
+    rarity          int          null,
+    resalePrice     float        not null,
+    secondaryIcon   varchar(255) null,
+    skillValue      float        null,
+    subType         varchar(255) null,
+    topSpeed        int          null,
+    useCount        int          not null,
+    visualStyle     varchar(255) null,
+    webIcon         varchar(255) null,
+    webLocation     varchar(255) null,
+    parentProductId bigint       null,
+    bundleItems     text         null,
+    constraint UK_10bw1u87a77ibq6hdbivxp1kp
+        unique (productId),
+    constraint FK8obn8l9i769slt8pjub191l52
+        foreign key (parentProductId) references PRODUCT (id)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `GIFT_CODE`
---
-
-DROP TABLE IF EXISTS `GIFT_CODE`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `GIFT_CODE`
+create table if not exists AMPLIFIERS
 (
-    `ID`       bigint NOT NULL AUTO_INCREMENT,
-    `code`     varchar(255) DEFAULT NULL,
-    `endsAt`   datetime     DEFAULT NULL,
-    `startsAt` datetime     DEFAULT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    id             bigint auto_increment
+        primary key,
+    ampType        varchar(255) null,
+    cashMultiplier float        null,
+    repMultiplier  float        null,
+    product_id     varchar(255) not null,
+    constraint UK_dpq9a1cdlxuukwbqor9ua1j2a
+        unique (product_id),
+    constraint FK8dw7pn0b32ngrloirp6m9xx5x
+        foreign key (product_id) references PRODUCT (productId)
+)
+    charset = latin1;
 
---
--- Table structure for table `HARDWARE_INFO`
---
+create index PRODUCT_availability_index
+    on PRODUCT (categoryName, productType, enabled, minLevel, premium);
 
-DROP TABLE IF EXISTS `HARDWARE_INFO`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `HARDWARE_INFO`
+create index PRODUCT_entitlementTag_index
+    on PRODUCT (entitlementTag);
+
+create index PRODUCT_hash_index
+    on PRODUCT (hash);
+
+create index parent_prod_id_index
+    on PRODUCT (parentProductId);
+
+create index prod_id_index
+    on PRODUCT (productId);
+
+create table if not exists RECOVERY_PASSWORD
 (
-    `ID`           bigint NOT NULL AUTO_INCREMENT,
-    `banned`       bit(1) NOT NULL,
-    `hardwareHash` varchar(255) DEFAULT NULL,
-    `hardwareInfo` longtext,
-    `userId`       bigint       DEFAULT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB
+    id             bigint auto_increment
+        primary key,
+    expirationDate datetime                             null,
+    isClose        bit                                  null,
+    randomKey      varchar(255) collate utf8_unicode_ci null,
+    userId         bigint                               null
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `INVENTORY`
---
-
-DROP TABLE IF EXISTS `INVENTORY`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `INVENTORY`
+create table if not exists REPORT
 (
-    `id`                            bigint NOT NULL AUTO_INCREMENT,
-    `performancePartsCapacity`      int    DEFAULT NULL,
-    `performancePartsUsedSlotCount` int    DEFAULT NULL,
-    `skillModPartsCapacity`         int    DEFAULT NULL,
-    `skillModPartsUsedSlotCount`    int    DEFAULT NULL,
-    `visualPartsCapacity`           int    DEFAULT NULL,
-    `visualPartsUsedSlotCount`      int    DEFAULT NULL,
-    `personaId`                     bigint DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FK_INVENTORY_PERSONA` (`personaId`),
-    CONSTRAINT `FK_INVENTORY_PERSONA` FOREIGN KEY (`personaId`) REFERENCES `PERSONA` (`ID`)
-) ENGINE = InnoDB
+    id              bigint auto_increment
+        primary key,
+    abuserPersonaId bigint       null,
+    chatMinutes     int          null,
+    customCarID     int          null,
+    description     varchar(255) null,
+    hacksdetected   bigint       null,
+    personaId       bigint       null,
+    petitionType    int          null
+)
+    collate = utf8mb4_unicode_ci;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `INVENTORY_ITEM`
---
-
-DROP TABLE IF EXISTS `INVENTORY_ITEM`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `INVENTORY_ITEM`
+create table if not exists REWARD_TABLE
 (
-    `id`                 bigint       NOT NULL AUTO_INCREMENT,
-    `expirationDate`     datetime DEFAULT NULL,
-    `remainingUseCount`  int      DEFAULT NULL,
-    `resellPrice`        int      DEFAULT NULL,
-    `status`             varchar(255) NOT NULL,
-    `inventoryEntity_id` bigint       NOT NULL,
-    `productId`          varchar(255) NOT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FKpt9o6wxhd3m4ufvl7dgifl9l3` (`inventoryEntity_id`),
-    KEY `FK1ii2plfjt9hme45210mfpr15e` (`productId`),
-    CONSTRAINT `FK1ii2plfjt9hme45210mfpr15e` FOREIGN KEY (`productId`) REFERENCES `PRODUCT` (`productId`),
-    CONSTRAINT `FKpt9o6wxhd3m4ufvl7dgifl9l3` FOREIGN KEY (`inventoryEntity_id`) REFERENCES `INVENTORY` (`id`)
-) ENGINE = InnoDB
+    ID   bigint auto_increment
+        primary key,
+    name varchar(255) null,
+    constraint REWARD_TABLE_name_index
+        unique (name)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `INVITE_TICKET`
---
-
-DROP TABLE IF EXISTS `INVITE_TICKET`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `INVITE_TICKET`
+create table if not exists EVENT
 (
-    `ID`           bigint NOT NULL AUTO_INCREMENT,
-    `DISCORD_NAME` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `TICKET`       varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `USERID`       bigint                                                  DEFAULT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FK_INVITETICKET_USER` (`USERID`),
-    CONSTRAINT `FK3plac3qijtk0ciw43aoro0ogn` FOREIGN KEY (`USERID`) REFERENCES `USER` (`ID`),
-    CONSTRAINT `FK_INVITETICKET_USER` FOREIGN KEY (`USERID`) REFERENCES `USER` (`ID`)
-) ENGINE = InnoDB
+    ID                         int auto_increment
+        primary key,
+    baseCashReward             int                                  not null,
+    baseRepReward              int                                  not null,
+    eventModeId                int                                  not null,
+    finalCashRewardMultiplier  float                                not null,
+    finalRepRewardMultiplier   float                                not null,
+    isEnabled                  bit    default b'1'                  null,
+    isLocked                   bit    default b'0'                  null,
+    rewardsTimeLimit           bigint default 0                     not null,
+    levelCashRewardMultiplier  float                                not null,
+    levelRepRewardMultiplier   float                                not null,
+    maxCarClassRating          int                                  not null,
+    maxLevel                   int                                  not null,
+    maxPlayers                 int                                  not null,
+    minCarClassRating          int                                  not null,
+    minLevel                   int                                  not null,
+    minTopSpeedTrigger         float                                not null,
+    name                       varchar(255) collate utf8_unicode_ci null,
+    perfectStartCashMultiplier float                                not null,
+    perfectStartRepMultiplier  float                                not null,
+    rank1CashMultiplier        float                                not null,
+    rank1RepMultiplier         float                                not null,
+    rank2CashMultiplier        float                                not null,
+    rank2RepMultiplier         float                                not null,
+    rank3CashMultiplier        float                                not null,
+    rank3RepMultiplier         float                                not null,
+    rank4CashMultiplier        float                                not null,
+    rank4RepMultiplier         float                                not null,
+    rank5CashMultiplier        float                                not null,
+    rank5RepMultiplier         float                                not null,
+    rank6CashMultiplier        float                                not null,
+    rank6RepMultiplier         float                                not null,
+    rank7CashMultiplier        float                                not null,
+    rank7RepMultiplier         float                                not null,
+    rank8CashMultiplier        float                                not null,
+    rank8RepMultiplier         float                                not null,
+    topSpeedCashMultiplier     float                                not null,
+    topSpeedRepMultiplier      float                                not null,
+    carClassHash               int                                  not null,
+    trackLength                float                                not null,
+    rewardTable_rank1_id       bigint                               null,
+    rewardTable_rank2_id       bigint                               null,
+    rewardTable_rank3_id       bigint                               null,
+    rewardTable_rank4_id       bigint                               null,
+    rewardTable_rank5_id       bigint                               null,
+    rewardTable_rank6_id       bigint                               null,
+    rewardTable_rank7_id       bigint                               null,
+    rewardTable_rank8_id       bigint                               null,
+    isRotationEnabled          bit    default b'0'                  null,
+    dnfTimerTime               int    default 60000                 null,
+    lobbyCountdownTime         int    default 60000                 null,
+    legitTime                  bigint default 0                     null,
+    isDnfEnabled               bit    default b'1'                  null,
+    isRaceAgainEnabled         bit    default b'1'                  null,
+    constraint FK2xj5h4dvsmiy3fpyayhmgsm7y
+        foreign key (rewardTable_rank6_id) references REWARD_TABLE (ID),
+    constraint FK5r8fjqwem02m1b4oyc6yy1esq
+        foreign key (rewardTable_rank3_id) references REWARD_TABLE (ID),
+    constraint FK8g17bk7hkmabmnf88srvslxwm
+        foreign key (rewardTable_rank4_id) references REWARD_TABLE (ID),
+    constraint FKalw5jfl728ahfpvdwhegdty6w
+        foreign key (rewardTable_rank5_id) references REWARD_TABLE (ID),
+    constraint FKdwjw797e5pirj7rnvcr6d71pi
+        foreign key (rewardTable_rank2_id) references REWARD_TABLE (ID),
+    constraint FKfh6oit4kajywxhmxtid3yfukk
+        foreign key (rewardTable_rank8_id) references REWARD_TABLE (ID),
+    constraint FKfpntheixvd1mgifia39l2tf4b
+        foreign key (rewardTable_rank7_id) references REWARD_TABLE (ID),
+    constraint FKhky4tfvfpo91vixa09jkofjnc
+        foreign key (rewardTable_rank1_id) references REWARD_TABLE (ID)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create index EVENT_availability_index
+    on EVENT (isEnabled asc, minLevel asc, maxLevel desc);
 
---
--- Table structure for table `LEVEL_REP`
---
+create index test_index
+    on EVENT (ID, name);
 
-DROP TABLE IF EXISTS `LEVEL_REP`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `LEVEL_REP`
+create table if not exists LOBBY
 (
-    `level`    bigint NOT NULL AUTO_INCREMENT,
-    `expPoint` bigint DEFAULT NULL,
-    PRIMARY KEY (`level`)
-) ENGINE = InnoDB
+    ID                 bigint auto_increment
+        primary key,
+    isPrivate          bit      null,
+    lobbyDateTimeStart datetime null,
+    personaId          bigint   null,
+    EVENTID            int      null,
+    startedTime        datetime null,
+    constraint FKig5wp7wc5nuwille2w0hahp77
+        foreign key (EVENTID) references EVENT (ID),
+    constraint FK_LOBBY_EVENT
+        foreign key (EVENTID) references EVENT (ID)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `LOBBY`
---
-
-DROP TABLE IF EXISTS `LOBBY`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `LOBBY`
+create table if not exists EVENT_SESSION
 (
-    `ID`                 bigint NOT NULL AUTO_INCREMENT,
-    `isPrivate`          bit(1)   DEFAULT NULL,
-    `lobbyDateTimeStart` datetime DEFAULT NULL,
-    `personaId`          bigint   DEFAULT NULL,
-    `EVENTID`            int      DEFAULT NULL,
-    `startedTime`        datetime DEFAULT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FK_LOBBY_EVENT` (`EVENTID`),
-    CONSTRAINT `FK_LOBBY_EVENT` FOREIGN KEY (`EVENTID`) REFERENCES `EVENT` (`ID`),
-    CONSTRAINT `FKig5wp7wc5nuwille2w0hahp77` FOREIGN KEY (`EVENTID`) REFERENCES `EVENT` (`ID`)
-) ENGINE = InnoDB
+    ID          bigint auto_increment
+        primary key,
+    EVENTID     int    null,
+    ENDED       bigint null,
+    STARTED     bigint null,
+    LOBBYID     bigint null,
+    NEXTLOBBYID bigint null,
+    constraint FK_EVENTSESSION_LOBBY
+        foreign key (LOBBYID) references LOBBY (ID),
+    constraint FK_EVENTSESSION_NEXTLOBBY
+        foreign key (NEXTLOBBYID) references LOBBY (ID),
+    constraint FKj7j77j10kjso12h57nw1vdb1
+        foreign key (EVENTID) references EVENT (ID),
+    constraint FK_EVENTSESSION_EVENT
+        foreign key (EVENTID) references EVENT (ID)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create index LOBBY_startedTime_index
+    on LOBBY (startedTime);
 
---
--- Table structure for table `LOBBY_ENTRANT`
---
-
-DROP TABLE IF EXISTS `LOBBY_ENTRANT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `LOBBY_ENTRANT`
+create table if not exists REWARD_TABLE_ITEM
 (
-    `id`        bigint NOT NULL AUTO_INCREMENT,
-    `gridIndex` int    NOT NULL,
-    `LOBBYID`   bigint DEFAULT NULL,
-    `PERSONAID` bigint DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FK_LOBBYENTRANT_LOBBY` (`LOBBYID`),
-    KEY `FK_LOBBYENTRANT_PERSONA` (`PERSONAID`),
-    CONSTRAINT `FK_LOBBYENTRANT_LOBBY` FOREIGN KEY (`LOBBYID`) REFERENCES `LOBBY` (`ID`),
-    CONSTRAINT `FK_LOBBYENTRANT_PERSONA` FOREIGN KEY (`PERSONAID`) REFERENCES `PERSONA` (`ID`),
-    CONSTRAINT `FKn2yjevc0kdgpj7juvn0udr2mn` FOREIGN KEY (`LOBBYID`) REFERENCES `LOBBY` (`ID`),
-    CONSTRAINT `FKqy9gynb01x729yacdubgmjier` FOREIGN KEY (`PERSONAID`) REFERENCES `PERSONA` (`ID`)
-) ENGINE = InnoDB
+    ID                   bigint auto_increment
+        primary key,
+    dropWeight           double null,
+    script               text   not null,
+    rewardTableEntity_ID bigint not null,
+    constraint FK4qxgxc2phadj0ig58lsepsx9y
+        foreign key (rewardTableEntity_ID) references REWARD_TABLE (ID)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `LOGIN_ANNOUCEMENT`
---
-
-DROP TABLE IF EXISTS `LOGIN_ANNOUCEMENT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `LOGIN_ANNOUCEMENT`
+create table if not exists SERVER_INFO
 (
-    `id`       int NOT NULL AUTO_INCREMENT,
-    `imageUrl` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `target`   varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `type`     varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
+    messageSrv                       varchar(1000) collate utf8_unicode_ci not null,
+    country                          varchar(255) collate utf8_unicode_ci  null,
+    adminList                        varchar(255) collate utf8_unicode_ci  null,
+    bannerUrl                        varchar(255) collate utf8_unicode_ci  null,
+    discordUrl                       varchar(255) collate utf8_unicode_ci  null,
+    facebookUrl                      varchar(255) collate utf8_unicode_ci  null,
+    homePageUrl                      varchar(255) collate utf8_unicode_ci  null,
+    numberOfRegistered               int                                   null,
+    ownerList                        varchar(255) collate utf8_unicode_ci  null,
+    serverName                       varchar(255) collate utf8_unicode_ci  not null
+        primary key,
+    timezone                         int                                   null,
+    activatedHolidaySceneryGroups    varchar(255) default ''               not null,
+    disactivatedHolidaySceneryGroups varchar(255) default ''               not null,
+    allowedCountries                 varchar(255)                          null,
+    secondsToShutDown                int          default 7200             null
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `NEWS_ARTICLE`
---
-
-DROP TABLE IF EXISTS `NEWS_ARTICLE`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `NEWS_ARTICLE`
+create table if not exists TREASURE_HUNT_CONFIG
 (
-    `id`                    bigint NOT NULL AUTO_INCREMENT,
-    `filters`               varchar(255)  DEFAULT NULL,
-    `iconType`              int           DEFAULT NULL,
-    `longHALId`             varchar(255)  DEFAULT NULL,
-    `parameters`            varchar(1000) DEFAULT NULL,
-    `shortHALId`            varchar(255)  DEFAULT NULL,
-    `sticky`                int           DEFAULT NULL,
-    `timestamp`             bigint        DEFAULT NULL,
-    `type`                  varchar(255)  DEFAULT NULL,
-    `persona_id`            bigint        DEFAULT NULL,
-    `referenced_persona_id` bigint        DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FKrgi3drtymu1h23a4jjgd092yg` (`persona_id`),
-    KEY `FK41ahos5r10lc5v0o1ttd3tqt3` (`referenced_persona_id`),
-    CONSTRAINT `FK41ahos5r10lc5v0o1ttd3tqt3` FOREIGN KEY (`referenced_persona_id`) REFERENCES `PERSONA` (`ID`),
-    CONSTRAINT `FKrgi3drtymu1h23a4jjgd092yg` FOREIGN KEY (`persona_id`) REFERENCES `PERSONA` (`ID`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    ID              bigint auto_increment
+        primary key,
+    base_cash       float  null,
+    base_rep        float  null,
+    cash_multiplier float  null,
+    rep_multiplier  float  null,
+    streak          int    null,
+    reward_table_id bigint null,
+    constraint FK5tyssnup3qalmjfmr4q27jpxf
+        foreign key (reward_table_id) references REWARD_TABLE (ID)
+)
+    charset = latin1;
 
---
--- Table structure for table `ONLINE_USERS`
---
-
-DROP TABLE IF EXISTS `ONLINE_USERS`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ONLINE_USERS`
+create table if not exists USER
 (
-    `ID`            int NOT NULL,
-    `numberOfUsers` int NOT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    ID                   bigint auto_increment
+        primary key,
+    EMAIL                varchar(255) collate utf8_unicode_ci null,
+    PASSWORD             varchar(50) collate utf8_unicode_ci  null,
+    premium              bit default b'0'                     not null,
+    isAdmin              bit                                  null,
+    HWID                 varchar(255)                         null,
+    IP_ADDRESS           varchar(255)                         null,
+    created              datetime                             null,
+    lastLogin            datetime                             null,
+    gameHardwareHash     varchar(255)                         null,
+    isLocked             bit                                  null,
+    selectedPersonaIndex int default 0                        null,
+    constraint USER_email_index
+        unique (EMAIL)
+)
+    charset = utf8;
 
---
--- Table structure for table `OWNEDCAR`
---
-
-DROP TABLE IF EXISTS `OWNEDCAR`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `OWNEDCAR`
+create table if not exists INVITE_TICKET
 (
-    `id`             bigint NOT NULL AUTO_INCREMENT,
-    `durability`     int    NOT NULL,
-    `expirationDate` datetime                                                DEFAULT NULL,
-    `heat`           float  NOT NULL,
-    `ownershipType`  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `carSlotId`      bigint                                                  DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FK9i0ql538ftgc26i0eri8keeqp` (`carSlotId`),
-    CONSTRAINT `FK9i0ql538ftgc26i0eri8keeqp` FOREIGN KEY (`carSlotId`) REFERENCES `CARSLOT` (`id`),
-    CONSTRAINT `FK_OWNEDCAR_CARSLOT` FOREIGN KEY (`carSlotId`) REFERENCES `CARSLOT` (`id`)
-) ENGINE = InnoDB
+    ID           bigint auto_increment
+        primary key,
+    DISCORD_NAME varchar(255) collate utf8_unicode_ci null,
+    TICKET       varchar(255) collate utf8_unicode_ci null,
+    USERID       bigint                               null,
+    constraint FK3plac3qijtk0ciw43aoro0ogn
+        foreign key (USERID) references USER (ID),
+    constraint FK_INVITETICKET_USER
+        foreign key (USERID) references USER (ID)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create index INVITE_TICKET_TICKET_index
+    on INVITE_TICKET (TICKET);
 
---
--- Table structure for table `PAINT`
---
-
-DROP TABLE IF EXISTS `PAINT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `PAINT`
+create table if not exists PERSONA
 (
-    `id`          bigint NOT NULL AUTO_INCREMENT,
-    `paintGroup`  int    DEFAULT NULL,
-    `hue`         int    NOT NULL,
-    `sat`         int    NOT NULL,
-    `slot`        int    NOT NULL,
-    `paintVar`    int    DEFAULT NULL,
-    `customCarId` bigint DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FKpxxc02fcm311w9odwx6j6wu6u` (`customCarId`),
-    CONSTRAINT `FK_PAINT_CUSTOMCAR` FOREIGN KEY (`customCarId`) REFERENCES `CUSTOMCAR` (`id`),
-    CONSTRAINT `FKpxxc02fcm311w9odwx6j6wu6u` FOREIGN KEY (`customCarId`) REFERENCES `CUSTOMCAR` (`id`)
-) ENGINE = InnoDB
+    ID                bigint auto_increment
+        primary key,
+    boost             double                               not null,
+    cash              double                               not null,
+    curCarIndex       int                                  not null,
+    iconIndex         int                                  not null,
+    level             int                                  not null,
+    motto             varchar(255) collate utf8_unicode_ci null,
+    name              varchar(255) collate utf8_unicode_ci null,
+    percentToLevel    float                                not null,
+    rating            double                               not null,
+    rep               double                               not null,
+    repAtCurrentLevel int                                  not null,
+    score             int                                  not null,
+    USERID            bigint                               null,
+    created           datetime                             null,
+    badges            varchar(2048)                        null,
+    first_login       datetime                             null,
+    last_login        datetime                             null,
+    constraint PERSONA_name_index
+        unique (name),
+    constraint FKon9k3f1y35051t3y7x6ogd6k7
+        foreign key (USERID) references USER (ID),
+    constraint FK_PERSONA_USER
+        foreign key (USERID) references USER (ID)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `PARAMETER`
---
-
-DROP TABLE IF EXISTS `PARAMETER`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `PARAMETER`
+create table if not exists BAN
 (
-    `name`  varchar(255) NOT NULL,
-    `value` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`name`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    id           bigint auto_increment
+        primary key,
+    data         varchar(255) null,
+    endsAt       datetime     null,
+    reason       varchar(255) null,
+    type         varchar(255) null,
+    user_id      bigint       null,
+    started      datetime     null,
+    willEnd      bit          null,
+    banned_by_id bigint       null,
+    constraint FK_BANNED_BY
+        foreign key (banned_by_id) references PERSONA (ID),
+    constraint FK_BAN_USER
+        foreign key (user_id) references USER (ID),
+    constraint FKlwawdqh4uid0isnsc9uomdyfx
+        foreign key (user_id) references USER (ID)
+)
+    collate = utf8mb4_unicode_ci;
 
---
--- Table structure for table `PERFORMANCEPART`
---
+create index BAN_endsAt_index
+    on BAN (endsAt);
 
-DROP TABLE IF EXISTS `PERFORMANCEPART`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `PERFORMANCEPART`
+create index BAN_existence_index
+    on BAN (user_id, willEnd, endsAt);
+
+create table if not exists CARSLOT
 (
-    `id`                        bigint NOT NULL AUTO_INCREMENT,
-    `performancePartAttribHash` int    NOT NULL,
-    `customCarId`               bigint DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FKbehavbux872md9t4uedp5xw68` (`customCarId`),
-    CONSTRAINT `FK_PERFPART_CUSTOMCAR` FOREIGN KEY (`customCarId`) REFERENCES `CUSTOMCAR` (`id`),
-    CONSTRAINT `FKbehavbux872md9t4uedp5xw68` FOREIGN KEY (`customCarId`) REFERENCES `CUSTOMCAR` (`id`)
-) ENGINE = InnoDB
+    id            bigint auto_increment
+        primary key,
+    ownedCarTrans longtext collate utf8_unicode_ci null,
+    PersonaId     bigint                           null,
+    constraint FKc8km27r2ln6pxi1wfr5r8qjrd
+        foreign key (PersonaId) references PERSONA (ID),
+    constraint FK_CARSLOT_PERSONA
+        foreign key (PersonaId) references PERSONA (ID)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `PERSONA`
---
-
-DROP TABLE IF EXISTS `PERSONA`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `PERSONA`
+create table if not exists EVENT_DATA
 (
-    `ID`                bigint NOT NULL AUTO_INCREMENT,
-    `boost`             double NOT NULL,
-    `cash`              double NOT NULL,
-    `curCarIndex`       int    NOT NULL,
-    `iconIndex`         int    NOT NULL,
-    `level`             int    NOT NULL,
-    `motto`             varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `name`              varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `percentToLevel`    float  NOT NULL,
-    `rating`            double NOT NULL,
-    `rep`               double NOT NULL,
-    `repAtCurrentLevel` int    NOT NULL,
-    `score`             int    NOT NULL,
-    `USERID`            bigint                                                  DEFAULT NULL,
-    `created`           datetime                                                DEFAULT NULL,
-    `badges`            varchar(2048)                                           DEFAULT NULL,
-    `first_login`       datetime                                                DEFAULT NULL,
-    `last_login`        datetime                                                DEFAULT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FK_PERSONA_USER` (`USERID`),
-    CONSTRAINT `FK_PERSONA_USER` FOREIGN KEY (`USERID`) REFERENCES `USER` (`ID`),
-    CONSTRAINT `FKon9k3f1y35051t3y7x6ogd6k7` FOREIGN KEY (`USERID`) REFERENCES `USER` (`ID`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 100
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    ID                                   bigint auto_increment
+        primary key,
+    alternateEventDurationInMilliseconds bigint           not null,
+    bestLapDurationInMilliseconds        bigint           not null,
+    bustedCount                          int              not null,
+    carId                                bigint           not null,
+    copsDeployed                         int              not null,
+    copsDisabled                         int              not null,
+    copsRammed                           int              not null,
+    costToState                          int              not null,
+    distanceToFinish                     float            not null,
+    eventDurationInMilliseconds          bigint           not null,
+    eventModeId                          int              not null,
+    eventSessionId                       bigint           null,
+    finishReason                         int              not null,
+    fractionCompleted                    float            not null,
+    hacksDetected                        bigint           not null,
+    heat                                 float            not null,
+    infractions                          int              not null,
+    longestJumpDurationInMilliseconds    bigint           not null,
+    numberOfCollisions                   int              not null,
+    perfectStart                         int              not null,
+    personaId                            bigint           null,
+    `rank`                               int              not null,
+    roadBlocksDodged                     int              not null,
+    spikeStripsDodged                    int              not null,
+    sumOfJumpsDurationInMilliseconds     bigint           not null,
+    topSpeed                             float            not null,
+    EVENTID                              int              null,
+    isLegit                              bit default b'0' null,
+    serverTimeInMilliseconds             bigint           null,
+    serverTimeStarted                    bigint           null,
+    serverTimeEnded                      bigint           null,
+    carClassHash                         int              null,
+    carRating                            int              null,
+    constraint esi_personaId
+        unique (eventSessionId, personaId),
+    constraint EVENT_DATA_EVENT_SESSION_ID_fk
+        foreign key (eventSessionId) references EVENT_SESSION (ID)
+            on delete cascade,
+    constraint EVENT_DATA_PERSONA_ID_fk
+        foreign key (personaId) references PERSONA (ID)
+            on delete cascade,
+    constraint FKjqbikfyvivd8pf6ke5ke5rv1k
+        foreign key (EVENTID) references EVENT (ID),
+    constraint FK_EVENTDATA_EVENT
+        foreign key (EVENTID) references EVENT (ID)
+)
+    charset = utf8;
 
---
--- Table structure for table `PERSONA_ACHIEVEMENT`
---
+create index EVENT_DATA_persona_id_index
+    on EVENT_DATA (personaId);
 
-DROP TABLE IF EXISTS `PERSONA_ACHIEVEMENT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `PERSONA_ACHIEVEMENT`
+create index car_id_index
+    on EVENT_DATA (carId);
+
+create index finishreason_index
+    on EVENT_DATA (finishReason);
+
+create table if not exists EVENT_POWERUP
 (
-    `ID`             bigint NOT NULL AUTO_INCREMENT,
-    `can_progress`   bit(1) DEFAULT NULL,
-    `current_value`  bigint DEFAULT NULL,
-    `achievement_id` bigint NOT NULL,
-    `persona_id`     bigint NOT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FKi0362rxl6y75pcw9v1n7hmecu` (`achievement_id`),
-    KEY `FKmci5vxxoedblsncmosjfbtfxk` (`persona_id`),
-    CONSTRAINT `FKi0362rxl6y75pcw9v1n7hmecu` FOREIGN KEY (`achievement_id`) REFERENCES `ACHIEVEMENT` (`ID`),
-    CONSTRAINT `FKmci5vxxoedblsncmosjfbtfxk` FOREIGN KEY (`persona_id`) REFERENCES `PERSONA` (`ID`)
-) ENGINE = InnoDB
+    id             bigint auto_increment
+        primary key,
+    personaId      bigint not null,
+    eventSessionId bigint not null,
+    powerupHash    int    not null,
+    constraint event_session_fk
+        foreign key (eventSessionId) references EVENT_SESSION (ID)
+            on delete cascade,
+    constraint persona_fk
+        foreign key (personaId) references PERSONA (ID)
+            on delete cascade
+);
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create index hash_index
+    on EVENT_POWERUP (powerupHash);
 
---
--- Table structure for table `PERSONA_ACHIEVEMENT_RANK`
---
+create index persona_index
+    on EVENT_POWERUP (personaId);
 
-DROP TABLE IF EXISTS `PERSONA_ACHIEVEMENT_RANK`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `PERSONA_ACHIEVEMENT_RANK`
+create index session_index
+    on EVENT_POWERUP (eventSessionId);
+
+create index session_persona_index
+    on EVENT_POWERUP (eventSessionId, personaId);
+
+create table if not exists INVENTORY
 (
-    `ID`                     bigint NOT NULL AUTO_INCREMENT,
-    `achieved_on`            datetime                                                 DEFAULT NULL,
-    `state`                  enum ('Locked','InProgress','Completed','RewardWaiting') DEFAULT NULL,
-    `achievement_rank_id`    bigint NOT NULL,
-    `persona_achievement_id` bigint NOT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FKc1w7mcx2mdb9bg30d0ed5efd9` (`achievement_rank_id`),
-    KEY `FKbbg8f49c6fgkbwwhe25i2ely0` (`persona_achievement_id`),
-    CONSTRAINT `FKbbg8f49c6fgkbwwhe25i2ely0` FOREIGN KEY (`persona_achievement_id`) REFERENCES `PERSONA_ACHIEVEMENT` (`ID`),
-    CONSTRAINT `FKc1w7mcx2mdb9bg30d0ed5efd9` FOREIGN KEY (`achievement_rank_id`) REFERENCES `ACHIEVEMENT_RANK` (`ID`)
-) ENGINE = InnoDB
+    id                            bigint auto_increment
+        primary key,
+    performancePartsCapacity      int    null,
+    performancePartsUsedSlotCount int    null,
+    skillModPartsCapacity         int    null,
+    skillModPartsUsedSlotCount    int    null,
+    visualPartsCapacity           int    null,
+    visualPartsUsedSlotCount      int    null,
+    personaId                     bigint null,
+    constraint FK_INVENTORY_PERSONA
+        foreign key (personaId) references PERSONA (ID)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `PERSONA_BADGE`
---
-
-DROP TABLE IF EXISTS `PERSONA_BADGE`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `PERSONA_BADGE`
+create table if not exists INVENTORY_ITEM
 (
-    `ID`                  bigint NOT NULL AUTO_INCREMENT,
-    `slot`                int DEFAULT NULL,
-    `badge_definition_id` bigint NOT NULL,
-    `persona_id`          bigint NOT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FK4c2e5u8ymnlh4xc8hiem6uota` (`badge_definition_id`),
-    KEY `FKah3mnx6lcx9mg3ant8n1uorii` (`persona_id`),
-    CONSTRAINT `FK4c2e5u8ymnlh4xc8hiem6uota` FOREIGN KEY (`badge_definition_id`) REFERENCES `BADGE_DEFINITION` (`ID`),
-    CONSTRAINT `FKah3mnx6lcx9mg3ant8n1uorii` FOREIGN KEY (`persona_id`) REFERENCES `PERSONA` (`ID`)
-) ENGINE = InnoDB
+    id                 bigint auto_increment
+        primary key,
+    expirationDate     datetime     null,
+    remainingUseCount  int          null,
+    resellPrice        int          null,
+    status             varchar(255) not null,
+    inventoryEntity_id bigint       not null,
+    productId          varchar(255) not null,
+    constraint FK1ii2plfjt9hme45210mfpr15e
+        foreign key (productId) references PRODUCT (productId),
+    constraint FKpt9o6wxhd3m4ufvl7dgifl9l3
+        foreign key (inventoryEntity_id) references INVENTORY (id)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create index INVENTORY_ITEM_expirationDate_index
+    on INVENTORY_ITEM (expirationDate);
 
---
--- Table structure for table `PRODUCT`
---
-
-DROP TABLE IF EXISTS `PRODUCT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `PRODUCT`
+create table if not exists LOBBY_ENTRANT
 (
-    `id`              bigint       NOT NULL AUTO_INCREMENT,
-    `accel`           int          DEFAULT NULL,
-    `brand`           varchar(255) DEFAULT NULL,
-    `categoryId`      varchar(255) DEFAULT NULL,
-    `categoryName`    varchar(255) DEFAULT NULL,
-    `currency`        varchar(255) NOT NULL,
-    `description`     varchar(255) DEFAULT NULL,
-    `dropWeight`      double       DEFAULT NULL,
-    `durationMinute`  int          NOT NULL,
-    `enabled`         bit(1)       NOT NULL,
-    `entitlementTag`  varchar(255) DEFAULT NULL,
-    `handling`        int          DEFAULT NULL,
-    `hash`            int          DEFAULT NULL,
-    `icon`            varchar(255) NOT NULL,
-    `isDropable`      bit(1)       NOT NULL,
-    `level`           int          NOT NULL,
-    `longDescription` varchar(255) DEFAULT NULL,
-    `minLevel`        int          NOT NULL,
-    `premium`         bit(1)       NOT NULL,
-    `price`           float        NOT NULL,
-    `priority`        int          NOT NULL,
-    `productId`       varchar(255) NOT NULL,
-    `productTitle`    varchar(255) DEFAULT NULL,
-    `productType`     varchar(255) NOT NULL,
-    `rarity`          int          DEFAULT NULL,
-    `resalePrice`     float        NOT NULL,
-    `secondaryIcon`   varchar(255) DEFAULT NULL,
-    `skillValue`      float        DEFAULT NULL,
-    `subType`         varchar(255) DEFAULT NULL,
-    `topSpeed`        int          DEFAULT NULL,
-    `useCount`        int          NOT NULL,
-    `visualStyle`     varchar(255) DEFAULT NULL,
-    `webIcon`         varchar(255) DEFAULT NULL,
-    `webLocation`     varchar(255) DEFAULT NULL,
-    `parentProductId` bigint       DEFAULT NULL,
-    `bundleItems`     text,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `UK_10bw1u87a77ibq6hdbivxp1kp` (`productId`),
-    KEY `prod_id_index` (`productId`),
-    KEY `FK8obn8l9i769slt8pjub191l52` (`parentProductId`),
-    CONSTRAINT `FK8obn8l9i769slt8pjub191l52` FOREIGN KEY (`parentProductId`) REFERENCES `PRODUCT` (`id`)
-) ENGINE = InnoDB
+    id        bigint auto_increment
+        primary key,
+    gridIndex int    not null,
+    LOBBYID   bigint null,
+    PERSONAID bigint null,
+    constraint FKn2yjevc0kdgpj7juvn0udr2mn
+        foreign key (LOBBYID) references LOBBY (ID),
+    constraint FK_LOBBYENTRANT_LOBBY
+        foreign key (LOBBYID) references LOBBY (ID),
+    constraint FKqy9gynb01x729yacdubgmjier
+        foreign key (PERSONAID) references PERSONA (ID),
+    constraint FK_LOBBYENTRANT_PERSONA
+        foreign key (PERSONAID) references PERSONA (ID)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `PROMO_CODE`
---
-
-DROP TABLE IF EXISTS `PROMO_CODE`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `PROMO_CODE`
+create table if not exists NEWS_ARTICLE
 (
-    `id`        bigint NOT NULL AUTO_INCREMENT,
-    `isUsed`    bit(1)       DEFAULT NULL,
-    `promoCode` varchar(255) DEFAULT NULL,
-    `USERID`    bigint       DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FK_PROMOCODE_USER` (`USERID`),
-    CONSTRAINT `FK_PROMOCODE_USER` FOREIGN KEY (`USERID`) REFERENCES `USER` (`ID`),
-    CONSTRAINT `FKf3q30eb9w1j5o89cumpi72gry` FOREIGN KEY (`USERID`) REFERENCES `USER` (`ID`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    id                    bigint auto_increment
+        primary key,
+    filters               varchar(255)  null,
+    iconType              int           null,
+    longHALId             varchar(255)  null,
+    parameters            varchar(1000) null,
+    shortHALId            varchar(255)  null,
+    sticky                int           null,
+    timestamp             bigint        null,
+    type                  varchar(255)  null,
+    persona_id            bigint        null,
+    referenced_persona_id bigint        null,
+    constraint FK41ahos5r10lc5v0o1ttd3tqt3
+        foreign key (referenced_persona_id) references PERSONA (ID),
+    constraint FKrgi3drtymu1h23a4jjgd092yg
+        foreign key (persona_id) references PERSONA (ID)
+)
+    charset = latin1;
 
---
--- Table structure for table `RECOVERY_PASSWORD`
---
-
-DROP TABLE IF EXISTS `RECOVERY_PASSWORD`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `RECOVERY_PASSWORD`
+create table if not exists OWNEDCAR
 (
-    `id`             bigint NOT NULL AUTO_INCREMENT,
-    `expirationDate` datetime                                                DEFAULT NULL,
-    `isClose`        bit(1)                                                  DEFAULT NULL,
-    `randomKey`      varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `userId`         bigint                                                  DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    id             bigint auto_increment
+        primary key,
+    durability     int                                  not null,
+    expirationDate datetime                             null,
+    heat           float                                not null,
+    ownershipType  varchar(255) collate utf8_unicode_ci null,
+    carSlotId      bigint                               null,
+    constraint FK_OWNEDCAR_CARSLOT
+        foreign key (carSlotId) references CARSLOT (id),
+    constraint FK9i0ql538ftgc26i0eri8keeqp
+        foreign key (carSlotId) references CARSLOT (id)
+)
+    charset = utf8;
 
---
--- Table structure for table `REPORT`
---
-
-DROP TABLE IF EXISTS `REPORT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `REPORT`
+create table if not exists CUSTOMCAR
 (
-    `id`              bigint NOT NULL AUTO_INCREMENT,
-    `abuserPersonaId` bigint                                                        DEFAULT NULL,
-    `chatMinutes`     int                                                           DEFAULT NULL,
-    `customCarID`     int                                                           DEFAULT NULL,
-    `description`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `hacksdetected`   bigint                                                        DEFAULT NULL,
-    `personaId`       bigint                                                        DEFAULT NULL,
-    `petitionType`    int                                                           DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
+    id                 bigint auto_increment
+        primary key,
+    baseCar            int                                     not null,
+    carClassHash       int                                     not null,
+    isPreset           bit                                     not null,
+    level              int                                     not null,
+    name               varchar(255) collate utf8mb4_unicode_ci null,
+    physicsProfileHash int                                     not null,
+    rating             int                                     not null,
+    resalePrice        float                                   not null,
+    rideHeightDrop     float                                   not null,
+    skillModSlotCount  int                                     not null,
+    version            int                                     not null,
+    ownedCarId         bigint                                  null,
+    constraint FK_CUSTOMCAR_OWNEDCAR
+        foreign key (ownedCarId) references OWNEDCAR (id),
+    constraint FKjgdh4g5me6ljh5srjkn2t0i71
+        foreign key (ownedCarId) references OWNEDCAR (id)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create index bci_index
+    on CUSTOMCAR (baseCar);
 
---
--- Table structure for table `REWARD_TABLE`
---
+create index customcar_name_index
+    on CUSTOMCAR (name);
 
-DROP TABLE IF EXISTS `REWARD_TABLE`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `REWARD_TABLE`
+create index pph_index
+    on CUSTOMCAR (physicsProfileHash);
+
+create index OWNEDCAR_expirationDate_index
+    on OWNEDCAR (expirationDate);
+
+create index OWNEDCAR_ownershipType_index
+    on OWNEDCAR (ownershipType);
+
+create table if not exists PAINT
 (
-    `ID`   bigint NOT NULL AUTO_INCREMENT,
-    `name` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB
+    id          bigint auto_increment
+        primary key,
+    paintGroup  int    null,
+    hue         int    not null,
+    sat         int    not null,
+    slot        int    not null,
+    paintVar    int    null,
+    customCarId bigint null,
+    constraint FK_PAINT_CUSTOMCAR
+        foreign key (customCarId) references CUSTOMCAR (id),
+    constraint FKpxxc02fcm311w9odwx6j6wu6u
+        foreign key (customCarId) references CUSTOMCAR (id)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `REWARD_TABLE_ITEM`
---
-
-DROP TABLE IF EXISTS `REWARD_TABLE_ITEM`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `REWARD_TABLE_ITEM`
+create table if not exists PERFORMANCEPART
 (
-    `ID`                   bigint NOT NULL AUTO_INCREMENT,
-    `dropWeight`           double DEFAULT NULL,
-    `script`               text   NOT NULL,
-    `rewardTableEntity_ID` bigint NOT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FK4qxgxc2phadj0ig58lsepsx9y` (`rewardTableEntity_ID`),
-    CONSTRAINT `FK4qxgxc2phadj0ig58lsepsx9y` FOREIGN KEY (`rewardTableEntity_ID`) REFERENCES `REWARD_TABLE` (`ID`)
-) ENGINE = InnoDB
+    id                        bigint auto_increment
+        primary key,
+    performancePartAttribHash int    not null,
+    customCarId               bigint null,
+    constraint FK_PERFPART_CUSTOMCAR
+        foreign key (customCarId) references CUSTOMCAR (id),
+    constraint FKbehavbux872md9t4uedp5xw68
+        foreign key (customCarId) references CUSTOMCAR (id)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `SERVER_INFO`
---
-
-DROP TABLE IF EXISTS `SERVER_INFO`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `SERVER_INFO`
+create table if not exists PERSONA_ACHIEVEMENT
 (
-    `messageSrv`                       varchar(1000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `country`                          varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci           DEFAULT NULL,
-    `adminList`                        varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci           DEFAULT NULL,
-    `bannerUrl`                        varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci           DEFAULT NULL,
-    `discordUrl`                       varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci           DEFAULT NULL,
-    `facebookUrl`                      varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci           DEFAULT NULL,
-    `homePageUrl`                      varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci           DEFAULT NULL,
-    `numberOfRegistered`               int                                                               DEFAULT NULL,
-    `ownerList`                        varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci           DEFAULT NULL,
-    `serverName`                       varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci  NOT NULL,
-    `timezone`                         int                                                               DEFAULT NULL,
-    `activatedHolidaySceneryGroups`    varchar(255)                                             NOT NULL DEFAULT '',
-    `disactivatedHolidaySceneryGroups` varchar(255)                                             NOT NULL DEFAULT '',
-    `allowedCountries`                 varchar(255)                                                      DEFAULT NULL,
-    PRIMARY KEY (`serverName`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    ID             bigint auto_increment
+        primary key,
+    can_progress   bit    null,
+    current_value  bigint null,
+    achievement_id bigint not null,
+    persona_id     bigint not null,
+    constraint FKi0362rxl6y75pcw9v1n7hmecu
+        foreign key (achievement_id) references ACHIEVEMENT (ID),
+    constraint FKmci5vxxoedblsncmosjfbtfxk
+        foreign key (persona_id) references PERSONA (ID)
+)
+    charset = latin1;
 
---
--- Table structure for table `SKILLMODPART`
---
+create index persona_ach_index
+    on PERSONA_ACHIEVEMENT (persona_id, achievement_id);
 
-DROP TABLE IF EXISTS `SKILLMODPART`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `SKILLMODPART`
+create table if not exists PERSONA_ACHIEVEMENT_RANK
 (
-    `id`                     bigint NOT NULL AUTO_INCREMENT,
-    `isFixed`                bit(1) NOT NULL,
-    `skillModPartAttribHash` int    NOT NULL,
-    `customCarId`            bigint DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FK8hnhp2he4tg3rxtpyad7payt1` (`customCarId`),
-    CONSTRAINT `FK8hnhp2he4tg3rxtpyad7payt1` FOREIGN KEY (`customCarId`) REFERENCES `CUSTOMCAR` (`id`),
-    CONSTRAINT `FK_SKILLPART_CUSTOMCAR` FOREIGN KEY (`customCarId`) REFERENCES `CUSTOMCAR` (`id`)
-) ENGINE = InnoDB
+    ID                     bigint auto_increment
+        primary key,
+    achieved_on            datetime                                                    null,
+    state                  enum ('Locked', 'InProgress', 'Completed', 'RewardWaiting') null,
+    achievement_rank_id    bigint                                                      not null,
+    persona_achievement_id bigint                                                      not null,
+    constraint FKbbg8f49c6fgkbwwhe25i2ely0
+        foreign key (persona_achievement_id) references PERSONA_ACHIEVEMENT (ID),
+    constraint FKc1w7mcx2mdb9bg30d0ed5efd9
+        foreign key (achievement_rank_id) references ACHIEVEMENT_RANK (ID)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `SOCIAL_RELATIONSHIP`
---
-
-DROP TABLE IF EXISTS `SOCIAL_RELATIONSHIP`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `SOCIAL_RELATIONSHIP`
+create table if not exists PERSONA_BADGE
 (
-    `ID`              int NOT NULL AUTO_INCREMENT,
-    `remotePersonaId` bigint DEFAULT NULL,
-    `status`          bigint DEFAULT NULL,
-    `fromUserId`      bigint DEFAULT NULL,
-    `userId`          bigint DEFAULT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FKih34hpy2rt97e269pop7ehcwm` (`fromUserId`),
-    KEY `FKb9v7qy291m237rtenur72v61l` (`userId`),
-    CONSTRAINT `FKb9v7qy291m237rtenur72v61l` FOREIGN KEY (`userId`) REFERENCES `USER` (`ID`),
-    CONSTRAINT `FKih34hpy2rt97e269pop7ehcwm` FOREIGN KEY (`fromUserId`) REFERENCES `USER` (`ID`)
-) ENGINE = InnoDB
+    ID                  bigint auto_increment
+        primary key,
+    slot                int    null,
+    badge_definition_id bigint not null,
+    persona_id          bigint not null,
+    constraint FK4c2e5u8ymnlh4xc8hiem6uota
+        foreign key (badge_definition_id) references BADGE_DEFINITION (ID),
+    constraint FKah3mnx6lcx9mg3ant8n1uorii
+        foreign key (persona_id) references PERSONA (ID)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `TOKEN_SESSION`
---
-
-DROP TABLE IF EXISTS `TOKEN_SESSION`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `TOKEN_SESSION`
+create table if not exists PROMO_CODE
 (
-    `ID`                varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-    `activeLobbyId`     bigint                                                           DEFAULT NULL,
-    `activePersonaId`   bigint                                                           DEFAULT NULL,
-    `expirationDate`    datetime                                                         DEFAULT NULL,
-    `premium`           bit(1)                                                  NOT NULL DEFAULT b'0',
-    `relayCryptoTicket` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci          DEFAULT NULL,
-    `userId`            bigint                                                           DEFAULT NULL,
-    `clientHostIp`      varchar(255)                                                     DEFAULT NULL,
-    `webToken`          varchar(255)                                                     DEFAULT NULL,
-    PRIMARY KEY (`ID`),
-    UNIQUE KEY `UK_9ranmagnxgrp70u76q860goeb` (`userId`),
-    CONSTRAINT `FKomwojh6l6a26jsu4jiqpjnuvn` FOREIGN KEY (`userId`) REFERENCES `USER` (`ID`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    id        bigint auto_increment
+        primary key,
+    isUsed    bit          null,
+    promoCode varchar(255) null,
+    USERID    bigint       null,
+    constraint FKf3q30eb9w1j5o89cumpi72gry
+        foreign key (USERID) references USER (ID),
+    constraint FK_PROMOCODE_USER
+        foreign key (USERID) references USER (ID)
+)
+    charset = utf8;
 
---
--- Table structure for table `TREASURE_HUNT`
---
-
-DROP TABLE IF EXISTS `TREASURE_HUNT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `TREASURE_HUNT`
+create table if not exists SKILLMODPART
 (
-    `personaId`      bigint NOT NULL,
-    `coinsCollected` int    DEFAULT NULL,
-    `isStreakBroken` bit(1) DEFAULT NULL,
-    `numCoins`       int    DEFAULT NULL,
-    `seed`           int    DEFAULT NULL,
-    `streak`         int    DEFAULT NULL,
-    `thDate`         date   DEFAULT NULL,
-    `isCompleted`    bit(1) NOT NULL,
-    PRIMARY KEY (`personaId`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    id                     bigint auto_increment
+        primary key,
+    isFixed                bit    not null,
+    skillModPartAttribHash int    not null,
+    customCarId            bigint null,
+    constraint FK_SKILLPART_CUSTOMCAR
+        foreign key (customCarId) references CUSTOMCAR (id),
+    constraint FK8hnhp2he4tg3rxtpyad7payt1
+        foreign key (customCarId) references CUSTOMCAR (id)
+)
+    charset = utf8;
 
---
--- Table structure for table `TREASURE_HUNT_CONFIG`
---
-
-DROP TABLE IF EXISTS `TREASURE_HUNT_CONFIG`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `TREASURE_HUNT_CONFIG`
+create table if not exists SOCIAL_RELATIONSHIP
 (
-    `ID`              bigint NOT NULL AUTO_INCREMENT,
-    `base_cash`       float  DEFAULT NULL,
-    `base_rep`        float  DEFAULT NULL,
-    `cash_multiplier` float  DEFAULT NULL,
-    `rep_multiplier`  float  DEFAULT NULL,
-    `streak`          int    DEFAULT NULL,
-    `reward_table_id` bigint DEFAULT NULL,
-    PRIMARY KEY (`ID`),
-    KEY `FK5tyssnup3qalmjfmr4q27jpxf` (`reward_table_id`),
-    CONSTRAINT `FK5tyssnup3qalmjfmr4q27jpxf` FOREIGN KEY (`reward_table_id`) REFERENCES `REWARD_TABLE` (`ID`)
-) ENGINE = InnoDB
+    ID              int auto_increment
+        primary key,
+    remotePersonaId bigint null,
+    status          bigint null,
+    fromUserId      bigint null,
+    userId          bigint null,
+    constraint FKb9v7qy291m237rtenur72v61l
+        foreign key (userId) references USER (ID),
+    constraint FKih34hpy2rt97e269pop7ehcwm
+        foreign key (fromUserId) references USER (ID)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `USER`
---
-
-DROP TABLE IF EXISTS `USER`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `USER`
+create table if not exists TOKEN_SESSION
 (
-    `ID`               bigint NOT NULL AUTO_INCREMENT,
-    `EMAIL`            varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-    `PASSWORD`         varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci  DEFAULT NULL,
-    `premium`          bit(1) NOT NULL                                         DEFAULT b'0',
-    `isAdmin`          bit(1)                                                  DEFAULT NULL,
-    `HWID`             varchar(255)                                            DEFAULT NULL,
-    `IP_ADDRESS`       varchar(255)                                            DEFAULT NULL,
-    `created`          datetime                                                DEFAULT NULL,
-    `lastLogin`        datetime                                                DEFAULT NULL,
-    `gameHardwareHash` varchar(255)                                            DEFAULT NULL,
-    `isLocked`         bit(1)                                                  DEFAULT NULL,
-    PRIMARY KEY (`ID`)
-) ENGINE = InnoDB
+    ID                varchar(255) collate utf8_unicode_ci not null,
+    activeLobbyId     bigint                               null,
+    activePersonaId   bigint                               null,
+    expirationDate    datetime                             null,
+    premium           bit default b'0'                     not null,
+    relayCryptoTicket varchar(255) collate utf8_unicode_ci null,
+    userId            bigint                               null,
+    clientHostIp      varchar(255)                         null,
+    webToken          varchar(255)                         null,
+    eventSessionId    bigint                               null,
+    constraint TOKEN_SESSION_ID_uindex
+        unique (ID),
+    constraint UK_9ranmagnxgrp70u76q860goeb
+        unique (userId),
+    constraint FKomwojh6l6a26jsu4jiqpjnuvn
+        foreign key (userId) references USER (ID),
+    constraint TOKEN_SESSION_ibfk_1
+        foreign key (eventSessionId) references EVENT_SESSION (ID)
+            on delete set null,
+    constraint TOKEN_SESSION_userID__fk
+        foreign key (userId) references USER (ID)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+create index TOKEN_SESSION_activePersonaId_index
+    on TOKEN_SESSION (activePersonaId);
 
---
--- Table structure for table `VINYL`
---
+create index event_session_fk
+    on TOKEN_SESSION (eventSessionId);
 
-DROP TABLE IF EXISTS `VINYL`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `VINYL`
+alter table TOKEN_SESSION
+    add primary key (ID);
+
+create table if not exists TREASURE_HUNT
 (
-    `id`          bigint NOT NULL AUTO_INCREMENT,
-    `hash`        int    NOT NULL,
-    `hue1`        int    NOT NULL,
-    `hue2`        int    NOT NULL,
-    `hue3`        int    NOT NULL,
-    `hue4`        int    NOT NULL,
-    `layer`       int    NOT NULL,
-    `mir`         bit(1) NOT NULL,
-    `rot`         int    NOT NULL,
-    `sat1`        int    NOT NULL,
-    `sat2`        int    NOT NULL,
-    `sat3`        int    NOT NULL,
-    `sat4`        int    NOT NULL,
-    `scalex`      int    NOT NULL,
-    `scaley`      int    NOT NULL,
-    `shear`       int    NOT NULL,
-    `tranx`       int    NOT NULL,
-    `trany`       int    NOT NULL,
-    `var1`        int    NOT NULL,
-    `var2`        int    NOT NULL,
-    `var3`        int    NOT NULL,
-    `var4`        int    NOT NULL,
-    `customCarId` bigint DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FK83pxksxc4fx2efkwnpqet3f3l` (`customCarId`),
-    CONSTRAINT `FK83pxksxc4fx2efkwnpqet3f3l` FOREIGN KEY (`customCarId`) REFERENCES `CUSTOMCAR` (`id`),
-    CONSTRAINT `FK_VINYL_CUSTOMCAR` FOREIGN KEY (`customCarId`) REFERENCES `CUSTOMCAR` (`id`)
-) ENGINE = InnoDB
+    personaId      bigint not null
+        primary key,
+    coinsCollected int    null,
+    isStreakBroken bit    null,
+    numCoins       int    null,
+    seed           int    null,
+    streak         int    null,
+    thDate         date   null,
+    isCompleted    bit    not null,
+    constraint TREASURE_HUNT_personaId_PERSONA_fk
+        foreign key (personaId) references PERSONA (ID)
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `VINYLPRODUCT`
---
-
-DROP TABLE IF EXISTS `VINYLPRODUCT`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `VINYLPRODUCT`
+create table if not exists VINYL
 (
-    `id`               bigint NOT NULL AUTO_INCREMENT,
-    `bundleItems`      varchar(255) DEFAULT NULL,
-    `categoryId`       varchar(255) DEFAULT NULL,
-    `categoryName`     varchar(255) DEFAULT NULL,
-    `currency`         varchar(255) DEFAULT NULL,
-    `description`      varchar(255) DEFAULT NULL,
-    `durationMinute`   int    NOT NULL,
-    `enabled`          bit(1) NOT NULL,
-    `entitlementTag`   varchar(255) DEFAULT NULL,
-    `hash`             int          DEFAULT NULL,
-    `icon`             varchar(255) DEFAULT NULL,
-    `level`            int    NOT NULL,
-    `longDescription`  varchar(255) DEFAULT NULL,
-    `minLevel`         int    NOT NULL,
-    `premium`          bit(1) NOT NULL,
-    `price`            float  NOT NULL,
-    `priority`         int    NOT NULL,
-    `productId`        varchar(255) DEFAULT NULL,
-    `productTitle`     varchar(255) DEFAULT NULL,
-    `productType`      varchar(255) DEFAULT NULL,
-    `secondaryIcon`    varchar(255) DEFAULT NULL,
-    `useCount`         int    NOT NULL,
-    `visualStyle`      varchar(255) DEFAULT NULL,
-    `webIcon`          varchar(255) DEFAULT NULL,
-    `webLocation`      varchar(255) DEFAULT NULL,
-    `parentCategoryId` bigint       DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FK_VINYLPRODUCT_CATEGORY` (`parentCategoryId`),
-    CONSTRAINT `FK_VINYLPRODUCT_CATEGORY` FOREIGN KEY (`parentCategoryId`) REFERENCES `CATEGORY` (`idcategory`)
-) ENGINE = InnoDB
+    id          bigint auto_increment
+        primary key,
+    hash        int    not null,
+    hue1        int    not null,
+    hue2        int    not null,
+    hue3        int    not null,
+    hue4        int    not null,
+    layer       int    not null,
+    mir         bit    not null,
+    rot         int    not null,
+    sat1        int    not null,
+    sat2        int    not null,
+    sat3        int    not null,
+    sat4        int    not null,
+    scalex      int    not null,
+    scaley      int    not null,
+    shear       int    not null,
+    tranx       int    not null,
+    trany       int    not null,
+    var1        int    not null,
+    var2        int    not null,
+    var3        int    not null,
+    var4        int    not null,
+    customCarId bigint null,
+    constraint FK_VINYL_CUSTOMCAR
+        foreign key (customCarId) references CUSTOMCAR (id),
+    constraint FK83pxksxc4fx2efkwnpqet3f3l
+        foreign key (customCarId) references CUSTOMCAR (id)
+)
+    charset = utf8;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `VIRTUALITEM`
---
-
-DROP TABLE IF EXISTS `VIRTUALITEM`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `VIRTUALITEM`
+create table if not exists VINYLPRODUCT
 (
-    `itemName`         varchar(255) NOT NULL,
-    `brand`            varchar(255) DEFAULT NULL,
-    `hash`             int          DEFAULT NULL,
-    `icon`             varchar(255) DEFAULT NULL,
-    `longdescription`  varchar(255) DEFAULT NULL,
-    `rarity`           int          DEFAULT NULL,
-    `resellprice`      int          DEFAULT NULL,
-    `shortdescription` varchar(255) DEFAULT NULL,
-    `subType`          varchar(255) DEFAULT NULL,
-    `tier`             int          DEFAULT NULL,
-    `title`            varchar(255) DEFAULT NULL,
-    `type`             varchar(255) DEFAULT NULL,
-    `warnondelete`     bit(1)       DEFAULT NULL,
-    PRIMARY KEY (`itemName`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    id               bigint auto_increment
+        primary key,
+    bundleItems      varchar(255) null,
+    categoryId       varchar(255) null,
+    categoryName     varchar(255) null,
+    currency         varchar(255) null,
+    description      varchar(255) null,
+    durationMinute   int          not null,
+    enabled          bit          not null,
+    entitlementTag   varchar(255) null,
+    hash             int          null,
+    icon             varchar(255) null,
+    level            int          not null,
+    longDescription  varchar(255) null,
+    minLevel         int          not null,
+    premium          bit          not null,
+    price            float        not null,
+    priority         int          not null,
+    productId        varchar(255) null,
+    productTitle     varchar(255) null,
+    productType      varchar(255) null,
+    secondaryIcon    varchar(255) null,
+    useCount         int          not null,
+    visualStyle      varchar(255) null,
+    webIcon          varchar(255) null,
+    webLocation      varchar(255) null,
+    parentCategoryId bigint       null,
+    constraint FK_VINYLPRODUCT_CATEGORY
+        foreign key (parentCategoryId) references CATEGORY (idcategory)
+)
+    charset = latin1;
 
---
--- Table structure for table `VISUALPART`
---
-
-DROP TABLE IF EXISTS `VISUALPART`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `VISUALPART`
+create table if not exists VIRTUALITEM
 (
-    `id`          bigint NOT NULL AUTO_INCREMENT,
-    `partHash`    int    NOT NULL,
-    `slotHash`    int    NOT NULL,
-    `customCarId` bigint DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FK_VISUALPART_CUSTOMCAR` (`customCarId`),
-    CONSTRAINT `FK_VISUALPART_CUSTOMCAR` FOREIGN KEY (`customCarId`) REFERENCES `CUSTOMCAR` (`id`)
-) ENGINE = InnoDB
+    itemName         varchar(255) not null
+        primary key,
+    brand            varchar(255) null,
+    hash             int          null,
+    icon             varchar(255) null,
+    longdescription  varchar(255) null,
+    rarity           int          null,
+    resellprice      int          null,
+    shortdescription varchar(255) null,
+    subType          varchar(255) null,
+    tier             int          null,
+    title            varchar(255) null,
+    type             varchar(255) null,
+    warnondelete     bit          null
+)
+    charset = latin1;
 
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `serveritems_skillmod_part`
---
-
-DROP TABLE IF EXISTS `serveritems_skillmod_part`;
-/*!40101 SET @saved_cs_client = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `serveritems_skillmod_part`
+create table if not exists VISUALPART
 (
-    `CollectionName`        varchar(255) NOT NULL,
-    `Name`                  varchar(255) DEFAULT NULL,
-    `SkillModCategory`      varchar(255) DEFAULT NULL,
-    `SkillModEffects_ARRAY` varchar(255) DEFAULT NULL,
-    `SkillModPartQuality`   smallint     DEFAULT NULL,
-    `Template`              bit(1)       DEFAULT NULL,
-    PRIMARY KEY (`CollectionName`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE = @OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE = @OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
-
--- Dump completed on 2020-05-03  0:12:08
+    id          bigint auto_increment
+        primary key,
+    partHash    int    not null,
+    slotHash    int    not null,
+    customCarId bigint null,
+    constraint FK_VISUALPART_CUSTOMCAR
+        foreign key (customCarId) references CUSTOMCAR (id)
+)
+    charset = latin1;
