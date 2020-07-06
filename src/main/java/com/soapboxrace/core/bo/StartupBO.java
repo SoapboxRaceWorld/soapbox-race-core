@@ -9,17 +9,21 @@ package com.soapboxrace.core.bo;
 import com.soapboxrace.core.api.util.BuildInfo;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 @Singleton
 @Startup
 public class StartupBO {
+
+    @EJB
+    private OnlineUsersBO onlineUsersBO;
+
     @PostConstruct
     public void init() {
-        String template = "StartupBO: Server running on code version %s (%s) - branch %s";
-
-        System.out.println(String.format(template, BuildInfo.getCommitID(), BuildInfo.getLongCommitID(),
-                BuildInfo.getBranch()));
+        System.out.printf("StartupBO: Server running on code version %s (%s) - branch %s%n", BuildInfo.getCommitID(), BuildInfo.getLongCommitID(),
+                BuildInfo.getBranch());
+        onlineUsersBO.insertNumberOfUsesOnlineNow();
     }
 }
