@@ -39,18 +39,19 @@ public class RewardPursuitBO extends RewardEventBO<PursuitArbitrationPacket> {
         EventEntity eventEntity = eventSessionEntity.getEvent();
         PersonaEntity personaEntity = personaDao.findById(activePersonaId);
         RewardVO rewardVO = getRewardVO(personaEntity);
+        EventRewardEntity eventRewardEntity = eventEntity.getSingleplayerRewardConfig();
 
-        setPursuitRewards(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
+        setPursuitRewards(personaEntity, eventRewardEntity, pursuitArbitrationPacket, rewardVO);
 
         Random random = new Random();
         pursuitArbitrationPacket.setRank(random.nextInt(4 - 1) + 1);
         applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, true, achievementTransaction);
-        return getAccolades(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
+        return getAccolades(personaEntity, eventRewardEntity, pursuitArbitrationPacket, rewardVO);
     }
 
-    public void setPursuitRewards(PersonaEntity personaEntity, EventEntity eventEntity,
-                                  PursuitArbitrationPacket pursuitArbitrationPacket, RewardVO rewardVO) {
-        setBaseReward(personaEntity, eventEntity, pursuitArbitrationPacket, rewardVO);
+    private void setPursuitRewards(PersonaEntity personaEntity, EventRewardEntity eventRewardEntity,
+                                   PursuitArbitrationPacket pursuitArbitrationPacket, RewardVO rewardVO) {
+        setBaseReward(personaEntity, eventRewardEntity, pursuitArbitrationPacket, rewardVO);
         setPursitParamReward(pursuitArbitrationPacket.getCopsDeployed(), EnumRewardType.COP_CARS_DEPLOYED, rewardVO);
         setPursitParamReward(pursuitArbitrationPacket.getCopsDisabled(), EnumRewardType.COP_CARS_DISABLED, rewardVO);
         setPursitParamReward(pursuitArbitrationPacket.getCopsRammed(), EnumRewardType.COP_CARS_RAMMED, rewardVO);
@@ -64,9 +65,9 @@ public class RewardPursuitBO extends RewardEventBO<PursuitArbitrationPacket> {
         setPursitParamReward(pursuitArbitrationPacket.getSpikeStripsDodged(), EnumRewardType.SPIKE_STRIPS_DODGED,
                 rewardVO);
 
-        setTopSpeedReward(eventEntity, pursuitArbitrationPacket.getTopSpeed(), rewardVO);
+        setTopSpeedReward(eventRewardEntity, pursuitArbitrationPacket.getTopSpeed(), rewardVO);
         setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.BOUNTY_HUNTER);
-        setMultiplierReward(eventEntity, rewardVO);
+        setMultiplierReward(eventRewardEntity, rewardVO);
         setAmplifierReward(personaEntity, rewardVO);
     }
 }
