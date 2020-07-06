@@ -39,12 +39,12 @@ public class RewardTeamEscapeBO extends RewardEventBO<TeamEscapeArbitrationPacke
         float bustedCount = teamEscapeArbitrationPacket.getBustedCount();
         bustedCount++;
 
-        EventEntity eventEntity = eventSessionEntity.getEvent();
         PersonaEntity personaEntity = personaDao.findById(activePersonaId);
         RewardVO rewardVO = getRewardVO(personaEntity);
+        EventRewardEntity eventRewardEntity = getRewardConfiguration(eventSessionEntity);
 
-        setBaseReward(personaEntity, eventEntity, teamEscapeArbitrationPacket, rewardVO);
-        setRankReward(eventEntity, teamEscapeArbitrationPacket, rewardVO);
+        setBaseReward(personaEntity, eventRewardEntity, teamEscapeArbitrationPacket, rewardVO);
+        setRankReward(eventRewardEntity, teamEscapeArbitrationPacket, rewardVO);
 
         float bustedBaseRep = rewardVO.getBaseRep() / bustedCount;
         float bustedBaseCash = rewardVO.getBaseCash() / bustedCount;
@@ -52,7 +52,7 @@ public class RewardTeamEscapeBO extends RewardEventBO<TeamEscapeArbitrationPacke
         rewardVO.setBaseRep((int) bustedBaseRep);
         rewardVO.setBaseCash((int) bustedBaseCash);
 
-        setPerfectStartReward(eventEntity, teamEscapeArbitrationPacket.getPerfectStart(), rewardVO);
+        setPerfectStartReward(eventRewardEntity, teamEscapeArbitrationPacket.getPerfectStart(), rewardVO);
         setPursitParamReward(teamEscapeArbitrationPacket.getCopsDeployed(), EnumRewardType.COP_CARS_DEPLOYED, rewardVO);
         setPursitParamReward(teamEscapeArbitrationPacket.getCopsDisabled(), EnumRewardType.COP_CARS_DISABLED, rewardVO);
         setPursitParamReward(teamEscapeArbitrationPacket.getCopsRammed(), EnumRewardType.COP_CARS_RAMMED, rewardVO);
@@ -65,13 +65,13 @@ public class RewardTeamEscapeBO extends RewardEventBO<TeamEscapeArbitrationPacke
         setPursitParamReward(teamEscapeArbitrationPacket.getSpikeStripsDodged(), EnumRewardType.SPIKE_STRIPS_DODGED,
                 rewardVO);
 
-        setTopSpeedReward(eventEntity, teamEscapeArbitrationPacket.getTopSpeed(), rewardVO);
+        setTopSpeedReward(eventRewardEntity, teamEscapeArbitrationPacket.getTopSpeed(), rewardVO);
         setSkillMultiplierReward(personaEntity, rewardVO, SkillModRewardType.BOUNTY_HUNTER);
-        setMultiplierReward(eventEntity, rewardVO);
+        setMultiplierReward(eventRewardEntity, rewardVO);
         setAmplifierReward(personaEntity, rewardVO);
 
         teamEscapeArbitrationPacket.setRank(RandomUtils.nextInt(1, 5));
         applyRaceReward(rewardVO.getRep(), rewardVO.getCash(), personaEntity, true, achievementTransaction);
-        return getAccolades(personaEntity, eventEntity, teamEscapeArbitrationPacket, rewardVO);
+        return getAccolades(personaEntity, eventRewardEntity, teamEscapeArbitrationPacket, rewardVO);
     }
 }

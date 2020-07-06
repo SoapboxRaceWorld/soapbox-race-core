@@ -66,15 +66,15 @@ public class RewardBO {
         return (int) baseRewardResult;
     }
 
-    public void setBaseReward(PersonaEntity personaEntity, EventEntity eventEntity,
+    public void setBaseReward(PersonaEntity personaEntity, EventRewardEntity eventRewardEntity,
                               ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
-        float baseRep = (float) eventEntity.getBaseRepReward();
-        float baseCash = (float) eventEntity.getBaseCashReward();
+        float baseRep = (float) eventRewardEntity.getBaseRepReward();
+        float baseCash = (float) eventRewardEntity.getBaseCashReward();
         Float playerLevelRepConst = getPlayerLevelConst(personaEntity.getLevel(),
-                eventEntity.getLevelRepRewardMultiplier());
+                eventRewardEntity.getLevelRepRewardMultiplier());
         Float playerLevelCashConst = getPlayerLevelConst(personaEntity.getLevel(),
-                eventEntity.getLevelCashRewardMultiplier());
-        Float timeConst = getTimeConst(eventEntity.getRewardsTimeLimit(), arbitrationPacket.getEventDurationInMilliseconds());
+                eventRewardEntity.getLevelCashRewardMultiplier());
+        Float timeConst = getTimeConst(eventRewardEntity.getEventEntity().getRewardsTimeLimit(), arbitrationPacket.getEventDurationInMilliseconds());
         rewardVO.setBaseRep(getBaseReward(baseRep, playerLevelRepConst, timeConst));
         rewardVO.setBaseCash(getBaseReward(baseCash, playerLevelCashConst, timeConst));
     }
@@ -128,13 +128,13 @@ public class RewardBO {
         }
     }
 
-    public void setTopSpeedReward(EventEntity eventEntity, float topSpeed, RewardVO rewardVO) {
-        float minTopSpeedTrigger = eventEntity.getMinTopSpeedTrigger();
+    public void setTopSpeedReward(EventRewardEntity eventRewardEntity, float topSpeed, RewardVO rewardVO) {
+        float minTopSpeedTrigger = eventRewardEntity.getMinTopSpeedTrigger();
         if (topSpeed >= minTopSpeedTrigger) {
             float baseRep = rewardVO.getBaseRep();
             float baseCash = rewardVO.getBaseCash();
-            float topSpeedCashMultiplier = eventEntity.getTopSpeedCashMultiplier();
-            float topSpeedRepMultiplier = eventEntity.getTopSpeedRepMultiplier();
+            float topSpeedCashMultiplier = eventRewardEntity.getTopSpeedCashMultiplier();
+            float topSpeedRepMultiplier = eventRewardEntity.getTopSpeedRepMultiplier();
             float highSpeedRep = baseRep * topSpeedRepMultiplier;
             float highSpeedCash = baseCash * topSpeedCashMultiplier;
             rewardVO.add((int) highSpeedRep, (int) highSpeedCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
@@ -163,13 +163,13 @@ public class RewardBO {
         rewardVO.add(0, (int) finalCash, EnumRewardCategory.SKILL_MOD, EnumRewardType.TOKEN_AMPLIFIER);
     }
 
-    public Accolades getAccolades(PersonaEntity personaEntity, EventEntity eventEntity,
+    public Accolades getAccolades(PersonaEntity personaEntity, EventRewardEntity eventRewardEntity,
                                   ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
         Accolades accolades = new Accolades();
         accolades.setFinalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setHasLeveledUp(isLeveledUp(personaEntity, rewardVO.getRep()));
         accolades.setLuckyDrawInfo(getEventLuckyDraw(arbitrationPacket.getRank(),
-                personaEntity, eventEntity));
+                personaEntity, eventRewardEntity));
         accolades.setOriginalRewards(getFinalReward(rewardVO.getRep(), rewardVO.getCash()));
         accolades.setRewardInfo(rewardVO.getArrayOfRewardPart());
         return accolades;
@@ -188,23 +188,23 @@ public class RewardBO {
         return accolades;
     }
 
-    public void setMultiplierReward(EventEntity eventEntity, RewardVO rewardVO) {
+    public void setMultiplierReward(EventRewardEntity eventRewardEntity, RewardVO rewardVO) {
         float rep = rewardVO.getRep();
         float cash = rewardVO.getCash();
-        float finalRepRewardMultiplier = eventEntity.getFinalRepRewardMultiplier();
-        float finalCashRewardMultiplier = eventEntity.getFinalCashRewardMultiplier();
+        float finalRepRewardMultiplier = eventRewardEntity.getFinalRepRewardMultiplier();
+        float finalCashRewardMultiplier = eventRewardEntity.getFinalCashRewardMultiplier();
         float finalRep = rep * finalRepRewardMultiplier;
         float finalCash = cash * finalCashRewardMultiplier;
         rewardVO.add((int) finalRep, 0, EnumRewardCategory.AMPLIFIER, EnumRewardType.REP_AMPLIFIER);
         rewardVO.add(0, (int) finalCash, EnumRewardCategory.AMPLIFIER, EnumRewardType.TOKEN_AMPLIFIER);
     }
 
-    public void setPerfectStartReward(EventEntity eventEntity, int perfectStart, RewardVO rewardVO) {
+    public void setPerfectStartReward(EventRewardEntity eventRewardEntity, int perfectStart, RewardVO rewardVO) {
         if (perfectStart == 1) {
             float baseRep = rewardVO.getBaseRep();
             float baseCash = rewardVO.getBaseCash();
-            float perfectStartCashMultiplier = eventEntity.getPerfectStartCashMultiplier();
-            float perfectStartRepMultiplier = eventEntity.getPerfectStartRepMultiplier();
+            float perfectStartCashMultiplier = eventRewardEntity.getPerfectStartCashMultiplier();
+            float perfectStartRepMultiplier = eventRewardEntity.getPerfectStartRepMultiplier();
             float perfectStartRep = baseRep * perfectStartRepMultiplier;
             float perfectStartCash = baseCash * perfectStartCashMultiplier;
             rewardVO.add((int) perfectStartRep, (int) perfectStartCash, EnumRewardCategory.BONUS, EnumRewardType.NONE);
@@ -218,41 +218,41 @@ public class RewardBO {
         }
     }
 
-    public void setRankReward(EventEntity eventEntity, ArbitrationPacket routeArbitrationPacket, RewardVO rewardVO) {
+    public void setRankReward(EventRewardEntity eventRewardEntity, ArbitrationPacket routeArbitrationPacket, RewardVO rewardVO) {
         float rankRepMultiplier = 0f;
         float rankCashMultiplier = 0f;
         switch (routeArbitrationPacket.getRank()) {
             case 1:
-                rankRepMultiplier = eventEntity.getRank1RepMultiplier();
-                rankCashMultiplier = eventEntity.getRank1CashMultiplier();
+                rankRepMultiplier = eventRewardEntity.getRank1RepMultiplier();
+                rankCashMultiplier = eventRewardEntity.getRank1CashMultiplier();
                 break;
             case 2:
-                rankRepMultiplier = eventEntity.getRank2RepMultiplier();
-                rankCashMultiplier = eventEntity.getRank2CashMultiplier();
+                rankRepMultiplier = eventRewardEntity.getRank2RepMultiplier();
+                rankCashMultiplier = eventRewardEntity.getRank2CashMultiplier();
                 break;
             case 3:
-                rankRepMultiplier = eventEntity.getRank3RepMultiplier();
-                rankCashMultiplier = eventEntity.getRank3CashMultiplier();
+                rankRepMultiplier = eventRewardEntity.getRank3RepMultiplier();
+                rankCashMultiplier = eventRewardEntity.getRank3CashMultiplier();
                 break;
             case 4:
-                rankRepMultiplier = eventEntity.getRank4RepMultiplier();
-                rankCashMultiplier = eventEntity.getRank4CashMultiplier();
+                rankRepMultiplier = eventRewardEntity.getRank4RepMultiplier();
+                rankCashMultiplier = eventRewardEntity.getRank4CashMultiplier();
                 break;
             case 5:
-                rankRepMultiplier = eventEntity.getRank5RepMultiplier();
-                rankCashMultiplier = eventEntity.getRank5CashMultiplier();
+                rankRepMultiplier = eventRewardEntity.getRank5RepMultiplier();
+                rankCashMultiplier = eventRewardEntity.getRank5CashMultiplier();
                 break;
             case 6:
-                rankRepMultiplier = eventEntity.getRank6RepMultiplier();
-                rankCashMultiplier = eventEntity.getRank6CashMultiplier();
+                rankRepMultiplier = eventRewardEntity.getRank6RepMultiplier();
+                rankCashMultiplier = eventRewardEntity.getRank6CashMultiplier();
                 break;
             case 7:
-                rankRepMultiplier = eventEntity.getRank7RepMultiplier();
-                rankCashMultiplier = eventEntity.getRank7CashMultiplier();
+                rankRepMultiplier = eventRewardEntity.getRank7RepMultiplier();
+                rankCashMultiplier = eventRewardEntity.getRank7CashMultiplier();
                 break;
             case 8:
-                rankRepMultiplier = eventEntity.getRank8RepMultiplier();
-                rankCashMultiplier = eventEntity.getRank8CashMultiplier();
+                rankRepMultiplier = eventRewardEntity.getRank8RepMultiplier();
+                rankCashMultiplier = eventRewardEntity.getRank8CashMultiplier();
                 break;
             default:
                 break;
@@ -323,8 +323,8 @@ public class RewardBO {
         return luckyDrawInfo;
     }
 
-    private LuckyDrawItem getEventRewardItem(PersonaEntity personaEntity, EventEntity eventEntity, Integer rank) {
-        if (eventEntity == null) {
+    private LuckyDrawItem getEventRewardItem(PersonaEntity personaEntity, EventRewardEntity eventRewardEntity, Integer rank) {
+        if (eventRewardEntity == null) {
             return getRandomRewardItem(personaEntity);
         }
 
@@ -332,28 +332,28 @@ public class RewardBO {
 
         switch (rank) {
             case 1:
-                rewardTableEntity = eventEntity.getRewardTableRank1();
+                rewardTableEntity = eventRewardEntity.getRewardTableRank1();
                 break;
             case 2:
-                rewardTableEntity = eventEntity.getRewardTableRank2();
+                rewardTableEntity = eventRewardEntity.getRewardTableRank2();
                 break;
             case 3:
-                rewardTableEntity = eventEntity.getRewardTableRank3();
+                rewardTableEntity = eventRewardEntity.getRewardTableRank3();
                 break;
             case 4:
-                rewardTableEntity = eventEntity.getRewardTableRank4();
+                rewardTableEntity = eventRewardEntity.getRewardTableRank4();
                 break;
             case 5:
-                rewardTableEntity = eventEntity.getRewardTableRank5();
+                rewardTableEntity = eventRewardEntity.getRewardTableRank5();
                 break;
             case 6:
-                rewardTableEntity = eventEntity.getRewardTableRank6();
+                rewardTableEntity = eventRewardEntity.getRewardTableRank6();
                 break;
             case 7:
-                rewardTableEntity = eventEntity.getRewardTableRank7();
+                rewardTableEntity = eventRewardEntity.getRewardTableRank7();
                 break;
             case 8:
-                rewardTableEntity = eventEntity.getRewardTableRank8();
+                rewardTableEntity = eventRewardEntity.getRewardTableRank8();
                 break;
             default:
                 throw new IllegalArgumentException("cannot handle rank " + rank);
@@ -378,13 +378,13 @@ public class RewardBO {
     }
 
     private LuckyDrawInfo getEventLuckyDraw(Integer rank, PersonaEntity personaEntity,
-                                            EventEntity eventEntity) {
+                                            EventRewardEntity eventRewardEntity) {
         LuckyDrawInfo luckyDrawInfo = new LuckyDrawInfo();
         if (!parameterBO.getBoolParam("ENABLE_DROP_ITEM")) {
             return luckyDrawInfo;
         }
         ArrayOfLuckyDrawItem arrayOfLuckyDrawItem = new ArrayOfLuckyDrawItem();
-        LuckyDrawItem itemFromProduct = getEventRewardItem(personaEntity, eventEntity, rank);
+        LuckyDrawItem itemFromProduct = getEventRewardItem(personaEntity, eventRewardEntity, rank);
         if (itemFromProduct == null) {
             return luckyDrawInfo;
         }
