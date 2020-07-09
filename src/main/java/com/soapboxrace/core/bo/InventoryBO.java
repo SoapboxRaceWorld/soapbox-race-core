@@ -109,16 +109,17 @@ public class InventoryBO {
         InventoryEntity inventoryEntity = inventoryItemEntity.getInventoryEntity();
         InventoryItemTrans inventoryItemTrans = new InventoryItemTrans();
         inventoryItemTrans.setEntitlementTag(productEntity.getEntitlementTag());
-        inventoryItemTrans.setHash(productEntity.getHash());
-        inventoryItemTrans.setProductId(productEntity.getProductId());
-        inventoryItemTrans.setVirtualItemType(productEntity.getProductType().toLowerCase());
-        inventoryItemTrans.setStringHash("0x" + String.format("%08X", productEntity.getHash()));
-        inventoryItemTrans.setInventoryId(inventoryEntity.getId());
-        inventoryItemTrans.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount());
-        inventoryItemTrans.setStatus(inventoryItemEntity.getStatus());
         if (inventoryItemEntity.getExpirationDate() != null) {
             inventoryItemTrans.setExpirationDate(inventoryItemEntity.getExpirationDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         }
+        inventoryItemTrans.setHash(productEntity.getHash());
+        inventoryItemTrans.setInventoryId(inventoryEntity.getId());
+        inventoryItemTrans.setProductId(productEntity.getProductId());
+        inventoryItemTrans.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount());
+        inventoryItemTrans.setResellPrice(inventoryItemEntity.getResellPrice());
+        inventoryItemTrans.setStatus(inventoryItemEntity.getStatus());
+        inventoryItemTrans.setStringHash("0x" + String.format("%08X", productEntity.getHash()));
+        inventoryItemTrans.setVirtualItemType(productEntity.getProductType().toLowerCase());
         return inventoryItemTrans;
     }
 
@@ -130,7 +131,6 @@ public class InventoryBO {
      * @param productEntity   The {@link ProductEntity} to query for information when checking capacity.
      * @return {@code true} if the inventory can hold the given product, {@code false} otherwise
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean canInventoryHold(InventoryEntity inventoryEntity, ProductEntity productEntity) {
         String productType = productEntity.getProductType().toUpperCase();
         int capacity = 0; // the specific capacity for the given type of item for the given inventory
