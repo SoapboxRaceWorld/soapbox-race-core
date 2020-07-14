@@ -10,7 +10,7 @@ public class EventRewardEntity {
     @Column(name = "ID", nullable = false)
     private String id;
 
-    @OneToOne(targetEntity = EventEntity.class, optional = false)
+    @ManyToOne(targetEntity = EventEntity.class, optional = false)
     @JoinColumn(name = "event_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_REWARD_EVENTID"))
     private EventEntity eventEntity;
 
@@ -42,35 +42,35 @@ public class EventRewardEntity {
     private float rank8CashMultiplier;
     private float minTopSpeedTrigger;
 
-    @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank1_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_REWARD_RANK1TABLE_ID"))
     private RewardTableEntity rewardTableRank1;
 
-    @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank2_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_REWARD_RANK2TABLE_ID"))
     private RewardTableEntity rewardTableRank2;
 
-    @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank3_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_REWARD_RANK3TABLE_ID"))
     private RewardTableEntity rewardTableRank3;
 
-    @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank4_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_REWARD_RANK4TABLE_ID"))
     private RewardTableEntity rewardTableRank4;
 
-    @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank5_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_REWARD_RANK5TABLE_ID"))
     private RewardTableEntity rewardTableRank5;
 
-    @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank6_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_REWARD_RANK6TABLE_ID"))
     private RewardTableEntity rewardTableRank6;
 
-    @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank7_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_REWARD_RANK7TABLE_ID"))
     private RewardTableEntity rewardTableRank7;
 
-    @OneToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = RewardTableEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardTable_rank8_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_REWARD_RANK8TABLE_ID"))
     private RewardTableEntity rewardTableRank8;
 
