@@ -242,9 +242,9 @@ public class BasketBO {
 
         boolean isRental = productEntity.getDurationMinute() > 0;
         if (isRental) {
-            List<CarSlotEntity> nonRentals = carSlotDAO.findNonRentalsByPersonaId(personaEntity.getPersonaId());
+            Long numNonRentals = carSlotDAO.findNumNonRentalsByPersonaId(personaEntity.getPersonaId());
 
-            if (nonRentals.isEmpty()) {
+            if (numNonRentals.equals(0L)) {
                 throw new EngineException("Persona " + personaEntity.getName() + " has no non-rental cars", EngineExceptionCode.MissingRequiredEntitlements, true);
             }
         }
@@ -332,9 +332,9 @@ public class BasketBO {
             return false;
         }
         if (!carSlotEntity.getPersona().getPersonaId().equals(personaEntity.getPersonaId())) {
-            return false;
+            throw new EngineException(EngineExceptionCode.CarNotOwnedByDriver, false);
         }
-        int nonRentalCarCount = carSlotDAO.findNonRentalsByPersonaId(personaEntity.getPersonaId()).size();
+        Long nonRentalCarCount = carSlotDAO.findNumNonRentalsByPersonaId(personaEntity.getPersonaId());
 
         // If the car is not a rental, check the number of non-rentals
         if (!"RentalCar".equalsIgnoreCase(carSlotEntity.getOwnedCar().getOwnershipType())) {
@@ -345,23 +345,14 @@ public class BasketBO {
             return false;
         }
 
-        CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
-
         int curCarIndex = personaEntity.getCurCarIndex();
-        if (defaultCarEntity.getId().equals(carSlotEntity.getId())) {
-            curCarIndex = 0;
-        } else {
-            List<CarSlotEntity> personasCar = personaBo.getPersonasCar(personaEntity.getPersonaId());
-            int curCarIndexTmp = curCarIndex;
-            for (int i = 0; i < curCarIndexTmp; i++) {
-                if (personasCar.get(i).getId().equals(carSlotEntity.getId())) {
-                    curCarIndex--;
-                    break;
-                }
-            }
+
+        if (curCarIndex <= 0) {
+            throw new EngineException("curCarIndex <= 0 when trying to sell car", EngineExceptionCode.CantDeleteLastOwnedCar, true);
         }
+
+        personaEntity.setCurCarIndex(curCarIndex - 1);
         carSlotDAO.delete(carSlotEntity);
-        personaEntity.setCurCarIndex(curCarIndex);
         personaDao.update(personaEntity);
 
         return true;

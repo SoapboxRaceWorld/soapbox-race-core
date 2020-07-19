@@ -16,11 +16,9 @@ import javax.persistence.*;
                         "   INNER JOIN FETCH obj.ownedCar oc" +
                         "       INNER JOIN FETCH oc.customCar cc " +
                         "WHERE obj.persona = :persona "), //
-        @NamedQuery(name = "CarSlotEntity.findNonRentalsByPersonaId", //
-                query = "SELECT obj FROM CarSlotEntity obj JOIN FETCH obj.ownedCar AS oc WHERE obj.persona = :persona" +
-                        " AND oc.expirationDate IS NULL" +
-                        " ORDER by " +
-                        "obj.id"), //
+        @NamedQuery(name = "CarSlotEntity.findNumNonRentalsByPersonaId", //
+                query = "SELECT COUNT(obj) FROM CarSlotEntity obj INNER JOIN obj.ownedCar oc WHERE obj.persona = :persona" +
+                        " AND oc.expirationDate IS NULL"), //
         @NamedQuery(name = "CarSlotEntity.deleteByPersona", //
                 query = "DELETE FROM CarSlotEntity obj WHERE obj.persona = :persona"), //
         @NamedQuery(name = "CarSlotEntity.findAllExpired", //
