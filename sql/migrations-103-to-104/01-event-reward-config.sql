@@ -1,6 +1,3 @@
-# v1.0.3 -> v1.0.4
-# as of july 6 2020
-
 CREATE TABLE EVENT_REWARD
 (
     ID                         VARCHAR(255) NOT NULL,
