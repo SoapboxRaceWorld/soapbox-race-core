@@ -19,9 +19,8 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
-@HwBan
+@Secured
 @Provider
 @Priority(Priorities.AUTHORIZATION)
 public class HwBanFilter implements ContainerRequestFilter {
