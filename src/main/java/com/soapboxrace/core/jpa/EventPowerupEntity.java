@@ -18,8 +18,8 @@ public class EventPowerupEntity {
     @JoinColumn(name = "personaId", referencedColumnName = "id", nullable = false)
     private PersonaEntity personaEntity;
 
-    @ManyToOne(targetEntity = EventSessionEntity.class, optional = false)
-    @JoinColumn(name = "eventSessionId", referencedColumnName = "id", nullable = false)
+    @ManyToOne(targetEntity = EventSessionEntity.class)
+    @JoinColumn(name = "eventSessionId", referencedColumnName = "id")
     private EventSessionEntity eventSessionEntity;
 
     @Column

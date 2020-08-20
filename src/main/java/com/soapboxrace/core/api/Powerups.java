@@ -75,9 +75,7 @@ public class Powerups {
         }
 
         Long realEventSessionId = tokenBO.getEventSessionId(securityToken);
-        if (realEventSessionId != null) {
-            eventPowerupBO.createPowerupRecord(realEventSessionId, activePersonaId, powerupHash);
-        }
+        eventPowerupBO.createPowerupRecord(realEventSessionId, activePersonaId, powerupHash);
 
         return "";
     }

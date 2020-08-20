@@ -25,8 +25,11 @@ public class EventPowerupBO {
     public void createPowerupRecord(Long eventSessionId, Long activePersonaId, Integer powerupHash) {
         EventPowerupEntity eventPowerupEntity = new EventPowerupEntity();
         eventPowerupEntity.setPersonaEntity(personaDAO.findById(activePersonaId));
-        eventPowerupEntity.setEventSessionEntity(eventSessionDAO.findById(eventSessionId));
         eventPowerupEntity.setPowerupHash(powerupHash);
+
+        if (eventSessionId != null) {
+            eventPowerupEntity.setEventSessionEntity(eventSessionDAO.findById(eventSessionId));
+        }
 
         eventPowerupDAO.insert(eventPowerupEntity);
     }
