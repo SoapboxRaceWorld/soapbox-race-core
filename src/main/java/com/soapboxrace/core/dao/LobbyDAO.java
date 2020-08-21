@@ -50,26 +50,7 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
         return query.getResultList();
     }
 
-    public List<LobbyEntity> findAllRunning() {
-        Date dateNow = new Date();
-        Date datePast = new Date(dateNow.getTime() - 50000);
-
-        TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findAllOpen", LobbyEntity.class);
-        query.setParameter("dateTime1", datePast);
-        query.setParameter("dateTime2", dateNow);
-        List<LobbyEntity> resultList = query.getResultList();
-        for (LobbyEntity lobbyEntity : resultList) {
-            List<LobbyEntrantEntity> entrants = lobbyEntity.getEntrants();
-            for (LobbyEntrantEntity lobbyEntrantEntity : entrants) {
-                lobbyEntrantEntity.getPersona();
-            }
-        }
-        return resultList;
-    }
-
     public List<LobbyEntity> findByEventStarted(int eventId) {
-//		Date dateNow = new Date();
-//		Date datePast = new Date(dateNow.getTime() - 35000);
         LocalDateTime dateNow = LocalDateTime.now();
         LocalDateTime datePast = LocalDateTime.now().minusSeconds(35);
 
