@@ -20,7 +20,6 @@ import java.util.List;
 @Entity
 @Table(name = "LOBBY")
 @NamedQueries({ //
-        @NamedQuery(name = "LobbyEntity.findAll", query = "SELECT obj FROM LobbyEntity obj JOIN FETCH obj.event e"), //
         @NamedQuery(name = "LobbyEntity.findAllOpen", //
                 query = "SELECT obj FROM LobbyEntity obj JOIN FETCH obj.event e WHERE obj.startedTime between :dateTime1 and :dateTime2 and size(obj.entrants) < obj.event.maxPlayers"), //
         @NamedQuery(name = "LobbyEntity.findAllOpenByCarClass", //
