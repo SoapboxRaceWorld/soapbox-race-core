@@ -9,6 +9,7 @@ package com.soapboxrace.core.api;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.jaxb.http.ClientServerCryptoTicket;
 import com.soapboxrace.jaxb.http.UdpRelayCryptoTicket;
 
 import javax.ejb.EJB;
@@ -42,7 +43,7 @@ public class Crypto {
     @GET
     @Path("/cryptoticket")
     @Produces(MediaType.APPLICATION_XML)
-    public String cryptoticket() {
+    public ClientServerCryptoTicket cryptoticket() {
         byte[] randomUUIDBytes = UUIDGen.getRandomUUIDBytes();
         String ticketIV = Base64.getEncoder().encodeToString(randomUUIDBytes);
         byte[] helloPacket = {10, 11, 12, 13};
@@ -50,14 +51,12 @@ public class Crypto {
         byteBuffer.put(helloPacket);
         byte[] cryptoTicketBytes = byteBuffer.array();
         String cryptoTicketBase64 = Base64.getEncoder().encodeToString(cryptoTicketBytes);
-        return "<ClientServerCryptoTicket>\n" +
-                "<CryptoTicket>" +
-                cryptoTicketBase64 +
-                "</CryptoTicket>\n" +
-                "<SessionKey>AAAAAAAAAAAAAAAAAAAAAA==</SessionKey>\n" +
-                "<TicketIv>" +
-                ticketIV +
-                "</TicketIv>\n" +
-                "</ClientServerCryptoTicket>";
+
+        ClientServerCryptoTicket clientServerCryptoTicket = new ClientServerCryptoTicket();
+        clientServerCryptoTicket.setCryptoTicket(cryptoTicketBase64);
+        clientServerCryptoTicket.setSessionKey("AAAAAAAAAAAAAAAAAAAAAA==");
+        clientServerCryptoTicket.setTicketIv(ticketIV);
+
+        return clientServerCryptoTicket;
     }
 }
