@@ -4,8 +4,6 @@ import com.soapboxrace.core.dao.EventPowerupDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.EventPowerupEntity;
-import com.soapboxrace.core.jpa.EventSessionEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
