@@ -96,19 +96,8 @@ public class LobbyEntity {
         this.personaId = personaId;
     }
 
-    public boolean add(LobbyEntrantEntity e) {
-        if (entrants == null) {
-            entrants = new ArrayList<>();
-        }
-        return entrants.add(e);
-    }
-
     public int getLobbyCountdownInMilliseconds(int baseTime) {
         if (startedTime != null) {
-//			Long time = System.currentTimeMillis() - lobbyDateTimeStart.getTime();
-//			time = baseTime - time;
-//			return time.intValue();
-//			return System.currentTimeMillis() - startedTime.toEpochSecond()
             return (int) (baseTime - (System.currentTimeMillis() - (startedTime.toEpochSecond(OffsetDateTime.now().getOffset()) * 1000)));
         }
 
