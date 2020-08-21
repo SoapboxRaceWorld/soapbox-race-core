@@ -6,6 +6,11 @@
 
 package com.soapboxrace.core.jpa;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -40,6 +45,8 @@ public class LobbyEntity {
     private EventEntity event;
 
     @OneToMany(mappedBy = "lobby", targetEntity = LobbyEntrantEntity.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Fetch(FetchMode.JOIN)
     private List<LobbyEntrantEntity> entrants = new ArrayList<>();
 
     private LocalDateTime startedTime;

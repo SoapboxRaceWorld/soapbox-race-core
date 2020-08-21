@@ -26,14 +26,7 @@ public class LobbyDAO extends BaseDAO<LobbyEntity> {
     }
 
     public LobbyEntity findById(Long id) {
-        LobbyEntity lobbyEntity = entityManager.find(LobbyEntity.class, id);
-
-        if (lobbyEntity != null) {
-            lobbyEntity.getEntrants().size();
-            return lobbyEntity;
-        }
-
-        return null;
+        return entityManager.find(LobbyEntity.class, id);
     }
 
     public List<LobbyEntity> findAllOpen(int carClassHash) {
