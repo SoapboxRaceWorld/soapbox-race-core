@@ -36,14 +36,14 @@ public class GetServerInformationBO {
         serverInformationVO.setBannerUrl(parameterBO.getStrParam("SERVER_INFO_BANNER_URL"));
         serverInformationVO.setAdminList(parameterBO.getStrParam("SERVER_INFO_ADMINS"));
         serverInformationVO.setOwnerList(parameterBO.getStrParam("SERVER_INFO_OWNERS"));
-        serverInformationVO.setNumberOfRegistered(onlineUsersEntity.getNumberOfRegistered());
         serverInformationVO.setSecondsToShutDown(parameterBO.getIntParam("SERVER_INFO_SHUTDOWN_TIMER", 7200));
         serverInformationVO.setAllowedCountries(parameterBO.getStrParam("SERVER_INFO_ALLOWED_COUNTRIES"));
         serverInformationVO.setActivatedHolidaySceneryGroups(parameterBO.getStrListParam("SERVER_INFO_ENABLED_SCENERY"));
         serverInformationVO.setDisactivatedHolidaySceneryGroups(parameterBO.getStrListParam("SERVER_INFO_DISABLED_SCENERY"));
-        serverInformationVO.setOnlineNumber(onlineUsersEntity.getNumberOfOnline());
         serverInformationVO.setRequireTicket(parameterBO.getStrParam("TICKET_TOKEN") != null);
         serverInformationVO.setServerVersion(BuildInfo.getVersion());
+        serverInformationVO.setOnlineNumber(onlineUsersEntity.getNumberOfOnline());
+        serverInformationVO.setNumberOfRegistered(onlineUsersEntity.getNumberOfRegistered());
 
         return serverInformationVO;
     }
