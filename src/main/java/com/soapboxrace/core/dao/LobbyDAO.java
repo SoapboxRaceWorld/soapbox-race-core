@@ -9,14 +9,12 @@ package com.soapboxrace.core.dao;
 import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
-import com.soapboxrace.core.jpa.LobbyEntrantEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Stateless
