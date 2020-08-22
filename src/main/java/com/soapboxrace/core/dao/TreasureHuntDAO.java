@@ -11,17 +11,10 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 @Stateless
 public class TreasureHuntDAO extends BaseDAO<TreasureHuntEntity> {
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public TreasureHuntEntity findById(Long personaId) {
         return entityManager.find(TreasureHuntEntity.class, personaId);

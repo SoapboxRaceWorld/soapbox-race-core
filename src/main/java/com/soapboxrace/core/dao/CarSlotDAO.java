@@ -11,19 +11,12 @@ import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
 public class CarSlotDAO extends BaseDAO<CarSlotEntity> {
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public CarSlotEntity findById(Long id) {
         return entityManager.find(CarSlotEntity.class, id);

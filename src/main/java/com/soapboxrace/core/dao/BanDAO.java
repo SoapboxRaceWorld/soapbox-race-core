@@ -11,8 +11,6 @@ import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
@@ -20,10 +18,6 @@ import java.util.List;
 
 @Stateless
 public class BanDAO extends BaseDAO<BanEntity> {
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public BanEntity findByUser(UserEntity userEntity) {
         TypedQuery<BanEntity> query = entityManager.createQuery("SELECT obj FROM BanEntity obj WHERE obj.userEntity =" +

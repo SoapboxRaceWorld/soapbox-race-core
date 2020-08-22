@@ -10,25 +10,16 @@ import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.ProductEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
 public class ProductDAO extends BaseDAO<ProductEntity> {
-    private final SecureRandom secureRandom = new SecureRandom();
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public ProductEntity findById(Long id) {
         return entityManager.find(ProductEntity.class, id);

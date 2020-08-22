@@ -10,17 +10,10 @@ import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.CarClassesEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 @Stateless
 public class CarClassesDAO extends BaseDAO<CarClassesEntity> {
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public CarClassesEntity findById(String vltName) {
         return entityManager.find(CarClassesEntity.class, vltName);

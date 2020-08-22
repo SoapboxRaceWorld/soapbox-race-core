@@ -10,12 +10,11 @@ import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.AmplifierEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 @Stateless
 public class AmplifierDAO extends BaseDAO<AmplifierEntity> {
+
     /**
      * Finds the {@link AmplifierEntity} in the database with the given product hash.
      *
@@ -27,10 +26,5 @@ public class AmplifierDAO extends BaseDAO<AmplifierEntity> {
                 , AmplifierEntity.class);
         query.setParameter("hash", hash);
         return query.getSingleResult();
-    }
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
     }
 }

@@ -11,17 +11,11 @@ import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
 public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public List<InventoryItemEntity> findAllByPersonaId(Long personaId) {
         return entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaId", InventoryItemEntity.class)

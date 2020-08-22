@@ -11,18 +11,11 @@ import com.soapboxrace.core.jpa.PersonaAchievementRankEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
 public class PersonaAchievementRankDAO extends BaseDAO<PersonaAchievementRankEntity> {
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public List<PersonaAchievementRankEntity> findAllByPersonaId(Long personaId) {
         TypedQuery<PersonaAchievementRankEntity> query = this.entityManager.createNamedQuery(

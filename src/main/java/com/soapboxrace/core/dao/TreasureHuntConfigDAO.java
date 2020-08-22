@@ -12,18 +12,11 @@ import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.TreasureHuntConfigEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
 public class TreasureHuntConfigDAO extends BaseDAO<TreasureHuntConfigEntity> {
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public TreasureHuntConfigEntity findForStreak(Integer streak) {
         TypedQuery<TreasureHuntConfigEntity> query = this.entityManager.createNamedQuery(

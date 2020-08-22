@@ -10,18 +10,11 @@ import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.ChatRoomEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
 public class ChatRoomDAO extends BaseDAO<ChatRoomEntity> {
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public ChatRoomEntity findById(int id) {
         return entityManager.find(ChatRoomEntity.class, id);

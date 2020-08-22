@@ -11,19 +11,12 @@ import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Stateless
 public class LobbyDAO extends BaseDAO<LobbyEntity> {
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public LobbyEntity findById(Long id) {
         return entityManager.find(LobbyEntity.class, id);

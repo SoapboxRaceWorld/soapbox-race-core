@@ -10,18 +10,11 @@ import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.LevelRepEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
 public class LevelRepDAO extends BaseDAO<LevelRepEntity> {
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public LevelRepEntity findByLevel(Long level) {
         TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findByLevel",

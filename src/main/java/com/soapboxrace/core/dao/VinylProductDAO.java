@@ -11,18 +11,11 @@ import com.soapboxrace.core.jpa.CategoryEntity;
 import com.soapboxrace.core.jpa.VinylProductEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
 public class VinylProductDAO extends BaseDAO<VinylProductEntity> {
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public VinylProductEntity findById(Long id) {
         return entityManager.find(VinylProductEntity.class, id);

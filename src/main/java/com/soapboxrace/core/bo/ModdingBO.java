@@ -10,9 +10,6 @@ import com.soapboxrace.core.vo.ModInfoVO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Stateless
 public class ModdingBO {

@@ -7,7 +7,6 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.api.util.GeoIp2;
-import com.soapboxrace.core.api.util.UUIDGen;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.engine.EngineException;

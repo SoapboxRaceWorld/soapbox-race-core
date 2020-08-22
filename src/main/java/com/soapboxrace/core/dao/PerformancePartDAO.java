@@ -11,17 +11,10 @@ import com.soapboxrace.core.jpa.CustomCarEntity;
 import com.soapboxrace.core.jpa.PerformancePartEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 @Stateless
 public class PerformancePartDAO extends BaseDAO<PerformancePartEntity> {
-
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public void deleteByCustomCar(CustomCarEntity customCarEntity) {
         Query query = entityManager.createNamedQuery("PerformancePartEntity.deleteByCustomCar");

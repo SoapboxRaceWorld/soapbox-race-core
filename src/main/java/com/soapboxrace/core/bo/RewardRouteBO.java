@@ -8,8 +8,6 @@ package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.RewardVO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.engine.EngineException;
-import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.Accolades;
 import com.soapboxrace.jaxb.http.RouteArbitrationPacket;

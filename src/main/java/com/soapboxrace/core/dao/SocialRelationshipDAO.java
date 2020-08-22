@@ -10,17 +10,11 @@ import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.SocialRelationshipEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
 public class SocialRelationshipDAO extends BaseDAO<SocialRelationshipEntity> {
-    @PersistenceContext
-    protected void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     public void deleteAllByPersonaId(Long personaId) {
         entityManager.createNamedQuery("SocialRelationshipEntity.deleteAllByPersonaId")
