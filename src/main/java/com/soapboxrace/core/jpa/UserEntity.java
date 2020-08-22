@@ -13,7 +13,6 @@ import java.util.List;
 @Entity
 @Table(name = "USER")
 @NamedQueries({ //
-        @NamedQuery(name = "UserEntity.findAll", query = "SELECT obj FROM UserEntity obj"),
         @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT obj FROM UserEntity obj WHERE obj.email = " +
                 ":email"), //
         @NamedQuery(name = "UserEntity.findByIpAddress", query = "SELECT obj FROM UserEntity obj WHERE obj.ipAddress " +
