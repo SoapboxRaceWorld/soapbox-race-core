@@ -6,6 +6,11 @@
 
 package com.soapboxrace.core.jpa;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,7 +45,9 @@ public class UserEntity {
     @Column(name = "IP_ADDRESS")
     private String ipAddress;
 
-    @OneToMany(mappedBy = "user", targetEntity = PersonaEntity.class)
+    @OneToMany(mappedBy = "user", targetEntity = PersonaEntity.class, fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Fetch(FetchMode.JOIN)
     private List<PersonaEntity> personas;
 
     @Column(name = "premium")
