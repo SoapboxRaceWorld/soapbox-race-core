@@ -3,13 +3,13 @@ package com.soapboxrace.core.jpa;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "EVENT_POWERUP", indexes = {
+@Table(name = "USED_POWERUP", indexes = {
         @Index(name = "session_index", columnList = "eventSessionId"),
         @Index(name = "session_persona_index", columnList = "eventSessionId, personaId"),
         @Index(name = "persona_index", columnList = "personaId"),
         @Index(name = "hash_index", columnList = "powerupHash"),
 })
-public class EventPowerupEntity {
+public class UsedPowerupEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

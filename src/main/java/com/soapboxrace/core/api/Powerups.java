@@ -42,7 +42,7 @@ public class Powerups {
     private AchievementBO achievementBO;
 
     @EJB
-    private EventPowerupBO eventPowerupBO;
+    private PowerupTrackingBO usedPowerupBO;
 
     @POST
     @Secured
@@ -75,7 +75,7 @@ public class Powerups {
         }
 
         Long realEventSessionId = tokenBO.getEventSessionId(securityToken);
-        eventPowerupBO.createPowerupRecord(realEventSessionId, activePersonaId, powerupHash);
+        usedPowerupBO.createPowerupRecord(realEventSessionId, activePersonaId, powerupHash);
 
         return "";
     }
