@@ -7,12 +7,16 @@
 package com.soapboxrace.core.dao.util;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 public abstract class BaseDAO<T> {
 
     protected EntityManager entityManager;
 
-    protected abstract void setEntityManager(EntityManager entityManager);
+    @PersistenceContext
+    protected void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     public void insert(T entity) {
         entityManager.persist(entity);
