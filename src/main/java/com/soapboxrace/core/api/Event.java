@@ -47,7 +47,9 @@ public class Event {
     @Secured
     @Path("/abort")
     @Produces(MediaType.APPLICATION_XML)
-    public String abort(@QueryParam("eventSessionId") Long eventSessionId) {
+    public String abort(@HeaderParam("securityToken") String securityToken,
+                        @QueryParam("eventSessionId") Long eventSessionId) {
+        tokenBO.setEventSessionId(securityToken, null);
         return "";
     }
 
