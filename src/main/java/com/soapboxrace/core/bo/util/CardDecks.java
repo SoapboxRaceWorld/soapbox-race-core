@@ -4,7 +4,7 @@
  * Copyright (c) 2020.
  */
 
-package com.soapboxrace.core.jpa;
+package com.soapboxrace.core.bo.util;
 
 public enum CardDecks {
     GoldCar("LD_CARD_SPECIAL_GOLD"),
