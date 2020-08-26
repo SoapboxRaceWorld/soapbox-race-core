@@ -6,7 +6,8 @@
 
 package com.soapboxrace.core.api.util;
 
-import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.dao.TokenSessionDAO;
+import com.soapboxrace.core.jpa.TokenSessionEntity;
 
 import javax.annotation.Priority;
 import javax.ejb.EJB;
@@ -16,6 +17,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+import java.util.Date;
 
 @Secured
 @Provider
@@ -23,7 +25,7 @@ import javax.ws.rs.ext.Provider;
 public class AuthenticationFilter implements ContainerRequestFilter {
 
     @EJB
-    private TokenSessionBO tokenSessionBO;
+    private TokenSessionDAO tokenDAO;
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
@@ -34,15 +36,23 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
         Long userId = Long.valueOf(userIdStr);
         try {
-            validateToken(userId, securityToken);
+            TokenSessionEntity tokenSessionEntity = validateToken(userId, securityToken);
+            requestContext.setProperty("tokenSession", tokenSessionEntity);
         } catch (Exception e) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }
     }
 
-    private void validateToken(Long userId, String securityToken) {
-        if (!tokenSessionBO.verifyToken(userId, securityToken)) {
+    private TokenSessionEntity validateToken(Long userId, String securityToken) {
+        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+        if (tokenSessionEntity == null || !tokenSessionEntity.getUserEntity().getId().equals(userId)) {
             throw new NotAuthorizedException("Invalid Token");
         }
+        long time = new Date().getTime();
+        long tokenTime = tokenSessionEntity.getExpirationDate().getTime();
+        if (time > tokenTime) {
+            throw new NotAuthorizedException("Invalid Token");
+        }
+        return tokenSessionEntity;
     }
 }

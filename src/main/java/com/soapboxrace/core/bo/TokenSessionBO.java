@@ -43,16 +43,6 @@ public class TokenSessionBO {
     @EJB
     private AuthenticationBO authenticationBO;
 
-    public boolean verifyToken(Long userId, String securityToken) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
-        if (tokenSessionEntity == null || !tokenSessionEntity.getUserEntity().getId().equals(userId)) {
-            return false;
-        }
-        long time = new Date().getTime();
-        long tokenTime = tokenSessionEntity.getExpirationDate().getTime();
-        return time <= tokenTime;
-    }
-
     public String createToken(Long userId, String clientHostName) {
         TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
         Date expirationDate = getMinutes(parameterBO.getIntParam("SESSION_LENGTH_MINUTES", 130));
