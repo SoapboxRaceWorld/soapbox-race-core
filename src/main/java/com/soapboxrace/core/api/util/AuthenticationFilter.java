@@ -6,9 +6,11 @@
 
 package com.soapboxrace.core.api.util;
 
+import com.soapboxrace.core.bo.HardwareInfoBO;
 import com.soapboxrace.core.bo.RequestSessionInfo;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
+import com.soapboxrace.core.jpa.UserEntity;
 
 import javax.annotation.Priority;
 import javax.ejb.EJB;
@@ -31,6 +33,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     @Inject
     private RequestSessionInfo requestSessionInfo;
+
+    @EJB
+    private HardwareInfoBO hardwareInfoBO;
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
@@ -58,6 +63,14 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         if (time > tokenTime) {
             throw new NotAuthorizedException("Invalid Token");
         }
+
+        UserEntity userEntity = tokenSessionEntity.getUserEntity();
+
+        String gameHardwareHash = userEntity.getGameHardwareHash();
+        if (gameHardwareHash != null && hardwareInfoBO.isHardwareHashBanned(gameHardwareHash)) {
+            throw new NotAuthorizedException("Account Banned");
+        }
+
         return tokenSessionEntity;
     }
 }
