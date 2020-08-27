@@ -10,6 +10,7 @@ import com.soapboxrace.core.dao.util.BaseDAO;
 import com.soapboxrace.core.jpa.PersonaEntity;
 
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -29,6 +30,13 @@ public class PersonaDAO extends BaseDAO<PersonaEntity> {
 
         List<PersonaEntity> resultList = query.getResultList();
         return !resultList.isEmpty() ? resultList.get(0) : null;
+    }
+
+    public void addPointsToScore(Long personaId, Integer points) {
+        Query query = entityManager.createNamedQuery("PersonaEntity.addPointsToScore");
+        query.setParameter("personaId", personaId);
+        query.setParameter("points", points);
+        query.executeUpdate();
     }
 
     public Long countPersonas() {
