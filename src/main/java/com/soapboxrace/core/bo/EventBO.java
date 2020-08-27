@@ -6,7 +6,10 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.*;
+import com.soapboxrace.core.dao.EventDAO;
+import com.soapboxrace.core.dao.EventDataDAO;
+import com.soapboxrace.core.dao.EventSessionDAO;
+import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
@@ -14,6 +17,7 @@ import com.soapboxrace.core.jpa.*;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.List;
+import java.util.Objects;
 
 @Stateless
 public class EventBO {
@@ -29,9 +33,6 @@ public class EventBO {
 
     @EJB
     private PersonaDAO personaDao;
-
-    @EJB
-    private TokenSessionDAO tokenSessionDao;
 
     @EJB
     private PersonaBO personaBO;
@@ -55,15 +56,11 @@ public class EventBO {
         eventDataDao.insert(eventDataEntity);
     }
 
-    public EventSessionEntity createEventSession(String securityToken, int eventId) {
+    public EventSessionEntity createEventSession(TokenSessionEntity tokenSessionEntity, int eventId) {
+        Objects.requireNonNull(tokenSessionEntity);
+
         EventEntity eventEntity = eventDao.findById(eventId);
         if (eventEntity == null) {
-            return null;
-        }
-
-        TokenSessionEntity tokenSessionEntity = tokenSessionDao.findById(securityToken);
-
-        if (tokenSessionEntity == null) {
             return null;
         }
 

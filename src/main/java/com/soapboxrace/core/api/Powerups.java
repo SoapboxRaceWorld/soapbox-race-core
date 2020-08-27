@@ -16,15 +16,13 @@ import com.soapboxrace.jaxb.xmpp.XMPP_PowerupActivatedType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePowerupActivated;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Map;
 
 @Path("/powerups")
 public class Powerups {
-
-    @EJB
-    private TokenSessionBO tokenBO;
 
     @EJB
     private InventoryBO inventoryBO;
@@ -44,15 +42,18 @@ public class Powerups {
     @EJB
     private PowerupTrackingBO usedPowerupBO;
 
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
+
     @POST
     @Secured
     @Path("/activated/{powerupHash}")
     @Produces(MediaType.APPLICATION_XML)
-    public String activated(@HeaderParam("securityToken") String securityToken,
-                            @PathParam(value = "powerupHash") Integer powerupHash,
-                            @QueryParam("targetId") Long targetId, @QueryParam("receivers") String receivers,
+    public String activated(@PathParam(value = "powerupHash") Integer powerupHash,
+                            @QueryParam("targetId") Long targetId,
+                            @QueryParam("receivers") String receivers,
                             @QueryParam("eventSessionId") Long eventSessionId) {
-        Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+        Long activePersonaId = requestSessionInfo.getActivePersonaId();
 
         XMPP_ResponseTypePowerupActivated powerupActivatedResponse = new XMPP_ResponseTypePowerupActivated();
         XMPP_PowerupActivatedType powerupActivated = new XMPP_PowerupActivatedType();
@@ -74,8 +75,7 @@ public class Powerups {
             achievementBO.commitTransaction(personaEntity, transaction);
         }
 
-        Long realEventSessionId = tokenBO.getEventSessionId(securityToken);
-        usedPowerupBO.createPowerupRecord(realEventSessionId, activePersonaId, powerupHash);
+        usedPowerupBO.createPowerupRecord(requestSessionInfo.getEventSessionId(), activePersonaId, powerupHash);
 
         return "";
     }

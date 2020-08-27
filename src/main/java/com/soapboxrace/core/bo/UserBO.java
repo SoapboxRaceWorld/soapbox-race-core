@@ -127,8 +127,7 @@ public class UserBO {
         }
     }
 
-    public UserInfo getUserById(Long userId) {
-        UserEntity userEntity = userDao.findById(userId);
+    public UserInfo getUserInfo(UserEntity userEntity) {
         UserInfo userInfo = new UserInfo();
         ArrayOfProfileData arrayOfProfileData = new ArrayOfProfileData();
         List<PersonaEntity> listOfProfile = userEntity.getPersonas();
@@ -145,7 +144,7 @@ public class UserBO {
         }
         userInfo.setPersonas(arrayOfProfileData);
         User user = new User();
-        user.setUserId(userId);
+        user.setUserId(userEntity.getId());
         userInfo.setUser(user);
         userInfo.setDefaultPersonaIdx(userEntity.getSelectedPersonaIndex());
         return userInfo;

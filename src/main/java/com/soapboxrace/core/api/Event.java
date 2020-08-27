@@ -15,6 +15,7 @@ import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.JAXBUtility;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.InputStream;
@@ -43,13 +44,15 @@ public class Event {
     @EJB
     private MatchmakingBO matchmakingBO;
 
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
+
     @POST
     @Secured
     @Path("/abort")
     @Produces(MediaType.APPLICATION_XML)
-    public String abort(@HeaderParam("securityToken") String securityToken,
-                        @QueryParam("eventSessionId") Long eventSessionId) {
-        tokenBO.setEventSessionId(securityToken, null);
+    public String abort(@QueryParam("eventSessionId") Long eventSessionId) {
+        tokenBO.setEventSessionId(requestSessionInfo.getTokenSessionEntity(), null);
         return "";
     }
 
@@ -57,12 +60,11 @@ public class Event {
     @Secured
     @Path("/launched")
     @Produces(MediaType.APPLICATION_XML)
-    public String launched(@HeaderParam("securityToken") String securityToken,
-                           @QueryParam("eventSessionId") Long eventSessionId) {
-        Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+    public String launched(@QueryParam("eventSessionId") Long eventSessionId) {
+        Long activePersonaId = requestSessionInfo.getActivePersonaId();
         matchmakingBO.removePlayerFromQueue(activePersonaId);
         eventBO.createEventDataSession(activePersonaId, eventSessionId);
-        tokenBO.setEventSessionId(securityToken, eventSessionId);
+        tokenBO.setEventSessionId(requestSessionInfo.getTokenSessionEntity(), eventSessionId);
         return "";
     }
 
@@ -70,12 +72,12 @@ public class Event {
     @Secured
     @Path("/arbitration")
     @Produces(MediaType.APPLICATION_XML)
-    public String arbitration(InputStream arbitrationXml, @HeaderParam("securityToken") String securityToken,
+    public String arbitration(InputStream arbitrationXml,
                               @QueryParam("eventSessionId") Long eventSessionId) {
         EventSessionEntity eventSessionEntity = eventBO.findEventSessionById(eventSessionId);
         EventEntity event = eventSessionEntity.getEvent();
         EventMode eventMode = EventMode.fromId(event.getEventModeId());
-        Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+        Long activePersonaId = requestSessionInfo.getActivePersonaId();
         EventResult eventResult = null;
 
         switch (eventMode) {
@@ -108,7 +110,7 @@ public class Event {
                 break;
         }
 
-        tokenBO.setEventSessionId(securityToken, null);
+        tokenBO.setEventSessionId(requestSessionInfo.getTokenSessionEntity(), null);
 
         if (eventResult == null) {
             return "";
@@ -126,7 +128,7 @@ public class Event {
         EventSessionEntity eventSessionEntity = eventBO.findEventSessionById(eventSessionId);
         PursuitArbitrationPacket pursuitArbitrationPacket = JAXBUtility.unMarshal(bustXml,
                 PursuitArbitrationPacket.class);
-        Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+        Long activePersonaId = requestSessionInfo.getActivePersonaId();
         return JAXBUtility.marshal(eventResultPursuitBO.handle(eventSessionEntity, activePersonaId, pursuitArbitrationPacket));
     }
 }

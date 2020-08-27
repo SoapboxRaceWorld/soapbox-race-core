@@ -59,14 +59,13 @@ public class User {
     @Secured
     @Path("GetPermanentSession")
     @Produces(MediaType.APPLICATION_XML)
-    public Response getPermanentSession(@HeaderParam("securityToken") String securityToken,
-                                        @HeaderParam("userId") Long userId) {
+    public Response getPermanentSession() {
         UserEntity userEntity = requestSessionInfo.getUser();
         BanEntity ban = authenticationBO.checkUserBan(userEntity);
 
         if (ban != null) {
             // Ideally this will never happen. Then again, plenty of weird stuff has happened.
-            tokenBO.deleteByUserId(userId);
+            tokenBO.deleteByUserId(userEntity.getId());
 
             throw new EngineException(EngineExceptionCode.BannedEntitlements, true);
         }
@@ -80,9 +79,9 @@ public class User {
             }
         }
 
-        tokenBO.deleteByUserId(userId);
-        String randomUUID = tokenBO.createToken(userId, sr.getRemoteHost());
-        UserInfo userInfo = userBO.getUserById(userId);
+        tokenBO.deleteByUserId(userEntity.getId());
+        String randomUUID = tokenBO.createToken(userEntity, sr.getRemoteHost());
+        UserInfo userInfo = userBO.getUserInfo(userEntity);
         userInfo.getUser().setSecurityToken(randomUUID);
         userBO.createXmppUser(userInfo);
         return Response.ok(userInfo).build();
@@ -92,11 +91,9 @@ public class User {
     @Secured
     @Path("SecureLoginPersona")
     @Produces(MediaType.APPLICATION_XML)
-    public String secureLoginPersona(@HeaderParam("securityToken") String securityToken,
-                                     @HeaderParam("userId") Long userId,
-                                     @QueryParam("personaId") Long personaId) {
-        tokenBO.setActivePersonaId(securityToken, personaId);
-        userBO.secureLoginPersona(userId, personaId);
+    public String secureLoginPersona(@QueryParam("personaId") Long personaId) {
+        tokenBO.setActivePersonaId(requestSessionInfo.getTokenSessionEntity(), personaId);
+        userBO.secureLoginPersona(requestSessionInfo.getUser().getId(), personaId);
         // Question: Why is this here?
         // Answer: Weird things happen sometimes.
         matchmakingBO.removePlayerFromQueue(personaId);
@@ -107,13 +104,13 @@ public class User {
     @Secured
     @Path("SecureLogoutPersona")
     @Produces(MediaType.APPLICATION_XML)
-    public String secureLogoutPersona(@HeaderParam("securityToken") String securityToken,
-                                      @HeaderParam("userId") Long userId,
-                                      @QueryParam("personaId") Long personaId) {
-        long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-        tokenBO.setActivePersonaId(securityToken, 0L);
-        presenceBO.removePresence(activePersonaId);
-        matchmakingBO.removePlayerFromQueue(personaId);
+    public String secureLogoutPersona(@QueryParam("personaId") Long personaId) {
+        if (personaId.equals(requestSessionInfo.getActivePersonaId())) {
+            presenceBO.removePresence(requestSessionInfo.getActivePersonaId());
+            matchmakingBO.removePlayerFromQueue(requestSessionInfo.getActivePersonaId());
+        }
+
+        tokenBO.setActivePersonaId(requestSessionInfo.getTokenSessionEntity(), 0L);
 
         return "";
     }
@@ -122,15 +119,14 @@ public class User {
     @Secured
     @Path("SecureLogout")
     @Produces(MediaType.APPLICATION_XML)
-    public String secureLogout(@HeaderParam("userId") Long userId, @HeaderParam("securityToken") String securityToken) {
-        Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-
+    public String secureLogout() {
+        Long activePersonaId = requestSessionInfo.getActivePersonaId();
         if (!Objects.isNull(activePersonaId) && !activePersonaId.equals(0L)) {
-            tokenBO.setActivePersonaId(securityToken, 0L);
+            tokenBO.setActivePersonaId(requestSessionInfo.getTokenSessionEntity(), 0L);
             presenceBO.removePresence(activePersonaId);
         }
 
-        tokenBO.deleteByUserId(userId);
+        tokenBO.deleteByUserId(requestSessionInfo.getUser().getId());
 
         return "";
     }

@@ -13,7 +13,11 @@ import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.JAXBUtility;
 
 import javax.ejb.EJB;
-import javax.ws.rs.*;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -27,20 +31,20 @@ public class Events {
     private EventsBO eventsBO;
 
     @EJB
-    private TokenSessionBO tokenSessionBO;
-
-    @EJB
     private ParameterBO parameterBO;
 
     @EJB
     private PersonaBO personaBO;
 
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
+
     @GET
     @Secured
     @Path("/availableatlevel")
     @Produces(MediaType.APPLICATION_XML)
-    public EventsPacket availableAtLevel(@HeaderParam("securityToken") String securityToken) {
-        Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
+    public EventsPacket availableAtLevel() {
+        Long activePersonaId = requestSessionInfo.getActivePersonaId();
         OwnedCarTrans defaultCar = personaBO.getDefaultCar(activePersonaId);
         int carClassHash = defaultCar.getCustomCar().getCarClassHash();
 
@@ -94,10 +98,9 @@ public class Events {
     @Secured
     @Path("/gettreasurehunteventsession")
     @Produces(MediaType.APPLICATION_XML)
-    public TreasureHuntEventSession getTreasureHuntEventSession(@HeaderParam("securityToken") String securityToken) {
+    public TreasureHuntEventSession getTreasureHuntEventSession() {
         if (parameterBO.getBoolParam("ENABLE_TREASURE_HUNT")) {
-            Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-            return eventsBO.getTreasureHuntEventSession(activePersonaId);
+            return eventsBO.getTreasureHuntEventSession(requestSessionInfo.getActivePersonaId());
         }
         return new TreasureHuntEventSession();
     }
@@ -106,19 +109,16 @@ public class Events {
     @Secured
     @Path("/notifycoincollected")
     @Produces(MediaType.APPLICATION_XML)
-    public String notifyCoinCollected(@HeaderParam("securityToken") String securityToken,
-                                      @QueryParam("coins") Integer coins) {
-        Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-        return JAXBUtility.marshal(eventsBO.notifyCoinCollected(activePersonaId, coins));
+    public String notifyCoinCollected(@QueryParam("coins") Integer coins) {
+        return JAXBUtility.marshal(eventsBO.notifyCoinCollected(requestSessionInfo.getActivePersonaId(), coins));
     }
 
     @GET
     @Secured
     @Path("/accolades")
     @Produces(MediaType.APPLICATION_XML)
-    public String accolades(@HeaderParam("securityToken") String securityToken) {
-        Long activePersonaId = tokenSessionBO.getActivePersonaId(securityToken);
-        return JAXBUtility.marshal(eventsBO.accolades(activePersonaId, false));
+    public String accolades() {
+        return JAXBUtility.marshal(eventsBO.accolades(requestSessionInfo.getActivePersonaId(), false));
     }
 
     @GET

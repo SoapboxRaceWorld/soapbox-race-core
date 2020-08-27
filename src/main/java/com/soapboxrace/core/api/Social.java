@@ -8,10 +8,11 @@ package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.AdminBO;
+import com.soapboxrace.core.bo.RequestSessionInfo;
 import com.soapboxrace.core.bo.SocialBO;
-import com.soapboxrace.core.bo.TokenSessionBO;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -22,10 +23,10 @@ public class Social {
     private SocialBO bo;
 
     @EJB
-    private TokenSessionBO tokenSessionBo;
-
-    @EJB
     private AdminBO adminBo;
+
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
 
     @POST
     @Secured
@@ -37,8 +38,8 @@ public class Social {
                            @QueryParam("description") String description,
                            @QueryParam("customCarID") Integer customCarID,
                            @QueryParam("chatMinutes") Integer chatMinutes) {
-        if (tokenSessionBo.isAdmin(securityToken) && description.startsWith("/")) {
-            adminBo.sendCommand(tokenSessionBo.getActivePersonaId(securityToken), abuserPersonaId, description);
+        if (requestSessionInfo.isAdmin() && description.startsWith("/")) {
+            adminBo.sendCommand(requestSessionInfo.getActivePersonaId(), abuserPersonaId, description);
         } else {
             bo.sendReport(personaId, abuserPersonaId, petitionType, description, customCarID, chatMinutes, 0L);
         }

@@ -40,13 +40,12 @@ public class TokenSessionBO {
     @EJB
     private AuthenticationBO authenticationBO;
 
-    public String createToken(Long userId, String clientHostName) {
+    public String createToken(UserEntity userEntity, String clientHostName) {
         TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
         Date expirationDate = getMinutes(parameterBO.getIntParam("SESSION_LENGTH_MINUTES", 130));
         tokenSessionEntity.setExpirationDate(expirationDate);
         String randomUUID = UUID.randomUUID().toString();
         tokenSessionEntity.setSecurityToken(randomUUID);
-        UserEntity userEntity = userDAO.findById(userId);
         tokenSessionEntity.setUserEntity(userEntity);
         tokenSessionEntity.setPremium(userEntity.isPremium());
         tokenSessionEntity.setClientHostIp(clientHostName);
@@ -93,7 +92,7 @@ public class TokenSessionBO {
                     userDAO.update(userEntity);
                     Long userId = userEntity.getId();
                     deleteByUserId(userId);
-                    String randomUUID = createToken(userId, httpRequest.getRemoteHost());
+                    String randomUUID = createToken(userEntity, httpRequest.getRemoteHost());
                     loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
                     loginStatusVO.setDescription("");
 

@@ -7,29 +7,29 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.RequestSessionInfo;
 import com.soapboxrace.core.bo.SocialRelationshipBO;
-import com.soapboxrace.core.bo.TokenSessionBO;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 @Path("/removefriend")
 public class RemoveFriend {
-    @EJB
-    private TokenSessionBO tokenSessionBO;
 
     @EJB
     private SocialRelationshipBO socialRelationshipBO;
 
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
+
     @GET
     @Secured
-    public Response removefriend(@QueryParam("friendPersonaId") Long friendPersonaId,
-                                 @HeaderParam("securityToken") String securityToken) {
-        return Response.ok().entity(socialRelationshipBO.removeFriend(tokenSessionBO.getActivePersonaId(securityToken),
+    public Response removefriend(@QueryParam("friendPersonaId") Long friendPersonaId) {
+        return Response.ok().entity(socialRelationshipBO.removeFriend(requestSessionInfo.getActivePersonaId(),
                 friendPersonaId)).build();
     }
 }

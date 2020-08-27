@@ -7,31 +7,33 @@
 package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.bo.RequestSessionInfo;
 import com.soapboxrace.core.bo.SocialRelationshipBO;
-import com.soapboxrace.core.bo.TokenSessionBO;
 
 import javax.ejb.EJB;
-import javax.ws.rs.*;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/resolvefriendsrequest")
 public class ResolveFriendsRequest {
-    @EJB
-    private TokenSessionBO sessionBO;
 
     @EJB
     private SocialRelationshipBO socialRelationshipBO;
 
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
+
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_XML)
-    public Response resolveFriendsRequest(@HeaderParam("securityToken") String securityToken,
-                                          @QueryParam("friendPersonaId") Long friendPersonaId, @QueryParam(
-            "resolution") int resolution) {
-        Long activePersonaId = sessionBO.getActivePersonaId(securityToken);
-
-        return Response.ok(this.socialRelationshipBO.resolveFriendsRequest(activePersonaId, friendPersonaId,
+    public Response resolveFriendsRequest(@QueryParam("friendPersonaId") Long friendPersonaId,
+                                          @QueryParam("resolution") int resolution) {
+        return Response.ok(this.socialRelationshipBO.resolveFriendsRequest(requestSessionInfo.getActivePersonaId(), friendPersonaId,
                 resolution)).build();
     }
 }

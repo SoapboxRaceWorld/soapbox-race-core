@@ -60,7 +60,7 @@ public class JAXBUtility {
         return stringWriter.toString();
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public static <T> T unMarshal(InputStream is, Class<T> classz) {
         try {
             InputStreamReader inputStreamReader = new InputStreamReader(is);
