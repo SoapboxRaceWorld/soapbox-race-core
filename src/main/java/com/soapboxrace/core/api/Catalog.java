@@ -8,7 +8,7 @@ package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.ProductBO;
-import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.bo.RequestSessionInfo;
 import com.soapboxrace.core.jpa.CategoryEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.jaxb.http.ArrayOfCategoryTrans;
@@ -17,6 +17,7 @@ import com.soapboxrace.jaxb.http.CategoryTrans;
 import com.soapboxrace.jaxb.http.ProductTrans;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -27,8 +28,8 @@ public class Catalog {
     @EJB
     private ProductBO productBO;
 
-    @EJB
-    private TokenSessionBO tokenBO;
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
 
     @GET
     @Secured
@@ -38,9 +39,8 @@ public class Catalog {
             "categoryName") String categoryName,
                                                   @QueryParam("clientProductType") String clientProductType) {
         ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
-        Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
         List<ProductEntity> productsInCategory = productBO.productsInCategory(categoryName, clientProductType,
-                activePersonaId);
+                requestSessionInfo.getActivePersonaId());
         List<ProductTrans> productTransList = productBO.getProductTransList(productsInCategory);
         arrayOfProductTrans.getProductTrans().addAll(productTransList);
         return arrayOfProductTrans;
@@ -51,7 +51,7 @@ public class Catalog {
     @Path("/categories")
     @Produces(MediaType.APPLICATION_XML)
     public ArrayOfCategoryTrans categories(@HeaderParam("securityToken") String securityToken) {
-        Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
+        Long activePersonaId = requestSessionInfo.getActivePersonaId();
         ArrayOfCategoryTrans arrayOfCategoryTrans = new ArrayOfCategoryTrans();
         List<CategoryEntity> listCategoryEntity = productBO.categories();
         for (CategoryEntity entity : listCategoryEntity) {

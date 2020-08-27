@@ -9,14 +9,12 @@ package com.soapboxrace.core.api;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
-import com.soapboxrace.core.jpa.CarSlotEntity;
-import com.soapboxrace.core.jpa.OwnedCarEntity;
-import com.soapboxrace.core.jpa.PersonaEntity;
-import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.JAXBUtility;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.BufferedReader;
@@ -46,14 +44,16 @@ public class Personas {
     @EJB
     private InventoryBO inventoryBO;
 
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
+
     @POST
     @Secured
     @Path("/{personaId}/commerce")
     @Produces(MediaType.APPLICATION_XML)
     public CommerceSessionResultTrans commerce(InputStream commerceXml,
-                                               @HeaderParam("securityToken") String securityToken,
                                                @PathParam(value = "personaId") Long personaId) {
-        sessionBO.verifyPersonaOwnership(securityToken, personaId);
+        sessionBO.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
         String xml = new BufferedReader(new InputStreamReader(commerceXml))
                 .lines().collect(Collectors.joining(""));
         CommerceSessionTrans commerceSessionTrans = JAXBUtility.unMarshal(xml, CommerceSessionTrans.class);
@@ -65,9 +65,10 @@ public class Personas {
     @Secured
     @Path("/{personaId}/baskets")
     @Produces(MediaType.APPLICATION_XML)
-    public CommerceResultTrans baskets(@HeaderParam("securityToken") String securityToken, InputStream basketXml,
+    public CommerceResultTrans baskets(InputStream basketXml,
                                        @PathParam(value = "personaId") Long personaId) {
-        sessionBO.verifyPersonaOwnership(securityToken, personaId);
+        TokenSessionEntity tokenSessionEntity = requestSessionInfo.getTokenSessionEntity();
+        sessionBO.verifyPersonaOwnership(tokenSessionEntity, personaId);
 
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
 
@@ -79,8 +80,6 @@ public class Personas {
         commerceResultTrans.setCommerceItems(new ArrayOfCommerceItemTrans());
         commerceResultTrans.setInvalidBasket(new InvalidBasketTrans());
         commerceResultTrans.setInventoryItems(arrayOfInventoryItemTrans);
-
-        ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
 
         BasketTrans basketTrans = JAXBUtility.unMarshal(basketXml, BasketTrans.class);
         String productId = basketTrans.getItems().getBasketItemTrans().get(0).getProductId();
@@ -98,16 +97,13 @@ public class Personas {
             if (productEntity != null) {
                 switch (productEntity.getProductType()) {
                     case "PRESETCAR":
-                        commerceResultTrans.setStatus(basketBO.buyCar(productEntity, personaEntity, securityToken,
-                                commerceResultTrans));
+                        commerceResultTrans.setStatus(basketBO.buyCar(productEntity, personaEntity, tokenSessionEntity, commerceResultTrans));
                         break;
                     case "BUNDLE":
-                        commerceResultTrans.setStatus(basketBO.buyBundle(productId, personaEntity,
-                                commerceResultTrans));
+                        commerceResultTrans.setStatus(basketBO.buyBundle(productId, personaEntity, commerceResultTrans));
                         break;
                     case "AMPLIFIER":
-                        commerceResultTrans.setStatus(basketBO.buyAmplifier(personaEntity, productId
-                        ));
+                        commerceResultTrans.setStatus(basketBO.buyAmplifier(personaEntity, productId));
                         break;
                 }
             }
@@ -134,9 +130,8 @@ public class Personas {
     @Secured
     @Path("/{personaId}/carslots")
     @Produces(MediaType.APPLICATION_XML)
-    public CarSlotInfoTrans carslots(@PathParam(value = "personaId") Long personaId,
-                                     @HeaderParam("securityToken") String securityToken) {
-        sessionBO.verifyPersonaOwnership(securityToken, personaId);
+    public CarSlotInfoTrans carslots(@PathParam(value = "personaId") Long personaId) {
+        sessionBO.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
 
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
         List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
@@ -150,7 +145,7 @@ public class Personas {
         carSlotInfoTrans.setCarsOwnedByPersona(arrayOfOwnedCarTrans);
         carSlotInfoTrans.setDefaultOwnedCarIndex(personaEntity.getCurCarIndex());
         carSlotInfoTrans.setObtainableSlots(new ArrayOfProductTrans());
-        int carlimit = parameterBO.getCarLimit(securityToken);
+        int carlimit = parameterBO.getCarLimit(requestSessionInfo.getUser());
         carSlotInfoTrans.setOwnedCarSlotsCount(carlimit);
         ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
         ProductTrans productTrans = new ProductTrans();
@@ -181,8 +176,8 @@ public class Personas {
     @Path("/inventory/objects")
     @Produces(MediaType.APPLICATION_XML)
     public InventoryTrans inventoryObjects(@HeaderParam("securityToken") String securityToken) {
-        long personaId = sessionBO.getActivePersonaId(securityToken);
-        return inventoryBO.getClientInventory(inventoryBO.getInventory(personaBO.getPersonaById(personaId)));
+        return inventoryBO.getClientInventory(inventoryBO.getInventory(
+                personaBO.getPersonaById(requestSessionInfo.getActivePersonaId())));
     }
 
     @GET
@@ -191,8 +186,7 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public String sellInventoryItem(@HeaderParam("securityToken") String securityToken,
                                     @PathParam("entitlementTag") String entitlementTag) {
-        long personaId = sessionBO.getActivePersonaId(securityToken);
-        inventoryBO.removeItem(personaId, entitlementTag);
+        inventoryBO.removeItem(requestSessionInfo.getActivePersonaId(), entitlementTag);
         return "";
     }
 
@@ -201,10 +195,10 @@ public class Personas {
     @Path("/{personaId}/cars")
     @Produces(MediaType.APPLICATION_XML)
     public String carsPost(@PathParam(value = "personaId") Long personaId,
-                           @QueryParam("serialNumber") Long serialNumber,
-                           @HeaderParam("securityToken") String securityToken) {
-        sessionBO.verifyPersonaOwnership(securityToken, personaId);
-        if (basketBO.sellCar(securityToken, personaId, serialNumber)) {
+                           @QueryParam("serialNumber") Long serialNumber) {
+        TokenSessionEntity tokenSessionEntity = requestSessionInfo.getTokenSessionEntity();
+        sessionBO.verifyPersonaOwnership(tokenSessionEntity, personaId);
+        if (basketBO.sellCar(tokenSessionEntity, personaId, serialNumber)) {
             OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
             return JAXBUtility.marshal(ownedCarTrans);
         }
@@ -239,10 +233,9 @@ public class Personas {
     @Secured
     @Path("/{personaId}/cars")
     @Produces(MediaType.APPLICATION_XML)
-    public String carsPut(@PathParam(value = "personaId") Long personaId,
-                          @HeaderParam("securityToken") String securityToken, InputStream ownedCarXml) {
+    public String carsPut(@PathParam(value = "personaId") Long personaId, InputStream ownedCarXml) {
         // update car (skill and performance shop)
-        sessionBO.verifyPersonaOwnership(securityToken, personaId);
+        sessionBO.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
         OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
         return JAXBUtility.marshal(ownedCarTrans);
     }
@@ -259,9 +252,8 @@ public class Personas {
     @Secured
     @Path("/{personaId}/defaultcar/{carId}")
     @Produces(MediaType.APPLICATION_XML)
-    public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId,
-                             @HeaderParam("securityToken") String securityToken) {
-        sessionBO.verifyPersonaOwnership(securityToken, personaId);
+    public String defaultcar(@PathParam(value = "personaId") Long personaId, @PathParam(value = "carId") Long carId) {
+        sessionBO.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
         personaBO.changeDefaultCar(personaId, carId);
         return "";
     }

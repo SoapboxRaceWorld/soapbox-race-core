@@ -7,9 +7,7 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.ParameterDAO;
-import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.jpa.ParameterEntity;
-import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 
 import javax.annotation.PostConstruct;
@@ -27,9 +25,6 @@ public class ParameterBO {
 
     @EJB
     private ParameterDAO parameterDao;
-
-    @EJB
-    private TokenSessionDAO tokenDAO;
 
     private final ConcurrentMap<String, String> parameterMap;
 
@@ -58,17 +53,6 @@ public class ParameterBO {
 
     private String getParameter(String name) {
         return parameterMap.get(name);
-    }
-
-    public int getCarLimit(String securityToken) {
-        TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
-        return getCarLimit(tokenSession.getUserEntity());
-    }
-
-    public int getMaxLevel(String securityToken) {
-        TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
-
-        return getMaxLevel(tokenSession.getUserEntity());
     }
 
     public int getCarLimit(UserEntity userEntity) {

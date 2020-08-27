@@ -133,9 +133,9 @@ public class BasketBO {
         return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
     }
 
-    public CommerceResultStatus buyCar(ProductEntity productEntity, PersonaEntity personaEntity, String securityToken,
+    public CommerceResultStatus buyCar(ProductEntity productEntity, PersonaEntity personaEntity, TokenSessionEntity tokenSessionEntity,
                                        CommerceResultTrans commerceResultTrans) {
-        if (getPersonaCarCount(personaEntity.getPersonaId()) >= parameterBO.getCarLimit(securityToken)) {
+        if (getPersonaCarCount(personaEntity.getPersonaId()) >= parameterBO.getCarLimit(tokenSessionEntity.getUserEntity())) {
             return CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS;
         }
 
@@ -298,8 +298,8 @@ public class BasketBO {
         return carSlotDAO.findByPersonaId(personaId);
     }
 
-    public boolean sellCar(String securityToken, Long personaId, Long serialNumber) {
-        this.tokenSessionBO.verifyPersonaOwnership(securityToken, personaId);
+    public boolean sellCar(TokenSessionEntity tokenSessionEntity, Long personaId, Long serialNumber) {
+        this.tokenSessionBO.verifyPersonaOwnership(tokenSessionEntity, personaId);
 
         OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(serialNumber);
         if (ownedCarEntity == null) {

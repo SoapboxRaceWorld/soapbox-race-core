@@ -15,10 +15,9 @@ import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.JAXBUtility;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
 import java.io.InputStream;
 import java.util.regex.Pattern;
 
@@ -40,6 +39,9 @@ public class DriverPersona {
 
     @EJB
     private MatchmakingBO matchmakingBO;
+
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
 
     @GET
     @Secured
@@ -110,9 +112,8 @@ public class DriverPersona {
     @Secured
     @Path("/DeletePersona")
     @Produces(MediaType.APPLICATION_XML)
-    public String deletePersona(@QueryParam("personaId") Long personaId,
-                                @HeaderParam("securityToken") String securityToken) {
-        tokenSessionBo.verifyPersonaOwnership(securityToken, personaId);
+    public String deletePersona(@QueryParam("personaId") Long personaId) {
+        tokenSessionBo.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
         driverPersonaBO.deletePersona(personaId);
         return "<long>0</long>";
     }
@@ -130,10 +131,9 @@ public class DriverPersona {
     @Secured
     @Path("/UpdatePersonaPresence")
     @Produces(MediaType.APPLICATION_XML)
-    public String updatePersonaPresence(@HeaderParam("securityToken") String securityToken,
-                                        @QueryParam("personaId") Long personaId,
+    public String updatePersonaPresence(@QueryParam("personaId") Long personaId,
                                         @QueryParam("presence") Long presence) {
-        tokenSessionBo.verifyPersonaOwnership(securityToken, personaId);
+        tokenSessionBo.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
         presenceBO.updatePresence(personaId, presence);
         matchmakingBO.removePlayerFromQueue(personaId);
 
@@ -152,10 +152,9 @@ public class DriverPersona {
     @Secured
     @Path("/UpdateStatusMessage")
     @Produces(MediaType.APPLICATION_XML)
-    public PersonaMotto updateStatusMessage(InputStream statusXml, @HeaderParam("securityToken") String securityToken
-            , @Context Request request) {
+    public PersonaMotto updateStatusMessage(InputStream statusXml) {
         PersonaMotto personaMotto = JAXBUtility.unMarshal(statusXml, PersonaMotto.class);
-        tokenSessionBo.verifyPersonaOwnership(securityToken, personaMotto.getPersonaId());
+        tokenSessionBo.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaMotto.getPersonaId());
 
         driverPersonaBO.updateStatusMessage(personaMotto.getMessage(), personaMotto.getPersonaId());
         return personaMotto;

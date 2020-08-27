@@ -8,11 +8,11 @@ package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.api.util.UUIDGen;
-import com.soapboxrace.core.bo.TokenSessionBO;
+import com.soapboxrace.core.bo.RequestSessionInfo;
 import com.soapboxrace.jaxb.http.ClientServerCryptoTicket;
 import com.soapboxrace.jaxb.http.UdpRelayCryptoTicket;
 
-import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.nio.ByteBuffer;
@@ -21,8 +21,8 @@ import java.util.Base64;
 @Path("/crypto")
 public class Crypto {
 
-    @EJB
-    private TokenSessionBO tokenBO;
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
 
     @GET
     @Secured
@@ -33,8 +33,7 @@ public class Crypto {
         byte[] randomUUIDBytes = UUIDGen.getRandomUUIDBytes();
         String ticketIV = Base64.getEncoder().encodeToString(randomUUIDBytes);
         UdpRelayCryptoTicket udpRelayCryptoTicket = new UdpRelayCryptoTicket();
-        String activeRelayCryptoTicket = tokenBO.getActiveRelayCryptoTicket(securityToken);
-        udpRelayCryptoTicket.setCryptoTicket(activeRelayCryptoTicket);
+        udpRelayCryptoTicket.setCryptoTicket(requestSessionInfo.getActiveRelayCryptoTicket());
         udpRelayCryptoTicket.setSessionKey("AAAAAAAAAAAAAAAAAAAAAA==");
         udpRelayCryptoTicket.setTicketIv(ticketIV);
         return udpRelayCryptoTicket;
