@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @Stateless
@@ -35,9 +36,6 @@ public class TokenSessionBO {
 
     @EJB
     private ParameterBO parameterBO;
-
-    @EJB
-    private GetServerInformationBO serverInfoBO;
 
     @EJB
     private AuthenticationBO authenticationBO;
@@ -56,18 +54,6 @@ public class TokenSessionBO {
         tokenSessionEntity.setEventSessionId(null);
         tokenDAO.insert(tokenSessionEntity);
         return randomUUID;
-    }
-
-    @Deprecated
-    public void verifyPersonaOwnership(String securityToken, Long personaId) {
-        TokenSessionEntity tokenSession = tokenDAO.findById(securityToken);
-        if (tokenSession == null) {
-            throw new EngineException(EngineExceptionCode.NoSuchSessionInSessionStore, true);
-        }
-
-        if (!tokenSession.getUserEntity().ownsPersona(personaId)) {
-            throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser, true);
-        }
     }
 
     public void deleteByUserId(Long userId) {
@@ -119,64 +105,34 @@ public class TokenSessionBO {
         return loginStatusVO;
     }
 
-    @Deprecated
-    public Long getActivePersonaId(String securityToken) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
-        return tokenSessionEntity.getActivePersonaId();
+    public void verifyPersonaOwnership(TokenSessionEntity tokenSessionEntity, Long personaId) {
+        Objects.requireNonNull(tokenSessionEntity);
+
+        if (!tokenSessionEntity.getUserEntity().ownsPersona(personaId)) {
+            throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser, true);
+        }
     }
 
-    @Deprecated
-    public void setActivePersonaId(String securityToken, Long personaId, Boolean isLogout) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+    public void setActivePersonaId(TokenSessionEntity tokenSessionEntity, Long personaId) {
+        Objects.requireNonNull(tokenSessionEntity);
 
-        if (!isLogout) {
-            if (!tokenSessionEntity.getUserEntity().ownsPersona(personaId)) {
-                throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser, true);
-            }
+        if (!personaId.equals(0L)) {
+            verifyPersonaOwnership(tokenSessionEntity, personaId);
         }
 
         tokenSessionEntity.setActivePersonaId(personaId);
         tokenDAO.update(tokenSessionEntity);
     }
 
-    @Deprecated
-    public String getActiveRelayCryptoTicket(String securityToken) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
-        return tokenSessionEntity.getRelayCryptoTicket();
-    }
-
-    @Deprecated
-    public Long getActiveLobbyId(String securityToken) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
-        return tokenSessionEntity.getActiveLobbyId();
-    }
-
-    @Deprecated
-    public void setActiveLobbyId(String securityToken, Long lobbyId) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+    public void setActiveLobbyId(TokenSessionEntity tokenSessionEntity, Long lobbyId) {
+        Objects.requireNonNull(tokenSessionEntity);
         tokenSessionEntity.setActiveLobbyId(lobbyId);
         tokenDAO.update(tokenSessionEntity);
     }
 
-    @Deprecated
-    public boolean isAdmin(String securityToken) {
-        return getUser(securityToken).isAdmin();
-    }
-
-    @Deprecated
-    public UserEntity getUser(String securityToken) {
-        return tokenDAO.findById(securityToken).getUserEntity();
-    }
-
-    @Deprecated
-    public void setEventSessionId(String securityToken, Long eventSessionId) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+    public void setEventSessionId(TokenSessionEntity tokenSessionEntity, Long eventSessionId) {
+        Objects.requireNonNull(tokenSessionEntity);
         tokenSessionEntity.setEventSessionId(eventSessionId);
         tokenDAO.update(tokenSessionEntity);
-    }
-
-    @Deprecated
-    public Long getEventSessionId(String securityToken) {
-        return tokenDAO.findById(securityToken).getEventSessionId();
     }
 }

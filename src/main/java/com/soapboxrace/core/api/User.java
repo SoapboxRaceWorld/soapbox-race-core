@@ -17,6 +17,7 @@ import com.soapboxrace.jaxb.http.UserInfo;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -51,13 +52,16 @@ public class User {
     @EJB
     private MatchmakingBO matchmakingBO;
 
+    @Inject
+    private RequestSessionInfo requestSessionInfo;
+
     @POST
     @Secured
     @Path("GetPermanentSession")
     @Produces(MediaType.APPLICATION_XML)
     public Response getPermanentSession(@HeaderParam("securityToken") String securityToken,
                                         @HeaderParam("userId") Long userId) {
-        UserEntity userEntity = tokenBO.getUser(securityToken);
+        UserEntity userEntity = requestSessionInfo.getUser();
         BanEntity ban = authenticationBO.checkUserBan(userEntity);
 
         if (ban != null) {
@@ -91,7 +95,7 @@ public class User {
     public String secureLoginPersona(@HeaderParam("securityToken") String securityToken,
                                      @HeaderParam("userId") Long userId,
                                      @QueryParam("personaId") Long personaId) {
-        tokenBO.setActivePersonaId(securityToken, personaId, false);
+        tokenBO.setActivePersonaId(securityToken, personaId);
         userBO.secureLoginPersona(userId, personaId);
         // Question: Why is this here?
         // Answer: Weird things happen sometimes.
@@ -107,7 +111,7 @@ public class User {
                                       @HeaderParam("userId") Long userId,
                                       @QueryParam("personaId") Long personaId) {
         long activePersonaId = tokenBO.getActivePersonaId(securityToken);
-        tokenBO.setActivePersonaId(securityToken, 0L, true);
+        tokenBO.setActivePersonaId(securityToken, 0L);
         presenceBO.removePresence(activePersonaId);
         matchmakingBO.removePlayerFromQueue(personaId);
 
@@ -122,7 +126,7 @@ public class User {
         Long activePersonaId = tokenBO.getActivePersonaId(securityToken);
 
         if (!Objects.isNull(activePersonaId) && !activePersonaId.equals(0L)) {
-            tokenBO.setActivePersonaId(securityToken, 0L, true);
+            tokenBO.setActivePersonaId(securityToken, 0L);
             presenceBO.removePresence(activePersonaId);
         }
 
