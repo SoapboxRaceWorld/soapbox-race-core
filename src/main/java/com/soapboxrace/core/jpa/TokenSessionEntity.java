@@ -29,7 +29,7 @@ public class TokenSessionEntity {
     @Column(name = "ID", nullable = false)
     private String securityToken;
 
-    @OneToOne(targetEntity = UserEntity.class, cascade = CascadeType.ALL, optional = false)
+    @OneToOne(targetEntity = UserEntity.class, cascade = CascadeType.MERGE, optional = false)
     @JoinColumn(name = "userId", referencedColumnName = "ID")
     private UserEntity userEntity;
 
