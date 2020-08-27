@@ -6,7 +6,6 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.api.util.GeoIp2;
 import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.engine.EngineException;
@@ -81,29 +80,8 @@ public class TokenSessionBO {
         return new Date(time);
     }
 
-    private LoginStatusVO checkGeoIp(String ip) {
-        LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-        String allowedCountries = serverInfoBO.getServerInformation().getAllowedCountries();
-        if (allowedCountries != null && !allowedCountries.isEmpty()) {
-            String geoip2DbFilePath = parameterBO.getStrParam("GEOIP2_DB_FILE_PATH");
-            GeoIp2 geoIp2 = GeoIp2.getInstance(geoip2DbFilePath);
-            if (geoIp2.isCountryAllowed(ip, allowedCountries)) {
-                return new LoginStatusVO(0L, "", true);
-            } else {
-                loginStatusVO.setDescription("GEOIP BLOCK ACTIVE IN THIS SERVER, ALLOWED COUNTRIES: [" + allowedCountries + "]");
-            }
-        } else {
-            return new LoginStatusVO(0L, "", true);
-        }
-        return loginStatusVO;
-    }
-
     public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
-        LoginStatusVO loginStatusVO = checkGeoIp(httpRequest.getRemoteAddr());
-        if (!loginStatusVO.isLoginOk()) {
-            return loginStatusVO;
-        }
-        loginStatusVO = new LoginStatusVO(0L, "", false);
+        LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
 
         if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
             UserEntity userEntity = userDAO.findByEmail(email);
