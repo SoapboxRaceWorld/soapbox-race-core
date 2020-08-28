@@ -6,14 +6,18 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.AmplifierEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
 @Stateless
-public class AmplifierDAO extends BaseDAO<AmplifierEntity> {
+public class AmplifierDAO extends LongKeyedDAO<AmplifierEntity> {
+
+    public AmplifierDAO() {
+        super(AmplifierEntity.class);
+    }
 
     /**
      * Finds the {@link AmplifierEntity} in the database with the given product hash.

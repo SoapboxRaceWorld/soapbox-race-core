@@ -16,8 +16,6 @@ import java.util.List;
                 ":name"),
         @NamedQuery(name = "AchievementEntity.findAllByCategory", query = "SELECT a FROM AchievementEntity a WHERE a" +
                 ".category = :category"),
-        @NamedQuery(name = "AchievementEntity.findAllVisible", query = "SELECT a FROM AchievementEntity a WHERE a" +
-                ".visible = true"),
         @NamedQuery(name = "AchievementEntity.findAll", query = "SELECT a fROM AchievementEntity a")
 })
 public class AchievementEntity {
@@ -33,8 +31,7 @@ public class AchievementEntity {
     @Column(name = "progress_text")
     private String progressText;
 
-    @Column(name = "stat_conversion", columnDefinition = "ENUM('None', 'FromMetersToDistance', " +
-            "'FromMillisecondsToMinutes')")
+    @Column(name = "stat_conversion", columnDefinition = "ENUM('None', 'FromMetersToDistance', 'FromMillisecondsToMinutes')")
     private String statConversion;
 
     @Column(name = "category")

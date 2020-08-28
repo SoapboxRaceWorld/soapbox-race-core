@@ -6,13 +6,17 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.AchievementRewardEntity;
 
 import javax.ejb.Stateless;
 
 @Stateless
-public class AchievementRewardDAO extends BaseDAO<AchievementRewardEntity> {
+public class AchievementRewardDAO extends LongKeyedDAO<AchievementRewardEntity> {
+
+    public AchievementRewardDAO() {
+        super(AchievementRewardEntity.class);
+    }
 
     public AchievementRewardEntity findByDescription(String description) {
         return this.entityManager.createNamedQuery("AchievementRewardEntity.findByDescription",

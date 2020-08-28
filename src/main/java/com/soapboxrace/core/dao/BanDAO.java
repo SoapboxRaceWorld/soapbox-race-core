@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 
@@ -16,7 +16,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Stateless
-public class BanDAO extends BaseDAO<BanEntity> {
+public class BanDAO extends LongKeyedDAO<BanEntity> {
+
+    public BanDAO() {
+        super(BanEntity.class);
+    }
 
     public BanEntity findByUser(UserEntity userEntity) {
         TypedQuery<BanEntity> query = entityManager.createQuery("SELECT obj FROM BanEntity obj WHERE obj.userEntity =" +

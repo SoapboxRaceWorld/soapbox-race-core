@@ -6,15 +6,15 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.AchievementRankEntity;
 
 import javax.ejb.Stateless;
 
 @Stateless
-public class AchievementRankDAO extends BaseDAO<AchievementRankEntity> {
+public class AchievementRankDAO extends LongKeyedDAO<AchievementRankEntity> {
 
-    public AchievementRankEntity findById(Long id) {
-        return this.entityManager.find(AchievementRankEntity.class, id);
+    public AchievementRankDAO() {
+        super(AchievementRankEntity.class);
     }
 }
