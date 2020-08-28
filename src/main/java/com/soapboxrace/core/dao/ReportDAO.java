@@ -6,16 +6,15 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.ReportEntity;
 
 import javax.ejb.Stateless;
 
 @Stateless
-public class ReportDAO extends BaseDAO<ReportEntity> {
+public class ReportDAO extends LongKeyedDAO<ReportEntity> {
 
-    public ReportEntity findById(Long id) {
-        return entityManager.find(ReportEntity.class, id);
+    public ReportDAO() {
+        super(ReportEntity.class);
     }
-
 }

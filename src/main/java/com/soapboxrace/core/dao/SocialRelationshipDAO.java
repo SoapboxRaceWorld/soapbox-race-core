@@ -14,7 +14,12 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class SocialRelationshipDAO extends BaseDAO<SocialRelationshipEntity> {
+public class SocialRelationshipDAO extends BaseDAO<SocialRelationshipEntity, Integer> {
+
+    @Override
+    public SocialRelationshipEntity find(Integer key) {
+        return this.entityManager.find(SocialRelationshipEntity.class, key);
+    }
 
     public void deleteAllByPersonaId(Long personaId) {
         entityManager.createNamedQuery("SocialRelationshipEntity.deleteAllByPersonaId")

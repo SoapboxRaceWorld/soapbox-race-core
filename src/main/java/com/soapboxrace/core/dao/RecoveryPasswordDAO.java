@@ -15,9 +15,10 @@ import java.util.Date;
 import java.util.List;
 
 @Stateless
-public class RecoveryPasswordDAO extends BaseDAO<RecoveryPasswordEntity> {
+public class RecoveryPasswordDAO extends BaseDAO<RecoveryPasswordEntity, Integer> {
 
-    public RecoveryPasswordEntity findById(int id) {
+    @Override
+    public RecoveryPasswordEntity find(Integer id) {
         return entityManager.find(RecoveryPasswordEntity.class, id);
     }
 

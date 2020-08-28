@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.PersonaEntity;
 
 import javax.ejb.Stateless;
@@ -17,10 +17,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 @Stateless
-public class PersonaDAO extends BaseDAO<PersonaEntity> {
+public class PersonaDAO extends LongKeyedDAO<PersonaEntity> {
 
-    public PersonaEntity findById(Long id) {
-        return entityManager.find(PersonaEntity.class, id);
+    public PersonaDAO() {
+        super(PersonaEntity.class);
     }
 
     public PersonaEntity findByName(String name) {

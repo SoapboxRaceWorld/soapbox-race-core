@@ -13,9 +13,10 @@ import javax.ejb.Stateless;
 import java.util.List;
 
 @Stateless
-public class ParameterDAO extends BaseDAO<ParameterEntity> {
+public class ParameterDAO extends BaseDAO<ParameterEntity, String> {
 
-    public ParameterEntity findById(String name) {
+    @Override
+    public ParameterEntity find(String name) {
         return entityManager.find(ParameterEntity.class, name);
     }
 

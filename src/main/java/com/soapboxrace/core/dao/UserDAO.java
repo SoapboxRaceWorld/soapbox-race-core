@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.UserEntity;
 
 import javax.ejb.Stateless;
@@ -14,14 +14,10 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class UserDAO extends BaseDAO<UserEntity> {
+public class UserDAO extends LongKeyedDAO<UserEntity> {
 
-    public UserEntity findById(Long id) {
-        UserEntity user = entityManager.find(UserEntity.class, id);
-
-        user.getPersonas().size();
-
-        return user;
+    public UserDAO() {
+        super(UserEntity.class);
     }
 
     public UserEntity findByEmail(String email) {

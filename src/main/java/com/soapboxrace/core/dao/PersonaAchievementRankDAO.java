@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.PersonaAchievementRankEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 
@@ -15,7 +15,11 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class PersonaAchievementRankDAO extends BaseDAO<PersonaAchievementRankEntity> {
+public class PersonaAchievementRankDAO extends LongKeyedDAO<PersonaAchievementRankEntity> {
+
+    public PersonaAchievementRankDAO() {
+        super(PersonaAchievementRankEntity.class);
+    }
 
     public List<PersonaAchievementRankEntity> findAllByPersonaId(Long personaId) {
         TypedQuery<PersonaAchievementRankEntity> query = this.entityManager.createNamedQuery(

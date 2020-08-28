@@ -14,10 +14,11 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 @Stateless
-public class TokenSessionDAO extends BaseDAO<TokenSessionEntity> {
+public class TokenSessionDAO extends BaseDAO<TokenSessionEntity, String> {
 
-    public TokenSessionEntity findById(String securityToken) {
-        return entityManager.find(TokenSessionEntity.class, securityToken);
+    @Override
+    public TokenSessionEntity find(String securityToken) {
+        return this.entityManager.find(TokenSessionEntity.class, securityToken);
     }
 
     public TokenSessionEntity findByUserId(Long userId) {

@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.OnlineUsersEntity;
 
 import javax.ejb.Stateless;
@@ -15,10 +15,10 @@ import java.util.Date;
 import java.util.List;
 
 @Stateless
-public class OnlineUsersDAO extends BaseDAO<OnlineUsersEntity> {
+public class OnlineUsersDAO extends LongKeyedDAO<OnlineUsersEntity> {
 
-    public OnlineUsersEntity findById(Long id) {
-        return entityManager.find(OnlineUsersEntity.class, id);
+    public OnlineUsersDAO() {
+        super(OnlineUsersEntity.class);
     }
 
     public OnlineUsersEntity findByTime(Date time) {

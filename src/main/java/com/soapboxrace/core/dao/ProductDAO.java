@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.ProductEntity;
 
 import javax.ejb.Stateless;
@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
-public class ProductDAO extends BaseDAO<ProductEntity> {
+public class ProductDAO extends LongKeyedDAO<ProductEntity> {
 
-    public ProductEntity findById(Long id) {
-        return entityManager.find(ProductEntity.class, id);
+    public ProductDAO() {
+        super(ProductEntity.class);
     }
 
     public List<ProductEntity> findByLevelEnabled(String categoryName, String productType, int minLevel,

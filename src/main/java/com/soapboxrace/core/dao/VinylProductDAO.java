@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.CategoryEntity;
 import com.soapboxrace.core.jpa.VinylProductEntity;
 
@@ -15,10 +15,10 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class VinylProductDAO extends BaseDAO<VinylProductEntity> {
+public class VinylProductDAO extends LongKeyedDAO<VinylProductEntity> {
 
-    public VinylProductEntity findById(Long id) {
-        return entityManager.find(VinylProductEntity.class, id);
+    public VinylProductDAO() {
+        super(VinylProductEntity.class);
     }
 
     public VinylProductEntity findByHash(Integer hash) {

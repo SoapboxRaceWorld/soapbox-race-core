@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.LobbyEntrantEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
@@ -15,10 +15,10 @@ import javax.ejb.Stateless;
 import javax.persistence.Query;
 
 @Stateless
-public class LobbyEntrantDAO extends BaseDAO<LobbyEntrantEntity> {
+public class LobbyEntrantDAO extends LongKeyedDAO<LobbyEntrantEntity> {
 
-    public LobbyEntrantEntity findById(Long id) {
-        return entityManager.find(LobbyEntrantEntity.class, id);
+    public LobbyEntrantDAO() {
+        super(LobbyEntrantEntity.class);
     }
 
     public void deleteByPersona(PersonaEntity personaEntity) {

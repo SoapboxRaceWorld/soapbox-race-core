@@ -54,7 +54,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     }
 
     private TokenSessionEntity validateToken(Long userId, String securityToken) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.findById(securityToken);
+        TokenSessionEntity tokenSessionEntity = tokenDAO.find(securityToken);
         if (tokenSessionEntity == null || !tokenSessionEntity.getUserEntity().getId().equals(userId)) {
             throw new NotAuthorizedException("Invalid Token");
         }

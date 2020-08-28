@@ -14,7 +14,12 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class LoginAnnouncementDAO extends BaseDAO<LoginAnnouncementEntity> {
+public class LoginAnnouncementDAO extends BaseDAO<LoginAnnouncementEntity, Integer> {
+
+    @Override
+    public LoginAnnouncementEntity find(Integer key) {
+        return entityManager.find(LoginAnnouncementEntity.class, key);
+    }
 
     public List<LoginAnnouncementEntity> findAll() {
         TypedQuery<LoginAnnouncementEntity> query = entityManager.createNamedQuery("LoginAnnouncementEntity.findAll",

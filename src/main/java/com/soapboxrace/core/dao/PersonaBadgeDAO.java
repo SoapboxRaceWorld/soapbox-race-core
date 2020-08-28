@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.PersonaBadgeEntity;
 
 import javax.ejb.Stateless;
@@ -14,7 +14,11 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class PersonaBadgeDAO extends BaseDAO<PersonaBadgeEntity> {
+public class PersonaBadgeDAO extends LongKeyedDAO<PersonaBadgeEntity> {
+
+    public PersonaBadgeDAO() {
+        super(PersonaBadgeEntity.class);
+    }
 
     public void deleteAllBadgesForPersona(Long personaId) {
         this.entityManager.createNamedQuery("PersonaBadgeEntity.deleteAllBadgesForPersona")

@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.TreasureHuntConfigEntity;
@@ -16,7 +16,11 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class TreasureHuntConfigDAO extends BaseDAO<TreasureHuntConfigEntity> {
+public class TreasureHuntConfigDAO extends LongKeyedDAO<TreasureHuntConfigEntity> {
+
+    public TreasureHuntConfigDAO() {
+        super(TreasureHuntConfigEntity.class);
+    }
 
     public TreasureHuntConfigEntity findForStreak(Integer streak) {
         TypedQuery<TreasureHuntConfigEntity> query = this.entityManager.createNamedQuery(
