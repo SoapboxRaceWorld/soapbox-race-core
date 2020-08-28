@@ -11,7 +11,6 @@ import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 
 import javax.ejb.Stateless;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,11 +27,5 @@ public class BanDAO extends BaseDAO<BanEntity> {
         List<BanEntity> results = query.getResultList();
 
         return results.isEmpty() ? null : results.get(0);
-    }
-
-    public void unbanUser(UserEntity userEntity) {
-        Query createQuery = entityManager.createQuery("DELETE FROM BanEntity obj WHERE obj.userEntity = :user");
-        createQuery.setParameter("user", userEntity);
-        createQuery.executeUpdate();
     }
 }
