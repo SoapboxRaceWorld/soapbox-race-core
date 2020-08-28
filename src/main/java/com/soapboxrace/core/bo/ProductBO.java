@@ -80,7 +80,7 @@ public class ProductBO {
         boolean premium = false;
         int level = 1;
         if (personaId != null && !personaId.equals(0L)) {
-            PersonaEntity personaEntity = personaDao.findById(personaId);
+            PersonaEntity personaEntity = personaDao.find(personaId);
             premium = personaEntity.getUser().isPremium();
             level = personaEntity.getLevel();
         }
@@ -123,7 +123,7 @@ public class ProductBO {
         boolean premium = false;
         int level = 1;
         if (personaId != null && !personaId.equals(0L)) {
-            PersonaEntity personaEntity = personaDao.findById(personaId);
+            PersonaEntity personaEntity = personaDao.find(personaId);
             premium = personaEntity.getUser().isPremium();
             level = personaEntity.getLevel();
         }

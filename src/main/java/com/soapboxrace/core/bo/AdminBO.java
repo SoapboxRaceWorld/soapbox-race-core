@@ -44,7 +44,7 @@ public class AdminBO {
 
     public void sendCommand(Long personaId, Long abuserPersonaId, String command) {
         CommandInfo commandInfo = CommandInfo.parse(command);
-        PersonaEntity personaEntity = personaDao.findById(abuserPersonaId);
+        PersonaEntity personaEntity = personaDao.find(abuserPersonaId);
 
         if (personaEntity == null)
             return;
@@ -56,7 +56,7 @@ public class AdminBO {
                     break;
                 }
 
-                sendBan(personaEntity, personaDao.findById(personaId), commandInfo.timeEnd, commandInfo.reason);
+                sendBan(personaEntity, personaDao.find(personaId), commandInfo.timeEnd, commandInfo.reason);
                 openFireSoapBoxCli.send(XmppChat.createSystemMessage("Banned user!"), personaId);
                 break;
             case KICK:

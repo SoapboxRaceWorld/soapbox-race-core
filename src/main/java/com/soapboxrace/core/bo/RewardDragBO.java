@@ -33,7 +33,7 @@ public class RewardDragBO extends RewardEventBO<DragArbitrationPacket> {
         if (!legit || finishReason != 22) {
             return new Accolades();
         }
-        PersonaEntity personaEntity = personaDao.findById(activePersonaId);
+        PersonaEntity personaEntity = personaDao.find(activePersonaId);
         RewardVO rewardVO = getRewardVO(personaEntity);
         EventRewardEntity eventRewardEntity = getRewardConfiguration(eventSessionEntity);
 

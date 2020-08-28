@@ -1,8 +1,8 @@
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.UsedPowerupDAO;
 import com.soapboxrace.core.dao.EventSessionDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.UsedPowerupDAO;
 import com.soapboxrace.core.jpa.UsedPowerupEntity;
 
 import javax.ejb.EJB;
@@ -22,11 +22,11 @@ public class PowerupTrackingBO {
 
     public void createPowerupRecord(Long eventSessionId, Long activePersonaId, Integer powerupHash) {
         UsedPowerupEntity usedPowerupEntity = new UsedPowerupEntity();
-        usedPowerupEntity.setPersonaEntity(personaDAO.findById(activePersonaId));
+        usedPowerupEntity.setPersonaEntity(personaDAO.find(activePersonaId));
         usedPowerupEntity.setPowerupHash(powerupHash);
 
         if (eventSessionId != null) {
-            usedPowerupEntity.setEventSessionEntity(eventSessionDAO.findById(eventSessionId));
+            usedPowerupEntity.setEventSessionEntity(eventSessionDAO.find(eventSessionId));
         }
 
         usedPowerupDAO.insert(usedPowerupEntity);

@@ -68,7 +68,7 @@ public class DriverPersonaBO {
     private SocialRelationshipDAO socialRelationshipDAO;
 
     public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
-        UserEntity userEntity = userDao.findById(userId);
+        UserEntity userEntity = userDao.find(userId);
 
         if (userEntity.getPersonas().size() >= 3) {
             throw new EngineException(EngineExceptionCode.MaximumNumberOfPersonasForUserReached, false);
@@ -118,7 +118,7 @@ public class DriverPersonaBO {
     }
 
     public ProfileData getPersonaInfo(Long personaId) {
-        PersonaEntity personaEntity = personaDao.findById(personaId);
+        PersonaEntity personaEntity = personaDao.find(personaId);
         ProfileData profileData = castPersonaEntity(personaEntity);
 
         ArrayOfBadgePacket arrayOfBadgePacket = this.getBadges(personaId);
@@ -157,7 +157,7 @@ public class DriverPersonaBO {
     public ArrayOfPersonaBase getPersonaBaseFromList(List<Long> personaIdList) {
         ArrayOfPersonaBase arrayOfPersonaBase = new ArrayOfPersonaBase();
         for (Long personaId : personaIdList) {
-            PersonaEntity personaEntity = personaDao.findById(personaId);
+            PersonaEntity personaEntity = personaDao.find(personaId);
             if (personaEntity == null) {
                 return arrayOfPersonaBase;
             }
@@ -183,7 +183,7 @@ public class DriverPersonaBO {
     }
 
     public void deletePersona(Long personaId) {
-        PersonaEntity personaEntity = personaDao.findById(personaId);
+        PersonaEntity personaEntity = personaDao.find(personaId);
         UserEntity user = personaEntity.getUser();
         List<CarSlotEntity> carSlots = carSlotDAO.findByPersonaId(personaId);
         for (CarSlotEntity carSlotEntity : carSlots) {
@@ -217,7 +217,7 @@ public class DriverPersonaBO {
     }
 
     public void updateStatusMessage(String message, Long personaId) {
-        PersonaEntity personaEntity = personaDao.findById(personaId);
+        PersonaEntity personaEntity = personaDao.find(personaId);
         personaEntity.setMotto(message);
         personaDao.update(personaEntity);
     }

@@ -32,7 +32,7 @@ public class RecoveryPassword {
         if (!password.equals(passwordconf)) {
             return "ERROR: Passwords not match!";
         }
-        return bo.resetPassword(password, passwordconf, randomKey);
+        return bo.resetPassword(password, randomKey);
     }
 
     @POST

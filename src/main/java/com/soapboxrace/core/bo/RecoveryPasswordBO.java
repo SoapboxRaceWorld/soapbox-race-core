@@ -39,19 +39,19 @@ public class RecoveryPasswordBO {
     @Resource(mappedName = "java:jboss/mail/Gmail")
     private Session mailSession;
 
-    public String resetPassword(String password, String passwordconf, String randomKey) {
+    public String resetPassword(String password, String randomKey) {
         RecoveryPasswordEntity recoveryPasswordEntity = recoveryPasswordDao.findByRandomKey(randomKey);
         if (recoveryPasswordEntity == null) {
             return "ERROR: invalid randomKey!";
         }
 
-        Long currentTime = new Date().getTime();
-        Long recoveryTime = recoveryPasswordEntity.getExpirationDate().getTime();
+        long currentTime = new Date().getTime();
+        long recoveryTime = recoveryPasswordEntity.getExpirationDate().getTime();
         if (recoveryPasswordEntity.getIsClose() || currentTime > recoveryTime) {
             return "ERROR: randomKey expired";
         }
 
-        UserEntity userEntity = userDao.findById(recoveryPasswordEntity.getUserId());
+        UserEntity userEntity = userDao.find(recoveryPasswordEntity.getUserId());
         userEntity.setPassword(DigestUtils.sha1Hex(password));
         userDao.update(userEntity);
 
@@ -94,19 +94,18 @@ public class RecoveryPasswordBO {
             message.setFrom(new InternetAddress(parameterBO.getStrParam("EMAIL_FROM")));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(userEntity.getEmail()));
             message.setSubject("Recovery Password Email");
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Dear user,\n\n");
-            stringBuilder.append("Someone requested to recover forgotten password in our soapbox race world server" +
-                    ".\n\n");
-            stringBuilder.append("If wasn't you, just ignore this email.\n\n");
-            stringBuilder.append("You can click this link to reset your password:\n\n");
-            stringBuilder.append(parameterBO.getStrParam("SERVER_ADDRESS"));
-            stringBuilder.append(parameterBO.getStrParam("SERVER_PASSWORD_RESET_PATH", "/soapbox-race-core/password.jsp"));
-            stringBuilder.append("?randomKey=");
-            stringBuilder.append(randomKey);
-            stringBuilder.append("\n\nThanks for playing!\n\n");
-            stringBuilder.append("\n\nSBRW Team.\n");
-            message.setText(stringBuilder.toString());
+            String stringBuilder = "Dear user,\n\n" +
+                    "Someone requested to recover forgotten password in our soapbox race world server" +
+                    ".\n\n" +
+                    "If wasn't you, just ignore this email.\n\n" +
+                    "You can click this link to reset your password:\n\n" +
+                    parameterBO.getStrParam("SERVER_ADDRESS") +
+                    parameterBO.getStrParam("SERVER_PASSWORD_RESET_PATH", "/soapbox-race-core/password.jsp") +
+                    "?randomKey=" +
+                    randomKey +
+                    "\n\nThanks for playing!\n\n" +
+                    "\n\nSBRW Team.\n";
+            message.setText(stringBuilder);
             Transport.send(message);
             return true;
         } catch (MessagingException mex) {
@@ -116,7 +115,7 @@ public class RecoveryPasswordBO {
     }
 
     private Date getHours(int hours) {
-        Long time = new Date().getTime();
+        long time = new Date().getTime();
         time += hours * 60000 * 60;
         return new Date(time);
     }

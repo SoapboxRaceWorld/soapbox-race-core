@@ -122,7 +122,7 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
      * @param transaction        the {@link AchievementTransaction} instance
      */
     protected void updateEventAchievements(EventDataEntity eventDataEntity, EventSessionEntity eventSessionEntity, Long activePersonaId, TA packet, AchievementTransaction transaction) {
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        PersonaEntity personaEntity = personaDAO.find(activePersonaId);
         EventEntity eventEntity = eventDataEntity.getEvent();
 
         transaction.add("EVENT", Map.of(

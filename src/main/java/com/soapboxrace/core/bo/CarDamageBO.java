@@ -49,7 +49,7 @@ public class CarDamageBO {
         }
 
         Long carId = arbitrationPacket.getCarId();
-        OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(carId);
+        OwnedCarEntity ownedCarEntity = ownedCarDAO.find(carId);
         int durability = ownedCarEntity.getDurability();
         if (durability > 0) {
             int calcDamage = eventEntity.getEventModeId() == 19 ? 2 : 5; // 5% for non-drags, 2% for drags

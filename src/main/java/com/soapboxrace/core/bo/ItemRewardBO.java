@@ -8,7 +8,6 @@ package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.bo.util.*;
 import com.soapboxrace.core.dao.CardPackDAO;
-import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.dao.RewardTableDAO;
 import com.soapboxrace.core.engine.EngineException;
@@ -30,9 +29,6 @@ public class ItemRewardBO {
 
     @EJB
     private ScriptingBO scriptingBO;
-
-    @EJB
-    private PersonaDAO personaDAO;
 
     @EJB
     private ProductDAO productDAO;

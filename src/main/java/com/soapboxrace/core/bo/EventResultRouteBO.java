@@ -87,7 +87,7 @@ public class EventResultRouteBO extends EventResultBO<RouteArbitrationPacket, Ro
             arrayOfRouteEntrantResult.getRouteEntrantResult().add(routeEntrantResult);
         }
 
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        PersonaEntity personaEntity = personaDAO.find(activePersonaId);
         AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         RouteEventResult routeEventResult = new RouteEventResult();
         routeEventResult.setAccolades(rewardRouteBO.getAccolades(activePersonaId, routeArbitrationPacket,

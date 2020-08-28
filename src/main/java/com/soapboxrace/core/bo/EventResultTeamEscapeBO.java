@@ -114,7 +114,7 @@ public class EventResultTeamEscapeBO extends EventResultBO<TeamEscapeArbitration
             }
         }
 
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        PersonaEntity personaEntity = personaDAO.find(activePersonaId);
         AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         TeamEscapeEventResult teamEscapeEventResult = new TeamEscapeEventResult();
         teamEscapeEventResult.setAccolades(rewardTeamEscapeBO.getAccolades(activePersonaId,

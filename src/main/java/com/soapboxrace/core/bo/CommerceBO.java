@@ -56,7 +56,7 @@ public class CommerceBO {
 
     public CommerceSessionResultTrans doCommerce(CommerceSessionTrans commerceSessionTrans, Long personaId) {
         List<BasketItemTrans> basketItems = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        PersonaEntity personaEntity = personaDAO.find(personaId);
         OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId).getOwnedCar();
         OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
         CustomCarTrans customCarTrans = ownedCarTrans.getCustomCar();

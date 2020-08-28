@@ -37,7 +37,7 @@ public class RewardPursuitBO extends RewardEventBO<PursuitArbitrationPacket> {
             return new Accolades();
         }
         EventEntity eventEntity = eventSessionEntity.getEvent();
-        PersonaEntity personaEntity = personaDao.findById(activePersonaId);
+        PersonaEntity personaEntity = personaDao.find(activePersonaId);
         RewardVO rewardVO = getRewardVO(personaEntity);
         EventRewardEntity eventRewardEntity = eventEntity.getSingleplayerRewardConfig();
 

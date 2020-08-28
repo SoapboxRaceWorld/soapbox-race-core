@@ -39,7 +39,7 @@ public class RewardTeamEscapeBO extends RewardEventBO<TeamEscapeArbitrationPacke
         float bustedCount = teamEscapeArbitrationPacket.getBustedCount();
         bustedCount++;
 
-        PersonaEntity personaEntity = personaDao.findById(activePersonaId);
+        PersonaEntity personaEntity = personaDao.find(activePersonaId);
         RewardVO rewardVO = getRewardVO(personaEntity);
         EventRewardEntity eventRewardEntity = getRewardConfiguration(eventSessionEntity);
 

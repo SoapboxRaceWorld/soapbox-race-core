@@ -27,9 +27,6 @@ public class PersonaBO {
     private CarSlotDAO carSlotDAO;
 
     @EJB
-    private LevelRepDAO levelRepDAO;
-
-    @EJB
     private OwnedCarDAO ownedCarDAO;
 
     @EJB
@@ -42,7 +39,7 @@ public class PersonaBO {
     private CarDamageBO carDamageBO;
 
     public void updateBadges(Long personaId, BadgeBundle badgeBundle) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        PersonaEntity personaEntity = personaDAO.find(personaId);
 
         for (BadgeInput badgeInput : badgeBundle.getBadgeInputs()) {
             if (badgeInput.getSlotId() > 3) {
@@ -71,7 +68,7 @@ public class PersonaBO {
     }
 
     public void changeDefaultCar(Long personaId, Long defaultCarId) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        PersonaEntity personaEntity = personaDAO.find(personaId);
         changeDefaultCar(personaEntity, defaultCarId);
         personaDAO.update(personaEntity);
     }
@@ -89,11 +86,11 @@ public class PersonaBO {
     }
 
     public PersonaEntity getPersonaById(Long personaId) {
-        return personaDAO.findById(personaId);
+        return personaDAO.find(personaId);
     }
 
     public CarSlotEntity getDefaultCarEntity(Long personaId) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        PersonaEntity personaEntity = personaDAO.find(personaId);
         List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
         int curCarIndex = personaEntity.getCurCarIndex();
         if (!carSlotList.isEmpty()) {
@@ -129,13 +126,9 @@ public class PersonaBO {
         return carSlotDAO.findByPersonaId(personaId);
     }
 
-    public LevelRepEntity getLevelInfoByLevel(Long level) {
-        return levelRepDAO.findByLevel(level);
-    }
-
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public OwnedCarEntity getCarByOwnedCarId(Long ownedCarId) {
-        OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(ownedCarId);
+        OwnedCarEntity ownedCarEntity = ownedCarDAO.find(ownedCarId);
         CustomCarEntity customCar = ownedCarEntity.getCustomCar();
 
         // Load customcar data since we can't do it in the query

@@ -102,7 +102,7 @@ public class SocialRelationshipBO {
     }
 
     public ArrayOfLong getBlockersByUsers(Long personaId) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        PersonaEntity personaEntity = personaDAO.find(personaId);
 
         if (personaEntity == null) {
             throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
@@ -120,7 +120,7 @@ public class SocialRelationshipBO {
 
     public FriendResult addFriend(Long activePersonaId, String displayName) {
         // activePersonaEntity is the SENDER, targetPersonaEntity is the RECIPIENT.
-        PersonaEntity activePersonaEntity = personaDAO.findById(activePersonaId);
+        PersonaEntity activePersonaEntity = personaDAO.find(activePersonaId);
         PersonaEntity targetPersonaEntity = personaDAO.findByName(displayName);
         FriendResult friendResult = new FriendResult();
 
@@ -199,13 +199,13 @@ public class SocialRelationshipBO {
             throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
         }
 
-        PersonaEntity activePersonaEntity = personaDAO.findById(activePersonaId);
+        PersonaEntity activePersonaEntity = personaDAO.find(activePersonaId);
 
         if (activePersonaEntity == null) {
             throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
         }
 
-        PersonaEntity friendPersonaEntity = personaDAO.findById(friendPersonaId);
+        PersonaEntity friendPersonaEntity = personaDAO.find(friendPersonaId);
 
         if (friendPersonaEntity == null) {
             throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
@@ -243,13 +243,13 @@ public class SocialRelationshipBO {
     }
 
     public PersonaBase removeFriend(Long activePersonaId, Long friendPersonaId) {
-        PersonaEntity activePersonaEntity = personaDAO.findById(activePersonaId);
+        PersonaEntity activePersonaEntity = personaDAO.find(activePersonaId);
 
         if (activePersonaEntity == null) {
             throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, false);
         }
 
-        PersonaEntity friendPersonaEntity = personaDAO.findById(friendPersonaId);
+        PersonaEntity friendPersonaEntity = personaDAO.find(friendPersonaId);
 
         if (friendPersonaEntity == null) {
             throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
@@ -283,13 +283,13 @@ public class SocialRelationshipBO {
     }
 
     public PersonaBase blockPlayer(Long userId, Long activePersonaId, Long otherPersonaId) {
-        PersonaEntity activePersonaEntity = personaDAO.findById(activePersonaId);
+        PersonaEntity activePersonaEntity = personaDAO.find(activePersonaId);
 
         if (activePersonaEntity == null) {
             throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, false);
         }
 
-        PersonaEntity otherPersonaEntity = personaDAO.findById(otherPersonaId);
+        PersonaEntity otherPersonaEntity = personaDAO.find(otherPersonaId);
 
         if (otherPersonaEntity == null) {
             throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
@@ -317,7 +317,7 @@ public class SocialRelationshipBO {
     }
 
     public PersonaBase unblockPlayer(Long userId, Long otherPersonaId) {
-        PersonaEntity otherPersonaEntity = personaDAO.findById(otherPersonaId);
+        PersonaEntity otherPersonaEntity = personaDAO.find(otherPersonaId);
 
         if (otherPersonaEntity == null) {
             throw new EngineException(EngineExceptionCode.RemotePersonaIdInvalid, false);
@@ -369,7 +369,7 @@ public class SocialRelationshipBO {
     private void addPendingRequestToList(PersonaFriendsList personaFriendsList,
                                          SocialRelationshipEntity socialRelationshipEntity) {
         FriendPersona friendPersona =
-                copyPersonaEntityToFriendPersona(personaDAO.findById(socialRelationshipEntity.getRemotePersonaId()));
+                copyPersonaEntityToFriendPersona(personaDAO.find(socialRelationshipEntity.getRemotePersonaId()));
         friendPersona.setPresence(3L);
         personaFriendsList.getFriendPersona().getFriendPersona().add(friendPersona);
     }
@@ -440,7 +440,7 @@ public class SocialRelationshipBO {
             if ("game_presence_updates".equals(channel)) {
                 Long[] parts = Arrays.stream(message.split("\\|")).map(Long::parseLong).toArray(Long[]::new);
 
-                sendPresencePackets(personaDAO.findById(parts[0]), parts[1]);
+                sendPresencePackets(personaDAO.find(parts[0]), parts[1]);
             }
         }
 

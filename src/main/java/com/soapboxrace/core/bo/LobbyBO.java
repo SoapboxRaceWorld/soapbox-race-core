@@ -60,14 +60,14 @@ public class LobbyBO {
         if (lobbys.isEmpty()) {
             matchmakingBO.addPlayerToQueue(personaId, carClassHash);
         } else {
-            PersonaEntity personaEntity = personaDao.findById(personaId);
+            PersonaEntity personaEntity = personaDao.find(personaId);
             joinLobby(personaEntity, lobbys, true);
         }
     }
 
     public void joinQueueEvent(Long personaId, int eventId) {
-        PersonaEntity personaEntity = personaDao.findById(personaId);
-        EventEntity eventEntity = eventDao.findById(eventId);
+        PersonaEntity personaEntity = personaDao.find(personaId);
+        EventEntity eventEntity = eventDao.find(eventId);
 
         CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
         OwnedCarEntity ownedCarEntity = defaultCarEntity.getOwnedCar();
@@ -91,7 +91,7 @@ public class LobbyBO {
 
     public void createPrivateLobby(Long creatorPersonaId, int eventId) {
         List<Long> personaIdList = openFireRestApiCli.getAllPersonaByGroup(creatorPersonaId);
-        EventEntity eventEntity = eventDao.findById(eventId);
+        EventEntity eventEntity = eventDao.find(eventId);
         if (!personaIdList.isEmpty()) {
             createLobby(creatorPersonaId, eventId, eventEntity.getCarClassHash(), true);
 
@@ -99,7 +99,7 @@ public class LobbyBO {
             if (lobbyEntity != null) {
                 for (Long recipientPersonaId : personaIdList) {
                     if (!recipientPersonaId.equals(creatorPersonaId)) {
-                        PersonaEntity recipientPersonaEntity = personaDao.findById(recipientPersonaId);
+                        PersonaEntity recipientPersonaEntity = personaDao.find(recipientPersonaId);
 
                         lobbyMessagingBO.sendLobbyInvitation(lobbyEntity, recipientPersonaEntity, eventEntity.getLobbyCountdownTime());
                     }
@@ -109,7 +109,7 @@ public class LobbyBO {
     }
 
     public LobbyEntity createLobby(Long personaId, int eventId, int carClassHash, Boolean isPrivate) {
-        EventEntity eventEntity = eventDao.findById(eventId);
+        EventEntity eventEntity = eventDao.find(eventId);
 
         LobbyEntity lobbyEntity = new LobbyEntity();
         lobbyEntity.setEvent(eventEntity);
@@ -119,7 +119,7 @@ public class LobbyBO {
 
         lobbyDao.insert(lobbyEntity);
 
-        PersonaEntity personaEntity = personaDao.findById(personaId);
+        PersonaEntity personaEntity = personaDao.find(personaId);
         lobbyMessagingBO.sendLobbyInvitation(lobbyEntity, personaEntity, 10000);
 
         if (!isPrivate) {
@@ -130,7 +130,7 @@ public class LobbyBO {
 
                 if (!queuePersonaId.equals(-1L) && !matchmakingBO.isEventIgnored(queuePersonaId, eventId)) {
                     if (lobbyEntity.getEntrants().size() < lobbyEntity.getEvent().getMaxPlayers()) {
-                        PersonaEntity queuePersona = personaDao.findById(queuePersonaId);
+                        PersonaEntity queuePersona = personaDao.find(queuePersonaId);
                         lobbyMessagingBO.sendLobbyInvitation(lobbyEntity, queuePersona, eventEntity.getLobbyCountdownTime());
                     }
                 }
@@ -183,7 +183,7 @@ public class LobbyBO {
     }
 
     public void declineinvite(Long activePersonaId, Long lobbyInviteId) {
-        LobbyEntity lobbyEntity = lobbyDao.findById(lobbyInviteId);
+        LobbyEntity lobbyEntity = lobbyDao.find(lobbyInviteId);
 
         if (lobbyEntity == null) {
             return;
@@ -193,8 +193,8 @@ public class LobbyBO {
     }
 
     public LobbyInfo acceptinvite(Long personaId, Long lobbyInviteId) {
-        LobbyEntity lobbyEntity = lobbyDao.findById(lobbyInviteId);
-        PersonaEntity personaEntity = personaDao.findById(personaId);
+        LobbyEntity lobbyEntity = lobbyDao.find(lobbyInviteId);
+        PersonaEntity personaEntity = personaDao.find(personaId);
 
         if (lobbyEntity == null) {
             throw new EngineException(EngineExceptionCode.GameDoesNotExist, false);
@@ -267,8 +267,8 @@ public class LobbyBO {
     }
 
     public void removeEntrantFromLobby(Long personaId, Long lobbyId) {
-        LobbyEntity lobbyEntity = lobbyDao.findById(lobbyId);
-        PersonaEntity personaEntity = personaDao.findById(personaId);
+        LobbyEntity lobbyEntity = lobbyDao.find(lobbyId);
+        PersonaEntity personaEntity = personaDao.find(personaId);
 
         if (lobbyEntity == null) {
             throw new EngineException(EngineExceptionCode.GameDoesNotExist, false);

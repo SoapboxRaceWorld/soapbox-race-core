@@ -97,7 +97,7 @@ public class RewardBO {
         boolean hasLevelChanged = false;
 
         if (parameterBO.getBoolParam("ENABLE_REPUTATION") && personaEntity.getLevel() < maxLevel) {
-            Long expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
+            Long expToNextLevel = levelRepDao.find((long) personaEntity.getLevel()).getExpPoint();
             long expMax = personaEntity.getRepAtCurrentLevel() + exp;
             if (expMax >= expToNextLevel) {
                 boolean isLeveledUp = true;
@@ -106,7 +106,7 @@ public class RewardBO {
                     personaEntity.setLevel(personaEntity.getLevel() + 1);
                     personaEntity.setRepAtCurrentLevel((int) (expMax - expToNextLevel));
 
-                    expToNextLevel = levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
+                    expToNextLevel = levelRepDao.find((long) personaEntity.getLevel()).getExpPoint();
                     expMax = personaEntity.getRepAtCurrentLevel() + exp;
 
                     isLeveledUp = (expMax >= expToNextLevel);
@@ -374,7 +374,7 @@ public class RewardBO {
     }
 
     private Boolean isLeveledUp(PersonaEntity personaEntity, Integer exp) {
-        return (long) (personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.findByLevel((long) personaEntity.getLevel()).getExpPoint();
+        return (long) (personaEntity.getRepAtCurrentLevel() + exp) >= levelRepDao.find((long) personaEntity.getLevel()).getExpPoint();
     }
 
     private LuckyDrawInfo getEventLuckyDraw(Integer rank, PersonaEntity personaEntity,

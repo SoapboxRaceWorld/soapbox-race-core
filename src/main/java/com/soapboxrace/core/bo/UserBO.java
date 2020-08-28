@@ -106,7 +106,7 @@ public class UserBO {
     }
 
     public void secureLoginPersona(Long userId, Long personaId) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        PersonaEntity personaEntity = personaDAO.find(personaId);
 
         if (personaEntity != null) {
             UserEntity user = personaEntity.getUser();

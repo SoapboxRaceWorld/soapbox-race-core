@@ -38,7 +38,7 @@ public class EventBO {
     private PersonaBO personaBO;
 
     public List<EventEntity> availableAtLevel(Long personaId) {
-        PersonaEntity personaEntity = personaDao.findById(personaId);
+        PersonaEntity personaEntity = personaDao.find(personaId);
         return eventDao.findByLevel(personaEntity.getLevel());
     }
 
@@ -59,7 +59,7 @@ public class EventBO {
     public EventSessionEntity createEventSession(TokenSessionEntity tokenSessionEntity, int eventId) {
         Objects.requireNonNull(tokenSessionEntity);
 
-        EventEntity eventEntity = eventDao.findById(eventId);
+        EventEntity eventEntity = eventDao.find(eventId);
         if (eventEntity == null) {
             return null;
         }
@@ -90,6 +90,6 @@ public class EventBO {
     }
 
     public EventSessionEntity findEventSessionById(Long id) {
-        return eventSessionDao.findById(id);
+        return eventSessionDao.find(id);
     }
 }

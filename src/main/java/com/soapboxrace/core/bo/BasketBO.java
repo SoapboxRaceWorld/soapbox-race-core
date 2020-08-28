@@ -201,7 +201,7 @@ public class BasketBO {
             return CommerceResultStatus.FAIL_LOCKED_PRODUCT_NOT_ACCESSIBLE_TO_THIS_USER;
 
         if (performPersonaTransaction(personaEntity, productEntity)) {
-            TreasureHuntEntity treasureHuntEntity = treasureHuntDAO.findById(personaEntity.getPersonaId());
+            TreasureHuntEntity treasureHuntEntity = treasureHuntDAO.find(personaEntity.getPersonaId());
             treasureHuntEntity.setIsStreakBroken(false);
 
             treasureHuntDAO.update(treasureHuntEntity);
@@ -301,7 +301,7 @@ public class BasketBO {
     public boolean sellCar(TokenSessionEntity tokenSessionEntity, Long personaId, Long serialNumber) {
         this.tokenSessionBO.verifyPersonaOwnership(tokenSessionEntity, personaId);
 
-        OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(serialNumber);
+        OwnedCarEntity ownedCarEntity = ownedCarDAO.find(serialNumber);
         if (ownedCarEntity == null) {
             return false;
         }
@@ -310,7 +310,7 @@ public class BasketBO {
             return false;
         }
 
-        PersonaEntity personaEntity = personaDao.findById(personaId);
+        PersonaEntity personaEntity = personaDao.find(personaId);
 
         if (!removeCar(personaEntity, serialNumber)) {
             return false;
@@ -323,7 +323,7 @@ public class BasketBO {
     }
 
     public boolean removeCar(PersonaEntity personaEntity, Long serialNumber) {
-        OwnedCarEntity ownedCarEntity = ownedCarDAO.findById(serialNumber);
+        OwnedCarEntity ownedCarEntity = ownedCarDAO.find(serialNumber);
         if (ownedCarEntity == null) {
             return false;
         }

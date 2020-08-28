@@ -51,9 +51,9 @@ public class EventsBO {
     private TreasureHuntConfigDAO treasureHuntConfigDAO;
 
     public TreasureHuntEventSession getTreasureHuntEventSession(Long activePersonaId) {
-        TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
+        TreasureHuntEntity treasureHuntEntity = treasureHuntDao.find(activePersonaId);
         if (treasureHuntEntity == null) {
-            driverPersonaBo.createThInformation(personaDao.findById(activePersonaId));
+            driverPersonaBo.createThInformation(personaDao.find(activePersonaId));
             return getTreasureHuntEventSession(activePersonaId);
         }
 
@@ -91,7 +91,7 @@ public class EventsBO {
     }
 
     public Accolades notifyCoinCollected(Long activePersonaId, Integer coins) {
-        TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
+        TreasureHuntEntity treasureHuntEntity = treasureHuntDao.find(activePersonaId);
         if (treasureHuntEntity != null) {
             if (treasureHuntEntity.getCoinsCollected() == 32767) {
                 throw new EngineException("TH is not ready", EngineExceptionCode.SecurityKickedArbitration, true);
@@ -121,8 +121,8 @@ public class EventsBO {
                 don't revive -> reset to day 1 + get day 1 rewards, back to green
          */
 
-        PersonaEntity personaEntity = personaDao.findById(activePersonaId);
-        TreasureHuntEntity treasureHuntEntity = treasureHuntDao.findById(activePersonaId);
+        PersonaEntity personaEntity = personaDao.find(activePersonaId);
+        TreasureHuntEntity treasureHuntEntity = treasureHuntDao.find(activePersonaId);
 
         if (treasureHuntEntity == null) {
             throw new EngineException("TreasureHunt does not exist for driver: " + activePersonaId, EngineExceptionCode.InvalidOperation, true);
@@ -180,7 +180,7 @@ public class EventsBO {
     }
 
     private Accolades getTreasureHuntAccolades(Long activePersonaId, TreasureHuntEntity treasureHuntEntity, AchievementTransaction achievementTransaction, boolean giveReward) {
-        PersonaEntity personaEntity = personaDao.findById(activePersonaId);
+        PersonaEntity personaEntity = personaDao.find(activePersonaId);
         TreasureHuntConfigEntity treasureHuntConfigEntity =
                 treasureHuntConfigDAO.findForStreak(treasureHuntEntity.getStreak());
         RewardVO rewardVO = rewardBO.getRewardVO(personaEntity);

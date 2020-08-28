@@ -137,7 +137,7 @@ public class AchievementBO {
     }
 
     public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        PersonaEntity personaEntity = personaDAO.find(personaId);
         PersonaAchievementRankEntity personaAchievementRankEntity =
                 personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, achievementRankId);
 
@@ -161,7 +161,7 @@ public class AchievementBO {
         achievementRewards.setWallets(new ArrayOfWalletTrans());
 
         achievementRewards.getWallets().getWalletTrans().add(new WalletTrans() {{
-            setBalance(personaDAO.findById(personaId).getCash());
+            setBalance(personaEntity.getCash());
             setCurrency("CASH");
         }});
 

@@ -78,7 +78,7 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
 
         boolean isBusted = pursuitArbitrationPacket.getFinishReason() == 266;
 
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        PersonaEntity personaEntity = personaDAO.find(activePersonaId);
         AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         PursuitEventResult pursuitEventResult = new PursuitEventResult();
         pursuitEventResult.setAccolades(rewardPursuitBO.getAccolades(activePersonaId, pursuitArbitrationPacket

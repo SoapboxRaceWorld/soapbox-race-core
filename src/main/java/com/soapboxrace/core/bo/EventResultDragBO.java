@@ -104,7 +104,7 @@ public class EventResultDragBO extends EventResultBO<DragArbitrationPacket, Drag
             }
         }
 
-        PersonaEntity personaEntity = personaDAO.findById(activePersonaId);
+        PersonaEntity personaEntity = personaDAO.find(activePersonaId);
         AchievementTransaction transaction = achievementBO.createTransaction(activePersonaId);
         DragEventResult dragEventResult = new DragEventResult();
         dragEventResult.setAccolades(rewardDragBO.getAccolades(activePersonaId, dragArbitrationPacket,

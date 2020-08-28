@@ -48,7 +48,7 @@ public class LobbyCountdownBO {
     @Timeout
     public void onTimeout(Timer timer) {
         Long lobbyId = (Long) timer.getInfo();
-        LobbyEntity lobbyEntity = lobbyDAO.findById(lobbyId);
+        LobbyEntity lobbyEntity = lobbyDAO.find(lobbyId);
         List<LobbyEntrantEntity> entrants = lobbyEntity.getEntrants();
         if (entrants.size() < 2) {
             return;

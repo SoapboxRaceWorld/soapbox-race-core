@@ -386,7 +386,7 @@ public class InventoryBO {
      * @throws EngineException if no item with the given entitlement
      */
     public void removeItem(Long personaId, String entitlementTag) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        PersonaEntity personaEntity = personaDAO.find(personaId);
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
 
         removeItem(personaEntity, inventoryEntity, entitlementTag, -1);
@@ -401,7 +401,7 @@ public class InventoryBO {
      * @throws EngineException if no item with the given entitlement
      */
     public void removeItem(Long personaId, String entitlementTag, Integer quantity) {
-        PersonaEntity personaEntity = personaDAO.findById(personaId);
+        PersonaEntity personaEntity = personaDAO.find(personaId);
         InventoryEntity inventoryEntity = inventoryDAO.findByPersonaId(personaId);
 
         removeItem(personaEntity, inventoryEntity, entitlementTag, quantity);
