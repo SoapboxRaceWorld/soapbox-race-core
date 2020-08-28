@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 
@@ -16,10 +16,10 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class CarSlotDAO extends BaseDAO<CarSlotEntity> {
+public class CarSlotDAO extends LongKeyedDAO<CarSlotEntity> {
 
-    public CarSlotEntity findById(Long id) {
-        return entityManager.find(CarSlotEntity.class, id);
+    public CarSlotDAO() {
+        super(CarSlotEntity.class);
     }
 
     public List<CarSlotEntity> findByPersonaId(Long personaId) {

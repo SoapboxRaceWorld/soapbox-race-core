@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.EventEntity;
 import com.soapboxrace.core.jpa.LobbyEntity;
 
@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Stateless
-public class LobbyDAO extends BaseDAO<LobbyEntity> {
+public class LobbyDAO extends LongKeyedDAO<LobbyEntity> {
 
-    public LobbyEntity findById(Long id) {
-        return entityManager.find(LobbyEntity.class, id);
+    public LobbyDAO() {
+        super(LobbyEntity.class);
     }
 
     public List<LobbyEntity> findAllOpen(int carClassHash) {

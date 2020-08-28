@@ -12,9 +12,10 @@ import com.soapboxrace.core.jpa.BasketDefinitionEntity;
 import javax.ejb.Stateless;
 
 @Stateless
-public class BasketDefinitionDAO extends BaseDAO<BasketDefinitionEntity> {
+public class BasketDefinitionDAO extends BaseDAO<BasketDefinitionEntity, String> {
 
-    public BasketDefinitionEntity findById(String productId) {
+    @Override
+    public BasketDefinitionEntity find(String productId) {
         return entityManager.find(BasketDefinitionEntity.class, productId);
     }
 

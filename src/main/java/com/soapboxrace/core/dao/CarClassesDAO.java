@@ -13,9 +13,10 @@ import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
 @Stateless
-public class CarClassesDAO extends BaseDAO<CarClassesEntity> {
+public class CarClassesDAO extends BaseDAO<CarClassesEntity, String> {
 
-    public CarClassesEntity findById(String vltName) {
+    @Override
+    public CarClassesEntity find(String vltName) {
         return entityManager.find(CarClassesEntity.class, vltName);
     }
 

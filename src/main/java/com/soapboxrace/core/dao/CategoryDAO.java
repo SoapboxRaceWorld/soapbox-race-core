@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.CategoryEntity;
 
 import javax.ejb.Stateless;
@@ -14,10 +14,10 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class CategoryDAO extends BaseDAO<CategoryEntity> {
+public class CategoryDAO extends LongKeyedDAO<CategoryEntity> {
 
-    public CategoryEntity findById(Long id) {
-        return entityManager.find(CategoryEntity.class, id);
+    public CategoryDAO() {
+        super(CategoryEntity.class);
     }
 
     public List<CategoryEntity> getAll() {

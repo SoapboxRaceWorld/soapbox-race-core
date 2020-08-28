@@ -280,7 +280,7 @@ public class BasketBO {
         }
 
         CarClassesEntity carClassesEntity =
-                carClassesDAO.findById(carSlotEntity.getOwnedCar().getCustomCar().getName());
+                carClassesDAO.find(carSlotEntity.getOwnedCar().getCustomCar().getName());
 
         AchievementTransaction transaction = achievementBO.createTransaction(personaEntity.getPersonaId());
 
@@ -376,7 +376,7 @@ public class BasketBO {
     private OwnedCarTrans getCar(ProductEntity productEntity) {
         Objects.requireNonNull(productEntity, "productEntity is null");
         String productId = productEntity.getProductId();
-        BasketDefinitionEntity basketDefinitionEntity = basketDefinitionsDAO.findById(productId);
+        BasketDefinitionEntity basketDefinitionEntity = basketDefinitionsDAO.find(productId);
         if (basketDefinitionEntity == null) {
             throw new IllegalArgumentException(String.format("No basket definition for %s", productId));
         }

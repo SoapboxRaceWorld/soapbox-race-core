@@ -6,12 +6,15 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.CustomCarEntity;
 
 import javax.ejb.Stateless;
 
 @Stateless
-public class CustomCarDAO extends BaseDAO<CustomCarEntity> {
-    //
+public class CustomCarDAO extends LongKeyedDAO<CustomCarEntity> {
+
+    public CustomCarDAO() {
+        super(CustomCarEntity.class);
+    }
 }

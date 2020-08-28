@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.EventDataEntity;
 
 import javax.ejb.Stateless;
@@ -14,10 +14,10 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class EventDataDAO extends BaseDAO<EventDataEntity> {
+public class EventDataDAO extends LongKeyedDAO<EventDataEntity> {
 
-    public EventDataEntity findById(Long id) {
-        return entityManager.find(EventDataEntity.class, id);
+    public EventDataDAO() {
+        super(EventDataEntity.class);
     }
 
     public List<EventDataEntity> findByPersona(Long personaId) {

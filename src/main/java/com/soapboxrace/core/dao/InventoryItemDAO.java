@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.InventoryItemEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 
@@ -15,7 +15,11 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class InventoryItemDAO extends BaseDAO<InventoryItemEntity> {
+public class InventoryItemDAO extends LongKeyedDAO<InventoryItemEntity> {
+
+    public InventoryItemDAO() {
+        super(InventoryItemEntity.class);
+    }
 
     public List<InventoryItemEntity> findAllByPersonaId(Long personaId) {
         return entityManager.createNamedQuery("InventoryItemEntity.findAllByPersonaId", InventoryItemEntity.class)

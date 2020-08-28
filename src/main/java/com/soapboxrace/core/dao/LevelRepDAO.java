@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.LevelRepEntity;
 
 import javax.ejb.Stateless;
@@ -14,15 +14,15 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class LevelRepDAO extends BaseDAO<LevelRepEntity> {
+public class LevelRepDAO extends LongKeyedDAO<LevelRepEntity> {
 
+    public LevelRepDAO() {
+        super(LevelRepEntity.class);
+    }
+
+    @Deprecated
     public LevelRepEntity findByLevel(Long level) {
-        TypedQuery<LevelRepEntity> query = entityManager.createNamedQuery("LevelRepEntity.findByLevel",
-                LevelRepEntity.class);
-        query.setParameter("level", level);
-
-        List<LevelRepEntity> resultList = query.getResultList();
-        return !resultList.isEmpty() ? resultList.get(0) : null;
+        return find(level);
     }
 
     public List<LevelRepEntity> findAll() {

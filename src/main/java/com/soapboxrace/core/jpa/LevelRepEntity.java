@@ -11,9 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "LEVEL_REP")
 @NamedQueries({
-        @NamedQuery(name = "LevelRepEntity.findAll", query = "SELECT obj FROM LevelRepEntity obj"), //
-        @NamedQuery(name = "LevelRepEntity.findByLevel", query = "SELECT obj FROM LevelRepEntity obj WHERE obj.level " +
-                "= :level"), //
+        @NamedQuery(name = "LevelRepEntity.findAll", query = "SELECT obj FROM LevelRepEntity obj"),
         @NamedQuery(name = "LevelRepEntity.findMaxLevel", query = "SELECT MAX(obj.level) FROM LevelRepEntity obj"), //
 })
 public class LevelRepEntity {

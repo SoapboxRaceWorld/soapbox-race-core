@@ -14,9 +14,10 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class EventDAO extends BaseDAO<EventEntity> {
+public class EventDAO extends BaseDAO<EventEntity, Integer> {
 
-    public EventEntity findById(int id) {
+    @Override
+    public EventEntity find(Integer id) {
         return entityManager.find(EventEntity.class, id);
     }
 
