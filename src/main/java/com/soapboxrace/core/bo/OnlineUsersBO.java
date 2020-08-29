@@ -11,24 +11,32 @@ import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.OnlineUsersEntity;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 
-import javax.ejb.EJB;
-import javax.ejb.Schedule;
-import javax.ejb.Stateless;
+import javax.annotation.PostConstruct;
+import javax.ejb.*;
 import java.util.Date;
 
-@Stateless
+@Singleton
+@Lock(LockType.READ)
 public class OnlineUsersBO {
 
     @EJB
-    OpenFireRestApiCli openFireRestApiCli;
+    private OpenFireRestApiCli openFireRestApiCli;
+
     @EJB
     private OnlineUsersDAO onlineUsersDAO;
+
     @EJB
     private UserDAO userDAO;
 
+    private OnlineUsersEntity lastRecordedStats;
+
     public OnlineUsersEntity getOnlineUsersStats() {
-        Date lastMinutes = getLastMinutes(1);
-        return onlineUsersDAO.findByTime(lastMinutes);
+        return lastRecordedStats;
+    }
+
+    @PostConstruct
+    public void init() {
+        insertNumberOfUsesOnlineNow();
     }
 
     @Schedule(minute = "*", hour = "*", persistent = false)
@@ -39,12 +47,6 @@ public class OnlineUsersBO {
         onlineUsersEntity.setNumberOfRegistered(userDAO.countUsers());
         onlineUsersEntity.setTimeRecord((int) timeLong);
         onlineUsersDAO.insert(onlineUsersEntity);
-    }
-
-    private Date getLastMinutes(int minutes) {
-        long time = new Date().getTime();
-        time = time - (minutes * 90000);
-
-        return new Date(time);
+        lastRecordedStats = onlineUsersEntity;
     }
 }
