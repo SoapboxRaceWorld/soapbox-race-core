@@ -14,10 +14,10 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class SocialRelationshipDAO extends BaseDAO<SocialRelationshipEntity, Integer> {
+public class SocialRelationshipDAO extends BaseDAO<SocialRelationshipEntity, Long> {
 
     @Override
-    public SocialRelationshipEntity find(Integer key) {
+    public SocialRelationshipEntity find(Long key) {
         return this.entityManager.find(SocialRelationshipEntity.class, key);
     }
 

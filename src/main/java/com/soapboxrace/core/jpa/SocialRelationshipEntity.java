@@ -29,7 +29,7 @@ public class SocialRelationshipEntity {
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -46,11 +46,11 @@ public class SocialRelationshipEntity {
     private Long status; // 0: pending friend request; 1: accepted friend; 2: blocked user, 3: pending friend request
     // (not accepted by target)
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
