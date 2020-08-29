@@ -33,7 +33,7 @@ public class Crypto {
         byte[] randomUUIDBytes = UUIDGen.getRandomUUIDBytes();
         String ticketIV = Base64.getEncoder().encodeToString(randomUUIDBytes);
         UdpRelayCryptoTicket udpRelayCryptoTicket = new UdpRelayCryptoTicket();
-        udpRelayCryptoTicket.setCryptoTicket(requestSessionInfo.getActiveRelayCryptoTicket());
+        udpRelayCryptoTicket.setCryptoTicket(requestSessionInfo.getRelayCryptoTicket());
         udpRelayCryptoTicket.setSessionKey("AAAAAAAAAAAAAAAAAAAAAA==");
         udpRelayCryptoTicket.setTicketIv(ticketIV);
         return udpRelayCryptoTicket;

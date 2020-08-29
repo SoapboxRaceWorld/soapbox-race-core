@@ -38,7 +38,7 @@ public class RequestSessionInfo {
         return tokenSessionEntity.getActivePersonaId();
     }
 
-    public String getActiveRelayCryptoTicket() {
+    public String getRelayCryptoTicket() {
         return tokenSessionEntity.getRelayCryptoTicket();
     }
 }
