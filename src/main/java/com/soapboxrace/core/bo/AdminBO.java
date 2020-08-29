@@ -87,7 +87,6 @@ public class AdminBO {
         banEntity.setStarted(LocalDateTime.now());
         banEntity.setReason(reason);
         banEntity.setBannedBy(bannedBy);
-        banEntity.setWillEnd(endsOn != null);
         banDAO.insert(banEntity);
         userDao.update(userEntity);
         sendKick(userEntity.getId(), personaEntity.getPersonaId());
