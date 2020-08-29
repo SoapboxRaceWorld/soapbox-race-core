@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "BAN")
-@NamedQueries({ //
-        @NamedQuery(name = "BanEntity.findAll", query = "SELECT obj FROM BanEntity obj")})
 public class BanEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
