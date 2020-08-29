@@ -36,11 +36,11 @@ public class OnlineUsersBO {
 
     @PostConstruct
     public void init() {
-        insertNumberOfUsesOnlineNow();
+        insertOnlineStats();
     }
 
     @Schedule(minute = "*", hour = "*", persistent = false)
-    public void insertNumberOfUsesOnlineNow() {
+    public void insertOnlineStats() {
         long timeLong = new Date().getTime() / 1000L;
         OnlineUsersEntity onlineUsersEntity = new OnlineUsersEntity();
         onlineUsersEntity.setNumberOfOnline(openFireRestApiCli.getTotalOnlineUsers());

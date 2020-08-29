@@ -24,6 +24,6 @@ public class StartupBO {
     public void init() {
         System.out.printf("StartupBO: Server running on code version %s (%s) - branch %s%n", BuildInfo.getCommitID(), BuildInfo.getLongCommitID(),
                 BuildInfo.getBranch());
-        onlineUsersBO.insertNumberOfUsesOnlineNow();
+        onlineUsersBO.insertOnlineStats();
     }
 }
