@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 public class BanEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
 
     @OneToOne(targetEntity = UserEntity.class)
@@ -34,12 +33,9 @@ public class BanEntity {
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime started;
 
-    @Column
+    @Column(name = "ends_at")
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime endsAt;
-
-    @Column
-    private boolean willEnd;
 
     public Long getId() {
         return id;
@@ -79,14 +75,6 @@ public class BanEntity {
 
     public void setReason(String reason) {
         this.reason = reason;
-    }
-
-    public boolean isWillEnd() {
-        return willEnd;
-    }
-
-    public void setWillEnd(boolean willEnd) {
-        this.willEnd = willEnd;
     }
 
     public LocalDateTime getStarted() {
