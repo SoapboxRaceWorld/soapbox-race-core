@@ -42,6 +42,16 @@ public class CarSlotDAO extends LongKeyedDAO<CarSlotEntity> {
         return query.getSingleResult();
     }
 
+    public Long findNumByPersonaId(Long personaId) {
+        PersonaEntity personaEntity = new PersonaEntity();
+        personaEntity.setPersonaId(personaId);
+
+        TypedQuery<Long> query = entityManager.createNamedQuery("CarSlotEntity.findNumByPersonaId",
+                Long.class);
+        query.setParameter("persona", personaEntity);
+        return query.getSingleResult();
+    }
+
     public List<CarSlotEntity> findAllExpired() {
         TypedQuery<CarSlotEntity> query = entityManager.createNamedQuery("CarSlotEntity.findAllExpired",
                 CarSlotEntity.class);

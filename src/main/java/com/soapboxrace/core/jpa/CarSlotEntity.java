@@ -19,6 +19,8 @@ import javax.persistence.*;
         @NamedQuery(name = "CarSlotEntity.findNumNonRentalsByPersonaId", //
                 query = "SELECT COUNT(obj) FROM CarSlotEntity obj INNER JOIN obj.ownedCar oc WHERE obj.persona = :persona" +
                         " AND oc.expirationDate IS NULL"), //
+        @NamedQuery(name = "CarSlotEntity.findNumByPersonaId",
+                query = "SELECT COUNT(obj) FROM CarSlotEntity obj WHERE obj.persona = :persona"),
         @NamedQuery(name = "CarSlotEntity.deleteByPersona", //
                 query = "DELETE FROM CarSlotEntity obj WHERE obj.persona = :persona"), //
         @NamedQuery(name = "CarSlotEntity.findAllExpired", //

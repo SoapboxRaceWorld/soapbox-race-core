@@ -345,14 +345,18 @@ public class BasketBO {
             return false;
         }
 
+        carSlotDAO.delete(carSlotEntity);
+
         int curCarIndex = personaEntity.getCurCarIndex();
 
-        if (curCarIndex <= 0) {
-            throw new EngineException("curCarIndex <= 0 when trying to sell car", EngineExceptionCode.CantDeleteLastOwnedCar, true);
+        if (curCarIndex > 0) {
+            // Best case: we just decrement the current car index
+            personaEntity.setCurCarIndex(curCarIndex - 1);
+        } else {
+            // Worst case: count cars again and subtract 1 to get new index
+            personaEntity.setCurCarIndex(carSlotDAO.findNumByPersonaId(personaEntity.getPersonaId()).intValue() - 1);
         }
 
-        personaEntity.setCurCarIndex(curCarIndex - 1);
-        carSlotDAO.delete(carSlotEntity);
         personaDao.update(personaEntity);
 
         return true;
