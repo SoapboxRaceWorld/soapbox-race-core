@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.SocialRelationshipEntity;
 
 import javax.ejb.Stateless;
@@ -14,11 +14,10 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class SocialRelationshipDAO extends BaseDAO<SocialRelationshipEntity, Long> {
+public class SocialRelationshipDAO extends LongKeyedDAO<SocialRelationshipEntity> {
 
-    @Override
-    public SocialRelationshipEntity find(Long key) {
-        return this.entityManager.find(SocialRelationshipEntity.class, key);
+    public SocialRelationshipDAO() {
+        super(SocialRelationshipEntity.class);
     }
 
     public void deleteAllByPersonaId(Long personaId) {

@@ -6,17 +6,15 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.StringKeyedDAO;
 import com.soapboxrace.core.jpa.BasketDefinitionEntity;
 
 import javax.ejb.Stateless;
 
 @Stateless
-public class BasketDefinitionDAO extends BaseDAO<BasketDefinitionEntity, String> {
+public class BasketDefinitionDAO extends StringKeyedDAO<BasketDefinitionEntity> {
 
-    @Override
-    public BasketDefinitionEntity find(String productId) {
-        return entityManager.find(BasketDefinitionEntity.class, productId);
+    public BasketDefinitionDAO() {
+        super(BasketDefinitionEntity.class);
     }
-
 }

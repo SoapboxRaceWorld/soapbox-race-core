@@ -6,18 +6,17 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.StringKeyedDAO;
 import com.soapboxrace.core.jpa.ParameterEntity;
 
 import javax.ejb.Stateless;
 import java.util.List;
 
 @Stateless
-public class ParameterDAO extends BaseDAO<ParameterEntity, String> {
+public class ParameterDAO extends StringKeyedDAO<ParameterEntity> {
 
-    @Override
-    public ParameterEntity find(String name) {
-        return entityManager.find(ParameterEntity.class, name);
+    public ParameterDAO() {
+        super(ParameterEntity.class);
     }
 
     public List<ParameterEntity> findAll() {

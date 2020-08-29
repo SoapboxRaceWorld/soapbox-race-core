@@ -6,18 +6,17 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.StringKeyedDAO;
 import com.soapboxrace.core.jpa.CarClassesEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 
 @Stateless
-public class CarClassesDAO extends BaseDAO<CarClassesEntity, String> {
+public class CarClassesDAO extends StringKeyedDAO<CarClassesEntity> {
 
-    @Override
-    public CarClassesEntity find(String vltName) {
-        return entityManager.find(CarClassesEntity.class, vltName);
+    public CarClassesDAO() {
+        super(CarClassesEntity.class);
     }
 
     public CarClassesEntity findByProductId(String productId) {

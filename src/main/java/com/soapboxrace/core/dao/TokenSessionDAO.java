@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.StringKeyedDAO;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 
 import javax.ejb.Stateless;
@@ -14,11 +14,10 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 @Stateless
-public class TokenSessionDAO extends BaseDAO<TokenSessionEntity, String> {
+public class TokenSessionDAO extends StringKeyedDAO<TokenSessionEntity> {
 
-    @Override
-    public TokenSessionEntity find(String securityToken) {
-        return this.entityManager.find(TokenSessionEntity.class, securityToken);
+    public TokenSessionDAO() {
+        super(TokenSessionEntity.class);
     }
 
     public TokenSessionEntity findByUserId(Long userId) {
