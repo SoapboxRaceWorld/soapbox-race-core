@@ -42,21 +42,6 @@ public class InventoryItemDAO extends LongKeyedDAO<InventoryItemEntity> {
                 .getResultList();
     }
 
-    public InventoryItemEntity findByPersonaIdAndHash(Long personaId, Integer hash) {
-        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity" +
-                ".findAllByPersonaIdAndHash", InventoryItemEntity.class);
-        query.setParameter("personaId", personaId);
-        query.setParameter("hash", hash);
-
-        List<InventoryItemEntity> results = query.getResultList();
-
-        if (!results.isEmpty()) {
-            return results.get(0);
-        }
-
-        return null;
-    }
-
     public InventoryItemEntity findByPersonaIdAndEntitlementTag(Long personaId, String entitlementTag) {
         TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity" +
                 ".findAllByPersonaIdAndTag", InventoryItemEntity.class);
@@ -77,22 +62,6 @@ public class InventoryItemDAO extends LongKeyedDAO<InventoryItemEntity> {
                 ".findAllByInventoryAndTag", InventoryItemEntity.class);
         query.setParameter("inventoryId", inventoryId);
         query.setParameter("entitlementTag", entitlementTag);
-
-        List<InventoryItemEntity> results = query.getResultList();
-
-        if (!results.isEmpty()) {
-            return results.get(0);
-        }
-
-        return null;
-    }
-
-    public InventoryItemEntity findByInventoryIdAndHash(Long inventoryId, Integer hash) {
-        TypedQuery<InventoryItemEntity> query = entityManager.createNamedQuery("InventoryItemEntity" +
-                        ".findAllByInventoryAndHash",
-                InventoryItemEntity.class);
-        query.setParameter("inventoryId", inventoryId);
-        query.setParameter("hash", hash);
 
         List<InventoryItemEntity> results = query.getResultList();
 

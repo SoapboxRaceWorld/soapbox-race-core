@@ -40,11 +40,4 @@ public class TokenSessionDAO extends StringKeyedDAO<TokenSessionEntity> {
         query.executeUpdate();
     }
 
-    public void updateLobbyIdByPersonaId(Long personaId, Long lobbyId) {
-        Query query = entityManager.createNamedQuery("TokenSessionEntity.updateLobbyId");
-        query.setParameter("personaId", personaId);
-        query.setParameter("activeLobbyId", lobbyId);
-        query.executeUpdate();
-    }
-
 }

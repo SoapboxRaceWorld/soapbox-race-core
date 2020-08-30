@@ -10,18 +10,12 @@ import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.RewardTableEntity;
 
 import javax.ejb.Stateless;
-import java.util.List;
 
 @Stateless
 public class RewardTableDAO extends LongKeyedDAO<RewardTableEntity> {
 
     public RewardTableDAO() {
         super(RewardTableEntity.class);
-    }
-
-    public List<RewardTableEntity> findAll() {
-        return this.entityManager.createNamedQuery("RewardTableEntity.findAll", RewardTableEntity.class)
-                .getResultList();
     }
 
     public RewardTableEntity findByName(String name) {

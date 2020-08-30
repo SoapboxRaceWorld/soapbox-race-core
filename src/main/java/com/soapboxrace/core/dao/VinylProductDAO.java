@@ -30,15 +30,6 @@ public class VinylProductDAO extends LongKeyedDAO<VinylProductEntity> {
         return !resultList.isEmpty() ? resultList.get(0) : null;
     }
 
-    public VinylProductEntity findByProductId(String productId) {
-        TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity.findByProductId",
-                VinylProductEntity.class);
-        query.setParameter("productId", productId);
-
-        List<VinylProductEntity> resultList = query.getResultList();
-        return !resultList.isEmpty() ? resultList.get(0) : null;
-    }
-
     public List<VinylProductEntity> findByCategoryLevelEnabled(CategoryEntity category, int minLevel, Boolean enabled
             , Boolean premium) {
         TypedQuery<VinylProductEntity> query = entityManager.createNamedQuery("VinylProductEntity" +
