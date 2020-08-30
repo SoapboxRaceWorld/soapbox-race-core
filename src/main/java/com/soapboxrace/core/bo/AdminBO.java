@@ -7,12 +7,8 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.api.util.MiscUtils;
-import com.soapboxrace.core.dao.BanDAO;
-import com.soapboxrace.core.dao.HardwareInfoDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
-import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.BanEntity;
-import com.soapboxrace.core.jpa.HardwareInfoEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
@@ -31,13 +27,7 @@ public class AdminBO {
     private PersonaDAO personaDao;
 
     @EJB
-    private UserDAO userDao;
-
-    @EJB
-    private BanDAO banDAO;
-
-    @EJB
-    private HardwareInfoDAO hardwareInfoDAO;
+    private BanBO banBO;
 
     @EJB
     private OpenFireSoapBoxCli openFireSoapBoxCli;
@@ -49,9 +39,10 @@ public class AdminBO {
         if (personaEntity == null)
             return;
 
+        UserEntity userEntity = personaEntity.getUser();
         switch (commandInfo.action) {
             case BAN:
-                if (banDAO.findByUser(personaEntity.getUser()) != null) {
+                if (banBO.isBanned(userEntity)) {
                     openFireSoapBoxCli.send(XmppChat.createSystemMessage("User is already banned!"), personaId);
                     break;
                 }
@@ -60,17 +51,17 @@ public class AdminBO {
                 openFireSoapBoxCli.send(XmppChat.createSystemMessage("Banned user!"), personaId);
                 break;
             case KICK:
-                sendKick(personaEntity.getUser().getId(), personaEntity.getPersonaId());
+                sendKick(userEntity.getId(), personaEntity.getPersonaId());
                 openFireSoapBoxCli.send(XmppChat.createSystemMessage("Kicked user!"), personaId);
                 break;
             case UNBAN:
                 BanEntity existingBan;
-                if ((existingBan = banDAO.findByUser(personaEntity.getUser())) == null) {
+                if ((existingBan = banBO.getUserBan(userEntity)) == null) {
                     openFireSoapBoxCli.send(XmppChat.createSystemMessage("User is not banned!"), personaId);
                     break;
                 }
 
-                banDAO.delete(existingBan);
+                banBO.expireBan(existingBan);
                 openFireSoapBoxCli.send(XmppChat.createSystemMessage("Unbanned user!"), personaId);
 
                 break;
@@ -81,22 +72,8 @@ public class AdminBO {
 
     private void sendBan(PersonaEntity personaEntity, PersonaEntity bannedBy, LocalDateTime endsOn, String reason) {
         UserEntity userEntity = personaEntity.getUser();
-        BanEntity banEntity = new BanEntity();
-        banEntity.setUserEntity(userEntity);
-        banEntity.setEndsAt(endsOn);
-        banEntity.setStarted(LocalDateTime.now());
-        banEntity.setReason(reason);
-        banEntity.setBannedBy(bannedBy);
-        banDAO.insert(banEntity);
-        userDao.update(userEntity);
+        banBO.banUser(userEntity, bannedBy, reason, endsOn);
         sendKick(userEntity.getId(), personaEntity.getPersonaId());
-
-        HardwareInfoEntity hardwareInfoEntity = hardwareInfoDAO.findByUserId(userEntity.getId());
-
-        if (hardwareInfoEntity != null) {
-            hardwareInfoEntity.setBanned(true);
-            hardwareInfoDAO.update(hardwareInfoEntity);
-        }
     }
 
     private void sendKick(Long userId, Long personaId) {
