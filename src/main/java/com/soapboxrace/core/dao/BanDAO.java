@@ -12,7 +12,6 @@ import com.soapboxrace.core.jpa.UserEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Stateless
@@ -23,12 +22,15 @@ public class BanDAO extends LongKeyedDAO<BanEntity> {
     }
 
     public BanEntity findByUser(UserEntity userEntity) {
-        TypedQuery<BanEntity> query = entityManager.createQuery("SELECT obj FROM BanEntity obj WHERE obj.userEntity = :user AND (obj.endsAt IS NULL OR obj.endsAt > :now)", BanEntity.class);
+        TypedQuery<BanEntity> query = entityManager.createNamedQuery("BanEntity.findByUser", BanEntity.class);
         query.setParameter("user", userEntity);
-        query.setParameter("now", LocalDateTime.now());
 
         List<BanEntity> results = query.getResultList();
 
         return results.isEmpty() ? null : results.get(0);
+    }
+
+    public List<BanEntity> findAllExpired() {
+        return entityManager.createNamedQuery("BanEntity.findAllExpired", BanEntity.class).getResultList();
     }
 }

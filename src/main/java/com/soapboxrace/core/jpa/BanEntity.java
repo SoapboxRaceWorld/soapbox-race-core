@@ -13,6 +13,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "BAN")
+@NamedQueries({
+        @NamedQuery(name = "BanEntity.findAllExpired",
+                query = "SELECT obj FROM BanEntity obj WHERE obj.endsAt IS NOT NULL AND obj.endsAt <= CURRENT_TIMESTAMP"),
+        @NamedQuery(name = "BanEntity.findByUser",
+                query = "SELECT obj FROM BanEntity obj WHERE obj.userEntity = :user AND (obj.endsAt IS NULL OR obj.endsAt > CURRENT_TIMESTAMP)")
+})
 public class BanEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
