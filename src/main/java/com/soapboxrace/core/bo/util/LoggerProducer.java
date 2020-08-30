@@ -14,6 +14,6 @@ public class LoggerProducer {
 
     @Produces
     public Logger produceLogger(InjectionPoint injectionPoint) {
-        return LoggerFactory.getLogger(injectionPoint.getBean().getBeanClass());
+        return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass());
     }
 }
