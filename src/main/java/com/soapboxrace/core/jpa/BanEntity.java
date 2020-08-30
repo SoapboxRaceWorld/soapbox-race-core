@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 @Table(name = "BAN")
 @NamedQueries({
         @NamedQuery(name = "BanEntity.findAllExpired",
-                query = "SELECT obj FROM BanEntity obj WHERE obj.endsAt IS NOT NULL AND obj.endsAt <= CURRENT_TIMESTAMP"),
+                query = "SELECT obj FROM BanEntity obj WHERE obj.endsAt IS NOT NULL AND obj.endsAt <= CURRENT_TIMESTAMP AND obj.active = true"),
         @NamedQuery(name = "BanEntity.findByUser",
-                query = "SELECT obj FROM BanEntity obj WHERE obj.userEntity = :user AND (obj.endsAt IS NULL OR obj.endsAt > CURRENT_TIMESTAMP)")
+                query = "SELECT obj FROM BanEntity obj WHERE obj.userEntity = :user AND (obj.endsAt IS NULL OR obj.endsAt > CURRENT_TIMESTAMP) AND obj.active = true")
 })
 public class BanEntity {
     @Id
@@ -42,6 +42,9 @@ public class BanEntity {
     @Column(name = "ends_at")
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime endsAt;
+
+    @Column
+    private Boolean active;
 
     public Long getId() {
         return id;
@@ -89,5 +92,13 @@ public class BanEntity {
 
     public void setStarted(LocalDateTime started) {
         this.started = started;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
