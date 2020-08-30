@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.BaseDAO;
+import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.RecoveryPasswordEntity;
 
 import javax.ejb.Stateless;
@@ -15,11 +15,10 @@ import java.util.Date;
 import java.util.List;
 
 @Stateless
-public class RecoveryPasswordDAO extends BaseDAO<RecoveryPasswordEntity, Integer> {
+public class RecoveryPasswordDAO extends LongKeyedDAO<RecoveryPasswordEntity> {
 
-    @Override
-    public RecoveryPasswordEntity find(Integer id) {
-        return entityManager.find(RecoveryPasswordEntity.class, id);
+    public RecoveryPasswordDAO() {
+        super(RecoveryPasswordEntity.class);
     }
 
     public RecoveryPasswordEntity findByUserId(Long userId) {
