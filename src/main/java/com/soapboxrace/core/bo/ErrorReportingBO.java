@@ -24,10 +24,8 @@ public class ErrorReportingBO {
     public void init() {
         if (parameterBO.getBoolParam("ENABLE_SENTRY_REPORTING")) {
             this.sentryClient = SentryClientFactory.sentryClient(parameterBO.getStrParam("SENTRY_DSN"));
-            this.logger.info("Sentry support is enabled");
+            this.logger.info("Initialized error reporting system with Sentry support");
         }
-
-        this.logger.info("Initialized error reporting system");
     }
 
     @Asynchronous

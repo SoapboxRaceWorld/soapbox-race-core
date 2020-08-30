@@ -9,12 +9,14 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
+import javax.inject.Inject;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
@@ -27,6 +29,14 @@ import java.security.cert.X509Certificate;
 @Singleton
 public class OpenFireConnector {
 
+    @EJB
+    private ParameterBO parameterBO;
+
+    @Inject
+    private Logger logger;
+
+    private XMPPTCPConnection connection;
+
     private String ipAddress;
 
     private Integer port;
@@ -34,11 +44,6 @@ public class OpenFireConnector {
     private String engineToken;
 
     private boolean debugMode;
-
-    @EJB
-    private ParameterBO parameterBO;
-
-    private XMPPTCPConnection connection;
 
     private static X509TrustManager getX509TrustManager() {
         return new X509TrustManager() {
@@ -80,7 +85,7 @@ public class OpenFireConnector {
             ReconnectionManager.getInstanceFor(this.connection)
                     .setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.RANDOM_INCREASING_DELAY);
 
-            System.out.println("Logged in to Openfire server!");
+            logger.info("Logged in to Openfire server!");
         } catch (IOException | SmackException | XMPPException | InterruptedException e) {
             throw new RuntimeException("Failed to connect to Openfire server", e);
         }
@@ -95,8 +100,8 @@ public class OpenFireConnector {
     @Lock(LockType.READ)
     public void send(String msg, Long personaId) {
         if (this.debugMode) {
-            System.out.println("MESSAGE TO " + personaId);
-            System.out.println(msg);
+            logger.debug("MESSAGE TO {}", personaId);
+            logger.debug(msg);
         }
         Message message = new Message();
         message.setSubject("1337733113377331");

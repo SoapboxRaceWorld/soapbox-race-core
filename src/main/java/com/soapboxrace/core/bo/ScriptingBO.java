@@ -1,12 +1,14 @@
 package com.soapboxrace.core.bo;
 
 import jdk.nashorn.api.scripting.NashornScriptEngine;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.inject.Inject;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
@@ -19,13 +21,15 @@ import java.util.Map;
 @Startup
 public class ScriptingBO {
 
+    @Inject
+    private Logger logger;
+
     private NashornScriptEngine scriptEngine;
 
     @PostConstruct
     public void init() {
-        System.out.println("ScriptingBO is starting");
         scriptEngine = (NashornScriptEngine) new ScriptEngineManager().getEngineByName("nashorn");
-        System.out.println("ScriptingBO has started");
+        logger.info("Initialized JavaScript engine");
     }
 
     /**

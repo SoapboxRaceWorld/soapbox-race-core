@@ -18,12 +18,14 @@ import com.soapboxrace.jaxb.xmpp.XMPP_FriendPersonaType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePersonaBase;
 import io.lettuce.core.pubsub.RedisPubSubListener;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -45,31 +47,32 @@ public class SocialRelationshipBO {
     private PresenceBO presenceBO;
     @EJB
     private ParameterBO parameterBO;
+    @Inject
+    private Logger logger;
     private StatefulRedisPubSubConnection<String, String> pubSubConnection;
     private SocialRelationshipListener listener;
-    private boolean enabled;
 
     @PostConstruct
     public void init() {
-        System.out.println("SocialRelationshipBO init");
-        this.enabled = parameterBO.getBoolParam("ENABLE_REDIS");
-        if (this.enabled) {
+        if (this.parameterBO.getBoolParam("ENABLE_REDIS")) {
             this.listener = new SocialRelationshipListener();
             this.pubSubConnection = this.redisBO.createPubSub();
             this.pubSubConnection.addListener(this.listener);
             this.pubSubConnection.sync().subscribe("game_presence_updates");
+        } else {
+            logger.warn("Redis is not enabled! Relationship updates and presence updates are disabled.");
         }
+        logger.info("Initialized social relationship system");
     }
 
     @PreDestroy
     public void shutdown() {
-        System.out.println("SocialRelationshipBO shutdown");
-
-        if (this.enabled) {
+        if (this.pubSubConnection != null) {
             this.pubSubConnection.removeListener(this.listener);
             this.pubSubConnection.close();
             this.listener = null;
         }
+        logger.info("Shutdown social relationship system");
     }
 
     public PersonaFriendsList getFriendsList(Long userId) {

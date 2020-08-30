@@ -7,11 +7,13 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.api.util.BuildInfo;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.inject.Inject;
 
 @Singleton
 @Startup
@@ -20,10 +22,12 @@ public class StartupBO {
     @EJB
     private OnlineUsersBO onlineUsersBO;
 
+    @Inject
+    private Logger logger;
+
     @PostConstruct
     public void init() {
-        System.out.printf("StartupBO: Server running on code version %s (%s) - branch %s%n", BuildInfo.getCommitID(), BuildInfo.getLongCommitID(),
-                BuildInfo.getBranch());
+        logger.info("StartupBO: Server running on code version {} ({}) - branch {}", BuildInfo.getCommitID(), BuildInfo.getLongCommitID(), BuildInfo.getBranch());
         onlineUsersBO.insertOnlineStats();
     }
 }

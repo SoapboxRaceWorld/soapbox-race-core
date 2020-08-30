@@ -11,20 +11,25 @@ import io.lettuce.core.RedisException;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.inject.Inject;
 
 @Startup
 @Singleton
 public class RedisBO {
 
-    private RedisClient redisClient;
-
     @EJB
     private ParameterBO parameterBO;
+
+    @Inject
+    private Logger logger;
+
+    private RedisClient redisClient;
     private StatefulRedisConnection<String, String> connection;
     private RedisURI redisURI;
 
@@ -40,9 +45,9 @@ public class RedisBO {
 
             try {
                 this.connection = this.redisClient.connect(redisURI);
-                System.out.println("Connected to Redis server!");
+                logger.info("Connected to Redis server at {}:{}", redisHost, redisPort);
             } catch (RedisException exception) {
-                throw new RuntimeException("Failed to connect to Redis server on " + redisHost + ":" + redisPort, exception);
+                throw new RuntimeException("Failed to connect to Redis server at " + redisHost + ":" + redisPort, exception);
             }
         }
     }

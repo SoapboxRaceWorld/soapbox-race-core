@@ -8,10 +8,12 @@ package com.soapboxrace.core.bo;
 
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
+import javax.inject.Inject;
 import java.util.List;
 
 @Singleton
@@ -24,24 +26,26 @@ public class PresenceBO {
     @EJB
     private ParameterBO parameterBO;
 
-    private boolean enabled;
+    @Inject
+    private Logger logger;
+
     private StatefulRedisPubSubConnection<String, String> pubSubConnection;
     private StatefulRedisConnection<String, String> connection;
 
     @PostConstruct
     public void init() {
-        this.enabled = parameterBO.getBoolParam("ENABLE_REDIS");
-        if (this.enabled) {
+        if (this.parameterBO.getBoolParam("ENABLE_REDIS")) {
             this.pubSubConnection = this.redisBO.createPubSub();
             this.connection = this.redisBO.getConnection();
+            logger.info("Initialized presence system");
+        } else {
+            logger.warn("Redis is not enabled! Presence system is disabled.");
         }
     }
 
     @PreDestroy
     public void shutdown() {
-        System.out.println("PresenceBO shutdown");
-
-        if (this.enabled) {
+        if (this.connection != null) {
             List<String> keys = this.connection.sync().keys("game_presence.*");
             if (!keys.isEmpty())
                 this.connection.sync().del(keys.toArray(new String[0]));
@@ -50,29 +54,25 @@ public class PresenceBO {
     }
 
     public void updatePresence(Long personaId, Long presence) {
-        if (this.enabled) {
-            if (personaId != 0L) {
-                Long currentPresence = this.getPresence(personaId);
+        if (this.connection != null && !personaId.equals(0L)) {
+            Long currentPresence = this.getPresence(personaId);
 
-                if (!currentPresence.equals(presence)) {
-                    this.connection.sync().set(getPresenceKey(personaId), presence.toString());
-                    this.pubSubConnection.sync().publish("game_presence_updates", personaId + "|" + presence);
-                }
+            if (!currentPresence.equals(presence)) {
+                this.connection.sync().set(getPresenceKey(personaId), presence.toString());
+                this.pubSubConnection.sync().publish("game_presence_updates", personaId + "|" + presence);
             }
         }
     }
 
     public void removePresence(Long personaId) {
-        if (this.enabled) {
-            if (personaId != 0L) {
-                updatePresence(personaId, 0L);
-                this.connection.sync().del(getPresenceKey(personaId));
-            }
+        if (this.connection != null && !personaId.equals(0L)) {
+            updatePresence(personaId, 0L);
+            this.connection.sync().del(getPresenceKey(personaId));
         }
     }
 
     public Long getPresence(Long personaId) {
-        if (!this.enabled)
+        if (this.connection == null)
             return 0L;
 
         String value = this.connection.sync().get(getPresenceKey(personaId));

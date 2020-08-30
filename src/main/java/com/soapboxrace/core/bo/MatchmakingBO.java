@@ -9,10 +9,12 @@ package com.soapboxrace.core.bo;
 import io.lettuce.core.KeyValue;
 import io.lettuce.core.ScanIterator;
 import io.lettuce.core.api.StatefulRedisConnection;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
+import javax.inject.Inject;
 
 /**
  * Responsible for managing the multiplayer matchmaking system.
@@ -35,24 +37,27 @@ public class MatchmakingBO {
     @EJB
     private ParameterBO parameterBO;
 
-    private boolean enabled;
+    @Inject
+    private Logger logger;
+
     private StatefulRedisConnection<String, String> redisConnection;
 
     @PostConstruct
     public void initialize() {
-        this.enabled = parameterBO.getBoolParam("ENABLE_REDIS");
-        if (this.enabled) {
+        if (this.parameterBO.getBoolParam("ENABLE_REDIS")) {
             this.redisConnection = this.redisBO.getConnection();
+            logger.info("Initialized matchmaking system");
+        } else {
+            logger.warn("Redis is not enabled! Matchmaking queue is disabled.");
         }
     }
 
     @PreDestroy
     public void shutdown() {
-        System.out.println("MatchmakingBO shutdown");
-
-        if (this.enabled) {
+        if (this.redisConnection != null) {
             this.redisConnection.sync().del("matchmaking_queue");
         }
+        logger.info("Shutdown matchmaking system");
     }
 
     /**
@@ -62,7 +67,7 @@ public class MatchmakingBO {
      * @param carClass  The class of the persona's current car.
      */
     public void addPlayerToQueue(Long personaId, Integer carClass) {
-        if (this.enabled) {
+        if (this.redisConnection != null) {
             this.redisConnection.sync().hset("matchmaking_queue", personaId.toString(), carClass.toString());
         }
     }
@@ -73,7 +78,7 @@ public class MatchmakingBO {
      * @param personaId The ID of the persona to remove from the queue.
      */
     public void removePlayerFromQueue(Long personaId) {
-        if (this.enabled) {
+        if (this.redisConnection != null) {
             this.redisConnection.sync().hdel("matchmaking_queue", personaId.toString());
         }
     }
@@ -85,7 +90,7 @@ public class MatchmakingBO {
      * @return The ID of the persona, or {@literal -1} if no persona was found.
      */
     public Long getPlayerFromQueue(Integer carClass) {
-        if (!this.enabled)
+        if (this.redisConnection == null)
             return -1L;
 
         ScanIterator<KeyValue<String, String>> iterator = ScanIterator.hscan(this.redisConnection.sync(), "matchmaking_queue");
@@ -110,7 +115,7 @@ public class MatchmakingBO {
      * @param eventId   the event ID
      */
     public void ignoreEvent(long personaId, long eventId) {
-        if (this.enabled) {
+        if (this.redisConnection != null) {
             this.redisConnection.sync().sadd("ignored_events." + personaId, Long.toString(eventId));
         }
     }
@@ -121,7 +126,7 @@ public class MatchmakingBO {
      * @param personaId the persona ID
      */
     public void resetIgnoredEvents(long personaId) {
-        if (this.enabled) {
+        if (this.redisConnection != null) {
             this.redisConnection.sync().del("ignored_events." + personaId);
         }
     }
@@ -134,7 +139,7 @@ public class MatchmakingBO {
      * @return {@code true} if the given event ID is in the list of ignored events for the given persona ID
      */
     public boolean isEventIgnored(long personaId, long eventId) {
-        if (this.enabled) {
+        if (this.redisConnection != null) {
             return this.redisConnection.sync().sismember("ignored_events." + personaId, Long.toString(eventId));
         }
 
