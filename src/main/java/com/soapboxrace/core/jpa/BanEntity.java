@@ -6,8 +6,6 @@
 
 package com.soapboxrace.core.jpa;
 
-import com.soapboxrace.core.jpa.convert.LocalDateTimeConverter;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -36,11 +34,9 @@ public class BanEntity {
     private String reason;
 
     @Column
-    @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime started;
 
     @Column(name = "ends_at")
-    @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime endsAt;
 
     @Column
