@@ -22,6 +22,7 @@ public class LoginAnnouncementEntity {
     private String imageUrl;
     private String type;
     private String target;
+    private String context;
 
     public int getId() {
         return id;
@@ -53,5 +54,13 @@ public class LoginAnnouncementEntity {
 
     public void setTarget(String target) {
         this.target = target;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
     }
 }

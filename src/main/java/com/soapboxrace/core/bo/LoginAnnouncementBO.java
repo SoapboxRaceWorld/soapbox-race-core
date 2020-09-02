@@ -30,7 +30,7 @@ public class LoginAnnouncementBO {
         List<LoginAnnouncementEntity> listOfLoginAnnoucement = loginAnnoucementDao.findAll();
         for (LoginAnnouncementEntity entity : listOfLoginAnnoucement) {
             LoginAnnouncementDefinition loginAnnouncementDefinition = new LoginAnnouncementDefinition();
-            loginAnnouncementDefinition.setContext(LoginAnnouncementContext.NOT_APPLICABLE);
+            loginAnnouncementDefinition.setContext(LoginAnnouncementContext.fromValue(entity.getContext()));
             loginAnnouncementDefinition.setId(entity.getId());
             loginAnnouncementDefinition.setImageChecksum(-1);
             loginAnnouncementDefinition.setImageUrl(entity.getImageUrl());
@@ -41,8 +41,7 @@ public class LoginAnnouncementBO {
 
         LoginAnnouncementsDefinition loginAnnouncementsDefinition = new LoginAnnouncementsDefinition();
         loginAnnouncementsDefinition.setAnnouncements(arrayOfLoginAnnouncementDefinition);
-        String announcementDomain = parameterBO.getStrParam("ANNOUNCEMENT_DOMAIN");
-        loginAnnouncementsDefinition.setImagesPath(announcementDomain);
+        loginAnnouncementsDefinition.setImagesPath(parameterBO.getStrParam("ANNOUNCEMENT_DOMAIN"));
         return loginAnnouncementsDefinition;
     }
 }
