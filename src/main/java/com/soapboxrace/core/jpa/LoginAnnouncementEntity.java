@@ -9,7 +9,7 @@ package com.soapboxrace.core.jpa;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "LOGIN_ANNOUCEMENT")
+@Table(name = "LOGIN_ANNOUNCEMENT")
 @NamedQueries({ //
         @NamedQuery(name = "LoginAnnouncementEntity.findAll", query = "SELECT obj FROM LoginAnnouncementEntity obj") //
 })
