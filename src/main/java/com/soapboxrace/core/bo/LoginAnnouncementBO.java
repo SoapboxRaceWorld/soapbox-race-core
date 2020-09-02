@@ -9,11 +9,13 @@ package com.soapboxrace.core.bo;
 import com.soapboxrace.core.dao.LoginAnnouncementDAO;
 import com.soapboxrace.core.jpa.LoginAnnouncementEntity;
 import com.soapboxrace.jaxb.http.*;
+import org.slf4j.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
+import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -28,10 +30,14 @@ public class LoginAnnouncementBO {
     @EJB
     private ParameterBO parameterBO;
 
+    @Inject
+    private Logger logger;
+
     private final ConcurrentMap<String, LoginAnnouncementsDefinition> announcementsCache = new ConcurrentHashMap<>();
 
     public void resetCachedAnnouncements() {
         announcementsCache.clear();
+        logger.info("Cleared announcement cache");
     }
 
     public LoginAnnouncementsDefinition getLoginAnnouncements(String language) {
