@@ -18,7 +18,7 @@ import java.util.List;
 public class LoginAnnouncementBO {
 
     @EJB
-    private LoginAnnouncementDAO loginAnnoucementDao;
+    private LoginAnnouncementDAO loginAnnouncementDao;
 
     @EJB
     private ParameterBO parameterBO;
@@ -27,7 +27,7 @@ public class LoginAnnouncementBO {
         ArrayOfLoginAnnouncementDefinition arrayOfLoginAnnouncementDefinition =
                 new ArrayOfLoginAnnouncementDefinition();
 
-        List<LoginAnnouncementEntity> listOfLoginAnnoucement = loginAnnoucementDao.findAllByLanguage(language);
+        List<LoginAnnouncementEntity> listOfLoginAnnoucement = loginAnnouncementDao.findAllByLanguage(language);
         for (LoginAnnouncementEntity entity : listOfLoginAnnoucement) {
             LoginAnnouncementDefinition loginAnnouncementDefinition = new LoginAnnouncementDefinition();
             loginAnnouncementDefinition.setContext(LoginAnnouncementContext.fromValue(entity.getContext()));
