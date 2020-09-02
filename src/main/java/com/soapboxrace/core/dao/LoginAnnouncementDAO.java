@@ -26,4 +26,11 @@ public class LoginAnnouncementDAO extends BaseDAO<LoginAnnouncementEntity, Integ
                 LoginAnnouncementEntity.class);
         return query.getResultList();
     }
+
+    public List<LoginAnnouncementEntity> findAllByLanguage(String language) {
+        TypedQuery<LoginAnnouncementEntity> query = entityManager.createNamedQuery("LoginAnnouncementEntity.findAllByLanguage",
+                LoginAnnouncementEntity.class);
+        query.setParameter("language", language);
+        return query.getResultList();
+    }
 }

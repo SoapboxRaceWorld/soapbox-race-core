@@ -23,11 +23,11 @@ public class LoginAnnouncementBO {
     @EJB
     private ParameterBO parameterBO;
 
-    public LoginAnnouncementsDefinition getLoginAnnouncements() {
+    public LoginAnnouncementsDefinition getLoginAnnouncements(String language) {
         ArrayOfLoginAnnouncementDefinition arrayOfLoginAnnouncementDefinition =
                 new ArrayOfLoginAnnouncementDefinition();
 
-        List<LoginAnnouncementEntity> listOfLoginAnnoucement = loginAnnoucementDao.findAll();
+        List<LoginAnnouncementEntity> listOfLoginAnnoucement = loginAnnoucementDao.findAllByLanguage(language);
         for (LoginAnnouncementEntity entity : listOfLoginAnnoucement) {
             LoginAnnouncementDefinition loginAnnouncementDefinition = new LoginAnnouncementDefinition();
             loginAnnouncementDefinition.setContext(LoginAnnouncementContext.fromValue(entity.getContext()));

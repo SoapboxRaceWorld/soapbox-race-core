@@ -11,7 +11,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "LOGIN_ANNOUNCEMENT")
 @NamedQueries({ //
-        @NamedQuery(name = "LoginAnnouncementEntity.findAll", query = "SELECT obj FROM LoginAnnouncementEntity obj") //
+        @NamedQuery(name = "LoginAnnouncementEntity.findAll", query = "SELECT obj FROM LoginAnnouncementEntity obj"), //
+        @NamedQuery(name = "LoginAnnouncementEntity.findAllByLanguage",
+                query = "SELECT obj FROM LoginAnnouncementEntity obj WHERE obj.language IS NULL OR obj.language = :language") //
 })
 public class LoginAnnouncementEntity {
 
@@ -23,6 +25,7 @@ public class LoginAnnouncementEntity {
     private String type;
     private String target;
     private String context;
+    private String language;
 
     public int getId() {
         return id;
@@ -62,5 +65,13 @@ public class LoginAnnouncementEntity {
 
     public void setContext(String context) {
         this.context = context;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

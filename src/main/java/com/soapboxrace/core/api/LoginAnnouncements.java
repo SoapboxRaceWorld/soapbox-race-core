@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 @Path("/LoginAnnouncements")
@@ -25,7 +26,7 @@ public class LoginAnnouncements {
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_XML)
-    public LoginAnnouncementsDefinition loginAnnouncements() {
-        return bo.getLoginAnnouncements();
+    public LoginAnnouncementsDefinition loginAnnouncements(@QueryParam("language") String language) {
+        return bo.getLoginAnnouncements(language);
     }
 }
