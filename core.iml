@@ -14,6 +14,7 @@
     <facet type="jpa" name="JPA">
       <configuration>
         <setting name="validation-enabled" value="true" />
+        <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="soapboxrace-pu" value="d9791c6e-3dd4-4196-83b9-b13ad16d6cf3" />
         </datasource-mapping>
