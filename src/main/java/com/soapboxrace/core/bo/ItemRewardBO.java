@@ -479,12 +479,12 @@ public class ItemRewardBO {
             int numProducts = productEntities.size();
 
             if (this.isWeighted) {
-                Map<Long, Double> weights = new HashMap<>();
+                Map<String, Double> weights = new HashMap<>();
                 double defaultWeight = 1.0d / numProducts;
 
                 for (ProductEntity productEntity : productEntities) {
                     Double dropWeight = productEntity.getDropWeight();
-                    weights.put(productEntity.getId(), dropWeight == null ? defaultWeight : dropWeight);
+                    weights.put(productEntity.getProductId(), dropWeight == null ? defaultWeight : dropWeight);
                 }
                 double weightSum = weights.values().stream().mapToDouble(d -> d).sum();
 
@@ -492,7 +492,7 @@ public class ItemRewardBO {
                 double random = Math.random() * weightSum;
 
                 for (int i = 0; i < productEntities.size(); i++) {
-                    random -= weights.get(productEntities.get(i).getId());
+                    random -= weights.get(productEntities.get(i).getProductId());
 
                     if (random <= 0.0d) {
                         randomIndex = i;
