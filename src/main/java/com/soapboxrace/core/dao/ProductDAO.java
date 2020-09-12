@@ -6,7 +6,7 @@
 
 package com.soapboxrace.core.dao;
 
-import com.soapboxrace.core.dao.util.LongKeyedDAO;
+import com.soapboxrace.core.dao.util.StringKeyedDAO;
 import com.soapboxrace.core.jpa.ProductEntity;
 
 import javax.ejb.Stateless;
@@ -17,9 +17,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Stateless
-public class ProductDAO extends LongKeyedDAO<ProductEntity> {
+public class ProductDAO extends StringKeyedDAO<ProductEntity> {
 
     public ProductDAO() {
         super(ProductEntity.class);
@@ -37,19 +38,9 @@ public class ProductDAO extends LongKeyedDAO<ProductEntity> {
         return query.getResultList();
     }
 
-    public ProductEntity findByProductId(String productId) {
-        TypedQuery<ProductEntity> query = entityManager.createNamedQuery("ProductEntity.findByProductId",
-                ProductEntity.class);
-        query.setParameter("productId", productId);
-
-        List<ProductEntity> results = query.getResultList();
-
-        if (results.isEmpty()) {
-            throw new RuntimeException("Could not find product with ID: " + productId);
-        }
-
-        return results.get(0);
-        //        return query.getSingleResult();
+    @Override
+    public ProductEntity find(String key) {
+        return Objects.requireNonNull(super.find(key), () -> "Could not find product with ID: " + key);
     }
 
     public ProductEntity findByEntitlementTag(String entitlementTag) {

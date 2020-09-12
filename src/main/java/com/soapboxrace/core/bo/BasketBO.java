@@ -89,14 +89,14 @@ public class BasketBO {
     private AmplifierDAO amplifierDAO;
 
     public ProductEntity findProduct(String productId) {
-        return productDao.findByProductId(productId);
+        return productDao.find(productId);
     }
 
     public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity) {
         CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
         int price =
-                (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCarEntity.getOwnedCar().getDurability()));
-        ProductEntity repairProduct = productDao.findByProductId(productId);
+                (int) (productDao.find(productId).getPrice() * (100 - defaultCarEntity.getOwnedCar().getDurability()));
+        ProductEntity repairProduct = productDao.find(productId);
 
         if (repairProduct == null) {
             return CommerceResultStatus.FAIL_INVALID_BASKET;
@@ -116,7 +116,7 @@ public class BasketBO {
         if (!parameterBO.getBoolParam("ENABLE_ECONOMY")) {
             return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
         }
-        ProductEntity powerupProduct = productDao.findByProductId(productId);
+        ProductEntity powerupProduct = productDao.find(productId);
 
         if (powerupProduct == null) {
             return CommerceResultStatus.FAIL_INVALID_BASKET;
@@ -162,7 +162,7 @@ public class BasketBO {
     }
 
     public CommerceResultStatus buyBundle(String productId, PersonaEntity personaEntity, CommerceResultTrans commerceResultTrans) {
-        ProductEntity bundleProduct = productDao.findByProductId(productId);
+        ProductEntity bundleProduct = productDao.find(productId);
 
         if (bundleProduct == null) {
             return CommerceResultStatus.FAIL_INVALID_BASKET;
@@ -195,7 +195,7 @@ public class BasketBO {
     }
 
     public CommerceResultStatus reviveTreasureHunt(String productId, PersonaEntity personaEntity) {
-        ProductEntity productEntity = productDao.findByProductId(productId);
+        ProductEntity productEntity = productDao.find(productId);
 
         if (!canPurchaseProduct(personaEntity, productEntity))
             return CommerceResultStatus.FAIL_LOCKED_PRODUCT_NOT_ACCESSIBLE_TO_THIS_USER;
@@ -213,7 +213,7 @@ public class BasketBO {
     }
 
     public CommerceResultStatus buyAmplifier(PersonaEntity personaEntity, String productId) {
-        ProductEntity productEntity = productDao.findByProductId(productId);
+        ProductEntity productEntity = productDao.find(productId);
 
         if (!canPurchaseProduct(personaEntity, productEntity))
             return CommerceResultStatus.FAIL_LOCKED_PRODUCT_NOT_ACCESSIBLE_TO_THIS_USER;

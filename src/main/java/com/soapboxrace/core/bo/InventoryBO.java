@@ -233,7 +233,7 @@ public class InventoryBO {
      */
     public InventoryItemEntity addInventoryItem(InventoryEntity inventoryEntity, String productId, int quantity,
                                                 LocalDateTime expirationDate, boolean ignoreLimits) {
-        ProductEntity productEntity = productDAO.findByProductId(productId);
+        ProductEntity productEntity = productDAO.find(productId);
 
         // Validation
         if (productEntity == null)
@@ -295,7 +295,7 @@ public class InventoryBO {
     @SuppressWarnings("UnusedReturnValue")
     public InventoryItemEntity addStackedInventoryItem(InventoryEntity inventoryEntity, String productId,
                                                        int quantity, boolean ignoreLimits) {
-        ProductEntity productEntity = productDAO.findByProductId(productId);
+        ProductEntity productEntity = productDAO.find(productId);
 
         // Validation
         if (productEntity == null)
