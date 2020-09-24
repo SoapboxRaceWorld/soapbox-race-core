@@ -38,6 +38,70 @@
     <orderEntry type="library" name="Maven: io.thorntail:container:2.7.0.Final" level="project" />
     <orderEntry type="library" name="Maven: io.thorntail:config-api:2.7.0" level="project" />
     <orderEntry type="library" name="Maven: io.thorntail:config-api-runtime:2.7.0" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:io:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:ee:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:request-controller:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-servlet:2.1.3.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-core:2.1.3.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.xnio:xnio-api:3.8.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.client:wildfly-client-config:1.0.1.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.jboss.xnio:xnio-nio:3.8.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.threads:jboss-threads:3.1.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:meta-spi:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:bean-validation:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:logstash:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:datasources:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:jca:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:connector:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:security:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:elytron:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:jaxrs:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:jaxrs-cdi:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.10.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.10.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.3" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.activation:jakarta.activation-api:1.2.1" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:cdi:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:cdi-config:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:microprofile-health:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:spi:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:msc:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:microprofile-config:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:microprofile-config-wildfly-config-api:2.7.0" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.config:smallrye-config:1.6.2" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.config:smallrye-config-common:1.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.microprofile.config:microprofile-config-api:1.4" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye:smallrye-health:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.microprofile.health:microprofile-health-api:2.2" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye:smallrye-health-extension-api:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:management:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:naming:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:management-console:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:mail:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:ejb:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:discovery:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:jaxrs-jaxb:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:hibernate-validator:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:jpa:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:infinispan:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:jmx:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:remoting:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:bootstrap:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:transactions:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:logging:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:hibernate:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:thorntail-runner:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:tools:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:fraction-metadata:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:maven-utils:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.annotation:javax.annotation-api:1.2" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:undertow:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:container:2.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:config-api:2.7.0" level="project" />
+    <orderEntry type="library" name="Maven: io.thorntail:config-api-runtime:2.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.common:wildfly-common:1.5.1.Final" level="project" />
     <orderEntry type="library" name="Maven: io.thorntail:io:2.7.0.Final" level="project" />
     <orderEntry type="library" name="Maven: io.thorntail:ee:2.7.0.Final" level="project" />
