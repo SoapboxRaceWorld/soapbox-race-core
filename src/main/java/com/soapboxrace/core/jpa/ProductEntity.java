@@ -24,9 +24,16 @@ import java.util.Set;
         @NamedQuery(name = "ProductEntity.findByLevelEnabled", //
                 query = "SELECT obj FROM ProductEntity obj WHERE " //
                         + "obj.enabled = :enabled AND "//
-                        + "obj.level <= :minLevel AND " //
+                        + "obj.minLevel <= :minLevel AND " //
                         + "(obj.premium = false or obj.premium = :premium )AND " //
                         + "obj.categoryName = :categoryName AND "//
+                        + "obj.productType = :productType"), //
+        @NamedQuery(name = "ProductEntity.findForEndRace", //
+                query = "SELECT obj FROM ProductEntity obj WHERE " //
+                        + "obj.enabled = true AND " //
+                        + "obj.level <= :level AND " //
+                        + "obj.categoryName = :categoryName AND " //
+                        + "obj.isDropable = true AND " //
                         + "obj.productType = :productType"), //
         @NamedQuery(name = "ProductEntity.findByProductId", query = "SELECT obj FROM ProductEntity obj WHERE obj" +
                 ".productId = :productId"), //
@@ -34,15 +41,30 @@ import java.util.Set;
                 ".entitlementTag = :entitlementTag"), //
         @NamedQuery(name = "ProductEntity.findByHash", query = "SELECT obj FROM ProductEntity obj WHERE obj.hash = " +
                 ":hash"), //
+        @NamedQuery(name = "ProductEntity.findByType", query = "SELECT obj FROM ProductEntity obj WHERE obj" +
+                ".productType = :type AND obj.enabled=true"), //
         @NamedQuery(name = "ProductEntity.findDropsByType", query = "SELECT obj FROM ProductEntity obj WHERE obj" +
                 ".productType = :type AND obj.isDropable = true AND obj.enabled = true AND obj.dropWeight IS NOT NULL" +
                 " AND obj.dropWeight > 0.0"), //
+        @NamedQuery(name = "ProductEntity.findDropsBySubTypeAndRarity", query = "SELECT obj FROM ProductEntity obj " +
+                "WHERE obj.subType = :subType AND obj.enabled=true AND obj.rarity = :rarity AND obj.isDropable = true" +
+                " AND obj.dropWeight >" +
+                " 0.0"),
+        @NamedQuery(name = "ProductEntity.findDropsByProdTypeAndRarity", query = "SELECT obj FROM ProductEntity obj " +
+                "WHERE obj.productType = :prodType AND obj.enabled=true AND obj.rarity = :rarity AND obj.isDropable =" +
+                " true AND obj" +
+                ".dropWeight > 0.0"),
 })
 public class ProductEntity implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne(targetEntity = ProductEntity.class)
-    @JoinColumn(name = "parentProductId", referencedColumnName = "productId")
+    @JoinColumn(name = "parentProductId", referencedColumnName = "id")
     private ProductEntity parentProduct;
+    private String categoryId;
     @Column(nullable = false)
     private String currency;
     private String description;
@@ -50,12 +72,12 @@ public class ProductEntity implements Serializable {
     private Integer hash;
     @Column(nullable = false)
     private String icon;
+    private int level;
     private String longDescription;
     private float price;
     private float resalePrice;
     private int priority;
     @Column(nullable = false)
-    @Id
     private String productId;
     private String productTitle;
     @Column(nullable = false)
@@ -67,7 +89,7 @@ public class ProductEntity implements Serializable {
     private String webLocation;
     private String categoryName;
     private boolean enabled;
-    private int level;
+    private int minLevel;
     private boolean premium = false;
     private boolean isDropable;
     private Integer topSpeed = 0;
@@ -85,6 +107,22 @@ public class ProductEntity implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     @Fetch(FetchMode.JOIN)
     private Set<ProductEntity> bundleItems;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public String getCurrency() {
         return currency;
@@ -124,6 +162,14 @@ public class ProductEntity implements Serializable {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public String getLongDescription() {
@@ -230,12 +276,12 @@ public class ProductEntity implements Serializable {
         this.enabled = enabled;
     }
 
-    public int getLevel() {
-        return level;
+    public int getMinLevel() {
+        return minLevel;
     }
 
-    public void setLevel(int minLevel) {
-        this.level = minLevel;
+    public void setMinLevel(int minLevel) {
+        this.minLevel = minLevel;
     }
 
     public boolean isPremium() {
