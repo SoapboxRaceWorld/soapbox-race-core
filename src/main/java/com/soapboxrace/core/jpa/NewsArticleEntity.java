@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Table(name = "NEWS_ARTICLE")
 @NamedQueries({
         @NamedQuery(name = "NewsArticleEntity.findAllByPersona",
-                query = "SELECT obj FROM NewsArticleEntity obj WHERE obj.persona.personaId = :id"),
+                query = "SELECT obj FROM NewsArticleEntity obj WHERE obj.persona.personaId = :id OR obj.persona IS NULL"),
         @NamedQuery(name = "NewsArticleEntity.deleteAllByPersona",
                 query = "DELETE FROM NewsArticleEntity obj WHERE obj.persona.personaId = :id"),
         @NamedQuery(name = "NewsArticleEntity.findAllByReferencedPersona",
