@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.bo.util.TimeConverter;
 import com.soapboxrace.core.dao.NewsArticleDAO;
 import com.soapboxrace.core.jpa.NewsArticleEntity;
 import com.soapboxrace.jaxb.http.ArrayOfNewsArticleTrans;
@@ -28,7 +29,7 @@ public class NewsArticleBO {
             NewsArticleTrans newsArticleTrans = new NewsArticleTrans();
             newsArticleTrans.setNewsId(newsArticleEntity.getId());
             newsArticleTrans.setPersonaId(personaId);
-            newsArticleTrans.setTimestamp(newsArticleEntity.getTimestamp());
+            newsArticleTrans.setTimestamp(TimeConverter.getTicks(newsArticleEntity.getTimestamp()));
             newsArticleTrans.setParameters(newsArticleEntity.getParameters());
             newsArticleTrans.setSticky(newsArticleEntity.getSticky());
             newsArticleTrans.setType(newsArticleEntity.getType().getTypeId());
