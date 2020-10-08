@@ -6,15 +6,13 @@
 
 package com.soapboxrace.core.bo;
 
-import javax.ejb.Stateless;
 import java.util.HashMap;
 import java.util.Map;
 
-@Stateless
-public class SceneryBO {
-    private final Map<String, Long> sceneryIds = new HashMap<>();
+public class SceneryUtil {
+    private static final Map<String, Long> sceneryIds = new HashMap<>();
 
-    {
+    static {
         sceneryIds.put("SCENERY_GROUP_NORMAL", 0L);
         sceneryIds.put("SCENERY_GROUP_OKTOBERFEST", 1L);
         sceneryIds.put("SCENERY_GROUP_HALLOWEEN", 2L);
@@ -22,11 +20,11 @@ public class SceneryBO {
         sceneryIds.put("SCENERY_GROUP_NEWYEARS", 5L);
     }
 
-    public long getSceneryId(String scenery) {
+    public static long getSceneryId(String scenery) {
         return sceneryIds.getOrDefault(scenery, 0L);
     }
 
-    public boolean isValid(String scenery) {
+    public static boolean isValid(String scenery) {
         return sceneryIds.containsKey(scenery);
     }
 }

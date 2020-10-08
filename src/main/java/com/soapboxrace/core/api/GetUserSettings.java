@@ -10,7 +10,7 @@ import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.GetServerInformationBO;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.RequestSessionInfo;
-import com.soapboxrace.core.bo.SceneryBO;
+import com.soapboxrace.core.bo.SceneryUtil;
 import com.soapboxrace.core.bo.util.ServerInformationVO;
 import com.soapboxrace.jaxb.http.ArrayOfLong;
 import com.soapboxrace.jaxb.http.ArrayOfString;
@@ -31,9 +31,6 @@ public class GetUserSettings {
     private GetServerInformationBO serverInformationBO;
 
     @EJB
-    private SceneryBO sceneryBO;
-
-    @EJB
     private ParameterBO parameterBO;
 
     @Inject
@@ -47,7 +44,7 @@ public class GetUserSettings {
         List<String> activatedSceneryGroups = serverInformation.getActivatedHolidaySceneryGroups();
         List<String> disactivatedSceneryGroups = serverInformation.getDisactivatedHolidaySceneryGroups();
         List<Long> sceneryIds = activatedSceneryGroups.stream()
-                .map(sceneryBO::getSceneryId)
+                .map(SceneryUtil::getSceneryId)
                 .collect(Collectors.toList());
 
         UserSettings userSettings = new UserSettings();
@@ -59,7 +56,7 @@ public class GetUserSettings {
         ArrayOfString arrayOfString = new ArrayOfString();
         arrayOfString.getString().addAll(
                 activatedSceneryGroups.stream()
-                        .filter(sceneryBO::isValid)
+                        .filter(SceneryUtil::isValid)
                         .collect(Collectors.toList()));
         userSettings.setActivatedHolidaySceneryGroups(arrayOfString);
         ArrayOfLong arrayOfLong = new ArrayOfLong();
@@ -68,7 +65,7 @@ public class GetUserSettings {
         ArrayOfString arrayOfString2 = new ArrayOfString();
         arrayOfString2.getString().addAll(
                 disactivatedSceneryGroups.stream()
-                        .filter(s -> sceneryBO.isValid(s.replace("_DISABLE", "")))
+                        .filter(s -> SceneryUtil.isValid(s.replace("_DISABLE", "")))
                         .collect(Collectors.toList()));
         userSettings.setDisactivatedHolidaySceneryGroups(arrayOfString2);
         userSettings.setFirstTimeLogin(false);
