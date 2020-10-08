@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.events.PersonaPresenceUpdated;
 import io.lettuce.core.KeyValue;
 import io.lettuce.core.ScanIterator;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 /**
@@ -144,5 +146,11 @@ public class MatchmakingBO {
         }
 
         return false;
+    }
+
+    @Asynchronous
+    @Lock(LockType.READ)
+    public void handlePersonaPresenceUpdated(@Observes PersonaPresenceUpdated personaPresenceUpdated) {
+        removePlayerFromQueue(personaPresenceUpdated.getPersonaId());
     }
 }

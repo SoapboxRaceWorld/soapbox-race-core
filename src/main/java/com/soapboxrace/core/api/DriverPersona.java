@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 
 @Path("/DriverPersona")
 public class DriverPersona {
+
     private final Pattern NAME_PATTERN = Pattern.compile("^[A-Z0-9]{3,15}$");
 
     @EJB
@@ -36,9 +37,6 @@ public class DriverPersona {
 
     @EJB
     private PresenceBO presenceBO;
-
-    @EJB
-    private MatchmakingBO matchmakingBO;
 
     @Inject
     private RequestSessionInfo requestSessionInfo;
@@ -135,7 +133,6 @@ public class DriverPersona {
                                         @QueryParam("presence") Long presence) {
         tokenSessionBo.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
         presenceBO.updatePresence(personaId, presence);
-        matchmakingBO.removePlayerFromQueue(personaId);
 
         return "";
     }

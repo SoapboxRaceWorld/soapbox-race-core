@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.events.PersonaPresenceUpdated;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -28,6 +30,9 @@ public class PresenceBO {
 
     @Inject
     private Logger logger;
+
+    @Inject
+    private Event<PersonaPresenceUpdated> personaPresenceUpdatedEvent;
 
     private StatefulRedisPubSubConnection<String, String> pubSubConnection;
     private StatefulRedisConnection<String, String> connection;
@@ -53,6 +58,7 @@ public class PresenceBO {
         }
     }
 
+    @Asynchronous
     public void updatePresence(Long personaId, Long presence) {
         if (this.connection != null && !personaId.equals(0L)) {
             Long currentPresence = this.getPresence(personaId);
@@ -60,6 +66,7 @@ public class PresenceBO {
             if (!currentPresence.equals(presence)) {
                 this.connection.sync().set(getPresenceKey(personaId), presence.toString());
                 this.pubSubConnection.sync().publish("game_presence_updates", personaId + "|" + presence);
+                personaPresenceUpdatedEvent.fire(new PersonaPresenceUpdated(personaId, presence));
             }
         }
     }
