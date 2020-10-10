@@ -10,69 +10,53 @@ import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.SocialRelationshipDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
+import com.soapboxrace.core.events.PersonaPresenceUpdated;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.SocialRelationshipEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.xmpp.XMPP_FriendPersonaType;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypePersonaBase;
-import io.lettuce.core.pubsub.RedisPubSubListener;
-import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.ejb.*;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 @Singleton
 @Startup
+@Lock(LockType.READ)
 public class SocialRelationshipBO {
     @EJB
     private SocialRelationshipDAO socialRelationshipDAO;
     @EJB
     private PersonaDAO personaDAO;
     @EJB
-    private RedisBO redisBO;
-    @EJB
     private OpenFireSoapBoxCli openFireSoapBoxCli;
     @EJB
     private DriverPersonaBO driverPersonaBO;
     @EJB
     private PresenceBO presenceBO;
-    @EJB
-    private ParameterBO parameterBO;
     @Inject
     private Logger logger;
-    private StatefulRedisPubSubConnection<String, String> pubSubConnection;
-    private SocialRelationshipListener listener;
 
     @PostConstruct
     public void init() {
-        if (this.parameterBO.getBoolParam("ENABLE_REDIS")) {
-            this.listener = new SocialRelationshipListener();
-            this.pubSubConnection = this.redisBO.createPubSub();
-            this.pubSubConnection.addListener(this.listener);
-            this.pubSubConnection.sync().subscribe("game_presence_updates");
-        } else {
-            logger.warn("Redis is not enabled! Relationship updates and presence updates are disabled.");
-        }
         logger.info("Initialized social relationship system");
     }
 
     @PreDestroy
     public void shutdown() {
-        if (this.pubSubConnection != null) {
-            this.pubSubConnection.removeListener(this.listener);
-            this.pubSubConnection.close();
-            this.listener = null;
-        }
         logger.info("Shutdown social relationship system");
+    }
+
+    @Asynchronous
+    public void handlePersonaPresenceUpdated(@Observes PersonaPresenceUpdated personaPresenceUpdated) {
+        sendPresencePackets(personaDAO.find(personaPresenceUpdated.getPersonaId()), personaPresenceUpdated.getPresence());
     }
 
     public PersonaFriendsList getFriendsList(Long userId) {
@@ -435,41 +419,5 @@ public class SocialRelationshipBO {
         personaPacket.setPersonaId(personaEntity.getPersonaId());
 
         openFireSoapBoxCli.send(personaPacket, targetPersonaId);
-    }
-
-    private class SocialRelationshipListener implements RedisPubSubListener<String, String> {
-        @Override
-        public void message(String channel, String message) {
-            if ("game_presence_updates".equals(channel)) {
-                Long[] parts = Arrays.stream(message.split("\\|")).map(Long::parseLong).toArray(Long[]::new);
-
-                sendPresencePackets(personaDAO.find(parts[0]), parts[1]);
-            }
-        }
-
-        @Override
-        public void message(String pattern, String channel, String message) {
-
-        }
-
-        @Override
-        public void subscribed(String channel, long count) {
-
-        }
-
-        @Override
-        public void psubscribed(String pattern, long count) {
-
-        }
-
-        @Override
-        public void unsubscribed(String channel, long count) {
-
-        }
-
-        @Override
-        public void punsubscribed(String pattern, long count) {
-
-        }
     }
 }
