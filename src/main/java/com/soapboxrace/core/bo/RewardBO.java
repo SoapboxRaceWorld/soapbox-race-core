@@ -146,10 +146,7 @@ public class RewardBO {
         CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
         Set<SkillModPartEntity> skillModParts = defaultCarEntity.getOwnedCar().getCustomCar().getSkillModParts();
         float skillMultiplier = 0f;
-        float maxSkillMultiplier = 30f;
-        if (SkillModRewardType.EXPLORER.equals(skillModRewardType)) {
-            maxSkillMultiplier = 50f;
-        }
+        float maxSkillMultiplier = parameterBO.getFloatParam("SKILL_" + skillModRewardType.toString() + "_MAX_VALUE", 30f);
         for (SkillModPartEntity skillModPartEntity : skillModParts) {
             ProductEntity productEntity = productDAO.findByHash(skillModPartEntity.getSkillModPartAttribHash());
             if (productEntity != null && productEntity.getProductTitle().equals(skillModRewardType.toString())) {
