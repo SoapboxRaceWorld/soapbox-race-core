@@ -7,18 +7,27 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.dao.CarSlotDAO;
+import com.soapboxrace.core.dao.CustomCarDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.jpa.CustomCarEntity;
 
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Stateless
 public class CarSlotBO {
 
     @EJB
     private CarSlotDAO carSlotDAO;
+
+    @EJB
+    private CustomCarDAO customCarDAO;
+
+    @EJB
+    private PerformanceBO performanceBO;
 
     @EJB
     private BasketBO basketBO;
@@ -30,5 +39,21 @@ public class CarSlotBO {
                 basketBO.removeCar(carSlotEntity.getPersona(), carSlotEntity.getOwnedCar().getId());
             }
         }
+    }
+
+    public List<CarSlotEntity> getPersonasCar(Long personaId) {
+        List<CarSlotEntity> carSlotEntities = carSlotDAO.findByPersonaId(personaId);
+
+        for (CarSlotEntity carSlotEntity : carSlotEntities) {
+            CustomCarEntity customCarEntity = carSlotEntity.getOwnedCar().getCustomCar();
+
+            if (customCarEntity.getCarClassHash() == 0) {
+                // CarClassHash can be set to 0 to recalculate rating/class
+                performanceBO.calcNewCarClass(customCarEntity);
+                customCarDAO.update(customCarEntity);
+            }
+        }
+
+        return carSlotEntities;
     }
 }

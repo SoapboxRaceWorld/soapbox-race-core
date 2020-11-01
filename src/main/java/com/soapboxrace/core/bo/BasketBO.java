@@ -21,7 +21,6 @@ import com.soapboxrace.jaxb.util.JAXBUtility;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -84,6 +83,9 @@ public class BasketBO {
 
     @EJB
     private CarDamageBO carDamageBO;
+
+    @EJB
+    private CarSlotBO carSlotBO;
 
     @EJB
     private AmplifierDAO amplifierDAO;
@@ -291,10 +293,6 @@ public class BasketBO {
         return carSlotEntity;
     }
 
-    public List<CarSlotEntity> getPersonasCar(Long personaId) {
-        return carSlotDAO.findByPersonaId(personaId);
-    }
-
     public boolean sellCar(TokenSessionEntity tokenSessionEntity, Long personaId, Long serialNumber) {
         this.tokenSessionBO.verifyPersonaOwnership(tokenSessionEntity, personaId);
 
@@ -397,7 +395,7 @@ public class BasketBO {
     }
 
     private int getPersonaCarCount(Long personaId) {
-        return getPersonasCar(personaId).size();
+        return carSlotBO.getPersonasCar(personaId).size();
     }
 
     private boolean canPurchaseProduct(PersonaEntity personaEntity, ProductEntity productEntity) {

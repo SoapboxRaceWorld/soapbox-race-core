@@ -38,6 +38,9 @@ public class PersonaBO {
     @EJB
     private CarDamageBO carDamageBO;
 
+    @EJB
+    private CarSlotBO carSlotBO;
+
     public void updateBadges(Long personaId, BadgeBundle badgeBundle) {
         PersonaEntity personaEntity = personaDAO.find(personaId);
 
@@ -91,7 +94,7 @@ public class PersonaBO {
 
     public CarSlotEntity getDefaultCarEntity(Long personaId) {
         PersonaEntity personaEntity = personaDAO.find(personaId);
-        List<CarSlotEntity> carSlotList = getPersonasCar(personaId);
+        List<CarSlotEntity> carSlotList = carSlotBO.getPersonasCar(personaId);
         int curCarIndex = personaEntity.getCurCarIndex();
         if (!carSlotList.isEmpty()) {
             if (curCarIndex >= carSlotList.size()) {
@@ -113,17 +116,13 @@ public class PersonaBO {
     }
 
     public void repairAllCars(PersonaEntity personaEntity) {
-        List<CarSlotEntity> carSlotEntities = getPersonasCar(personaEntity.getPersonaId());
+        List<CarSlotEntity> carSlotEntities = carSlotBO.getPersonasCar(personaEntity.getPersonaId());
 
         for (CarSlotEntity carSlotEntity : carSlotEntities) {
             OwnedCarEntity ownedCarEntity = carSlotEntity.getOwnedCar();
 
             carDamageBO.updateDurability(ownedCarEntity, 100);
         }
-    }
-
-    public List<CarSlotEntity> getPersonasCar(Long personaId) {
-        return carSlotDAO.findByPersonaId(personaId);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

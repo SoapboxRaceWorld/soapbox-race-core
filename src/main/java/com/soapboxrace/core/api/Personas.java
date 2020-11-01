@@ -33,6 +33,9 @@ public class Personas {
     private PersonaBO personaBO;
 
     @EJB
+    private CarSlotBO carSlotBO;
+
+    @EJB
     private CommerceBO commerceBO;
 
     @EJB
@@ -134,7 +137,7 @@ public class Personas {
         sessionBO.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
 
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
-        List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
+        List<CarSlotEntity> personasCar = carSlotBO.getPersonasCar(personaId);
         ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
         for (CarSlotEntity carSlotEntity : personasCar) {
             OwnedCarEntity ownedCarEntity = carSlotEntity.getOwnedCar();
@@ -211,7 +214,7 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public ArrayOfOwnedCarTrans carsGet(@PathParam(value = "personaId") Long personaId) {
         ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
-        List<CarSlotEntity> personasCar = basketBO.getPersonasCar(personaId);
+        List<CarSlotEntity> personasCar = carSlotBO.getPersonasCar(personaId);
         for (CarSlotEntity carSlotEntity : personasCar) {
             OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
             arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
