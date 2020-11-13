@@ -93,26 +93,45 @@ public class PersonaBO {
     }
 
     public CarSlotEntity getDefaultCarEntity(Long personaId) {
-        PersonaEntity personaEntity = personaDAO.find(personaId);
-        List<CarSlotEntity> carSlotList = carSlotBO.getPersonasCar(personaId);
-        int curCarIndex = personaEntity.getCurCarIndex();
-        if (!carSlotList.isEmpty()) {
-            if (curCarIndex >= carSlotList.size()) {
-                curCarIndex = carSlotList.size() - 1;
-                CarSlotEntity ownedCarEntity = carSlotList.get(curCarIndex);
-                changeDefaultCar(personaEntity, ownedCarEntity.getId());
+        int carSlotCount = carSlotBO.countPersonasCar(personaId);
+
+        if (carSlotCount > 0) {
+            PersonaEntity personaEntity = personaDAO.find(personaId);
+            int curCarIndex = personaEntity.getCurCarIndex();
+
+            if (curCarIndex >= carSlotCount) {
+                curCarIndex = carSlotCount - 1;
+                personaEntity.setCurCarIndex(curCarIndex);
+                personaDAO.update(personaEntity);
             }
-            return carSlotList.get(curCarIndex);
+
+            CarSlotEntity carSlotEntity = carSlotDAO.findByPersonaIdEager(personaId, curCarIndex);
+            CustomCarEntity customCarEntity = carSlotEntity.getOwnedCar().getCustomCar();
+            customCarEntity.getPaints().size();
+            customCarEntity.getPerformanceParts().size();
+            customCarEntity.getSkillModParts().size();
+            customCarEntity.getVinyls().size();
+            customCarEntity.getVisualParts().size();
+
+            return carSlotEntity;
         }
+
         return null;
     }
 
     public OwnedCarTrans getDefaultCar(Long personaId) {
+        Long startTime = System.currentTimeMillis();
         CarSlotEntity carSlotEntity = getDefaultCarEntity(personaId);
         if (carSlotEntity == null) {
             return new OwnedCarTrans();
         }
-        return OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
+        Long endFetchTime = System.currentTimeMillis();
+        OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
+        Long endTime = System.currentTimeMillis();
+
+        System.out.printf("defaultcar: total time %d ms, fetch time %d ms, xml convert time %d ms%n", endTime - startTime, endFetchTime - startTime, endTime - endFetchTime);
+
+        return ownedCarTrans;
     }
 
     public void repairAllCars(PersonaEntity personaEntity) {

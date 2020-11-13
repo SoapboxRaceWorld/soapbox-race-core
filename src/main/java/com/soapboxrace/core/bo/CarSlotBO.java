@@ -45,6 +45,11 @@ public class CarSlotBO {
 
         for (CarSlotEntity carSlotEntity : carSlotEntities) {
             CustomCarEntity customCarEntity = carSlotEntity.getOwnedCar().getCustomCar();
+            customCarEntity.getPaints().size();
+            customCarEntity.getPerformanceParts().size();
+            customCarEntity.getSkillModParts().size();
+            customCarEntity.getVinyls().size();
+            customCarEntity.getVisualParts().size();
 
             if (customCarEntity.getCarClassHash() == 0) {
                 // CarClassHash can be set to 0 to recalculate rating/class
@@ -54,5 +59,9 @@ public class CarSlotBO {
         }
 
         return carSlotEntities;
+    }
+
+    public int countPersonasCar(Long personaId) {
+        return carSlotDAO.findNumByPersonaId(personaId);
     }
 }

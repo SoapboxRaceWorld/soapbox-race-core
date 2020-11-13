@@ -10,10 +10,9 @@ import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.*;
 
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class OwnedCarConverter {
 
@@ -43,7 +42,7 @@ public class OwnedCarConverter {
 
         ArrayOfCustomPaintTrans arrayOfCustomPaintTrans = new ArrayOfCustomPaintTrans();
         List<CustomPaintTrans> customPaintTransList = arrayOfCustomPaintTrans.getCustomPaintTrans();
-        Set<PaintEntity> paints = customCarEntity.getPaints();
+        List<PaintEntity> paints = customCarEntity.getPaints();
         for (PaintEntity paintEntity : paints) {
             CustomPaintTrans customPaintTransTmp = new CustomPaintTrans();
             customPaintTransTmp.setGroup(paintEntity.getGroup());
@@ -57,7 +56,7 @@ public class OwnedCarConverter {
 
         ArrayOfPerformancePartTrans arrayOfPerformancePartTrans = new ArrayOfPerformancePartTrans();
         List<PerformancePartTrans> performancePartTransList = arrayOfPerformancePartTrans.getPerformancePartTrans();
-        Set<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
+        List<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
         for (PerformancePartEntity performancePartEntity : performanceParts) {
             PerformancePartTrans performancePartTrans = new PerformancePartTrans();
             performancePartTrans.setPerformancePartAttribHash(performancePartEntity.getPerformancePartAttribHash());
@@ -67,7 +66,7 @@ public class OwnedCarConverter {
 
         ArrayOfSkillModPartTrans arrayOfSkillModPartTrans = new ArrayOfSkillModPartTrans();
         List<SkillModPartTrans> skillModPartTransList = arrayOfSkillModPartTrans.getSkillModPartTrans();
-        Set<SkillModPartEntity> skillModParts = customCarEntity.getSkillModParts();
+        List<SkillModPartEntity> skillModParts = customCarEntity.getSkillModParts();
         for (SkillModPartEntity skillModPartEntity : skillModParts) {
             SkillModPartTrans skillModPartTrans = new SkillModPartTrans();
             skillModPartTrans.setIsFixed(skillModPartEntity.isFixed());
@@ -78,7 +77,7 @@ public class OwnedCarConverter {
 
         ArrayOfCustomVinylTrans arrayOfCustomVinylTrans = new ArrayOfCustomVinylTrans();
         List<CustomVinylTrans> customVinylTransList = arrayOfCustomVinylTrans.getCustomVinylTrans();
-        Set<VinylEntity> vinyls = customCarEntity.getVinyls();
+        List<VinylEntity> vinyls = customCarEntity.getVinyls();
         for (VinylEntity vinylEntity : vinyls) {
             CustomVinylTrans customVinylTransTmp = new CustomVinylTrans();
             customVinylTransTmp.setHash(vinylEntity.getHash());
@@ -108,7 +107,7 @@ public class OwnedCarConverter {
 
         ArrayOfVisualPartTrans arrayOfVisualPartTrans = new ArrayOfVisualPartTrans();
         List<VisualPartTrans> visualPartTransList = arrayOfVisualPartTrans.getVisualPartTrans();
-        Set<VisualPartEntity> visualParts = customCarEntity.getVisualParts();
+        List<VisualPartEntity> visualParts = customCarEntity.getVisualParts();
         for (VisualPartEntity visualPartEntity : visualParts) {
             VisualPartTrans visualPartTrans = new VisualPartTrans();
             visualPartTrans.setPartHash(visualPartEntity.getPartHash());
@@ -142,7 +141,7 @@ public class OwnedCarConverter {
     }
 
     public static void paints2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
-        Set<PaintEntity> paintEntityList = new HashSet<>();
+        List<PaintEntity> paintEntityList = new ArrayList<>();
         List<CustomPaintTrans> customPaintTrans = customCarTrans.getPaints().getCustomPaintTrans();
         for (CustomPaintTrans customPaintTransTmp : customPaintTrans) {
             PaintEntity paintEntity = new PaintEntity();
@@ -163,7 +162,7 @@ public class OwnedCarConverter {
     }
 
     public static void performanceParts2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
-        Set<PerformancePartEntity> performancePartEntityList = new HashSet<>();
+        List<PerformancePartEntity> performancePartEntityList = new ArrayList<>();
         List<PerformancePartTrans> performancePartTransList =
                 customCarTrans.getPerformanceParts().getPerformancePartTrans();
         for (PerformancePartTrans performancePartTransTmp : performancePartTransList) {
@@ -181,7 +180,7 @@ public class OwnedCarConverter {
     }
 
     public static void skillModParts2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
-        Set<SkillModPartEntity> skillModPartEntityList = new HashSet<>();
+        List<SkillModPartEntity> skillModPartEntityList = new ArrayList<>();
         List<SkillModPartTrans> skillModPartTransList = customCarTrans.getSkillModParts().getSkillModPartTrans();
         for (SkillModPartTrans skillModPartTransTmp : skillModPartTransList) {
             SkillModPartEntity skillModPartEntity = new SkillModPartEntity();
@@ -199,7 +198,7 @@ public class OwnedCarConverter {
     }
 
     public static void vinyls2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
-        Set<VinylEntity> vinylEntityList = new HashSet<>();
+        List<VinylEntity> vinylEntityList = new ArrayList<>();
         List<CustomVinylTrans> customVinylTrans = customCarTrans.getVinyls().getCustomVinylTrans();
         for (CustomVinylTrans customVinylTransTmp : customVinylTrans) {
             VinylEntity vinylEntity = new VinylEntity();
@@ -236,7 +235,7 @@ public class OwnedCarConverter {
     }
 
     public static void visuallParts2NewEntity(CustomCarTrans customCarTrans, CustomCarEntity customCarEntity) {
-        Set<VisualPartEntity> visualPartEntityList = new HashSet<>();
+        List<VisualPartEntity> visualPartEntityList = new ArrayList<>();
         List<VisualPartTrans> visualPartTransList = customCarTrans.getVisualParts().getVisualPartTrans();
         for (VisualPartTrans visualPartTransTmp : visualPartTransList) {
             VisualPartEntity visualPartEntity = new VisualPartEntity();

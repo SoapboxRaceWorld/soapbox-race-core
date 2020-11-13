@@ -349,7 +349,7 @@ public class BasketBO {
             personaEntity.setCurCarIndex(curCarIndex - 1);
         } else {
             // Worst case: count cars again and subtract 1 to get new index
-            personaEntity.setCurCarIndex(carSlotDAO.findNumByPersonaId(personaEntity.getPersonaId()).intValue() - 1);
+            personaEntity.setCurCarIndex(carSlotDAO.findNumByPersonaId(personaEntity.getPersonaId()) - 1);
         }
 
         personaDao.update(personaEntity);

@@ -12,15 +12,17 @@ import javax.persistence.*;
 @Table(name = "CARSLOT")
 @NamedQueries({
         @NamedQuery(name = "CarSlotEntity.findByPersonaId", //
+                query = "SELECT obj FROM CarSlotEntity obj WHERE obj.persona.id = :persona ORDER BY obj.id"),
+        @NamedQuery(name = "CarSlotEntity.findByPersonaIdEager", //
                 query = "SELECT obj FROM CarSlotEntity obj " +
                         "   INNER JOIN FETCH obj.ownedCar oc" +
                         "       INNER JOIN FETCH oc.customCar cc " +
-                        "WHERE obj.persona = :persona "), //
+                        "WHERE obj.persona.id = :persona ORDER BY obj.id"), //
         @NamedQuery(name = "CarSlotEntity.findNumNonRentalsByPersonaId", //
-                query = "SELECT COUNT(obj) FROM CarSlotEntity obj INNER JOIN obj.ownedCar oc WHERE obj.persona = :persona" +
+                query = "SELECT COUNT(obj) FROM CarSlotEntity obj INNER JOIN obj.ownedCar oc WHERE obj.persona.id = :persona" +
                         " AND oc.expirationDate IS NULL"), //
         @NamedQuery(name = "CarSlotEntity.findNumByPersonaId",
-                query = "SELECT COUNT(obj) FROM CarSlotEntity obj WHERE obj.persona = :persona"),
+                query = "SELECT COUNT(obj) FROM CarSlotEntity obj WHERE obj.persona.id = :persona"),
         @NamedQuery(name = "CarSlotEntity.deleteByPersona", //
                 query = "DELETE FROM CarSlotEntity obj WHERE obj.persona = :persona"), //
         @NamedQuery(name = "CarSlotEntity.findAllExpired", //
@@ -32,7 +34,7 @@ public class CarSlotEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PersonaId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_CARSLOT_PERSONA"))
     private PersonaEntity persona;
 

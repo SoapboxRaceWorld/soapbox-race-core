@@ -23,33 +23,40 @@ public class CarSlotDAO extends LongKeyedDAO<CarSlotEntity> {
     }
 
     public List<CarSlotEntity> findByPersonaId(Long personaId) {
-        PersonaEntity personaEntity = new PersonaEntity();
-        personaEntity.setPersonaId(personaId);
-
         TypedQuery<CarSlotEntity> query = entityManager.createNamedQuery("CarSlotEntity.findByPersonaId",
                 CarSlotEntity.class);
-        query.setParameter("persona", personaEntity);
+        query.setParameter("persona", personaId);
+        return query.getResultList();
+    }
+
+    public CarSlotEntity findByPersonaIdEager(Long personaId, int index) {
+        TypedQuery<CarSlotEntity> query = entityManager.createNamedQuery("CarSlotEntity.findByPersonaIdEager",
+                CarSlotEntity.class);
+        query.setParameter("persona", personaId);
+        query.setFirstResult(index);
+        query.setMaxResults(1);
+        return query.getSingleResult();
+    }
+
+    public List<CarSlotEntity> findByPersonaIdEager(Long personaId) {
+        TypedQuery<CarSlotEntity> query = entityManager.createNamedQuery("CarSlotEntity.findByPersonaIdEager",
+                CarSlotEntity.class);
+        query.setParameter("persona", personaId);
         return query.getResultList();
     }
 
     public Long findNumNonRentalsByPersonaId(Long personaId) {
-        PersonaEntity personaEntity = new PersonaEntity();
-        personaEntity.setPersonaId(personaId);
-
         TypedQuery<Long> query = entityManager.createNamedQuery("CarSlotEntity.findNumNonRentalsByPersonaId",
                 Long.class);
-        query.setParameter("persona", personaEntity);
+        query.setParameter("persona", personaId);
         return query.getSingleResult();
     }
 
-    public Long findNumByPersonaId(Long personaId) {
-        PersonaEntity personaEntity = new PersonaEntity();
-        personaEntity.setPersonaId(personaId);
-
+    public int findNumByPersonaId(Long personaId) {
         TypedQuery<Long> query = entityManager.createNamedQuery("CarSlotEntity.findNumByPersonaId",
                 Long.class);
-        query.setParameter("persona", personaEntity);
-        return query.getSingleResult();
+        query.setParameter("persona", personaId);
+        return query.getSingleResult().intValue();
     }
 
     public List<CarSlotEntity> findAllExpired() {
