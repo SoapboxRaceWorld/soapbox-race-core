@@ -395,7 +395,7 @@ public class BasketBO {
     }
 
     private int getPersonaCarCount(Long personaId) {
-        return carSlotBO.getPersonasCar(personaId).size();
+        return carSlotBO.countPersonasCar(personaId);
     }
 
     private boolean canPurchaseProduct(PersonaEntity personaEntity, ProductEntity productEntity) {
