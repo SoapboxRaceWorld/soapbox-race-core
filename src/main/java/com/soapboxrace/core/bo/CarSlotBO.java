@@ -11,13 +11,12 @@ import com.soapboxrace.core.dao.CustomCarDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CustomCarEntity;
 
-import javax.ejb.EJB;
-import javax.ejb.Schedule;
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Stateless
+@Singleton
+@Lock(LockType.READ)
 public class CarSlotBO {
 
     @EJB
