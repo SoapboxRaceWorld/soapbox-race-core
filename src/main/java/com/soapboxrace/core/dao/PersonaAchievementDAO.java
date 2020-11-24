@@ -22,15 +22,13 @@ public class PersonaAchievementDAO extends LongKeyedDAO<PersonaAchievementEntity
     }
 
     public List<PersonaAchievementEntity> findAllByPersonaId(Long personaId) {
-        TypedQuery<PersonaAchievementEntity> query = this.entityManager.createNamedQuery("PersonaAchievementEntity" +
-                ".findAllByPersonaId", PersonaAchievementEntity.class);
+        TypedQuery<PersonaAchievementEntity> query = this.entityManager.createNamedQuery("PersonaAchievementEntity.findAllByPersonaId", PersonaAchievementEntity.class);
         query.setParameter("personaId", personaId);
         return query.getResultList();
     }
 
     public PersonaAchievementEntity findByPersonaIdAndAchievementId(Long personaId, Long achievementId) {
-        TypedQuery<PersonaAchievementEntity> query = this.entityManager.createNamedQuery("PersonaAchievementEntity" +
-                ".findByPersonaIdAndAchievementId", PersonaAchievementEntity.class);
+        TypedQuery<PersonaAchievementEntity> query = this.entityManager.createNamedQuery("PersonaAchievementEntity.findByPersonaIdAndAchievementId", PersonaAchievementEntity.class);
         query.setParameter("personaId", personaId);
         query.setParameter("achievementId", achievementId);
 

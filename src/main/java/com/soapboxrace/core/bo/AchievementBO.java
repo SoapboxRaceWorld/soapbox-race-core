@@ -19,14 +19,17 @@ import com.soapboxrace.jaxb.xmpp.AchievementProgress;
 import com.soapboxrace.jaxb.xmpp.AchievementsAwarded;
 import com.soapboxrace.jaxb.xmpp.XMPP_ResponseTypeAchievementsAwarded;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.*;
 import javax.script.ScriptException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Singleton
 @Lock(LockType.READ)
+@Startup
 public class AchievementBO {
     public static final DateTimeFormatter RANK_COMPLETED_AT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss");
     @EJB
@@ -51,6 +54,30 @@ public class AchievementBO {
     private PersonaDAO personaDAO;
     @EJB
     private OpenFireSoapBoxCli openFireSoapBoxCli;
+
+    private List<AchievementEntity> achievementEntities;
+
+    @PostConstruct
+    public void onStartup() {
+        this.achievementEntities = achievementDAO.findAll();
+        benchmark();
+    }
+
+    private void benchmark() {
+
+        // TEMP DEV CODE
+        long start = System.currentTimeMillis();
+        int numIterations = 1000;
+        for (int i = 0; i < numIterations; i++) {
+            loadAll(100L);
+        }
+        long end = System.currentTimeMillis();
+
+        long timeDiff = end - start;
+        float period = ((float) timeDiff) / (float) numIterations;
+
+        System.out.printf("AchievementBO startup benchmark: %d iterations took %d ms (%f ms per iteration)%n", numIterations, timeDiff, period);
+    }
 
     @Schedule(minute = "*/30", hour = "*")
     public void updateRankRarities() {
@@ -95,6 +122,120 @@ public class AchievementBO {
         achievementUpdateInfoList.clear();
     }
 
+    public AchievementsPacket loadAll(Long personaId) {
+        if (personaId.equals(0L)) {
+            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, true);
+        }
+
+        AchievementsPacket achievementsPacket = new AchievementsPacket();
+        achievementsPacket.setPersonaId(personaId);
+        achievementsPacket.setBadges(new ArrayOfBadgeDefinitionPacket());
+        achievementsPacket.setDefinitions(new ArrayOfAchievementDefinitionPacket());
+
+        Map<Long, PersonaAchievementEntity> personaAchievementEntityMap = personaAchievementDAO.findAllByPersonaId(personaId)
+                .stream()
+                .collect(Collectors.toMap(p -> p.getAchievementEntity().getId(), p -> p));
+        for (AchievementEntity achievementEntity : /*achievementDAO.findAll()*/ achievementEntities) {
+            AchievementDefinitionPacket achievementDefinitionPacket = new AchievementDefinitionPacket();
+
+            achievementDefinitionPacket.setAchievementDefinitionId(achievementEntity.getId().intValue());
+            achievementDefinitionPacket.setAchievementRanks(new ArrayOfAchievementRankPacket());
+            achievementDefinitionPacket.setBadgeDefinitionId(achievementEntity.getBadgeDefinitionEntity().getId().intValue());
+            achievementDefinitionPacket.setIsVisible(achievementEntity.getVisible());
+            achievementDefinitionPacket.setProgressText(achievementEntity.getProgressText());
+            achievementDefinitionPacket.setStatConversion(StatConversion.fromValue(achievementEntity.getStatConversion()));
+            achievementDefinitionPacket.setCanProgress(true);
+
+            PersonaAchievementEntity personaAchievementEntity = personaAchievementEntityMap.get(achievementEntity.getId());
+
+            if (personaAchievementEntity != null) {
+                achievementDefinitionPacket.setCanProgress(personaAchievementEntity.isCanProgress());
+                achievementDefinitionPacket.setCurrentValue(personaAchievementEntity.getCurrentValue());
+            }
+
+            for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
+                AchievementRankPacket rankPacket = new AchievementRankPacket();
+                rankPacket.setAchievedOn("0001-01-01T00:00:00");
+                rankPacket.setIsRare(achievementRankEntity.isRare());
+                rankPacket.setRarity(achievementRankEntity.getRarity());
+                rankPacket.setRank(achievementRankEntity.getRank().shortValue());
+                rankPacket.setRewardDescription(achievementRankEntity.getRewardDescription());
+                rankPacket.setRewardType(achievementRankEntity.getRewardType());
+                rankPacket.setRewardVisualStyle(achievementRankEntity.getRewardVisualStyle());
+                rankPacket.setPoints(achievementRankEntity.getPoints().shortValue());
+                rankPacket.setAchievementRankId(achievementRankEntity.getId().intValue());
+                if (achievementRankEntity.getRank().equals(1)) {
+                    // NOTE 17.05.2020: this is apparently necessary, game ignores updates otherwise
+                    rankPacket.setState(AchievementState.IN_PROGRESS);
+                } else {
+                    rankPacket.setState(AchievementState.LOCKED);
+                }
+                rankPacket.setThresholdValue(achievementRankEntity.getThresholdValue());
+
+                if (personaAchievementEntity != null && personaAchievementEntity.getRanks().size() >= achievementRankEntity.getRank()) {
+                    PersonaAchievementRankEntity personaAchievementRankEntity = personaAchievementEntity.getRanks().get(achievementRankEntity.getRank() - 1);
+                    rankPacket.setState(AchievementState.fromValue(personaAchievementRankEntity.getState()));
+
+                    if (personaAchievementRankEntity.getAchievedOn() != null) {
+                        rankPacket.setAchievedOn(personaAchievementRankEntity.getAchievedOn().format(RANK_COMPLETED_AT_FORMATTER));
+                    }
+                }
+
+                achievementDefinitionPacket.getAchievementRanks().getAchievementRankPacket().add(rankPacket);
+            }
+
+            achievementsPacket.getDefinitions().getAchievementDefinitionPacket().add(achievementDefinitionPacket);
+        }
+
+        for (BadgeDefinitionEntity badgeDefinitionEntity : badgeDefinitionDAO.findAll()) {
+            BadgeDefinitionPacket badgeDefinitionPacket = new BadgeDefinitionPacket();
+            badgeDefinitionPacket.setBackground(badgeDefinitionEntity.getBackground());
+            badgeDefinitionPacket.setBorder(badgeDefinitionEntity.getBorder());
+            badgeDefinitionPacket.setDescription(badgeDefinitionEntity.getDescription());
+            badgeDefinitionPacket.setIcon(badgeDefinitionEntity.getIcon());
+            badgeDefinitionPacket.setName(badgeDefinitionEntity.getName());
+            badgeDefinitionPacket.setBadgeDefinitionId(badgeDefinitionEntity.getId().intValue());
+            achievementsPacket.getBadges().getBadgeDefinitionPacket().add(badgeDefinitionPacket);
+        }
+
+        return achievementsPacket;
+    }
+
+    public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
+        PersonaEntity personaEntity = personaDAO.find(personaId);
+        PersonaAchievementRankEntity personaAchievementRankEntity =
+                personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, achievementRankId);
+
+        if (personaAchievementRankEntity == null) {
+            throw new IllegalArgumentException(personaId + " does not have " + achievementRankId);
+        }
+
+        if (!"RewardWaiting".equals(personaAchievementRankEntity.getState())) {
+            throw new IllegalArgumentException(personaId + " has no reward for " + achievementRankId);
+        }
+
+        AchievementRewards achievementRewards = new AchievementRewards();
+        achievementRewards.setAchievementRankId(achievementRankId);
+        achievementRewards.setVisualStyle(personaAchievementRankEntity.getAchievementRankEntity().getRewardVisualStyle());
+        achievementRewards.setStatus(CommerceResultStatus.SUCCESS);
+        ItemRewardBO.RewardedItemsContainer rewards = itemRewardBO.getRewards(
+                personaEntity,
+                achievementRewardDAO.findByDescription(personaAchievementRankEntity.getAchievementRankEntity().getRewardDescription())
+                        .getRewardScript());
+        itemRewardBO.convertRewards(rewards, achievementRewards);
+        achievementRewards.setWallets(new ArrayOfWalletTrans());
+
+        achievementRewards.getWallets().getWalletTrans().add(new WalletTrans() {{
+            setBalance(personaEntity.getCash());
+            setCurrency("CASH");
+        }});
+
+        personaAchievementRankEntity.setState("Completed");
+        personaAchievementRankDAO.update(personaAchievementRankEntity);
+
+        return achievementRewards;
+    }
+
     private void sendUpdateMessage(PersonaEntity personaEntity, List<AchievementUpdateInfo> achievementUpdateInfoList, List<BadgePacket> badgePacketList) {
         AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
         achievementsAwarded.setScore(personaEntity.getScore());
@@ -134,122 +275,6 @@ public class AchievementBO {
         responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
 
         openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
-    }
-
-    public AchievementRewards redeemReward(Long personaId, Long achievementRankId) {
-        PersonaEntity personaEntity = personaDAO.find(personaId);
-        PersonaAchievementRankEntity personaAchievementRankEntity =
-                personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId, achievementRankId);
-
-        if (personaAchievementRankEntity == null) {
-            throw new IllegalArgumentException(personaId + " does not have " + achievementRankId);
-        }
-
-        if (!"RewardWaiting".equals(personaAchievementRankEntity.getState())) {
-            throw new IllegalArgumentException(personaId + " has no reward for " + achievementRankId);
-        }
-
-        AchievementRewards achievementRewards = new AchievementRewards();
-        achievementRewards.setAchievementRankId(achievementRankId);
-        achievementRewards.setVisualStyle(personaAchievementRankEntity.getAchievementRankEntity().getRewardVisualStyle());
-        achievementRewards.setStatus(CommerceResultStatus.SUCCESS);
-        ItemRewardBO.RewardedItemsContainer rewards = itemRewardBO.getRewards(
-                personaEntity,
-                achievementRewardDAO.findByDescription(personaAchievementRankEntity.getAchievementRankEntity().getRewardDescription())
-                        .getRewardScript());
-        itemRewardBO.convertRewards(rewards, achievementRewards);
-        achievementRewards.setWallets(new ArrayOfWalletTrans());
-
-        achievementRewards.getWallets().getWalletTrans().add(new WalletTrans() {{
-            setBalance(personaEntity.getCash());
-            setCurrency("CASH");
-        }});
-
-        personaAchievementRankEntity.setState("Completed");
-        personaAchievementRankDAO.update(personaAchievementRankEntity);
-
-        return achievementRewards;
-    }
-
-    public AchievementsPacket loadAll(Long personaId) {
-        if (personaId.equals(0L)) {
-            throw new EngineException(EngineExceptionCode.FailedSessionSecurityPolicy, true);
-        }
-
-        AchievementsPacket achievementsPacket = new AchievementsPacket();
-        achievementsPacket.setPersonaId(personaId);
-        achievementsPacket.setBadges(new ArrayOfBadgeDefinitionPacket());
-        achievementsPacket.setDefinitions(new ArrayOfAchievementDefinitionPacket());
-
-        for (AchievementEntity achievementEntity : achievementDAO.findAll()) {
-            AchievementDefinitionPacket achievementDefinitionPacket = new AchievementDefinitionPacket();
-
-            achievementDefinitionPacket.setAchievementDefinitionId(achievementEntity.getId().intValue());
-            achievementDefinitionPacket.setAchievementRanks(new ArrayOfAchievementRankPacket());
-            achievementDefinitionPacket.setBadgeDefinitionId(achievementEntity.getBadgeDefinitionEntity().getId().intValue());
-            achievementDefinitionPacket.setIsVisible(achievementEntity.getVisible());
-            achievementDefinitionPacket.setProgressText(achievementEntity.getProgressText());
-            achievementDefinitionPacket.setStatConversion(StatConversion.fromValue(achievementEntity.getStatConversion()));
-
-            PersonaAchievementEntity personaAchievementEntity =
-                    personaAchievementDAO.findByPersonaIdAndAchievementId(personaId, achievementEntity.getId());
-
-            if (personaAchievementEntity != null) {
-                achievementDefinitionPacket.setCanProgress(personaAchievementEntity.isCanProgress());
-                achievementDefinitionPacket.setCurrentValue(personaAchievementEntity.getCurrentValue());
-            } else {
-                achievementDefinitionPacket.setCanProgress(true);
-            }
-
-            for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
-                AchievementRankPacket rankPacket = new AchievementRankPacket();
-                rankPacket.setAchievedOn("0001-01-01T00:00:00");
-                rankPacket.setIsRare(achievementRankEntity.isRare());
-                rankPacket.setRarity(achievementRankEntity.getRarity());
-                rankPacket.setRank(achievementRankEntity.getRank().shortValue());
-                rankPacket.setRewardDescription(achievementRankEntity.getRewardDescription());
-                rankPacket.setRewardType(achievementRankEntity.getRewardType());
-                rankPacket.setRewardVisualStyle(achievementRankEntity.getRewardVisualStyle());
-                rankPacket.setPoints(achievementRankEntity.getPoints().shortValue());
-                rankPacket.setAchievementRankId(achievementRankEntity.getId().intValue());
-                if (achievementRankEntity.getRank().equals(1)) {
-                    // NOTE 17.05.2020: this is apparently necessary, game ignores updates otherwise
-                    rankPacket.setState(AchievementState.IN_PROGRESS);
-                } else {
-                    rankPacket.setState(AchievementState.LOCKED);
-                }
-                rankPacket.setThresholdValue(achievementRankEntity.getThresholdValue());
-
-                PersonaAchievementRankEntity personaAchievementRankEntity =
-                        personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaId,
-                                achievementRankEntity.getId());
-
-                if (personaAchievementRankEntity != null) {
-                    rankPacket.setState(AchievementState.fromValue(personaAchievementRankEntity.getState()));
-
-                    if (personaAchievementRankEntity.getAchievedOn() != null) {
-                        rankPacket.setAchievedOn(personaAchievementRankEntity.getAchievedOn().format(RANK_COMPLETED_AT_FORMATTER));
-                    }
-                }
-
-                achievementDefinitionPacket.getAchievementRanks().getAchievementRankPacket().add(rankPacket);
-            }
-
-            achievementsPacket.getDefinitions().getAchievementDefinitionPacket().add(achievementDefinitionPacket);
-        }
-
-        for (BadgeDefinitionEntity badgeDefinitionEntity : badgeDefinitionDAO.findAll()) {
-            BadgeDefinitionPacket badgeDefinitionPacket = new BadgeDefinitionPacket();
-            badgeDefinitionPacket.setBackground(badgeDefinitionEntity.getBackground());
-            badgeDefinitionPacket.setBorder(badgeDefinitionEntity.getBorder());
-            badgeDefinitionPacket.setDescription(badgeDefinitionEntity.getDescription());
-            badgeDefinitionPacket.setIcon(badgeDefinitionEntity.getIcon());
-            badgeDefinitionPacket.setName(badgeDefinitionEntity.getName());
-            badgeDefinitionPacket.setBadgeDefinitionId(badgeDefinitionEntity.getId().intValue());
-            achievementsPacket.getBadges().getBadgeDefinitionPacket().add(badgeDefinitionPacket);
-        }
-
-        return achievementsPacket;
     }
 
     /**

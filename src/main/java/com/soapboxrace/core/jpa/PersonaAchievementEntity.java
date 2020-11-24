@@ -6,6 +6,11 @@
 
 package com.soapboxrace.core.jpa;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -41,6 +46,8 @@ public class PersonaAchievementEntity {
 
     @OneToMany(mappedBy = "personaAchievementEntity", targetEntity = PersonaAchievementRankEntity.class, cascade =
             CascadeType.DETACH, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Fetch(FetchMode.SUBSELECT)
     private List<PersonaAchievementRankEntity> ranks;
 
     public Long getId() {
