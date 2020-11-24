@@ -8,8 +8,6 @@ package com.soapboxrace.core.jpa;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -103,9 +101,8 @@ public class ProductEntity implements Serializable {
     private Integer rarity;
     private Double dropWeight;
 
-    @OneToMany(mappedBy = "parentProduct", targetEntity = ProductEntity.class, fetch = FetchType.EAGER)
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "parentProduct", targetEntity = ProductEntity.class, fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
     private Set<ProductEntity> bundleItems;
 
     public Long getId() {

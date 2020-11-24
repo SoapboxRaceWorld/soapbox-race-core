@@ -84,7 +84,12 @@ public class ProductBO {
             premium = personaEntity.getUser().isPremium();
             level = personaEntity.getLevel();
         }
-        return productDAO.findByLevelEnabled(categoryName, productType, level, true, premium);
+        List<ProductEntity> productEntities = productDAO.findByLevelEnabled(categoryName, productType, level, true, premium);
+
+        for (ProductEntity product : productEntities) {
+            product.getBundleItems().size();
+        }
+        return productEntities;
     }
 
     public ProductEntity getRandomDrop(String productType) {
