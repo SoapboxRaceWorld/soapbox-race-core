@@ -56,10 +56,12 @@ public class AchievementBO {
     private OpenFireSoapBoxCli openFireSoapBoxCli;
 
     private List<AchievementEntity> achievementEntities;
+    private List<BadgeDefinitionEntity> badgeDefinitionEntities;
 
     @PostConstruct
     public void onStartup() {
         this.achievementEntities = achievementDAO.findAll();
+        this.badgeDefinitionEntities = badgeDefinitionDAO.findAll();
         benchmark();
     }
 
@@ -187,7 +189,7 @@ public class AchievementBO {
             achievementsPacket.getDefinitions().getAchievementDefinitionPacket().add(achievementDefinitionPacket);
         }
 
-        for (BadgeDefinitionEntity badgeDefinitionEntity : badgeDefinitionDAO.findAll()) {
+        for (BadgeDefinitionEntity badgeDefinitionEntity : /*badgeDefinitionDAO.findAll()*/ badgeDefinitionEntities) {
             BadgeDefinitionPacket badgeDefinitionPacket = new BadgeDefinitionPacket();
             badgeDefinitionPacket.setBackground(badgeDefinitionEntity.getBackground());
             badgeDefinitionPacket.setBorder(badgeDefinitionEntity.getBorder());
