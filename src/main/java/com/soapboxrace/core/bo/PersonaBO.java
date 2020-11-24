@@ -120,18 +120,12 @@ public class PersonaBO {
     }
 
     public OwnedCarTrans getDefaultCar(Long personaId) {
-        Long startTime = System.currentTimeMillis();
         CarSlotEntity carSlotEntity = getDefaultCarEntity(personaId);
         if (carSlotEntity == null) {
             return new OwnedCarTrans();
         }
-        Long endFetchTime = System.currentTimeMillis();
-        OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
-        Long endTime = System.currentTimeMillis();
 
-        System.out.printf("defaultcar: total time %d ms, fetch time %d ms, xml convert time %d ms%n", endTime - startTime, endFetchTime - startTime, endTime - endFetchTime);
-
-        return ownedCarTrans;
+        return OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
     }
 
     public void repairAllCars(PersonaEntity personaEntity) {
