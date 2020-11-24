@@ -15,7 +15,7 @@ import com.soapboxrace.core.jpa.ProductEntity;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.List;
+import java.util.Set;
 
 @Stateless
 public class PerformanceBO {
@@ -40,7 +40,7 @@ public class PerformanceBO {
         int accel = 0;
         int handling = 0;
         if (!ignoreParts) {
-            List<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
+            Set<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
             for (PerformancePartEntity performancePartEntity : performanceParts) {
                 int perfHash = performancePartEntity.getPerformancePartAttribHash();
                 ProductEntity productEntity = productDAO.findByHash(perfHash);
