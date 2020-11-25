@@ -6,6 +6,8 @@
 
 package com.soapboxrace.core.bo;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.soapboxrace.core.bo.util.AchievementProgressionContext;
 import com.soapboxrace.core.bo.util.AchievementUpdateInfo;
 import com.soapboxrace.core.dao.*;
@@ -56,11 +58,14 @@ public class AchievementBO {
 
     private List<AchievementEntity> achievementEntities;
     private List<BadgeDefinitionEntity> badgeDefinitionEntities;
+    private Multimap<String, AchievementEntity> achievementCategoryMap;
 
     @PostConstruct
     public void onStartup() {
         this.achievementEntities = achievementDAO.findAll();
         this.badgeDefinitionEntities = badgeDefinitionDAO.findAll();
+        this.achievementCategoryMap = ArrayListMultimap.create();
+        this.achievementEntities.forEach(a -> this.achievementCategoryMap.put(a.getCategory(), a));
     }
 
     @Schedule(minute = "*/30", hour = "*")
@@ -275,7 +280,7 @@ public class AchievementBO {
         properties = new HashMap<>(properties);
         List<AchievementUpdateInfo> achievementUpdateInfoList = new ArrayList<>();
 
-        for (AchievementEntity achievementEntity : achievementDAO.findAllByCategory(achievementCategory)) {
+        for (AchievementEntity achievementEntity : achievementCategoryMap.get(achievementCategory)) {
             if (!achievementEntity.getAutoUpdate()) continue;
 
             if (achievementEntity.getUpdateTrigger() == null || achievementEntity.getUpdateTrigger().trim().isEmpty()) {
@@ -403,18 +408,15 @@ public class AchievementBO {
                         if (newVal >= threshold && newVal != personaAchievementEntity.getCurrentValue()) {
                             currentRank.setState("RewardWaiting");
                             currentRank.setAchievedOn(LocalDateTime.now());
-                            personaAchievementRankDAO.update(currentRank);
                             pointsAdded += current.getPoints();
 
                             achievementUpdateInfo.getCompletedAchievementRanks().add(new AchievementUpdateInfo.CompletedAchievementRank(
                                     achievementEntity, current, currentRank.getAchievedOn()));
                         } else if (previous != null && previousRank.getState().equals("InProgress")) {
                             currentRank.setState("Locked");
-                            personaAchievementRankDAO.update(currentRank);
                             break;
                         } else if (newVal > 0 && newVal != personaAchievementEntity.getCurrentValue() && newVal < threshold) {
                             currentRank.setState("InProgress");
-                            personaAchievementRankDAO.update(currentRank);
                             achievementUpdateInfo.setProgressedAchievement(new AchievementUpdateInfo.ProgressedAchievement(achievementEntity.getId(), newVal));
                             break;
                         }
