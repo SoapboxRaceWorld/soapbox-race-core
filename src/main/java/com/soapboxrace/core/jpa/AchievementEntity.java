@@ -6,6 +6,11 @@
 
 package com.soapboxrace.core.jpa;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -51,6 +56,8 @@ public class AchievementEntity {
 
     @OneToMany(targetEntity = AchievementRankEntity.class, mappedBy = "achievementEntity", cascade =
             CascadeType.DETACH, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Fetch(FetchMode.SUBSELECT)
     private List<AchievementRankEntity> ranks;
 
     @OneToOne(targetEntity = BadgeDefinitionEntity.class, optional = false, fetch = FetchType.LAZY)
