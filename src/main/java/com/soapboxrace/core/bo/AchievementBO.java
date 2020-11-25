@@ -61,7 +61,7 @@ public class AchievementBO {
     private Multimap<String, AchievementEntity> achievementCategoryMap;
 
     @PostConstruct
-    public void onStartup() {
+    public void loadData() {
         this.achievementEntities = achievementDAO.findAll();
         this.badgeDefinitionEntities = badgeDefinitionDAO.findAll();
         this.achievementCategoryMap = ArrayListMultimap.create();
