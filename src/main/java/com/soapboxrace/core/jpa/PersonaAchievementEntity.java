@@ -12,6 +12,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ import java.util.List;
         @NamedQuery(name = "PersonaAchievementEntity.findAllByPersonaId", query = "SELECT p FROM " +
                 "PersonaAchievementEntity p WHERE p.personaEntity.personaId = :personaId"),
         @NamedQuery(name = "PersonaAchievementEntity.findByPersonaIdAndAchievementId", query = "SELECT p FROM " +
-                "PersonaAchievementEntity p WHERE p.personaEntity.personaId = :personaId AND p.achievementEntity.id =" +
+                "PersonaAchievementEntity p JOIN FETCH p.ranks WHERE p.personaEntity.personaId = :personaId AND p.achievementEntity.id =" +
                 " :achievementId"),
 })
 public class PersonaAchievementEntity {
@@ -48,7 +49,7 @@ public class PersonaAchievementEntity {
             CascadeType.DETACH, orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     @Fetch(FetchMode.SUBSELECT)
-    private List<PersonaAchievementRankEntity> ranks;
+    private List<PersonaAchievementRankEntity> ranks = new ArrayList<>();
 
     public Long getId() {
         return id;

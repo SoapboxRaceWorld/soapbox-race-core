@@ -443,6 +443,7 @@ public class AchievementBO {
         rankEntity.setPersonaAchievementEntity(personaAchievementEntity);
         rankEntity.setAchievementRankEntity(achievementRankEntity);
         personaAchievementRankDAO.insert(rankEntity);
+        personaAchievementEntity.getRanks().add(rankEntity);
         return rankEntity;
     }
 }
