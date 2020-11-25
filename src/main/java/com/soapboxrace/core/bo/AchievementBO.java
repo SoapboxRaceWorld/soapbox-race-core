@@ -74,7 +74,7 @@ public class AchievementBO {
 
         if (countPersonas == 0L) return;
 
-        for (AchievementEntity achievementEntity : achievementDAO.findAll()) {
+        for (AchievementEntity achievementEntity : this.achievementEntities) {
             for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
                 achievementRankEntity.setRarity(((float) personaAchievementRankDAO.countPersonasWithRank(achievementRankEntity.getId())) / countPersonas);
                 achievementRankDAO.update(achievementRankEntity);
