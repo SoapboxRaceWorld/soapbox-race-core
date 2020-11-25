@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 
 @Singleton
 @Lock(LockType.READ)
-@Startup
 public class AchievementBO {
     public static final DateTimeFormatter RANK_COMPLETED_AT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss");
     @EJB
@@ -62,23 +61,6 @@ public class AchievementBO {
     public void onStartup() {
         this.achievementEntities = achievementDAO.findAll();
         this.badgeDefinitionEntities = badgeDefinitionDAO.findAll();
-        benchmark();
-    }
-
-    private void benchmark() {
-
-        // TEMP DEV CODE
-        long start = System.currentTimeMillis();
-        int numIterations = 1000;
-        for (int i = 0; i < numIterations; i++) {
-            loadAll(100L);
-        }
-        long end = System.currentTimeMillis();
-
-        long timeDiff = end - start;
-        float period = ((float) timeDiff) / (float) numIterations;
-
-        System.out.printf("AchievementBO startup benchmark: %d iterations took %d ms (%f ms per iteration)%n", numIterations, timeDiff, period);
     }
 
     @Schedule(minute = "*/30", hour = "*")
