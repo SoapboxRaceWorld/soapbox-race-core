@@ -145,7 +145,7 @@ public class BasketBO {
         if (canPurchaseProduct(personaEntity, productEntity)) {
             try {
                 CarSlotEntity carSlotEntity = addCar(productEntity, personaEntity);
-                personaEntity.setCurCarIndex(personaEntity.getCurCarIndex() + 1);
+                personaEntity.setCurCarIndex(carSlotDAO.findNumByPersonaId(personaEntity.getPersonaId()) - 1);
                 personaDao.update(personaEntity);
 
                 ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
