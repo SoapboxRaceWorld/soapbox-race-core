@@ -380,15 +380,11 @@ public class AchievementBO {
                         AchievementRankEntity previous = null;
                         AchievementRankEntity current = achievementEntity.getRanks().get(i);
                         PersonaAchievementRankEntity previousRank = null;
-                        PersonaAchievementRankEntity currentRank =
-                                personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaEntity.getPersonaId(),
-                                        current.getId());
+                        PersonaAchievementRankEntity currentRank = findPersonaAchievementRank(personaAchievementEntity, current);
 
                         if (i > 0) {
                             previous = achievementEntity.getRanks().get(i - 1);
-                            previousRank =
-                                    personaAchievementRankDAO.findByPersonaIdAndAchievementRankId(personaEntity.getPersonaId(),
-                                            previous.getId());
+                            previousRank = findPersonaAchievementRank(personaAchievementEntity, previous);
 
                             if (previousRank == null) {
                                 previousRank = createPersonaAchievementRank(personaAchievementEntity, previous);
@@ -435,6 +431,17 @@ public class AchievementBO {
         } catch (ScriptException ex) {
             throw new EngineException(ex, EngineExceptionCode.UnspecifiedError, true);
         }
+    }
+
+    private PersonaAchievementRankEntity findPersonaAchievementRank(PersonaAchievementEntity personaAchievementEntity, AchievementRankEntity achievementRankEntity) {
+        List<PersonaAchievementRankEntity> personaAchievementRankEntities = personaAchievementEntity.getRanks();
+        Integer rankNum = achievementRankEntity.getRank();
+
+        if (personaAchievementRankEntities.size() >= rankNum) {
+            return personaAchievementRankEntities.get(rankNum - 1);
+        }
+
+        return null;
     }
 
     private PersonaAchievementRankEntity createPersonaAchievementRank(PersonaAchievementEntity personaAchievementEntity, AchievementRankEntity achievementRankEntity) {
