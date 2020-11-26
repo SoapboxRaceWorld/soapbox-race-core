@@ -13,6 +13,7 @@ import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
+import org.hibernate.Hibernate;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -45,7 +46,7 @@ public class EventBO {
     public void createEventDataSession(Long personaId, Long eventSessionId) {
         OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId).getOwnedCar();
 
-        EventSessionEntity eventSessionEntity = findEventSessionById(eventSessionId);
+        EventSessionEntity eventSessionEntity = eventSessionDao.find(eventSessionId);
         EventDataEntity eventDataEntity = new EventDataEntity();
         eventDataEntity.setPersonaId(personaId);
         eventDataEntity.setEventSessionId(eventSessionId);
@@ -90,6 +91,10 @@ public class EventBO {
     }
 
     public EventSessionEntity findEventSessionById(Long id) {
-        return eventSessionDao.find(id);
+        EventSessionEntity eventSession = eventSessionDao.find(id);
+        Hibernate.initialize(eventSession.getEvent().getSingleplayerRewardConfig());
+        Hibernate.initialize(eventSession.getEvent().getMultiplayerRewardConfig());
+        Hibernate.initialize(eventSession.getEvent().getPrivateRewardConfig());
+        return eventSession;
     }
 }

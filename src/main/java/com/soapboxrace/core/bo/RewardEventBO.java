@@ -14,7 +14,7 @@ public abstract class RewardEventBO<TA extends ArbitrationPacket> extends Reward
     protected EventRewardEntity getRewardConfiguration(EventSessionEntity eventSessionEntity) {
         EventEntity eventEntity = eventSessionEntity.getEvent();
         LobbyEntity lobbyEntity = eventSessionEntity.getLobby();
-        EventRewardEntity eventRewardEntity = eventEntity.getSingleplayerRewardConfig();
+        EventRewardEntity eventRewardEntity;
 
         if (lobbyEntity != null) {
             if (lobbyEntity.getIsPrivate()) {
@@ -22,6 +22,8 @@ public abstract class RewardEventBO<TA extends ArbitrationPacket> extends Reward
             } else {
                 eventRewardEntity = eventEntity.getMultiplayerRewardConfig();
             }
+        } else {
+            eventRewardEntity = eventEntity.getSingleplayerRewardConfig();
         }
 
         if (eventRewardEntity == null) {

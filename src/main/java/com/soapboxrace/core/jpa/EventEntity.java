@@ -49,15 +49,15 @@ public class EventEntity {
     @Column(columnDefinition = "BIT DEFAULT 1", nullable = false)
     private boolean isDnfEnabled;
 
-    @ManyToOne(targetEntity = EventRewardEntity.class, optional = false)
+    @ManyToOne(targetEntity = EventRewardEntity.class, optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "singleplayer_reward_config_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_SINGLEPLAYER_REWARD_CONFIG_ID"))
     private EventRewardEntity singleplayerRewardConfig;
 
-    @ManyToOne(targetEntity = EventRewardEntity.class, optional = false)
+    @ManyToOne(targetEntity = EventRewardEntity.class, optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "multiplayer_reward_config_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_MULTIPLAYER_REWARD_CONFIG_ID"))
     private EventRewardEntity multiplayerRewardConfig;
 
-    @ManyToOne(targetEntity = EventRewardEntity.class, optional = false)
+    @ManyToOne(targetEntity = EventRewardEntity.class, optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "private_reward_config_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_PRIVATE_REWARD_CONFIG_ID"))
     private EventRewardEntity privateRewardConfig;
 
