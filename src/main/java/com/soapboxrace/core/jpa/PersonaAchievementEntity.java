@@ -18,11 +18,10 @@ import java.util.List;
 @Entity
 @Table(name = "PERSONA_ACHIEVEMENT")
 @NamedQueries({
-        @NamedQuery(name = "PersonaAchievementEntity.findAllByPersonaId", query = "SELECT p FROM " +
-                "PersonaAchievementEntity p WHERE p.personaEntity.personaId = :personaId"),
-        @NamedQuery(name = "PersonaAchievementEntity.findByPersonaIdAndAchievementId", query = "SELECT p FROM " +
-                "PersonaAchievementEntity p JOIN FETCH p.ranks WHERE p.personaEntity.personaId = :personaId AND p.achievementEntity.id =" +
-                " :achievementId"),
+        @NamedQuery(name = "PersonaAchievementEntity.findAllByPersonaId",
+                query = "SELECT p FROM PersonaAchievementEntity p WHERE p.personaEntity.personaId = :personaId"),
+        @NamedQuery(name = "PersonaAchievementEntity.findByPersonaIdAndAchievementId",
+                query = "SELECT p FROM PersonaAchievementEntity p WHERE p.personaEntity.personaId = :personaId AND p.achievementEntity.id = :achievementId"),
 })
 public class PersonaAchievementEntity {
 
