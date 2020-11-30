@@ -133,13 +133,16 @@ public class CommerceBO {
                 ProductEntity productEntity = productDAO.findByHash(addedItem.getKey());
 
                 if (productEntity != null) {
-                    if (basketItems.stream().anyMatch(p -> p.getProductId().equalsIgnoreCase(productEntity.getProductId()))) {
+                    InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByInventoryIdAndEntitlementTag(inventoryEntity.getId(), productEntity.getEntitlementTag());
+                    boolean itemInBasket = basketItems.stream().anyMatch(p -> p.getProductId().equalsIgnoreCase(productEntity.getProductId()));
+
+                    if (inventoryItemEntity != null && !itemInBasket) {
+                        inventoryBO.decreaseItemCount(inventoryEntity, inventoryItemEntity);
+                    } else {
                         if (productEntity.getCurrency().equals("CASH"))
                             removeCash += (int) productEntity.getPrice();
                         else
                             removeBoost += (int) productEntity.getPrice();
-                    } else {
-                        inventoryBO.decreaseItemCount(inventoryEntity, productEntity.getEntitlementTag());
                     }
                 } else {
                     commerceSessionResultTrans.setStatus(CommerceResultStatus.FAIL_INVALID_BASKET);
@@ -163,12 +166,7 @@ public class CommerceBO {
 
         if (commerceSessionTrans.getEntitlementsToSell().getItems() != null) {
             commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans().forEach(e -> {
-                InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId
-                        , e.getEntitlementId());
-
-                if (inventoryItemEntity != null) {
-                    inventoryBO.removeItem(personaEntity, e.getEntitlementId(), e.getQuantity());
-                }
+                inventoryBO.removeItem(personaEntity, e.getEntitlementId(), e.getQuantity());
             });
         }
 

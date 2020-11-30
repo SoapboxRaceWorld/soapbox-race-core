@@ -345,6 +345,10 @@ public class InventoryBO {
         if (existingItem == null)
             throw new EngineException("Could not find entitlement '" + entitlementTag + "' in IID " + inventoryEntity.getId(), EngineExceptionCode.NoSuchEntitlementExists, true);
 
+        return decreaseItemCount(inventoryEntity, existingItem);
+    }
+
+    public InventoryItemEntity decreaseItemCount(InventoryEntity inventoryEntity, InventoryItemEntity existingItem) {
         existingItem.setRemainingUseCount(existingItem.getRemainingUseCount() - 1);
 
         if (existingItem.getRemainingUseCount() <= 0) {
