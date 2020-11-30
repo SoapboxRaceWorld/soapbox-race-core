@@ -166,7 +166,12 @@ public class CommerceBO {
 
         if (commerceSessionTrans.getEntitlementsToSell().getItems() != null) {
             commerceSessionTrans.getEntitlementsToSell().getItems().getEntitlementItemTrans().forEach(e -> {
-                inventoryBO.removeItem(personaEntity, e.getEntitlementId(), e.getQuantity());
+                InventoryItemEntity inventoryItemEntity = inventoryItemDAO.findByPersonaIdAndEntitlementTag(personaId
+                        , e.getEntitlementId());
+
+                if (inventoryItemEntity != null) {
+                    inventoryBO.removeItem(personaEntity, e.getEntitlementId(), e.getQuantity());
+                }
             });
         }
 
