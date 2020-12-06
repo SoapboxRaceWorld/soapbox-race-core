@@ -41,7 +41,7 @@ public class RewardPursuitBO extends RewardEventBO<PursuitArbitrationPacket> {
         RewardVO rewardVO = getRewardVO(personaEntity);
         EventRewardEntity eventRewardEntity = eventEntity.getSingleplayerRewardConfig();
 
-        setPursuitRewards(personaEntity, eventRewardEntity, pursuitArbitrationPacket, rewardVO);
+        setPursuitRewards(personaEntity, eventSessionEntity.getEvent(), eventRewardEntity, pursuitArbitrationPacket, rewardVO);
 
         Random random = new Random();
         pursuitArbitrationPacket.setRank(random.nextInt(4 - 1) + 1);
@@ -49,9 +49,9 @@ public class RewardPursuitBO extends RewardEventBO<PursuitArbitrationPacket> {
         return getAccolades(personaEntity, eventRewardEntity, pursuitArbitrationPacket, rewardVO);
     }
 
-    private void setPursuitRewards(PersonaEntity personaEntity, EventRewardEntity eventRewardEntity,
+    private void setPursuitRewards(PersonaEntity personaEntity, EventEntity eventEntity, EventRewardEntity eventRewardEntity,
                                    PursuitArbitrationPacket pursuitArbitrationPacket, RewardVO rewardVO) {
-        setBaseReward(personaEntity, eventRewardEntity, pursuitArbitrationPacket, rewardVO);
+        setBaseReward(personaEntity, eventEntity, eventRewardEntity, pursuitArbitrationPacket, rewardVO);
         setPursitParamReward(pursuitArbitrationPacket.getCopsDeployed(), EnumRewardType.COP_CARS_DEPLOYED, rewardVO);
         setPursitParamReward(pursuitArbitrationPacket.getCopsDisabled(), EnumRewardType.COP_CARS_DISABLED, rewardVO);
         setPursitParamReward(pursuitArbitrationPacket.getCopsRammed(), EnumRewardType.COP_CARS_RAMMED, rewardVO);

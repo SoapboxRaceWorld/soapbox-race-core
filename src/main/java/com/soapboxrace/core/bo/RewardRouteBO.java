@@ -36,7 +36,7 @@ public class RewardRouteBO extends RewardEventBO<RouteArbitrationPacket> {
         RewardVO rewardVO = getRewardVO(personaEntity);
         EventRewardEntity eventRewardEntity = getRewardConfiguration(eventSessionEntity);
 
-        setBaseReward(personaEntity, eventRewardEntity, routeArbitrationPacket, rewardVO);
+        setBaseReward(personaEntity, eventSessionEntity.getEvent(), eventRewardEntity, routeArbitrationPacket, rewardVO);
         setRankReward(eventRewardEntity, routeArbitrationPacket, rewardVO);
         setPerfectStartReward(eventRewardEntity, routeArbitrationPacket.getPerfectStart(), rewardVO);
         setTopSpeedReward(eventRewardEntity, routeArbitrationPacket.getTopSpeed(), rewardVO);

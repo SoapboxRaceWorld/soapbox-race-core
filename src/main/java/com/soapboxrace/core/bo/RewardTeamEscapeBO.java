@@ -43,7 +43,7 @@ public class RewardTeamEscapeBO extends RewardEventBO<TeamEscapeArbitrationPacke
         RewardVO rewardVO = getRewardVO(personaEntity);
         EventRewardEntity eventRewardEntity = getRewardConfiguration(eventSessionEntity);
 
-        setBaseReward(personaEntity, eventRewardEntity, teamEscapeArbitrationPacket, rewardVO);
+        setBaseReward(personaEntity, eventDataEntity.getEvent(), eventRewardEntity, teamEscapeArbitrationPacket, rewardVO);
         setRankReward(eventRewardEntity, teamEscapeArbitrationPacket, rewardVO);
 
         float bustedBaseRep = rewardVO.getBaseRep() / bustedCount;

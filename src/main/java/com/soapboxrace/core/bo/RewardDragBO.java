@@ -37,7 +37,7 @@ public class RewardDragBO extends RewardEventBO<DragArbitrationPacket> {
         RewardVO rewardVO = getRewardVO(personaEntity);
         EventRewardEntity eventRewardEntity = getRewardConfiguration(eventSessionEntity);
 
-        setBaseReward(personaEntity, eventRewardEntity, dragArbitrationPacket, rewardVO);
+        setBaseReward(personaEntity, eventSessionEntity.getEvent(), eventRewardEntity, dragArbitrationPacket, rewardVO);
         setRankReward(eventRewardEntity, dragArbitrationPacket, rewardVO);
         setPerfectStartReward(eventRewardEntity, dragArbitrationPacket.getPerfectStart(), rewardVO);
         setTopSpeedReward(eventRewardEntity, dragArbitrationPacket.getTopSpeed(), rewardVO);

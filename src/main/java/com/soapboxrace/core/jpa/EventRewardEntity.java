@@ -10,10 +10,6 @@ public class EventRewardEntity {
     @Column(name = "ID", nullable = false)
     private String id;
 
-    @ManyToOne(targetEntity = EventEntity.class, optional = false)
-    @JoinColumn(name = "event_id", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_REWARD_EVENTID"))
-    private EventEntity eventEntity;
-
     private int baseRepReward;
     private float levelRepRewardMultiplier;
     private float finalRepRewardMultiplier;
@@ -80,14 +76,6 @@ public class EventRewardEntity {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public EventEntity getEventEntity() {
-        return eventEntity;
-    }
-
-    public void setEventEntity(EventEntity eventEntity) {
-        this.eventEntity = eventEntity;
     }
 
     public int getBaseRepReward() {
