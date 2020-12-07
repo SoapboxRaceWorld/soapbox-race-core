@@ -1,7 +1,6 @@
 CREATE TABLE EVENT_REWARD
 (
     ID                         VARCHAR(255) NOT NULL,
-    event_id                   INT          NOT NULL,
     baseRepReward              INT          NOT NULL DEFAULT 0,
     levelRepRewardMultiplier   FLOAT        NOT NULL DEFAULT 0,
     finalRepRewardMultiplier   FLOAT        NOT NULL DEFAULT 0,
@@ -39,7 +38,6 @@ CREATE TABLE EVENT_REWARD
     rewardTable_rank8_id       BIGINT       NULL,
 
     PRIMARY KEY (ID),
-    CONSTRAINT FK_EVENT_REWARD_EVENTID FOREIGN KEY (event_id) REFERENCES EVENT (ID),
     CONSTRAINT FK_EVENT_REWARD_RANK1TABLE_ID FOREIGN KEY (rewardTable_rank1_id) REFERENCES REWARD_TABLE (ID),
     CONSTRAINT FK_EVENT_REWARD_RANK2TABLE_ID FOREIGN KEY (rewardTable_rank2_id) REFERENCES REWARD_TABLE (ID),
     CONSTRAINT FK_EVENT_REWARD_RANK3TABLE_ID FOREIGN KEY (rewardTable_rank3_id) REFERENCES REWARD_TABLE (ID),
@@ -50,7 +48,7 @@ CREATE TABLE EVENT_REWARD
     CONSTRAINT FK_EVENT_REWARD_RANK8TABLE_ID FOREIGN KEY (rewardTable_rank8_id) REFERENCES REWARD_TABLE (ID)
 );
 
-INSERT INTO EVENT_REWARD (ID, event_id, baseRepReward, levelRepRewardMultiplier, finalRepRewardMultiplier,
+INSERT INTO EVENT_REWARD (ID, baseRepReward, levelRepRewardMultiplier, finalRepRewardMultiplier,
                           perfectStartRepMultiplier, topSpeedRepMultiplier, rank1RepMultiplier, rank2RepMultiplier,
                           rank3RepMultiplier, rank4RepMultiplier, rank5RepMultiplier, rank6RepMultiplier,
                           rank7RepMultiplier, rank8RepMultiplier, baseCashReward, levelCashRewardMultiplier,
@@ -61,7 +59,6 @@ INSERT INTO EVENT_REWARD (ID, event_id, baseRepReward, levelRepRewardMultiplier,
                           rewardTable_rank4_id, rewardTable_rank5_id, rewardTable_rank6_id, rewardTable_rank7_id,
                           rewardTable_rank8_id)
 SELECT CONCAT(E.ID, '_generic'),
-       E.ID,
        E.baseRepReward,
        E.levelRepRewardMultiplier,
        E.finalRepRewardMultiplier,
@@ -199,9 +196,9 @@ ALTER TABLE EVENT
 ALTER TABLE EVENT
     ADD COLUMN private_reward_config_id VARCHAR(255) NOT NULL;
 UPDATE EVENT E
-SET singleplayer_reward_config_id=(SELECT ER.ID FROM EVENT_REWARD ER WHERE ER.event_id = E.ID),
-    multiplayer_reward_config_id=(SELECT ER.ID FROM EVENT_REWARD ER WHERE ER.event_id = E.ID),
-    private_reward_config_id=(SELECT ER.ID FROM EVENT_REWARD ER WHERE ER.event_id = E.ID)
+SET singleplayer_reward_config_id=CONCAT(E.ID, '_generic'),
+    multiplayer_reward_config_id=CONCAT(E.ID, '_generic'),
+    private_reward_config_id=CONCAT(E.ID, '_generic')
 WHERE 1=1;
 ALTER TABLE EVENT
     ADD CONSTRAINT FK_EVENT_SINGLEPLAYER_REWARD_CONFIG_ID FOREIGN KEY (singleplayer_reward_config_id) REFERENCES EVENT_REWARD (ID);
