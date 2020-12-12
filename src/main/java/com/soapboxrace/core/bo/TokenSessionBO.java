@@ -43,24 +43,28 @@ public class TokenSessionBO {
     @EJB
     private AuthenticationBO authenticationBO;
 
-    private final Map<String, TokenSessionEntity> sessionKeyToTokenMap = new ConcurrentHashMap<>();
-    private final Map<Long, String> userIdToSessionKeyMap = new ConcurrentHashMap<>();
     @EJB
     private HardwareInfoBO hardwareInfoBO;
 
+    private final Map<String, TokenSessionEntity> sessionKeyToTokenMap = new ConcurrentHashMap<>();
+    private final Map<Long, String> userIdToSessionKeyMap = new ConcurrentHashMap<>();
+
     public String createToken(UserEntity userEntity, String clientHostName) {
-        TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
         Date expirationDate = getMinutes(parameterBO.getIntParam("SESSION_LENGTH_MINUTES", 130));
-        tokenSessionEntity.setExpirationDate(expirationDate);
         String randomUUID = UUID.randomUUID().toString();
+        TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
+
+        tokenSessionEntity.setExpirationDate(expirationDate);
         tokenSessionEntity.setSecurityToken(randomUUID);
         tokenSessionEntity.setUserEntity(userEntity);
         tokenSessionEntity.setPremium(userEntity.isPremium());
         tokenSessionEntity.setClientHostIp(clientHostName);
         tokenSessionEntity.setActivePersonaId(0L);
         tokenSessionEntity.setEventSessionId(null);
+
         this.sessionKeyToTokenMap.put(randomUUID, tokenSessionEntity);
         this.userIdToSessionKeyMap.put(userEntity.getId(), randomUUID);
+
         return randomUUID;
     }
 
@@ -94,12 +98,6 @@ public class TokenSessionBO {
         if (sessionKey != null) {
             this.sessionKeyToTokenMap.remove(sessionKey);
         }
-    }
-
-    private Date getMinutes(int minutes) {
-        long time = new Date().getTime();
-        time = time + (minutes * 60000L);
-        return new Date(time);
     }
 
     public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
@@ -179,5 +177,11 @@ public class TokenSessionBO {
     public void setRelayCryptoTicket(TokenSessionEntity tokenSessionEntity, String relayCryptoTicket) {
         Objects.requireNonNull(tokenSessionEntity);
         tokenSessionEntity.setRelayCryptoTicket(relayCryptoTicket);
+    }
+
+    private Date getMinutes(int minutes) {
+        long time = new Date().getTime();
+        time = time + (minutes * 60000L);
+        return new Date(time);
     }
 }
