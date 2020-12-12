@@ -81,7 +81,7 @@ public class TokenSessionBO {
         long time = new Date().getTime();
         long tokenTime = tokenSessionEntity.getExpirationDate().getTime();
         if (time > tokenTime) {
-            throw new NotAuthorizedException("Invalid Token");
+            throw new NotAuthorizedException("Expired Token");
         }
 
         return tokenSessionEntity;

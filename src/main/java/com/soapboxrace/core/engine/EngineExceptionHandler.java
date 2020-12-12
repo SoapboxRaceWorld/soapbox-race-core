@@ -42,10 +42,13 @@ public class EngineExceptionHandler implements ExceptionMapper<Exception> {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE)
                     .type(MediaType.APPLICATION_XML_TYPE)
                     .entity(engineExceptionTrans).build();
-        } else if (exception instanceof NotAuthorizedException) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
         } else {
             errorReportingBO.sendException(exception);
+
+            if (exception instanceof NotAuthorizedException) {
+                return Response.status(Response.Status.UNAUTHORIZED).build();
+            }
+
             EngineExceptionTrans engineExceptionTrans = new EngineExceptionTrans();
             String stackTrace = ExceptionUtils.getStackTrace(exception);
 
