@@ -79,8 +79,8 @@ public class LobbyCountdownBO {
             byteBuffer.put(numOfRacers);
             byteBuffer.putInt(personaId.intValue());
             byte[] cryptoTicketBytes = byteBuffer.array();
-            String relayCrypotTicket = Base64.getEncoder().encodeToString(cryptoTicketBytes);
-            tokenSessionBO.setRelayCryptoTicket(tokenSessionBO.findByUserId(lobbyEntrantEntity.getPersona().getUser().getId()), relayCrypotTicket);
+            String relayCryptoTicket = Base64.getEncoder().encodeToString(cryptoTicketBytes);
+            tokenSessionBO.setRelayCryptoTicket(tokenSessionBO.findByUserId(lobbyEntrantEntity.getPersona().getUser().getId()), relayCryptoTicket);
 
             XMPP_P2PCryptoTicketType p2pCryptoTicketType = new XMPP_P2PCryptoTicketType();
             p2pCryptoTicketType.setPersonaId(personaId);
