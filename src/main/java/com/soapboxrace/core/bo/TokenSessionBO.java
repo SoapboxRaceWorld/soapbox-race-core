@@ -98,11 +98,8 @@ public class TokenSessionBO {
     }
 
     public void deleteByUserId(Long userId) {
-        String sessionKey = this.userIdToSessionKeyMap.remove(userId);
-
-        if (sessionKey != null) {
-            this.sessionKeyToTokenMap.remove(sessionKey);
-        }
+        String sessionKey = Objects.requireNonNull(this.userIdToSessionKeyMap.remove(userId), () -> String.format("User %d has no session key, but we're trying to delete their session!", userId));
+        Objects.requireNonNull(this.sessionKeyToTokenMap.remove(sessionKey), () -> String.format("User %d has session key, but session isn't in the store!", userId));
     }
 
     public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
