@@ -102,6 +102,7 @@ public class DriverPersona {
         }
 
         long personaId = persona.getPersonaId();
+        requestSessionInfo.getTokenSessionEntity().getAllowedPersonaIds().add(personaId);
         userBo.createXmppUser(personaId, securityToken.substring(0, 16));
         return persona;
     }
@@ -113,6 +114,7 @@ public class DriverPersona {
     public String deletePersona(@QueryParam("personaId") Long personaId) {
         tokenSessionBo.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
         driverPersonaBO.deletePersona(personaId);
+        requestSessionInfo.getTokenSessionEntity().getAllowedPersonaIds().remove(personaId);
         return "<long>0</long>";
     }
 

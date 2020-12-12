@@ -6,31 +6,14 @@
 
 package com.soapboxrace.core.jpa;
 
-import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-@Entity
-@Table(name = "TOKEN_SESSION")
-@NamedQueries({ //
-        @NamedQuery(name = "TokenSessionEntity.findByUserId", query = "SELECT obj FROM TokenSessionEntity obj WHERE " +
-                "obj.userEntity.id = :userId"), //
-        @NamedQuery(name = "TokenSessionEntity.deleteByUserId", query = "DELETE FROM TokenSessionEntity obj WHERE obj" +
-                ".userEntity.id = :userId"), //
-        @NamedQuery(name = "TokenSessionEntity.updateRelayCrytoTicket", //
-                query = "UPDATE TokenSessionEntity obj " //
-                        + "SET obj.relayCryptoTicket = :relayCryptoTicket WHERE obj.activePersonaId = :personaId"), //
-        @NamedQuery(name = "TokenSessionEntity.updateLobbyId", //
-                query = "UPDATE TokenSessionEntity obj " //
-                        + "SET obj.activeLobbyId = :activeLobbyId WHERE obj.activePersonaId = :personaId") //
-})
 public class TokenSessionEntity {
 
-    @Id
-    @Column(name = "ID", nullable = false)
     private String securityToken;
 
-    @OneToOne(targetEntity = UserEntity.class, cascade = CascadeType.MERGE, optional = false)
-    @JoinColumn(name = "userId", referencedColumnName = "ID")
     private UserEntity userEntity;
 
     private Date expirationDate;
@@ -48,6 +31,8 @@ public class TokenSessionEntity {
     private String webToken;
 
     private Long eventSessionId;
+
+    private Set<Long> allowedPersonaIds = new HashSet<>();
 
     public String getSecurityToken() {
         return securityToken;
@@ -127,5 +112,13 @@ public class TokenSessionEntity {
 
     public void setEventSessionId(Long eventSessionId) {
         this.eventSessionId = eventSessionId;
+    }
+
+    public Set<Long> getAllowedPersonaIds() {
+        return allowedPersonaIds;
+    }
+
+    public void setAllowedPersonaIds(Set<Long> allowedPersonaIds) {
+        this.allowedPersonaIds = allowedPersonaIds;
     }
 }

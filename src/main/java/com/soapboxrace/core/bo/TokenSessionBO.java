@@ -10,6 +10,7 @@ import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.BanEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
@@ -61,6 +62,10 @@ public class TokenSessionBO {
         tokenSessionEntity.setClientHostIp(clientHostName);
         tokenSessionEntity.setActivePersonaId(0L);
         tokenSessionEntity.setEventSessionId(null);
+
+        for (PersonaEntity personaEntity : userEntity.getPersonas()) {
+            tokenSessionEntity.getAllowedPersonaIds().add(personaEntity.getPersonaId());
+        }
 
         this.sessionKeyToTokenMap.put(randomUUID, tokenSessionEntity);
         this.userIdToSessionKeyMap.put(userEntity.getId(), randomUUID);
@@ -149,7 +154,7 @@ public class TokenSessionBO {
     public void verifyPersonaOwnership(TokenSessionEntity tokenSessionEntity, Long personaId) {
         Objects.requireNonNull(tokenSessionEntity);
 
-        if (!tokenSessionEntity.getUserEntity().ownsPersona(personaId)) {
+        if (!tokenSessionEntity.getAllowedPersonaIds().contains(personaId)) {
             throw new EngineException(EngineExceptionCode.RemotePersonaDoesNotBelongToUser, true);
         }
     }
