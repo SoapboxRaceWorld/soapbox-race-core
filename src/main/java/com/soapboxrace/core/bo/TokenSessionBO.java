@@ -6,7 +6,6 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.TokenSessionDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
@@ -16,20 +15,24 @@ import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
 
 import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
+import javax.ejb.Singleton;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.NotAuthorizedException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Date;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Stateless
+@Singleton
+@Lock(LockType.READ)
 public class TokenSessionBO {
-    @EJB
-    private TokenSessionDAO tokenDAO;
 
     @EJB
     private UserDAO userDAO;
@@ -39,6 +42,11 @@ public class TokenSessionBO {
 
     @EJB
     private AuthenticationBO authenticationBO;
+
+    private final Map<String, TokenSessionEntity> sessionKeyToTokenMap = new ConcurrentHashMap<>();
+    private final Map<Long, String> userIdToSessionKeyMap = new ConcurrentHashMap<>();
+    @EJB
+    private HardwareInfoBO hardwareInfoBO;
 
     public String createToken(UserEntity userEntity, String clientHostName) {
         TokenSessionEntity tokenSessionEntity = new TokenSessionEntity();
@@ -51,17 +59,46 @@ public class TokenSessionBO {
         tokenSessionEntity.setClientHostIp(clientHostName);
         tokenSessionEntity.setActivePersonaId(0L);
         tokenSessionEntity.setEventSessionId(null);
-        tokenDAO.insert(tokenSessionEntity);
+        this.sessionKeyToTokenMap.put(randomUUID, tokenSessionEntity);
+        this.userIdToSessionKeyMap.put(userEntity.getId(), randomUUID);
         return randomUUID;
     }
 
+    public TokenSessionEntity validateToken(Long userId, String securityToken) {
+        TokenSessionEntity tokenSessionEntity = sessionKeyToTokenMap.get(securityToken);
+        if (tokenSessionEntity == null || !tokenSessionEntity.getUserEntity().getId().equals(userId)) {
+            throw new NotAuthorizedException("Invalid Token");
+        }
+        long time = new Date().getTime();
+        long tokenTime = tokenSessionEntity.getExpirationDate().getTime();
+        if (time > tokenTime) {
+            throw new NotAuthorizedException("Invalid Token");
+        }
+
+        return tokenSessionEntity;
+    }
+
+    public TokenSessionEntity findByUserId(Long userId) {
+        String sessionKey = this.userIdToSessionKeyMap.get(userId);
+
+        if (sessionKey != null) {
+            return Objects.requireNonNull(this.sessionKeyToTokenMap.get(sessionKey), () -> String.format("User %d has session key, but session is missing!", userId));
+        }
+
+        return null;
+    }
+
     public void deleteByUserId(Long userId) {
-        tokenDAO.deleteByUserId(userId);
+        String sessionKey = this.userIdToSessionKeyMap.remove(userId);
+
+        if (sessionKey != null) {
+            this.sessionKeyToTokenMap.remove(sessionKey);
+        }
     }
 
     private Date getMinutes(int minutes) {
         long time = new Date().getTime();
-        time = time + (minutes * 60000);
+        time = time + (minutes * 60000L);
         return new Date(time);
     }
 
@@ -74,6 +111,13 @@ public class TokenSessionBO {
                 if (password.equals(userEntity.getPassword())) {
                     if (userEntity.isLocked()) {
                         loginStatusVO.setDescription("Account locked. Contact an administrator.");
+                        return loginStatusVO;
+                    }
+
+                    if (userEntity.getGameHardwareHash() != null && hardwareInfoBO.isHardwareHashBanned(userEntity.getGameHardwareHash())) {
+                        LoginStatusVO.Ban ban = new LoginStatusVO.Ban();
+                        ban.setReason("Your computer is banned from this server.");
+                        loginStatusVO.setBan(ban);
                         return loginStatusVO;
                     }
 
@@ -120,18 +164,20 @@ public class TokenSessionBO {
         }
 
         tokenSessionEntity.setActivePersonaId(personaId);
-        tokenDAO.update(tokenSessionEntity);
     }
 
     public void setActiveLobbyId(TokenSessionEntity tokenSessionEntity, Long lobbyId) {
         Objects.requireNonNull(tokenSessionEntity);
         tokenSessionEntity.setActiveLobbyId(lobbyId);
-        tokenDAO.update(tokenSessionEntity);
     }
 
     public void setEventSessionId(TokenSessionEntity tokenSessionEntity, Long eventSessionId) {
         Objects.requireNonNull(tokenSessionEntity);
         tokenSessionEntity.setEventSessionId(eventSessionId);
-        tokenDAO.update(tokenSessionEntity);
+    }
+
+    public void setRelayCryptoTicket(TokenSessionEntity tokenSessionEntity, String relayCryptoTicket) {
+        Objects.requireNonNull(tokenSessionEntity);
+        tokenSessionEntity.setRelayCryptoTicket(relayCryptoTicket);
     }
 }

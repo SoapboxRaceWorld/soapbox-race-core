@@ -6,11 +6,9 @@
 
 package com.soapboxrace.core.api.util;
 
-import com.soapboxrace.core.bo.HardwareInfoBO;
 import com.soapboxrace.core.bo.RequestSessionInfo;
-import com.soapboxrace.core.dao.TokenSessionDAO;
+import com.soapboxrace.core.bo.TokenSessionBO;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
-import com.soapboxrace.core.jpa.UserEntity;
 
 import javax.annotation.Priority;
 import javax.ejb.EJB;
@@ -21,21 +19,17 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.util.Date;
 
 @Secured
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
 
-    @EJB
-    private TokenSessionDAO tokenDAO;
-
     @Inject
     private RequestSessionInfo requestSessionInfo;
 
     @EJB
-    private HardwareInfoBO hardwareInfoBO;
+    private TokenSessionBO tokenSessionBO;
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
@@ -46,31 +40,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         }
         Long userId = Long.valueOf(userIdStr);
         try {
-            TokenSessionEntity tokenSessionEntity = validateToken(userId, securityToken);
+            TokenSessionEntity tokenSessionEntity = tokenSessionBO.validateToken(userId, securityToken);
             requestSessionInfo.setTokenSessionEntity(tokenSessionEntity);
         } catch (Exception e) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }
-    }
-
-    private TokenSessionEntity validateToken(Long userId, String securityToken) {
-        TokenSessionEntity tokenSessionEntity = tokenDAO.find(securityToken);
-        if (tokenSessionEntity == null || !tokenSessionEntity.getUserEntity().getId().equals(userId)) {
-            throw new NotAuthorizedException("Invalid Token");
-        }
-        long time = new Date().getTime();
-        long tokenTime = tokenSessionEntity.getExpirationDate().getTime();
-        if (time > tokenTime) {
-            throw new NotAuthorizedException("Invalid Token");
-        }
-
-        UserEntity userEntity = tokenSessionEntity.getUserEntity();
-
-        String gameHardwareHash = userEntity.getGameHardwareHash();
-        if (gameHardwareHash != null && hardwareInfoBO.isHardwareHashBanned(gameHardwareHash)) {
-            throw new NotAuthorizedException("Account Banned");
-        }
-
-        return tokenSessionEntity;
     }
 }
