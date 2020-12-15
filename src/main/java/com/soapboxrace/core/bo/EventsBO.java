@@ -194,8 +194,11 @@ public class EventsBO {
         float repThMultiplier = parameterBO.getFloatParam("TH_REP_MULTIPLIER");
         float cashThMultiplier = parameterBO.getFloatParam("TH_CASH_MULTIPLIER");
 
-        float baseRep = playerLevelRepConst * repThMultiplier;
-        float baseCash = playerLevelCashConst * cashThMultiplier;
+        float globalRepMultiplier = parameterBO.getFloatParam("REP_REWARD_MULTIPLIER", 1.0f);
+        float globalCashMultiplier = parameterBO.getFloatParam("CASH_REWARD_MULTIPLIER", 1.0f);
+
+        float baseRep = playerLevelRepConst * repThMultiplier * globalRepMultiplier;
+        float baseCash = playerLevelCashConst * cashThMultiplier * globalCashMultiplier;
 
         float repDayMultiplier = treasureHuntConfigEntity.getRepMultiplier();
         float cashDayMultiplier = treasureHuntConfigEntity.getCashMultiplier();
