@@ -61,6 +61,7 @@ public class LobbyBO {
         if (lobbys.isEmpty()) {
             matchmakingBO.addPlayerToQueue(personaId, carClassHash);
         } else {
+            Collections.shuffle(lobbys);
             PersonaEntity personaEntity = personaDao.find(personaId);
             joinLobby(personaEntity, lobbys, true);
         }
