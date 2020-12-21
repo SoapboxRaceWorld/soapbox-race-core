@@ -38,7 +38,6 @@ public class OpenfireHook {
             adminBO.sendChatCommand(persona, command, personaEntity.getName());
         }
         
-        //Just to force actions...
         return Response.noContent().build();
     }
 }
