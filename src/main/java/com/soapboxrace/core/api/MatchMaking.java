@@ -9,6 +9,9 @@ package com.soapboxrace.core.api;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.jpa.EventSessionEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.EventEntity;
+import com.soapboxrace.core.jpa.LobbyEntity;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.jaxb.http.LobbyInfo;
 import com.soapboxrace.jaxb.http.OwnedCarTrans;
@@ -19,6 +22,10 @@ import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
+import com.soapboxrace.core.bo.util.DiscordWebhook;
+import com.soapboxrace.core.dao.PersonaDAO;
+import com.soapboxrace.core.dao.LobbyDAO;
 
 @Path("/matchmaking")
 public class MatchMaking {
@@ -37,6 +44,18 @@ public class MatchMaking {
 
     @EJB
     private MatchmakingBO matchmakingBO;
+
+    @EJB
+    private DiscordWebhook discordWebhook;
+    
+    @EJB
+    private LobbyDAO lobbyDAO;
+
+    @EJB
+    private PersonaDAO personaDAO;
+
+    @EJB
+    private ParameterBO parameterBO;
 
     @Inject
     private RequestSessionInfo requestSessionInfo;
@@ -119,6 +138,29 @@ public class MatchMaking {
     @Produces(MediaType.APPLICATION_XML)
     public LobbyInfo acceptInvite(@QueryParam("lobbyInviteId") Long lobbyInviteId) {
         tokenSessionBO.setActiveLobbyId(requestSessionInfo.getTokenSessionEntity(), lobbyInviteId);
+        Long activePersonaId = requestSessionInfo.getActivePersonaId();
+
+        LobbyEntity lobbyInformation = lobbyDAO.findById(lobbyInviteId);
+		if(activePersonaId.equals(lobbyInformation.getPersonaId())) {
+            
+			EventEntity eventInformation = lobbyInformation.getEvent();
+			String eventNameFull = eventInformation.getName();
+			String eventName = eventNameFull.split("\\(")[0];
+
+			PersonaEntity personaEntity = personaDAO.find(activePersonaId);
+			
+			String msg = "[" + personaEntity.getName() + "] is looking for racers on " + eventName;
+			String msgDs = "**" + personaEntity.getName() + "** is looking for racers on **" + eventName + "**";
+
+			if(parameterBO.getStrParam("DISCORD_WEBHOOK_LOBBY_URL") != null) {
+				discordWebhook.sendMessage(msgDs, 
+					parameterBO.getStrParam("DISCORD_WEBHOOK_LOBBY_URL"), 
+					parameterBO.getStrParam("DISCORD_WEBHOOK_LOBBY_NAME", "[SBRW] Server"),
+					0xbb00ff
+				);
+			}
+        }
+
         return lobbyBO.acceptinvite(requestSessionInfo.getActivePersonaId(), lobbyInviteId);
     }
 

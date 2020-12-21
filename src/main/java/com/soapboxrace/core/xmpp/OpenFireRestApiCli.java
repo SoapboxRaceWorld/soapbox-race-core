@@ -29,6 +29,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PreDestroy;
+import com.soapboxrace.core.bo.util.DiscordWebhook;
+
 @Startup
 @Singleton
 public class OpenFireRestApiCli {
@@ -42,6 +45,9 @@ public class OpenFireRestApiCli {
 
     @EJB
     private ChatRoomDAO chatRoomDAO;
+
+    @EJB
+	private DiscordWebhook discord;
 
     @PostConstruct
     public void init() {
@@ -58,7 +64,14 @@ public class OpenFireRestApiCli {
                 createGeneralChatRoom(chatRoomEntity.getShortName(), i);
             }
         }
+
+        discord.sendMessage("Server is now up and running.", 0x00ff00);
     }
+
+    @PreDestroy
+	public void terminate() {
+		discord.sendMessage("Server is shutting down.", 0xff0000);
+	}
 
     private Builder getBuilder(String path) {
         return getBuilder(path, null);
@@ -179,6 +192,7 @@ public class OpenFireRestApiCli {
         mucRoomEntity.setPersistent(true);
         mucRoomEntity.setBroadcastPresenceRoles(Arrays.asList("moderator", "participant", "visitor"));
         mucRoomEntity.setLogEnabled(true);
+        mucRoomEntity.setPublicRoom(true);
 
         builder.post(Entity.entity(mucRoomEntity, MediaType.APPLICATION_XML));
     }

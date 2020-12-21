@@ -23,36 +23,67 @@ public class CarClasses {
     @Produces(MediaType.APPLICATION_XML)
     public ArrayOfCarClass carClasses() {
         ArrayOfCarClass arrayOfCarClass = new ArrayOfCarClass();
-        CarClass carClass = new CarClass();
-        carClass.setCarClassHash(-2142411446);
-        carClass.setMaxRating((short) 999);
-        carClass.setMinRating((short) 750);
-        arrayOfCarClass.getCarClass().add(carClass);
-        CarClass carClass2 = new CarClass();
-        carClass2.setCarClassHash(-406473455);
-        carClass2.setMaxRating((short) 599);
-        carClass2.setMinRating((short) 500);
-        arrayOfCarClass.getCarClass().add(carClass2);
-        CarClass carClass3 = new CarClass();
-        carClass3.setCarClassHash(-405837480);
-        carClass3.setMaxRating((short) 749);
-        carClass3.setMinRating((short) 600);
-        arrayOfCarClass.getCarClass().add(carClass3);
-        CarClass carClass4 = new CarClass();
-        carClass4.setCarClassHash(415909161);
-        carClass4.setMaxRating((short) 399);
-        carClass4.setMinRating((short) 250);
-        arrayOfCarClass.getCarClass().add(carClass4);
-        CarClass carClass5 = new CarClass();
-        carClass5.setCarClassHash(872416321);
-        carClass5.setMaxRating((short) 249);
-        carClass5.setMinRating((short) 0);
-        arrayOfCarClass.getCarClass().add(carClass5);
-        CarClass carClass6 = new CarClass();
-        carClass6.setCarClassHash(1866825865);
-        carClass6.setMaxRating((short) 499);
-        carClass6.setMinRating((short) 400);
-        arrayOfCarClass.getCarClass().add(carClass6);
+
+        CarClass carClass_S3 = new CarClass();
+        carClass_S3.setCarClassHash(1526233495);
+        carClass_S3.setMaxRating((short) 1999);
+        carClass_S3.setMinRating((short) 1500);
+        arrayOfCarClass.getCarClass().add(carClass_S3);
+        
+        CarClass carClass_S2 = new CarClass();
+        carClass_S2.setCarClassHash(221915816);
+        carClass_S2.setMaxRating((short) 1499);
+        carClass_S2.setMinRating((short) 1250);
+        arrayOfCarClass.getCarClass().add(carClass_S2);
+        
+        CarClass carClass_S1 = new CarClass();
+        carClass_S1.setCarClassHash(86241155);
+        carClass_S1.setMaxRating((short) 1249);
+        carClass_S1.setMinRating((short) 1000);
+        arrayOfCarClass.getCarClass().add(carClass_S1);
+        
+        CarClass carClass_S = new CarClass();
+        carClass_S.setCarClassHash(-2142411446);
+        carClass_S.setMaxRating((short) 999);
+        carClass_S.setMinRating((short) 750);
+        arrayOfCarClass.getCarClass().add(carClass_S);
+
+        CarClass carClass_A = new CarClass();
+        carClass_A.setCarClassHash(-405837480);
+        carClass_A.setMaxRating((short) 749);
+        carClass_A.setMinRating((short) 600);
+        arrayOfCarClass.getCarClass().add(carClass_A);
+
+        CarClass carClass_B = new CarClass();
+        carClass_B.setCarClassHash(-406473455);
+        carClass_B.setMaxRating((short) 599);
+        carClass_B.setMinRating((short) 500);
+        arrayOfCarClass.getCarClass().add(carClass_B);
+
+        CarClass carClass_C = new CarClass();
+        carClass_C.setCarClassHash(1866825865);
+        carClass_C.setMaxRating((short) 499);
+        carClass_C.setMinRating((short) 400);
+        arrayOfCarClass.getCarClass().add(carClass_C);
+
+        CarClass carClass_D = new CarClass();
+        carClass_D.setCarClassHash(415909161);
+        carClass_D.setMaxRating((short) 399);
+        carClass_D.setMinRating((short) 250);
+        arrayOfCarClass.getCarClass().add(carClass_D);
+
+        CarClass carClass_E = new CarClass();
+        carClass_E.setCarClassHash(872416321);
+        carClass_E.setMaxRating((short) 249);
+        carClass_E.setMinRating((short) 50);
+        arrayOfCarClass.getCarClass().add(carClass_E);
+
+        CarClass carClass_F = new CarClass();
+        carClass_F.setCarClassHash(869393278);
+        carClass_F.setMaxRating((short) 49);
+        carClass_F.setMinRating((short) 0);
+        arrayOfCarClass.getCarClass().add(carClass_F);
+
         return arrayOfCarClass;
     }
 }

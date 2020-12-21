@@ -22,6 +22,17 @@ public class LobbyDAO extends LongKeyedDAO<LobbyEntity> {
         super(LobbyEntity.class);
     }
 
+    public LobbyEntity findById(Long id) {
+        LobbyEntity lobbyEntity = entityManager.find(LobbyEntity.class, id);
+
+        if (lobbyEntity != null) {
+            lobbyEntity.getEntrants().size();
+            return lobbyEntity;
+        }
+
+        return null;
+    }
+
     public List<LobbyEntity> findAllOpen(int carClassHash) {
         LocalDateTime dateNow = LocalDateTime.now();
         LocalDateTime datePast = LocalDateTime.now().minusSeconds(35);

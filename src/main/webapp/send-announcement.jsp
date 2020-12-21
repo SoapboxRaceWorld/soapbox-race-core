@@ -17,7 +17,7 @@
     <title>Send Chat Announcement</title>
 </head>
 <body>
-<form action="Engine.svc/SendAnnouncement" method="post">
+<form action="Engine.svc/Send/Announcement" method="post">
     Message: <textarea name="message"></textarea>
     <br/> <br/>
     <input type="hidden" name="announcementAuth"

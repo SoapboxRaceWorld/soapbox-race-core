@@ -7,6 +7,7 @@ public class ServerInformationVO {
 
     private String homePageUrl;
     private String facebookUrl;
+    private String twitterUrl;
     private String discordUrl;
 
     private String serverName;
@@ -24,6 +25,9 @@ public class ServerInformationVO {
 
     private Long onlineNumber;
     private boolean requireTicket = false;
+    private float playerCountRewardMultiplier;
+    private boolean happyHourEnabled = false;
+    private float happyHourMultipler = 1f;
     private String serverVersion;
 
     public String getMessageSrv() {
@@ -48,6 +52,14 @@ public class ServerInformationVO {
 
     public void setFacebookUrl(String facebookUrl) {
         this.facebookUrl = facebookUrl;
+    }
+
+    public String getTwitterUrl() {
+        return twitterUrl;
+    }
+
+    public void setTwitterUrl(String twitterUrl) {
+        this.twitterUrl = twitterUrl;
     }
 
     public String getDiscordUrl() {
@@ -169,4 +181,28 @@ public class ServerInformationVO {
     public void setServerVersion(String serverVersion) {
         this.serverVersion = serverVersion;
     }
+
+	public float getPlayerCountRewardMultiplier() {
+		return playerCountRewardMultiplier;
+	}
+
+	public void setPlayerCountRewardMultiplier(float playerCountRewardMultiplier) {
+		this.playerCountRewardMultiplier = playerCountRewardMultiplier;
+    }
+    
+	public boolean getHappyHourEnabled() {
+		return happyHourEnabled;
+	}
+
+	public void setHappyHourEnabled(boolean happyHourEnabled) {
+		this.happyHourEnabled = happyHourEnabled;
+    }
+
+	public float getHappyHourMultipler() {
+		return happyHourMultipler;
+	}
+
+	public void setHappyHourMultipler(float happyHourMultipler) {
+		this.happyHourMultipler = happyHourMultipler;
+	}
 }

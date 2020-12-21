@@ -59,6 +59,15 @@ public class UserEntity {
     @Column(name = "isLocked")
     private boolean isLocked;
 
+    @Column(name = "isDeveloper")
+    private boolean isDeveloper;
+
+    @Column(name = "DiscordID", length = 255)
+	private String discordid;
+
+	@Column(name = "UserAgent", length = 255)
+    private String ua;
+
     @Column(name = "created")
     private LocalDateTime created;
 
@@ -119,6 +128,31 @@ public class UserEntity {
     public void setPremium(boolean premium) {
         this.premium = premium;
     }
+
+
+    public boolean isDeveloper() {
+        return isDeveloper;
+    }
+
+    public void setIsDeveloper(boolean isDeveloper) {
+        this.isDeveloper = isDeveloper;
+    }
+    
+	public String getDiscordId() {
+		return discordid;
+	}
+
+	public void setDiscordId(String discordid) {
+		this.discordid = discordid;
+	}
+
+	public String getUA() {
+		return ua;
+	}
+
+	public void setUA(String ua) {
+		this.ua = ua;
+	}
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean ownsPersona(Long id) {

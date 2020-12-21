@@ -29,6 +29,13 @@
         <version.thorntail>2.7.0.Final</version.thorntail>
     </properties>
 
+    <repositories>
+	    <repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -256,6 +263,11 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.MrPowerGamerBR</groupId>
+            <artifactId>TemmieWebhook</artifactId>
+            <version>-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
