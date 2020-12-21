@@ -81,8 +81,7 @@ public class TokenSessionBO {
         long time = new Date().getTime();
         long tokenTime = tokenSessionEntity.getExpirationDate().getTime();
         if (time > tokenTime) {
-            removeSession(securityToken);
-            throw new NotAuthorizedException("Expired Token as of " + tokenSessionEntity.getExpirationDate().toString());
+            throw new NotAuthorizedException("Expired Token");
         }
 
         return tokenSessionEntity;
@@ -98,6 +97,7 @@ public class TokenSessionBO {
         return null;
     }
 
+<<<<<<< HEAD
     public void removeSession(String sessionKey) {
         Objects.requireNonNull(this.sessionKeyToTokenMap.remove(sessionKey), () -> String.format("Tried to remove session %s, but it could not be found in the store!", sessionKey));
     }
@@ -105,6 +105,11 @@ public class TokenSessionBO {
     public void deleteByUserId(Long userId) {
         String sessionKey = Objects.requireNonNull(this.userIdToSessionKeyMap.remove(userId), () -> String.format("User %d has no session key, but we're trying to delete their session!", userId));
         removeSession(sessionKey);
+=======
+    public void deleteByUserId(Long userId) {
+        String sessionKey = Objects.requireNonNull(this.userIdToSessionKeyMap.remove(userId), () -> String.format("User %d has no session key, but we're trying to delete their session!", userId));
+        Objects.requireNonNull(this.sessionKeyToTokenMap.remove(sessionKey), () -> String.format("User %d has session key, but session isn't in the store!", userId));
+>>>>>>> parent of decde88 (Remove expired sessions in verification process)
     }
 
     public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
