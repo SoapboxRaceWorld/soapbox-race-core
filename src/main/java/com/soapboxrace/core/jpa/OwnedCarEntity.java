@@ -12,7 +12,21 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "OWNEDCAR")
 @NamedQueries({
-        @NamedQuery(name = "OwnedCarEntity.deleteAllExpired", query = "DELETE FROM OwnedCarEntity obj WHERE obj.expirationDate <= CURRENT_TIMESTAMP")
+        @NamedQuery(name = "OwnedCarEntity.findByPersonaId", //
+                query = "SELECT obj FROM OwnedCarEntity obj WHERE obj.persona.id = :persona ORDER BY obj.id"),
+        @NamedQuery(name = "OwnedCarEntity.findByPersonaIdEager", //
+                query = "SELECT obj FROM OwnedCarEntity obj " +
+                        "       INNER JOIN FETCH obj.customCar cc " +
+                        "WHERE obj.persona.id = :persona ORDER BY obj.id"), //
+        @NamedQuery(name = "OwnedCarEntity.findNumNonRentalsByPersonaId", //
+                query = "SELECT COUNT(obj) FROM OwnedCarEntity obj  WHERE obj.persona.id = :persona" +
+                        " AND obj.expirationDate IS NULL"), //
+        @NamedQuery(name = "OwnedCarEntity.findNumByPersonaId",
+                query = "SELECT COUNT(obj) FROM OwnedCarEntity obj WHERE obj.persona.id = :persona"),
+        @NamedQuery(name = "OwnedCarEntity.deleteByPersona", //
+                query = "DELETE FROM OwnedCarEntity obj WHERE obj.persona = :persona"), //
+        @NamedQuery(name = "OwnedCarEntity.deleteAllExpired", //
+                query = "DELETE FROM OwnedCarEntity obj  WHERE obj.expirationDate <= CURRENT_TIMESTAMP")
 })
 public class OwnedCarEntity {
 
@@ -20,9 +34,9 @@ public class OwnedCarEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "carSlotId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_OWNEDCAR_CARSLOT"))
-    private CarSlotEntity carSlot;
+    @ManyToOne(targetEntity = PersonaEntity.class, cascade = CascadeType.DETACH, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "personaId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_OWNEDCAR_PERSONA_personaId"))
+    private PersonaEntity persona;
 
     private int durability;
     private float heat;
@@ -41,12 +55,12 @@ public class OwnedCarEntity {
         this.id = id;
     }
 
-    public CarSlotEntity getCarSlot() {
-        return carSlot;
+    public PersonaEntity getPersona() {
+        return persona;
     }
 
-    public void setCarSlot(CarSlotEntity carSlot) {
-        this.carSlot = carSlot;
+    public void setPersona(PersonaEntity personaEntity) {
+        this.persona = personaEntity;
     }
 
     public int getDurability() {

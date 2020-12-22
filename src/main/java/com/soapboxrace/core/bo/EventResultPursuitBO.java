@@ -99,7 +99,7 @@ public class EventResultPursuitBO extends EventResultBO<PursuitArbitrationPacket
 
         achievementBO.commitTransaction(personaEntity, transaction);
 
-        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(activePersonaId).getOwnedCar();
+        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(activePersonaId);
         ownedCarEntity.setHeat(isBusted ? 1 : pursuitArbitrationPacket.getHeat());
         ownedCarDAO.update(ownedCarEntity);
         eventDataDao.update(eventDataEntity);

@@ -71,8 +71,7 @@ public class LobbyBO {
         PersonaEntity personaEntity = personaDao.find(personaId);
         EventEntity eventEntity = eventDao.find(eventId);
 
-        CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
-        OwnedCarEntity ownedCarEntity = defaultCarEntity.getOwnedCar();
+        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId);
         CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
 
         // only check restriction on non-open events

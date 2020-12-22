@@ -44,7 +44,7 @@ public class EventBO {
     }
 
     public void createEventDataSession(Long personaId, Long eventSessionId) {
-        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId).getOwnedCar();
+        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId);
 
         EventSessionEntity eventSessionEntity = eventSessionDao.find(eventSessionId);
         EventDataEntity eventDataEntity = new EventDataEntity();
@@ -71,8 +71,7 @@ public class EventBO {
             return null;
         }
 
-        CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(activePersonaId);
-        OwnedCarEntity ownedCarEntity = defaultCarEntity.getOwnedCar();
+        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(activePersonaId);
         CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
 
         // only check restriction on non-open events

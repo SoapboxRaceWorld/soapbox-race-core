@@ -9,7 +9,10 @@ package com.soapboxrace.core.api;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
-import com.soapboxrace.core.jpa.*;
+import com.soapboxrace.core.jpa.OwnedCarEntity;
+import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.jpa.ProductEntity;
+import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.util.JAXBUtility;
 
@@ -137,10 +140,9 @@ public class Personas {
         sessionBO.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
 
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
-        List<CarSlotEntity> personasCar = carSlotBO.getPersonasCar(personaId);
+        List<OwnedCarEntity> personasCar = carSlotBO.getPersonasCar(personaId);
         ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
-        for (CarSlotEntity carSlotEntity : personasCar) {
-            OwnedCarEntity ownedCarEntity = carSlotEntity.getOwnedCar();
+        for (OwnedCarEntity ownedCarEntity : personasCar) {
             OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
             arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
         }
@@ -214,9 +216,9 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public ArrayOfOwnedCarTrans carsGet(@PathParam(value = "personaId") Long personaId) {
         ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
-        List<CarSlotEntity> personasCar = carSlotBO.getPersonasCar(personaId);
-        for (CarSlotEntity carSlotEntity : personasCar) {
-            OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
+        List<OwnedCarEntity> personasCar = carSlotBO.getPersonasCar(personaId);
+        for (OwnedCarEntity ownedCarEntity : personasCar) {
+            OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
             arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
         }
         return arrayOfOwnedCarTrans;
