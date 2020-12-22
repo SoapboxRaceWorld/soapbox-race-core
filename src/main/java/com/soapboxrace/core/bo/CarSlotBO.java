@@ -31,7 +31,7 @@ public class CarSlotBO {
     @EJB
     private BasketBO basketBO;
 
-    @Schedule(minute = "*", hour = "*", persistent = false)
+    //@Schedule(minute = "*", hour = "*", persistent = false)
     public void scheduledRemoval() {
         for (CarSlotEntity carSlotEntity : carSlotDAO.findAllExpired()) {
             if (carSlotEntity.getOwnedCar().getExpirationDate().isBefore(LocalDateTime.now())) {
