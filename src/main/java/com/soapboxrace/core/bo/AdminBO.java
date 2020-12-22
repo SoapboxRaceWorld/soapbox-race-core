@@ -66,7 +66,7 @@ public class AdminBO {
         switch (commandInfo.action) {
             case BAN:
                 if (banBO.isBanned(userEntity)) {
-                    openFireSoapBoxCli.send(XmppChat.createSystemMessage("Oh no, this user is already banned..."), personaId);
+                    openFireSoapBoxCli.send(XmppChat.createSystemMessage("Oh no, this user is already banned."), personaId);
                     break;
                 }
 
