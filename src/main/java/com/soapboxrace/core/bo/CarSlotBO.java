@@ -10,9 +10,10 @@ import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.CustomCarDAO;
 import com.soapboxrace.core.jpa.CarSlotEntity;
 import com.soapboxrace.core.jpa.CustomCarEntity;
+import org.slf4j.Logger;
 
 import javax.ejb.*;
-import java.time.LocalDateTime;
+import javax.inject.Inject;
 import java.util.List;
 
 @Singleton
@@ -28,15 +29,14 @@ public class CarSlotBO {
     @EJB
     private PerformanceBO performanceBO;
 
-    @EJB
-    private BasketBO basketBO;
+    @Inject
+    private Logger logger;
 
     @Schedule(minute = "*", hour = "*", persistent = false)
     public void scheduledRemoval() {
-        for (CarSlotEntity carSlotEntity : carSlotDAO.findAllExpired()) {
-            if (carSlotEntity.getOwnedCar().getExpirationDate().isBefore(LocalDateTime.now())) {
-                basketBO.removeCar(carSlotEntity.getPersona(), carSlotEntity.getOwnedCar().getId());
-            }
+        int numRemoved = carSlotDAO.deleteAllExpired();
+        if (numRemoved > 0) {
+            logger.info("Removed {} expired cars", numRemoved);
         }
     }
 

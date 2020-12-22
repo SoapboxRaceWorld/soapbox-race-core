@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "OWNEDCAR")
+@NamedQueries({
+        @NamedQuery(name = "OwnedCarEntity.deleteAllExpired", query = "DELETE FROM OwnedCarEntity obj WHERE obj.expirationDate <= CURRENT_TIMESTAMP")
+})
 public class OwnedCarEntity {
 
     @Id
