@@ -34,7 +34,7 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
     - name: Build with Maven
-      run: git fetch --all --tags --always && mvn clean package -e "-Dnfs.core.stage=production"
+      run: git fetch --all --tags && mvn clean package -e "-Dnfs.core.stage=production"
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
