@@ -232,9 +232,13 @@ public class DriverPersonaBO {
 
     public ArrayOfString reserveName(String name) {
         ArrayOfString arrayOfString = new ArrayOfString();
+
         if (personaDao.findByName(name) != null) {
             arrayOfString.getString().add("NONE");
+        } else if (parameterBO.getStrParam("BLACKLISTED_NICKNAMES", "").contains(name)) {
+            arrayOfString.getString().add("NONE");
         }
+        
         return arrayOfString;
     }
 
