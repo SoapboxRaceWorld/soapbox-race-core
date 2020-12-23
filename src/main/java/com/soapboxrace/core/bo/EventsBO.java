@@ -179,6 +179,25 @@ public class EventsBO {
         return getTreasureHuntEventSession(treasureHuntEntity);
     }
 
+    public Float getPlayerCountConst() {
+        OnlineUsersEntity onlineUsersEntity = onlineUsersBO.getOnlineUsersStats();
+
+		float divider = parameterBO.getFloatParam("PLAYERCOUNT_REWARD_DIVIDER", 0f);
+		if (divider == 0) return 1f;
+		long playerCount = onlineUsersEntity.getNumberOfOnline();
+		return 1f + playerCount / divider;
+    }
+    
+    public Float getHappyHour() {
+        Boolean happyHourEnabled = parameterBO.getBoolParam("happyHourEnabled");
+
+        if(happyHourEnabled) {
+            return parameterBO.getFloatParam("happyHourMultipler");
+        } else {
+            return 1f;
+        }
+    }
+
     private Accolades getTreasureHuntAccolades(Long activePersonaId, TreasureHuntEntity treasureHuntEntity, AchievementTransaction achievementTransaction, boolean giveReward) {
         PersonaEntity personaEntity = personaDao.find(activePersonaId);
         TreasureHuntConfigEntity treasureHuntConfigEntity =
@@ -194,8 +213,8 @@ public class EventsBO {
         float repThMultiplier = parameterBO.getFloatParam("TH_REP_MULTIPLIER");
         float cashThMultiplier = parameterBO.getFloatParam("TH_CASH_MULTIPLIER");
 
-        float globalRepMultiplier = parameterBO.getFloatParam("REP_REWARD_MULTIPLIER", 1.0f);
-        float globalCashMultiplier = parameterBO.getFloatParam("CASH_REWARD_MULTIPLIER", 1.0f);
+        float globalRepMultiplier = Math.round( getPlayerCountConst() * getHappyHour() );
+        float globalCashMultiplier = Math.round( getPlayerCountConst() * getHappyHour() );
 
         float baseRep = playerLevelRepConst * repThMultiplier * globalRepMultiplier;
         float baseCash = playerLevelCashConst * cashThMultiplier * globalCashMultiplier;
