@@ -6,13 +6,14 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.CarSlotDAO;
 import com.soapboxrace.core.dao.CustomCarDAO;
-import com.soapboxrace.core.jpa.CarSlotEntity;
+import com.soapboxrace.core.dao.OwnedCarDAO;
 import com.soapboxrace.core.jpa.CustomCarEntity;
+import com.soapboxrace.core.jpa.OwnedCarEntity;
+import org.slf4j.Logger;
 
 import javax.ejb.*;
-import java.time.LocalDateTime;
+import javax.inject.Inject;
 import java.util.List;
 
 @Singleton
@@ -20,7 +21,7 @@ import java.util.List;
 public class CarSlotBO {
 
     @EJB
-    private CarSlotDAO carSlotDAO;
+    private OwnedCarDAO ownedCarDAO;
 
     @EJB
     private CustomCarDAO customCarDAO;
@@ -28,23 +29,22 @@ public class CarSlotBO {
     @EJB
     private PerformanceBO performanceBO;
 
-    @EJB
-    private BasketBO basketBO;
+    @Inject
+    private Logger logger;
 
     //@Schedule(minute = "*", hour = "*", persistent = false)
     public void scheduledRemoval() {
-        for (CarSlotEntity carSlotEntity : carSlotDAO.findAllExpired()) {
-            if (carSlotEntity.getOwnedCar().getExpirationDate().isBefore(LocalDateTime.now())) {
-                basketBO.removeCar(carSlotEntity.getPersona(), carSlotEntity.getOwnedCar().getId());
-            }
+        int numRemoved = ownedCarDAO.deleteAllExpired();
+        if (numRemoved > 0) {
+            logger.info("Removed {} expired cars", numRemoved);
         }
     }
 
-    public List<CarSlotEntity> getPersonasCar(Long personaId) {
-        List<CarSlotEntity> carSlotEntities = carSlotDAO.findByPersonaId(personaId);
+    public List<OwnedCarEntity> getPersonasCar(Long personaId) {
+        List<OwnedCarEntity> ownedCarEntities = ownedCarDAO.findByPersonaId(personaId);
 
-        for (CarSlotEntity carSlotEntity : carSlotEntities) {
-            CustomCarEntity customCarEntity = carSlotEntity.getOwnedCar().getCustomCar();
+        for (OwnedCarEntity ownedCarEntity : ownedCarEntities) {
+            CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
             customCarEntity.getPaints().size();
             customCarEntity.getPerformanceParts().size();
             customCarEntity.getSkillModParts().size();
@@ -58,10 +58,10 @@ public class CarSlotBO {
             }
         }
 
-        return carSlotEntities;
+        return ownedCarEntities;
     }
 
     public int countPersonasCar(Long personaId) {
-        return carSlotDAO.findNumByPersonaId(personaId);
+        return ownedCarDAO.findNumByPersonaId(personaId);
     }
 }

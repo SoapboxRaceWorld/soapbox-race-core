@@ -11,7 +11,6 @@ import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
-import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.UserInfo;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
@@ -60,16 +59,6 @@ public class User {
     @Path("GetPermanentSession")
     @Produces(MediaType.APPLICATION_XML)
     public Response getPermanentSession() {
-        UserEntity userEntity = requestSessionInfo.getUser();
-        BanEntity ban = authenticationBO.checkUserBan(userEntity);
-
-        if (ban != null) {
-            // Ideally this will never happen. Then again, plenty of weird stuff has happened.
-            tokenBO.deleteByUserId(userEntity.getId());
-
-            throw new EngineException(EngineExceptionCode.BannedEntitlements, true);
-        }
-
         long numberOfUsersOnlineNow = onlineUsersBO.getOnlineUsersStats().getNumberOfOnline();
         int maxOnlinePlayers = parameterBO.getIntParam("MAX_ONLINE_PLAYERS", -1);
 
@@ -79,6 +68,7 @@ public class User {
             }
         }
 
+        UserEntity userEntity = requestSessionInfo.getUser();
         tokenBO.deleteByUserId(userEntity.getId());
         String randomUUID = tokenBO.createToken(userEntity, sr.getRemoteHost());
         UserInfo userInfo = userBO.getUserInfo(userEntity);
