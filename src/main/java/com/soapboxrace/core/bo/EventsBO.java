@@ -17,6 +17,7 @@ import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.SkillModRewardType;
 import com.soapboxrace.core.jpa.TreasureHuntConfigEntity;
 import com.soapboxrace.core.jpa.TreasureHuntEntity;
+import com.soapboxrace.core.jpa.OnlineUsersEntity;
 import com.soapboxrace.jaxb.http.*;
 
 import javax.ejb.EJB;
@@ -49,6 +50,9 @@ public class EventsBO {
 
     @EJB
     private TreasureHuntConfigDAO treasureHuntConfigDAO;
+
+    @EJB
+    private OnlineUsersBO onlineUsersBO;
 
     public TreasureHuntEventSession getTreasureHuntEventSession(Long activePersonaId) {
         TreasureHuntEntity treasureHuntEntity = treasureHuntDao.find(activePersonaId);
