@@ -57,16 +57,14 @@ public class SendAnnouncement {
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/Chat")
-    public String sendChat(@QueryParam("announcementAuth") String token, @QueryParam("message") String message, @QueryParam("from") Long from, @QueryParam("channel") String channel) {
+    public String sendChat(@QueryParam("announcementAuth") String token, @QueryParam("message") String message, @QueryParam("from") String from, @QueryParam("channel") String channel) {
         String announcementToken = parameterBO.getStrParam("ANNOUNCEMENT_AUTH");
         if (announcementToken == null) {
             return "ERROR! no announcement token set in DB";
         }
 
         if (announcementToken.equals(token)) {
-			PersonaEntity personaEntity = personaDAO.find(from);
-
-            sendToAllXMPP.sendMessageToChannel("[" + personaEntity.getName() + "] " + message, channel);
+            sendToAllXMPP.sendMessageToChannel("[" + from + "] " + message, channel);
             return "SUCCESS!";
         } else {
             return "ERROR! invalid admin token";
