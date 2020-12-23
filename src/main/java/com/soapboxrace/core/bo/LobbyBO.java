@@ -22,6 +22,7 @@ import com.soapboxrace.jaxb.http.LobbyInfo;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -60,6 +61,7 @@ public class LobbyBO {
         if (lobbys.isEmpty()) {
             matchmakingBO.addPlayerToQueue(personaId, carClassHash);
         } else {
+            Collections.shuffle(lobbys);
             PersonaEntity personaEntity = personaDao.find(personaId);
             joinLobby(personaEntity, lobbys, true);
         }
@@ -69,8 +71,7 @@ public class LobbyBO {
         PersonaEntity personaEntity = personaDao.find(personaId);
         EventEntity eventEntity = eventDao.find(eventId);
 
-        CarSlotEntity defaultCarEntity = personaBO.getDefaultCarEntity(personaId);
-        OwnedCarEntity ownedCarEntity = defaultCarEntity.getOwnedCar();
+        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId);
         CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
 
         // only check restriction on non-open events
@@ -81,7 +82,7 @@ public class LobbyBO {
             }
         }
 
-        List<LobbyEntity> lobbys = lobbyDao.findByEventStarted(eventId);
+        List<LobbyEntity> lobbys = lobbyDao.findByEventStarted(eventEntity);
         if (lobbys.size() == 0) {
             createLobby(personaEntity.getPersonaId(), eventId, eventEntity.getCarClassHash(), false);
         } else {
@@ -95,7 +96,7 @@ public class LobbyBO {
         if (!personaIdList.isEmpty()) {
             createLobby(creatorPersonaId, eventId, eventEntity.getCarClassHash(), true);
 
-            LobbyEntity lobbyEntity = lobbyDao.findByEventAndPersona(eventId, creatorPersonaId);
+            LobbyEntity lobbyEntity = lobbyDao.findByEventAndPersona(eventEntity, creatorPersonaId);
             if (lobbyEntity != null) {
                 for (Long recipientPersonaId : personaIdList) {
                     if (!recipientPersonaId.equals(creatorPersonaId)) {

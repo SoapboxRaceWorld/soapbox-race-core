@@ -37,9 +37,6 @@ public class BasketBO {
     private BasketDefinitionDAO basketDefinitionsDAO;
 
     @EJB
-    private CarSlotDAO carSlotDAO;
-
-    @EJB
     private OwnedCarDAO ownedCarDAO;
 
     @EJB
@@ -95,9 +92,9 @@ public class BasketBO {
     }
 
     public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity) {
-        CarSlotEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
+        OwnedCarEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
         int price =
-                (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCarEntity.getOwnedCar().getDurability()));
+                (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCarEntity.getDurability()));
         ProductEntity repairProduct = productDao.findByProductId(productId);
 
         if (repairProduct == null) {
@@ -105,9 +102,8 @@ public class BasketBO {
         }
         if (this.canPurchaseProduct(personaEntity, repairProduct, price)) {
             personaDao.update(personaEntity);
-            OwnedCarEntity ownedCarEntity = defaultCarEntity.getOwnedCar();
-            carDamageBO.updateDurability(ownedCarEntity, 100);
-            carSlotDAO.update(defaultCarEntity);
+            carDamageBO.updateDurability(defaultCarEntity, 100);
+            ownedCarDAO.update(defaultCarEntity);
             this.performPersonaTransaction(personaEntity, repairProduct, price);
             return CommerceResultStatus.SUCCESS;
         }
@@ -144,12 +140,12 @@ public class BasketBO {
 
         if (canPurchaseProduct(personaEntity, productEntity)) {
             try {
-                CarSlotEntity carSlotEntity = addCar(productEntity, personaEntity);
-                personaEntity.setCurCarIndex(carSlotDAO.findNumByPersonaId(personaEntity.getPersonaId()) - 1);
+                OwnedCarEntity ownedCarEntity = addCar(productEntity, personaEntity);
+                personaEntity.setCurCarIndex(ownedCarDAO.findNumByPersonaId(personaEntity.getPersonaId()) - 1);
                 personaDao.update(personaEntity);
 
                 ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
-                OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carSlotEntity.getOwnedCar());
+                OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
                 commerceResultTrans.setPurchasedCars(arrayOfOwnedCarTrans);
                 arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
 
@@ -229,7 +225,7 @@ public class BasketBO {
         return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
     }
 
-    public CarSlotEntity addCar(ProductEntity productEntity, PersonaEntity personaEntity) {
+    public OwnedCarEntity addCar(ProductEntity productEntity, PersonaEntity personaEntity) {
         Objects.requireNonNull(productEntity, "productEntity is null");
 
         /*
@@ -241,7 +237,7 @@ public class BasketBO {
 
         boolean isRental = productEntity.getDurationMinute() > 0;
         if (isRental) {
-            Long numNonRentals = carSlotDAO.findNumNonRentalsByPersonaId(personaEntity.getPersonaId());
+            Long numNonRentals = ownedCarDAO.findNumNonRentalsByPersonaId(personaEntity.getPersonaId());
 
             if (numNonRentals.equals(0L)) {
                 throw new EngineException("Persona " + personaEntity.getName() + " has no non-rental cars", EngineExceptionCode.MissingRequiredEntitlements, true);
@@ -252,16 +248,11 @@ public class BasketBO {
         ownedCarTrans.setId(0L);
         ownedCarTrans.getCustomCar().setId(0);
 
-        CarSlotEntity carSlotEntity = new CarSlotEntity();
-        carSlotEntity.setPersona(personaEntity);
-
         OwnedCarEntity ownedCarEntity = new OwnedCarEntity();
-        ownedCarEntity.setCarSlot(carSlotEntity);
-
+        ownedCarEntity.setPersona(personaEntity);
         CustomCarEntity customCarEntity = new CustomCarEntity();
         customCarEntity.setOwnedCar(ownedCarEntity);
         ownedCarEntity.setCustomCar(customCarEntity);
-        carSlotEntity.setOwnedCar(ownedCarEntity);
         OwnedCarConverter.trans2Entity(ownedCarTrans, ownedCarEntity);
         OwnedCarConverter.details2NewEntity(ownedCarTrans, ownedCarEntity);
 
@@ -270,27 +261,26 @@ public class BasketBO {
             ownedCarEntity.setOwnershipType("RentalCar");
         }
 
-        carSlotDAO.insert(carSlotEntity);
-
-        performanceBO.calcNewCarClass(carSlotEntity.getOwnedCar().getCustomCar());
+        ownedCarDAO.insert(ownedCarEntity);
+        performanceBO.calcNewCarClass(ownedCarEntity.getCustomCar());
 
         if (isRental && canAddAmplifier(personaEntity.getPersonaId(), "INSURANCE_AMPLIFIER")) {
             addAmplifier(personaEntity, productDao.findByEntitlementTag("INSURANCE_AMPLIFIER"));
         }
 
         CarClassesEntity carClassesEntity =
-                carClassesDAO.find(carSlotEntity.getOwnedCar().getCustomCar().getName());
+                carClassesDAO.find(ownedCarEntity.getCustomCar().getName());
 
         AchievementTransaction transaction = achievementBO.createTransaction(personaEntity.getPersonaId());
 
         if (carClassesEntity != null) {
             AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity,
                     AchievementCommerceContext.CommerceType.CAR_PURCHASE);
-            transaction.add("COMMERCE", Map.of("persona", personaEntity, "carSlot", carSlotEntity, "commerceCtx", commerceContext));
+            transaction.add("COMMERCE", Map.of("persona", personaEntity, "ownedCar", ownedCarEntity, "commerceCtx", commerceContext));
             achievementBO.commitTransaction(personaEntity, transaction);
         }
 
-        return carSlotEntity;
+        return ownedCarEntity;
     }
 
     public boolean sellCar(TokenSessionEntity tokenSessionEntity, Long personaId, Long serialNumber) {
@@ -322,17 +312,13 @@ public class BasketBO {
         if (ownedCarEntity == null) {
             return false;
         }
-        CarSlotEntity carSlotEntity = ownedCarEntity.getCarSlot();
-        if (carSlotEntity == null) {
-            return false;
-        }
-        if (!carSlotEntity.getPersona().getPersonaId().equals(personaEntity.getPersonaId())) {
+        if (!ownedCarEntity.getPersona().getPersonaId().equals(personaEntity.getPersonaId())) {
             throw new EngineException(EngineExceptionCode.CarNotOwnedByDriver, false);
         }
-        Long nonRentalCarCount = carSlotDAO.findNumNonRentalsByPersonaId(personaEntity.getPersonaId());
+        Long nonRentalCarCount = ownedCarDAO.findNumNonRentalsByPersonaId(personaEntity.getPersonaId());
 
         // If the car is not a rental, check the number of non-rentals
-        if (!"RentalCar".equalsIgnoreCase(carSlotEntity.getOwnedCar().getOwnershipType())) {
+        if (!"RentalCar".equalsIgnoreCase(ownedCarEntity.getOwnershipType())) {
             if (nonRentalCarCount <= 1) {
                 return false;
             }
@@ -340,7 +326,7 @@ public class BasketBO {
             return false;
         }
 
-        carSlotDAO.delete(carSlotEntity);
+        ownedCarDAO.delete(ownedCarEntity);
 
         int curCarIndex = personaEntity.getCurCarIndex();
 
@@ -349,7 +335,7 @@ public class BasketBO {
             personaEntity.setCurCarIndex(curCarIndex - 1);
         } else {
             // Worst case: count cars again and subtract 1 to get new index
-            personaEntity.setCurCarIndex(carSlotDAO.findNumByPersonaId(personaEntity.getPersonaId()) - 1);
+            personaEntity.setCurCarIndex(ownedCarDAO.findNumByPersonaId(personaEntity.getPersonaId()) - 1);
         }
 
         personaDao.update(personaEntity);

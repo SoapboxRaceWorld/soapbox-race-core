@@ -92,7 +92,7 @@ public class ItemRewardBO {
         }
 
         for (WrappedCarReward carReward : rewardedItemsContainer.getCarRewardList()) {
-            commerceResult.getPurchasedCars().getOwnedCarTrans().add(OwnedCarConverter.entity2Trans(carReward.getCarSlotEntity().getOwnedCar()));
+            commerceResult.getPurchasedCars().getOwnedCarTrans().add(OwnedCarConverter.entity2Trans(carReward.getOwnedCarEntity()));
             ProductEntity productEntity = carReward.getProductEntity();
 
             CommerceItemTrans commerceItemTrans = new CommerceItemTrans();
@@ -199,17 +199,17 @@ public class ItemRewardBO {
     }
 
     public static class WrappedCarReward {
-        private final CarSlotEntity carSlotEntity;
+        private final OwnedCarEntity ownedCarEntity;
 
         private final ProductEntity productEntity;
 
-        public WrappedCarReward(CarSlotEntity carSlotEntity, ProductEntity productEntity) {
-            this.carSlotEntity = carSlotEntity;
+        public WrappedCarReward(OwnedCarEntity ownedCarEntity, ProductEntity productEntity) {
+            this.ownedCarEntity = ownedCarEntity;
             this.productEntity = productEntity;
         }
 
-        public CarSlotEntity getCarSlotEntity() {
-            return carSlotEntity;
+        public OwnedCarEntity getOwnedCarEntity() {
+            return ownedCarEntity;
         }
 
         public ProductEntity getProductEntity() {

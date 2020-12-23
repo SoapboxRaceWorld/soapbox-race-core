@@ -106,7 +106,9 @@ public class TokenSessionBO {
 
     public void deleteByUserId(Long userId) {
         String sessionKey = this.userIdToSessionKeyMap.remove(userId);
-        removeSession(sessionKey);
+        if (sessionKey != null) {
+            removeSession(sessionKey);
+        }
     }
 
     public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {

@@ -14,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Stateless
 public class LobbyDAO extends LongKeyedDAO<LobbyEntity> {
@@ -45,12 +46,9 @@ public class LobbyDAO extends LongKeyedDAO<LobbyEntity> {
         return query.getResultList();
     }
 
-    public List<LobbyEntity> findByEventStarted(int eventId) {
+    public List<LobbyEntity> findByEventStarted(EventEntity eventEntity) {
         LocalDateTime dateNow = LocalDateTime.now();
-        LocalDateTime datePast = LocalDateTime.now().minusSeconds(35);
-
-        EventEntity eventEntity = new EventEntity();
-        eventEntity.setId(eventId);
+        LocalDateTime datePast = LocalDateTime.now().minus(eventEntity.getLobbyCountdownTime(), TimeUnit.MILLISECONDS.toChronoUnit());
 
         TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findByEventStarted",
                 LobbyEntity.class);
@@ -60,11 +58,9 @@ public class LobbyDAO extends LongKeyedDAO<LobbyEntity> {
         return query.getResultList();
     }
 
-    public LobbyEntity findByEventAndPersona(int eventId, Long personaId) {
+    public LobbyEntity findByEventAndPersona(EventEntity eventEntity, Long personaId) {
         LocalDateTime dateNow = LocalDateTime.now();
-        LocalDateTime datePast = LocalDateTime.now().minusSeconds(35);
-        EventEntity eventEntity = new EventEntity();
-        eventEntity.setId(eventId);
+        LocalDateTime datePast = LocalDateTime.now().minus(eventEntity.getLobbyCountdownTime(), TimeUnit.MILLISECONDS.toChronoUnit());
 
         TypedQuery<LobbyEntity> query = entityManager.createNamedQuery("LobbyEntity.findByEventAndPersona",
                 LobbyEntity.class);
