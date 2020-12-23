@@ -25,3 +25,8 @@ ALTER TABLE OWNEDCAR
 
 # Remove old table
 DROP TABLE CARSLOT;
+
+# Update achievement scripts that depend on carSlot
+UPDATE ACHIEVEMENT
+SET update_trigger=REPLACE(update_trigger, 'carSlot.getOwnedCar().', 'ownedCar.')
+WHERE update_trigger LIKE '%carSlot.getOwnedCar().%';
