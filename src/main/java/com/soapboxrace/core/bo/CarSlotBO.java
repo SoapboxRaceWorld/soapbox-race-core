@@ -32,7 +32,7 @@ public class CarSlotBO {
     @Inject
     private Logger logger;
 
-    //@Schedule(minute = "*", hour = "*", persistent = false)
+    @Schedule(minute = "*", hour = "*", persistent = false)
     public void scheduledRemoval() {
         int numRemoved = ownedCarDAO.deleteAllExpired();
         if (numRemoved > 0) {
