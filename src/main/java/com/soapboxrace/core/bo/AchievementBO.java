@@ -72,12 +72,11 @@ public class AchievementBO {
     public void updateRankRarities() {
         Long countPersonas = personaDAO.countPersonas();
 
-        if (countPersonas == 0L) return;
-
-        for (AchievementEntity achievementEntity : this.achievementEntities) {
-            for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
-                achievementRankEntity.setRarity(((float) personaAchievementRankDAO.countPersonasWithRank(achievementRankEntity.getId())) / countPersonas);
-                achievementRankDAO.update(achievementRankEntity);
+        if (countPersonas > 0) {
+            for (AchievementEntity achievementEntity : this.achievementEntities) {
+                for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
+                    this.achievementRankDAO.updateRankRarity(achievementRankEntity.getId(), ((float) personaAchievementRankDAO.countPersonasWithRank(achievementRankEntity.getId())) / countPersonas);
+                }
             }
         }
     }
