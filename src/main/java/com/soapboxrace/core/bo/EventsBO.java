@@ -188,8 +188,10 @@ public class EventsBO {
         float baseRepTh = treasureHuntConfigEntity.getBaseRep();
         float baseCashTh = treasureHuntConfigEntity.getBaseCash();
 
-        float playerLevelRepConst = rewardBO.getPlayerLevelConst(personaEntity.getLevel(), baseRepTh);
-        float playerLevelCashConst = rewardBO.getPlayerLevelConst(personaEntity.getLevel(), baseCashTh);
+        float playerLevelCashConst = rewardBO.getPlayerLevelConst(personaEntity.getLevel() + parameterBO.getIntParam("REWARD_CASH_BASELINE_LEVEL", 0),
+                baseCashTh);
+        float playerLevelRepConst = rewardBO.getPlayerLevelConst(personaEntity.getLevel() + parameterBO.getIntParam("REWARD_REP_BASELINE_LEVEL", 0),
+                baseRepTh);
 
         float repThMultiplier = parameterBO.getFloatParam("TH_REP_MULTIPLIER");
         float cashThMultiplier = parameterBO.getFloatParam("TH_CASH_MULTIPLIER");
