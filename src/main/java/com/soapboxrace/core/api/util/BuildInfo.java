@@ -29,7 +29,6 @@ public class BuildInfo {
             time = gitStateInfo.commitTime;
             version = gitStateInfo.buildVersion;
         } catch (IOException | RuntimeException exception) {
-            System.out.println(exception.getMessage());
             branch = commitID = longCommitID = time = version = "unknown";
         }
     }

@@ -47,16 +47,21 @@ public class AdminBO {
     public void sendChatCommand(Long personaId, String command, String personaName) {
         String personaToBan = command.split(" ")[1];
         PersonaEntity personaEntity = personaDao.findByName(personaToBan);
-        command = command.replace(personaToBan + " ", "");
-		sendCommand(personaId, personaEntity.getPersonaId(), command);
+        String commandNoPersonaName = command.replace(personaEntity.getName() + " ", "");
+		sendCommand(personaId, personaEntity.getPersonaId(), commandNoPersonaName);
 	}
 
     public void sendCommand(Long personaId, Long abuserPersonaId, String command) {
         CommandInfo commandInfo = CommandInfo.parse(command);
         PersonaEntity personaEntity = personaDao.find(abuserPersonaId);
         PersonaEntity personaEntity1 = personaDao.find(personaId);
-        
-        String constructMsg = "[ " + personaEntity.getName() + " ] has been %s by [ " + personaEntity1.getName() + " ].";
+
+        System.out.println("----------------------");
+        System.out.println(command);
+        System.out.println(commandInfo);
+        System.out.println("----------------------");
+
+        String constructMsg = "[" + personaEntity.getName() + "] has been %s by [" + personaEntity1.getName() + "].";
         String constructMsg_ds = "**" + personaEntity.getName() + "** has been %s by **" + personaEntity1.getName() + "**";
 
 		if (personaEntity == null && personaEntity1 == null)
