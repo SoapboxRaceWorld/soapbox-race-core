@@ -67,7 +67,7 @@ create table if not exists ACHIEVEMENT_RANK
 create table if not exists BASKETDEFINITION
 (
     productId     varchar(255) not null
-        primary key,
+        //removed due to double primary key
     ownedCarTrans longtext     null,
     constraint BASKETDEFINITION_productId_uindex
         unique (productId)
