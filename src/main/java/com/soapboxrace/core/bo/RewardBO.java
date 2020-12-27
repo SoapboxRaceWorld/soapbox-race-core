@@ -16,6 +16,8 @@ import javax.ejb.Stateless;
 import java.util.Map;
 import java.util.Set;
 
+import com.soapboxrace.core.bo.util.DiscordWebhook;
+
 @Stateless
 public class RewardBO {
 
@@ -54,6 +56,9 @@ public class RewardBO {
 
     @EJB
     private OnlineUsersBO onlineUsersBO;
+
+    @EJB
+    private DiscordWebhook discord;
 
     public Float getPlayerLevelConst(int playerLevel, float levelCashRewardMultiplier) {
         return levelCashRewardMultiplier * playerLevel;
@@ -101,12 +106,13 @@ public class RewardBO {
         }
 
         boolean hasLevelChanged = false;
-
+        boolean isLeveledUp = false;
+        
         if (parameterBO.getBoolParam("ENABLE_REPUTATION") && personaEntity.getLevel() < maxLevel) {
             Long expToNextLevel = levelRepDao.find((long) personaEntity.getLevel()).getExpPoint();
             long expMax = personaEntity.getRepAtCurrentLevel() + exp;
             if (expMax >= expToNextLevel) {
-                boolean isLeveledUp = true;
+                isLeveledUp = true;
                 hasLevelChanged = true;
                 while (isLeveledUp) {
                     personaEntity.setLevel(personaEntity.getLevel() + 1);
@@ -126,6 +132,18 @@ public class RewardBO {
             personaEntity.setRep(personaEntity.getRep() + exp);
         }
         personaDao.update(personaEntity);
+
+        if(isLeveledUp == true) {
+            String constructMsg_ds = "**" + personaEntity.getName() + "** has reached Level **" + (personaEntity.getLevel() + 1) + "**";
+
+            if(parameterBO.getStrParam("DISCORD_WEBHOOK_LEVEL_URL") != null) {
+                discord.sendMessage(constructMsg_ds, 
+                    parameterBO.getStrParam("DISCORD_WEBHOOK_LEVEL_URL"), 
+                    parameterBO.getStrParam("DISCORD_WEBHOOK_LEVEL_NAME", "Botte"),
+                    0xff0000
+                );
+            }
+        }
 
         if (achievementTransaction != null) {
             AchievementProgressionContext progressionContext = new AchievementProgressionContext(cash, exp,
