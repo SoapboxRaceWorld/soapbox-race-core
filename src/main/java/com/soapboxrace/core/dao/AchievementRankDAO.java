@@ -17,4 +17,11 @@ public class AchievementRankDAO extends LongKeyedDAO<AchievementRankEntity> {
     public AchievementRankDAO() {
         super(AchievementRankEntity.class);
     }
+
+    public void updateRankRarity(Long rankId, float rarity) {
+        this.entityManager.createNamedQuery("AchievementRankEntity.updateRarity")
+                .setParameter("id", rankId)
+                .setParameter("rarity", rarity)
+                .executeUpdate();
+    }
 }

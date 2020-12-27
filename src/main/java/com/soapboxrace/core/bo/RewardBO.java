@@ -73,9 +73,12 @@ public class RewardBO {
                               ArbitrationPacket arbitrationPacket, RewardVO rewardVO) {
         float baseRep = (float) eventRewardEntity.getBaseRepReward();
         float baseCash = (float) eventRewardEntity.getBaseCashReward();
-        Float playerLevelRepConst = getPlayerLevelConst(personaEntity.getLevel(),
+        int level = personaEntity.getLevel();
+        int baselineLevelCash = parameterBO.getIntParam("REWARD_CASH_BASELINE_LEVEL", 0);
+        int baselineLevelRep = parameterBO.getIntParam("REWARD_REP_BASELINE_LEVEL", 0);
+        Float playerLevelRepConst = getPlayerLevelConst(baselineLevelRep + level,
                 eventRewardEntity.getLevelRepRewardMultiplier());
-        Float playerLevelCashConst = getPlayerLevelConst(personaEntity.getLevel(),
+        Float playerLevelCashConst = getPlayerLevelConst(baselineLevelCash + level,
                 eventRewardEntity.getLevelCashRewardMultiplier());
         Float timeConst = getTimeConst(eventEntity.getRewardsTimeLimit(), arbitrationPacket.getEventDurationInMilliseconds());
         rewardVO.setBaseRep(getBaseReward(baseRep, playerLevelRepConst, timeConst, Math.round( getPlayerCountConst() * getHappyHour() )));

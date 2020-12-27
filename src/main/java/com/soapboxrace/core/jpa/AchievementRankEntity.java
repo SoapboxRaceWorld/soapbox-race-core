@@ -10,6 +10,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "ACHIEVEMENT_RANK")
+@NamedQueries({
+        @NamedQuery(name = "AchievementRankEntity.updateRarity", query = "UPDATE AchievementRankEntity obj SET obj.rarity=:rarity WHERE obj.id=:id")
+})
 public class AchievementRankEntity {
 
     @Id

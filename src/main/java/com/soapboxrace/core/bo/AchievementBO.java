@@ -72,12 +72,11 @@ public class AchievementBO {
     public void updateRankRarities() {
         Long countPersonas = personaDAO.countPersonas();
 
-        if (countPersonas == 0L) return;
-
-        for (AchievementEntity achievementEntity : this.achievementEntities) {
-            for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
-                achievementRankEntity.setRarity(((float) personaAchievementRankDAO.countPersonasWithRank(achievementRankEntity.getId())) / countPersonas);
-                achievementRankDAO.update(achievementRankEntity);
+        if (countPersonas > 0) {
+            for (AchievementEntity achievementEntity : this.achievementEntities) {
+                for (AchievementRankEntity achievementRankEntity : achievementEntity.getRanks()) {
+                    this.achievementRankDAO.updateRankRarity(achievementRankEntity.getId(), ((float) personaAchievementRankDAO.countPersonasWithRank(achievementRankEntity.getId())) / countPersonas);
+                }
             }
         }
     }
@@ -100,7 +99,7 @@ public class AchievementBO {
      */
     public void commitTransaction(PersonaEntity personaEntity, AchievementTransaction transaction) {
         List<AchievementUpdateInfo> achievementUpdateInfoList = new ArrayList<>();
-        transaction.getEntries().forEach((k, v) -> v.forEach(m -> achievementUpdateInfoList.addAll(updateAchievements(personaEntity, k, m))));
+        transaction.getEntries().forEach((k, v) -> v.forEach(m -> achievementUpdateInfoList.addAll(updateAchievements(personaEntity, getPersonaAchievementEntityMap(personaEntity.getPersonaId()), k, m))));
         personaDAO.update(personaEntity);
         List<BadgePacket> badgePacketList = driverPersonaBO.getBadges(personaEntity.getPersonaId()).getBadgePacket();
 
@@ -121,9 +120,7 @@ public class AchievementBO {
         achievementsPacket.setBadges(new ArrayOfBadgeDefinitionPacket());
         achievementsPacket.setDefinitions(new ArrayOfAchievementDefinitionPacket());
 
-        Map<Long, PersonaAchievementEntity> personaAchievementEntityMap = personaAchievementDAO.findAllByPersonaId(personaId)
-                .stream()
-                .collect(Collectors.toMap(p -> p.getAchievementEntity().getId(), p -> p));
+        Map<Long, PersonaAchievementEntity> personaAchievementEntityMap = getPersonaAchievementEntityMap(personaId);
         for (AchievementEntity achievementEntity : /*achievementDAO.findAll()*/ achievementEntities) {
             AchievementDefinitionPacket achievementDefinitionPacket = new AchievementDefinitionPacket();
 
@@ -266,6 +263,12 @@ public class AchievementBO {
         openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
     }
 
+    private Map<Long, PersonaAchievementEntity> getPersonaAchievementEntityMap(Long personaId) {
+        return personaAchievementDAO.findAllByPersonaId(personaId)
+                .stream()
+                .collect(Collectors.toMap(p -> p.getAchievementEntity().getId(), p -> p));
+    }
+
     /**
      * Update all appropriate achievements in the given category for the persona by the given ID
      *
@@ -273,7 +276,7 @@ public class AchievementBO {
      * @param achievementCategory The category of achievements to evaluate
      * @param properties          Relevant contextual information for achievements.
      */
-    private List<AchievementUpdateInfo> updateAchievements(PersonaEntity personaEntity, String achievementCategory,
+    private List<AchievementUpdateInfo> updateAchievements(PersonaEntity personaEntity, Map<Long, PersonaAchievementEntity> personaAchievementEntityMap, String achievementCategory,
                                                            Map<String, Object> properties) {
         int originalScore = personaEntity.getScore();
         int newScore = originalScore;
@@ -288,8 +291,7 @@ public class AchievementBO {
             }
 
             // Locate persona-specific achievement data. Create it if it does not exist
-            PersonaAchievementEntity personaAchievementEntity = personaAchievementDAO.findByPersonaIdAndAchievementId(
-                    personaEntity.getPersonaId(), achievementEntity.getId());
+            PersonaAchievementEntity personaAchievementEntity = personaAchievementEntityMap.get(achievementEntity.getId());
             boolean insert = false;
 
             if (personaAchievementEntity == null) {
@@ -298,6 +300,7 @@ public class AchievementBO {
                 personaAchievementEntity.setCurrentValue(0L);
                 personaAchievementEntity.setAchievementEntity(achievementEntity);
                 personaAchievementEntity.setPersonaEntity(personaEntity);
+                personaAchievementEntityMap.put(achievementEntity.getId(), personaAchievementEntity);
                 insert = true;
             }
 
@@ -309,7 +312,7 @@ public class AchievementBO {
                 if (shouldUpdate) {
                     if (insert)
                         personaAchievementDAO.insert(personaAchievementEntity);
-                    AchievementUpdateInfo achievementUpdateInfo = updateAchievement(personaEntity, achievementEntity, properties, personaAchievementEntity);
+                    AchievementUpdateInfo achievementUpdateInfo = updateAchievement(achievementEntity, properties, personaAchievementEntity);
                     newScore += achievementUpdateInfo.getPointsGiven();
                     achievementUpdateInfoList.add(achievementUpdateInfo);
                 }
@@ -325,14 +328,14 @@ public class AchievementBO {
                     personaEntity.getLevel(), personaEntity.getScore(), 0, false, true,
                     false, false);
 
-            achievementUpdateInfoList.addAll(updateAchievements(personaEntity, "PROGRESSION",
+            achievementUpdateInfoList.addAll(updateAchievements(personaEntity, personaAchievementEntityMap, "PROGRESSION",
                     Map.of("persona", personaEntity, "progression", progressionContext)));
         }
 
         return achievementUpdateInfoList;
     }
 
-    private AchievementUpdateInfo updateAchievement(PersonaEntity personaEntity, AchievementEntity achievementEntity, Map<String, Object> bindings,
+    private AchievementUpdateInfo updateAchievement(AchievementEntity achievementEntity, Map<String, Object> bindings,
                                                     PersonaAchievementEntity personaAchievementEntity) {
         // If no progression can be made, there's nothing to do.
         if (!personaAchievementEntity.isCanProgress()) {

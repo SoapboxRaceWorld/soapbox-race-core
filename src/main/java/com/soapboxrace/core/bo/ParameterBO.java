@@ -114,7 +114,7 @@ public class ParameterBO {
     public List<String> getStrListParam(String parameter) {
         String value = getParameter(parameter);
 
-        if (value == null) {
+        if (value == null || value.isEmpty()) {
             return Collections.emptyList();
         }
 
