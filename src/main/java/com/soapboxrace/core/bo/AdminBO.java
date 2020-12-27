@@ -47,8 +47,8 @@ public class AdminBO {
     public void sendChatCommand(Long personaId, String command, String personaName) {
         String personaToBan = command.split(" ")[1];
         PersonaEntity personaEntity = personaDao.findByName(personaToBan);
-        String commandNoPersonaName = command.replace(personaEntity.getName() + " ", "");
-		sendCommand(personaId, personaEntity.getPersonaId(), commandNoPersonaName);
+        String commandNoPersonaName = command.replace(personaEntity.getName(), "");
+		sendCommand(personaId, personaEntity.getPersonaId(), commandNoPersonaName.trim());
 	}
 
     public void sendCommand(Long personaId, Long abuserPersonaId, String command) {

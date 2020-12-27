@@ -48,7 +48,6 @@ public class GetServerInformationBO {
         serverInformationVO.setPlayerCountRewardMultiplier(rewardBO.getPlayerCountConst());
         serverInformationVO.setHappyHourEnabled(parameterBO.getBoolParam("happyHourEnabled"));
         serverInformationVO.setHappyHourMultipler(parameterBO.getFloatParam("happyHourMultipler"));
-        serverInformationVO.setPlayerCountRewardMultiplier(rewardBO.getPlayerCountConst());
         serverInformationVO.setServerVersion(BuildInfo.getVersion() + " - " + BuildInfo.getCommitID());
         serverInformationVO.setOnlineNumber(onlineUsersEntity.getNumberOfOnline());
         serverInformationVO.setNumberOfRegistered(onlineUsersEntity.getNumberOfRegistered());
