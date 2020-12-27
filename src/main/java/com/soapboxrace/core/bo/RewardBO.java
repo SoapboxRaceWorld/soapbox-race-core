@@ -106,13 +106,14 @@ public class RewardBO {
         }
 
         boolean hasLevelChanged = false;
-        boolean isLeveledUp = false;
-        
+        boolean dscIsLeveledUp = false;
+
         if (parameterBO.getBoolParam("ENABLE_REPUTATION") && personaEntity.getLevel() < maxLevel) {
             Long expToNextLevel = levelRepDao.find((long) personaEntity.getLevel()).getExpPoint();
             long expMax = personaEntity.getRepAtCurrentLevel() + exp;
             if (expMax >= expToNextLevel) {
-                isLeveledUp = true;
+                boolean isLeveledUp = true;
+                dscIsLeveledUp = true;
                 hasLevelChanged = true;
                 while (isLeveledUp) {
                     personaEntity.setLevel(personaEntity.getLevel() + 1);
@@ -133,7 +134,7 @@ public class RewardBO {
         }
         personaDao.update(personaEntity);
 
-        if(isLeveledUp == true) {
+        if(dscIsLeveledUp == true) {
             String constructMsg_ds = "**" + personaEntity.getName() + "** has reached Level **" + (personaEntity.getLevel() + 1) + "**";
 
             if(parameterBO.getStrParam("DISCORD_WEBHOOK_LEVEL_URL") != null) {
