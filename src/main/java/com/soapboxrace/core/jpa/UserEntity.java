@@ -22,7 +22,7 @@ import java.util.List;
                 ":email"), //
         @NamedQuery(name = "UserEntity.findByIpAddress", query = "SELECT obj FROM UserEntity obj WHERE obj.ipAddress " +
                 "= :ipAddress"), //
-        @NamedQuery(name = "UserEntity.countUsers", query = "SELECT COUNT(obj) FROM UserEntity obj WHERE obj.lastLogin IS NOT NULL;") //
+        @NamedQuery(name = "UserEntity.countUsers", query = "SELECT COUNT(obj) FROM UserEntity obj WHERE obj.lastLogin IS NOT NULL") //
 })
 public class UserEntity {
 
