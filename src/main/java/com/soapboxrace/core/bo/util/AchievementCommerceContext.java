@@ -7,20 +7,27 @@
 package com.soapboxrace.core.bo.util;
 
 import com.soapboxrace.core.jpa.CarClassesEntity;
+import com.soapboxrace.core.jpa.ProductEntity;
 
 public class AchievementCommerceContext {
     private final CarClassesEntity carClassesEntity;
+    private final ProductEntity productEntity;
     private final CommerceType commerceType;
     private final int commerceTypeVal;
 
-    public AchievementCommerceContext(CarClassesEntity carClassesEntity, CommerceType commerceType) {
+    public AchievementCommerceContext(CarClassesEntity carClassesEntity, ProductEntity productEntity, CommerceType commerceType) {
         this.carClassesEntity = carClassesEntity;
+        this.productEntity = productEntity;
         this.commerceType = commerceType;
         this.commerceTypeVal = commerceType.ordinal();
     }
 
     public CarClassesEntity getCarClassesEntity() {
         return carClassesEntity;
+    }
+
+    public ProductEntity getProductEntity() {
+        return productEntity;
     }
 
     public CommerceType getCommerceType() {

@@ -275,7 +275,7 @@ public class BasketBO {
 
         if (carClassesEntity != null) {
             AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity,
-                    AchievementCommerceContext.CommerceType.CAR_PURCHASE);
+                    productEntity, AchievementCommerceContext.CommerceType.CAR_PURCHASE);
             transaction.add("COMMERCE", Map.of("persona", personaEntity, "ownedCar", ownedCarEntity, "commerceCtx", commerceContext));
             achievementBO.commitTransaction(personaEntity, transaction);
         }
