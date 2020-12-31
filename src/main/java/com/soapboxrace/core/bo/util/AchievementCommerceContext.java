@@ -10,16 +10,12 @@ import com.soapboxrace.core.jpa.CarClassesEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 
 public class AchievementCommerceContext {
-    private final CarClassesEntity carClassesEntity;
-    private final ProductEntity productEntity;
+    private CarClassesEntity carClassesEntity;
+    private ProductEntity productEntity;
     private final CommerceType commerceType;
-    private final int commerceTypeVal;
 
-    public AchievementCommerceContext(CarClassesEntity carClassesEntity, ProductEntity productEntity, CommerceType commerceType) {
-        this.carClassesEntity = carClassesEntity;
-        this.productEntity = productEntity;
+    public AchievementCommerceContext(CommerceType commerceType) {
         this.commerceType = commerceType;
-        this.commerceTypeVal = commerceType.ordinal();
     }
 
     public CarClassesEntity getCarClassesEntity() {
@@ -35,10 +31,18 @@ public class AchievementCommerceContext {
     }
 
     public int getCommerceTypeVal() {
-        return commerceTypeVal;
+        return commerceType.ordinal();
+    }
+
+    public void setCarClassesEntity(CarClassesEntity carClassesEntity) {
+        this.carClassesEntity = carClassesEntity;
+    }
+
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
     }
 
     public enum CommerceType {
-        CAR_PURCHASE, GENERIC_COMMERCE
+        CAR_PURCHASE, BUNDLE_PURCHASE
     }
 }

@@ -184,6 +184,12 @@ public class BasketBO {
 
                 performPersonaTransaction(personaEntity, bundleProduct);
 
+                AchievementCommerceContext commerceContext = new AchievementCommerceContext(AchievementCommerceContext.CommerceType.BUNDLE_PURCHASE);
+                commerceContext.setProductEntity(bundleProduct);
+                AchievementTransaction achievementTransaction = achievementBO.createTransaction(personaEntity.getPersonaId());
+                achievementTransaction.add("COMMERCE", Map.of("persona", personaEntity, "commerceCtx", commerceContext));
+                achievementBO.commitTransaction(personaEntity, achievementTransaction);
+
                 return CommerceResultStatus.SUCCESS;
             } catch (EngineException e) {
                 throw new EngineException("Error occurred in bundle purchase (product ID: " + productId + ")", e, e.getCode(), true);
@@ -274,8 +280,9 @@ public class BasketBO {
         AchievementTransaction transaction = achievementBO.createTransaction(personaEntity.getPersonaId());
 
         if (carClassesEntity != null) {
-            AchievementCommerceContext commerceContext = new AchievementCommerceContext(carClassesEntity,
-                    productEntity, AchievementCommerceContext.CommerceType.CAR_PURCHASE);
+            AchievementCommerceContext commerceContext = new AchievementCommerceContext(AchievementCommerceContext.CommerceType.CAR_PURCHASE);
+            commerceContext.setCarClassesEntity(carClassesEntity);
+            commerceContext.setProductEntity(productEntity);
             transaction.add("COMMERCE", Map.of("persona", personaEntity, "ownedCar", ownedCarEntity, "commerceCtx", commerceContext));
             achievementBO.commitTransaction(personaEntity, transaction);
         }
