@@ -123,7 +123,7 @@ public class BasketBO {
         if (canPurchaseProduct(personaEntity, powerupProduct)) {
             int currentCarSlot = personaEntity.getUser().getMaxCarSlots();
 
-            if(currentCarSlot <= parameterBO.getIntParam("CAR_SLOTS_MAXAMMOUNT", 2000)) {
+            if(currentCarSlot >= parameterBO.getIntParam("CAR_SLOTS_MAXAMMOUNT", 2000)) {
                 return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;
             }
 
