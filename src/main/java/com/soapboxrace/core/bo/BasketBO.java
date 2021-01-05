@@ -111,6 +111,31 @@ public class BasketBO {
         return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
     }
 
+    public CommerceResultStatus addGarageSlot(String productId, PersonaEntity personaEntity) {
+        if (!parameterBO.getBoolParam("ENABLE_ECONOMY")) {
+            return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+        }
+
+        ProductEntity powerupProduct = productDao.findByProductId(productId);
+        if(powerupProduct == null) {
+            return CommerceResultStatus.FAIL_INVALID_BASKET;
+        }
+
+        if (canPurchaseProduct(personaEntity, powerupProduct)) {
+            int currentCarSlot = personaEntity.getMaxCarSlots();
+
+            if(currentCarSlot <= parameterBO.getIntParam("CAR_SLOTS_MAXAMMOUNT", 2000)) {
+                return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;
+            }
+
+            personaEntity.setMaxCarSlots(personaEntity.getMaxCarSlots() + parameterBO.getIntParam("CAR_SLOTS_ADD", 20));
+            performPersonaTransaction(personaEntity, powerupProduct);
+            return CommerceResultStatus.SUCCESS;
+        }
+
+        return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;
+    }
+
     public CommerceResultStatus buyPowerups(String productId, PersonaEntity personaEntity) {
         if (!parameterBO.getBoolParam("ENABLE_ECONOMY")) {
             return CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS;

@@ -89,7 +89,7 @@ public class Personas {
 
         BasketTrans basketTrans = JAXBUtility.unMarshal(basketXml, BasketTrans.class);
         String productId = basketTrans.getItems().getBasketItemTrans().get(0).getProductId();
-        if ("-1".equals(productId) || "SRV-GARAGESLOT".equals(productId)) {
+        if ("-1".equals(productId)) {
             commerceResultTrans.setStatus(CommerceResultStatus.FAIL_INSUFFICIENT_FUNDS);
         } else if (productId.contains("SRV-POWERUP")) {
             commerceResultTrans.setStatus(basketBO.buyPowerups(productId, personaEntity));
@@ -97,6 +97,8 @@ public class Personas {
             commerceResultTrans.setStatus(basketBO.repairCar(productId, personaEntity));
         } else if ("SRV-THREVIVE".equals(productId)) {
             commerceResultTrans.setStatus(basketBO.reviveTreasureHunt(productId, personaEntity));
+        } else if ("SRV-GARAGESLOT".equals(productId)) {
+            commerceResultTrans.setStatus(basketBO.addGarageSlot(productId, personaEntity));
         } else {
             ProductEntity productEntity = basketBO.findProduct(productId);
 
