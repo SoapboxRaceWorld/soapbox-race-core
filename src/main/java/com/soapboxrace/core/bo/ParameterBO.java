@@ -61,10 +61,7 @@ public class ParameterBO {
     }
 
     public int getCarLimit(UserEntity userEntity) {
-        if (userEntity.isPremium()) {
-            return getIntParam("MAX_CAR_SLOTS_PREMIUM", 200);
-        }
-        return getIntParam("MAX_CAR_SLOTS_FREE", 200);
+        return userEntity.getMaxCarSlots();
     }
 
     public int getMaxCash(UserEntity userEntity) {

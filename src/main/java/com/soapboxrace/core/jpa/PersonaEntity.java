@@ -37,7 +37,6 @@ public class PersonaEntity {
     private int repAtCurrentLevel;
     private int score;
     private int curCarIndex = 0;
-    private int maxCarSlots = 300;
     @ManyToOne
     @JoinColumn(name = "USERID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PERSONA_USER"))
     private UserEntity user;
@@ -161,14 +160,6 @@ public class PersonaEntity {
 
     public void setCurCarIndex(int curCarIndex) {
         this.curCarIndex = curCarIndex;
-    }
-
-    public int getMaxCarSlots() {
-        return maxCarSlots;
-    }
-
-    public void setMaxCarSlots(int maxCarSlots) {
-        this.maxCarSlots = maxCarSlots;
     }
 
     public LocalDateTime getCreated() {

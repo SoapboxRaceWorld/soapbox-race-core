@@ -62,6 +62,8 @@ public class UserEntity {
     @Column(name = "isDeveloper")
     private boolean isDeveloper;
 
+    private int maxCarSlots = 300;
+
     @Column(name = "DiscordID", length = 255)
 	private String discordid;
 
@@ -129,13 +131,20 @@ public class UserEntity {
         this.premium = premium;
     }
 
-
     public boolean isDeveloper() {
         return isDeveloper;
     }
 
     public void setIsDeveloper(boolean isDeveloper) {
         this.isDeveloper = isDeveloper;
+    }
+
+    public int getMaxCarSlots() {
+        return maxCarSlots;
+    }
+
+    public void setMaxCarSlots(int maxCarSlots) {
+        this.maxCarSlots = maxCarSlots;
     }
     
 	public String getDiscordId() {

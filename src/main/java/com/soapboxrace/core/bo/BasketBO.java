@@ -93,8 +93,7 @@ public class BasketBO {
 
     public CommerceResultStatus repairCar(String productId, PersonaEntity personaEntity) {
         OwnedCarEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
-        int price =
-                (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCarEntity.getDurability()));
+        int price = (int) (productDao.findByProductId(productId).getPrice() * (100 - defaultCarEntity.getDurability()));
         ProductEntity repairProduct = productDao.findByProductId(productId);
 
         if (repairProduct == null) {
@@ -122,13 +121,13 @@ public class BasketBO {
         }
 
         if (canPurchaseProduct(personaEntity, powerupProduct)) {
-            int currentCarSlot = personaEntity.getMaxCarSlots();
+            int currentCarSlot = personaEntity.getUser().getMaxCarSlots();
 
             if(currentCarSlot <= parameterBO.getIntParam("CAR_SLOTS_MAXAMMOUNT", 2000)) {
                 return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;
             }
 
-            personaEntity.setMaxCarSlots(personaEntity.getMaxCarSlots() + parameterBO.getIntParam("CAR_SLOTS_ADD", 20));
+            personaEntity.getUser().setMaxCarSlots(personaEntity.getUser().getMaxCarSlots() + parameterBO.getIntParam("CAR_SLOTS_ADD", 20));
             performPersonaTransaction(personaEntity, powerupProduct);
             return CommerceResultStatus.SUCCESS;
         }
