@@ -152,7 +152,7 @@ public class Personas {
         carSlotInfoTrans.setCarsOwnedByPersona(arrayOfOwnedCarTrans);
         carSlotInfoTrans.setDefaultOwnedCarIndex(personaEntity.getCurCarIndex());
         carSlotInfoTrans.setObtainableSlots(new ArrayOfProductTrans());
-        int carlimit = parameterBO.getCarLimit(requestSessionInfo.getUser());
+        int carlimit = personaEntity.getMaxCarSlots();
         carSlotInfoTrans.setOwnedCarSlotsCount(carlimit);
         ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
         ProductTrans productTrans = new ProductTrans();
