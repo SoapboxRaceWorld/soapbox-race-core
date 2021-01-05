@@ -158,7 +158,7 @@ public class BasketBO {
 
     public CommerceResultStatus buyCar(ProductEntity productEntity, PersonaEntity personaEntity, TokenSessionEntity tokenSessionEntity,
                                        CommerceResultTrans commerceResultTrans) {
-        if (getPersonaCarCount(personaEntity.getPersonaId()) >= personaEntity.getMaxCarSlots()) {
+        if (getPersonaCarCount(personaEntity.getPersonaId()) >= personaEntity.getUser().getMaxCarSlots()) {
             return CommerceResultStatus.FAIL_INSUFFICIENT_CAR_SLOTS;
         }
 
