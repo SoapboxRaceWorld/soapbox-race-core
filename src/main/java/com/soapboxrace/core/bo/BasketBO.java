@@ -87,6 +87,9 @@ public class BasketBO {
     @EJB
     private AmplifierDAO amplifierDAO;
 
+    @EJB
+    private UserDAO userDao;
+
     public ProductEntity findProduct(String productId) {
         return productDao.findByProductId(productId);
     }
@@ -121,13 +124,15 @@ public class BasketBO {
         }
 
         if (canPurchaseProduct(personaEntity, powerupProduct)) {
-            int currentCarSlot = personaEntity.getUser().getMaxCarSlots();
+            UserEntity userEntity = personaEntity.getUser();
+            int currentCarSlot = userEntity.getMaxCarSlots();
 
             if(currentCarSlot >= parameterBO.getIntParam("CAR_SLOTS_MAXAMMOUNT", 2000)) {
                 return CommerceResultStatus.FAIL_MAX_ALLOWED_PURCHASES_FOR_THIS_PRODUCT;
             }
 
-            personaEntity.getUser().setMaxCarSlots(personaEntity.getUser().getMaxCarSlots() + parameterBO.getIntParam("CAR_SLOTS_ADD", 20));
+            userEntity.setMaxCarSlots(userEntity.getMaxCarSlots() + parameterBO.getIntParam("CAR_SLOTS_ADD", 1));
+            userDao.update(userEntity);
             performPersonaTransaction(personaEntity, powerupProduct);
             return CommerceResultStatus.SUCCESS;
         }
