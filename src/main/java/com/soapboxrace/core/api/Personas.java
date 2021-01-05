@@ -144,37 +144,43 @@ public class Personas {
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
         List<OwnedCarEntity> personasCar = carSlotBO.getPersonasCar(personaId);
         ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
+
         for (OwnedCarEntity ownedCarEntity : personasCar) {
             OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
             arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
         }
+
         CarSlotInfoTrans carSlotInfoTrans = new CarSlotInfoTrans();
         carSlotInfoTrans.setCarsOwnedByPersona(arrayOfOwnedCarTrans);
         carSlotInfoTrans.setDefaultOwnedCarIndex(personaEntity.getCurCarIndex());
         carSlotInfoTrans.setObtainableSlots(new ArrayOfProductTrans());
+
         int carlimit = parameterBO.getCarLimit(requestSessionInfo.getUser());
         carSlotInfoTrans.setOwnedCarSlotsCount(carlimit);
+
+        ProductEntity garageSlot = basketBO.findProduct("SRV-GARAGESLOT");
         ArrayOfProductTrans arrayOfProductTrans = new ArrayOfProductTrans();
         ProductTrans productTrans = new ProductTrans();
         productTrans.setBundleItems(new ArrayOfProductTrans());
-        productTrans.setCategoryId("");
-        productTrans.setCurrency("_NS");
-        productTrans.setDescription("New car slot !!");
-        productTrans.setDurationMinute(0);
-        productTrans.setHash(-1143680669);
-        productTrans.setIcon("128_cash");
-        productTrans.setLevel(70);
-        productTrans.setLongDescription("New car slot !");
-        productTrans.setPrice(100.0000);
-        productTrans.setPriority(0);
-        productTrans.setProductId("SRV-GARAGESLOT");
-        productTrans.setSecondaryIcon("");
-        productTrans.setUseCount(1);
-        productTrans.setVisualStyle("");
-        productTrans.setWebIcon("");
-        productTrans.setWebLocation("");
+        productTrans.setCategoryId(garageSlot.getCategoryId());
+        productTrans.setCurrency(garageSlot.getCurrency());
+        productTrans.setDescription(garageSlot.getDescription());
+        productTrans.setDurationMinute(garageSlot.getDurationMinute());
+        productTrans.setHash(garageSlot.getHash());
+        productTrans.setIcon(garageSlot.getIcon());
+        productTrans.setLevel(garageSlot.getLevel());
+        productTrans.setLongDescription(garageSlot.getLongDescription());
+        productTrans.setPrice(garageSlot.getPrice());
+        productTrans.setPriority(garageSlot.getPriority());
+        productTrans.setProductId(garageSlot.getProductId());
+        productTrans.setSecondaryIcon(garageSlot.getSecondaryIcon());
+        productTrans.setUseCount(garageSlot.getUseCount());
+        productTrans.setVisualStyle(garageSlot.getVisualStyle());
+        productTrans.setWebIcon(garageSlot.getWebIcon());
+        productTrans.setWebLocation(garageSlot.getWebLocation());
         arrayOfProductTrans.getProductTrans().add(productTrans);
         carSlotInfoTrans.setObtainableSlots(arrayOfProductTrans);
+        
         return carSlotInfoTrans;
     }
 
