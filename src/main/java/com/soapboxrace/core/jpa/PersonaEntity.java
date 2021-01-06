@@ -38,7 +38,7 @@ public class PersonaEntity {
     private int score;
     private int curCarIndex = 0;
     @ManyToOne
-    @JoinColumn(name = "USERID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PERSONA_USER"))
+    @JoinColumn(name = "USERID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_PERSONA_USER_USERID"))
     private UserEntity user;
 
     @Column(name = "created")

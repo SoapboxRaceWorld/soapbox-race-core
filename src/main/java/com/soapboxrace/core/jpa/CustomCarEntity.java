@@ -35,7 +35,7 @@ public class CustomCarEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ownedCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
-            "FK_CUSTOMCAR_OWNEDCAR"))
+            "FK_CUSTOMCAR_OWNEDCAR_ownedCarId"))
     private OwnedCarEntity ownedCar;
 
     @OneToMany(mappedBy = "customCar", targetEntity = PaintEntity.class,

@@ -40,7 +40,7 @@ public class LobbyEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBY_EVENT"))
+    @JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBY_EVENT_EVENTID"))
     private EventEntity event;
 
     @OneToMany(mappedBy = "lobby", targetEntity = LobbyEntrantEntity.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)

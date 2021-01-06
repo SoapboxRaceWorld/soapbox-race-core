@@ -15,11 +15,11 @@ public class UsedPowerupEntity {
     private Long id;
 
     @ManyToOne(targetEntity = PersonaEntity.class, optional = false)
-    @JoinColumn(name = "personaId", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "personaId", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "FK_USED_POWERUP_PERSONA_personaId"))
     private PersonaEntity personaEntity;
 
     @ManyToOne(targetEntity = EventSessionEntity.class)
-    @JoinColumn(name = "eventSessionId", referencedColumnName = "id")
+    @JoinColumn(name = "eventSessionId", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_USED_POWERUP_EVENT_SESSION_eventSessionId"))
     private EventSessionEntity eventSessionEntity;
 
     @Column

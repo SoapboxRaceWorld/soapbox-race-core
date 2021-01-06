@@ -51,13 +51,14 @@ public class InventoryItemEntity {
     private Long id;
 
     @ManyToOne(targetEntity = InventoryEntity.class, optional = false)
+    @JoinColumn(name = "inventoryEntity_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_INVENTORY_ITEM_INVENTORY_inventoryEntity_id"))
     private InventoryEntity inventoryEntity;
 
     @Column
     private LocalDateTime expirationDate;
 
-    @ManyToOne(targetEntity = ProductEntity.class, cascade = CascadeType.PERSIST, optional = false)
-    @JoinColumn(name = "productId", referencedColumnName = "productId")
+    @ManyToOne(targetEntity = ProductEntity.class, /* TODO: why is this here? */ cascade = CascadeType.PERSIST, optional = false)
+    @JoinColumn(name = "productId", referencedColumnName = "productId", foreignKey = @ForeignKey(name = "FK_INVENTORY_ITEM_PRODUCT_productId"))
     private ProductEntity productEntity;
 
     @Column
