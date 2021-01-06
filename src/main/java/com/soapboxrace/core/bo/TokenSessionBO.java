@@ -81,7 +81,7 @@ public class TokenSessionBO {
         long time = new Date().getTime();
         long tokenTime = tokenSessionEntity.getExpirationDate().getTime();
         if (time > tokenTime) {
-            removeSession(securityToken);
+            deleteByUserId(userId);
             throw new NotAuthorizedException("Expired Token as of " + tokenSessionEntity.getExpirationDate().toString());
         }
 
