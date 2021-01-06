@@ -38,8 +38,8 @@ public class PersonaAchievementRankEntity {
     @JoinColumn(name = "persona_achievement_id", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_PERSONA_ACHIEVEMENT_RANK_PERSONA_ACHIEVEMENT_id"))
     private PersonaAchievementEntity personaAchievementEntity;
 
-    @ManyToOne(targetEntity = AchievementRankEntity.class, optional = false, cascade = CascadeType.DETACH, foreignKey = @ForeignKey(name = "FK_PERSONA_ACHIEVEMENT_RANK_ACHIEVEMENT_RANK_id"))
-    @JoinColumn(name = "achievement_rank_id", referencedColumnName = "ID", nullable = false)
+    @ManyToOne(targetEntity = AchievementRankEntity.class, optional = false, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "achievement_rank_id", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_PERSONA_ACHIEVEMENT_RANK_ACHIEVEMENT_RANK_id"))
     private AchievementRankEntity achievementRankEntity;
 
     @Column(columnDefinition = "ENUM('Locked', 'InProgress', 'Completed', 'RewardWaiting')")
