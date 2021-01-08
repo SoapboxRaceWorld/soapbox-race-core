@@ -35,7 +35,7 @@ public class DriverPersonaBO {
     private LevelRepDAO levelRepDAO;
 
     @EJB
-    private OwnedCarDAO ownedCarDAO;
+    private CarDAO carDAO;
 
     @EJB
     private TreasureHuntDAO treasureHuntDAO;

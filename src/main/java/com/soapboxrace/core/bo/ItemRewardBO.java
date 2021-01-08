@@ -199,17 +199,17 @@ public class ItemRewardBO {
     }
 
     public static class WrappedCarReward {
-        private final OwnedCarEntity ownedCarEntity;
+        private final CarEntity carEntity;
 
         private final ProductEntity productEntity;
 
-        public WrappedCarReward(OwnedCarEntity ownedCarEntity, ProductEntity productEntity) {
-            this.ownedCarEntity = ownedCarEntity;
+        public WrappedCarReward(CarEntity carEntity, ProductEntity productEntity) {
+            this.carEntity = carEntity;
             this.productEntity = productEntity;
         }
 
-        public OwnedCarEntity getOwnedCarEntity() {
-            return ownedCarEntity;
+        public CarEntity getOwnedCarEntity() {
+            return carEntity;
         }
 
         public ProductEntity getProductEntity() {

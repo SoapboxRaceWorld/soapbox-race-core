@@ -12,15 +12,41 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "CUSTOMCAR")
-public class CustomCarEntity {
+@Table(name = "CAR")
+@NamedQueries({
+        @NamedQuery(name = "CarEntity.findByPersonaId", //
+                query = "SELECT obj FROM CarEntity obj WHERE obj.persona.personaId = :persona ORDER BY obj.id"),
+        @NamedQuery(name = "CarEntity.findByPersonaIdEager", //
+                query = "SELECT obj FROM CarEntity obj WHERE obj.persona.personaId = :persona ORDER BY obj.id"), //
+        @NamedQuery(name = "CarEntity.findNumNonRentalsByPersonaId", //
+                query = "SELECT COUNT(obj) FROM CarEntity obj  WHERE obj.persona.personaId = :persona" +
+                        " AND obj.expirationDate IS NULL"), //
+        @NamedQuery(name = "CarEntity.findNumByPersonaId",
+                query = "SELECT COUNT(obj) FROM CarEntity obj WHERE obj.persona.personaId = :persona"),
+        @NamedQuery(name = "CarEntity.deleteByPersona", //
+                query = "DELETE FROM CarEntity obj WHERE obj.persona = :persona"), //
+        @NamedQuery(name = "CarEntity.deleteAllExpired", //
+                query = "DELETE FROM CarEntity obj  WHERE obj.expirationDate <= CURRENT_TIMESTAMP")
+})
+public class CarEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(targetEntity = PersonaEntity.class, cascade = CascadeType.DETACH, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "personaId", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_CAR_PERSONA_personaId"))
+    private PersonaEntity persona;
+
+    private int durability;
+    private float heat;
+    private LocalDateTime expirationDate;
+    private String ownershipType = "CustomizedCar";
+
     private int baseCar;
     private int carClassHash;
     private boolean isPreset;
@@ -33,41 +59,35 @@ public class CustomCarEntity {
     private int skillModSlotCount;
     private int version;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ownedCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
-            "FK_CUSTOMCAR_OWNEDCAR_ownedCarId"))
-    private OwnedCarEntity ownedCar;
-
-    @OneToMany(mappedBy = "customCar", targetEntity = PaintEntity.class,
+    @OneToMany(mappedBy = "car", targetEntity = PaintEntity.class,
             orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @LazyCollection(LazyCollectionOption.FALSE)
     @Fetch(FetchMode.SUBSELECT)
     private Set<PaintEntity> paints;
 
-    @OneToMany(mappedBy = "customCar", targetEntity = PerformancePartEntity.class,
+    @OneToMany(mappedBy = "car", targetEntity = PerformancePartEntity.class,
             orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @LazyCollection(LazyCollectionOption.FALSE)
     @Fetch(FetchMode.SUBSELECT)
     private Set<PerformancePartEntity> performanceParts;
 
-    @OneToMany(mappedBy = "customCar", targetEntity = SkillModPartEntity.class,
+    @OneToMany(mappedBy = "car", targetEntity = SkillModPartEntity.class,
             orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @LazyCollection(LazyCollectionOption.FALSE)
     @Fetch(FetchMode.SUBSELECT)
     private Set<SkillModPartEntity> skillModParts;
 
-    @OneToMany(mappedBy = "customCar", targetEntity = VinylEntity.class,
+    @OneToMany(mappedBy = "car", targetEntity = VinylEntity.class,
             orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @LazyCollection(LazyCollectionOption.FALSE)
     @Fetch(FetchMode.SUBSELECT)
     private Set<VinylEntity> vinyls;
 
-    @OneToMany(mappedBy = "customCar", targetEntity = VisualPartEntity.class,
+    @OneToMany(mappedBy = "car", targetEntity = VisualPartEntity.class,
             orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @LazyCollection(LazyCollectionOption.FALSE)
     @Fetch(FetchMode.SUBSELECT)
     private Set<VisualPartEntity> visualParts;
-
 
     public Long getId() {
         return id;
@@ -75,6 +95,46 @@ public class CustomCarEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public PersonaEntity getPersona() {
+        return persona;
+    }
+
+    public void setPersona(PersonaEntity personaEntity) {
+        this.persona = personaEntity;
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    public void setDurability(int durability) {
+        this.durability = durability;
+    }
+
+    public float getHeat() {
+        return heat;
+    }
+
+    public void setHeat(float heat) {
+        this.heat = heat;
+    }
+
+    public LocalDateTime getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(LocalDateTime expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public String getOwnershipType() {
+        return ownershipType;
+    }
+
+    public void setOwnershipType(String ownershipType) {
+        this.ownershipType = ownershipType;
     }
 
     public int getBaseCar() {
@@ -204,13 +264,4 @@ public class CustomCarEntity {
     public void setVinyls(Set<VinylEntity> vinyls) {
         this.vinyls = vinyls;
     }
-
-    public OwnedCarEntity getOwnedCar() {
-        return ownedCar;
-    }
-
-    public void setOwnedCar(OwnedCarEntity ownedCar) {
-        this.ownedCar = ownedCar;
-    }
-
 }

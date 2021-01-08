@@ -9,7 +9,7 @@ package com.soapboxrace.core.bo;
 import com.soapboxrace.core.dao.CarClassesDAO;
 import com.soapboxrace.core.dao.ProductDAO;
 import com.soapboxrace.core.jpa.CarClassesEntity;
-import com.soapboxrace.core.jpa.CustomCarEntity;
+import com.soapboxrace.core.jpa.CarEntity;
 import com.soapboxrace.core.jpa.PerformancePartEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 
@@ -26,12 +26,12 @@ public class PerformanceBO {
     @EJB
     private ProductDAO productDAO;
 
-    public void calcNewCarClass(CustomCarEntity customCarEntity) {
-        calcNewCarClass(customCarEntity, customCarEntity.getOwnedCar().getDurability() == 0);
+    public void calcNewCarClass(CarEntity carEntity) {
+        calcNewCarClass(carEntity, carEntity.getDurability() == 0);
     }
 
-    public void calcNewCarClass(CustomCarEntity customCarEntity, boolean ignoreParts) {
-        int physicsProfileHash = customCarEntity.getPhysicsProfileHash();
+    public void calcNewCarClass(CarEntity carEntity, boolean ignoreParts) {
+        int physicsProfileHash = carEntity.getPhysicsProfileHash();
         CarClassesEntity carClassesEntity = carClassesDAO.findByHash(physicsProfileHash);
         if (carClassesEntity == null) {
             return;
@@ -40,7 +40,7 @@ public class PerformanceBO {
         int accel = 0;
         int handling = 0;
         if (!ignoreParts) {
-            Set<PerformancePartEntity> performanceParts = customCarEntity.getPerformanceParts();
+            Set<PerformancePartEntity> performanceParts = carEntity.getPerformanceParts();
             for (PerformancePartEntity performancePartEntity : performanceParts) {
                 int perfHash = performancePartEntity.getPerformancePartAttribHash();
                 ProductEntity productEntity = productDAO.findByHash(perfHash);
@@ -95,7 +95,7 @@ public class PerformanceBO {
             carclassHash = -2142411446;
         }
 
-        customCarEntity.setCarClassHash(carclassHash);
-        customCarEntity.setRating(finalClassInt);
+        carEntity.setCarClassHash(carclassHash);
+        carEntity.setRating(finalClassInt);
     }
 }

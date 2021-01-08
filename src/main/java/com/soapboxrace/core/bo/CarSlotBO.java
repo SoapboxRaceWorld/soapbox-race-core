@@ -6,10 +6,8 @@
 
 package com.soapboxrace.core.bo;
 
-import com.soapboxrace.core.dao.CustomCarDAO;
-import com.soapboxrace.core.dao.OwnedCarDAO;
-import com.soapboxrace.core.jpa.CustomCarEntity;
-import com.soapboxrace.core.jpa.OwnedCarEntity;
+import com.soapboxrace.core.dao.CarDAO;
+import com.soapboxrace.core.jpa.CarEntity;
 import org.slf4j.Logger;
 
 import javax.ejb.*;
@@ -21,10 +19,7 @@ import java.util.List;
 public class CarSlotBO {
 
     @EJB
-    private OwnedCarDAO ownedCarDAO;
-
-    @EJB
-    private CustomCarDAO customCarDAO;
+    private CarDAO carDAO;
 
     @EJB
     private PerformanceBO performanceBO;
@@ -34,27 +29,26 @@ public class CarSlotBO {
 
     @Schedule(minute = "*", hour = "*", persistent = false)
     public void scheduledRemoval() {
-        int numRemoved = ownedCarDAO.deleteAllExpired();
+        int numRemoved = carDAO.deleteAllExpired();
         if (numRemoved > 0) {
             logger.info("Removed {} expired cars", numRemoved);
         }
     }
 
-    public List<OwnedCarEntity> getPersonasCar(Long personaId) {
-        List<OwnedCarEntity> ownedCarEntities = ownedCarDAO.findByPersonaId(personaId);
+    public List<CarEntity> getPersonasCar(Long personaId) {
+        List<CarEntity> ownedCarEntities = carDAO.findByPersonaId(personaId);
 
-        for (OwnedCarEntity ownedCarEntity : ownedCarEntities) {
-            CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
-            customCarEntity.getPaints().size();
-            customCarEntity.getPerformanceParts().size();
-            customCarEntity.getSkillModParts().size();
-            customCarEntity.getVinyls().size();
-            customCarEntity.getVisualParts().size();
+        for (CarEntity carEntity : ownedCarEntities) {
+            carEntity.getPaints().size();
+            carEntity.getPerformanceParts().size();
+            carEntity.getSkillModParts().size();
+            carEntity.getVinyls().size();
+            carEntity.getVisualParts().size();
 
-            if (customCarEntity.getCarClassHash() == 0) {
+            if (carEntity.getCarClassHash() == 0) {
                 // CarClassHash can be set to 0 to recalculate rating/class
-                performanceBO.calcNewCarClass(customCarEntity);
-                customCarDAO.update(customCarEntity);
+                performanceBO.calcNewCarClass(carEntity);
+                carDAO.update(carEntity);
             }
         }
 
@@ -62,6 +56,6 @@ public class CarSlotBO {
     }
 
     public int countPersonasCar(Long personaId) {
-        return ownedCarDAO.findNumByPersonaId(personaId);
+        return carDAO.findNumByPersonaId(personaId);
     }
 }

@@ -146,8 +146,8 @@ public class RewardBO {
 
     public void setSkillMultiplierReward(PersonaEntity personaEntity, RewardVO rewardVO,
                                          SkillModRewardType skillModRewardType) {
-        OwnedCarEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
-        Set<SkillModPartEntity> skillModParts = defaultCarEntity.getCustomCar().getSkillModParts();
+        CarEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
+        Set<SkillModPartEntity> skillModParts = defaultCarEntity.getSkillModParts();
         float skillMultiplier = 0f;
         float maxSkillMultiplier = parameterBO.getFloatParam("SKILL_" + skillModRewardType.toString() + "_MAX_VALUE", 30f);
         for (SkillModPartEntity skillModPartEntity : skillModParts) {

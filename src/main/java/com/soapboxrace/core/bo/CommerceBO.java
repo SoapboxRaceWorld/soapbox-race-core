@@ -44,7 +44,7 @@ public class CommerceBO {
     private InventoryItemDAO inventoryItemDAO;
 
     @EJB
-    private CustomCarDAO customCarDAO;
+    private CarDAO carDAO;
 
     @EJB
     private DriverPersonaBO driverPersonaBO;
@@ -58,7 +58,7 @@ public class CommerceBO {
     public CommerceSessionResultTrans doCommerce(CommerceSessionTrans commerceSessionTrans, Long personaId) {
         List<BasketItemTrans> basketItems = commerceSessionTrans.getBasket().getItems().getBasketItemTrans();
         PersonaEntity personaEntity = personaDAO.find(personaId);
-        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId);
+        CarEntity carEntity = personaBO.getDefaultCarEntity(personaId);
         OwnedCarTrans ownedCarTrans = personaBO.getDefaultCar(personaId);
         CustomCarTrans customCarTrans = ownedCarTrans.getCustomCar();
         CustomCarTrans commerceCustomCar = commerceSessionTrans.getUpdatedCar().getCustomCar();
@@ -184,16 +184,15 @@ public class CommerceBO {
             return commerceSessionResultTrans;
         }
 
-        CustomCarEntity customCar = ownedCarEntity.getCustomCar();
-        OwnedCarConverter.paints2NewEntity(commerceCustomCar, customCar);
-        OwnedCarConverter.vinyls2NewEntity(commerceCustomCar, customCar);
-        OwnedCarConverter.skillModParts2NewEntity(commerceCustomCar, customCar);
-        OwnedCarConverter.performanceParts2NewEntity(commerceCustomCar, customCar);
-        OwnedCarConverter.visuallParts2NewEntity(commerceCustomCar, customCar);
+        OwnedCarConverter.paints2NewEntity(commerceCustomCar, carEntity);
+        OwnedCarConverter.vinyls2NewEntity(commerceCustomCar, carEntity);
+        OwnedCarConverter.skillModParts2NewEntity(commerceCustomCar, carEntity);
+        OwnedCarConverter.performanceParts2NewEntity(commerceCustomCar, carEntity);
+        OwnedCarConverter.visuallParts2NewEntity(commerceCustomCar, carEntity);
 
-        performanceBO.calcNewCarClass(customCar);
+        performanceBO.calcNewCarClass(carEntity);
 
-        customCarDAO.update(customCar);
+        carDAO.update(carEntity);
         personaEntity.setBoost(finalBoost);
         driverPersonaBO.updateCash(personaEntity, finalCash);
 

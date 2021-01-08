@@ -71,12 +71,11 @@ public class LobbyBO {
         PersonaEntity personaEntity = personaDao.find(personaId);
         EventEntity eventEntity = eventDao.find(eventId);
 
-        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId);
-        CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
+        CarEntity carEntity = personaBO.getDefaultCarEntity(personaId);
 
         // only check restriction on non-open events
         if (eventEntity.getCarClassHash() != 607077938) {
-            if (customCarEntity.getCarClassHash() != eventEntity.getCarClassHash()) {
+            if (carEntity.getCarClassHash() != eventEntity.getCarClassHash()) {
                 // The client UI does not allow you to join events outside your current car's class
                 throw new EngineException(EngineExceptionCode.CarDataInvalid, true);
             }
