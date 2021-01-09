@@ -54,6 +54,11 @@ SET OC.baseCar=CC.baseCar,
     OC.version=CC.version
 WHERE 1 = 1;
 
+# Update EVENT_DATA carId values
+UPDATE EVENT_DATA ED
+    INNER JOIN CUSTOMCAR CC ON ED.carId = CC.id
+SET ED.carId=CC.ownedCarId;
+
 # Update customization tables
 UPDATE PAINT P
     INNER JOIN CUSTOMCAR CC ON CC.id = P.customCarId
