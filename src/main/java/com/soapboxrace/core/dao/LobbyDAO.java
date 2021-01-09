@@ -23,7 +23,7 @@ public class LobbyDAO extends LongKeyedDAO<LobbyEntity> {
         super(LobbyEntity.class);
     }
 
-    public List<LobbyEntity> findAllOpen(int carClassHash) {
+    public List<LobbyEntity> findAllOpen(int carClassHash, int level) {
         LocalDateTime dateNow = LocalDateTime.now();
         LocalDateTime datePast = LocalDateTime.now().minusSeconds(35);
 
@@ -32,6 +32,7 @@ public class LobbyDAO extends LongKeyedDAO<LobbyEntity> {
         query.setParameter("dateTime1", datePast);
         query.setParameter("dateTime2", dateNow);
         query.setParameter("carClassHash", carClassHash);
+        query.setParameter("level", level);
         return query.getResultList();
     }
 
