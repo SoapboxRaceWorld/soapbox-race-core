@@ -43,6 +43,7 @@ public class LobbyDAO extends LongKeyedDAO<LobbyEntity> {
         query.setParameter("dateTime1", datePast);
         query.setParameter("dateTime2", dateNow);
         query.setParameter("carClassHash", carClassHash);
+        query.setParameter("level", level);
         return query.getResultList();
     }
 

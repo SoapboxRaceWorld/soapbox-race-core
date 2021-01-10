@@ -18,15 +18,15 @@ public class EventSessionEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENTSESSION_EVENT"))
+    @JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_SESSION_EVENT_EVENTID"))
     private EventEntity event;
 
     @OneToOne
-    @JoinColumn(name = "LOBBYID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENTSESSION_LOBBY"))
+    @JoinColumn(name = "LOBBYID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_SESSION_LOBBY_LOBBYID"))
     private LobbyEntity lobby;
 
     @OneToOne
-    @JoinColumn(name = "NEXTLOBBYID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENTSESSION_NEXTLOBBY"))
+    @JoinColumn(name = "NEXTLOBBYID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENT_SESSION_LOBBY_NEXTLOBBYID"))
     private LobbyEntity nextLobby;
 
     @Column(name = "STARTED")

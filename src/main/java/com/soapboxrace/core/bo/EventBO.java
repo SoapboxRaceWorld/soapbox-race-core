@@ -44,7 +44,7 @@ public class EventBO {
     }
 
     public void createEventDataSession(Long personaId, Long eventSessionId) {
-        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(personaId);
+        CarEntity carEntity = personaBO.getDefaultCarEntity(personaId);
 
         EventSessionEntity eventSessionEntity = eventSessionDao.find(eventSessionId);
         EventDataEntity eventDataEntity = new EventDataEntity();
@@ -52,8 +52,8 @@ public class EventBO {
         eventDataEntity.setEventSessionId(eventSessionId);
         eventDataEntity.setEvent(eventSessionEntity.getEvent());
         eventDataEntity.setServerTimeStarted(System.currentTimeMillis());
-        eventDataEntity.setCarClassHash(ownedCarEntity.getCustomCar().getCarClassHash());
-        eventDataEntity.setCarRating(ownedCarEntity.getCustomCar().getRating());
+        eventDataEntity.setCarClassHash(carEntity.getCarClassHash());
+        eventDataEntity.setCarRating(carEntity.getRating());
         eventDataDao.insert(eventDataEntity);
     }
 
@@ -71,12 +71,11 @@ public class EventBO {
             return null;
         }
 
-        OwnedCarEntity ownedCarEntity = personaBO.getDefaultCarEntity(activePersonaId);
-        CustomCarEntity customCarEntity = ownedCarEntity.getCustomCar();
+        CarEntity carEntity = personaBO.getDefaultCarEntity(activePersonaId);
 
         // only check restriction on non-open events
         if (eventEntity.getCarClassHash() != 607077938) {
-            if (customCarEntity.getCarClassHash() != eventEntity.getCarClassHash()) {
+            if (carEntity.getCarClassHash() != eventEntity.getCarClassHash()) {
                 // The client UI does not allow you to join events outside your current car's class
                 throw new EngineException(EngineExceptionCode.CarDataInvalid, true);
             }

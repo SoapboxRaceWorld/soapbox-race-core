@@ -21,6 +21,7 @@ public class RewardTableItemEntity {
     private String script;
 
     @ManyToOne(targetEntity = RewardTableEntity.class, optional = false)
+    @JoinColumn(name = "rewardTableEntity_ID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_REWARD_TABLE_ITEM_REWARD_TABLE_rewardTableEntity_ID"))
     private RewardTableEntity rewardTableEntity;
 
     @Column

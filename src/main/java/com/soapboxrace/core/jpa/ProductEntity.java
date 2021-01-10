@@ -60,7 +60,7 @@ public class ProductEntity implements Serializable {
     private Long id;
 
     @ManyToOne(targetEntity = ProductEntity.class)
-    @JoinColumn(name = "parentProductId", referencedColumnName = "id")
+    @JoinColumn(name = "parentProductId", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_PRODUCT_PRODUCT_parentProductId"))
     private ProductEntity parentProduct;
     private String categoryId;
     @Column(nullable = false)

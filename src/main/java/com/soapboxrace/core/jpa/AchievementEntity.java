@@ -61,7 +61,7 @@ public class AchievementEntity {
     private List<AchievementRankEntity> ranks;
 
     @OneToOne(targetEntity = BadgeDefinitionEntity.class, optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "badge_definition_id", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "badge_definition_id", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_ACHIEVEMENT_BADGE_DEFINITION_badge_definition_id"))
     private BadgeDefinitionEntity badgeDefinitionEntity;
 
     @Column(name = "should_overwrite_progress", columnDefinition = "BIT(1) DEFAULT 0")

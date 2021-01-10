@@ -26,12 +26,12 @@ public class LobbyEntrantEntity implements Comparable<LobbyEntrantEntity> {
     @ManyToOne
     @XmlTransient
     @JoinColumn(name = "PERSONAID", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
-            "FK_LOBBYENTRANT_PERSONA"))
+            "FK_LOBBY_ENTRANT_PERSONA_PERSONAID"))
     private PersonaEntity persona;
 
     @ManyToOne
     @XmlTransient
-    @JoinColumn(name = "LOBBYID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBYENTRANT_LOBBY"))
+    @JoinColumn(name = "LOBBYID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBY_ENTRANT_LOBBY_LOBBYID"))
     private LobbyEntity lobby;
 
     private int gridIndex;

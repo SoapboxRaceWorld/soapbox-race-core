@@ -10,8 +10,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "VINYL")
-@NamedQueries({@NamedQuery(name = "VinylEntity.deleteByCustomCar", //
-        query = "DELETE FROM VinylEntity obj WHERE obj.customCar = :customCar") //
+@NamedQueries({@NamedQuery(name = "VinylEntity.deleteByCar", //
+        query = "DELETE FROM VinylEntity obj WHERE obj.car = :customCar") //
 })
 public class VinylEntity {
 
@@ -20,9 +20,9 @@ public class VinylEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
-            "FK_VINYL_CUSTOMCAR"))
-    private CustomCarEntity customCar;
+    @JoinColumn(name = "carId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
+            "FK_VINYL_CAR_carId"))
+    private CarEntity car;
 
     private int hash;
     private int hue1;
@@ -54,12 +54,12 @@ public class VinylEntity {
         this.id = id;
     }
 
-    public CustomCarEntity getCustomCar() {
-        return customCar;
+    public CarEntity getCar() {
+        return car;
     }
 
-    public void setCustomCar(CustomCarEntity customCar) {
-        this.customCar = customCar;
+    public void setCar(CarEntity car) {
+        this.car = car;
     }
 
     public int getHash() {

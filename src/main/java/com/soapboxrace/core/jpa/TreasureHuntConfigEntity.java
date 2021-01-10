@@ -24,8 +24,8 @@ public class TreasureHuntConfigEntity {
     @Column(name = "streak")
     private Integer streak;
 
-    @ManyToOne(targetEntity = RewardTableEntity.class, optional = true)
-    @JoinColumn(referencedColumnName = "ID", name = "reward_table_id")
+    @ManyToOne(targetEntity = RewardTableEntity.class)
+    @JoinColumn(referencedColumnName = "ID", name = "reward_table_id", foreignKey = @ForeignKey(name = "FK_TREASURE_HUNT_CONFIG_REWARD_TABLE_reward_table_id"))
     private RewardTableEntity rewardTableEntity;
 
     @Column(name = "base_rep")

@@ -18,6 +18,7 @@ public class CardPackItemEntity {
     private Long id;
 
     @ManyToOne(targetEntity = CardPackEntity.class, optional = false)
+    @JoinColumn(name = "cardPackEntity_ID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_CARD_PACK_ITEM_CARD_PACK_cardPackEntity_ID"))
     private CardPackEntity cardPackEntity;
 
     @Column(columnDefinition = "TEXT", nullable = false)

@@ -10,8 +10,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PAINT")
-@NamedQueries({@NamedQuery(name = "PaintEntity.deleteByCustomCar", //
-        query = "DELETE FROM PaintEntity obj WHERE obj.customCar = :customCar") //
+@NamedQueries({@NamedQuery(name = "PaintEntity.deleteByCar", //
+        query = "DELETE FROM PaintEntity obj WHERE obj.car = :car") //
 })
 public class PaintEntity {
 
@@ -20,9 +20,9 @@ public class PaintEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
-            "FK_PAINT_CUSTOMCAR"))
-    private CustomCarEntity customCar;
+    @JoinColumn(name = "carId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
+            "FK_PAINT_CAR_carId"))
+    private CarEntity car;
 
     @Column(name = "paintGroup")
     private int group;
@@ -40,12 +40,12 @@ public class PaintEntity {
         this.id = id;
     }
 
-    public CustomCarEntity getCustomCar() {
-        return customCar;
+    public CarEntity getCar() {
+        return car;
     }
 
-    public void setCustomCar(CustomCarEntity customCar) {
-        this.customCar = customCar;
+    public void setCar(CarEntity car) {
+        this.car = car;
     }
 
     public int getGroup() {
