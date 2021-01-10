@@ -56,13 +56,12 @@ public class LobbyBO {
     private LobbyMessagingBO lobbyMessagingBO;
 
     public void joinFastLobby(Long personaId, int carClassHash) {
-        PersonaEntity personaEntity = personaDao.find(personaId);
-        List<LobbyEntity> lobbys = lobbyDao.findAllOpen(carClassHash, personaEntity.getLevel());
+        List<LobbyEntity> lobbys = lobbyDao.findAllOpen(carClassHash);
 
         if (lobbys.isEmpty()) {
             matchmakingBO.addPlayerToQueue(personaId, carClassHash);
         } else {
-            Collections.shuffle(lobbys);
+            PersonaEntity personaEntity = personaDao.findById(personaId);
             joinLobby(personaEntity, lobbys, true);
         }
     }
