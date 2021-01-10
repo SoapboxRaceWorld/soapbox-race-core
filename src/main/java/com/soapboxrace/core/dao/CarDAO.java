@@ -7,7 +7,7 @@
 package com.soapboxrace.core.dao;
 
 import com.soapboxrace.core.dao.util.LongKeyedDAO;
-import com.soapboxrace.core.jpa.OwnedCarEntity;
+import com.soapboxrace.core.jpa.CarEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 
 import javax.ejb.Stateless;
@@ -16,56 +16,56 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class OwnedCarDAO extends LongKeyedDAO<OwnedCarEntity> {
+public class CarDAO extends LongKeyedDAO<CarEntity> {
 
-    public OwnedCarDAO() {
-        super(OwnedCarEntity.class);
+    public CarDAO() {
+        super(CarEntity.class);
     }
 
-    public List<OwnedCarEntity> findByPersonaId(Long personaId) {
-        TypedQuery<OwnedCarEntity> query = entityManager.createNamedQuery("OwnedCarEntity.findByPersonaId",
-                OwnedCarEntity.class);
+    public List<CarEntity> findByPersonaId(Long personaId) {
+        TypedQuery<CarEntity> query = entityManager.createNamedQuery("CarEntity.findByPersonaId",
+                CarEntity.class);
         query.setParameter("persona", personaId);
         return query.getResultList();
     }
 
-    public OwnedCarEntity findByPersonaIdEager(Long personaId, int index) {
-        TypedQuery<OwnedCarEntity> query = entityManager.createNamedQuery("OwnedCarEntity.findByPersonaIdEager",
-                OwnedCarEntity.class);
+    public CarEntity findByPersonaIdEager(Long personaId, int index) {
+        TypedQuery<CarEntity> query = entityManager.createNamedQuery("CarEntity.findByPersonaIdEager",
+                CarEntity.class);
         query.setParameter("persona", personaId);
         query.setFirstResult(index);
         query.setMaxResults(1);
         return query.getSingleResult();
     }
 
-    public List<OwnedCarEntity> findByPersonaIdEager(Long personaId) {
-        TypedQuery<OwnedCarEntity> query = entityManager.createNamedQuery("OwnedCarEntity.findByPersonaIdEager",
-                OwnedCarEntity.class);
+    public List<CarEntity> findByPersonaIdEager(Long personaId) {
+        TypedQuery<CarEntity> query = entityManager.createNamedQuery("CarEntity.findByPersonaIdEager",
+                CarEntity.class);
         query.setParameter("persona", personaId);
         return query.getResultList();
     }
 
     public Long findNumNonRentalsByPersonaId(Long personaId) {
-        TypedQuery<Long> query = entityManager.createNamedQuery("OwnedCarEntity.findNumNonRentalsByPersonaId",
+        TypedQuery<Long> query = entityManager.createNamedQuery("CarEntity.findNumNonRentalsByPersonaId",
                 Long.class);
         query.setParameter("persona", personaId);
         return query.getSingleResult();
     }
 
     public int findNumByPersonaId(Long personaId) {
-        TypedQuery<Long> query = entityManager.createNamedQuery("OwnedCarEntity.findNumByPersonaId",
+        TypedQuery<Long> query = entityManager.createNamedQuery("CarEntity.findNumByPersonaId",
                 Long.class);
         query.setParameter("persona", personaId);
         return query.getSingleResult().intValue();
     }
 
     public int deleteAllExpired() {
-        Query query = entityManager.createNamedQuery("OwnedCarEntity.deleteAllExpired");
+        Query query = entityManager.createNamedQuery("CarEntity.deleteAllExpired");
         return query.executeUpdate();
     }
 
     public void deleteByPersona(PersonaEntity personaEntity) {
-        Query query = entityManager.createNamedQuery("OwnedCarEntity.deleteByPersona");
+        Query query = entityManager.createNamedQuery("CarEntity.deleteByPersona");
         query.setParameter("persona", personaEntity);
         query.executeUpdate();
     }

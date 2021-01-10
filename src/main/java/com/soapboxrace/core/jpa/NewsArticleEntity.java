@@ -44,11 +44,11 @@ public class NewsArticleEntity {
     private int iconType;
 
     @ManyToOne(targetEntity = PersonaEntity.class)
-    @JoinColumn(name = "persona_id", referencedColumnName = "id")
+    @JoinColumn(name = "persona_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_NEWS_ARTICLE_PERSONA_persona_id"))
     private PersonaEntity persona;
 
     @ManyToOne(targetEntity = PersonaEntity.class)
-    @JoinColumn(name = "referenced_persona_id", referencedColumnName = "id")
+    @JoinColumn(name = "referenced_persona_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_NEWS_ARTICLE_PERSONA_persona_id"))
     private PersonaEntity referencedPersona;
 
     @Column

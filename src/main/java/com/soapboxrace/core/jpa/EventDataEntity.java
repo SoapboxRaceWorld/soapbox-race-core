@@ -49,7 +49,7 @@ public class EventDataEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENTDATA_EVENT"))
+    @JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_EVENTDATA_EVENT_EVENTID"))
     private EventEntity event;
     private Long personaId;
     private int eventModeId;

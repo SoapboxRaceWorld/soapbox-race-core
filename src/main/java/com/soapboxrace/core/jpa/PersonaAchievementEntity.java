@@ -31,11 +31,11 @@ public class PersonaAchievementEntity {
     private Long id;
 
     @ManyToOne(targetEntity = PersonaEntity.class, cascade = CascadeType.DETACH, optional = false)
-    @JoinColumn(name = "persona_id", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "persona_id", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_PERSONA_ACHIEVEMENT_PERSONA_persona_id"))
     private PersonaEntity personaEntity;
 
     @ManyToOne(targetEntity = AchievementEntity.class, cascade = CascadeType.DETACH, optional = false)
-    @JoinColumn(name = "achievement_id", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "achievement_id", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_PERSONA_ACHIEVEMENT_ACHIEVEMENT_achievement_id"))
     private AchievementEntity achievementEntity;
 
     @Column(name = "can_progress")

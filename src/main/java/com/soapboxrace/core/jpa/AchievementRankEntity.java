@@ -21,11 +21,7 @@ public class AchievementRankEntity {
     private Long id;
 
     @ManyToOne(targetEntity = AchievementEntity.class, cascade = CascadeType.DETACH)
-    @JoinColumn(
-            name = "achievement_id",
-            referencedColumnName = "ID",
-            nullable = false
-    )
+    @JoinColumn(name = "achievement_id", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_ACHIEVEMENT_RANK_ACHIEVEMENT_achievement_id"))
     private AchievementEntity achievementEntity;
 
     @Column

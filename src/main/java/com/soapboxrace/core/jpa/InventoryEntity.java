@@ -22,7 +22,7 @@ public class InventoryEntity {
     private Long id;
 
     @OneToOne(targetEntity = PersonaEntity.class)
-    @JoinColumn(name = "personaId", foreignKey = @ForeignKey(name = "FK_INVENTORY_PERSONA"))
+    @JoinColumn(name = "personaId", foreignKey = @ForeignKey(name = "FK_INVENTORY_PERSONA_personaId"))
     private PersonaEntity personaEntity;
 
     @OneToMany(mappedBy = "inventoryEntity", fetch =

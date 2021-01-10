@@ -24,7 +24,7 @@ import java.util.List;
                 query = "SELECT obj FROM LobbyEntity obj JOIN FETCH obj.event e WHERE obj.startedTime between :dateTime1 and :dateTime2 and size(obj.entrants) < obj.event.maxPlayers"), //
         @NamedQuery(name = "LobbyEntity.findAllOpenByCarClass", //
                 query = "SELECT obj FROM LobbyEntity obj " //
-                        + "JOIN FETCH obj.event e WHERE obj.startedTime between :dateTime1 and :dateTime2 " //
+                        + "JOIN FETCH obj.event e WHERE :level >= e.minLevel and :level <= e.maxLevel and obj.startedTime between :dateTime1 and :dateTime2 " //
                         + "and (obj.event.carClassHash = 607077938 or obj.event.carClassHash = :carClassHash ) and size(obj.entrants) < obj.event.maxPlayers"),
         @NamedQuery(name = "LobbyEntity.findByEventStarted", query = "SELECT obj FROM LobbyEntity obj JOIN FETCH obj.event e WHERE obj.event" +
                 " = :event AND obj.startedTime between :dateTime1 AND :dateTime2 AND obj.isPrivate = false AND size(obj.entrants) < obj.event.maxPlayers"), //
@@ -40,7 +40,7 @@ public class LobbyEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBY_EVENT"))
+    @JoinColumn(name = "EVENTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_LOBBY_EVENT_EVENTID"))
     private EventEntity event;
 
     @OneToMany(mappedBy = "lobby", targetEntity = LobbyEntrantEntity.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)

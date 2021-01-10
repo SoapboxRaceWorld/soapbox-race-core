@@ -9,7 +9,7 @@ package com.soapboxrace.core.api;
 import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.bo.util.OwnedCarConverter;
-import com.soapboxrace.core.jpa.OwnedCarEntity;
+import com.soapboxrace.core.jpa.CarEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.ProductEntity;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
@@ -142,11 +142,10 @@ public class Personas {
         sessionBO.verifyPersonaOwnership(requestSessionInfo.getTokenSessionEntity(), personaId);
 
         PersonaEntity personaEntity = personaBO.getPersonaById(personaId);
-        List<OwnedCarEntity> personasCar = carSlotBO.getPersonasCar(personaId);
+        List<CarEntity> personasCar = carSlotBO.getPersonasCar(personaId);
         ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
-
-        for (OwnedCarEntity ownedCarEntity : personasCar) {
-            OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
+        for (CarEntity carEntity : personasCar) {
+            OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carEntity);
             arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
         }
 
@@ -224,9 +223,9 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public ArrayOfOwnedCarTrans carsGet(@PathParam(value = "personaId") Long personaId) {
         ArrayOfOwnedCarTrans arrayOfOwnedCarTrans = new ArrayOfOwnedCarTrans();
-        List<OwnedCarEntity> personasCar = carSlotBO.getPersonasCar(personaId);
-        for (OwnedCarEntity ownedCarEntity : personasCar) {
-            OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(ownedCarEntity);
+        List<CarEntity> personasCar = carSlotBO.getPersonasCar(personaId);
+        for (CarEntity carEntity : personasCar) {
+            OwnedCarTrans ownedCarTrans = OwnedCarConverter.entity2Trans(carEntity);
             arrayOfOwnedCarTrans.getOwnedCarTrans().add(ownedCarTrans);
         }
         return arrayOfOwnedCarTrans;
@@ -238,8 +237,8 @@ public class Personas {
     @Produces(MediaType.APPLICATION_XML)
     public OwnedCarTrans carsGet(@PathParam(value = "personaId") Long personaId,
                                  @PathParam(value = "carId") Long carId) {
-        OwnedCarEntity ownedCarEntity = personaBO.getCarByOwnedCarId(carId);
-        return OwnedCarConverter.entity2Trans(ownedCarEntity);
+        CarEntity carEntity = personaBO.getCarByOwnedCarId(carId);
+        return OwnedCarConverter.entity2Trans(carEntity);
     }
 
     @PUT

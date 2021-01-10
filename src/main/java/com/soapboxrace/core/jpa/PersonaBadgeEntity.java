@@ -26,11 +26,11 @@ public class PersonaBadgeEntity {
     private Long id;
 
     @ManyToOne(targetEntity = PersonaEntity.class, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "persona_id", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "persona_id", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_PERSONA_BADGE_PERSONA_persona_id"))
     private PersonaEntity personaEntity;
 
     @ManyToOne(targetEntity = BadgeDefinitionEntity.class, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "badge_definition_id", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "badge_definition_id", referencedColumnName = "ID", nullable = false, foreignKey = @ForeignKey(name = "FK_PERSONA_BADGE_BADGE_DEFINITION_badge_definition_id"))
     private BadgeDefinitionEntity badgeDefinitionEntity;
 
     @Column

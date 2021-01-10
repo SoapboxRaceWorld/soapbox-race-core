@@ -21,7 +21,7 @@ public class AmplifierEntity {
     private Long id;
 
     @OneToOne(targetEntity = ProductEntity.class, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "product_id", referencedColumnName = "productId")
+    @JoinColumn(name = "product_id", referencedColumnName = "productId", foreignKey = @ForeignKey(name = "FK_AMPLIFIERS_PRODUCT_product_id"))
     private ProductEntity productEntity;
 
     @Column

@@ -35,7 +35,7 @@ public class DriverPersonaBO {
     private LevelRepDAO levelRepDAO;
 
     @EJB
-    private OwnedCarDAO ownedCarDAO;
+    private CarDAO carDAO;
 
     @EJB
     private TreasureHuntDAO treasureHuntDAO;
@@ -185,20 +185,6 @@ public class DriverPersonaBO {
     public void deletePersona(Long personaId) {
         PersonaEntity personaEntity = personaDao.find(personaId);
         UserEntity user = personaEntity.getUser();
-        List<OwnedCarEntity> ownedCarEntities = ownedCarDAO.findByPersonaId(personaId);
-        for (OwnedCarEntity ownedCarEntity : ownedCarEntities) {
-            ownedCarDAO.delete(ownedCarEntity);
-        }
-        ownedCarDAO.deleteByPersona(personaEntity);
-        lobbyEntrantDAO.deleteByPersona(personaEntity);
-        treasureHuntDAO.deleteByPersona(personaEntity);
-        inventoryItemDAO.deleteByPersona(personaEntity);
-        inventoryDAO.deleteByPersona(personaEntity);
-        personaAchievementRankDAO.deleteByPersona(personaEntity);
-        personaAchievementDAO.deleteByPersona(personaEntity);
-        personaBadgeDAO.deleteAllBadgesForPersona(personaId);
-        socialRelationshipDAO.deleteAllByPersonaId(personaId);
-
         personaDao.delete(personaEntity);
         user.setSelectedPersonaIndex(Math.max(0, user.getSelectedPersonaIndex() - 1));
         userDao.update(user);

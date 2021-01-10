@@ -31,7 +31,7 @@ public class InviteTicketEntity {
     private String discordName;
 
     @ManyToOne
-    @JoinColumn(name = "USERID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_INVITETICKET_USER"))
+    @JoinColumn(name = "USERID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_INVITE_TICKET_USER_USERID"))
     private UserEntity user;
 
     public Long getId() {

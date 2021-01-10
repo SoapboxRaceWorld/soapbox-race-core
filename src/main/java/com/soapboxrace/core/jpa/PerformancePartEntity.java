@@ -10,8 +10,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PERFORMANCEPART")
-@NamedQueries({@NamedQuery(name = "PerformancePartEntity.deleteByCustomCar", //
-        query = "DELETE FROM PerformancePartEntity obj WHERE obj.customCar = :customCar") //
+@NamedQueries({@NamedQuery(name = "PerformancePartEntity.deleteByCar", //
+        query = "DELETE FROM PerformancePartEntity obj WHERE obj.car = :car") //
 })
 public class PerformancePartEntity {
 
@@ -21,9 +21,9 @@ public class PerformancePartEntity {
     private int performancePartAttribHash;
 
     @ManyToOne
-    @JoinColumn(name = "customCarId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
-            "FK_PERFPART_CUSTOMCAR"))
-    private CustomCarEntity customCar;
+    @JoinColumn(name = "carId", referencedColumnName = "ID", foreignKey = @ForeignKey(name =
+            "FK_PERFORMANCEPART_CAR_carId"))
+    private CarEntity car;
 
     public Long getId() {
         return id;
@@ -41,12 +41,12 @@ public class PerformancePartEntity {
         this.performancePartAttribHash = performancePartAttribHash;
     }
 
-    public CustomCarEntity getCustomCar() {
-        return customCar;
+    public CarEntity getCar() {
+        return car;
     }
 
-    public void setCustomCar(CustomCarEntity customCar) {
-        this.customCar = customCar;
+    public void setCar(CarEntity car) {
+        this.car = car;
     }
 
 }

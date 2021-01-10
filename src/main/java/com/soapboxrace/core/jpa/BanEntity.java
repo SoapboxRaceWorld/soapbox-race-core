@@ -23,11 +23,11 @@ public class BanEntity {
     private Long id;
 
     @OneToOne(targetEntity = UserEntity.class)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BAN_USER"))
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BAN_USER_user_id"))
     private UserEntity userEntity;
 
     @ManyToOne(targetEntity = PersonaEntity.class)
-    @JoinColumn(name = "banned_by_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BANNED_BY"))
+    @JoinColumn(name = "banned_by_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_BAN_PERSONA_banned_by_id"))
     private PersonaEntity bannedBy;
 
     @Column

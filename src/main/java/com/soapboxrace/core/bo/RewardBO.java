@@ -81,10 +81,10 @@ public class RewardBO {
         int level = personaEntity.getLevel();
         int baselineLevelCash = parameterBO.getIntParam("REWARD_CASH_BASELINE_LEVEL", 0);
         int baselineLevelRep = parameterBO.getIntParam("REWARD_REP_BASELINE_LEVEL", 0);
-        Float playerLevelRepConst = getPlayerLevelConst(baselineLevelRep + level,
-                eventRewardEntity.getLevelRepRewardMultiplier());
-        Float playerLevelCashConst = getPlayerLevelConst(baselineLevelCash + level,
-                eventRewardEntity.getLevelCashRewardMultiplier());
+        float playerLevelRepConst = getPlayerLevelConst(level,
+                eventRewardEntity.getLevelRepRewardMultiplier()) + baselineLevelRep;
+        float playerLevelCashConst = getPlayerLevelConst(level,
+                eventRewardEntity.getLevelCashRewardMultiplier()) + baselineLevelCash;
         Float timeConst = getTimeConst(eventEntity.getRewardsTimeLimit(), arbitrationPacket.getEventDurationInMilliseconds());
         rewardVO.setBaseRep(getBaseReward(baseRep, playerLevelRepConst, timeConst, Math.round( getPlayerCountConst() * getHappyHour() )));
         rewardVO.setBaseCash(getBaseReward(baseCash, playerLevelCashConst, timeConst, Math.round( getPlayerCountConst() * getHappyHour() )));
@@ -168,8 +168,8 @@ public class RewardBO {
 
     public void setSkillMultiplierReward(PersonaEntity personaEntity, RewardVO rewardVO,
                                          SkillModRewardType skillModRewardType) {
-        OwnedCarEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
-        Set<SkillModPartEntity> skillModParts = defaultCarEntity.getCustomCar().getSkillModParts();
+        CarEntity defaultCarEntity = personaBo.getDefaultCarEntity(personaEntity.getPersonaId());
+        Set<SkillModPartEntity> skillModParts = defaultCarEntity.getSkillModParts();
         float skillMultiplier = 0f;
         float maxSkillMultiplier = parameterBO.getFloatParam("SKILL_" + skillModRewardType.toString() + "_MAX_VALUE", 30f);
         for (SkillModPartEntity skillModPartEntity : skillModParts) {
