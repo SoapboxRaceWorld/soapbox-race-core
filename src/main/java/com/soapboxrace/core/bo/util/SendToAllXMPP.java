@@ -26,7 +26,6 @@ public class SendToAllXMPP {
         String msg = XmppChat.createSystemMessage(message);
 
         for (MUCRoomEntity channel : channels) {
-        	System.out.println(channel.getRoomName());
         	if(channel.getRoomName().equals(channelname)) {
 	            List<Long> members = restApiCli.getAllOccupantsInRoom(channel.getRoomName());
 
