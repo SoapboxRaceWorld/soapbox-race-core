@@ -57,7 +57,8 @@ WHERE 1 = 1;
 # Update EVENT_DATA carId values
 UPDATE EVENT_DATA ED
     INNER JOIN CUSTOMCAR CC ON ED.carId = CC.id
-SET ED.carId=CC.ownedCarId;
+SET ED.carId=CC.ownedCarId
+WHERE ED.carId != 0;
 
 # Update customization tables
 UPDATE PAINT P
