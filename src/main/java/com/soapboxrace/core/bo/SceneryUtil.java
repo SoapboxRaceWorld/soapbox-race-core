@@ -17,6 +17,7 @@ public class SceneryUtil {
         sceneryIds.put("SCENERY_GROUP_OKTOBERFEST", 1L);
         sceneryIds.put("SCENERY_GROUP_HALLOWEEN", 2L);
         sceneryIds.put("SCENERY_GROUP_CHRISTMAS", 3L);
+        sceneryIds.put("SCENERY_GROUP_VALENTINES", 4L);
         sceneryIds.put("SCENERY_GROUP_NEWYEARS", 5L);
     }
 
