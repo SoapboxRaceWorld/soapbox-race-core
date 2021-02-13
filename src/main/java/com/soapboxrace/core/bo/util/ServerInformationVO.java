@@ -26,6 +26,10 @@ public class ServerInformationVO {
     private Long onlineNumber;
     private boolean requireTicket = false;
     private float playerCountRewardMultiplier;
+
+    private String WebSignupUrl;
+    private String PasswordResetUrl;
+
     private boolean happyHourEnabled = false;
     private float happyHourMultipler = 1f;
     private String serverVersion;
@@ -174,6 +178,23 @@ public class ServerInformationVO {
         this.requireTicket = requireTicket;
     }
 
+    public String getWebSignupUrl() {
+        return WebSignupUrl;
+    }
+
+    public void setWebSignupUrl(String WebSignupUrl) {
+        this.WebSignupUrl = WebSignupUrl;
+    }
+
+    
+    public String getPasswordResetUrl() {
+        return PasswordResetUrl;
+    }
+
+    public void setPasswordResetUrl(String PasswordResetUrl) {
+        this.PasswordResetUrl = PasswordResetUrl;
+    }
+    
     public String getServerVersion() {
         return serverVersion;
     }
