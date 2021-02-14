@@ -27,8 +27,8 @@ public class ServerInformationVO {
     private boolean requireTicket = false;
     private float playerCountRewardMultiplier;
 
-    private String WebSignupUrl;
-    private String PasswordResetUrl;
+    private String webSignupUrl;
+    private String webRecoveryUrl;
 
     private boolean happyHourEnabled = false;
     private float happyHourMultipler = 1f;
@@ -179,20 +179,20 @@ public class ServerInformationVO {
     }
 
     public String getWebSignupUrl() {
-        return WebSignupUrl;
+        return webSignupUrl;
     }
 
-    public void setWebSignupUrl(String WebSignupUrl) {
-        this.WebSignupUrl = WebSignupUrl;
+    public void setWebSignupUrl(String webSignupUrl) {
+        this.webSignupUrl = webSignupUrl;
     }
 
     
-    public String getPasswordResetUrl() {
-        return PasswordResetUrl;
+    public String getWebRecoveryUrl() {
+        return webRecoveryUrl;
     }
 
-    public void setPasswordResetUrl(String PasswordResetUrl) {
-        this.PasswordResetUrl = PasswordResetUrl;
+    public void setWebRecoveryUrl(String webRecoveryUrl) {
+        this.webRecoveryUrl = webRecoveryUrl;
     }
     
     public String getServerVersion() {

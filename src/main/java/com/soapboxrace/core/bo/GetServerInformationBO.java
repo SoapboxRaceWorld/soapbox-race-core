@@ -49,7 +49,7 @@ public class GetServerInformationBO {
         serverInformationVO.setHappyHourEnabled(parameterBO.getBoolParam("happyHourEnabled"));
         serverInformationVO.setHappyHourMultipler(parameterBO.getFloatParam("happyHourMultipler"));
         serverInformationVO.setWebSignupUrl(parameterBO.getStrParam("SERVER_INFO_SIGNUPURL"));
-        serverInformationVO.setPasswordResetUrl(parameterBO.getStrParam("SERVER_INFO_RESETURL"));
+        serverInformationVO.setWebRecoveryUrl(parameterBO.getStrParam("SERVER_INFO_RESETURL"));
         serverInformationVO.setServerVersion(BuildInfo.getVersion() + " - " + BuildInfo.getCommitID());
         serverInformationVO.setOnlineNumber(onlineUsersEntity.getNumberOfOnline());
         serverInformationVO.setNumberOfRegistered(onlineUsersEntity.getNumberOfRegistered());
