@@ -29,6 +29,7 @@ public class ServerInformationVO {
 
     private String webSignupUrl;
     private String webRecoveryUrl;
+    private String webPanelUrl;
 
     private boolean happyHourEnabled = false;
     private float happyHourMultipler = 1f;
@@ -193,6 +194,14 @@ public class ServerInformationVO {
 
     public void setWebRecoveryUrl(String webRecoveryUrl) {
         this.webRecoveryUrl = webRecoveryUrl;
+    }
+
+    public String getWebPanelUrl() {
+        return webPanelUrl;
+    }
+
+    public void setWebPanelUrl(String webPanelUrl) {
+        this.webPanelUrl = webPanelUrl;
     }
     
     public String getServerVersion() {

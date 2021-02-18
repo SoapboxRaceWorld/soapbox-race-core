@@ -50,6 +50,7 @@ public class GetServerInformationBO {
         serverInformationVO.setHappyHourMultipler(parameterBO.getFloatParam("happyHourMultipler"));
         serverInformationVO.setWebSignupUrl(parameterBO.getStrParam("SERVER_INFO_SIGNUPURL"));
         serverInformationVO.setWebRecoveryUrl(parameterBO.getStrParam("SERVER_INFO_RESETURL"));
+        serverInformationVO.setWebPanelUrl(parameterBO.getStrParam("SERVER_INFO_WEBPANEL"));
         serverInformationVO.setServerVersion(BuildInfo.getVersion() + " - " + BuildInfo.getCommitID());
         serverInformationVO.setOnlineNumber(onlineUsersEntity.getNumberOfOnline());
         serverInformationVO.setNumberOfRegistered(onlineUsersEntity.getNumberOfRegistered());
