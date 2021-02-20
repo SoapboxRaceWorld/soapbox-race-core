@@ -59,5 +59,85 @@ public class LaunchFilter implements ContainerRequestFilter {
             userEntity.setHwid(hwid);
             userDao.update(userEntity);
         }
+
+        if (parameterBO.getBoolParam("ENABLE_WHITELISTED_LAUNCHERS_ONLY")) {
+            String json_whitelisted_launchers = parameterBO.getStrParam("WHITELISTED_LAUNCHERS_ONLY", null);
+            String get_useragent = "";
+            String get_launcher;
+            String[] ua_split;
+            boolean lock_access = false;
+
+            if (json_whitelisted_launchers != null) {
+                JSONObject obj_json_whitelisted_launchers = new JSONObject(json_whitelisted_launchers);
+
+
+                if (requestContext.getHeaderString("X-UserAgent") != null) {
+                    get_useragent = requestContext.getHeaderString("X-UserAgent");
+                    get_launcher = "SBRW";
+                } else if (requestContext.getHeaderString("User-Agent") != null) {
+                    get_useragent = requestContext.getHeaderString("User-Agent");
+                    get_launcher = "ELECTRON";
+                } else {
+                    get_launcher = "JLAUNCHER";
+                }
+
+                if (get_launcher.equals("SBRW")) {
+                    ua_split = get_useragent.split(" ");
+                    
+                    if(get_useragent.startsWith("LegacyLauncher")) { 
+                        //MeTonaTOR's Own Launcher - Legacy
+                        if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("legacy")) == -1) {
+                            lock_access = true;
+                        }               
+                    } else if(get_useragent.startsWith("GameLauncherReborn")) { 
+                        //SBRW Official Launcher, since 2018 using this ID
+                        if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("sbrw")) == -1) {
+                            lock_access = true;
+                        }
+                    } else if(get_useragent.startsWith("WebLauncher")) { 
+                        //MeTonaTOR WebBrowser Based Launcher - WIP
+                        if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("weblauncher")) == -1) {
+                            lock_access = true;
+                        }
+                    } else {
+                        lock_access = true;
+                    }
+                } else if (get_launcher.equals("ELECTRON")) {
+                    ua_split = get_useragent.split("/");
+
+                    //RedBlueScreen Launcher - Electron based
+                    if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("electron")) == -1) {
+                        lock_access = true;
+                    }
+                } else {
+                    lock_access = true;
+                }
+
+                if (parameterBO.getBoolParam("SIGNED_LAUNCHER")) {        
+                    //Temporarely this works for SBRW Only, starting from 2.1.6.3
+                    if (requestContext.getHeaderString("X-UserAgent") != null) {
+                        String allowedLaunchersHash = parameterBO.getStrParam("SIGNED_LAUNCHER_HASH", "");
+                        String allowedLaunchersHwid = parameterBO.getStrParam("SIGNED_LAUNCHER_HWID_WL", "");
+                        String currentLauncherHash = requestContext.getHeaderString("X-GameLauncherHash");
+        
+                        if(allowedLaunchersHash.contains(currentLauncherHash) == false) lock_access = true;
+        
+                        if(lock_access == true) {
+                            if(allowedLaunchersHwid.contains(hwid)) lock_access = false;
+                        }
+                    }
+                }
+
+                if (lock_access) {
+                    LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
+                    loginStatusVO.setDescription("You're using the wrong (or unsigned) launcher, please update to the latest one:\n\n" +
+                    "    SOAPBOX  Launcher: " + parameterBO.getStrParam("CUSTOM_SOAPBOX_LAUNCHER_URL",  "https://git.io/Download_NFSW") + "\n" + 
+                    "    Electron Launcher: " + parameterBO.getStrParam("CUSTOM_ELECTRON_LAUNCHER_URL", "https://launcher.sparkserver.eu/") + "\n" + 
+                    "    WebBased Launcher: " + parameterBO.getStrParam("CUSTOM_WEBBASED_LAUNCHER_URL", "Not Yet Released"));
+
+                    requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
+                }
+            }
+        }
     }
 }
