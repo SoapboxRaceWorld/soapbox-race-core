@@ -77,6 +77,9 @@ public class LaunchFilter implements ContainerRequestFilter {
                 } else if (requestContext.getHeaderString("User-Agent") != null) {
                     get_useragent = requestContext.getHeaderString("User-Agent");
                     get_launcher = "ELECTRON";
+                } else if (requestContext.getHeaderString("user-agent") != null) {
+                    get_useragent = requestContext.getHeaderString("user-agent");
+                    get_launcher = "ELECTRON";
                 } else {
                     get_launcher = "JLAUNCHER";
                 }
@@ -97,6 +100,11 @@ public class LaunchFilter implements ContainerRequestFilter {
                     } else if(get_useragent.startsWith("WebLauncher")) { 
                         //MeTonaTOR WebBrowser Based Launcher - WIP
                         if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("weblauncher")) == -1) {
+                            lock_access = true;
+                        }
+                    } else if(get_useragent.startsWith("Horizon")) { 
+                        //Horizon Launcher - WIP
+                        if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("horizon")) == -1) {
                             lock_access = true;
                         }
                     } else {
@@ -133,6 +141,7 @@ public class LaunchFilter implements ContainerRequestFilter {
                     loginStatusVO.setDescription("You're using the wrong (or unsigned) launcher, please update to the latest one:\n\n" +
                     "    SOAPBOX  Launcher: " + parameterBO.getStrParam("CUSTOM_SOAPBOX_LAUNCHER_URL",  "https://git.io/Download_NFSW") + "\n" + 
                     "    Electron Launcher: " + parameterBO.getStrParam("CUSTOM_ELECTRON_LAUNCHER_URL", "https://launcher.sparkserver.eu/") + "\n" + 
+                    "    Horizon  Launcher: " + parameterBO.getStrParam("CUSTOM_HORIZON_LAUNCHER_URL",  "Not Yet Released") + "\n" + 
                     "    WebBased Launcher: " + parameterBO.getStrParam("CUSTOM_WEBBASED_LAUNCHER_URL", "Not Yet Released"));
 
                     requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
