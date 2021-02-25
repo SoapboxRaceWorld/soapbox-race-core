@@ -235,7 +235,7 @@ public class ServerInformationVO {
 		return repRewardMultiplier;
 	}
 
-	public void setRrepRewardMultiplier(float repRewardMultiplier) {
+	public void setRepRewardMultiplier(float repRewardMultiplier) {
 		this.repRewardMultiplier = repRewardMultiplier;
     }
     
