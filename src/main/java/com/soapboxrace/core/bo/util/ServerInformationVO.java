@@ -31,6 +31,9 @@ public class ServerInformationVO {
     private String webRecoveryUrl;
     private String webPanelUrl;
 
+    private float cashRewardMultiplier;
+    private float repRewardMultiplier;
+
     private boolean happyHourEnabled = false;
     private float happyHourMultipler = 1f;
     private String serverVersion;
@@ -218,6 +221,22 @@ public class ServerInformationVO {
 
 	public void setPlayerCountRewardMultiplier(float playerCountRewardMultiplier) {
 		this.playerCountRewardMultiplier = playerCountRewardMultiplier;
+    }
+
+	public float getCashRewardMultiplier() {
+		return cashRewardMultiplier;
+	}
+
+	public void setCashRewardMultiplier(float cashRewardMultiplier) {
+		this.cashRewardMultiplier = cashRewardMultiplier;
+    }
+
+	public float getRepRewardMultiplier() {
+		return repRewardMultiplier;
+	}
+
+	public void setRrepRewardMultiplier(float repRewardMultiplier) {
+		this.repRewardMultiplier = repRewardMultiplier;
     }
     
 	public boolean getHappyHourEnabled() {
