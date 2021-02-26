@@ -87,7 +87,9 @@ public class RewardBO {
                 eventRewardEntity.getLevelCashRewardMultiplier()) + baselineLevelCash;
         Float timeConst = getTimeConst(eventEntity.getRewardsTimeLimit(), arbitrationPacket.getEventDurationInMilliseconds());
         rewardVO.setBaseRep(getBaseReward(baseRep, playerLevelRepConst, timeConst, Math.round( getPlayerCountConst() * getHappyHour() )));
-        rewardVO.setBaseCash(getBaseReward(baseCash, playerLevelCashConst, timeConst, Math.round( getPlayerCountConst() * getHappyHour() )));
+        rewardVO.setBaseCash(getBaseReward(baseCash, playerLevelCashConst, timeConst, Math.round( getPlayerCountConst() * getHappyHour() )));    
+        rewardVO.setBaseRep(getBaseReward(baseRep, playerLevelRepConst, timeConst, parameterBO.getFloatParam("REP_REWARD_MULTIPLIER", 1.0f)));
+        rewardVO.setBaseCash(getBaseReward(baseCash, playerLevelCashConst, timeConst, parameterBO.getFloatParam("CASH_REWARD_MULTIPLIER", 1.0f)));
     }
 
     public RewardVO getRewardVO(PersonaEntity personaEntity) {
