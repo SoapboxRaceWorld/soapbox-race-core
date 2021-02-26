@@ -26,6 +26,14 @@ public class ServerInformationVO {
     private Long onlineNumber;
     private boolean requireTicket = false;
     private float playerCountRewardMultiplier;
+
+    private String webSignupUrl;
+    private String webRecoveryUrl;
+    private String webPanelUrl;
+
+    private float cashRewardMultiplier;
+    private float repRewardMultiplier;
+
     private boolean happyHourEnabled = false;
     private float happyHourMultipler = 1f;
     private String serverVersion;
@@ -174,6 +182,31 @@ public class ServerInformationVO {
         this.requireTicket = requireTicket;
     }
 
+    public String getWebSignupUrl() {
+        return webSignupUrl;
+    }
+
+    public void setWebSignupUrl(String webSignupUrl) {
+        this.webSignupUrl = webSignupUrl;
+    }
+
+    
+    public String getWebRecoveryUrl() {
+        return webRecoveryUrl;
+    }
+
+    public void setWebRecoveryUrl(String webRecoveryUrl) {
+        this.webRecoveryUrl = webRecoveryUrl;
+    }
+
+    public String getWebPanelUrl() {
+        return webPanelUrl;
+    }
+
+    public void setWebPanelUrl(String webPanelUrl) {
+        this.webPanelUrl = webPanelUrl;
+    }
+    
     public String getServerVersion() {
         return serverVersion;
     }
@@ -188,6 +221,22 @@ public class ServerInformationVO {
 
 	public void setPlayerCountRewardMultiplier(float playerCountRewardMultiplier) {
 		this.playerCountRewardMultiplier = playerCountRewardMultiplier;
+    }
+
+	public float getCashRewardMultiplier() {
+		return cashRewardMultiplier;
+	}
+
+	public void setCashRewardMultiplier(float cashRewardMultiplier) {
+		this.cashRewardMultiplier = cashRewardMultiplier;
+    }
+
+	public float getRepRewardMultiplier() {
+		return repRewardMultiplier;
+	}
+
+	public void setRepRewardMultiplier(float repRewardMultiplier) {
+		this.repRewardMultiplier = repRewardMultiplier;
     }
     
 	public boolean getHappyHourEnabled() {

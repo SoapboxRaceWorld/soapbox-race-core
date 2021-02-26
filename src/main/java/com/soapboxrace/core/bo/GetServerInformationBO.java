@@ -48,6 +48,11 @@ public class GetServerInformationBO {
         serverInformationVO.setPlayerCountRewardMultiplier(rewardBO.getPlayerCountConst());
         serverInformationVO.setHappyHourEnabled(parameterBO.getBoolParam("happyHourEnabled"));
         serverInformationVO.setHappyHourMultipler(parameterBO.getFloatParam("happyHourMultipler"));
+        serverInformationVO.setWebSignupUrl(parameterBO.getStrParam("SERVER_INFO_SIGNUPURL"));
+        serverInformationVO.setWebRecoveryUrl(parameterBO.getStrParam("SERVER_INFO_RESETURL"));
+        serverInformationVO.setWebPanelUrl(parameterBO.getStrParam("SERVER_INFO_WEBPANEL"));
+        serverInformationVO.setCashRewardMultiplier(parameterBO.getFloatParam("CASH_REWARD_MULTIPLIER"));
+        serverInformationVO.setRepRewardMultiplier(parameterBO.getFloatParam("REP_REWARD_MULTIPLIER"));
         serverInformationVO.setServerVersion(BuildInfo.getVersion() + " - " + BuildInfo.getCommitID());
         serverInformationVO.setOnlineNumber(onlineUsersEntity.getNumberOfOnline());
         serverInformationVO.setNumberOfRegistered(onlineUsersEntity.getNumberOfRegistered());
