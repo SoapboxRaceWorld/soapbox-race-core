@@ -28,7 +28,7 @@ public class ParameterBO {
 	private String getParameter(String name) {
 		try {
             for (ParameterEntity parameterEntity : parameterDao.findAll()) {
-                if (parameterEntity.getName() == name) {
+                if (parameterEntity.getName().trim().equals(name)) {
                     return parameterEntity.getValue();
                 }
             }
