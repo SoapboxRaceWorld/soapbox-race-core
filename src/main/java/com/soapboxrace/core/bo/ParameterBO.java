@@ -27,8 +27,11 @@ public class ParameterBO {
 
 	private String getParameter(String name) {
 		try {
-			ParameterEntity findById = parameterDao.findById(name);
-			return findById.getValue();
+            for (ParameterEntity parameterEntity : parameterDao.findAll()) {
+                if (parameterEntity.getName() == name) {
+                    return parameterEntity.getValue();
+                }
+            }
 		} catch (Exception e) {
             System.out.println("Unknown parameter name: " + name);
 		}
