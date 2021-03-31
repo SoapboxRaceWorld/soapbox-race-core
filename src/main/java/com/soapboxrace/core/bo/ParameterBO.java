@@ -9,6 +9,7 @@ package com.soapboxrace.core.bo;
 import com.soapboxrace.core.dao.ParameterDAO;
 import com.soapboxrace.core.jpa.ParameterEntity;
 import com.soapboxrace.core.jpa.UserEntity;
+import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
@@ -19,24 +20,38 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-@Stateless
+@Startup
+@Singleton
+@Lock(LockType.READ)
 public class ParameterBO {
 
     @EJB
     private ParameterDAO parameterDao;
 
-	private String getParameter(String name) {
-		try {
-            for (ParameterEntity parameterEntity : parameterDao.findAll()) {
-                if (parameterEntity.getName().trim().equals(name)) {
-                    return parameterEntity.getValue();
-                }
-            }
-		} catch (Exception e) {
-            System.out.println("Unknown parameter name: " + name);
-		}
-		return null;
-	}
+    @Inject
+    private Logger logger;
+    private final ConcurrentMap<String, String> parameterMap;
+    public ParameterBO() {
+        parameterMap = new ConcurrentHashMap<>();
+    }
+    @PostConstruct
+    public void init() {
+        loadParameters();
+    }
+    /**
+     * Loads parameters from the database
+     */
+    public void loadParameters() {
+        parameterMap.clear();
+        for (ParameterEntity parameterEntity : parameterDao.findAll()) {
+            if (parameterEntity.getValue() != null)
+                parameterMap.put(parameterEntity.getName(), parameterEntity.getValue());
+        }
+        logger.info("Loaded {} parameters from database", parameterMap.size());
+    }
+    private String getParameter(String name) {
+        return parameterMap.get(name);
+    }
 
     public int getCarLimit(UserEntity userEntity) {
         return userEntity.getMaxCarSlots();

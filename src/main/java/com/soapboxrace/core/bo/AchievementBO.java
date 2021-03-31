@@ -29,6 +29,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import java.time.LocalDate;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.ZoneId;
+
 @Singleton
 @Lock(LockType.READ)
 public class AchievementBO {
@@ -458,4 +464,54 @@ public class AchievementBO {
         personaAchievementEntity.getRanks().add(rankEntity);
         return rankEntity;
     }
+
+    /**
+	 * Test attempt in custom server HUD alerts. Uses achievement's UI completion announcements as a base.
+	 * It rewrites the temporal UI information about the player's score, so we need to take the score from the player's persona.
+	 * @param personaId - ID of player persona
+	 * @param text - main text to display
+	 * @author Hypercycle, MeTonaTOR
+	 */
+    public void broadcastUICustom(Long personaId, String text, String description, int seconds) {
+		PersonaEntity personaEntity = personaDAO.find(personaId);
+
+        //We wanna avoid the error for no user there.
+        if(personaEntity == null) {
+            return;
+        }
+
+		AchievementsAwarded achievementsAwarded = new AchievementsAwarded();
+		achievementsAwarded.setPersonaId(personaEntity.getPersonaId());
+		achievementsAwarded.setScore(personaEntity.getScore());
+		AchievementAwarded achievementAwarded = new AchievementAwarded();
+
+		String achievedOnStr = "0001-01-01T00:00:00";
+
+		try {
+			LocalDate date = LocalDate.now();
+			GregorianCalendar gcal = GregorianCalendar.from(date.atStartOfDay(ZoneId.systemDefault()));
+			XMLGregorianCalendar xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
+			xmlCalendar.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+			achievedOnStr = xmlCalendar.toXMLFormat();
+		} catch (Exception e) {
+			System.err.println("xml calendar str error");
+		}
+
+		achievementAwarded.setAchievedOn(achievedOnStr);
+		achievementAwarded.setAchievementDefinitionId((long) 104);
+		achievementAwarded.setClip("AchievementFlasherBase");
+		achievementAwarded.setClipLengthInSeconds(seconds);
+		achievementAwarded.setDescription(description);
+		achievementAwarded.setIcon("BADGE18");
+		achievementAwarded.setName(text);
+		achievementAwarded.setPoints(0);
+		achievementAwarded.setRare(false);
+		achievementAwarded.setRarity(0);
+
+		ArrayList<AchievementAwarded> achievements = new ArrayList<>();
+		achievements.add(achievementAwarded);
+
+		achievementsAwarded.setAchievements(achievements);
+		openFireSoapBoxCli.send(achievementsAwarded, personaId);
+	}
 }

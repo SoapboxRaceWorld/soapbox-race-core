@@ -31,6 +31,7 @@ public class ReloadParameters {
         }
 
         if (adminToken.equals(token)) {
+            parameterBO.loadParameters();
             return "SUCCESS! reloaded parameters";
         } else {
             return "ERROR! invalid admin token";

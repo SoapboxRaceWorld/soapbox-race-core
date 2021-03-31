@@ -6,6 +6,7 @@
 
 package com.soapboxrace.core.api;
 
+import com.soapboxrace.core.bo.AchievementBO;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.core.bo.util.SendToAllXMPP;
@@ -36,6 +37,9 @@ public class SendAnnouncement {
     @EJB
     private PersonaDAO personaDAO;
 
+    @EJB
+    private AchievementBO achievementBo;
+
     @POST
     @Produces(MediaType.TEXT_HTML)
     @Path("/Announcement")
@@ -65,6 +69,28 @@ public class SendAnnouncement {
 
         if (announcementToken.equals(token)) {
             sendToAllXMPP.sendMessageToChannel("[" + from + "] " + message, channel);
+            return "SUCCESS!";
+        } else {
+            return "ERROR! invalid admin token";
+        }
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    @Path("/Alert")
+    public String sendAlert(@QueryParam("announcementAuth") String token, @QueryParam("message") String message, @QueryParam("username") String personaName) {
+        String announcementToken = parameterBO.getStrParam("ANNOUNCEMENT_AUTH");
+        if (announcementToken == null) {
+            return "ERROR! no announcement token set in DB";
+        }
+
+        if (announcementToken.equals(token)) {
+            PersonaEntity personaEntity = personaDAO.findByName(personaName);
+            if(personaEntity == null) {
+                return "ERROR! User not found!";
+            }
+            
+            achievementBo.broadcastUICustom(personaEntity.getPersonaId(), message, "ADMINALERT", 5);
             return "SUCCESS!";
         } else {
             return "ERROR! invalid admin token";
