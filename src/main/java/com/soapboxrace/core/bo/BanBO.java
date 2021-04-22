@@ -75,6 +75,7 @@ public class BanBO {
             hardwareInfoEntity.setBanned(false);
             hardwareInfoDAO.update(hardwareInfoEntity);
         }
+        
         banEntity.setActive(false);
         banDAO.update(banEntity);
     }

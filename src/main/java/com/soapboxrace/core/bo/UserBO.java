@@ -82,6 +82,7 @@ public class UserBO {
         InviteTicketEntity inviteTicketEntity = new InviteTicketEntity();
         inviteTicketEntity.setTicket("empty-ticket");
         String ticketToken = parameterBO.getStrParam("TICKET_TOKEN");
+
         if (ticketToken != null && !ticketToken.equals("null")) {
             inviteTicketEntity = inviteTicketDAO.findByTicket(ticket);
             if (inviteTicketEntity == null || inviteTicketEntity.getTicket() == null || inviteTicketEntity.getTicket().isEmpty()) {
@@ -93,11 +94,19 @@ public class UserBO {
                 return loginStatusVO;
             }
         }
+
         UserEntity findByEmail = userDao.findByEmail(email);
         if (findByEmail != null) {
-            loginStatusVO.setDescription("Registration Error: Registration limit reached for email!");
+            loginStatusVO.setDescription("Registration Error: You already made an account with this email.");
             return loginStatusVO;
         }
+
+        int countIpAddress = userDao.countUsersByIpAddress(ip);
+        if (countIpAddress >= parameterBO.getIntParam("MAX_IP_REGISTRATIONS", 5)) {
+            loginStatusVO.setDescription("Registration Error: Registration limit reached for this IP!");
+            return loginStatusVO;
+        }
+
         UserEntity userEntity = createUser(email, passwd, ip);
         inviteTicketEntity.setUser(userEntity);
         inviteTicketDAO.insert(inviteTicketEntity);

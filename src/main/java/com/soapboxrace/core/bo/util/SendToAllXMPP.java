@@ -18,37 +18,57 @@ public class SendToAllXMPP {
     @EJB
     private OpenFireSoapBoxCli openFireSoapBoxCli;
 
-	public void sendMessageToChannel(String message, String channelname) {
+	public void _sendMessageToChannel(String message, String channelname, Boolean isRaw) {
 		List<MUCRoomEntity> channels = restApiCli.getAllRooms()
 			.stream()
 			.collect(Collectors.toList());
 
-        String msg = XmppChat.createSystemMessage(message);
+		if(!isRaw) {
+			message = XmppChat.createSystemMessage(message);
+		}
 
         for (MUCRoomEntity channel : channels) {
         	if(channel.getRoomName().equals(channelname)) {
 	            List<Long> members = restApiCli.getAllOccupantsInRoom(channel.getRoomName());
 
 	            for (Long member : members) {
-	                openFireSoapBoxCli.send(msg, member);
+	                openFireSoapBoxCli.send(message, member);
 	            }
 	        }
         }
 	}
 
-	public void sendMessage(String message) {
+	public void _sendMessage(String message, Boolean isRaw) {
 		List<MUCRoomEntity> channels = restApiCli.getAllRooms()
 			.stream()
 			.collect(Collectors.toList());
 
-        String msg = XmppChat.createSystemMessage(message);
+		if(!isRaw) {
+			message = XmppChat.createSystemMessage(message);
+		}
 
         for (MUCRoomEntity channel : channels) {
             List<Long> members = restApiCli.getAllOccupantsInRoom(channel.getRoomName());
 
             for (Long member : members) {
-                openFireSoapBoxCli.send(msg, member);
+                openFireSoapBoxCli.send(message, member);
             }
    	    }
+   	}
+
+	public void sendMessage(String message) {
+		_sendMessage(message, false);
+   	}
+
+	public void sendRawMessage(String message) {
+		_sendMessage(message, true);
+   	}
+
+	public void sendMessageToChannel(String message, String channelname) {
+		_sendMessageToChannel(message, channelname, false);
+   	}
+
+	public void sendRawMessageToChannel(String message, String channelname) {
+		_sendMessageToChannel(message, channelname, true);
    	}
 } 

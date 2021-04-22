@@ -16,6 +16,9 @@ import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.HardwareInfo;
 import com.soapboxrace.jaxb.util.JAXBUtility;
 
+import com.soapboxrace.core.jpa.PersonaEntity;
+import com.soapboxrace.core.dao.HardwareInfoDAO;
+
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -36,6 +39,9 @@ public class Reporting {
 
     @Inject
     private RequestSessionInfo requestSessionInfo;
+    
+    @EJB
+    private HardwareInfoDAO hardwareInfoDAO;
 
     @POST
     @Secured
@@ -43,10 +49,18 @@ public class Reporting {
     @Produces(MediaType.APPLICATION_XML)
     public String sendHardwareInfo(InputStream is) {
         HardwareInfo hardwareInfo = JAXBUtility.unMarshal(is, HardwareInfo.class);
-        if(hardwareInfo.getCpuid0().equals("GenuineIntel") || hardwareInfo.getCpuid0().equals("AuthenticAMD") || hardwareInfo.getCpuid0().equals("VIA VIA VIA ")) {            HardwareInfoEntity hardwareInfoEntity = hardwareInfoBO.save(hardwareInfo);
+        if(hardwareInfo.getCpuid0().equals("GenuineIntel") || hardwareInfo.getCpuid0().equals("AuthenticAMD") || hardwareInfo.getCpuid0().equals("VIA VIA VIA ")) {            
+            HardwareInfoEntity hardwareInfoEntity = hardwareInfoBO.save(hardwareInfo);
             UserEntity user = requestSessionInfo.getUser();
             user.setGameHardwareHash(hardwareInfoEntity.getHardwareHash());
             userDAO.update(user);
+
+            HardwareInfoEntity checkBannedHWID = hardwareInfoDAO.findBannedByHardwareHash(hardwareInfoEntity.getHardwareHash());
+            if(checkBannedHWID != null) {
+                user.setLocked(true);
+                userDAO.update(user);
+                tokenBO.deleteByUserId(user.getId());
+            }
         } else {
             tokenBO.deleteByUserId(requestSessionInfo.getUser().getId());
         }

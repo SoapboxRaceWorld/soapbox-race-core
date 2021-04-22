@@ -18,11 +18,10 @@ import java.util.List;
 @Entity
 @Table(name = "USER")
 @NamedQueries({ //
-        @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT obj FROM UserEntity obj WHERE obj.email = " +
-                ":email"), //
-        @NamedQuery(name = "UserEntity.findByIpAddress", query = "SELECT obj FROM UserEntity obj WHERE obj.ipAddress " +
-                "= :ipAddress"), //
-        @NamedQuery(name = "UserEntity.countUsers", query = "SELECT COUNT(obj) FROM UserEntity obj WHERE obj.lastLogin IS NOT NULL") //
+        @NamedQuery(name = "UserEntity.findByEmail", query = "SELECT obj FROM UserEntity obj WHERE obj.email = :email"), //
+        @NamedQuery(name = "UserEntity.findByIpAddress", query = "SELECT obj FROM UserEntity obj WHERE obj.ipAddress = :ipAddress"), //
+        @NamedQuery(name = "UserEntity.countUsers", query = "SELECT COUNT(obj) FROM UserEntity obj WHERE obj.lastLogin IS NOT NULL"), //
+        @NamedQuery(name = "UserEntity.countUsersByIpAddress", query = "SELECT COUNT(obj) FROM UserEntity obj WHERE obj.ipAddress = :ipAddress") //
 })
 public class UserEntity {
 

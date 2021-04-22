@@ -28,6 +28,20 @@ public class UserDAO extends LongKeyedDAO<UserEntity> {
         return !resultList.isEmpty() ? resultList.get(0) : null;
     }
 
+    public UserEntity findByIP(String ip) {
+        TypedQuery<UserEntity> query = entityManager.createNamedQuery("UserEntity.findByIpAddress", UserEntity.class);
+        query.setParameter("ipAddress", ip);
+
+        List<UserEntity> resultList = query.getResultList();
+        return !resultList.isEmpty() ? resultList.get(0) : null;
+    }
+
+    public int countUsersByIpAddress(String ip) {
+        TypedQuery<Long> query = entityManager.createNamedQuery("UserEntity.countUsersByIpAddress", Long.class);
+        query.setParameter("ipAddress", ip);
+        return query.getSingleResult().intValue();
+    }
+
     public Long countUsers() {
         return entityManager.createNamedQuery("UserEntity.countUsers", Long.class).getSingleResult();
     }

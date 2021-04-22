@@ -76,6 +76,12 @@ public class AdminBO {
 
                 openFireRestApiCli.sendChatAnnouncement(constructMsg.replace("%s", "banned"));
 
+                if(commandInfo.reason == null) {
+                    String reason = parameterBO.getStrParam("DEFAULT_BAN_REASON", "No reason provided.");
+                } else {
+                    String reason = commandInfo.reason;
+                }
+
                 sendBan(personaEntity, personaDao.find(personaId), commandInfo.timeEnd, commandInfo.reason);
                 openFireSoapBoxCli.send(XmppChat.createSystemMessage("Yay, user has been banned."), personaId);
 

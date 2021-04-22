@@ -61,14 +61,25 @@ public class SendAnnouncement {
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Path("/Chat")
-    public String sendChat(@QueryParam("announcementAuth") String token, @QueryParam("message") String message, @QueryParam("from") String from, @QueryParam("channel") String channel) {
+    public String sendChat(
+        @QueryParam("announcementAuth") String token, 
+        @QueryParam("message") String message, 
+        @QueryParam("from") String from, 
+        @QueryParam("channel") String channel,
+        @QueryParam("rawData") Boolean rawData
+    ) {
         String announcementToken = parameterBO.getStrParam("ANNOUNCEMENT_AUTH");
         if (announcementToken == null) {
             return "ERROR! no announcement token set in DB";
         }
 
         if (announcementToken.equals(token)) {
-            sendToAllXMPP.sendMessageToChannel("[" + from + "] " + message, channel);
+            if(rawData != null && rawData == true) {
+                sendToAllXMPP.sendRawMessageToChannel(message, channel);
+            } else {
+                sendToAllXMPP.sendMessageToChannel("[" + from + "] " + message, channel);
+            }
+            
             return "SUCCESS!";
         } else {
             return "ERROR! invalid admin token";
