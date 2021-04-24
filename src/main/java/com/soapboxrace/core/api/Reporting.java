@@ -16,7 +16,6 @@ import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.jaxb.http.HardwareInfo;
 import com.soapboxrace.jaxb.util.JAXBUtility;
 
-import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.dao.HardwareInfoDAO;
 
 import javax.ejb.EJB;

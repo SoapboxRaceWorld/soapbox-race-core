@@ -14,6 +14,7 @@ import com.soapboxrace.core.jpa.UserEntity;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.core.xmpp.XmppChat;
+import com.soapboxrace.core.dao.UserDAO;
 
 import com.soapboxrace.core.bo.util.DiscordWebhook;
 
@@ -43,6 +44,9 @@ public class AdminBO {
 
     @EJB
     private OpenFireRestApiCli openFireRestApiCli;
+
+    @EJB
+    private UserDAO userDAO;
 
     public void sendChatCommand(Long personaId, String command, String personaName) {
         try {
@@ -135,6 +139,14 @@ public class AdminBO {
 				}
 
                 banBO.expireBan(existingBan);
+                
+                //Re-check USER table if user is locked
+                UserEntity bannedUser = existingBan.getUserEntity();
+                if(bannedUser.isLocked()) {
+                    bannedUser.setLocked(false);
+                    userDAO.update(bannedUser);
+                }
+                
                 openFireSoapBoxCli.send(XmppChat.createSystemMessage("The user has been unbanned, I hope we will not have to ban it once again."), personaId);
 
                 break;

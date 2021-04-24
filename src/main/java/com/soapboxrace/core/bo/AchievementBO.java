@@ -10,6 +10,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.soapboxrace.core.bo.util.AchievementProgressionContext;
 import com.soapboxrace.core.bo.util.AchievementUpdateInfo;
+import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
@@ -61,6 +62,8 @@ public class AchievementBO {
     private PersonaDAO personaDAO;
     @EJB
     private OpenFireSoapBoxCli openFireSoapBoxCli;
+    @EJB
+    private ParameterBO parameterBO;
 
     private List<AchievementEntity> achievementEntities;
     private List<BadgeDefinitionEntity> badgeDefinitionEntities;
@@ -265,6 +268,11 @@ public class AchievementBO {
 
         XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded = new XMPP_ResponseTypeAchievementsAwarded();
         responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
+
+        //Here we must send all achievements, let's try it
+        /*if(parameterBO.getBoolParam("ACHIEVEMENT_CHAT_SEND")) {
+            
+        }*/
 
         openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
     }

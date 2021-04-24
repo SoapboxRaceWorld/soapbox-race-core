@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "HARDWARE_INFO")
 @NamedQueries({ //
         @NamedQuery(name = "HardwareInfoEntity.findByHardwareHash", query = "SELECT obj FROM HardwareInfoEntity obj WHERE obj.hardwareHash = :hardwareHash"), //
-        @NamedQuery(name = "HardwareInfoEntity.findBannedByHardwareHash", query = "SELECT COUNT(obj) FROM HardwareInfoEntity obj WHERE obj.banned = 1 AND obj.hardwareHash = :hardwareHash"), //
+        @NamedQuery(name = "HardwareInfoEntity.findBannedByHardwareHash", query = "SELECT obj FROM HardwareInfoEntity obj WHERE obj.banned = 1 AND obj.hardwareHash = :hardwareHash"), //
         @NamedQuery(name = "HardwareInfoEntity.findByUserId", query = "SELECT obj FROM HardwareInfoEntity obj WHERE obj.userId = :userId") //
 })
 
