@@ -10,12 +10,12 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.soapboxrace.core.bo.util.AchievementProgressionContext;
 import com.soapboxrace.core.bo.util.AchievementUpdateInfo;
-import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.dao.*;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.core.xmpp.OpenFireSoapBoxCli;
+import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.jaxb.http.*;
 import com.soapboxrace.jaxb.xmpp.AchievementAwarded;
 import com.soapboxrace.jaxb.xmpp.AchievementProgress;
@@ -64,6 +64,8 @@ public class AchievementBO {
     private OpenFireSoapBoxCli openFireSoapBoxCli;
     @EJB
     private ParameterBO parameterBO;
+    @EJB
+    private OpenFireRestApiCli openFireRestApiCli;
 
     private List<AchievementEntity> achievementEntities;
     private List<BadgeDefinitionEntity> badgeDefinitionEntities;
@@ -254,6 +256,12 @@ public class AchievementBO {
                 achievementAwarded.setPoints(achievementRankEntity.getPoints());
                 achievementAwarded.setRarity(achievementRankEntity.getRarity());
                 achievementsAwarded.getAchievements().add(achievementAwarded);
+                
+                //Here we must send all achievements, let's try it
+                if(parameterBO.getBoolParam("ACHIEVEMENT_CHAT_SEND")) {
+                    String buildMsg = "[SYSTEM] [ " + personaEntity.getName() + " ] has made the advancement [ " + achievementEntity.getBadgeDefinitionEntity().getParsedName() + " ]";
+                    openFireRestApiCli.sendChatAnnouncement(buildMsg);
+                }
             }
 
             AchievementUpdateInfo.ProgressedAchievement progressedAchievement = achievementUpdateInfo.getProgressedAchievement();
@@ -268,11 +276,6 @@ public class AchievementBO {
 
         XMPP_ResponseTypeAchievementsAwarded responseTypeAchievementsAwarded = new XMPP_ResponseTypeAchievementsAwarded();
         responseTypeAchievementsAwarded.setAchievementsAwarded(achievementsAwarded);
-
-        //Here we must send all achievements, let's try it
-        /*if(parameterBO.getBoolParam("ACHIEVEMENT_CHAT_SEND")) {
-            
-        }*/
 
         openFireSoapBoxCli.send(responseTypeAchievementsAwarded, personaEntity.getPersonaId());
     }

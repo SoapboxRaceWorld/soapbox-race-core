@@ -68,7 +68,7 @@ public class AdminBO {
         String constructMsg_ds = "**" + personaEntity.getName() + "** has been %s by **" + personaEntity1.getName() + "**";
 
 		if (personaEntity == null && personaEntity1 == null)
-			return;
+            return; 
 
         UserEntity userEntity = personaEntity.getUser();
         switch (commandInfo.action) {
@@ -79,18 +79,13 @@ public class AdminBO {
                 }
 
                 openFireRestApiCli.sendChatAnnouncement(constructMsg.replace("%s", "banned"));
+                String reason = (commandInfo.reason == null) ? parameterBO.getStrParam("DEFAULT_BAN_REASON", "No reason provided.") : commandInfo.reason;
 
-                if(commandInfo.reason == null) {
-                    String reason = parameterBO.getStrParam("DEFAULT_BAN_REASON", "No reason provided.");
-                } else {
-                    String reason = commandInfo.reason;
-                }
-
-                sendBan(personaEntity, personaDao.find(personaId), commandInfo.timeEnd, commandInfo.reason);
+                sendBan(personaEntity, personaDao.find(personaId), commandInfo.timeEnd, reason);
                 openFireSoapBoxCli.send(XmppChat.createSystemMessage("Yay, user has been banned."), personaId);
 
                 if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL") != null) {
-					discord.sendMessage(constructMsg_ds.replace("%s", "banned") + ". Reason: " + commandInfo.reason, 
+					discord.sendMessage(constructMsg_ds.replace("%s", "banned") + ". Reason: " + reason, 
 						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL"), 
 						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_NAME", "Botte"),
 						0xff0000
@@ -98,7 +93,7 @@ public class AdminBO {
 				}
 
                 if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_PUBLIC_URL") != null) {
-					discord.sendMessage(constructMsg_ds.replace("%s", "banned") + ". Reason: " + commandInfo.reason, 
+					discord.sendMessage(constructMsg_ds.replace("%s", "banned") + ". Reason: " + reason, 
 						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_PUBLIC_URL"), 
 						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_NAME", "Botte"),
 						0xff0000

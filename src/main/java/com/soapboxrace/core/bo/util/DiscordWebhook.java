@@ -10,7 +10,6 @@ import com.soapboxrace.core.bo.ParameterBO;
 import com.mrpowergamerbr.temmiewebhook.DiscordEmbed;
 import com.mrpowergamerbr.temmiewebhook.DiscordMessage;
 import com.mrpowergamerbr.temmiewebhook.TemmieWebhook;
-import com.mrpowergamerbr.temmiewebhook.embed.ThumbnailEmbed;
 
 @Stateless
 public class DiscordWebhook {

@@ -35,6 +35,9 @@ public class BadgeDefinitionEntity {
     @Column
     private String name;
 
+    @Column
+    private String parsed_name;
+
     @OneToOne(targetEntity = AchievementEntity.class, mappedBy = "badgeDefinitionEntity")
     private AchievementEntity achievementEntity;
 
@@ -84,6 +87,14 @@ public class BadgeDefinitionEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getParsedName() {
+        return parsed_name;
+    }
+
+    public void setParsedName(String parsed_name) {
+        this.parsed_name = parsed_name;
     }
 
     public AchievementEntity getAchievementEntity() {
