@@ -259,7 +259,7 @@ public class AchievementBO {
                 
                 //Here we must send all achievements, let's try it
                 if(parameterBO.getBoolParam("ACHIEVEMENT_CHAT_SEND")) {
-                    String buildMsg = "[SYSTEM] [ " + personaEntity.getName() + " ] has made the advancement [ " + achievementEntity.getBadgeDefinitionEntity().getParsedName() + " ]";
+                    String buildMsg = "[SYSTEM] [ " + personaEntity.getName() + " ] has just earned the achievement [ " + achievementEntity.getBadgeDefinitionEntity().getParsedName() + " ]";
                     openFireRestApiCli.sendChatAnnouncement(buildMsg);
                 }
             }
