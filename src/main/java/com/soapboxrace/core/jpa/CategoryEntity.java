@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "CATEGORY")
 @NamedQueries({ //
-        @NamedQuery(name = "CategoryEntity.getAll", query = "SELECT obj FROM CategoryEntity obj") //
+    @NamedQuery(name = "CategoryEntity.getAll", query = "SELECT obj FROM CategoryEntity obj ORDER BY obj.priority DESC;") //
 })
 public class CategoryEntity {
 
