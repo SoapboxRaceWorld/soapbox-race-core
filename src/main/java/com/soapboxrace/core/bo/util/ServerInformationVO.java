@@ -34,6 +34,8 @@ public class ServerInformationVO {
     private float cashRewardMultiplier;
     private float repRewardMultiplier;
 
+    private String discordApplicationID;
+
     private boolean happyHourEnabled = false;
     private float happyHourMultipler = 1f;
     private String serverVersion;
@@ -237,6 +239,14 @@ public class ServerInformationVO {
 
 	public void setRepRewardMultiplier(float repRewardMultiplier) {
 		this.repRewardMultiplier = repRewardMultiplier;
+    }
+
+	public String getDiscordApplicationID() {
+		return discordApplicationID;
+	}
+
+	public void setDiscordApplicationID(String discordApplicationID) {
+		this.discordApplicationID = discordApplicationID;
     }
     
 	public boolean getHappyHourEnabled() {
