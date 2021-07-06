@@ -295,14 +295,11 @@ public class BasketBO {
         }
 
         carDAO.insert(carEntity);
-        performanceBO.calcNewCarClass(carEntity);
+        CarClassesEntity carClassesEntity = performanceBO.calcNewCarClass(carEntity);
 
         if (isRental && canAddAmplifier(personaEntity.getPersonaId(), "INSURANCE_AMPLIFIER")) {
             addAmplifier(personaEntity, productDao.findByEntitlementTag("INSURANCE_AMPLIFIER"));
         }
-
-        CarClassesEntity carClassesEntity =
-                carClassesDAO.find(carEntity.getName());
 
         AchievementTransaction transaction = achievementBO.createTransaction(personaEntity.getPersonaId());
 
