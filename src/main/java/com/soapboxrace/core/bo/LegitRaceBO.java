@@ -63,6 +63,11 @@ public class LegitRaceBO {
             }
         }
 
-        return true;
+        CarEntity carEntity = carDAO.find(arbitrationPacket.getCarId());
+        if (carEntity == null) {
+            return false;
+        }
+
+        return (sessionEntity.getEvent().getCarClassHash() != 607077938 && carEntity.getCarClassHash() == sessionEntity.getEvent().getCarClassHash()) || carEntity.getCarClassHash() != 0;
     }
 }
