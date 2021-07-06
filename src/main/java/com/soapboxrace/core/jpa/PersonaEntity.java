@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit;
 @NamedQueries({ //
         @NamedQuery(name = "PersonaEntity.findByName", query = "SELECT obj FROM PersonaEntity obj WHERE obj.name = " +
                 ":name"), //
-        @NamedQuery(name = "PersonaEntity.countPersonas", query = "SELECT count(obj) FROM PersonaEntity obj"), //
+        @NamedQuery(name = "PersonaEntity.countPersonas", query = "SELECT count(obj) FROM PersonaEntity obj WHERE obj.deleted_at IS NULL"), //
         @NamedQuery(name = "PersonaEntity.addPointsToScore", query = "UPDATE PersonaEntity obj SET obj.score=obj.score+:points WHERE obj.personaId=:personaId")
 })
 public class PersonaEntity {

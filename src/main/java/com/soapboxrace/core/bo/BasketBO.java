@@ -363,7 +363,7 @@ public class BasketBO {
         if(parameterBO.getBoolParam("SBRWR_KEEP_CARS") == false) {
             carDAO.delete(carEntity);
         } else {
-            carEntity.setSoldAt(LocalDate.now());
+            carEntity.setSoldAt(LocalDateTime.now());
             carDAO.update(carEntity);
         }
 

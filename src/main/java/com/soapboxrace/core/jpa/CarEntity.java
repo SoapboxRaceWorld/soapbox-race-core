@@ -26,7 +26,7 @@ import java.util.Set;
                 query = "SELECT COUNT(obj) FROM CarEntity obj  WHERE obj.persona.personaId = :persona" +
                         " AND obj.expirationDate IS NULL"), //
         @NamedQuery(name = "CarEntity.findNumByPersonaId",
-                query = "SELECT COUNT(obj) FROM CarEntity obj WHERE obj.persona.personaId = :persona"),
+                query = "SELECT COUNT(obj) FROM CarEntity obj WHERE obj.persona.personaId = :persona AND obj.sold_at IS NULL"),
         @NamedQuery(name = "CarEntity.deleteByPersona", //
                 query = "DELETE FROM CarEntity obj WHERE obj.persona = :persona"), //
         @NamedQuery(name = "CarEntity.deleteAllExpired", //
