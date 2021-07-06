@@ -185,8 +185,15 @@ public class DriverPersonaBO {
 
     public void deletePersona(Long personaId) {
         PersonaEntity personaEntity = personaDao.find(personaId);
-        UserEntity user = personaEntity.getUser();
-        personaDao.delete(personaEntity);
+
+        if(parameterBO.getBoolParam("SBRWR_KEEP_PERSONA") == false) {
+            UserEntity user = personaEntity.getUser();
+            personaDao.delete(personaEntity);
+        } else {
+            personaEntity.setDeletedAt(LocalDate.now());
+            personaDao.update(personaEntity);
+        }
+
         user.setSelectedPersonaIndex(Math.max(0, user.getSelectedPersonaIndex() - 1));
         userDao.update(user);
     }

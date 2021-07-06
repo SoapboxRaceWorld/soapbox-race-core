@@ -360,7 +360,12 @@ public class BasketBO {
             return false;
         }
 
-        carDAO.delete(carEntity);
+        if(parameterBO.getBoolParam("SBRWR_KEEP_CARS") == false) {
+            carDAO.delete(carEntity);
+        } else {
+            carEntity.setSoldAt(LocalDate.now());
+            carDAO.update(carEntity);
+        }
 
         int curCarIndex = personaEntity.getCurCarIndex();
 
