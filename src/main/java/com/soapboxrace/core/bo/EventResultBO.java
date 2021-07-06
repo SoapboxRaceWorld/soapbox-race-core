@@ -4,6 +4,7 @@ import com.soapboxrace.core.bo.util.AchievementEventContext;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.jpa.*;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
+import com.soapboxrace.jaxb.http.ClientPhysicsMetrics;
 import com.soapboxrace.jaxb.http.EventResult;
 import com.soapboxrace.jaxb.http.ExitPath;
 
@@ -62,6 +63,8 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
      * @param packet          the {@link TA} instance
      */
     protected final void prepareBasicEventData(EventDataEntity eventDataEntity, Long activePersonaId, TA packet) {
+        ClientPhysicsMetrics clientPhysicsMetrics = packet.getPhysicsMetrics();
+
         eventDataEntity.setAlternateEventDurationInMilliseconds(packet.getAlternateEventDurationInMilliseconds());
         eventDataEntity.setCarId(packet.getCarId());
         eventDataEntity.setEventDurationInMilliseconds(packet.getEventDurationInMilliseconds());
@@ -72,6 +75,15 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
         eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
         eventDataEntity.setServerTimeEnded(System.currentTimeMillis());
         eventDataEntity.setServerTimeInMilliseconds(eventDataEntity.getServerTimeEnded() - eventDataEntity.getServerTimeStarted());
+
+        if (clientPhysicsMetrics != null) {
+            eventDataEntity.setAccelerationAverage(clientPhysicsMetrics.getAccelerationAverage());
+            eventDataEntity.setAccelerationMaximum(clientPhysicsMetrics.getAccelerationMaximum());
+            eventDataEntity.setAccelerationMedian(clientPhysicsMetrics.getAccelerationMedian());
+            eventDataEntity.setSpeedAverage(clientPhysicsMetrics.getSpeedAverage());
+            eventDataEntity.setSpeedMaximum(clientPhysicsMetrics.getSpeedMaximum());
+            eventDataEntity.setSpeedMedian(clientPhysicsMetrics.getSpeedMedian());
+        }
     }
 
     /**

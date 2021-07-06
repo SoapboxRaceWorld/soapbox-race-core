@@ -70,6 +70,13 @@ public class EventDataEntity {
     private Integer carClassHash;
     private Integer carRating;
 
+    private Float accelerationAverage;
+    private Float accelerationMaximum;
+    private Float accelerationMedian;
+    private Float speedAverage;
+    private Float speedMaximum;
+    private Float speedMedian;
+
     public Long getId() {
         return id;
     }
@@ -346,5 +353,53 @@ public class EventDataEntity {
 
     public void setCarRating(Integer carRating) {
         this.carRating = carRating;
+    }
+
+    public Float getAccelerationAverage() {
+        return accelerationAverage;
+    }
+
+    public void setAccelerationAverage(Float accelerationAverage) {
+        this.accelerationAverage = accelerationAverage;
+    }
+
+    public Float getAccelerationMaximum() {
+        return accelerationMaximum;
+    }
+
+    public void setAccelerationMaximum(Float accelerationMaximum) {
+        this.accelerationMaximum = accelerationMaximum;
+    }
+
+    public Float getAccelerationMedian() {
+        return accelerationMedian;
+    }
+
+    public void setAccelerationMedian(Float accelerationMedian) {
+        this.accelerationMedian = accelerationMedian;
+    }
+
+    public Float getSpeedAverage() {
+        return speedAverage;
+    }
+
+    public void setSpeedAverage(Float speedAverage) {
+        this.speedAverage = speedAverage;
+    }
+
+    public Float getSpeedMaximum() {
+        return speedMaximum;
+    }
+
+    public void setSpeedMaximum(Float speedMaximum) {
+        this.speedMaximum = speedMaximum;
+    }
+
+    public Float getSpeedMedian() {
+        return speedMedian;
+    }
+
+    public void setSpeedMedian(Float speedMedian) {
+        this.speedMedian = speedMedian;
     }
 }
