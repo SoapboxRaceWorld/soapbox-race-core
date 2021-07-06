@@ -125,4 +125,13 @@ public class ParameterBO {
         String parameterFromDB = getParameter(parameter);
         return parameterFromDB == null || parameterFromDB.isEmpty() ? defaultValue : Float.valueOf(parameterFromDB);
     }
+
+    public void setParameter(String name, String value) {
+        parameterMap.put(name, value);
+
+        ParameterEntity entity = new ParameterEntity();
+        entity.setName(name);
+        entity.setValue(value);
+        parameterDao.update(entity);
+    }
 }

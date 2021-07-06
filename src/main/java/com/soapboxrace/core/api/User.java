@@ -8,10 +8,16 @@ package com.soapboxrace.core.api;
 
 import com.soapboxrace.core.api.util.LauncherChecks;
 import com.soapboxrace.core.api.util.Secured;
+import com.soapboxrace.core.auth.AuthException;
+import com.soapboxrace.core.auth.AuthResultVO;
+import com.soapboxrace.core.auth.verifiers.LegacyPasswordVerifier;
+import com.soapboxrace.core.auth.verifiers.ModernPasswordVerifier;
+import com.soapboxrace.core.auth.verifiers.PasswordVerifier;
 import com.soapboxrace.core.bo.*;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
 import com.soapboxrace.core.jpa.UserEntity;
+import com.soapboxrace.core.vo.*;
 import com.soapboxrace.jaxb.http.UserInfo;
 import com.soapboxrace.jaxb.login.LoginStatusVO;
 
@@ -50,6 +56,10 @@ public class User {
 
     @EJB
     private MatchmakingBO matchmakingBO;
+
+    @EJB
+    private Argon2BO argon2BO;
+
 
     @Inject
     private RequestSessionInfo requestSessionInfo;
@@ -126,11 +136,24 @@ public class User {
     @Produces(MediaType.APPLICATION_XML)
     @LauncherChecks
     public Response authenticateUser(@QueryParam("email") String email, @QueryParam("password") String password) {
-        LoginStatusVO loginStatusVO = tokenBO.login(email, password, sr);
-        if (loginStatusVO.isLoginOk()) {
+        try {
+            if (parameterBO.getBoolParam("MODERN_AUTH_ENABLED")) {
+                throw new AuthException("This server requires launcher with Modern Auth support. " +
+                        "Please update your launcher.");
+            }
+            if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
+                throw new AuthException("Bad Request: no email or password supplied");
+            }
+            PasswordVerifier verifier = new LegacyPasswordVerifier(password);
+            AuthResultVO result = tokenBO.login(email, verifier, sr);
+
+            LoginStatusVO loginStatusVO = new LoginStatusVO(result.getUserId(), result.getToken(), true);
             return Response.ok(loginStatusVO).build();
+        } catch (AuthException e) {
+            return Response.serverError()
+                    .entity(e.toLoginStatus())
+                    .build();
         }
-        return Response.serverError().entity(loginStatusVO).build();
     }
 
     @GET
@@ -139,11 +162,74 @@ public class User {
     @LauncherChecks
     public Response createUser(@QueryParam("email") String email, @QueryParam("password") String password, @QueryParam(
             "inviteTicket") String inviteTicket) {
-        LoginStatusVO loginStatusVO = userBO.createUserWithTicket(email, password, sr.getRemoteAddr(), inviteTicket);
-        if (loginStatusVO != null && loginStatusVO.isLoginOk()) {
-            loginStatusVO = tokenBO.login(email, password, sr);
+        try {
+            if (parameterBO.getBoolParam("MODERN_AUTH_ENABLED")) {
+                throw new AuthException("This server requires launcher with Modern Auth support. " +
+                        "Please update your launcher.");
+            }
+            if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
+                throw new AuthException("Bad Request: no email or password supplied");
+            }
+            PasswordVerifier verifier = new LegacyPasswordVerifier(password);
+            userBO.createUserWithTicket(email, verifier, sr.getRemoteAddr(), inviteTicket);
+            AuthResultVO result = tokenBO.login(email, verifier, sr);
+
+            LoginStatusVO loginStatusVO = new LoginStatusVO(result.getUserId(), result.getToken(), true);
             return Response.ok(loginStatusVO).build();
+        } catch (AuthException e) {
+            return Response.serverError()
+                    .entity(e.toLoginStatus())
+                    .build();
         }
-        return Response.serverError().entity(loginStatusVO).build();
+    }
+
+    @POST
+    @Path("modernRegister")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @LauncherChecks
+    public Response modernRegister(ModernRegisterRequest req)
+    {
+        try {
+            if (!parameterBO.getBoolParam("MODERN_AUTH_ENABLED")) {
+                throw new AuthException("Modern Auth not enabled!");
+            }
+            if (req.getEmail() == null || req.getEmail().isEmpty() ||
+                    req.getPassword() == null || req.getPassword().isEmpty()) {
+                throw new AuthException("Bad Request: no email or password supplied");
+            }
+            PasswordVerifier verifier = new ModernPasswordVerifier(argon2BO, req.getPassword());
+            userBO.createUserWithTicket(req.getEmail(), verifier, sr.getRemoteAddr(), req.getTicket());
+        } catch (AuthException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new JSONError(e.getMessage())).build();
+        }
+        return Response.ok(new ModernRegisterResponse("Account created! You can now log in.")).build();
+    }
+
+    @POST
+    @Path("modernAuth")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @LauncherChecks
+    public Response modernAuth(ModernAuthRequest req)
+    {
+        try {
+            if (!parameterBO.getBoolParam("MODERN_AUTH_ENABLED")) {
+                throw new AuthException("Modern Auth not enabled!");
+            }
+            if (req.getEmail() == null || req.getEmail().isEmpty() ||
+                    req.getPassword() == null || req.getPassword().isEmpty()) {
+                throw new AuthException("Bad Request: no email or password supplied");
+            }
+            PasswordVerifier verifier = new ModernPasswordVerifier(argon2BO, req.getPassword());
+            AuthResultVO authResult = tokenBO.login(req.getEmail(), verifier, sr);
+
+            ModernAuthResponse resp = new ModernAuthResponse();
+            resp.setUserId(authResult.getUserId());
+            resp.setToken(authResult.getToken());
+            return Response.ok(resp).build();
+        } catch (AuthException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new JSONError(e.getMessage())).build();
+        }
     }
 }

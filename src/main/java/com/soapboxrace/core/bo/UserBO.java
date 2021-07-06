@@ -7,6 +7,8 @@
 package com.soapboxrace.core.bo;
 
 import com.google.common.collect.Iterables;
+import com.soapboxrace.core.auth.AuthException;
+import com.soapboxrace.core.auth.verifiers.PasswordVerifier;
 import com.soapboxrace.core.dao.InviteTicketDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.UserDAO;
@@ -18,7 +20,6 @@ import com.soapboxrace.jaxb.http.ArrayOfProfileData;
 import com.soapboxrace.jaxb.http.ProfileData;
 import com.soapboxrace.jaxb.http.User;
 import com.soapboxrace.jaxb.http.UserInfo;
-import com.soapboxrace.jaxb.login.LoginStatusVO;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import javax.ejb.EJB;
@@ -61,10 +62,10 @@ public class UserBO {
         xmppRestApiCli.createUpdatePersona(personaId, xmppPasswd);
     }
 
-    public UserEntity createUser(String email, String passwd, String ip) {
+    public UserEntity createUser(String email, String password, String ip) {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(email);
-        userEntity.setPassword(passwd);
+        userEntity.setPassword(password);
         userEntity.setIpAddress(ip);
         userEntity.setCreated(LocalDateTime.now());
         userEntity.setLastLogin(LocalDateTime.now());
@@ -72,46 +73,42 @@ public class UserBO {
         return userEntity;
     }
 
-    public LoginStatusVO createUserWithTicket(String email, String passwd, String ip, String ticket) {
-        LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-        if (!EmailValidator.getInstance().isValid(email)) {
-            loginStatusVO.setDescription("Registration Error: Invalid Email Format!");
-            return loginStatusVO;
+    public void createUserWithTicket(String email, PasswordVerifier password, String ip, String ticket) throws AuthException {
+        EmailValidator validator = EmailValidator.getInstance();
+        if (!validator.isValid(email)) {
+            throw new AuthException("Invalid email address!");
         }
 
-        InviteTicketEntity inviteTicketEntity = new InviteTicketEntity();
-        inviteTicketEntity.setTicket("empty-ticket");
+        InviteTicketEntity inviteTicketEntity = null;
         String ticketToken = parameterBO.getStrParam("TICKET_TOKEN");
 
         if (ticketToken != null && !ticketToken.equals("null")) {
             inviteTicketEntity = inviteTicketDAO.findByTicket(ticket);
+            
             if (inviteTicketEntity == null || inviteTicketEntity.getTicket() == null || inviteTicketEntity.getTicket().isEmpty()) {
-                loginStatusVO.setDescription("Registration Error: Invalid Ticket!");
-                return loginStatusVO;
+                throw new AuthException("Invalid ticket!");
             }
+
             if (inviteTicketEntity.getUser() != null) {
-                loginStatusVO.setDescription("Registration Error: Ticket already in use!");
-                return loginStatusVO;
+                throw new AuthException("Ticket already used!");
             }
         }
 
         UserEntity findByEmail = userDao.findByEmail(email);
         if (findByEmail != null) {
-            loginStatusVO.setDescription("Registration Error: You already made an account with this email.");
-            return loginStatusVO;
+            throw new AuthException("You're already registered!");
         }
 
         int countIpAddress = userDao.countUsersByIpAddress(ip);
         if (countIpAddress >= parameterBO.getIntParam("MAX_IP_REGISTRATIONS", 5)) {
-            loginStatusVO.setDescription("Registration Error: Registration limit reached for this IP!");
-            return loginStatusVO;
+            throw new AuthException("Registration limit reached for this IP!");
         }
 
-        UserEntity userEntity = createUser(email, passwd, ip);
-        inviteTicketEntity.setUser(userEntity);
-        inviteTicketDAO.insert(inviteTicketEntity);
-        loginStatusVO = new LoginStatusVO(userEntity.getId(), "", true);
-        return loginStatusVO;
+        UserEntity userEntity = createUser(email, password.createHash(), ip);
+        if (inviteTicketEntity != null) {
+            inviteTicketEntity.setUser(userEntity);
+            inviteTicketDAO.insert(inviteTicketEntity);
+        }
     }
 
     public void secureLoginPersona(Long userId, Long personaId) {

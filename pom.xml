@@ -12,10 +12,10 @@
 
     <groupId>world.soapboxrace</groupId>
     <artifactId>core</artifactId>
-    <version>2.0.0-snapshot</version>
+    <version>2.1.0-snapshot</version>
     <packaging>war</packaging>
 
-    <name>Soapbox Race World Core</name>
+    <name>Soapbox Race World Reloaded Core</name>
 
     <properties>
         <maven.compiler.source>9</maven.compiler.source>
@@ -268,6 +268,11 @@
             <groupId>com.github.MrPowerGamerBR</groupId>
             <artifactId>TemmieWebhook</artifactId>
             <version>-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.mkammerer</groupId>
+            <artifactId>argon2-jvm</artifactId>
+            <version>2.7</version>
         </dependency>
     </dependencies>
 </project>

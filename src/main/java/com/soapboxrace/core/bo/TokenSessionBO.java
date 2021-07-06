@@ -6,6 +6,10 @@
 
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.auth.AuthException;
+import com.soapboxrace.core.auth.AuthResultVO;
+import com.soapboxrace.core.auth.BanInfoVO;
+import com.soapboxrace.core.auth.verifiers.PasswordVerifier;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.engine.EngineException;
 import com.soapboxrace.core.engine.EngineExceptionCode;
@@ -13,7 +17,6 @@ import com.soapboxrace.core.jpa.BanEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.TokenSessionEntity;
 import com.soapboxrace.core.jpa.UserEntity;
-import com.soapboxrace.jaxb.login.LoginStatusVO;
 
 import javax.ejb.EJB;
 import javax.ejb.Lock;
@@ -22,9 +25,6 @@ import javax.ejb.Singleton;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.NotAuthorizedException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
@@ -111,53 +111,36 @@ public class TokenSessionBO {
         }
     }
 
-    public LoginStatusVO login(String email, String password, HttpServletRequest httpRequest) {
-        LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-
-        if (email != null && !email.isEmpty() && password != null && !password.isEmpty()) {
-            UserEntity userEntity = userDAO.findByEmail(email);
-            if (userEntity != null) {
-                if (password.equals(userEntity.getPassword())) {
-                    if (userEntity.isLocked()) {
-                        loginStatusVO.setDescription("Account locked. Contact an administrator.");
-                        return loginStatusVO;
-                    }
-
-                    if (userEntity.getGameHardwareHash() != null && hardwareInfoBO.isHardwareHashBanned(userEntity.getGameHardwareHash())) {
-                        LoginStatusVO.Ban ban = new LoginStatusVO.Ban();
-                        ban.setReason("Your computer is banned from this server.");
-                        loginStatusVO.setBan(ban);
-                        return loginStatusVO;
-                    }
-
-                    BanEntity banEntity = authenticationBO.checkUserBan(userEntity);
-
-                    if (banEntity != null) {
-                        LoginStatusVO.Ban ban = new LoginStatusVO.Ban();
-                        ban.setReason(banEntity.getReason());
-                        if (banEntity.getEndsAt() != null)
-                            ban.setExpires(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withZone(ZoneId.systemDefault()).format(banEntity.getEndsAt()));
-                        loginStatusVO.setBan(ban);
-                        return loginStatusVO;
-                    }
-
-                    userEntity.setLastLogin(LocalDateTime.now());
-                    userEntity.setDiscordId(httpRequest.getHeader("X-DiscordID"));
-                    userEntity.setUA(httpRequest.getHeader("X-UserAgent"));
-
-                    userDAO.update(userEntity);
-                    Long userId = userEntity.getId();
-                    deleteByUserId(userId);
-                    String randomUUID = createToken(userEntity, httpRequest.getRemoteHost());
-                    loginStatusVO = new LoginStatusVO(userId, randomUUID, true);
-                    loginStatusVO.setDescription("");
-
-                    return loginStatusVO;
-                }
-            }
+    public AuthResultVO login(String email, PasswordVerifier password, HttpServletRequest httpRequest) throws AuthException {
+        if (email == null || email.isEmpty()) {
+            throw new AuthException("Invalid email or password");
         }
-        loginStatusVO.setDescription("LOGIN ERROR");
-        return loginStatusVO;
+
+        UserEntity userEntity = userDAO.findByEmail(email);
+        if (userEntity == null) {
+            throw new AuthException("Invalid email or password");
+        }
+        if (!password.verifyHash(userEntity)) {
+            throw new AuthException("Invalid email or password");
+        }
+        if (userEntity.isLocked()) {
+            throw new AuthException("Account locked. Contact an administrator.");
+        }
+
+        BanEntity banEntity = authenticationBO.checkUserBan(userEntity);
+
+        if (banEntity != null) {
+            BanInfoVO banInfoVO = new BanInfoVO(banEntity.getReason(), banEntity.getEndsAt());
+            throw new AuthException(banInfoVO);
+        }
+
+        userEntity.setLastLogin(LocalDateTime.now());
+        userDAO.update(userEntity);
+        Long userId = userEntity.getId();
+        deleteByUserId(userId);
+        String randomUUID = createToken(userEntity, httpRequest.getRemoteHost());
+
+        return new AuthResultVO(userId, randomUUID);
     }
 
     public void verifyPersonaOwnership(TokenSessionEntity tokenSessionEntity, Long personaId) {

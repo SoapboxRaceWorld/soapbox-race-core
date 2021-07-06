@@ -40,6 +40,8 @@ public class ServerInformationVO {
     private float happyHourMultipler = 1f;
     private String serverVersion;
 
+    private boolean modernAuthSupport;
+
     public String getMessageSrv() {
         return messageSrv;
     }
@@ -264,4 +266,12 @@ public class ServerInformationVO {
 	public void setHappyHourMultipler(float happyHourMultipler) {
 		this.happyHourMultipler = happyHourMultipler;
 	}
+
+    public boolean isModernAuthSupport() {
+        return modernAuthSupport;
+    }
+
+    public void setModernAuthSupport(boolean modernAuthSupport) {
+        this.modernAuthSupport = modernAuthSupport;
+    }
 }
