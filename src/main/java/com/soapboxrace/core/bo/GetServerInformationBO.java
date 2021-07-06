@@ -57,6 +57,7 @@ public class GetServerInformationBO {
         serverInformationVO.setServerVersion(BuildInfo.getVersion() + " - " + BuildInfo.getCommitID());
         serverInformationVO.setOnlineNumber(onlineUsersEntity.getNumberOfOnline());
         serverInformationVO.setNumberOfRegistered(onlineUsersEntity.getNumberOfRegistered());
+        serverInformationVO.setModernAuthSupport(parameterBO.getBoolParam("MODERN_AUTH_ENABLED"));
 
         return serverInformationVO;
     }
