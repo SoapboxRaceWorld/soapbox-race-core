@@ -52,7 +52,7 @@ public class Events {
         ArrayOfEventDefinition arrayOfEventDefinition = new ArrayOfEventDefinition();
         List<EventEntity> availableAtLevel = eventBO.availableAtLevel(activePersonaId);
         for (EventEntity eventEntity : availableAtLevel) {
-            if (eventEntity.getCarClassHash() != 607077938 && carClassHash != eventEntity.getCarClassHash()) {
+            if (carClassHash == 0 || (eventEntity.getCarClassHash() != 607077938 && carClassHash != eventEntity.getCarClassHash())) {
                 eventEntity.setLocked(true);
             }
             arrayOfEventDefinition.getEventDefinition().add(getEventDefinitionWithId(eventEntity));

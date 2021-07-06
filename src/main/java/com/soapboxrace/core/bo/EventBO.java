@@ -73,12 +73,9 @@ public class EventBO {
 
         CarEntity carEntity = personaBO.getDefaultCarEntity(activePersonaId);
 
-        // only check restriction on non-open events
-        if (eventEntity.getCarClassHash() != 607077938) {
-            if (carEntity.getCarClassHash() != eventEntity.getCarClassHash()) {
-                // The client UI does not allow you to join events outside your current car's class
-                throw new EngineException(EngineExceptionCode.CarDataInvalid, true);
-            }
+        if (carEntity.getCarClassHash() == 0 || (eventEntity.getCarClassHash() != 607077938 && carEntity.getCarClassHash() != eventEntity.getCarClassHash())) {
+            // The client UI does not allow you to join events outside your current car's class
+            throw new EngineException(EngineExceptionCode.CarDataInvalid, false);
         }
 
         EventSessionEntity eventSessionEntity = new EventSessionEntity();
