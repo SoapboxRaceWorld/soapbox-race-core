@@ -6,6 +6,8 @@
 
 package com.soapboxrace.core.bo;
 
+import com.soapboxrace.core.dao.CarDAO;
+import com.soapboxrace.core.jpa.CarEntity;
 import com.soapboxrace.core.jpa.EventDataEntity;
 import com.soapboxrace.core.jpa.EventSessionEntity;
 import com.soapboxrace.jaxb.http.ArbitrationPacket;
@@ -20,6 +22,9 @@ public class LegitRaceBO {
 
     @EJB
     private SocialBO socialBo;
+
+    @EJB
+    private CarDAO carDAO;
 
     public boolean isLegit(Long activePersonaId, ArbitrationPacket arbitrationPacket,
                            EventSessionEntity sessionEntity,
