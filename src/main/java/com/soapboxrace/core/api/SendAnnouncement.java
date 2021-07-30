@@ -77,7 +77,7 @@ public class SendAnnouncement {
             if(rawData != null && rawData == true) {
                 sendToAllXMPP.sendRawMessageToChannel(message, channel);
             } else {
-                sendToAllXMPP.sendMessageToChannel("[" + from + "] " + message, channel);
+                sendToAllXMPP.sendMessageToChannel(message, channel);
             }
             
             return "SUCCESS!";
