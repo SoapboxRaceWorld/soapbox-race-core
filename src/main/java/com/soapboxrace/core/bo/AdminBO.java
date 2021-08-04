@@ -49,17 +49,25 @@ public class AdminBO {
     private UserDAO userDAO;
 
     public void sendChatCommand(Long personaId, String command, String personaName) {
+        sendChatCommand(personaId, command, personaName, true);
+    }
+
+    public void sendChatCommand(Long personaId, String command, String personaName, Boolean sendWebHookAction) {
         try {
             String personaToBan = command.split(" ")[1];
             PersonaEntity personaEntity = personaDao.findByName(personaToBan);
             String commandNoPersonaName = command.replace(personaEntity.getName(), "");
-            sendCommand(personaId, personaEntity.getPersonaId(), commandNoPersonaName.trim());
+            sendCommand(personaId, personaEntity.getPersonaId(), commandNoPersonaName.trim(), sendWebHookAction);
         } catch (Exception e) {
             e.printStackTrace();
         }
 	}
 
     public void sendCommand(Long personaId, Long abuserPersonaId, String command) {
+        sendCommand(personaId, abuserPersonaId, command, true);
+    }
+
+    public void sendCommand(Long personaId, Long abuserPersonaId, String command, Boolean sendWebHookAction) {
         CommandInfo commandInfo = CommandInfo.parse(command);
         PersonaEntity personaEntity = personaDao.find(abuserPersonaId);
         PersonaEntity personaEntity1 = personaDao.find(personaId);
@@ -84,21 +92,23 @@ public class AdminBO {
                 sendBan(personaEntity, personaDao.find(personaId), commandInfo.timeEnd, reason);
                 openFireSoapBoxCli.send(XmppChat.createSystemMessage("Yay, user has been banned."), personaId);
 
-                if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL") != null) {
-					discord.sendMessage(constructMsg_ds.replace("%s", "banned") + ". Reason: " + reason, 
-						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL"), 
-						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_NAME", "Botte"),
-						0xff0000
-					);
-				}
+                if(sendWebHookAction == true) {
+                    if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL") != null) {
+                        discord.sendMessage(constructMsg_ds.replace("%s", "banned") + ". Reason: " + reason, 
+                            parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL"), 
+                            parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_NAME", "Botte"),
+                            0xff0000
+                        );
+                    }
 
-                if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_PUBLIC_URL") != null) {
-					discord.sendMessage(constructMsg_ds.replace("%s", "banned") + ". Reason: " + reason, 
-						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_PUBLIC_URL"), 
-						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_NAME", "Botte"),
-						0xff0000
-					);
-				}
+                    if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_PUBLIC_URL") != null) {
+                        discord.sendMessage(constructMsg_ds.replace("%s", "banned") + ". Reason: " + reason, 
+                            parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_PUBLIC_URL"), 
+                            parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_NAME", "Botte"),
+                            0xff0000
+                        );
+                    }
+                }
 
                 break;
             case KICK:
@@ -107,12 +117,14 @@ public class AdminBO {
                 sendKick(userEntity.getId(), personaEntity.getPersonaId());
                 openFireSoapBoxCli.send(XmppChat.createSystemMessage("Kicked out the butt of the user."), personaId);
 
-                if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL") != null) {
-					discord.sendMessage(constructMsg_ds.replace("%s", "kicked"), 
-						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL"), 
-						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_NAME", "Botte"),
-						0xfff200
-					);
+                if(sendWebHookAction == true) {
+                    if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL") != null) {
+                        discord.sendMessage(constructMsg_ds.replace("%s", "kicked"), 
+                            parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL"), 
+                            parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_NAME", "Botte"),
+                            0xfff200
+                        );
+                    }
                 }
                 
                 break;
@@ -124,14 +136,16 @@ public class AdminBO {
                 }
 
                 openFireRestApiCli.sendChatAnnouncement(constructMsg.replace("%s", "unbanned"));
-                
-                if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL") != null) {
-					discord.sendMessage(constructMsg_ds.replace("%s", "unbanned"), 
-						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL"), 
-						parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_NAME", "Botte"),
-						0x1aff00
-					);
-				}
+
+                if(sendWebHookAction == true) {
+                    if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL") != null) {
+                        discord.sendMessage(constructMsg_ds.replace("%s", "unbanned"), 
+                            parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL"), 
+                            parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_NAME", "Botte"),
+                            0x1aff00
+                        );
+                    }
+                }
 
                 banBO.expireBan(existingBan);
                 
