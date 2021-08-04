@@ -86,7 +86,10 @@ public class AdminBO {
                     break;
                 }
 
-                openFireRestApiCli.sendChatAnnouncement(constructMsg.replace("%s", "banned"));
+                if(parameterBO.getBoolParam("SBRWR_SEND_ADMIN_ACTION")) {
+                    openFireRestApiCli.sendChatAnnouncement(constructMsg.replace("%s", "banned"));
+                }
+                
                 String reason = (commandInfo.reason == null) ? parameterBO.getStrParam("DEFAULT_BAN_REASON", "No reason provided.") : commandInfo.reason;
 
                 sendBan(personaEntity, personaDao.find(personaId), commandInfo.timeEnd, reason);
@@ -112,7 +115,9 @@ public class AdminBO {
 
                 break;
             case KICK:
-                openFireRestApiCli.sendChatAnnouncement(constructMsg.replace("%s", "kicked"));
+                if(parameterBO.getBoolParam("SBRWR_SEND_ADMIN_ACTION")) {
+                    openFireRestApiCli.sendChatAnnouncement(constructMsg.replace("%s", "kicked"));
+                }
 
                 sendKick(userEntity.getId(), personaEntity.getPersonaId());
                 openFireSoapBoxCli.send(XmppChat.createSystemMessage("Kicked out the butt of the user."), personaId);
@@ -135,7 +140,9 @@ public class AdminBO {
                     break;
                 }
 
-                openFireRestApiCli.sendChatAnnouncement(constructMsg.replace("%s", "unbanned"));
+                if(parameterBO.getBoolParam("SBRWR_SEND_ADMIN_ACTION")) {
+                    openFireRestApiCli.sendChatAnnouncement(constructMsg.replace("%s", "unbanned"));
+                }
 
                 if(sendWebHookAction == true) {
                     if(parameterBO.getStrParam("DISCORD_WEBHOOK_BANREPORT_URL") != null) {
