@@ -218,14 +218,8 @@ public class DriverPersonaBO {
 
     public ArrayOfString reserveName(String name) {
         ArrayOfString arrayOfString = new ArrayOfString();
-        if (Boolean.TRUE.equals(parameterBO.getBoolParam("ENABLE_PERSONA_NAME_BLACKLIST"))) {
-            String[] personaNameBlacklist = parameterBO.getStrParam("PERSONA_NAME_BLACKLIST").split(";");
-
-            for (String personaName : personaNameBlacklist) {
-                if (personaName.equals(name)) {
-                    arrayOfString.getString().add("NONE");
-                }
-            }
+        if (Boolean.TRUE.equals(parameterBO.getBoolParam("ENABLE_PERSONA_NAME_BLACKLIST")) && !parameterBO.getStrParam("PERSONA_NAME_BLACKLIST").contains(name)) {
+            arrayOfString.getString().add("NONE");
         }
         if (personaDao.findByName(name) != null) {
             arrayOfString.getString().add("NONE");
