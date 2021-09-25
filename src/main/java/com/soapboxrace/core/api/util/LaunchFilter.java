@@ -60,59 +60,85 @@ public class LaunchFilter implements ContainerRequestFilter {
             userDao.update(userEntity);
         }
 
-        if (parameterBO.getBoolParam("ENABLE_WHITELISTED_LAUNCHERS_ONLY")) {
-            String json_whitelisted_launchers = parameterBO.getStrParam("WHITELISTED_LAUNCHERS_ONLY", null);
+        String json_whitelisted_launchers = parameterBO.getStrParam("WHITELISTED_LAUNCHERS_ONLY_JSON", null);
+
+        if (json_whitelisted_launchers != null) {
             String get_useragent = "";
-            String get_launcher;
-            String[] ua_split;
+            String get_launcher = "";
+            String[] ua_split = null;
             boolean lock_access = false;
+            boolean lock_unsigned = false;
+            boolean lock_insider = false;
 
-            if (json_whitelisted_launchers != null) {
-                JSONObject obj_json_whitelisted_launchers = new JSONObject(json_whitelisted_launchers);
+            JSONObject obj_json_whitelisted_launchers = new JSONObject(json_whitelisted_launchers);
 
-
-                if (requestContext.getHeaderString("X-UserAgent") != null) {
-                    get_useragent = requestContext.getHeaderString("X-UserAgent");
-                    get_launcher = "SBRW";
-                } else if (requestContext.getHeaderString("user-agent") != null) {
-                    get_useragent = requestContext.getHeaderString("user-agent");
-                    get_launcher = "ELECTRON";
-                } else {
-                    get_launcher = "JLAUNCHER";
+            if (requestContext.getHeaderString("X-UserAgent") != null) {
+                get_useragent = requestContext.getHeaderString("X-UserAgent");
+                ua_split = get_useragent.split(" ");
+                if (get_useragent.startsWith("GameLauncherReborn")) {
+                    get_launcher = "sbrw";
+                } else if (get_useragent.startsWith("LegacyLauncher")) {
+                    get_launcher = "legacy";
                 }
+            } else if (requestContext.getHeaderString("user-agent") != null) {
+                get_useragent = requestContext.getHeaderString("user-agent");
+                get_launcher = "electron";
+                ua_split = get_useragent.split("/");
+            } else {
+                get_launcher = "JLAUNCHER";
+            }
 
-                if (get_launcher.equals("SBRW")) {
+            if (!json_whitelisted_launchers.contains(get_launcher) || obj_json_whitelisted_launchers.getString(get_launcher).equals("0")) {
+                lock_access = true;
+            } else if (ua_split != null && (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString(get_launcher)) == -1)) {
+                lock_access = true;
+            }
+
+            if (Boolean.TRUE.equals(parameterBO.getBoolParam("ENABLE_SIGNED_LAUNCHERS_ONLY")) && get_launcher.equals("sbrw")) {
+                // Signed certificates work only on sbrw v2.1.8.0 and later
+                String signedLaunchersCert = parameterBO.getStrParam("SIGNED_LAUNCHER_CERTIFICATE", "");    
+                String signedLaunchersHash = parameterBO.getStrParam("SIGNED_LAUNCHER_HASH", "");
+                String signedLaunchersHwid = parameterBO.getStrParam("SIGNED_LAUNCHER_HWID_WHITELIST", "");
+                String userLauncherHash = requestContext.getHeaderString("X-GameLauncherHash");
+                if (signedLaunchersHwid.contains(hwid)) {
+                    lock_access = false;
+                } else if (!lock_access) {
                     ua_split = get_useragent.split(" ");
-                    
-                    if(get_useragent.startsWith("LegacyLauncher")) {
-                        if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("legacy")) == -1) {
+                    String[] uaVerSplit = ua_split[1].split("\\.");
+                    if (requestContext.getHeaderString("X-GameLauncherCertificate") != null) {
+                        String userLauncherCert = requestContext.getHeaderString("X-GameLauncherCertificate");
+                        if (Boolean.TRUE.equals(signedLaunchersHash.contains(ua_split[1])) && !Boolean.TRUE.equals(signedLaunchersCert.equals(userLauncherCert))) {
                             lock_access = true;
-                        }               
-                    } else if(get_useragent.startsWith("GameLauncherReborn")) {
-                        if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("sbrw")) == -1) {
+                            lock_unsigned = true;
+                        } else if (!Boolean.TRUE.equals(signedLaunchersHash.contains(userLauncherHash))) {
                             lock_access = true;
+                            if (Integer.valueOf(uaVerSplit[3]) % 2 == 1) {
+                                lock_insider = true;
+                            } else {
+                                lock_unsigned = true;
+                            } 
                         }
                     } else {
                         lock_access = true;
                     }
-                } else if (get_launcher.equals("ELECTRON")) {
-                    ua_split = get_useragent.split("/");
+                }
+            }
 
-                    if (compareVersions(ua_split[1], obj_json_whitelisted_launchers.getString("electron")) == -1) {
-                        lock_access = true;
-                    }
+            if (lock_access) {
+                LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
+                String sbrwLink = "SBRW Launcher: https://git.io/Download_NFSW\n";
+                String electronLink = "Electron Launcher: https://launcher.sparkserver.eu/";
+                if (lock_unsigned) {
+                    loginStatusVO.setDescription("You're using an UNSIGNED build of this launcher\n" +
+                        "To play on this server please update to the latest OFFICIAL build:\n\n" + sbrwLink);
+                } else if (lock_insider) {
+                    loginStatusVO.setDescription("You're using a Dev/Insider version of this launcher\n" +
+                    "To play on this server you need to use a Release build:\n\n" + sbrwLink);
                 } else {
-                    lock_access = true;
+                    loginStatusVO.setDescription("You're using the wrong launcher or version\n" +
+                    "To play on this server please update to the latest one:\n\n" + sbrwLink + electronLink);
                 }
-
-                if (lock_access) {
-                    LoginStatusVO loginStatusVO = new LoginStatusVO(0L, "", false);
-                    loginStatusVO.setDescription("You're using the wrong launcher, please update to the latest one:\n\n" +
-                            "    SBRW Launcher: https://git.io/Download_NFSW\n" +
-                            "    Electron Launcher: https://launcher.sparkserver.eu/");
-
-                    requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
-                }
+                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity(loginStatusVO).build());
             }
         }
     }

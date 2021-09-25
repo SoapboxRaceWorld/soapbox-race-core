@@ -218,6 +218,16 @@ public class DriverPersonaBO {
 
     public ArrayOfString reserveName(String name) {
         ArrayOfString arrayOfString = new ArrayOfString();
+        // #92: Option to blacklist persona names, returns arrayOfString so it will not run an extra query if the requested driver name is blacklisted
+        if (Boolean.TRUE.equals(parameterBO.getBoolParam("ENABLE_PERSONA_NAME_BLACKLIST"))) {
+            String[] personaNameBlacklist = parameterBO.getStrParam("PERSONA_NAME_BLACKLIST").split(";");
+            for (String personaName : personaNameBlacklist) {
+                if (personaName.equals(name)) {
+                    arrayOfString.getString().add("NONE");
+                    return arrayOfString;
+                }
+            }
+        }
         if (personaDao.findByName(name) != null) {
             arrayOfString.getString().add("NONE");
         }
