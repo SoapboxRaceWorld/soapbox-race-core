@@ -99,7 +99,6 @@ public class LaunchFilter implements ContainerRequestFilter {
                 String signedLaunchersCert = parameterBO.getStrParam("SIGNED_LAUNCHER_CERTIFICATE", "");    
                 String signedLaunchersHash = parameterBO.getStrParam("SIGNED_LAUNCHER_HASH", "");
                 String signedLaunchersHwid = parameterBO.getStrParam("SIGNED_LAUNCHER_HWID_WHITELIST", "");
-                String userLauncherCert = "";
                 String userLauncherHash = requestContext.getHeaderString("X-GameLauncherHash");
                 if (signedLaunchersHwid.contains(hwid)) {
                     lock_access = false;
@@ -107,7 +106,8 @@ public class LaunchFilter implements ContainerRequestFilter {
                     ua_split = get_useragent.split(" ");
                     String[] uaVerSplit = ua_split[1].split("\\.");
                     if (requestContext.getHeaderString("X-GameLauncherCertificate") != null) {
-                        if (Boolean.TRUE.equals(signedLaunchersHash.contains(ua_split[1])) && !Boolean.TRUE.equals(signedLaunchersCert.contains(userLauncherCert))) {
+                        String userLauncherCert = requestContext.getHeaderString("X-GameLauncherCertificate");
+                        if (Boolean.TRUE.equals(signedLaunchersHash.contains(ua_split[1])) && !Boolean.TRUE.equals(signedLaunchersCert.equals(userLauncherCert))) {
                             lock_access = true;
                             lock_unsigned = true;
                         } else if (!Boolean.TRUE.equals(signedLaunchersHash.contains(userLauncherHash))) {
