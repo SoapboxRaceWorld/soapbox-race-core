@@ -99,7 +99,6 @@ public class LaunchFilter implements ContainerRequestFilter {
                 String signedLaunchersCert = parameterBO.getStrParam("SIGNED_LAUNCHER_CERTIFICATE", "");    
                 String signedLaunchersHash = parameterBO.getStrParam("SIGNED_LAUNCHER_HASH", "");
                 String signedLaunchersHwid = parameterBO.getStrParam("SIGNED_LAUNCHER_HWID_WHITELIST", "");
-                // This needs to be predefined else we'll get a big fat NullPointerException up our ass if the user launcher version is < 2.1.8.0
                 String userLauncherCert = "";
                 String userLauncherHash = requestContext.getHeaderString("X-GameLauncherHash");
                 if (signedLaunchersHwid.contains(hwid)) {
