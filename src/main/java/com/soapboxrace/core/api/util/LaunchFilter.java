@@ -94,23 +94,34 @@ public class LaunchFilter implements ContainerRequestFilter {
                 lock_access = true;
             }
 
-            if (!lock_access && Boolean.TRUE.equals(parameterBO.getBoolParam("ENABLE_SIGNED_LAUNCHERS_ONLY")) && get_launcher.equals("sbrw")) {        
-                String allowedLaunchersHash = parameterBO.getStrParam("SIGNED_LAUNCHER_HASH", "");
-                String allowedLaunchersHwid = parameterBO.getStrParam("SIGNED_LAUNCHER_HWID_WHITELIST", "");
-                ua_split = get_useragent.split(" ");
-                String[] uaVerSplit = ua_split[1].split("\\.");
+            if (Boolean.TRUE.equals(parameterBO.getBoolParam("ENABLE_SIGNED_LAUNCHERS_ONLY")) && get_launcher.equals("sbrw")) {
+                // Signed certificates work only on sbrw v2.1.8.0 and later
+                String signedLaunchersCert = parameterBO.getStrParam("SIGNED_LAUNCHER_CERTIFICATE", "");    
+                String signedLaunchersHash = parameterBO.getStrParam("SIGNED_LAUNCHER_HASH", "");
+                String signedLaunchersHwid = parameterBO.getStrParam("SIGNED_LAUNCHER_HWID_WHITELIST", "");
+                // This needs to be predefined else we'll get a big fat NullPointerException up our ass if the user launcher version is < 2.1.8.0
+                String userLauncherCert = "";
                 String userLauncherHash = requestContext.getHeaderString("X-GameLauncherHash");
-                if (Boolean.TRUE.equals(allowedLaunchersHash.contains(ua_split[1])) && !Boolean.TRUE.equals(allowedLaunchersHash.contains(userLauncherHash))) {
-                    lock_access = true;
-                    lock_unsigned = true;
-                } else if (Integer.valueOf(uaVerSplit[3]) % 2 == 1) {
-                    lock_access = true;
-                    lock_insider = true;
-                }
-                if (Boolean.TRUE.equals(allowedLaunchersHwid.contains(hwid))) {
-                    lock_insider = false;
+                if (signedLaunchersHwid.contains(hwid)) {
                     lock_access = false;
-                    lock_unsigned = false;
+                } else if (!lock_access) {
+                    ua_split = get_useragent.split(" ");
+                    String[] uaVerSplit = ua_split[1].split("\\.");
+                    if (requestContext.getHeaderString("X-GameLauncherCertificate") != null) {
+                        if (Boolean.TRUE.equals(signedLaunchersHash.contains(ua_split[1])) && !Boolean.TRUE.equals(signedLaunchersCert.contains(userLauncherCert))) {
+                            lock_access = true;
+                            lock_unsigned = true;
+                        } else if (!Boolean.TRUE.equals(signedLaunchersHash.contains(userLauncherHash))) {
+                            lock_access = true;
+                            if (Integer.valueOf(uaVerSplit[3]) % 2 == 1) {
+                                lock_insider = true;
+                            } else {
+                                lock_unsigned = true;
+                            } 
+                        }
+                    } else {
+                        lock_access = true;
+                    }
                 }
             }
 
@@ -120,10 +131,10 @@ public class LaunchFilter implements ContainerRequestFilter {
                 String electronLink = "Electron Launcher: https://launcher.sparkserver.eu/";
                 if (lock_unsigned) {
                     loginStatusVO.setDescription("You're using an UNSIGNED build of this launcher\n" +
-                        "To play on this server please update to the latest OFFICIAL build:\n\n" + sbrwLink + electronLink);
+                        "To play on this server please update to the latest OFFICIAL build:\n\n" + sbrwLink);
                 } else if (lock_insider) {
                     loginStatusVO.setDescription("You're using a Dev/Insider version of this launcher\n" +
-                    "To play on this server you need to use a Release build:\n\n" + sbrwLink + electronLink);
+                    "To play on this server you need to use a Release build:\n\n" + sbrwLink);
                 } else {
                     loginStatusVO.setDescription("You're using the wrong launcher or version\n" +
                     "To play on this server please update to the latest one:\n\n" + sbrwLink + electronLink);
