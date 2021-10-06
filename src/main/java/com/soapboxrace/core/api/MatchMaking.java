@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import com.soapboxrace.core.bo.util.DiscordWebhook;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.LobbyDAO;
+import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 
 @Path("/matchmaking")
 public class MatchMaking {
@@ -56,6 +57,9 @@ public class MatchMaking {
 
     @EJB
     private ParameterBO parameterBO;
+
+    @EJB
+    private OpenFireRestApiCli openFireRestApiCli;
 
     @Inject
     private RequestSessionInfo requestSessionInfo;
@@ -159,6 +163,10 @@ public class MatchMaking {
 					0xbb00ff
 				);
 			}
+
+            if(parameterBO.getBoolParam("SBRWR_INFORM_EVENT") == true) {
+                openFireRestApiCli.sendChatAnnouncement(msg);
+            } 
         }
 
         return lobbyBO.acceptinvite(requestSessionInfo.getActivePersonaId(), lobbyInviteId);
