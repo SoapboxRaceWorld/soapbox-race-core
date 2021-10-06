@@ -145,7 +145,7 @@ public class MatchMaking {
         Long activePersonaId = requestSessionInfo.getActivePersonaId();
 
         LobbyEntity lobbyInformation = lobbyDAO.findById(lobbyInviteId);
-		if(activePersonaId.equals(lobbyInformation.getPersonaId())) {
+		if(activePersonaId.equals(lobbyInformation.getPersonaId()) && !lobbyInformation.getIsPrivate()) {
             
 			EventEntity eventInformation = lobbyInformation.getEvent();
 			String eventNameFull = eventInformation.getName();

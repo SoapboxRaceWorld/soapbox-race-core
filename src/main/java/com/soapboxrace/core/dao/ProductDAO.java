@@ -74,7 +74,14 @@ public class ProductDAO extends LongKeyedDAO<ProductEntity> {
         List<ProductEntity> results = query.getResultList();
 
         if (results.isEmpty()) {
-            throw new RuntimeException("Could not find product with hash: " + hash);
+            if(parameterBO.getBoolParam("SBRWR_BYPASS_MISSING_HASH") == true) {
+                ProductEntity entity = new ProductEntity();
+                entity.setHash(hash);
+
+                return entity;
+            } else {
+                throw new RuntimeException("Could not find product with hash: " + hash);
+            }
         }
 
         return results.get(0);
