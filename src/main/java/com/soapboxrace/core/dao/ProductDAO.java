@@ -9,6 +9,8 @@ package com.soapboxrace.core.dao;
 import com.soapboxrace.core.dao.util.LongKeyedDAO;
 import com.soapboxrace.core.jpa.ProductEntity;
 
+import com.soapboxrace.core.bo.*;
+
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,6 +22,8 @@ import java.util.List;
 
 @Stateless
 public class ProductDAO extends LongKeyedDAO<ProductEntity> {
+    @EJB
+    private ParameterBO parameterBO;
 
     public ProductDAO() {
         super(ProductEntity.class);
