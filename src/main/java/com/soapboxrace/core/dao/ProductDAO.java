@@ -11,6 +11,7 @@ import com.soapboxrace.core.jpa.ProductEntity;
 
 import com.soapboxrace.core.bo.*;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
