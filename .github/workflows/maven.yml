@@ -7,6 +7,9 @@ on:
   push:
     branches:
       - develop
+      - nightriderz
+      - overdrive
+      - worldonline
     paths:
       - src/**
       - xsd/**
