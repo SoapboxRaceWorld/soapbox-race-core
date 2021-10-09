@@ -10,11 +10,14 @@ import com.google.common.collect.Iterables;
 import com.soapboxrace.core.auth.AuthException;
 import com.soapboxrace.core.auth.verifiers.PasswordVerifier;
 import com.soapboxrace.core.dao.InviteTicketDAO;
+import com.soapboxrace.core.dao.KCrewMemberDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
 import com.soapboxrace.core.dao.UserDAO;
 import com.soapboxrace.core.jpa.InviteTicketEntity;
 import com.soapboxrace.core.jpa.PersonaEntity;
 import com.soapboxrace.core.jpa.UserEntity;
+import com.soapboxrace.core.jpa.KCrewMemberEntity;
+import com.soapboxrace.core.jpa.KCrewEntity;
 import com.soapboxrace.core.xmpp.OpenFireRestApiCli;
 import com.soapboxrace.jaxb.http.ArrayOfProfileData;
 import com.soapboxrace.jaxb.http.ProfileData;
@@ -45,6 +48,9 @@ public class UserBO {
 
     @EJB
     private PersonaDAO personaDAO;
+
+    @EJB
+    private KCrewMemberDAO kCrewMemberDAO;
 
     @EJB
     private AchievementBO achievementBO;
@@ -140,8 +146,33 @@ public class UserBO {
         for (PersonaEntity personaEntity : listOfProfile) {
             // switch to apache beanutils copy
             ProfileData profileData = new ProfileData();
-            profileData.setName(personaEntity.getName());
+
+            if(parameterBO.getBoolParam("SBRWR_NR_ENABLECREW")) {
+                //Let's find out on which team the user currenly is:
+                KCrewMemberEntity kCrewMemberEntity = kCrewMemberDAO.findCrewMembershipByPersonaId(personaEntity.getPersonaId());
+
+                if(kCrewMemberEntity != null) {
+                    //Now let's fetch its name via JOIN tag:
+                    KCrewEntity kCrewEntity = kCrewMemberEntity.getCrew();
+                    
+                    if(kCrewEntity != null) {
+                        //Format style:
+                        String formatName = parameterBO.getStrParam("SBRWR_NR_CREWFORMAT", "{persona}");
+                        formatName = formatName.replace("{crew}", kCrewEntity.getTag());
+                        formatName = formatName.replace("{persona}", personaEntity.getName());
+                        profileData.setName(formatName);
+                    } else {
+                        profileData.setName(personaEntity.getName());
+                    }
+                } else {
+                    profileData.setName(personaEntity.getName());
+                }
+            } else {
+                profileData.setName(personaEntity.getName());
+            }
+
             profileData.setCash(personaEntity.getCash());
+            profileData.setBoost(personaEntity.getBoost());
             profileData.setIconIndex(personaEntity.getIconIndex());
             profileData.setPersonaId(personaEntity.getPersonaId());
             profileData.setLevel(personaEntity.getLevel());
