@@ -97,8 +97,18 @@ public class InventoryBO {
         inventoryTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
 
         for (InventoryItemEntity inventoryItemEntity : inventoryEntity.getInventoryItems()) {
-            InventoryItemTrans inventoryItemTrans = convertItemToItemTrans(inventoryItemEntity);
-            inventoryTrans.getInventoryItems().getInventoryItemTrans().add(inventoryItemTrans);
+            if(inventoryItemEntity.getProductEntity().getProductType().equals("POWERUP")) {
+                inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
+            } else {
+                if(inventoryItemEntity.getRemainingUseCount() >= 2) {
+                    for(int itemCount = 0; itemCount < inventoryItemEntity.getRemainingUseCount(); itemCount++) {
+                        inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
+                    }
+                } else {
+                    inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
+                }
+            }
+
         }
 
         return inventoryTrans;
@@ -115,7 +125,11 @@ public class InventoryBO {
         inventoryItemTrans.setHash(productEntity.getHash());
         inventoryItemTrans.setInventoryId(inventoryEntity.getId());
         inventoryItemTrans.setProductId(productEntity.getProductId());
-        inventoryItemTrans.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount());
+        if(inventoryItemEntity.getProductEntity().getProductType().equals("POWERUP")) {
+            inventoryItemTrans.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount());
+        } else {
+            inventoryItemTrans.setRemainingUseCount(1);
+        }
         inventoryItemTrans.setResellPrice(inventoryItemEntity.getResellPrice());
         inventoryItemTrans.setStatus(inventoryItemEntity.getStatus());
         inventoryItemTrans.setStringHash("0x" + String.format("%08X", productEntity.getHash()));
