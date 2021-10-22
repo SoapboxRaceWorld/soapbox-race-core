@@ -59,6 +59,9 @@ public class MatchMaking {
     private ParameterBO parameterBO;
 
     @EJB
+    private OnlineUsersBO onlineUsersBO;
+
+    @EJB
     private OpenFireRestApiCli openFireRestApiCli;
 
     @Inject
@@ -164,7 +167,7 @@ public class MatchMaking {
 				);
 			}
 
-            if(parameterBO.getBoolParam("SBRWR_INFORM_EVENT") == true) {
+            if(parameterBO.getBoolParam("SBRWR_INFORM_EVENT") == true && parameterBO.getIntParam("SBRWR_INFORM_EVENT_USERCOUNT", 30) >= onlineUsersBO.getOnlineUsersStats().getNumberOfOnline()) {
                 openFireRestApiCli.sendChatAnnouncement(msg);
             } 
         }
