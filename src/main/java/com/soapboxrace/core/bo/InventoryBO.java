@@ -97,18 +97,25 @@ public class InventoryBO {
         inventoryTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
 
         for (InventoryItemEntity inventoryItemEntity : inventoryEntity.getInventoryItems()) {
-            if(inventoryItemEntity.getProductEntity().getProductType().equals("POWERUP")) {
-                inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
-            } else {
-                if(inventoryItemEntity.getRemainingUseCount() >= 2) {
-                    for(int itemCount = 0; itemCount < inventoryItemEntity.getRemainingUseCount(); itemCount++) {
+            if(inventoryItemEntity.getProductEntity() != null) {
+                if(inventoryItemEntity.getProductEntity().getProductType().equals("POWERUP")) {
+                    inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
+                } else {
+                    if(inventoryItemEntity.getRemainingUseCount() >= 2) {
+                        int actualUseCount = inventoryItemEntity.getRemainingUseCount();
+                        int forceDisplay = parameterBO.getIntParam("SBRWR_MAX_ITEM_INVENTORY", 100);
+                        if(actualUseCount >= forceDisplay) {
+                            actualUseCount = forceDisplay;
+                        }
+
+                        for(int itemCount = 0; itemCount < actualUseCount; itemCount++) {
+                            inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
+                        }
+                    } else {
                         inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
                     }
-                } else {
-                    inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
                 }
             }
-
         }
 
         return inventoryTrans;
