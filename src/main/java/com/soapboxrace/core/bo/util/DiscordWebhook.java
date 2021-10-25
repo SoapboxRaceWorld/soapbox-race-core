@@ -17,6 +17,9 @@ public class DiscordWebhook {
 	private ParameterBO parameterBO;
 
 	public void sendMessage(String message, String webHookUrl, String botName, int color) {
+		if(webHookUrl == null) 
+			return;
+
 		TemmieWebhook temmie = new TemmieWebhook(webHookUrl);
 
 		DiscordEmbed de = DiscordEmbed.builder().description(message).color(color).build();
