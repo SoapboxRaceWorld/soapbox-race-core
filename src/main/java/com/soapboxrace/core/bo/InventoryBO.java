@@ -87,6 +87,11 @@ public class InventoryBO {
      * @return The new {@link InventoryTrans} instance to be returned to the client.
      */
     public InventoryTrans getClientInventory(InventoryEntity inventoryEntity) {
+        //Let's get actual count of items:
+        int visualparts = 0;
+        int skillmodparts = 0;
+        int performanceparts = 0;
+
         InventoryTrans inventoryTrans = new InventoryTrans();
         inventoryTrans.setPerformancePartsCapacity(inventoryEntity.getPerformancePartsCapacity());
         inventoryTrans.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount());
@@ -101,22 +106,28 @@ public class InventoryBO {
                 if(inventoryItemEntity.getProductEntity().getProductType().equals("POWERUP")) {
                     inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
                 } else {
-                    if(inventoryItemEntity.getRemainingUseCount() >= 2) {
-                        int actualUseCount = inventoryItemEntity.getRemainingUseCount();
-                        int forceDisplay = parameterBO.getIntParam("SBRWR_MAX_ITEM_INVENTORY", 100);
-                        if(actualUseCount >= forceDisplay) {
-                            actualUseCount = forceDisplay;
-                        }
+                    int actualUseCount = inventoryItemEntity.getRemainingUseCount();
+                    int forceDisplay = parameterBO.getIntParam("SBRWR_MAX_ITEM_INVENTORY", 100);
+                    if(actualUseCount >= forceDisplay) {
+                        actualUseCount = forceDisplay;
+                    }
 
-                        for(int itemCount = 0; itemCount < actualUseCount; itemCount++) {
-                            inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
-                        }
-                    } else {
+                    for(int itemCount = 0; itemCount < actualUseCount; itemCount++) {
                         inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
+
+                        switch(inventoryItemEntity.getProductEntity().getProductType()) {
+                            case "PERFORMANCEPART":     performanceparts++;     break;
+                            case "VISUALPART":          visualparts++;          break;
+                            case "SKILLMODPART":        skillmodparts++;        break;
+                        }
                     }
                 }
             }
         }
+
+        inventoryTrans.setPerformancePartsUsedSlotCount(performanceparts);
+        inventoryTrans.setVisualPartsUsedSlotCount(visualparts);
+        inventoryTrans.setSkillModPartsUsedSlotCount(skillmodparts);
 
         return inventoryTrans;
     }
