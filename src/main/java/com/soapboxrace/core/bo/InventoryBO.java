@@ -125,6 +125,13 @@ public class InventoryBO {
             }
         }
 
+        //Let's update user entity
+        InventoryEntity inventoryEntity_update = inventoryDAO.findByPersonaId(inventoryEntity.getPersonaEntity().getPersonaId());
+        inventoryEntity_update.setPerformancePartsUsedSlotCount(performanceparts);
+        inventoryEntity_update.setVisualPartsUsedSlotCount(visualparts);
+        inventoryEntity_update.setSkillModPartsUsedSlotCount(skillmodparts);
+        inventoryDAO.update(inventoryEntity);
+
         inventoryTrans.setPerformancePartsUsedSlotCount(performanceparts);
         inventoryTrans.setVisualPartsUsedSlotCount(visualparts);
         inventoryTrans.setSkillModPartsUsedSlotCount(skillmodparts);
