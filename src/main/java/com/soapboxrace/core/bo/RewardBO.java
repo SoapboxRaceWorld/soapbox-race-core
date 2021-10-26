@@ -518,7 +518,7 @@ public class RewardBO {
             if (productEntity.getProductType().equals("POWERUP")) {
                 inventoryBO.addStackedInventoryItem(inventory, productEntity.getProductId(), quantity);
             } else {
-                inventoryBO.addInventoryItem(inventory, productEntity.getProductId(), quantity);
+                inventoryBO.addInventoryItem(inventory, productEntity.getProductId(), 1);
             }
             luckyDrawItem.setRemainingUseCount(quantity == -1 ? productEntity.getUseCount() : quantity);
             luckyDrawItem.setDescription(luckyDrawItem.getDescription() + " x" + luckyDrawItem.getRemainingUseCount());

@@ -108,13 +108,16 @@ public class InventoryBO {
                 } else {
                     int actualUseCount = inventoryItemEntity.getRemainingUseCount();
                     int forceDisplay = parameterBO.getIntParam("SBRWR_MAX_ITEM_INVENTORY", 100);
+                    
                     if(actualUseCount >= forceDisplay) {
                         actualUseCount = forceDisplay;
                     }
 
                     for(int itemCount = 0; itemCount < actualUseCount; itemCount++) {
                         inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
+                    }
 
+                    for(int itemCount = 0; itemCount < inventoryItemEntity.getRemainingUseCount(); itemCount++) {
                         switch(inventoryItemEntity.getProductEntity().getProductType()) {
                             case "PERFORMANCEPART":     performanceparts++;     break;
                             case "VISUALPART":          visualparts++;          break;
@@ -290,9 +293,12 @@ public class InventoryBO {
         if (quantity == -1)
             quantity = productEntity.getUseCount();
 
+        //Doublecheck if is not a powerup:
+        int realquantity = productEntity.getProductType().equals("POWERUP") ? quantity : 1;
+
         InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
         inventoryItemEntity.setProductEntity(productEntity);
-        inventoryItemEntity.setRemainingUseCount(quantity);
+        inventoryItemEntity.setRemainingUseCount(realquantity);
         inventoryItemEntity.setExpirationDate(expirationDate);
         inventoryItemEntity.setStatus("ACTIVE");
         inventoryItemEntity.setResellPrice(Math.round(productEntity.getResalePrice() * parameterBO.getFloatParam(
