@@ -46,6 +46,9 @@ public class ItemRewardBO {
     private BasketBO basketBO;
 
     @EJB
+    private ParameterBO parameterBO;
+
+    @EJB
     private CardPackDAO cardPackDAO;
 
     public RewardedItemsContainer getRewards(PersonaEntity personaEntity, String rewardScript) {
@@ -84,7 +87,11 @@ public class ItemRewardBO {
             commerceItemTrans.setTitle(productEntity.getProductTitle());
 
             if (useCount != -1) {
-                commerceItemTrans.setTitle(commerceItemTrans.getTitle() + " x" + useCount);
+                if(parameterBO.getBoolParam("SBRWR_TRANSLATABLE")) {
+                    commerceItemTrans.setTitle(commerceItemTrans.getTitle() + "," + useCount);
+                } else {
+                    commerceItemTrans.setTitle(commerceItemTrans.getTitle() + " x" + useCount);
+                }
             }
 
             commerceResult.getCommerceItems().getCommerceItemTrans().add(commerceItemTrans);

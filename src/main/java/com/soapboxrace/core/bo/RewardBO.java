@@ -521,7 +521,12 @@ public class RewardBO {
                 inventoryBO.addInventoryItem(inventory, productEntity.getProductId(), 1);
             }
             luckyDrawItem.setRemainingUseCount(quantity == -1 ? productEntity.getUseCount() : quantity);
-            luckyDrawItem.setDescription(luckyDrawItem.getDescription() + " x" + luckyDrawItem.getRemainingUseCount());
+
+            if(parameterBO.getBoolParam("SBRWR_TRANSLATABLE")) {
+                luckyDrawItem.setDescription(luckyDrawItem.getDescription() + "," + luckyDrawItem.getRemainingUseCount());
+            } else {
+                luckyDrawItem.setDescription(luckyDrawItem.getDescription() + " x" + luckyDrawItem.getRemainingUseCount());
+            }
         }
         return luckyDrawItem;
     }
