@@ -523,7 +523,26 @@ public class RewardBO {
             luckyDrawItem.setRemainingUseCount(quantity == -1 ? productEntity.getUseCount() : quantity);
 
             if(parameterBO.getBoolParam("SBRWR_TRANSLATABLE")) {
-                luckyDrawItem.setDescription(luckyDrawItem.getDescription() + "," + luckyDrawItem.getRemainingUseCount());
+                if(productEntity.getProductType().equals("POWERUP")) {
+                    switch(productEntity.getProductTitle()) {
+                        case "GM_CATALOG_000002CF": luckyDrawItem.setDescription("LB_RUN_FLATS," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_000002BE": luckyDrawItem.setDescription("LB_TRAFFIC_MAGNET," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_000002C7": luckyDrawItem.setDescription("LB_COOLDOWN," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_000002D1": luckyDrawItem.setDescription("LB_SHIELD," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_000002BC": luckyDrawItem.setDescription("LB_SLINGSHOT," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_00000454": luckyDrawItem.setDescription("LB_READY," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_000002C5": luckyDrawItem.setDescription("LB_JUGGERNAUT," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_000002CD": luckyDrawItem.setDescription("LB_EMERGENCY_EVADE," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_000002CB": luckyDrawItem.setDescription("LB_TEAM_EMERGENCY_EVADE," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_000002C9": luckyDrawItem.setDescription("LB_NOS," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_000002C3": luckyDrawItem.setDescription("LB_ONE_MORE_LAP," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_000006EE": luckyDrawItem.setDescription("LB_TEAM_SLINGSHOT," + luckyDrawItem.getRemainingUseCount()); break;
+                        case "GM_CATALOG_00004EF9": luckyDrawItem.setDescription("LB_GHOSTING," + luckyDrawItem.getRemainingUseCount()); break;
+                        default:                    luckyDrawItem.setDescription(luckyDrawItem.getDescription() + "," + luckyDrawItem.getRemainingUseCount()); break;
+                    }
+                } else {
+                    luckyDrawItem.setDescription(luckyDrawItem.getDescription() + "," + luckyDrawItem.getRemainingUseCount());
+                }
             } else {
                 luckyDrawItem.setDescription(luckyDrawItem.getDescription() + " x" + luckyDrawItem.getRemainingUseCount());
             }
