@@ -3,6 +3,7 @@ package com.soapboxrace.core.bo.util;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import java.net.URI;
 import java.util.*; 
 
 import com.soapboxrace.core.bo.ParameterBO;
@@ -17,15 +18,20 @@ public class DiscordWebhook {
 	private ParameterBO parameterBO;
 
 	public void sendMessage(String message, String webHookUrl, String botName, int color) {
-		if(webHookUrl == null) 
-			return;
-
-		TemmieWebhook temmie = new TemmieWebhook(webHookUrl);
-
-		DiscordEmbed de = DiscordEmbed.builder().description(message).color(color).build();
-
-		DiscordMessage dm = DiscordMessage.builder().username(botName).embeds(Arrays.asList(de)).build();
-		temmie.sendMessage(dm);
+		try {
+			URI webHookUrlParsed = new URI(webHookUrl);
+			
+			if(webHookUrlParsed.getScheme() == "https" || webHookUrlParsed.getScheme() == "http") {
+				TemmieWebhook temmie = new TemmieWebhook(webHookUrl);
+				DiscordEmbed de = DiscordEmbed.builder().description(message).color(color).build();
+				DiscordMessage dm = DiscordMessage.builder().username(botName).embeds(Arrays.asList(de)).build();
+				temmie.sendMessage(dm);
+			} else {
+				System.out.println("Discord WebHooks are disabled.");
+			}
+		} catch (Exception e) {
+			System.out.println("Discord WebHooks are disabled.");	
+		}
 	}
 
 	public void sendMessage(String message, String webHookUrl, int color) {
