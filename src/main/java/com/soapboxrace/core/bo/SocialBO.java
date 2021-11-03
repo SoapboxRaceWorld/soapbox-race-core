@@ -47,11 +47,19 @@ public class SocialBO {
 			PersonaEntity personaEntity = personaDao.find(abuserPersonaId);
 			PersonaEntity personaEntity1 = personaDao.find(personaId);
 
-			discord.sendMessage("**" + personaEntity.getName() + "** has been reported by **" + personaEntity1.getName() + "**." + "\n Reason: **" + description + "**", 
-				parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_URL"), 
-				parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_NAME", "Botte"),
-				0xff9900
-			);
+            if(personaEntity1 == null) {
+                discord.sendMessage("**" + personaEntity.getName() + "** has been reported by **" + parameterBO.getStrParam("SBRWR_DEFAULTREPORTER", "SBRW Reloaded") + "**." + "\n Reason: **" + description + "**", 
+                    parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_URL"), 
+                    parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_NAME", "Botte"),
+                    0xff9900
+                );
+            } else {
+                discord.sendMessage("**" + personaEntity.getName() + "** has been reported by **" + personaEntity1.getName() + "**." + "\n Reason: **" + description + "**", 
+                    parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_URL"), 
+                    parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_NAME", "Botte"),
+                    0xff9900
+                );
+            }
 		}
     }
 
