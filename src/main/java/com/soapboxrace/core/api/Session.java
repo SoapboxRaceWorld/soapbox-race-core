@@ -10,6 +10,7 @@ import com.soapboxrace.core.api.util.Secured;
 import com.soapboxrace.core.bo.ParameterBO;
 import com.soapboxrace.core.bo.SessionBO;
 import com.soapboxrace.jaxb.http.ChatServer;
+import javax.servlet.http.HttpServletRequest;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
@@ -35,13 +36,19 @@ public class Session {
     @Secured
     @Path("/GetChatInfo")
     @Produces(MediaType.APPLICATION_XML)
-    public ChatServer getChatInfo() {
+    public ChatServer getChatInfo(HttpServletRequest httpRequest) {
         ChatServer chatServer = new ChatServer();
         String xmppIp = parameterBO.getStrParam("XMPP_IP");
         chatServer.setIp(xmppIp);
         chatServer.setPort(parameterBO.getIntParam("XMPP_PORT"));
         chatServer.setPrefix("sbrw");
-        chatServer.setRooms(bo.getAllChatRoom());
+
+        if(parameterBO.getBoolParam("SBRWR_ENABLE_GEO_CHAT")) {
+            chatServer.setRooms(bo.getChatRoomBasedOnCountry(httpRequest.getRemoteHost()));
+        } else {
+            chatServer.setRooms(bo.getAllChatRoom());
+        }
+        
         return chatServer;
     }
 }
