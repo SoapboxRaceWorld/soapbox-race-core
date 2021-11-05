@@ -26,6 +26,9 @@ public class Session {
     @Context
     UriInfo uri;
 
+    @Context
+    private HttpServletRequest httpRequest;
+
     @EJB
     private SessionBO bo;
 
@@ -36,7 +39,7 @@ public class Session {
     @Secured
     @Path("/GetChatInfo")
     @Produces(MediaType.APPLICATION_XML)
-    public ChatServer getChatInfo(HttpServletRequest httpRequest) {
+    public ChatServer getChatInfo() {
         ChatServer chatServer = new ChatServer();
         String xmppIp = parameterBO.getStrParam("XMPP_IP");
         chatServer.setIp(xmppIp);
