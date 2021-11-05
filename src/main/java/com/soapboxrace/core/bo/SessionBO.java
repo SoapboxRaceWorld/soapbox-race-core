@@ -44,20 +44,26 @@ public class SessionBO {
         ArrayOfChatRoom arrayOfChatRoom = new ArrayOfChatRoom();
 
         GeoIp2 geoIp2 = GeoIp2.getInstance(parameterBO.getStrParam("GEOIP2_DB_FILE_PATH"));
+        List<String> extraChannels = parameterBO.getStrListParam("SBRWR_GEO_EXTRACHANNELS");
+        String countryIso = geoIp2.getCountryIso(ip);
 
         //Let's add first the country specific:
-        ChatRoom chatRoomCountry = new ChatRoom();
-        chatRoomCountry.setChannelCount(parameterBO.getIntParam("SBRWR_GEO_MAX_CHANNELS", 2));
-        chatRoomCountry.setLongName(geoIp2.getCountryIso(ip));
-        chatRoomCountry.setShortName(geoIp2.getCountryIso(ip));
-        arrayOfChatRoom.getChatRoom().add(chatRoomCountry);
+        if(!extraChannels.contains(countryIso)) {
+            ChatRoom chatRoomCountry = new ChatRoom();
+            chatRoomCountry.setChannelCount(parameterBO.getIntParam("SBRWR_GEO_MAX_CHANNELS", 2));
+            chatRoomCountry.setLongName(geoIp2.getCountryIso(ip));
+            chatRoomCountry.setShortName(geoIp2.getCountryIso(ip));
+            arrayOfChatRoom.getChatRoom().add(chatRoomCountry);
+        }
 
-        //Let's add WW now
-        ChatRoom chatRoomWW = new ChatRoom();
-        chatRoomWW.setChannelCount(parameterBO.getIntParam("SBRWR_GEO_MAX_CHANNELS", 2));
-        chatRoomWW.setLongName(parameterBO.getStrParam("SBRWR_GEO_DEFAULT_LONGNAME", "WORLDWIDE"));
-        chatRoomWW.setShortName(parameterBO.getStrParam("SBRWR_GEO_DEFAULT_LONGNAME", "WW"));
-        arrayOfChatRoom.getChatRoom().add(chatRoomWW);
+        //Let's add extra channels now
+        for (String extraChannelsSingle : extraChannels) {
+            ChatRoom chatRoom = new ChatRoom();
+            chatRoom.setChannelCount(parameterBO.getIntParam("SBRWR_GEO_MAX_CHANNELS", 2));
+            chatRoom.setLongName("TXT_CHAT_LANG_" + extraChannelsSingle);
+            chatRoom.setShortName(extraChannelsSingle);
+            arrayOfChatRoom.getChatRoom().add(chatRoom);
+        }
 
         return arrayOfChatRoom;
     }
