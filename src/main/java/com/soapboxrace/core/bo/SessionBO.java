@@ -47,6 +47,16 @@ public class SessionBO {
         List<String> extraChannels = parameterBO.getStrListParam("SBRWR_GEO_EXTRACHANNELS");
         String countryIso = geoIp2.getCountryIso(ip);
 
+        //Let's add extra channels:
+        //@TODO: use CHAT_LIST table from database if SBRWR_GEO_EXTRACHANNELS == DEFAULT
+        for (String extraChannelsSingle : extraChannels) {
+            ChatRoom chatRoom = new ChatRoom();
+            chatRoom.setChannelCount(parameterBO.getIntParam("SBRWR_GEO_MAX_CHANNELS", 2));
+            chatRoom.setLongName("TXT_CHAT_LANG_" + extraChannelsSingle);
+            chatRoom.setShortName(extraChannelsSingle);
+            arrayOfChatRoom.getChatRoom().add(chatRoom);
+        }
+
         //Let's add first the country specific:
         if(!extraChannels.contains(countryIso)) {
             ChatRoom chatRoomCountry = new ChatRoom();
@@ -54,15 +64,6 @@ public class SessionBO {
             chatRoomCountry.setLongName(geoIp2.getCountryIso(ip));
             chatRoomCountry.setShortName(geoIp2.getCountryIso(ip));
             arrayOfChatRoom.getChatRoom().add(chatRoomCountry);
-        }
-
-        //Let's add extra channels now
-        for (String extraChannelsSingle : extraChannels) {
-            ChatRoom chatRoom = new ChatRoom();
-            chatRoom.setChannelCount(parameterBO.getIntParam("SBRWR_GEO_MAX_CHANNELS", 2));
-            chatRoom.setLongName("TXT_CHAT_LANG_" + extraChannelsSingle);
-            chatRoom.setShortName(extraChannelsSingle);
-            arrayOfChatRoom.getChatRoom().add(chatRoom);
         }
 
         return arrayOfChatRoom;
