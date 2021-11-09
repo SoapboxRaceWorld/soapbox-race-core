@@ -15,6 +15,8 @@ import com.soapboxrace.jaxb.http.ChatRoom;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+
+import java.util.Arrays;
 import java.util.List;
 
 @Stateless
@@ -44,17 +46,27 @@ public class SessionBO {
         ArrayOfChatRoom arrayOfChatRoom = new ArrayOfChatRoom();
 
         GeoIp2 geoIp2 = GeoIp2.getInstance(parameterBO.getStrParam("GEOIP2_DB_FILE_PATH"));
-        List<String> extraChannels = parameterBO.getStrListParam("SBRWR_GEO_EXTRACHANNELS");
+        List<String> extraChannels = parameterBO.getStrListParam("SBRWR_GEO_EXTRACHANNELS", Arrays.asList("DEFAULT"));
         String countryIso = geoIp2.getCountryIso(ip);
 
         //Let's add extra channels:
-        //@TODO: use CHAT_LIST table from database if SBRWR_GEO_EXTRACHANNELS == DEFAULT
-        for (String extraChannelsSingle : extraChannels) {
-            ChatRoom chatRoom = new ChatRoom();
-            chatRoom.setChannelCount(parameterBO.getIntParam("SBRWR_GEO_MAX_CHANNELS", 2));
-            chatRoom.setLongName("TXT_CHAT_LANG_" + extraChannelsSingle);
-            chatRoom.setShortName(extraChannelsSingle);
-            arrayOfChatRoom.getChatRoom().add(chatRoom);
+        if(extraChannels.contains("DEFAULT")) {
+            List<ChatRoomEntity> chatRoomList = chatRoomDao.findAll();
+            for (ChatRoomEntity entity : chatRoomList) {
+                ChatRoom chatRoom = new ChatRoom();
+                chatRoom.setChannelCount(entity.getAmount());
+                chatRoom.setLongName(entity.getLongName());
+                chatRoom.setShortName(entity.getShortName());
+                arrayOfChatRoom.getChatRoom().add(chatRoom);
+            }
+        } else {
+            for (String extraChannelsSingle : extraChannels) {
+                ChatRoom chatRoom = new ChatRoom();
+                chatRoom.setChannelCount(parameterBO.getIntParam("SBRWR_GEO_MAX_CHANNELS", 2));
+                chatRoom.setLongName("TXT_CHAT_LANG_" + extraChannelsSingle);
+                chatRoom.setShortName(extraChannelsSingle);
+                arrayOfChatRoom.getChatRoom().add(chatRoom);
+            }
         }
 
         //Let's add first the country specific:

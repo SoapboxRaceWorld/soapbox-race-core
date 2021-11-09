@@ -101,14 +101,18 @@ public class ParameterBO {
         return parameterFromDB == null || parameterFromDB.isEmpty() ? defaultValue : parameterFromDB;
     }
 
-    public List<String> getStrListParam(String parameter) {
+    public List<String> getStrListParam(String parameter, List<String> defaultValue) {
         String value = getParameter(parameter);
 
         if (value == null || value.isEmpty()) {
-            return Collections.emptyList();
+            return defaultValue;
         }
 
         return Arrays.asList(value.split(";"));
+    }
+
+    public List<String> getStrListParam(String parameter) {
+        return getStrListParam(parameter, Collections.emptyList());
     }
 
     public Float getFloatParam(String parameter) {
