@@ -59,7 +59,7 @@ public class LauncherChecksBO {
                 String version = jsonResponse.get("tag_name").toString().replace("\"", "");
                 String shaHash = StringUtils.substringBetween(jsonResponse.get("body").toString(), "EXE: `", "`");
                 // If the found version is not whitelisted add it to the list
-                if (shaHash != null && parameter != null) {
+                if (shaHash != null && parameter != null && !parameter.contains(shaHash)) {
                     logger.info("LauncherChecksBO: Found New SBRW Launcher release! {} ({})", version, shaHash);
                     parameterBO.setParameter("SIGNED_LAUNCHER_HASH", parameter + "\n" + version + "=" + shaHash);
                     logger.info("LauncherChecksBO: Whitelisted New SBRW Launcher version {}", version);
