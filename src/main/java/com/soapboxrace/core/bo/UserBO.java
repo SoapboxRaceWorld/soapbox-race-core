@@ -144,40 +144,42 @@ public class UserBO {
         ArrayOfProfileData arrayOfProfileData = new ArrayOfProfileData();
         List<PersonaEntity> listOfProfile = userEntity.getPersonas();
         for (PersonaEntity personaEntity : listOfProfile) {
-            // switch to apache beanutils copy
-            ProfileData profileData = new ProfileData();
+            if(personaEntity.getDeletedAt() == null) {      
+                // switch to apache beanutils copy
+                ProfileData profileData = new ProfileData();
 
-            if(parameterBO.getBoolParam("SBRWR_NR_ENABLECREW")) {
-                //Let's find out on which team the user currenly is:
-                KCrewMemberEntity kCrewMemberEntity = kCrewMemberDAO.findCrewMembershipByPersonaId(personaEntity.getPersonaId());
+                if(parameterBO.getBoolParam("SBRWR_NR_ENABLECREW")) {
+                    //Let's find out on which team the user currenly is:
+                    KCrewMemberEntity kCrewMemberEntity = kCrewMemberDAO.findCrewMembershipByPersonaId(personaEntity.getPersonaId());
 
-                if(kCrewMemberEntity != null) {
-                    //Now let's fetch its name via JOIN tag:
-                    KCrewEntity kCrewEntity = kCrewMemberEntity.getCrew();
-                    
-                    if(kCrewEntity != null) {
-                        //Format style:
-                        String formatName = parameterBO.getStrParam("SBRWR_NR_CREWFORMAT", "{persona}");
-                        formatName = formatName.replace("{crew}", kCrewEntity.getTag());
-                        formatName = formatName.replace("{persona}", personaEntity.getName());
-                        profileData.setName(formatName);
+                    if(kCrewMemberEntity != null) {
+                        //Now let's fetch its name via JOIN tag:
+                        KCrewEntity kCrewEntity = kCrewMemberEntity.getCrew();
+                        
+                        if(kCrewEntity != null) {
+                            //Format style:
+                            String formatName = parameterBO.getStrParam("SBRWR_NR_CREWFORMAT", "{persona}");
+                            formatName = formatName.replace("{crew}", kCrewEntity.getTag());
+                            formatName = formatName.replace("{persona}", personaEntity.getName());
+                            profileData.setName(formatName);
+                        } else {
+                            profileData.setName(personaEntity.getName());
+                        }
                     } else {
                         profileData.setName(personaEntity.getName());
                     }
                 } else {
                     profileData.setName(personaEntity.getName());
                 }
-            } else {
-                profileData.setName(personaEntity.getName());
-            }
 
-            profileData.setCash(personaEntity.getCash());
-            profileData.setBoost(personaEntity.getBoost());
-            profileData.setIconIndex(personaEntity.getIconIndex());
-            profileData.setPersonaId(personaEntity.getPersonaId());
-            profileData.setLevel(personaEntity.getLevel());
-            profileData.setBoost(personaEntity.getBoost());
-            arrayOfProfileData.getProfileData().add(profileData);
+                profileData.setCash(personaEntity.getCash());
+                profileData.setBoost(personaEntity.getBoost());
+                profileData.setIconIndex(personaEntity.getIconIndex());
+                profileData.setPersonaId(personaEntity.getPersonaId());
+                profileData.setLevel(personaEntity.getLevel());
+                profileData.setBoost(personaEntity.getBoost());
+                arrayOfProfileData.getProfileData().add(profileData);
+            }
         }
         userInfo.setPersonas(arrayOfProfileData);
         User user = new User();
