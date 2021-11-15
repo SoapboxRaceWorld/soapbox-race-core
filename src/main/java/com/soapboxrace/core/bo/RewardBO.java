@@ -176,7 +176,12 @@ public class RewardBO {
         float maxSkillMultiplier = parameterBO.getFloatParam("SKILL_" + skillModRewardType.toString() + "_MAX_VALUE", 30f);
         for (SkillModPartEntity skillModPartEntity : skillModParts) {
             ProductEntity productEntity = productDAO.findByHash(skillModPartEntity.getSkillModPartAttribHash());
-            if (productEntity != null && productEntity.getProductTitle().equals(skillModRewardType.toString())) {
+
+            // Whoever made that code, thanks for making it EQUAL and deny use of translation files (hi nilzao)
+            // And whoever accepted this code to be like it was: FUCK YOU (hi leo)
+            // And big thanks to whoever noticing the issue (thanks speedou)
+            // And also another self-thank for fixing that. (hi meto)
+            if (productEntity != null && productEntity.getProductTitle().contains(skillModRewardType.toString())) {
                 float skillValue = productEntity.getSkillValue();
                 skillMultiplier += skillValue;
             }
