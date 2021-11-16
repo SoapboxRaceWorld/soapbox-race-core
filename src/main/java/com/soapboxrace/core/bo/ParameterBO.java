@@ -98,17 +98,12 @@ public class ParameterBO {
     public String getStrParam(String parameter, String defaultValue) {
         String parameterFromDB = getParameter(parameter);
 
-        return parameterFromDB == null || parameterFromDB.isEmpty() ? defaultValue : parameterFromDB;
-    }
-
-    public List<String> getStrListParam(String parameter, List<String> defaultValue) {
-        String value = getParameter(parameter);
-
-        if (value == null || value.isEmpty()) {
+        if (parameterFromDB == null || parameterFromDB.isEmpty()) {
+            setParameter(parameter, parameterFromDB);
             return defaultValue;
         }
 
-        return Arrays.asList(value.split(";"));
+        return parameterFromDB;
     }
 
     public List<String> getStrListParam(String parameter) {
@@ -125,9 +120,26 @@ public class ParameterBO {
         return Float.valueOf(parameterFromDB);
     }
 
+    public List<String> getStrListParam(String parameter, List<String> defaultValue) {
+        String parameterFromDB = getParameter(parameter);
+
+        if (parameterFromDB == null || parameterFromDB.isEmpty()) {
+            setParameter(parameter, defaultValue.toString());
+            return defaultValue;
+        }
+
+        return Arrays.asList(parameterFromDB.split(";"));
+    }
+
     public Float getFloatParam(String parameter, Float defaultValue) {
         String parameterFromDB = getParameter(parameter);
-        return parameterFromDB == null || parameterFromDB.isEmpty() ? defaultValue : Float.valueOf(parameterFromDB);
+
+        if(parameterFromDB == null || parameterFromDB.isEmpty()) {
+            setParameter(parameter, defaultValue.toString());
+            return defaultValue;
+        }
+        
+        return Float.valueOf(parameterFromDB);
     }
 
     public void setParameter(String name, String value) {
