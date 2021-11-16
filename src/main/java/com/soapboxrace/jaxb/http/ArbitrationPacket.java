@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.*;
         "physicsMetrics",
         "rank",
         "response",
-        "Konami"
+        "konami"
 })
 @XmlSeeAlso({
         RouteArbitrationPacket.class,
