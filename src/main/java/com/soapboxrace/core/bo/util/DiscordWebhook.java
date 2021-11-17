@@ -20,8 +20,7 @@ public class DiscordWebhook {
 	public void sendMessage(String message, String webHookUrl, String botName, int color) {
 		try {
 			URI webHookUrlParsed = new URI(webHookUrl);
-			
-			if(webHookUrlParsed.getScheme() == "https" || webHookUrlParsed.getScheme() == "http") {
+			if(webHookUrlParsed.getScheme().equals("https") || webHookUrlParsed.getScheme().equals("http")) {
 				TemmieWebhook temmie = new TemmieWebhook(webHookUrl);
 				DiscordEmbed de = DiscordEmbed.builder().description(message).color(color).build();
 				DiscordMessage dm = DiscordMessage.builder().username(botName).embeds(Arrays.asList(de)).build();
