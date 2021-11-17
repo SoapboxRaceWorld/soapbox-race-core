@@ -30,7 +30,7 @@ public class DiscordWebhook {
 				System.out.println("Discord WebHooks are disabled.");
 			}
 		} catch (Exception e) {
-			System.out.println("Discord WebHooks are disabled.");	
+			System.out.println(e);	
 		}
 	}
 
