@@ -34,6 +34,7 @@ public class ParameterBO {
     public ParameterBO() {
         parameterMap = new ConcurrentHashMap<>();
     }
+    
     @PostConstruct
     public void init() {
         loadParameters();
@@ -49,6 +50,7 @@ public class ParameterBO {
         }
         logger.info("Loaded {} parameters from database", parameterMap.size());
     }
+
     private String getParameter(String name) {
         return parameterMap.get(name);
     }
@@ -81,26 +83,21 @@ public class ParameterBO {
         return Integer.valueOf(parameterFromDB);
     }
 
-    public Integer getIntParam(String parameter, Integer defaultValue) {
-        String parameterFromDB = getParameter(parameter);
-        return parameterFromDB == null || parameterFromDB.isEmpty() ? defaultValue : Integer.valueOf(parameterFromDB);
-    }
-
     public Boolean getBoolParam(String parameter) {
         String parameterFromDB = getParameter(parameter);
+
+        if (parameterFromDB == null || parameterFromDB.isEmpty()) {
+            setParameter(parameter, Boolean.FALSE.toString());
+        }
+
         return Boolean.valueOf(parameterFromDB);
     }
 
     public String getStrParam(String parameter) {
-        return getParameter(parameter);
-    }
-
-    public String getStrParam(String parameter, String defaultValue) {
         String parameterFromDB = getParameter(parameter);
 
         if (parameterFromDB == null || parameterFromDB.isEmpty()) {
-            setParameter(parameter, defaultValue);
-            return defaultValue;
+            setParameter(parameter, "");
         }
 
         return parameterFromDB;
@@ -118,6 +115,29 @@ public class ParameterBO {
         }
 
         return Float.valueOf(parameterFromDB);
+    }
+
+
+    public Integer getIntParam(String parameter, Integer defaultValue) {
+        String parameterFromDB = getParameter(parameter);
+
+        if (parameterFromDB == null || parameterFromDB.isEmpty()) {
+            setParameter(parameter, parameterFromDB);
+            return defaultValue;
+        }
+
+        return Integer.valueOf(parameterFromDB);
+    }
+
+    public String getStrParam(String parameter, String defaultValue) {
+        String parameterFromDB = getParameter(parameter);
+
+        if (parameterFromDB == null || parameterFromDB.isEmpty()) {
+            setParameter(parameter, defaultValue);
+            return defaultValue;
+        }
+
+        return parameterFromDB;
     }
 
     public List<String> getStrListParam(String parameter, List<String> defaultValue) {
