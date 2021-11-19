@@ -29,8 +29,9 @@ public class DiscordWebhook {
 			if(extra == null) {
 				de.description(message);
 			} else {
+				de.description("");
 				de.author(
-					AuthorEmbed.builder().name(extra.get("abuserPersonaName") + "").icon_url("https://cdn.nightriderz.world/images/website/icon-persona/" + extra.get("avatarId") + ".jpg").build()
+					AuthorEmbed.builder().name(extra.get("abuserPersonaName")).icon_url("https://cdn.nightriderz.world/images/website/icon-persona/" + extra.get("avatarId") + ".jpg").build()
 				);
 				de.fields(Arrays.asList(
 					FieldEmbed.builder().name("Category").value(extra.get("petitionTypeText")).build(),
@@ -45,7 +46,8 @@ public class DiscordWebhook {
 
 			de.color(color);
 
-			DiscordMessage dm = DiscordMessage.builder().username(botName).embeds(Arrays.asList(de.build())).build();
+			DiscordEmbed embed = de.build();
+			DiscordMessage dm = DiscordMessage.builder().username(botName).embeds(Arrays.asList(embed)).build();
 			temmie.sendMessage(dm);
 		} else {
 			System.out.println("Discord WebHooks are disabled.");
