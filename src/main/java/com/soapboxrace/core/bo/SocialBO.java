@@ -46,15 +46,29 @@ public class SocialBO {
         if(parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_URL") != null) {
 			PersonaEntity personaEntity = personaDao.find(abuserPersonaId);
 			PersonaEntity personaEntity1 = personaDao.find(personaId);
+            String petitionTypeText = "";
+            
+            description = description.replace("*", "\\*");
+            description = description.replace("_", "\\_");
+            description = description.replace("~", "\\~");
+
+            switch(petitionType) {
+                case 0:     petitionTypeText = "CHAT"; break;
+                case 1:     petitionTypeText = "STATUS MESSAGE"; break;
+                case 2:     petitionTypeText = "DRIVERNAME"; break;
+                case 3:     petitionTypeText = "CAR CUSTOMIZATION"; break;
+                case 4:     petitionTypeText = "CHEAT"; break;
+                default:    petitionTypeText = "Unknown"; break;
+            }
 
             if(personaEntity1 == null) {
-                discord.sendMessage("**" + personaEntity.getName() + "** has been reported by **" + parameterBO.getStrParam("SBRWR_DEFAULTREPORTER", "SBRW Reloaded") + "**." + "\n Reason: **" + description + "**", 
+                discord.sendMessage("[" + petitionTypeText + "] **" + personaEntity.getName() + "** has been reported by **" + parameterBO.getStrParam("SBRWR_DEFAULTREPORTER", "SBRW Reloaded") + "**." + "\n Reason: **" + description + "**", 
                     parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_URL"), 
                     parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_NAME", "Botte"),
                     0xff9900
                 );
             } else {
-                discord.sendMessage("**" + personaEntity.getName() + "** has been reported by **" + personaEntity1.getName() + "**." + "\n Reason: **" + description + "**", 
+                discord.sendMessage("[" + petitionTypeText + "] **" + personaEntity.getName() + "** has been reported by **" + personaEntity1.getName() + "**." + "\n Reason: **" + description + "**", 
                     parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_URL"), 
                     parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_NAME", "Botte"),
                     0xff9900
