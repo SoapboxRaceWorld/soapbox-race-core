@@ -122,7 +122,7 @@ public class ParameterBO {
         String parameterFromDB = getParameter(parameter);
 
         if (parameterFromDB == null || parameterFromDB.isEmpty()) {
-            setParameter(parameter, parameterFromDB);
+            setParameter(parameter, defaultValue.toString());
             return defaultValue;
         }
 
