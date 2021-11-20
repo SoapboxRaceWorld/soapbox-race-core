@@ -9,6 +9,7 @@ package com.soapboxrace.core.bo;
 import com.google.common.collect.Iterables;
 import com.soapboxrace.core.auth.AuthException;
 import com.soapboxrace.core.auth.verifiers.PasswordVerifier;
+import com.soapboxrace.core.bo.util.IsNullOrEmpty;
 import com.soapboxrace.core.dao.InviteTicketDAO;
 import com.soapboxrace.core.dao.KCrewMemberDAO;
 import com.soapboxrace.core.dao.PersonaDAO;
@@ -88,7 +89,7 @@ public class UserBO {
         InviteTicketEntity inviteTicketEntity = null;
         String ticketToken = parameterBO.getStrParam("TICKET_TOKEN");
 
-        if (ticketToken != null && !ticketToken.equals("null")) {
+        if (IsNullOrEmpty.check(ticketToken) == false) {
             inviteTicketEntity = inviteTicketDAO.findByTicket(ticket);
             
             if (inviteTicketEntity == null || inviteTicketEntity.getTicket() == null || inviteTicketEntity.getTicket().isEmpty()) {
