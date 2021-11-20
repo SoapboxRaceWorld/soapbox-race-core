@@ -41,7 +41,6 @@ public class DiscordWebhook {
 				de.footer(
 					FooterEmbed.builder().text(extra.get("botName")).build()
 				);
-				de.timestamp(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
 			}
 
 			de.color(color);
