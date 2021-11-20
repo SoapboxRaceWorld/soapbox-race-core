@@ -31,7 +31,7 @@ public class DiscordWebhook {
 			} else {
 				de.description("");
 				de.author(
-					AuthorEmbed.builder().name(extra.get("abuserPersonaName")).icon_url("https://cdn.nightriderz.world/images/website/icon-persona/" + extra.get("avatarId") + ".jpg").build()
+					AuthorEmbed.builder().name(extra.get("abuserPersonaName") + " has been reported.").icon_url("https://cdn.nightriderz.world/images/website/icon-persona/" + extra.get("avatarId") + ".jpg").build()
 				);
 				de.fields(Arrays.asList(
 					FieldEmbed.builder().name("Category").value(extra.get("petitionTypeText")).build(),
