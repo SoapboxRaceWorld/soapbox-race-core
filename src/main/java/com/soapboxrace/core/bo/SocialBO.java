@@ -16,6 +16,9 @@ import javax.ejb.Stateless;
 
 import com.soapboxrace.core.bo.util.DiscordWebhook;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Stateless
 public class SocialBO {
 
@@ -46,12 +49,35 @@ public class SocialBO {
         if(parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_URL") != null) {
 			PersonaEntity personaEntity = personaDao.find(abuserPersonaId);
 			PersonaEntity personaEntity1 = personaDao.find(personaId);
+            String petitionTypeText = "";
+            
+            description = description.replace("*", "\\*");
+            description = description.replace("_", "\\_");
+            description = description.replace("~", "\\~");
 
-			discord.sendMessage("**" + personaEntity.getName() + "** has been reported by **" + personaEntity1.getName() + "**." + "\n Reason: **" + description + "**", 
-				parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_URL"), 
-				parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_NAME", "Botte"),
-				0xff9900
-			);
+            switch(petitionType) {
+                case 0:     petitionTypeText = "CHAT"; break;
+                case 1:     petitionTypeText = "STATUS MESSAGE"; break;
+                case 2:     petitionTypeText = "DRIVERNAME"; break;
+                case 3:     petitionTypeText = "CAR CUSTOMIZATION"; break;
+                case 4:     petitionTypeText = "CHEAT"; break;
+                default:    petitionTypeText = "Unknown"; break;
+            }
+
+            Map<String, String> dictionary = new HashMap<String, String>();
+
+            dictionary.put("abuserPersonaName", personaEntity.getName());
+            dictionary.put("petitionTypeText", petitionTypeText);
+            dictionary.put("avatarId", String.valueOf(personaEntity.getIconIndex()));
+            dictionary.put("botName", parameterBO.getStrParam("SBRWR_DEFAULTREPORTER", "SBRW Reloaded"));
+
+            if(personaEntity1 == null) {
+                dictionary.put("reporterName", parameterBO.getStrParam("SBRWR_DEFAULTREPORTER", "SBRW Reloaded"));
+            } else {
+                dictionary.put("reporterName", personaEntity1.getName());
+            }
+
+            discord.sendMessage(description, parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_URL"), parameterBO.getStrParam("DISCORD_WEBHOOK_REPORT_NAME", "Botte"), 0xff0000, dictionary);
 		}
     }
 

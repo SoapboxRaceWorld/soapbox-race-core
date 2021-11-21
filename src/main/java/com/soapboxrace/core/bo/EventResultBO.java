@@ -26,6 +26,9 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
     protected LobbyBO lobbyBO;
 
     @EJB
+    protected ParameterBO parameterBo;
+
+    @EJB
     protected PersonaBO personaBO;
 
     @EJB
@@ -41,6 +44,13 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
      */
     public TR handle(EventSessionEntity eventSessionEntity, Long activePersonaId, TA packet) {
         packet.setHacksDetected(packet.getHacksDetected() & ~32); // remove ModifiedFiles flag
+
+        //TODO: Database script to accept certain cheat types.
+        if(packet.getKonami() != 0) {
+            if(parameterBo.getStrListParam("SBRWR_ACCEPT_KONAMI").isEmpty() != true) {
+                
+            }
+        }
 
         return handleInternal(eventSessionEntity, activePersonaId, packet);
     }
@@ -70,7 +80,7 @@ public abstract class EventResultBO<TA extends ArbitrationPacket, TR extends Eve
         eventDataEntity.setEventDurationInMilliseconds(packet.getEventDurationInMilliseconds());
         eventDataEntity.setFinishReason(packet.getFinishReason());
         eventDataEntity.setHacksDetected(packet.getHacksDetected());
-        eventDataEntity.setRank(packet.getRank());
+        eventDataEntity.setRank(packet.getRank());  //@FIXME: Verify this with a database result.
         eventDataEntity.setPersonaId(activePersonaId);
         eventDataEntity.setEventModeId(eventDataEntity.getEvent().getEventModeId());
         eventDataEntity.setServerTimeEnded(System.currentTimeMillis());

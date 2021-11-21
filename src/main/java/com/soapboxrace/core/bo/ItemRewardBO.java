@@ -46,6 +46,9 @@ public class ItemRewardBO {
     private BasketBO basketBO;
 
     @EJB
+    private ParameterBO parameterBO;
+
+    @EJB
     private CardPackDAO cardPackDAO;
 
     public RewardedItemsContainer getRewards(PersonaEntity personaEntity, String rewardScript) {
@@ -84,7 +87,30 @@ public class ItemRewardBO {
             commerceItemTrans.setTitle(productEntity.getProductTitle());
 
             if (useCount != -1) {
-                commerceItemTrans.setTitle(commerceItemTrans.getTitle() + " x" + useCount);
+                if(parameterBO.getBoolParam("SBRWR_TRANSLATABLE")) {
+                    if(productEntity.getProductType().equals("POWERUP")) {
+                        switch(productEntity.getProductTitle()) {
+                            case "GM_CATALOG_000002CF": commerceItemTrans.setTitle("LB_RUN_FLATS," + useCount); break;
+                            case "GM_CATALOG_000002BE": commerceItemTrans.setTitle("LB_TRAFFIC_MAGNET," + useCount); break;
+                            case "GM_CATALOG_000002C7": commerceItemTrans.setTitle("LB_COOLDOWN," + useCount); break;
+                            case "GM_CATALOG_000002D1": commerceItemTrans.setTitle("LB_SHIELD," + useCount); break;
+                            case "GM_CATALOG_000002BC": commerceItemTrans.setTitle("LB_SLINGSHOT," + useCount); break;
+                            case "GM_CATALOG_00000454": commerceItemTrans.setTitle("LB_READY," + useCount); break;
+                            case "GM_CATALOG_000002C5": commerceItemTrans.setTitle("LB_JUGGERNAUT," + useCount); break;
+                            case "GM_CATALOG_000002CD": commerceItemTrans.setTitle("LB_EMERGENCY_EVADE," + useCount); break;
+                            case "GM_CATALOG_000002CB": commerceItemTrans.setTitle("LB_TEAM_EMERGENCY_EVADE," + useCount); break;
+                            case "GM_CATALOG_000002C9": commerceItemTrans.setTitle("LB_NOS," + useCount); break;
+                            case "GM_CATALOG_000002C3": commerceItemTrans.setTitle("LB_ONE_MORE_LAP," + useCount); break;
+                            case "GM_CATALOG_000006EE": commerceItemTrans.setTitle("LB_TEAM_SLINGSHOT," + useCount); break;
+                            case "GM_CATALOG_00004EF9": commerceItemTrans.setTitle("LB_GHOSTING," + useCount); break;
+                            default:                    commerceItemTrans.setTitle(commerceItemTrans.getTitle() + "," + useCount); break;
+                        }
+                    } else {
+                        commerceItemTrans.setTitle(commerceItemTrans.getTitle() + "," + useCount);
+                    }
+                } else {
+                    commerceItemTrans.setTitle(commerceItemTrans.getTitle() + " x" + useCount);
+                }
             }
 
             commerceResult.getCommerceItems().getCommerceItemTrans().add(commerceItemTrans);

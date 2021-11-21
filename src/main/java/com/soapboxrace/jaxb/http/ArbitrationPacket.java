@@ -45,7 +45,8 @@ import javax.xml.bind.annotation.*;
         "hacksDetected",
         "physicsMetrics",
         "rank",
-        "response"
+        "response",
+        "konami"
 })
 @XmlSeeAlso({
         RouteArbitrationPacket.class,
@@ -76,6 +77,8 @@ public class ArbitrationPacket {
     protected int rank;
     @XmlElement(name = "Response")
     protected SecurityResponse response;
+    @XmlElement(name = "Konami")
+    protected int konami;
 
     /**
      * Gets the value of the alternateEventDurationInMilliseconds property.
@@ -221,4 +224,17 @@ public class ArbitrationPacket {
         this.response = value;
     }
 
+    /**
+     * Gets the value of the konami property.
+     */
+    public int getKonami() {
+        return konami;
+    }
+
+    /**
+     * Sets the value of the konami property.
+     */
+    public void setKonami(int value) {
+        this.konami = value;
+    }
 }

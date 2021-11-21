@@ -106,6 +106,9 @@ public class ProductDAO extends LongKeyedDAO<ProductEntity> {
         Root<ProductEntity> from = cq.from(ProductEntity.class);
         List<Predicate> predicates = new ArrayList<>();
 
+        //Actually disable drop for items that shouldn't be dropped at all:
+        predicates.add(cb.isTrue(from.get("isDropable")));
+        
         if (category != null) {
             predicates.add(cb.equal(from.get("categoryName"), category));
         }
@@ -121,6 +124,8 @@ public class ProductDAO extends LongKeyedDAO<ProductEntity> {
         if (rating != null) {
             predicates.add(cb.equal(from.get("rarity"), rating));
         }
+
+        
 
         cq = cq.where(predicates.toArray(new Predicate[0]));
 
