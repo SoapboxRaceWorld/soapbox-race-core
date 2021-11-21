@@ -87,11 +87,6 @@ public class InventoryBO {
      * @return The new {@link InventoryTrans} instance to be returned to the client.
      */
     public InventoryTrans getClientInventory(InventoryEntity inventoryEntity) {
-        //Let's get actual count of items:
-        int visualparts = 0;
-        int skillmodparts = 0;
-        int performanceparts = 0;
-
         InventoryTrans inventoryTrans = new InventoryTrans();
         inventoryTrans.setPerformancePartsCapacity(inventoryEntity.getPerformancePartsCapacity());
         inventoryTrans.setPerformancePartsUsedSlotCount(inventoryEntity.getPerformancePartsUsedSlotCount());
@@ -102,42 +97,9 @@ public class InventoryBO {
         inventoryTrans.setInventoryItems(new ArrayOfInventoryItemTrans());
 
         for (InventoryItemEntity inventoryItemEntity : inventoryEntity.getInventoryItems()) {
-            if(inventoryItemEntity.getProductEntity() != null) {
-                if(inventoryItemEntity.getProductEntity().getProductType().equals("POWERUP")) {
-                    inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
-                } else {
-                    int actualUseCount = inventoryItemEntity.getRemainingUseCount();
-                    int forceDisplay = parameterBO.getIntParam("SBRWR_MAX_ITEM_INVENTORY", 100);
-                    
-                    if(actualUseCount >= forceDisplay) {
-                        actualUseCount = forceDisplay;
-                    }
-
-                    for(int itemCount = 0; itemCount < actualUseCount; itemCount++) {
-                        inventoryTrans.getInventoryItems().getInventoryItemTrans().add(convertItemToItemTrans(inventoryItemEntity));
-                    }
-
-                    for(int itemCount = 0; itemCount < inventoryItemEntity.getRemainingUseCount(); itemCount++) {
-                        switch(inventoryItemEntity.getProductEntity().getProductType()) {
-                            case "PERFORMANCEPART":     performanceparts++;     break;
-                            case "VISUALPART":          visualparts++;          break;
-                            case "SKILLMODPART":        skillmodparts++;        break;
-                        }
-                    }
-                }
-            }
+            InventoryItemTrans inventoryItemTrans = convertItemToItemTrans(inventoryItemEntity);
+            inventoryTrans.getInventoryItems().getInventoryItemTrans().add(inventoryItemTrans);
         }
-
-        //Let's update user entity
-        InventoryEntity inventoryEntity_update = inventoryDAO.findByPersonaId(inventoryEntity.getPersonaEntity().getPersonaId());
-        inventoryEntity_update.setPerformancePartsUsedSlotCount(performanceparts);
-        inventoryEntity_update.setVisualPartsUsedSlotCount(visualparts);
-        inventoryEntity_update.setSkillModPartsUsedSlotCount(skillmodparts);
-        inventoryDAO.update(inventoryEntity);
-
-        inventoryTrans.setPerformancePartsUsedSlotCount(performanceparts);
-        inventoryTrans.setVisualPartsUsedSlotCount(visualparts);
-        inventoryTrans.setSkillModPartsUsedSlotCount(skillmodparts);
 
         return inventoryTrans;
     }
@@ -153,11 +115,7 @@ public class InventoryBO {
         inventoryItemTrans.setHash(productEntity.getHash());
         inventoryItemTrans.setInventoryId(inventoryEntity.getId());
         inventoryItemTrans.setProductId(productEntity.getProductId());
-        if(inventoryItemEntity.getProductEntity().getProductType().equals("POWERUP")) {
-            inventoryItemTrans.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount());
-        } else {
-            inventoryItemTrans.setRemainingUseCount(1);
-        }
+        inventoryItemTrans.setRemainingUseCount(inventoryItemEntity.getRemainingUseCount());
         inventoryItemTrans.setResellPrice(inventoryItemEntity.getResellPrice());
         inventoryItemTrans.setStatus(inventoryItemEntity.getStatus());
         inventoryItemTrans.setStringHash("0x" + String.format("%08X", productEntity.getHash()));
@@ -293,12 +251,9 @@ public class InventoryBO {
         if (quantity == -1)
             quantity = productEntity.getUseCount();
 
-        //Doublecheck if is not a powerup:
-        int realquantity = productEntity.getProductType().equals("POWERUP") ? quantity : 1;
-
         InventoryItemEntity inventoryItemEntity = new InventoryItemEntity();
         inventoryItemEntity.setProductEntity(productEntity);
-        inventoryItemEntity.setRemainingUseCount(realquantity);
+        inventoryItemEntity.setRemainingUseCount(quantity);
         inventoryItemEntity.setExpirationDate(expirationDate);
         inventoryItemEntity.setStatus("ACTIVE");
         inventoryItemEntity.setResellPrice(Math.round(productEntity.getResalePrice() * parameterBO.getFloatParam(

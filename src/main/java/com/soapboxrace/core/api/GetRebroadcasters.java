@@ -34,7 +34,8 @@ public class GetRebroadcasters {
     public ArrayOfUdpRelayInfo getRebroadcasters() {
         ArrayOfUdpRelayInfo arrayOfUdpRelayInfo = new ArrayOfUdpRelayInfo();
         UdpRelayInfo udpRelayInfo = new UdpRelayInfo();
-        udpRelayInfo.setHost(parameterBO.getStrParam("UDP_FREEROAM_IP"));
+        String freeroamIp = parameterBO.getStrParam("UDP_FREEROAM_IP");
+        udpRelayInfo.setHost(freeroamIp);
         udpRelayInfo.setPort(parameterBO.getIntParam("UDP_FREEROAM_PORT"));
         arrayOfUdpRelayInfo.getUdpRelayInfo().add(udpRelayInfo);
         return arrayOfUdpRelayInfo;

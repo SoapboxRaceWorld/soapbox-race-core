@@ -164,7 +164,7 @@ public class MatchMaking {
 				);
 			}
 
-            if(parameterBO.getBoolParam("SBRWR_INFORM_EVENT") == true && parameterBO.getIntParam("SBRWR_INFORM_EVENT_USERCOUNT", 30) >= openFireRestApiCli.getTotalOnlineUsers()) {
+            if(parameterBO.getBoolParam("SBRWR_INFORM_EVENT") == true) {
                 openFireRestApiCli.sendChatAnnouncement(msg);
             } 
         }

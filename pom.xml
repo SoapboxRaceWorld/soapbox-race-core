@@ -94,7 +94,7 @@
                     <format>json</format>
                     <gitDescribe>
                         <skip>false</skip>
-                        <always>true</always>
+                        <always>false</always>
                         <dirty>-dirty</dirty>
                     </gitDescribe>
                     <useNativeGit>true</useNativeGit>
@@ -273,11 +273,6 @@
             <groupId>de.mkammerer</groupId>
             <artifactId>argon2-jvm</artifactId>
             <version>2.7</version>
-        </dependency>
-        <dependency>
-            <groupId>com.maxmind.geoip2</groupId>
-            <artifactId>geoip2</artifactId>
-            <version>2.12.0</version>
         </dependency>
     </dependencies>
 </project>

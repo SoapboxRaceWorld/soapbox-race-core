@@ -66,9 +66,6 @@ public class DriverPersonaBO {
 
     @EJB
     private SocialRelationshipDAO socialRelationshipDAO;
-    
-    @EJB
-    private KCrewMemberDAO kCrewMemberDAO;
 
     public ProfileData createPersona(Long userId, PersonaEntity personaEntity) {
         UserEntity userEntity = userDao.find(userId);
@@ -100,31 +97,7 @@ public class DriverPersonaBO {
     private ProfileData castPersonaEntity(PersonaEntity personaEntity) {
         ProfileData profileData = new ProfileData();
         // switch to apache beanutils copy
-
-        if(parameterBO.getBoolParam("SBRWR_NR_ENABLECREW")) {
-            //Let's find out on which team the user currenly is:
-            KCrewMemberEntity kCrewMemberEntity = kCrewMemberDAO.findCrewMembershipByPersonaId(personaEntity.getPersonaId());
-
-            if(kCrewMemberEntity != null) {
-                //Now let's fetch its name via JOIN tag:
-                KCrewEntity kCrewEntity = kCrewMemberEntity.getCrew();
-                
-                if(kCrewEntity != null) {
-                    //Format style:
-                    String formatName = parameterBO.getStrParam("SBRWR_NR_CREWFORMAT", "{persona}");
-                    formatName = formatName.replace("{crew}", kCrewEntity.getTag());
-                    formatName = formatName.replace("{persona}", personaEntity.getName());
-                    profileData.setName(formatName);
-                } else {
-                    profileData.setName(personaEntity.getName());
-                }
-            } else {
-                profileData.setName(personaEntity.getName());
-            }
-        } else {
-            profileData.setName(personaEntity.getName());
-        }
-
+        profileData.setName(personaEntity.getName());
         profileData.setCash(personaEntity.getCash());
         profileData.setBoost(personaEntity.getBoost());
         profileData.setIconIndex(personaEntity.getIconIndex());
@@ -202,31 +175,6 @@ public class DriverPersonaBO {
         personaBase.setIconIndex(personaEntity.getIconIndex());
         personaBase.setLevel(personaEntity.getLevel());
         personaBase.setMotto(personaEntity.getMotto());
-
-        if(parameterBO.getBoolParam("SBRWR_NR_ENABLECREW")) {
-            //Let's find out on which team the user currenly is:
-            KCrewMemberEntity kCrewMemberEntity = kCrewMemberDAO.findCrewMembershipByPersonaId(personaEntity.getPersonaId());
-
-            if(kCrewMemberEntity != null) {
-                //Now let's fetch its name via JOIN tag:
-                KCrewEntity kCrewEntity = kCrewMemberEntity.getCrew();
-                
-                if(kCrewEntity != null) {
-                    //Format style:
-                    String formatName = parameterBO.getStrParam("SBRWR_NR_CREWFORMAT", "{persona}");
-                    formatName = formatName.replace("{crew}", kCrewEntity.getTag());
-                    formatName = formatName.replace("{persona}", personaEntity.getName());
-                    personaBase.setName(formatName);
-                } else {
-                    personaBase.setName(personaEntity.getName());
-                }
-            } else {
-                personaBase.setName(personaEntity.getName());
-            }
-        } else {
-            personaBase.setName(personaEntity.getName());
-        }
-
         personaBase.setName(personaEntity.getName());
         personaBase.setPresence(presenceBO.getPresence(personaEntity.getPersonaId()));
         personaBase.setPersonaId(personaEntity.getPersonaId());

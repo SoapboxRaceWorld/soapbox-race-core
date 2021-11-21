@@ -7,7 +7,6 @@
 package com.soapboxrace.core.bo;
 
 import com.soapboxrace.core.api.util.BuildInfo;
-import com.soapboxrace.core.bo.util.IsNullOrEmpty;
 import com.soapboxrace.core.bo.util.ServerInformationVO;
 import com.soapboxrace.core.jpa.OnlineUsersEntity;
 
@@ -45,7 +44,7 @@ public class GetServerInformationBO {
         serverInformationVO.setAllowedCountries(parameterBO.getStrParam("SERVER_INFO_ALLOWED_COUNTRIES"));
         serverInformationVO.setActivatedHolidaySceneryGroups(parameterBO.getStrListParam("SERVER_INFO_ENABLED_SCENERY"));
         serverInformationVO.setDisactivatedHolidaySceneryGroups(parameterBO.getStrListParam("SERVER_INFO_DISABLED_SCENERY"));
-        serverInformationVO.setRequireTicket(IsNullOrEmpty.check(parameterBO.getStrParam("TICKET_TOKEN")) == false);
+        serverInformationVO.setRequireTicket(parameterBO.getStrParam("TICKET_TOKEN") != null);
         serverInformationVO.setPlayerCountRewardMultiplier(rewardBO.getPlayerCountConst());
         serverInformationVO.setHappyHourEnabled(parameterBO.getBoolParam("happyHourEnabled"));
         serverInformationVO.setHappyHourMultipler(parameterBO.getFloatParam("happyHourMultipler"));

@@ -3,15 +3,10 @@ package com.soapboxrace.core.bo.util;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import java.text.SimpleDateFormat;
 import java.util.*; 
 
 import com.soapboxrace.core.bo.ParameterBO;
 
-import com.mrpowergamerbr.temmiewebhook.DiscordEmbed.DiscordEmbedBuilder;
-import com.mrpowergamerbr.temmiewebhook.embed.FooterEmbed;
-import com.mrpowergamerbr.temmiewebhook.embed.FieldEmbed;
-import com.mrpowergamerbr.temmiewebhook.embed.AuthorEmbed;
 import com.mrpowergamerbr.temmiewebhook.DiscordEmbed;
 import com.mrpowergamerbr.temmiewebhook.DiscordMessage;
 import com.mrpowergamerbr.temmiewebhook.TemmieWebhook;
@@ -21,41 +16,13 @@ public class DiscordWebhook {
 	@EJB
 	private ParameterBO parameterBO;
 
-	public void sendMessage(String message, String webHookUrl, String botName, int color, Map<String, String> extra) {
-		if(webHookUrl.contains("discord")) {
-			TemmieWebhook temmie = new TemmieWebhook(webHookUrl);
-			DiscordEmbedBuilder de = DiscordEmbed.builder();
-
-			if(extra == null) {
-				de.description(message);
-			} else {
-				de.description("");
-				de.author(
-					AuthorEmbed.builder().name(extra.get("abuserPersonaName") + " has been reported.").icon_url("https://cdn.nightriderz.world/images/website/icon-persona/" + extra.get("avatarId") + ".jpg").build()
-				);
-				de.fields(Arrays.asList(
-					FieldEmbed.builder().name("Category").value(extra.get("petitionTypeText")).build(),
-					FieldEmbed.builder().name("Reason").value(message).build(),
-					FieldEmbed.builder().name("Reporter").value(extra.get("reporterName")).build()
-				));
-				de.footer(
-					FooterEmbed.builder().text(extra.get("botName")).build()
-				);
-			}
-
-			de.color(color);
-
-			DiscordEmbed embed = de.build();
-			DiscordMessage dm = DiscordMessage.builder().username(botName).embeds(Arrays.asList(embed)).build();
-			temmie.sendMessage(dm);
-		} else {
-			System.out.println("Discord WebHooks are disabled.");
-		}
-	}
-
-	//Workaround
 	public void sendMessage(String message, String webHookUrl, String botName, int color) {
-		sendMessage(message, webHookUrl, botName, color, null);
+		TemmieWebhook temmie = new TemmieWebhook(webHookUrl);
+
+		DiscordEmbed de = DiscordEmbed.builder().description(message).color(color).build();
+
+		DiscordMessage dm = DiscordMessage.builder().username(botName).embeds(Arrays.asList(de)).build();
+		temmie.sendMessage(dm);
 	}
 
 	public void sendMessage(String message, String webHookUrl, int color) {

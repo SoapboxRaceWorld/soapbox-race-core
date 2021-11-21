@@ -33,7 +33,7 @@ public class LegitRaceBO {
         boolean legit = dataEntity.getServerTimeInMilliseconds() >= minimumTime;
 
         if (!legit) {
-            socialBo.sendReport(0L, activePersonaId, 4,
+            socialBo.sendReport(0L, activePersonaId, 3,
                     String.format("Abnormal event time: %d (below minimum of %d on event %d; session %d)",
                             dataEntity.getServerTimeInMilliseconds(), minimumTime, sessionEntity.getEvent().getId(), sessionEntity.getId()),
                     (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
@@ -41,7 +41,7 @@ public class LegitRaceBO {
         }
 
         if (arbitrationPacket.getHacksDetected() > 0) {
-            socialBo.sendReport(0L, activePersonaId, 4,
+            socialBo.sendReport(0L, activePersonaId, 3,
                     String.format("hacksDetected=%d (event %d; session %d)",
                             arbitrationPacket.getHacksDetected(), sessionEntity.getEvent().getId(), sessionEntity.getId()),
                     (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
@@ -52,14 +52,7 @@ public class LegitRaceBO {
             TeamEscapeArbitrationPacket teamEscapeArbitrationPacket = (TeamEscapeArbitrationPacket) arbitrationPacket;
 
             if (teamEscapeArbitrationPacket.getFinishReason() != 8202) {
-                if(teamEscapeArbitrationPacket.getCopsDisabled() > teamEscapeArbitrationPacket.getCopsDeployed()) {
-                    socialBo.sendReport(0L, activePersonaId, 4,
-                        String.format("Disabled more cops than deployed (deployed %d; disabled %d)",
-                            teamEscapeArbitrationPacket.getCopsDisabled(), teamEscapeArbitrationPacket.getCopsDeployed()),
-                    (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
-
-                    return false;
-                }
+                return teamEscapeArbitrationPacket.getCopsDisabled() <= teamEscapeArbitrationPacket.getCopsDeployed();
             }
         }
 
@@ -68,12 +61,7 @@ public class LegitRaceBO {
 
             if (pursuitArbitrationPacket.getFinishReason() != 8202) {
                 if (pursuitArbitrationPacket.getCopsDisabled() > pursuitArbitrationPacket.getCopsDeployed()) {
-                    socialBo.sendReport(0L, activePersonaId, 4,
-                        String.format("Disabled more cops than deployed (deployed %d; disabled %d)",
-                            pursuitArbitrationPacket.getCopsDisabled(), pursuitArbitrationPacket.getCopsDeployed()),
-                    (int) arbitrationPacket.getCarId(), 0, arbitrationPacket.getHacksDetected());
-
-                    return false;                    
+                    return false;
                 }
 
                 return pursuitArbitrationPacket.getTopSpeed() != 0 || pursuitArbitrationPacket.getInfractions() == 0;
